@@ -1,0 +1,70 @@
+{
+  "cik": 9999999999,
+  "entityName": "Example SIVE Inc.",
+  "facts": {
+    "dei": {
+      "EntityCommonStockSharesOutstanding": {
+        "label": "Entity Common Stock, Shares Outstanding",
+        "description": "Indicates the number of shares of common stock outstanding.",
+        "units": {
+          "shares": [
+            {
+              "fy": 2025,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2026-02-28",
+              "end": "2025-12-31",
+              "val": 12500000,
+              "accn": "0000000000-26-000001"
+            }
+          ]
+        }
+      }
+    },
+    "us-gaap": {
+      "Revenues": {
+        "label": "Revenue",
+        "description": "Amount of revenue recognized from goods sold, services rendered, and other activities.",
+        "units": {
+          "USD": [
+            {
+              "fy": 2025,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2026-02-28",
+              "end": "2025-12-31",
+              "val": 420000000,
+              "accn": "0000000000-26-000001"
+            },
+            {
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2025-02-28",
+              "end": "2024-12-31",
+              "val": 390000000,
+              "accn": "0000000000-25-000001"
+            }
+          ]
+        }
+      },
+      "NetIncomeLoss": {
+        "label": "Net Income (Loss)",
+        "description": "The portion of profit or loss for the period, net of income taxes.",
+        "units": {
+          "USD": [
+            {
+              "fy": 2025,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2026-02-28",
+              "end": "2025-12-31",
+              "val": -15000000,
+              "accn": "0000000000-26-000001"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

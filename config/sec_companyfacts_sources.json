@@ -1,0 +1,32 @@
+[
+  {
+    "ticker": "NVDA",
+    "cik": "0001045810",
+    "path": "../data/primary/raw/sec_companyfacts_nvda.json",
+    "source_url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json"
+  },
+  {
+    "ticker": "AAOI",
+    "cik": "0001158114",
+    "path": "../data/primary/raw/sec_companyfacts_aaoi.json",
+    "source_url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001158114.json"
+  },
+  {
+    "ticker": "LITE",
+    "cik": "0001633978",
+    "path": "../data/primary/raw/sec_companyfacts_lite.json",
+    "source_url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001633978.json"
+  },
+  {
+    "ticker": "COHR",
+    "cik": "0000820318",
+    "path": "../data/primary/raw/sec_companyfacts_cohr.json",
+    "source_url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000820318.json"
+  },
+  {
+    "ticker": "AXTI",
+    "cik": "0001051627",
+    "path": "../data/primary/raw/sec_companyfacts_axti.json",
+    "source_url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001051627.json"
+  }
+]

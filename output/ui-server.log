@@ -1,0 +1,17 @@
+127.0.0.1 - - [06/Jul/2026 17:33:44] "GET /index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:33:44] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:33:44] "GET /analyses/hbm-6f259a8f14/index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:33:44] code 404, message File not found
+127.0.0.1 - - [06/Jul/2026 17:33:44] "GET /analyses/hbm-6f259a8f14/reports/deliverable-research-report.md HTTP/1.1" 404 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /analyze?query=HBM&language=zh HTTP/1.1" 303 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /analyses/hbm-6f259a8f14/index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /analyses/hbm-6f259a8f14/index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /analyses/hbm-6f259a8f14/reports/deliverable-research-report.md HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:34:08] "GET /api/resolve-topic?query=%E5%AD%98%E5%82%A8%E8%8A%AF%E7%89%87&language=zh HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:44:21] "GET /analyze?query=HBM&language=zh HTTP/1.1" 303 -
+127.0.0.1 - - [06/Jul/2026 17:44:21] "GET /analyses/hbm-6f259a8f14/index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:44:34] "GET /index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:44:34] "GET /analyses/hbm-6f259a8f14/index.zh.html HTTP/1.1" 200 -
+127.0.0.1 - - [06/Jul/2026 17:44:34] "GET /analyses/hbm-6f259a8f14/reports/deliverable-research-report.md HTTP/1.1" 200 -

@@ -1,0 +1,31 @@
+[
+  {
+    "ticker": "SIVE",
+    "source_title": "Sivers Semiconductors Annual Report 2025",
+    "source_url": "https://www.sivers-semiconductors.com/wp-content/uploads/2026/05/Sivers_annualreport_2025_final.pdf",
+    "published_at": "2026-05-01",
+    "text_path": "sivers_annualreport_excerpt.txt",
+    "facts": [
+      {
+        "id": "net-sales-2025",
+        "claim": "Sivers Semiconductors reported 2025 net sales of SEK 306.6 million, up 40% year over year.",
+        "summary": "Official annual-report evidence shows SIVE 2025 net sales increased to SEK 306.6 million from SEK 219.2 million.",
+        "source_excerpt": "The Group’s net sales amounted to SEK 306.6 (219.2) million, an increase of SEK 87.4 million or 40% compared with the previous year.",
+        "themes": ["annual-report", "primary-source", "revenue", "CPO"],
+        "supply_chain_layer": "company financials",
+        "direction": "positive",
+        "factor_impacts": {"evidence_quality": 24, "demand_certainty": 8}
+      },
+      {
+        "id": "cpo-pipeline-2025",
+        "claim": "Sivers Semiconductors says its opportunity pipeline expanded into co-packaged optics and optical interconnects.",
+        "summary": "Official annual-report evidence links SIVE to pluggable optical interconnects and co-packaged optics opportunity expansion.",
+        "source_excerpt": "Our serviceable market and opportunity pipeline has expanded to include pluggable optical interconnects as well as scale-up and scale-out architectures for co-packaged optics (CPO).",
+        "themes": ["annual-report", "primary-source", "CPO", "photonics"],
+        "supply_chain_layer": "optical components",
+        "direction": "positive",
+        "factor_impacts": {"evidence_quality": 24, "demand_certainty": 6}
+      }
+    ]
+  }
+]

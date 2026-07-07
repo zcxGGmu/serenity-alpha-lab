@@ -1,0 +1,100 @@
+# Evidence Provenance Index
+
+**Research question:** 光模块
+**Retrieval limit per ticker:** 16
+
+## Primary Evidence
+
+- **official-report:SIVE:profit-after-tax-2025** [Sivers Semiconductors Annual Report 2025](https://www.sivers-semiconductors.com/wp-content/uploads/2026/05/Sivers_annualreport_2025_final.pdf) (2026-05-01, primary, fact)
+  - **Tickers:** SIVE
+  - **Used in memos:** sive-memo.md
+  - **Claim:** Sivers Semiconductors reported 2025 profit after tax of SEK -222.6 million.
+  - **Summary:** Official annual-report evidence shows SIVE remained loss-making in 2025, with profit after tax declining versus 2024.
+  - **Source excerpt:** Profit after tax amounted to SEK -222.6 (-183.9) million, a decline of SEK 38.7 million.
+- **official-report:SIVE:cpo-pipeline-2025** [Sivers Semiconductors Annual Report 2025](https://www.sivers-semiconductors.com/wp-content/uploads/2026/05/Sivers_annualreport_2025_final.pdf) (2026-05-01, primary, fact)
+  - **Tickers:** SIVE
+  - **Used in memos:** sive-memo.md
+  - **Claim:** Sivers Semiconductors says its opportunity pipeline expanded into co-packaged optics and optical interconnects.
+  - **Summary:** Official annual-report evidence links SIVE to pluggable optical interconnects and co-packaged optics opportunity expansion.
+  - **Source excerpt:** Our serviceable market and opportunity pipe - line has expanded to include pluggable optical interconnects as well as scale-up and scale-out architectures for co-packaged optics (CPO).
+- **official-report:SIVE:net-sales-2025** [Sivers Semiconductors Annual Report 2025](https://www.sivers-semiconductors.com/wp-content/uploads/2026/05/Sivers_annualreport_2025_final.pdf) (2026-05-01, primary, fact)
+  - **Tickers:** SIVE
+  - **Used in memos:** sive-memo.md
+  - **Claim:** Sivers Semiconductors reported 2025 net sales of SEK 306.6 million, up 40% year over year.
+  - **Summary:** Official annual-report evidence shows SIVE 2025 net sales increased to SEK 306.6 million from SEK 219.2 million.
+  - **Source excerpt:** The Group’s net sales amounted to SEK 306.6 (219.2) million, an increase of SEK 87.4 million or 40% compared with the previous year.
+- **sec-companyfacts:AAOI:1dde3c8a25f5** [SEC companyfacts AAOI Net Income (Loss) Attributable to Parent](https://data.sec.gov/api/xbrl/companyfacts/CIK0001158114.json) (2026-02-26, primary, fact)
+  - **Tickers:** AAOI
+  - **Used in memos:** aaoi-memo.md
+  - **Claim:** SEC companyfacts reports Net Income (Loss) Attributable to Parent for AAOI FY2025: $-38,228,000.
+  - **Summary:** Primary SEC companyfacts data shows AAOI FY2025 Net Income (Loss) Attributable to Parent of $-38,228,000 from a filed annual report accession 0001437749-26-005875.
+- **sec-companyfacts:AAOI:00c9a17ec040** [SEC companyfacts AAOI Revenue from Contract with Customer, Excluding Assessed Tax](https://data.sec.gov/api/xbrl/companyfacts/CIK0001158114.json) (2026-02-26, primary, fact)
+  - **Tickers:** AAOI
+  - **Used in memos:** aaoi-memo.md
+  - **Claim:** SEC companyfacts reports Revenue from Contract with Customer, Excluding Assessed Tax for AAOI FY2025: $455,715,000.
+  - **Summary:** Primary SEC companyfacts data shows AAOI FY2025 Revenue from Contract with Customer, Excluding Assessed Tax of $455,715,000 from a filed annual report accession 0001437749-26-005875.
+- **sec-companyfacts:AAOI:f0bd95191d47** [SEC companyfacts AAOI Entity Common Stock, Shares Outstanding](https://data.sec.gov/api/xbrl/companyfacts/CIK0001158114.json) (2026-02-26, primary, fact)
+  - **Tickers:** AAOI
+  - **Used in memos:** aaoi-memo.md
+  - **Claim:** SEC companyfacts reports Entity Common Stock, Shares Outstanding for AAOI FY2025: 75,198,817 shares.
+  - **Summary:** Primary SEC companyfacts data shows AAOI FY2025 Entity Common Stock, Shares Outstanding of 75,198,817 shares from a filed annual report accession 0001437749-26-005875.
+- **sec-companyfacts:AXTI:ecfbbed1b308** [SEC companyfacts AXTI Net Income (Loss) Attributable to Parent](https://data.sec.gov/api/xbrl/companyfacts/CIK0001051627.json) (2026-03-17, primary, fact)
+  - **Tickers:** AXTI
+  - **Used in memos:** axti-memo.md
+  - **Claim:** SEC companyfacts reports Net Income (Loss) Attributable to Parent for AXTI FY2025: $-21,260,000.
+  - **Summary:** Primary SEC companyfacts data shows AXTI FY2025 Net Income (Loss) Attributable to Parent of $-21,260,000 from a filed annual report accession 0001437749-26-008612.
+- **sec-companyfacts:AXTI:d11ca8a29d76** [SEC companyfacts AXTI Revenue from Contract with Customer, Excluding Assessed Tax](https://data.sec.gov/api/xbrl/companyfacts/CIK0001051627.json) (2026-03-17, primary, fact)
+  - **Tickers:** AXTI
+  - **Used in memos:** axti-memo.md
+  - **Claim:** SEC companyfacts reports Revenue from Contract with Customer, Excluding Assessed Tax for AXTI FY2025: $88,326,000.
+  - **Summary:** Primary SEC companyfacts data shows AXTI FY2025 Revenue from Contract with Customer, Excluding Assessed Tax of $88,326,000 from a filed annual report accession 0001437749-26-008612.
+- **sec-companyfacts:AXTI:ed8ec4c2ab87** [SEC companyfacts AXTI Entity Common Stock, Shares Outstanding](https://data.sec.gov/api/xbrl/companyfacts/CIK0001051627.json) (2026-03-17, primary, fact)
+  - **Tickers:** AXTI
+  - **Used in memos:** axti-memo.md
+  - **Claim:** SEC companyfacts reports Entity Common Stock, Shares Outstanding for AXTI FY2025: 55,573,599 shares.
+  - **Summary:** Primary SEC companyfacts data shows AXTI FY2025 Entity Common Stock, Shares Outstanding of 55,573,599 shares from a filed annual report accession 0001437749-26-008612.
+- **sec-companyfacts:COHR:69141b4fdf83** [SEC companyfacts COHR Revenue from Contract with Customer, Excluding Assessed Tax](https://data.sec.gov/api/xbrl/companyfacts/CIK0000820318.json) (2025-08-15, primary, fact)
+  - **Tickers:** COHR
+  - **Used in memos:** cohr-memo.md
+  - **Claim:** SEC companyfacts reports Revenue from Contract with Customer, Excluding Assessed Tax for COHR FY2025: $5,810,115,000.
+  - **Summary:** Primary SEC companyfacts data shows COHR FY2025 Revenue from Contract with Customer, Excluding Assessed Tax of $5,810,115,000 from a filed annual report accession 0000820318-25-000014.
+- **sec-companyfacts:COHR:d0d97c038714** [SEC companyfacts COHR Entity Common Stock, Shares Outstanding](https://data.sec.gov/api/xbrl/companyfacts/CIK0000820318.json) (2025-08-15, primary, fact)
+  - **Tickers:** COHR
+  - **Used in memos:** cohr-memo.md
+  - **Claim:** SEC companyfacts reports Entity Common Stock, Shares Outstanding for COHR FY2025: 155,805,474 shares.
+  - **Summary:** Primary SEC companyfacts data shows COHR FY2025 Entity Common Stock, Shares Outstanding of 155,805,474 shares from a filed annual report accession 0000820318-25-000014.
+- **sec-companyfacts:COHR:e23f5fa99a6d** [SEC companyfacts COHR Net Income (Loss) Attributable to Parent](https://data.sec.gov/api/xbrl/companyfacts/CIK0000820318.json) (2025-08-15, primary, fact)
+  - **Tickers:** COHR
+  - **Used in memos:** cohr-memo.md
+  - **Claim:** SEC companyfacts reports Net Income (Loss) Attributable to Parent for COHR FY2025: $49,364,000.
+  - **Summary:** Primary SEC companyfacts data shows COHR FY2025 Net Income (Loss) Attributable to Parent of $49,364,000 from a filed annual report accession 0000820318-25-000014.
+- **sec-companyfacts:LITE:07dd4a6958ac** [SEC companyfacts LITE Net Income (Loss) Attributable to Parent](https://data.sec.gov/api/xbrl/companyfacts/CIK0001633978.json) (2025-08-19, primary, fact)
+  - **Tickers:** LITE
+  - **Used in memos:** lite-memo.md
+  - **Claim:** SEC companyfacts reports Net Income (Loss) Attributable to Parent for LITE FY2025: $25,900,000.
+  - **Summary:** Primary SEC companyfacts data shows LITE FY2025 Net Income (Loss) Attributable to Parent of $25,900,000 from a filed annual report accession 0001628280-25-040830.
+- **sec-companyfacts:LITE:49f8c5259831** [SEC companyfacts LITE Entity Common Stock, Shares Outstanding](https://data.sec.gov/api/xbrl/companyfacts/CIK0001633978.json) (2025-08-19, primary, fact)
+  - **Tickers:** LITE
+  - **Used in memos:** lite-memo.md
+  - **Claim:** SEC companyfacts reports Entity Common Stock, Shares Outstanding for LITE FY2025: 69,900,000 shares.
+  - **Summary:** Primary SEC companyfacts data shows LITE FY2025 Entity Common Stock, Shares Outstanding of 69,900,000 shares from a filed annual report accession 0001628280-25-040830.
+- **sec-companyfacts:LITE:691f3ab6202a** [SEC companyfacts LITE Revenue from Contract with Customer, Excluding Assessed Tax](https://data.sec.gov/api/xbrl/companyfacts/CIK0001633978.json) (2025-08-19, primary, fact)
+  - **Tickers:** LITE
+  - **Used in memos:** lite-memo.md
+  - **Claim:** SEC companyfacts reports Revenue from Contract with Customer, Excluding Assessed Tax for LITE FY2025: $1,645,000,000.
+  - **Summary:** Primary SEC companyfacts data shows LITE FY2025 Revenue from Contract with Customer, Excluding Assessed Tax of $1,645,000,000 from a filed annual report accession 0001628280-25-040830.
+- **sec-companyfacts:NVDA:31dc7119e66f** [SEC companyfacts NVDA Net Income (Loss) Attributable to Parent](https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json) (2026-02-25, primary, fact)
+  - **Tickers:** NVDA
+  - **Used in memos:** nvda-memo.md
+  - **Claim:** SEC companyfacts reports Net Income (Loss) Attributable to Parent for NVDA FY2026: $120,067,000,000.
+  - **Summary:** Primary SEC companyfacts data shows NVDA FY2026 Net Income (Loss) Attributable to Parent of $120,067,000,000 from a filed annual report accession 0001045810-26-000021.
+- **sec-companyfacts:NVDA:3307c8faf037** [SEC companyfacts NVDA Entity Common Stock, Shares Outstanding](https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json) (2026-02-25, primary, fact)
+  - **Tickers:** NVDA
+  - **Used in memos:** nvda-memo.md
+  - **Claim:** SEC companyfacts reports Entity Common Stock, Shares Outstanding for NVDA FY2026: 24,300,000,000 shares.
+  - **Summary:** Primary SEC companyfacts data shows NVDA FY2026 Entity Common Stock, Shares Outstanding of 24,300,000,000 shares from a filed annual report accession 0001045810-26-000021.
+- **sec-companyfacts:NVDA:dd4dcebbdfc5** [SEC companyfacts NVDA Revenues](https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json) (2026-02-25, primary, fact)
+  - **Tickers:** NVDA
+  - **Used in memos:** nvda-memo.md
+  - **Claim:** SEC companyfacts reports Revenues for NVDA FY2026: $215,938,000,000.
+  - **Summary:** Primary SEC companyfacts data shows NVDA FY2026 Revenues of $215,938,000,000 from a filed annual report accession 0001045810-26-000021.

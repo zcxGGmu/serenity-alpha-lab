@@ -1,0 +1,50 @@
+[
+  {
+    "ticker": "AAOI",
+    "revenue_growth": "source-backed revenue $455.7M",
+    "gross_margin": "n/a",
+    "valuation": "n/a",
+    "momentum": "reported loss",
+    "cycle_position": "revenue ramp / loss-making"
+  },
+  {
+    "ticker": "AXTI",
+    "revenue_growth": "source-backed revenue $88.3M",
+    "gross_margin": "n/a",
+    "valuation": "n/a",
+    "momentum": "reported loss",
+    "cycle_position": "revenue ramp / loss-making"
+  },
+  {
+    "ticker": "COHR",
+    "revenue_growth": "source-backed revenue $5.8B",
+    "gross_margin": "n/a",
+    "valuation": "n/a",
+    "momentum": "reported profitable",
+    "cycle_position": "source-backed revenue base"
+  },
+  {
+    "ticker": "LITE",
+    "revenue_growth": "source-backed revenue $1.6B",
+    "gross_margin": "n/a",
+    "valuation": "n/a",
+    "momentum": "reported profitable",
+    "cycle_position": "source-backed revenue base"
+  },
+  {
+    "ticker": "NVDA",
+    "revenue_growth": "source-backed revenue $215.9B",
+    "gross_margin": "n/a",
+    "valuation": "n/a",
+    "momentum": "reported profitable",
+    "cycle_position": "source-backed revenue base"
+  },
+  {
+    "ticker": "SIVE",
+    "revenue_growth": "40% YoY official report",
+    "gross_margin": "n/a",
+    "valuation": "n/a",
+    "momentum": "reported loss",
+    "cycle_position": "revenue ramp / loss-making"
+  }
+]

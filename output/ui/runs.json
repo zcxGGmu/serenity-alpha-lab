@@ -1,0 +1,4589 @@
+{
+  "runs": [
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-909fd63547f6",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T16:49:37Z",
+      "started_at": "2026-07-07T16:49:37Z",
+      "completed_at": "2026-07-07T16:49:37Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-c19cec0ac711",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T16:49:17Z",
+      "started_at": "2026-07-07T16:49:17Z",
+      "completed_at": "2026-07-07T16:49:17Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-33b7e4894b5e",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T11:24:04Z",
+      "started_at": "2026-07-07T11:24:04Z",
+      "completed_at": "2026-07-07T11:24:04Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-0952d51dc56a",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T11:10:13Z",
+      "started_at": "2026-07-07T11:10:13Z",
+      "completed_at": "2026-07-07T11:10:13Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-ae8c5b25b4aa",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T10:55:18Z",
+      "started_at": "2026-07-07T10:55:18Z",
+      "completed_at": "2026-07-07T10:55:18Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-314d50bc2b0d",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T10:40:44Z",
+      "started_at": "2026-07-07T10:40:44Z",
+      "completed_at": "2026-07-07T10:40:44Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-81a5801c7206",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:46:25Z",
+      "started_at": "2026-07-07T09:46:25Z",
+      "completed_at": "2026-07-07T09:46:25Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-db661d19cfcf",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:34:14Z",
+      "started_at": "2026-07-07T09:34:14Z",
+      "completed_at": "2026-07-07T09:34:14Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-ebc4f9b7590a",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:33:53Z",
+      "started_at": "2026-07-07T09:33:53Z",
+      "completed_at": "2026-07-07T09:33:53Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-5d8d6318d3cc",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:33:35Z",
+      "started_at": "2026-07-07T09:33:35Z",
+      "completed_at": "2026-07-07T09:33:35Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-7ab0fc54211d",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:24:20Z",
+      "started_at": "2026-07-07T09:24:20Z",
+      "completed_at": "2026-07-07T09:24:21Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-b8a873e9c262",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:18:37Z",
+      "started_at": "2026-07-07T09:18:37Z",
+      "completed_at": "2026-07-07T09:18:37Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-76f739664872",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:10:14Z",
+      "started_at": "2026-07-07T09:10:14Z",
+      "completed_at": "2026-07-07T09:10:14Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-63d7049ebcd5",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:01:46Z",
+      "started_at": "2026-07-07T09:01:46Z",
+      "completed_at": "2026-07-07T09:01:46Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-671f2246797c",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T09:01:25Z",
+      "started_at": "2026-07-07T09:01:25Z",
+      "completed_at": "2026-07-07T09:01:25Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-6b16a4b62f68",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T08:39:14Z",
+      "started_at": "2026-07-07T08:39:14Z",
+      "completed_at": "2026-07-07T08:39:15Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-4cb5e075acca",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T08:33:24Z",
+      "started_at": "2026-07-07T08:33:24Z",
+      "completed_at": "2026-07-07T08:33:24Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-f4e115fd7263",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T08:22:43Z",
+      "started_at": "2026-07-07T08:22:43Z",
+      "completed_at": "2026-07-07T08:22:43Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-5a0215ab0c27",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T08:10:46Z",
+      "started_at": "2026-07-07T08:10:46Z",
+      "completed_at": "2026-07-07T08:10:46Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-cb0376ca16ee",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T07:42:37Z",
+      "started_at": "2026-07-07T07:42:37Z",
+      "completed_at": "2026-07-07T07:42:37Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示",
+          "import_handoff_href": "/analyses/hbm-6f259a8f14/index.zh.html#evidence-tasks"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-d5fbfbe25ed3",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T07:30:55Z",
+      "started_at": "2026-07-07T07:30:55Z",
+      "completed_at": "2026-07-07T07:30:55Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [
+        {
+          "ticker": "MU",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "MU primary filing HBM",
+          "copy_label": "复制补证提示"
+        },
+        {
+          "ticker": "MU",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "MU risk HBM",
+          "copy_label": "复制补证提示"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SKHYNIX primary filing HBM",
+          "copy_label": "复制补证提示"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SKHYNIX risk HBM",
+          "copy_label": "复制补证提示"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_primary_source",
+          "priority": "high",
+          "source_target": "Primary filing, company release, audited fact, or official investor material",
+          "search_prompt": "SAMSUNG primary filing HBM",
+          "copy_label": "复制补证提示"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "gap": "missing_risk_coverage",
+          "priority": "medium",
+          "source_target": "Risk, negative, or invalidation evidence from filings, earnings calls, or credible third-party sources",
+          "search_prompt": "SAMSUNG risk HBM",
+          "copy_label": "复制补证提示"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-c0d057bc8fda",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T07:18:33Z",
+      "started_at": "2026-07-07T07:18:33Z",
+      "completed_at": "2026-07-07T07:18:33Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "MU",
+          "evidence_count": 2,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "2 条证据"
+        },
+        {
+          "ticker": "SKHYNIX",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SAMSUNG",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "MONTAGE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "SNDK",
+          "evidence_count": 6,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "6 条证据"
+        },
+        {
+          "ticker": "GIGADEVICE",
+          "evidence_count": 0,
+          "primary_count": 0,
+          "risk_count": 0,
+          "coverage_label": "0 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-ae06fec41452",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T06:24:10Z",
+      "started_at": "2026-07-07T06:24:10Z",
+      "completed_at": "2026-07-07T06:24:10Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "coverage_label": "140 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-d19d52ef9ac0",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T03:17:47Z",
+      "started_at": "2026-07-07T03:17:47Z",
+      "completed_at": "2026-07-07T03:17:47Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-da35e29ddbff",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "queued_at": "2026-07-07T03:01:12Z",
+      "started_at": "2026-07-07T03:01:12Z",
+      "completed_at": "2026-07-07T03:01:13Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "job_id": "job-d849a1330c55",
+      "queued_at": "2026-07-07T02:50:02Z",
+      "started_at": "2026-07-07T02:50:02Z",
+      "completed_at": "2026-07-07T02:50:03Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "queued_at": "2026-07-07T02:33:23Z",
+      "started_at": "2026-07-07T02:33:23Z",
+      "completed_at": "2026-07-07T02:33:23Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-07T02:08:28Z",
+      "completed_at": "2026-07-07T02:08:28Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-07T02:01:43Z",
+      "completed_at": "2026-07-07T02:01:44Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-07T01:54:15Z",
+      "completed_at": "2026-07-07T01:54:15Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-07T01:47:14Z",
+      "completed_at": "2026-07-07T01:47:14Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T16:19:02Z",
+      "completed_at": "2026-07-06T16:19:02Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:56:44Z",
+      "completed_at": "2026-07-06T15:56:44Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:45:55Z",
+      "completed_at": "2026-07-06T15:45:55Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:37:04Z",
+      "completed_at": "2026-07-06T15:37:04Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:30:28Z",
+      "completed_at": "2026-07-06T15:30:28Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:24:18Z",
+      "completed_at": "2026-07-06T15:24:18Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:16:15Z",
+      "completed_at": "2026-07-06T15:16:15Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:12:28Z",
+      "completed_at": "2026-07-06T15:12:28Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T15:02:58Z",
+      "completed_at": "2026-07-06T15:02:58Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T14:58:03Z",
+      "completed_at": "2026-07-06T14:58:03Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T14:50:33Z",
+      "completed_at": "2026-07-06T14:50:33Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:49:34Z",
+      "completed_at": "2026-07-06T13:49:35Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:36:26Z",
+      "completed_at": "2026-07-06T13:36:26Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:27:17Z",
+      "completed_at": "2026-07-06T13:27:18Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:26:53Z",
+      "completed_at": "2026-07-06T13:26:54Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:26:36Z",
+      "completed_at": "2026-07-06T13:26:37Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:20:38Z",
+      "completed_at": "2026-07-06T13:20:38Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:13:52Z",
+      "completed_at": "2026-07-06T13:13:52Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "HBM",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
+      "error": "",
+      "started_at": "2026-07-06T13:06:18Z",
+      "completed_at": "2026-07-06T13:06:18Z",
+      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
+      "canonical_theme": "HBM",
+      "candidate_tickers": [
+        "MU",
+        "SKHYNIX",
+        "SAMSUNG",
+        "MONTAGE",
+        "AAOI",
+        "SNDK",
+        "GIGADEVICE",
+        "SIVE",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "NVDA"
+      ],
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    }
+  ]
+}

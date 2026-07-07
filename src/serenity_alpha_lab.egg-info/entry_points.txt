@@ -1,0 +1,2 @@
+[console_scripts]
+serenity-alpha-lab = serenity_alpha_lab.cli:main

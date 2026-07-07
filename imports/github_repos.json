@@ -1,0 +1,114 @@
+[
+  {
+    "full_name": "muxuuu/serenity-skill",
+    "url": "https://github.com/muxuuu/serenity-skill",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-skill/SKILL.md",
+      "references/methodology.md",
+      "references/articles.md"
+    ],
+    "tags": ["Serenity", "skill", "supply-chain bottleneck"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "yan-labs/serenity-aleabitoreddit",
+    "url": "https://github.com/yan-labs/serenity-aleabitoreddit",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-aleabitoreddit/SKILL.md",
+      "serenity-aleabitoreddit/references/articles.md",
+      "serenity-aleabitoreddit/references/methodology.md",
+      "references/articles.md",
+      "references/methodology.md"
+    ],
+    "tags": ["Serenity", "tweet archive", "AI infrastructure"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "Mrjie7205/serenity-bottleneck-hunter",
+    "url": "https://github.com/Mrjie7205/serenity-bottleneck-hunter",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-bottleneck-hunter/SKILL.md",
+      "references/methodology.md"
+    ],
+    "tags": ["Serenity", "bottleneck hunter", "Claude skill"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "ZadAnthony/serenity-skill",
+    "url": "https://github.com/ZadAnthony/serenity-skill",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-skill/SKILL.md",
+      "references/methodology.md"
+    ],
+    "tags": ["Serenity", "reverse supply-chain", "Claude Code skill"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "fadewalk/serenity-stock-choke",
+    "url": "https://github.com/fadewalk/serenity-stock-choke",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-stock-choke/SKILL.md",
+      "references/methodology.md"
+    ],
+    "tags": ["Serenity", "A-share", "stock choke"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "yijiashu/serenity-skill",
+    "url": "https://github.com/yijiashu/serenity-skill",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-skill/SKILL.md",
+      "references/methodology.md",
+      "references/articles.md"
+    ],
+    "tags": ["Serenity", "白毛股神", "Chinese skill"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "onebluecloud/serenity-playbook",
+    "url": "https://github.com/onebluecloud/serenity-playbook",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "serenity-playbook/SKILL.md",
+      "docs/playbook.md",
+      "references/methodology.md"
+    ],
+    "tags": ["Serenity", "playbook", "AI supply-chain"],
+    "published_at": "2026-07-04"
+  },
+  {
+    "full_name": "kooui/serenity-framework",
+    "url": "https://github.com/kooui/serenity-framework",
+    "default_branch": "main",
+    "candidate_paths": [
+      "README.md",
+      "SKILL.md",
+      "docs/framework.md",
+      "docs/methodology.md",
+      "references/methodology.md"
+    ],
+    "tags": ["Serenity", "framework", "5-layer supply chain"],
+    "published_at": "2026-07-04"
+  }
+]
+

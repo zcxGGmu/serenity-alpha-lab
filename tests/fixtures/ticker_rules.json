@@ -1,0 +1,12 @@
+[
+  {
+    "ticker": "SIVE",
+    "keywords": ["cpo", "silicon photonics", "硅光"],
+    "theme": "ticker-resolution:SIVE"
+  },
+  {
+    "ticker": "LITE",
+    "keywords": ["laser", "optical"],
+    "theme": "ticker-resolution:LITE"
+  }
+]
