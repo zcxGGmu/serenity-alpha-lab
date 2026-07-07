@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" width="1200" height="840" role="img" aria-labelledby="title desc">
+  <title id="title">Serenity Alpha Lab Evidence Closure Framework</title>
+  <desc id="desc">Claude Official style framework diagram showing evidence gaps, acquisition tasks, import validation, task status persistence, audit logs, rerun quality deltas, and filtered handoff.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', 'Microsoft JhengHei', 'SimHei', sans-serif; }
+    .title { fill: #1a1a1a; font-size: 25px; font-weight: 700; }
+    .subtitle { fill: #6a6a6a; font-size: 14px; font-weight: 400; }
+    .node-title { fill: #1a1a1a; font-size: 16px; font-weight: 700; }
+    .node-text { fill: #1a1a1a; font-size: 13px; font-weight: 400; }
+    .label { fill: #5a5a5a; font-size: 12px; font-weight: 600; }
+    .band-title { fill: #6a6a6a; font-size: 13px; font-weight: 700; }
+  </style>
+  <defs>
+    <marker id="arrow-claude" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#5a5a5a"/>
+    </marker>
+    <filter id="shadow-soft" x="-10%" y="-20%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="840" fill="#f8f6f3"/>
+  <text x="600" y="42" text-anchor="middle" class="title">Evidence Closure Framework</text>
+  <text x="600" y="66" text-anchor="middle" class="subtitle">How gaps become executable tasks, durable audit records, quality deltas, reruns, and filtered project handoffs</text>
+
+  <rect x="70" y="105" width="1060" height="118" rx="16" fill="#ffffff" fill-opacity="0.28" stroke="#4a4a4a" stroke-width="1.2" stroke-dasharray="6,5"/>
+  <text x="118" y="130" text-anchor="end" class="band-title">Detect</text>
+  <rect x="70" y="276" width="1060" height="118" rx="16" fill="#ffffff" fill-opacity="0.28" stroke="#4a4a4a" stroke-width="1.2" stroke-dasharray="6,5"/>
+  <text x="118" y="301" text-anchor="end" class="band-title">Act</text>
+  <rect x="70" y="447" width="1060" height="118" rx="16" fill="#ffffff" fill-opacity="0.28" stroke="#4a4a4a" stroke-width="1.2" stroke-dasharray="6,5"/>
+  <text x="118" y="472" text-anchor="end" class="band-title">Persist</text>
+  <rect x="70" y="618" width="1060" height="118" rx="16" fill="#ffffff" fill-opacity="0.28" stroke="#4a4a4a" stroke-width="1.2" stroke-dasharray="6,5"/>
+  <text x="118" y="643" text-anchor="end" class="band-title">Improve</text>
+
+  <path d="M 280 164 L 390 164" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 600 164 L 710 164" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 920 188 L 920 252 L 280 252 L 280 316" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 280 335 L 390 335" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 600 335 L 710 335" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 920 359 L 920 423 L 280 423 L 280 487" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 280 506 L 390 506" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 600 506 L 710 506" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 920 530 L 920 594 L 280 594 L 280 658" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 280 677 L 390 677" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <path d="M 600 677 L 710 677" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+
+  <rect x="313" y="152" width="76" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="351" y="169" text-anchor="middle" class="label">flags</text>
+  <rect x="628" y="152" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="668" y="169" text-anchor="middle" class="label">tasks</text>
+  <rect x="310" y="323" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="350" y="340" text-anchor="middle" class="label">collect</text>
+  <rect x="628" y="323" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="668" y="340" text-anchor="middle" class="label">import</text>
+  <rect x="310" y="494" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="350" y="511" text-anchor="middle" class="label">status</text>
+  <rect x="628" y="494" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="668" y="511" text-anchor="middle" class="label">audit</text>
+  <rect x="310" y="665" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="350" y="682" text-anchor="middle" class="label">rerun</text>
+  <rect x="628" y="665" width="80" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="668" y="682" text-anchor="middle" class="label">handoff</text>
+
+  <g filter="url(#shadow-soft)">
+    <rect x="130" y="119" width="150" height="88" rx="12" fill="#a8c5e6" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="205" y="151" text-anchor="middle" class="node-title">Coverage Gaps</text>
+    <text x="205" y="174" text-anchor="middle" class="node-text">primary/fact</text>
+    <text x="205" y="195" text-anchor="middle" class="node-text">risk + invalidation</text>
+
+    <rect x="390" y="119" width="210" height="88" rx="12" fill="#9dd4c7" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="495" y="151" text-anchor="middle" class="node-title">Preflight Tasks</text>
+    <text x="495" y="174" text-anchor="middle" class="node-text">evidence_gap_tasks</text>
+    <text x="495" y="195" text-anchor="middle" class="node-text">copyable search prompts</text>
+
+    <rect x="710" y="119" width="210" height="88" rx="12" fill="#f4e4c1" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="815" y="151" text-anchor="middle" class="node-title">Run Surfaces</text>
+    <text x="815" y="174" text-anchor="middle" class="node-text">preview + history</text>
+    <text x="815" y="195" text-anchor="middle" class="node-text">job detail handoff</text>
+
+    <rect x="130" y="290" width="150" height="88" rx="12" fill="#f4e4c1" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="205" y="322" text-anchor="middle" class="node-title">Collect Source</text>
+    <text x="205" y="345" text-anchor="middle" class="node-text">filing / report</text>
+    <text x="205" y="366" text-anchor="middle" class="node-text">excerpt + URL</text>
+
+    <rect x="390" y="290" width="210" height="88" rx="12" fill="#9dd4c7" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="495" y="322" text-anchor="middle" class="node-title">Ingest Evidence</text>
+    <text x="495" y="345" text-anchor="middle" class="node-text">/ingest-evidence</text>
+    <text x="495" y="366" text-anchor="middle" class="node-text">validate task claim</text>
+
+    <rect x="710" y="290" width="210" height="88" rx="12" fill="#9dd4c7" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="815" y="322" text-anchor="middle" class="node-title">Regenerate Page</text>
+    <text x="815" y="345" text-anchor="middle" class="node-text">rerun analysis</text>
+    <text x="815" y="366" text-anchor="middle" class="node-text">close visible gaps</text>
+
+    <rect x="130" y="461" width="150" height="88" rx="12" fill="#e8e6e3" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="205" y="493" text-anchor="middle" class="node-title">Task Statuses</text>
+    <text x="205" y="516" text-anchor="middle" class="node-text">to_collect</text>
+    <text x="205" y="537" text-anchor="middle" class="node-text">collected / verified</text>
+
+    <rect x="390" y="461" width="210" height="88" rx="12" fill="#e8e6e3" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="495" y="493" text-anchor="middle" class="node-title">Evidence Audit</text>
+    <text x="495" y="516" text-anchor="middle" class="node-text">before/after quality</text>
+    <text x="495" y="537" text-anchor="middle" class="node-text">ticker + task id</text>
+
+    <rect x="710" y="461" width="210" height="88" rx="12" fill="#e8e6e3" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="815" y="493" text-anchor="middle" class="node-title">Project Events</text>
+    <text x="815" y="516" text-anchor="middle" class="node-text">owner/status/detail</text>
+    <text x="815" y="537" text-anchor="middle" class="node-text">queue handoff copies</text>
+
+    <rect x="130" y="632" width="150" height="88" rx="12" fill="#9dd4c7" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="205" y="664" text-anchor="middle" class="node-title">Quality Delta</text>
+    <text x="205" y="687" text-anchor="middle" class="node-text">latest summary</text>
+    <text x="205" y="708" text-anchor="middle" class="node-text">project card impact</text>
+
+    <rect x="390" y="632" width="210" height="88" rx="12" fill="#f4e4c1" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="495" y="664" text-anchor="middle" class="node-title">Next Action Queue</text>
+    <text x="495" y="687" text-anchor="middle" class="node-text">collect / review</text>
+    <text x="495" y="708" text-anchor="middle" class="node-text">rerun / archive</text>
+
+    <rect x="710" y="632" width="210" height="88" rx="12" fill="#f4e4c1" stroke="#4a4a4a" stroke-width="2.5"/>
+    <text x="815" y="664" text-anchor="middle" class="node-title">Filtered Handoff</text>
+    <text x="815" y="687" text-anchor="middle" class="node-text">current filters + sort</text>
+    <text x="815" y="708" text-anchor="middle" class="node-text">research-only brief</text>
+  </g>
+
+  <path d="M 920 676 C 1030 676 1030 164 930 164" stroke="#5a5a5a" stroke-width="2" fill="none" marker-end="url(#arrow-claude)"/>
+  <rect x="965" y="406" width="122" height="24" rx="6" fill="#f8f6f3" fill-opacity="0.95"/>
+  <text x="1026" y="423" text-anchor="middle" class="label">feeds next run</text>
+
+  <rect x="934" y="744" width="218" height="62" rx="10" fill="#ffffff" stroke="#4a4a4a" stroke-width="1.5"/>
+  <line x1="954" y1="768" x2="989" y2="768" stroke="#5a5a5a" stroke-width="2" marker-end="url(#arrow-claude)"/>
+  <text x="1001" y="773" fill="#6a6a6a" font-size="12">Workflow transition</text>
+  <line x1="954" y1="790" x2="989" y2="790" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-claude)"/>
+  <text x="1001" y="795" fill="#6a6a6a" font-size="12">Durable write</text>
+</svg>

@@ -1,25 +1,108 @@
-# Serenity Alpha Lab
+<p align="center">
+  <strong>Serenity Alpha Lab</strong><br />
+  <sub>Local evidence. Bilingual research. Durable workflow.</sub>
+</p>
 
-`serenity-alpha-lab` is a local-first Serenity investment research system for stock, industry, sector, and theme analysis.
+<h1 align="center">Serenity Alpha Lab</h1>
+
+<p align="center">
+  <strong>Turn messy market questions into auditable research workflows.</strong><br />
+  A local-first Serenity-style investment research lab for stock, industry, sector, and theme analysis.
+</p>
+
+<p align="center">
+  <a href="pyproject.toml"><img alt="Python 3.9+" src="https://img.shields.io/badge/python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white"></a>
+  <a href="Makefile"><img alt="Verification" src="https://img.shields.io/badge/verify-make%20verify-2ea44f?style=flat-square"></a>
+  <a href="INSTALL.md"><img alt="Local first" src="https://img.shields.io/badge/local--first-research%20engine-6f42c1?style=flat-square"></a>
+  <a href="docs/RELEASE_CHECKLIST.md"><img alt="Research only" src="https://img.shields.io/badge/boundary-research%20only-ff4d4f?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <code>evidence -> scorecard -> dashboard -> evidence tasks -> rerun -> handoff</code>
+</p>
+
+<p align="center">
+  <a href="README.zh.md">中文 README</a>
+</p>
+
+> Serenity Alpha Lab is a local research system, not an investment adviser. It does not generate buy/sell/hold instructions, target prices, or position sizing. Every output is a research artifact that must be independently verified before any capital decision.
+
+## Recent highlights
+
+**Filtered project handoffs** — saved-project users can now copy exactly the current filtered and sorted project queue, preview the handoff before sharing it, and record the action in the project review event log.
+
+**Collaboration-ready project library** — project cards and detail drawers expose owner assignment, activity filters, latest activity summaries, event-type filters, next-action queues, evidence progress, latest evidence impact, and durable audit trails.
+
+**Background analysis runs** — analysis launches can submit through `/api/analyze-jobs`, return immediately with durable run metadata, and keep the Run Center polling queued, running, completed, failed, cancelled, and retry states.
+
+**Evidence closure loop** — preflight evidence gaps become executable tasks with copyable search prompts, report-section import handoff links, task-status persistence, quality delta summaries, and rerun context.
+
+## Architecture visuals
+
+The diagrams below use the `fireworks-tech-graph` Claude Official style 6: warm cream backgrounds, rounded high-contrast nodes, soft blue source nodes, teal processing nodes, beige infrastructure nodes, and gray durable-state nodes.
+
+### System architecture
+
+<p align="center">
+  <img src="docs/assets/diagrams/serenity-system-architecture.png" alt="Serenity Alpha Lab system architecture diagram" width="100%" />
+</p>
+
+The system is intentionally local-first. JSONL evidence, curated config catalogs, and importer outputs feed the Python research engine. The CLI orchestrates package generation and UI publication, while the dashboard server exposes local workflow APIs for runs, projects, events, task statuses, and evidence audits.
+
+### Research generation flow
+
+<p align="center">
+  <img src="docs/assets/diagrams/serenity-research-flow.png" alt="Serenity Alpha Lab research generation flow diagram" width="100%" />
+</p>
+
+A query is resolved into a canonical theme and candidate tickers, ranked against local evidence, scored through the Serenity scorecard, gated by readiness checks, and published as bilingual dashboards, memo packs, operational reports, and durable run records.
+
+### Evidence closure framework
+
+<p align="center">
+  <img src="docs/assets/diagrams/serenity-evidence-closure-framework.png" alt="Serenity Alpha Lab evidence closure framework diagram" width="100%" />
+</p>
+
+Evidence gaps become concrete tasks, import handoffs, task status records, audit entries, quality delta summaries, rerun context, next-action queues, and filtered research-only handoff briefs.
+
+SVG sources are kept beside the PNG assets:
+
+- [`serenity-system-architecture.svg`](docs/assets/diagrams/serenity-system-architecture.svg)
+- [`serenity-research-flow.svg`](docs/assets/diagrams/serenity-research-flow.svg)
+- [`serenity-evidence-closure-framework.svg`](docs/assets/diagrams/serenity-evidence-closure-framework.svg)
+
+## What is Serenity Alpha Lab?
+
+Serenity Alpha Lab is a local-first research engine for turning an industry, sector, theme, or ticker question into a traceable investment-research workspace.
 
 It combines:
 
 - evidence-backed claim storage
 - claim-type classification for fact, methodology, inference, risk, catalyst, and invalidation evidence
-- deterministic retrieval
-- transparent Serenity-style scoring
+- deterministic retrieval and transparent Serenity-style scoring
 - skeptic review and invalidation checks
-- source-backed local financial context where evidence exists
-- bilingual Chinese and English dashboard/report generation
-- a user-facing report library with drawer-based report reading
-- markdown memo generation
+- source-backed local financial context when evidence exists
+- bilingual Chinese and English dashboard and report generation
+- a saved-project library with workflow state, audit history, and handoff artifacts
+- markdown memo generation and drawer-based report reading
 
-It is not an investment adviser and does not generate buy/sell/hold instructions, target prices, or position sizing. Every output is a research artifact that must be independently verified before any capital decision.
+The default CPO pack evaluates `AAOI`, `LITE`, `COHR`, `AXTI`, `SIVE`, and `NVDA` using local evidence, SEC companyfacts snapshots, official report excerpts, and guarded manual intake evidence.
 
-## Quick Start
+```text
+input query
+  -> topic resolver
+  -> evidence-backed candidates
+  -> Serenity scorecard
+  -> bilingual dashboard
+  -> evidence acquisition queue
+  -> project library / handoff
+```
+
+## Install
+
+Use Python 3.9 or newer from a fresh local checkout:
 
 ```bash
-cd serenity-alpha-lab
 python3 -m pip install -e .
 make smoke
 make verify
@@ -28,63 +111,64 @@ make verify
 Source-tree fallback:
 
 ```bash
-python3 -m pytest tests -q
-python3 -m pytest tests/test_ui_http_e2e.py -q
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli doctor
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli run-cpo-pack --allow-skipped
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-ui --language both
+```
+
+See [`INSTALL.md`](INSTALL.md) for a clean-machine validation path.
+
+## Quick start
+
+Build the default product outputs:
+
+```bash
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli doctor
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli run-cpo-pack --allow-skipped
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-financial-metrics \
   --data data/enriched/github_plus_primary.jsonl data/primary/sive_official_report_evidence.jsonl \
   --out config/financial_metrics.json
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-ui --language both
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli scan-report-safety \
-  --reports output/packs/cpo-guarded/*-memo.md \
-  --out output/reports/report-safety-scan.md
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-coverage-matrix \
-  --data data/enriched/github_plus_primary.jsonl data/enriched/manual_intake_guarded.jsonl \
-  --stock-universe config/stock_universe.json \
-  --query "存储芯片" \
-  --out output/reports/universe-coverage-matrix.md
 ```
 
-The product pipeline regenerates:
-
-- `data/enriched/github_plus_primary.jsonl`
-- `output/reports/cpo-readiness-guarded.md`
-- `output/packs/cpo-guarded/index.md`
-- `output/packs/cpo-guarded/sources.md`
-- one memo per ready ticker in `output/packs/cpo-guarded/`
-- `config/financial_metrics.json` when source-backed metrics are rebuilt
-- `output/reports/universe-coverage-matrix.md` when stock-universe coverage is checked
-- `output/ui/index.html` and `output/ui/index.zh.html` when the local UI builder is run
-- generated analysis pages under `output/ui/analyses/<slug>/` when users launch new industry, theme, sector, or ticker research
-
-The default CPO pack currently evaluates `AAOI`, `LITE`, `COHR`, `AXTI`, `SIVE`, and `NVDA` using local evidence, SEC companyfacts snapshots, official report excerpts, and guarded manual intake evidence.
-
-## Stable Product Run
-
-Check local inputs without generating outputs:
+Start the local product server:
 
 ```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli doctor
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli serve-ui \
+  --host 127.0.0.1 \
+  --port 8767 \
+  --language both
 ```
 
-Use this command when handing the project to another user:
+Open:
+
+- Chinese UI: `http://127.0.0.1:8767/index.zh.html`
+- English UI: `http://127.0.0.1:8767/index.html`
+
+Use `Start analysis` / `启动分析` for a new local industry, sector, theme, or ticker report such as `存储芯片`, `HBM`, `半导体设备`, or `AAOI`. The page search box filters the currently open dashboard; it does not launch new analysis.
+
+## Stable product run
+
+The release gate is:
 
 ```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli run-cpo-pack --allow-skipped
+make verify
 ```
 
-Rebuild source-backed financial metrics from local evidence:
+It runs:
+
+- `python3 -m pytest tests -q`
+- `PYTHONPATH=src python3 -m serenity_alpha_lab.cli doctor`
+- `PYTHONPATH=src python3 -m serenity_alpha_lab.cli run-cpo-pack`
+- `PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-coverage-matrix ...`
+
+For the full user-facing surface, also regenerate metrics and bilingual UI:
 
 ```bash
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-financial-metrics \
   --data data/enriched/github_plus_primary.jsonl data/primary/sive_official_report_evidence.jsonl \
   --out config/financial_metrics.json
-```
 
-Build the bilingual dashboard UI after generating the pack and metrics:
-
-```bash
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-ui --language both
 ```
 
@@ -96,53 +180,56 @@ PYTHONPATH=src python3 -m serenity_alpha_lab.cli scan-report-safety \
   --out output/reports/report-safety-scan.md
 ```
 
-The safety scanner ignores quoted source evidence lines, so raw external excerpts can contain phrases such as `buy / sell / hold` without being confused with Serenity Alpha Lab's own generated guidance.
+The scanner distinguishes product prose from quoted source excerpts, so external evidence can contain investment-action language without being confused with Serenity Alpha Lab guidance.
 
-Build a stock-universe coverage matrix before expanding an industry page:
+## Product surface
 
-```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-coverage-matrix \
-  --data data/enriched/github_plus_primary.jsonl data/enriched/manual_intake_guarded.jsonl \
-  --stock-universe config/stock_universe.json \
-  --query "存储芯片" \
-  --out output/reports/universe-coverage-matrix.md
-```
+| Surface | What it does |
+| --- | --- |
+| Bilingual dashboard | Renders English and Chinese research pages with candidate comparison, source coverage, risk previews, and report drawers. |
+| Run Center | Persists analysis lifecycle state across queued, running, completed, failed, cancelled, and retry records. |
+| Project library | Saves generated analyses as reusable project records with quality snapshots, next actions, owners, and status filters. |
+| Evidence tasks | Turns missing primary, risk, demand, invalidation, and crowding evidence into executable collection tasks. |
+| Audit logs | Records project events, evidence verification, quality delta summaries, owner changes, and queue handoff copies. |
+| Handoff package | Copies research-only project queues, deliverable links, manifests, coverage matrices, and evidence queues for another reviewer. |
 
-The matrix ranks matched universe candidates by missing evidence, primary/fact coverage, risk coverage, priority, and the next source-search prompt. Use it before trusting a theme page as representative of the full industry candidate pool. When the UI is rebuilt, the matrix is also published to `output/ui/reports/universe-coverage-matrix.md` and appears in the homepage report library as a drawer-readable `Open Coverage Matrix` / `打开覆盖矩阵` entry.
+## Workflow surface
 
-Each UI-launched industry, sector, theme, or ticker analysis also writes its own operational reports under `output/ui/analyses/<slug>/reports/`:
+Serenity Alpha Lab keeps the user workflow explicit:
 
-- `universe-coverage-matrix.md` for the exact query that was launched.
-- `evidence-acquisition-queue.md` with the next primary-source, risk, and invalidation evidence tasks for the generated candidate set.
+| Step | User action | Durable output |
+| --- | --- | --- |
+| Resolve | Enter an industry, theme, sector, or ticker. | Canonical theme, candidate tickers, and coverage metadata. |
+| Generate | Launch analysis through the local UI or CLI. | Bilingual dashboard, memo pack, run record, and analysis manifest. |
+| Compare | Review the candidate comparison table first. | Score, rating, confidence, key gaps, evidence coverage, and financial context. |
+| Investigate | Open the report drawer and operational reports. | Deliverable research report, coverage matrix, and evidence acquisition queue. |
+| Close gaps | Collect evidence, import it, and mark tasks verified. | Task statuses, audit entries, quality-before/after context, and rerun links. |
+| Handoff | Filter project queues and copy research-only handoff briefs. | Review-event trace and shareable workflow context. |
 
-When the analysis is launched from the Chinese UI, both operational report bodies are localized in Chinese, not just the drawer buttons.
+## Generated outputs
 
-Start the local product server:
+The product pipeline regenerates:
 
-```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli serve-ui \
-  --host 127.0.0.1 \
-  --port 8767 \
-  --language both
-```
+- `data/enriched/github_plus_primary.jsonl`
+- `output/reports/cpo-readiness-guarded.md`
+- `output/packs/cpo-guarded/index.md`
+- `output/packs/cpo-guarded/sources.md`
+- one memo per ready ticker in `output/packs/cpo-guarded/`
+- `config/financial_metrics.json`
+- `output/reports/universe-coverage-matrix.md`
+- `output/ui/index.html`
+- `output/ui/index.zh.html`
+- generated analysis pages under `output/ui/analyses/<slug>/`
 
-Then open:
+Each UI-launched analysis writes query-specific operational reports under `output/ui/analyses/<slug>/reports/`:
 
-- Chinese UI: `http://127.0.0.1:8767/index.zh.html`
-- English UI: `http://127.0.0.1:8767/index.html`
+- `universe-coverage-matrix.md`
+- `evidence-acquisition-queue.md`
+- `deliverable-research-report.md`
 
-The UI is a bilingual research dashboard with readiness status, report history, explicit analysis launch controls, search, status filtering, candidate comparison, ticker-focused memo previews, source coverage, risk previews, invalidation checks, primary-source provenance, and drawer-based report reading.
+When analysis starts from the Chinese UI, the operational report bodies are localized in Chinese, not just the buttons.
 
-Default UI outputs:
-
-- `output/ui/index.html` for English.
-- `output/ui/index.zh.html` for Chinese.
-- `output/ui/metrics.json` for dashboard financial metrics copied from the canonical metrics catalog.
-- `output/ui/analyses/manifest.json` for generated report history.
-
-Use the `Start analysis` / `启动分析` form to create a new local industry, sector, theme, or ticker dashboard, such as `存储芯片`, `HBM`, `半导体设备`, or `AAOI`. The form writes a fresh readiness report, memo pack, and bilingual dashboard under `output/ui/analyses/`. The page search box is only for filtering the currently open dashboard.
-
-## User Workflow
+## User workflow
 
 For Chinese users:
 
@@ -150,60 +237,16 @@ For Chinese users:
 2. In `启动分析`, enter an industry, sector, theme, or ticker, for example `存储芯片` or `HBM`.
 3. Wait for the generated analysis page under `output/ui/analyses/<slug>/`.
 4. Read `候选对比` first to compare tickers by Serenity score, rating, confidence, key gaps, evidence coverage, and financial context.
-5. Use `查看报告` to open the right-side report drawer instead of leaving the dashboard.
-6. Review `证据补齐行动清单` before trusting or promoting a candidate; it explains which primary, demand, invalidation, and crowding evidence still needs to be collected.
-7. Open `覆盖矩阵` from the generated analysis page to confirm the theme-specific candidate universe and evidence gaps.
-8. Open `证据采集队列` from the generated analysis page to see which filings, official materials, risk evidence, or invalidation evidence should be collected next.
-9. Use `最近报告` on the homepage to reopen generated reports later.
+5. Use `查看报告` to open the right-side report drawer.
+6. Review `证据补齐行动清单` before trusting or promoting a candidate.
+7. Open `覆盖矩阵` and `证据采集队列` from the generated analysis page.
+8. Use `最近报告` and the saved-project library to reopen, filter, compare, and hand off analyses.
 
-For English users, use the same flow from `http://127.0.0.1:8767/index.html`.
+English users follow the same flow from `http://127.0.0.1:8767/index.html`.
 
-## UI E2E Smoke
+## Import Serenity GitHub projects
 
-Run the HTTP-level UI smoke test after changing dashboard, launcher, report drawer, or local server behavior:
-
-```bash
-python3 -m pytest tests/test_ui_http_e2e.py -q
-```
-
-The test starts a local ephemeral HTTP server, opens the Chinese homepage, calls `/analyze?query=存储芯片&language=zh`, follows the generated analysis page, and verifies the Chinese memo file used by the report drawer.
-
-Release notes and handoff checks:
-
-- `INSTALL.md`
-- `CHANGELOG.md`
-- `docs/RELEASE_CHECKLIST.md`
-
-Optional output overrides:
-
-```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli run-cpo-pack \
-  --combined-out data/enriched/github_plus_primary.jsonl \
-  --readiness-out output/reports/cpo-readiness-guarded.md \
-  --pack-out-dir output/packs/cpo-guarded
-```
-
-Dashboard output overrides:
-
-```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-ui \
-  --readiness output/reports/cpo-readiness-guarded.md \
-  --pack-dir output/packs/cpo-guarded \
-  --out output/ui/index.html \
-  --language both
-```
-
-Financial metrics output override:
-
-```bash
-PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-financial-metrics \
-  --data data/enriched/github_plus_primary.jsonl data/primary/sive_official_report_evidence.jsonl \
-  --out config/financial_metrics.json
-```
-
-## Import Serenity GitHub Projects
-
-The GitHub importer reads a curated repo manifest, fetches public markdown files, extracts Serenity-style supply-chain claims, and writes them as auditable evidence JSONL.
+The GitHub importer reads a curated repo manifest, fetches public markdown files, extracts Serenity-style supply-chain claims, and writes them as auditable evidence JSONL:
 
 ```bash
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli import-github \
@@ -211,7 +254,7 @@ PYTHONPATH=src python3 -m serenity_alpha_lab.cli import-github \
   --out data/imported/github_evidence.jsonl
 ```
 
-Then generate a memo from both the hand-curated seed evidence and imported GitHub evidence:
+Then generate a memo from curated seed evidence and imported GitHub evidence:
 
 ```bash
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli \
@@ -221,13 +264,11 @@ PYTHONPATH=src python3 -m serenity_alpha_lab.cli \
   --out output/memos/sive-cpo-enriched.md
 ```
 
-Imported evidence remains third-party research context. It should be treated as derived or speculative unless independently confirmed by primary filings, transcripts, customer disclosures, or direct archived posts.
+Imported evidence remains third-party research context. Treat it as derived or speculative until independently confirmed by primary filings, transcripts, customer disclosures, or direct archived posts.
 
-The scorer discounts generic methodology and prompt-template evidence so it can explain the research framework without dominating the thesis score. Risk and invalidation claims are weighted toward downside and disconfirmation factors.
+## Report anatomy
 
-## MVP Outputs
-
-The generated memo includes:
+Generated memos include:
 
 - research question
 - scorecard
@@ -244,4 +285,64 @@ The generated memo includes:
 - next research tasks
 - research-only disclaimer
 
-Chinese generated reports also include investment-analysis sections such as `投资分析结论`, `Serenity 选股因子`, `关键跟踪指标`, and `证据补齐行动清单`.
+Chinese generated reports also include `投资分析结论`, `Serenity 选股因子`, `关键跟踪指标`, and `证据补齐行动清单`.
+
+## Development
+
+Run focused checks while editing:
+
+```bash
+python3 -m pytest tests -q
+python3 -m pytest tests/test_ui_http_e2e.py -q
+```
+
+Run the HTTP-level UI smoke after changing dashboard, launcher, report drawer, or local server behavior:
+
+```bash
+PYTHONPATH=src python3 -m pytest tests/test_ui_http_e2e.py -q
+```
+
+The smoke starts a local ephemeral HTTP server, opens the Chinese homepage, calls `/analyze?query=存储芯片&language=zh`, follows the generated analysis page, and verifies the Chinese memo file used by the report drawer.
+
+Useful release and handoff docs:
+
+- [`INSTALL.md`](INSTALL.md)
+- [`CHANGELOG.md`](CHANGELOG.md)
+- [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md)
+
+## Configuration notes
+
+Optional CPO pack output overrides:
+
+```bash
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli run-cpo-pack \
+  --combined-out data/enriched/github_plus_primary.jsonl \
+  --readiness-out output/reports/cpo-readiness-guarded.md \
+  --pack-out-dir output/packs/cpo-guarded
+```
+
+Optional dashboard output overrides:
+
+```bash
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-ui \
+  --readiness output/reports/cpo-readiness-guarded.md \
+  --pack-dir output/packs/cpo-guarded \
+  --out output/ui/index.html \
+  --language both
+```
+
+Optional financial metrics output override:
+
+```bash
+PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-financial-metrics \
+  --data data/enriched/github_plus_primary.jsonl data/primary/sive_official_report_evidence.jsonl \
+  --out config/financial_metrics.json
+```
+
+## Inspirations and lineage
+
+Serenity Alpha Lab borrows the visible README rhythm of focused tool projects: centered identity, concise promise, current highlights, workflow tables, and explicit verification gates. The product itself stays anchored in local evidence, bilingual research workflows, and transparent research-only boundaries.
+
+## License
+
+See the repository license before distribution. If no license file is present in this checkout, treat the code as not licensed for redistribution until one is added.

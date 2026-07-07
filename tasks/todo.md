@@ -1,3 +1,55 @@
+# Serenity Alpha Lab Bilingual Diagram README Phase
+
+- [x] Inspect the requested `fireworks-tech-graph` skill and Claude Official style 6 reference.
+- [x] Inspect the real project architecture, CLI surfaces, UI routes, evidence model, retrieval, scoring, memo pack, acquisition queue, and coverage modules.
+- [x] Create a Claude Official style architecture diagram as SVG and PNG.
+- [x] Create a Claude Official style research workflow diagram as SVG and PNG.
+- [x] Create a Claude Official style evidence-closure framework diagram as SVG and PNG.
+- [x] Update README with English and Chinese diagram sections and architecture explanation.
+- [x] Verify SVG syntax, PNG exports, README links, tests, and repository diff.
+- [x] Record review notes and reusable lessons.
+
+## Design Check-In
+
+- User goal: deeply analyze the current project, use `fireworks-tech-graph`, draw a group of style 6 Claude Official diagrams, improve the README, and provide both English and Chinese versions.
+- Diagram set: system architecture, research generation flow, and evidence-closure framework.
+- Style constraint: use Claude Official warm cream background, soft blue input/source nodes, teal processing nodes, beige infrastructure nodes, gray storage/state nodes, rounded boxes, dark strokes, and technical arrow labels.
+- Accuracy constraint: diagrams must reflect the actual Python package boundaries and local-first product pipeline, including CLI commands, JSONL/config inputs, topic resolver, retrieval/scoring/readiness, memo/UI generation, HTTP APIs, durable JSON state, and report handoff outputs.
+- README constraint: keep the previous Gajae-inspired structure but add visual architecture and bilingual English/Chinese sections without introducing broken image links.
+
+## Review
+
+- Architecture analysis: mapped the current package around evidence ingestion/validation, topic resolution, retrieval, scoring/readiness, memo pack generation, dashboard publication, local HTTP workflow APIs, durable JSON state, and research-only handoff outputs.
+- Diagram implementation: generated three Claude Official style 6 diagrams as SVG and PNG under `docs/assets/diagrams/`: system architecture, research generation flow, and evidence closure framework.
+- README implementation: updated `README.md` with the architecture visuals and English explanations, then added a full Chinese version in `README.zh.md` with matching diagram references and localized project/workflow documentation.
+- Visual QA: rendered PNGs from SVG with `cairosvg`, inspected the generated images, and corrected overlapping state nodes plus clipped framework labels before final export.
+- Verification: SVG XML parsing passed, PNG dimensions were validated, README local references reported `missing local refs: none`, `git diff --check` passed, and `python3 -m pytest tests -q` passed with `165 passed`.
+
+# Serenity Alpha Lab README Gajae-Style Redesign Phase
+
+- [x] Review the target `gajae-code` README visual structure and section rhythm.
+- [x] Review the current Serenity Alpha Lab README, metadata, and available assets.
+- [x] Confirm the README redesign direction before implementation.
+- [x] Rewrite README with an adapted center-hero, badges, highlights, product/workflow, install, and development structure.
+- [x] Verify markdown readability, local links, commands, and repository diff.
+- [x] Record review notes and reusable lessons.
+
+## Design Check-In
+
+- User goal: redesign the Serenity Alpha Lab README with a close structural imitation of `Yeachan-Heo/gajae-code` while keeping all claims accurate to this Python local-first investment research product.
+- Reference pattern to adapt: centered hero/title/tagline, badge row, beta/safety note, recent highlights, "What is it?", install, quick start, workflow surface, development, contributors/inspirations/license-style closing.
+- Asset constraint: this repository currently has no local `.png`, `.jpg`, `.svg`, or `.webp` files to reference, so the first pass should avoid broken image links and use text/HTML layout instead of fake assets.
+- Safety constraint: keep the investment-research boundary explicit; no buy/sell/hold language, target prices, or position sizing.
+- Recommended approach: imitate the README architecture and tone strongly, but replace Gajae-specific agent runner concepts with Serenity Alpha Lab concepts such as local evidence, bilingual dashboards, Run Center, project library, evidence tasks, quality gates, and report handoffs.
+
+## Review
+
+- Implementation: rewrote `README.md` into a Gajae-inspired structure with centered identity, badge row, tagline, recent highlights, product explanation, install, quick start, stable run, product/workflow tables, generated outputs, user workflow, importer, report anatomy, development, configuration, lineage, and license sections.
+- Asset handling: avoided local image references because this repository currently has no `.png`, `.jpg`, `.svg`, or `.webp` assets, preventing broken README hero links.
+- Accuracy boundary: preserved Serenity Alpha Lab's research-only positioning and explicitly excluded buy/sell/hold instructions, target prices, and position sizing.
+- Verification: reviewed the rewritten README, ran `git diff --check`, and ran a local-link script that reported `missing local links: none`.
+- Repository impact: changed only `README.md` and `tasks/todo.md`.
+
 # Serenity Alpha Lab Filtered Project Handoff Phase
 
 - [x] Record the filtered project handoff phase and product target.

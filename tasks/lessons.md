@@ -1,5 +1,6 @@
 # Lessons
 
+- README architecture diagrams should be visually QA'd after SVG export, not only XML-validated. Render PNGs, inspect for clipped labels and crowded nodes, fix the SVG layout, and then rerun link checks plus tests before calling the documentation update complete.
 - Saved project libraries need activity-state filters once cards show collaboration history. Let users filter active versus inactive projects and sort by activity count from the same review event log, while keeping the data operational rather than investment-directed.
 - Project cards need activity summaries once review events become operational. Reuse the durable event log to show latest activity and event count on cards and detail drawers so users can triage projects before opening the full timeline.
 - Collaboration event logs need type filters once multiple workflow actions write to the same timeline. Count and filter events by operational type while preserving the project-specific audit trail and avoiding investment guidance.
