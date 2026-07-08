@@ -1,3 +1,44 @@
+# DSA-First Serenity Core P3-T01 Research Task Data Contract Phase
+
+- [x] Review Phase 3 / P3-T01 entry criteria from tracker before implementation.
+- [x] Inspect existing DSA Serenity audit schema, history schema readback, P2 evidence-gap tool output, and snapshot persistence tests.
+- [x] Create DSA contract doc `docs/serenity-research-task-contract.md` defining research-only task fields, lifecycle, rerun context, snapshot fields, and future table candidates.
+- [x] Write failing DSA schema tests in `tests/api/v1/test_serenity_research_task_schema.py` for task status transitions, gap taxonomy, old-history compatibility, and trading-field rejection.
+- [x] Implement minimal schema support in `api/v1/schemas/history.py` and shared Serenity schema types without adding DB tables or persistence behavior.
+- [x] Run focused red/green schema tests, existing Serenity schema/history tests, boundary guard, compile checks, forbidden trading-field scan, and diff check.
+- [x] Update tracker, this task log, lessons if reusable patterns emerge, and the restart prompt.
+- [x] Stage only P3-T01-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: Phase 2 is verified at DSA commit `f74720f`; Serenity Agent tools remain research-only, explicit-intent-gated, caller-context-only, default-off under `SERENITY_RESEARCH_ENABLED=false`, and fail-open.
+- Dependency: P1-T03 already persists optional audit metadata under `analysis_history.context_snapshot.serenity_research`; P3-T01 must continue snapshot-first and must not introduce a DB table, migration, service persistence path, or intelligence workflow mutation.
+- Tracker scope: P3-T01 defines the durable research task data contract only: `task_id`, `symbol`, `market`, `gap_type`, `reason`, `source_target`, `acceptance_criteria`, `status`, `created_at`, `updated_at`, `verified_at`, rerun context, snapshot placement, and future table candidates.
+- Product boundary: research tasks can only represent evidence gaps and follow-up research. They must not create or alter DSA trading advice, target price, position sizing, stop loss / take profit, trend prediction, `sentiment_score`, or `operation_advice`.
+- Design choice before implementation: keep task schema nested under the existing optional `serenity_research` / history response path, with strict extra-field rejection and old-record compatibility.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py -q` should fail before schema implementation because the new contract/schema does not exist.
+- Focused pass: `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py -q`.
+- Existing schema/history pass: `python3.11 -m pytest tests/serenity/test_serenity_api_schema_contract.py tests/serenity/test_analysis_history_serenity_snapshot.py -q`.
+- Boundary pass: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile api/v1/schemas/serenity.py api/v1/schemas/history.py tests/api/v1/test_serenity_research_task_schema.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity.*(买入|卖出|持有|目标价|仓位|止损|止盈)" api src tests docs`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P3-T01 files and Serenity generated `output/ui/*` remains untouched.
+
+
+## Review
+
+- Red check: `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py -q` failed during collection because the P3 research task schemas did not exist yet.
+- Implementation: DSA commit `0c97412` added `SerenityResearchTask`, `SerenityResearchTaskRerunContext`, and `SerenityResearchTaskStatusTransition`, plus the `tasks` list under `SerenityResearchAudit`.
+- Contract doc: added DSA `docs/serenity-research-task-contract.md` defining snapshot placement, task fields, required gap taxonomy, status machine, rerun context, future-table gate, safety rules, and rollback.
+- Boundary: P3-T01 did not add DB tables, migrations, service persistence, intelligence workflow behavior, provider fetches, Agent prompt changes, or trading-field mappings.
+- Target green check: `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py -q` -> `9 passed`.
+- Regression: schema/history tests -> `8 passed`; `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; safety scan only matched existing boundary docs / broad-regex smoke test name; `git diff --check` -> pass.
+- Next step: execute `P3-T02: Snapshot-Based Task Persistence`, generating and writing bounded research tasks to `context_snapshot.serenity_research.tasks` without introducing DB tables before the P3-T04 gate.
+
 # DSA-First Serenity Core P2 Phase Review
 
 - [x] Confirm P2 Phase Review entry criteria from tracker before review.
