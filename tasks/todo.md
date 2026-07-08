@@ -1,3 +1,31 @@
+# DSA-First Serenity Core P0-T03 Evidence Quality Service Phase
+
+- [x] Write failing DSA service tests for disabled, enabled, empty context, and adapter exception paths.
+- [x] Create `src/serenity/services/evidence_quality_service.py` and `src/serenity/services/__init__.py` in DSA.
+- [x] Keep service orchestration limited to adapter plus Serenity pure core scoring, coverage, readiness, and acquisition queue.
+- [x] Preserve disabled-by-default and fail-open behavior without provider/API/UI/DB/notification/task-queue imports.
+- [x] Verify service tests, adapter tests, core contract tests, static boundary guard, py_compile, and diff cleanliness.
+- [x] Commit the DSA P0-T03 implementation with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` and this task log with P0-T03 evidence.
+
+## Design Check-In
+
+- User goal: continue Phase 0 with `P0-T03: Evidence Quality Service POC` after the DSA context adapter is verified.
+- Scope: add only a narrow DSA-facing service and focused tests; do not connect service to DSA API, UI, DB, providers, notifications, task queue, report rendering, portfolio, backtest, or alert paths.
+- Contract: `EvidenceQualityService(enabled=False).evaluate(context)` returns a stable disabled research audit without calling adapter/core; enabled service returns JSON-serializable research-only evidence quality, readiness, coverage, gaps, acquisition tasks, and diagnostics.
+- Fail-open: empty context returns deterministic blocked audit; adapter/core exceptions return `status="failed_open"` with sanitized diagnostics and no upstream exception.
+- Safety: service output uses evidence-quality terminology only and does not include DSA trading fields such as `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+
+## Review
+
+- Red test: `python3.11 -m pytest tests/serenity/services/test_evidence_quality_service.py -q` initially failed with 4 missing-module/import failures, proving the service contract was not implemented yet.
+- Implementation: added DSA `src/serenity/services/evidence_quality_service.py` and package initializer with `EvidenceQualityService.evaluate(context: dict[str, Any]) -> dict[str, Any]`.
+- Behavior: disabled mode returns `enabled=false` without adapter execution; enabled mode composes `dsa_context_to_evidence`, `score_research_question`, `summarize_scorecard`, `assess_source_coverage`, `assess_batch_readiness`, and `build_acquisition_queue`.
+- Boundary behavior: service catches exceptions and returns `status="failed_open"` with sanitized diagnostics; empty context returns stable blocked audit; output remains JSON-serializable and research-only.
+- Verification: `python3.11 -m pytest tests/serenity/services/test_evidence_quality_service.py -q` -> `4 passed`; `python3.11 -m pytest tests/serenity/adapters/test_dsa_context_to_evidence.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py src/serenity/services/*.py` -> exit 0; `git diff --check` -> exit 0.
+- Commit: DSA `a382a0f` (`feat(serenity): 增加 Evidence Quality Service POC`).
+- Next step: start `P0-T04: CLI / Script POC Runner`; still keep Phase 0 local-only and do not change DSA API, UI, DB, providers, notifications, task queue, or trading-decision fields.
+
 # DSA-First Serenity Core P0-T02 Context Adapter Phase
 
 - [x] Write DSA adapter tests for complete context, empty context, missing news/fundamentals, and legacy flat keys.
