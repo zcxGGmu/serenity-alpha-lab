@@ -27,9 +27,9 @@
 
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
-| DSA 代码集成 | In Progress | Global tasks、`P0-T01`、`P0-T02`、`P0-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；尚未改 API、UI、DB |
+| DSA 代码集成 | In Progress | Global tasks、`P0-T01`、`P0-T02`、`P0-T03`、`P0-T04` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；尚未改 API、UI、DB |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
-| Phase 0 Evidence Bridge POC | In Progress | `P0-T01`、`P0-T02`、`P0-T03` 已完成并验证；下一步从 `P0-T04` CLI / Script POC Runner 开始 |
+| Phase 0 Evidence Bridge POC | In Review | `P0-T01` 至 `P0-T04` 已完成并验证；下一步执行 Phase 0 review gate |
 | Phase 1 Analysis Report Add-On | Not Started | 等 Phase 0 review 通过后再开始 |
 | Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
 | Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
@@ -37,10 +37,10 @@
 
 ### 当前下一步
 
-Global guardrails、P0-T01 core contract、P0-T02 DSA context adapter 与 P0-T03 evidence quality service 已完成；下一步继续 Phase 0 Evidence Bridge POC，不直接进入 UI、API 或数据库改造。
+Global guardrails、P0-T01 core contract、P0-T02 DSA context adapter、P0-T03 evidence quality service 与 P0-T04 local POC runner 已完成；下一步执行 Phase 0 review gate，不直接进入 UI、API 或数据库改造。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 执行 `P0-T04: CLI / Script POC Runner`。
+2. 执行 `P0 Phase Review`，确认 exit criteria 后再进入 Phase 1。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
 4. Phase 0 仅做本地 POC，不改 DSA API、UI、DB。
 
@@ -65,16 +65,17 @@ Global guardrails、P0-T01 core contract、P0-T02 DSA context adapter 与 P0-T03
 4. tasks/lessons.md
 
 当前状态：
-- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter 与 P0-T03 Evidence Quality Service POC；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
+- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter、P0-T03 Evidence Quality Service POC 与 P0-T04 CLI / Script POC Runner；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
 - Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 - DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
 - DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
 - DSA P0-T01 已完成：已在 DSA 内新增标准库-only `src/serenity/core/*` 最小研究契约和 `tests/serenity/core/test_core_contract.py`；DSA commit 为 `4e34c78`。
 - DSA P0-T02 已完成：已新增 `src/serenity/adapters/dsa_context_to_evidence.py`、`src/serenity/adapters/__init__.py` 和 `tests/serenity/adapters/test_dsa_context_to_evidence.py`；最新 DSA commit 为 `b85b72a`。
 - DSA P0-T03 已完成：已新增 `src/serenity/services/evidence_quality_service.py`、`src/serenity/services/__init__.py` 和 `tests/serenity/services/test_evidence_quality_service.py`；最新 DSA commit 为 `a382a0f`。
-- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter 和 evidence quality service POC；尚未开始 CLI runner / API / UI / DB 集成。
+- DSA P0-T04 已完成：已新增 `scripts/serenity_evidence_audit_poc.py`、`tests/serenity/test_evidence_audit_poc_script.py`、`tests/fixtures/serenity/dsa_context_full.json` 和 `docs/serenity-phase-0-poc.md`；最新 DSA commit 为 `e15e588`。
+- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter、evidence quality service POC 和本地 CLI/script runner；尚未开始 API / UI / DB 集成。
 - 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；前端缺 `apps/dsa-web/node_modules`。不要把这些既有失败归因于 Serenity。
-- 下一步从 tracker 的 `P0-T04: CLI / Script POC Runner` 开始，完成 Phase 0 本地 POC 验收后再 review。
+- 下一步从 tracker 的 `P0 Phase Review` 开始，确认 Phase 0 exit criteria 后再进入 Phase 1。
 - 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
 - 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
@@ -455,15 +456,15 @@ python -m pytest tests/serenity/services/test_evidence_quality_service.py -q
 ### P0-T04: CLI / Script POC Runner
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `e15e588`
+Evidence: DSA `scripts/serenity_evidence_audit_poc.py`, `tests/serenity/test_evidence_audit_poc_script.py`, `tests/fixtures/serenity/dsa_context_full.json`, `docs/serenity-phase-0-poc.md`; Red test `python3.11 -m pytest tests/serenity/test_evidence_audit_poc_script.py -q` initially -> `3 failed` due missing script; enabled script smoke `python3.11 scripts/serenity_evidence_audit_poc.py --sample tests/fixtures/serenity/dsa_context_full.json --enabled` -> exit 0 with parseable audit JSON; runner tests -> `3 passed`; service tests -> `4 passed`; adapter tests -> `3 passed`; core contract -> `3 passed`; boundary guard -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py src/serenity/services/*.py scripts/serenity_evidence_audit_poc.py` -> exit 0; `git diff --check` -> exit 0.
+Decision Notes: Runner reads only a local JSON sample and writes audit JSON to stdout; default run remains disabled, and `--enabled` explicitly runs the research audit. The script does not read DSA DB, start FastAPI, call providers, mutate reports, or change API/UI/DB behavior. Documentation records sample input, commands, output fields, and Phase 0 safety boundary.
+Rollback Notes: 删除 DSA `scripts/serenity_evidence_audit_poc.py`、`tests/serenity/test_evidence_audit_poc_script.py`、`tests/fixtures/serenity/dsa_context_full.json` 与 `docs/serenity-phase-0-poc.md`；不会影响 DSA 原有运行时。
 
 **Purpose:** 用最小脚本证明 evidence bridge 可独立运行，供后续 Phase 1 接入前验证。
 
@@ -477,11 +478,11 @@ Rollback Notes:
 
 **Implementation Checklist:**
 
-- [ ] 脚本接受 sample JSON 路径作为输入。
-- [ ] 脚本输出 audit JSON 到 stdout。
-- [ ] 脚本支持 `--enabled` 显式开启，默认关闭。
-- [ ] 示例文档记录 sample 输入、命令、输出字段解释。
-- [ ] 不读取 DSA DB，不启动 FastAPI，不调用行情 provider。
+- [x] 脚本接受 sample JSON 路径作为输入。
+- [x] 脚本输出 audit JSON 到 stdout。
+- [x] 脚本支持 `--enabled` 显式开启，默认关闭。
+- [x] 示例文档记录 sample 输入、命令、输出字段解释。
+- [x] 不读取 DSA DB，不启动 FastAPI，不调用行情 provider。
 
 **Tests:**
 
@@ -492,9 +493,9 @@ python -m pytest tests/serenity/test_evidence_audit_poc_script.py -q
 
 **DoD:**
 
-- [ ] POC 可在本地命令行稳定输出 audit JSON。
-- [ ] stdout 是可解析 JSON。
-- [ ] 文档说明 Phase 0 未修改 API/UI/DB。
+- [x] POC 可在本地命令行稳定输出 audit JSON。
+- [x] stdout 是可解析 JSON。
+- [x] 文档说明 Phase 0 未修改 API/UI/DB。
 
 **Rollback:** 删除 POC script、测试和 Phase 0 POC 文档。
 
@@ -1570,7 +1571,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | P0-T01 | Phase 0 | Serenity Core 最小契约抽取 | Verified | G-T01, G-T03 | DSA commit `4e34c78`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile/import smoke passed |
 | P0-T02 | Phase 0 | DSA Context 到 Evidence Adapter | Verified | P0-T01 | DSA commit `b85b72a`; adapter tests -> `3 passed`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile and diff check passed |
 | P0-T03 | Phase 0 | Evidence Quality Service POC | Verified | P0-T02 | DSA commit `a382a0f`; service tests -> `4 passed`; adapter tests -> `3 passed`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile and diff check passed |
-| P0-T04 | Phase 0 | CLI / Script POC Runner | Not Started | P0-T03 |  |
+| P0-T04 | Phase 0 | CLI / Script POC Runner | Verified | P0-T03 | DSA commit `e15e588`; enabled script smoke exit 0; runner tests -> `3 passed`; service tests -> `4 passed`; adapter tests -> `3 passed`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile and diff check passed |
 | P1-T01 | Phase 1 | API Schema 增加 Serenity Audit 类型 | Not Started | P0-T03 |  |
 | P1-T02 | Phase 1 | Analysis Service 附加 Serenity Audit | Not Started | P1-T01 |  |
 | P1-T03 | Phase 1 | 历史记录 Context Snapshot 持久化 | Not Started | P1-T02 |  |
@@ -1592,12 +1593,12 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-Global guardrails、P0-T01、P0-T02 与 P0-T03 已完成。从 Phase 0 继续，不直接进入 UI 或数据库改造。
+Global guardrails、P0-T01、P0-T02、P0-T03 与 P0-T04 已完成。从 Phase 0 review gate 继续，不直接进入 UI 或数据库改造。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
 - [x] 执行 P0-T01。
 - [x] 执行 P0-T02。
 - [x] 执行 P0-T03。
-- [ ] 执行 P0-T04。
-- [ ] Phase 0 review 通过后，再进入 Phase 1。
+- [x] 执行 P0-T04。
+- [ ] 执行 Phase 0 review gate，通过后再进入 Phase 1。

@@ -1,3 +1,31 @@
+# DSA-First Serenity Core P0-T04 CLI Script POC Runner Phase
+
+- [x] Write failing DSA script tests for disabled output, enabled audit JSON, and missing sample error handling.
+- [x] Create `scripts/serenity_evidence_audit_poc.py` in DSA.
+- [x] Create `tests/fixtures/serenity/dsa_context_full.json` sample input.
+- [x] Create `docs/serenity-phase-0-poc.md` documenting commands, output fields, and Phase 0 boundaries.
+- [x] Verify enabled script smoke, runner tests, service tests, adapter tests, core tests, boundary guard, py_compile, and diff cleanliness.
+- [x] Commit the DSA P0-T04 implementation with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` and this task log with P0-T04 evidence.
+
+## Design Check-In
+
+- User goal: complete `P0-T04: CLI / Script POC Runner` after P0-T03 service is verified.
+- Scope: add only an offline local script runner, one static JSON fixture, focused tests, and a POC document; do not connect Serenity to DSA API, UI, DB, providers, notifications, task queue, report rendering, portfolio, backtest, or alert paths.
+- Contract: script accepts `--sample`, defaults to disabled, supports `--enabled`, writes audit JSON to stdout, and writes missing/invalid sample errors to stderr with exit code 2.
+- Validation target: stdout must be parseable JSON and enabled output must include research-only audit fields without forbidden trading-decision keys.
+- Safety: Phase 0 remains local-only and does not modify DSA runtime behavior, API schema, UI surfaces, or database persistence.
+
+## Review
+
+- Red test: `python3.11 -m pytest tests/serenity/test_evidence_audit_poc_script.py -q` initially failed with 3 failures because `scripts/serenity_evidence_audit_poc.py` did not exist.
+- Implementation: added DSA `scripts/serenity_evidence_audit_poc.py`, static sample fixture `tests/fixtures/serenity/dsa_context_full.json`, script tests, and `docs/serenity-phase-0-poc.md`.
+- Behavior: default command returns disabled research audit JSON; `--enabled` runs `EvidenceQualityService` and emits full evidence quality/readiness/coverage/acquisition JSON; missing sample returns exit code 2 with a readable stderr message.
+- Boundary behavior: script only reads local sample JSON and does not fetch data, read DB, start FastAPI, call providers, send notifications, mutate reports, or change API/UI/DB behavior.
+- Verification: `python3.11 scripts/serenity_evidence_audit_poc.py --sample tests/fixtures/serenity/dsa_context_full.json --enabled` -> exit 0 with parseable audit JSON; `python3.11 -m pytest tests/serenity/test_evidence_audit_poc_script.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity/services/test_evidence_quality_service.py -q` -> `4 passed`; `python3.11 -m pytest tests/serenity/adapters/test_dsa_context_to_evidence.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py src/serenity/services/*.py scripts/serenity_evidence_audit_poc.py` -> exit 0; `git diff --check` -> exit 0.
+- Commit: DSA `e15e588` (`feat(serenity): 增加 Phase 0 证据审计 POC Runner`).
+- Next step: execute `P0 Phase Review`; confirm Phase 0 exit criteria before starting Phase 1.
+
 # DSA-First Serenity Core P0-T03 Evidence Quality Service Phase
 
 - [x] Write failing DSA service tests for disabled, enabled, empty context, and adapter exception paths.
