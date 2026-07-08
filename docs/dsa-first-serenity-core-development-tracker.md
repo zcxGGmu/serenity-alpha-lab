@@ -27,20 +27,20 @@
 
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
-| DSA 代码集成 | In Progress | Global tasks、Phase 0、Phase 1、Phase 2 Agent Tools 与 Phase 3 `P3-T01` Research Task Data Contract 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 `P3-T02` Snapshot-Based Task Persistence，DB 专表仍未启动 |
+| DSA 代码集成 | In Progress | Global tasks、Phase 0、Phase 1、Phase 2 Agent Tools 与 Phase 3 `P3-T01` Research Task Data Contract、`P3-T02` Snapshot-Based Task Persistence 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 `P3-T03` Intelligence Service 接入，DB 专表仍未启动 |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
 | Phase 0 Evidence Bridge POC | Verified | `P0-T01` 至 `P0-T04` 与 Phase 0 review gate 已完成并验证 |
 | Phase 1 Analysis Report Add-On | Verified | `P1-T01` API Schema、`P1-T02` Analysis Service 附加 Serenity Audit、`P1-T03` 历史记录 Context Snapshot 持久化、`P1-T04` Web 类型/证据质量面板、`P1-T05` HTTP / UI Smoke 与 P1 Phase Review 已完成并验证 |
 | Phase 2 Agent Tools | Verified | `P2-T01` Evidence Quality Agent Tool、`P2-T02` Evidence Gap Agent Tool、`P2-T03` Agent Prompt Boundary Test 与 P2 Phase Review 已完成并验证；review 修复了 feature flag 与 specialist fallback 两个边界缺口 |
-| Phase 3 Intelligence Workflow Persistence | In Progress | `P3-T01` Research Task Data Contract 已完成并验证；下一步从 `P3-T02` Snapshot-Based Task Persistence 开始，继续 snapshot-first，不新增 DB 专表 |
+| Phase 3 Intelligence Workflow Persistence | In Progress | `P3-T01` Research Task Data Contract 与 `P3-T02` Snapshot-Based Task Persistence 已完成并验证；下一步从 `P3-T03` Intelligence Service 接入开始，继续 snapshot-first，不新增 DB 专表 |
 | Phase 4 Provenance Safety Guardrails | Not Started | 等 Phase 3 review 通过后再开始 |
 
 ### 当前下一步
 
-Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On（含 `P1-T01` 至 `P1-T05` 与 P1 Phase Review）、Phase 2 Agent Tools（含 `P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）和 Phase 3 `P3-T01` Research Task Data Contract 已完成并通过验证；下一步继续 Phase 3 Intelligence Workflow Persistence，从 `P3-T02` Snapshot-Based Task Persistence 开始，但仍优先使用 snapshot，不新增 DB 专表。
+Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On（含 `P1-T01` 至 `P1-T05` 与 P1 Phase Review）、Phase 2 Agent Tools（含 `P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）和 Phase 3 `P3-T01` Research Task Data Contract、`P3-T02` Snapshot-Based Task Persistence 已完成并通过验证；下一步继续 Phase 3 Intelligence Workflow Persistence，从 `P3-T03` Intelligence Service 接入开始，但仍优先使用 snapshot，不新增 DB 专表。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 从 `P3-T02` Snapshot-Based Task Persistence 开始。
+2. 从 `P3-T03` Intelligence Service 接入开始。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
 4. Phase 3 只允许把 Serenity gaps 设计为可追踪研究任务，不得把 Serenity score 或 task 状态映射到 DSA 交易建议、目标价、仓位、趋势预测或 `sentiment_score`。
 
@@ -68,15 +68,15 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - DSA 分支：codex/serenity-phase-0-evidence-bridge
-- Serenity 最新提交：请以下次启动时 `git rev-parse --short HEAD` 为准；当前 tracker 已刷新到 P3-T01 完成后的状态
-- DSA 最新提交：0c97412 feat(serenity): 定义研究任务数据契约
+- Serenity 最新提交：请以下次启动时 `git rev-parse --short HEAD` 为准；当前 tracker 已刷新到 P3-T02 完成后的状态
+- DSA 最新提交：6774f61 feat(serenity): 持久化研究任务快照
 
 已完成：
 - Global guardrails：G-T01、G-T02、G-T03
 - Phase 0 Evidence Bridge POC：P0-T01、P0-T02、P0-T03、P0-T04 与 Phase 0 review gate
 - Phase 1 Analysis Report Add-On：P1-T01、P1-T02、P1-T03、P1-T04、P1-T05 与 P1 Phase Review
 - Phase 2 Agent Tools：P2-T01、P2-T02、P2-T03 与 P2 Phase Review
-- Phase 3 Intelligence Workflow Persistence：P3-T01 Research Task Data Contract
+- Phase 3 Intelligence Workflow Persistence：P3-T01 Research Task Data Contract、P3-T02 Snapshot-Based Task Persistence
 - 已新增 research-only `serenity_evidence_quality` Agent tool
 - 已新增 research-only `serenity_evidence_gaps` Agent tool
 - 两个 tool 均通过 DSA `src/agent/tools/analysis_tools.py` 的 `ALL_ANALYSIS_TOOLS` 注册
@@ -92,9 +92,16 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - P3-T01 已定义 task 状态机：`open -> collecting -> verified` 与 `open -> dismissed`
 - P3-T01 已定义至少四类 required gap：`primary_source`、`risk_coverage`、`demand_validation`、`invalidation_plan`
 - P3-T01 仍未新增 DB 表、migration、service persistence 或 intelligence workflow 行为
+- P3-T02 已新增 DSA `src/serenity/services/research_task_service.py`
+- P3-T02 已从 audit acquisition tasks 生成 deterministic research task id
+- P3-T02 已把 bounded tasks 写入 `analysis_history.context_snapshot.serenity_research.tasks`
+- P3-T02 已支持 snapshot 内 task status 更新：`open -> collecting -> verified` 与 `open -> dismissed`
+- P3-T02 已支持 `history_id + task_id` 精确定位，避免同一 query/code/report_type 重复分析误更新
+- P3-T02 已对 snapshot tasks 限制 top 20，并逐条通过 `SerenityResearchTask` schema 校验、剥离 trading fields
+- P3-T02 未新增 DB 表、migration、provider fetch、Agent prompt、intelligence workflow mutation 或 DSA trading field 映射
 
 未完成下一步：
-- 从 tracker 的 `P3-T02: Snapshot-Based Task Persistence` 开始
+- 从 tracker 的 `P3-T03: Intelligence Service 接入` 开始
 - Phase 3 Intelligence Workflow Persistence 尚未完成
 - Phase 4 Provenance Safety Guardrails 尚未开始
 - DB 专表尚未启动；目前仍使用 `analysis_history.context_snapshot.serenity_research`
@@ -107,7 +114,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略
 - Phase 3 研究任务只能表示 evidence gaps / follow-up research，不得自动创建交易建议或修改 DSA trading fields
 - 继续优先使用 snapshot / metadata；只有通过 tracker 的专表升级决策 gate 后才允许新增 DB 专表
-- P3-T02 可以生成并写回 `context_snapshot.serenity_research.tasks`，但不得新增 DB migration/table 或接入交易字段
+- P3-T03 可以复用 snapshot task metadata 接入 DSA 现有 intelligence workflow，但不得新增 DB migration/table，除非先通过 P3-T04 专表升级决策 gate
 
 P3-T01 验证证据：
 - red check `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py -q` -> collection error，缺少 `SerenityResearchTask` / `SerenityResearchTaskStatusTransition`
@@ -119,12 +126,23 @@ P3-T01 验证证据：
 - safety scan only matched existing boundary docs and broad-regex smoke test name
 - `git diff --check` -> pass
 
+P3-T02 验证证据：
+- red check `python3.11 -m pytest tests/serenity/services/test_research_task_service.py tests/storage/test_serenity_research_tasks_snapshot.py -q` -> collection error，缺少 `src.serenity.services.research_task_service`
+- after fix same command -> `13 passed`
+- schema/history regression `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py tests/serenity/test_analysis_history_serenity_snapshot.py -q` -> `12 passed`
+- `python3.11 -m pytest tests/serenity -q` -> `39 passed`
+- boundary guard `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`
+- target `py_compile` -> pass
+- safety scan only matched existing boundary docs / baseline scan command / broad-regex smoke test name
+- DB-table scan only matched contract docs and schema test names; no migration/table added
+- `git diff --check` -> pass
+
 已知环境 blocker：
 - full `python3.11 -m pytest tests/test_agent_registry.py -q` 此前仍因缺少 `pandas` 在 unrelated `src/storage.py` import 处失败；最近记录为 `1 failed, 58 passed`
-- 这是既有环境依赖缺口，不要归因于 Serenity P3-T01
+- 这是既有环境依赖缺口，不要归因于 Serenity P3-T02
 
 当前工作区注意事项：
-- DSA 工作区应为 clean，HEAD 为 `0c97412`
+- DSA 工作区应为 clean，HEAD 为 `6774f61`
 - Serenity 仓库仍有既有未提交 generated UI 输出变更：
   - output/ui/analyses/manifest.json
   - output/ui/reports/deliverable-research-report.md
@@ -1096,15 +1114,15 @@ python -m pytest tests/api/v1/test_serenity_research_task_schema.py -q
 ### P3-T02: Snapshot-Based Task Persistence
 
 Owner:
-Status: Not Started
-Started:
-Updated:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
 Branch:
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `6774f61`
+Evidence: Red check `python3.11 -m pytest tests/serenity/services/test_research_task_service.py tests/storage/test_serenity_research_tasks_snapshot.py -q` failed during collection because `src.serenity.services.research_task_service` was missing; after DSA commit `6774f61`, same command -> `13 passed`; schema/history regression `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py tests/serenity/test_analysis_history_serenity_snapshot.py -q` -> `12 passed`; full Serenity regression `python3.11 -m pytest tests/serenity -q` -> `39 passed`; boundary guard `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; target `py_compile` -> pass; safety scan only matched existing boundary docs / baseline scan command / broad-regex smoke test name; DB-table scan only matched contract docs and schema test names; `git diff --check` -> pass.
+Decision Notes: P3-T02 keeps snapshot-first persistence. Added `ResearchTaskService` to normalize audit acquisition tasks into deterministic, schema-valid research tasks; `AnalysisService` now attaches bounded tasks before the existing snapshot patch; `DatabaseManager` preserves top 20 sanitized `tasks` under `context_snapshot.serenity_research.tasks` and supports status updates in-place, including `history_id + task_id` precise row targeting. No DB table, migration, provider fetch, Agent prompt change, intelligence workflow mutation, or DSA trading-field mapping was introduced.
+Rollback Notes: Revert DSA commit `6774f61` to stop generating and updating snapshot tasks. Historical `context_snapshot.serenity_research.tasks` entries are optional JSON add-ons and can remain readable as inert metadata; no schema downgrade is required because no table or migration was added.
 
 **Purpose:** 在不新增数据库表的情况下，把 evidence gaps 转成可回读任务。
 
@@ -1120,12 +1138,12 @@ Rollback Notes:
 
 **Implementation Checklist:**
 
-- [ ] 从 audit gaps 生成 deterministic task ids。
-- [ ] 将 tasks 写入 `context_snapshot.serenity_research.tasks`。
-- [ ] 如果同一 analysis rerun 产生同一 gap，保持 task id 稳定。
-- [ ] 支持状态更新写回 snapshot。
-- [ ] 对 snapshot 太大设置上限，例如最多保留 top 20 tasks 和摘要字段。
-- [ ] 不引入新数据库 migration。
+- [x] 从 audit gaps 生成 deterministic task ids。
+- [x] 将 tasks 写入 `context_snapshot.serenity_research.tasks`。
+- [x] 如果同一 analysis rerun 产生同一 gap，保持 task id 稳定。
+- [x] 支持状态更新写回 snapshot。
+- [x] 对 snapshot 太大设置上限，例如最多保留 top 20 tasks 和摘要字段。
+- [x] 不引入新数据库 migration。
 
 **Tests:**
 
@@ -1135,9 +1153,9 @@ python -m pytest tests/serenity/services/test_research_task_service.py tests/sto
 
 **DoD:**
 
-- [ ] tasks 可持久化、回读、状态更新。
-- [ ] snapshot size 有上限。
-- [ ] 空 gaps 产生明确 empty state。
+- [x] tasks 可持久化、回读、状态更新。
+- [x] snapshot size 有上限。
+- [x] 空 gaps 产生明确 empty state。
 
 **Rollback:** 停止生成 tasks；已写入 snapshot 的 tasks 作为历史附加 JSON 保留。
 
@@ -1648,7 +1666,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | P2-T03 | Phase 2 | Agent Prompt Boundary Test | Verified | P2-T01, P2-T02 | DSA commit `213db24`; red-green prompt boundary tests -> `3 failed / 2 passed`, executor exposure check -> `2 failed / 6 passed`, final focused suite -> `8 passed`; P2 tool regression -> `11 passed`; registry tests -> `2 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile, forbidden phrase scan, and diff check passed |
 | P2-REV | Phase 2 | Phase 2 Review Gate | Verified | P2-T01, P2-T02, P2-T03 | DSA commit `f74720f`; feature flag red check -> `1 failed` then fixed in `18f5d13`; reviewer boundary red check -> `2 failed` then fixed in `f74720f`; prompt boundary -> `11 passed`; P2 tool regression -> `11 passed`; focused registry import/schema -> `2 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile and diff check passed |
 | P3-T01 | Phase 3 | Research Task Data Contract | Verified | P1-T03, P2-T02, P2-REV | DSA commit `0c97412`; red schema check failed on missing task schema, then `9 passed`; schema/history regression -> `8 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile, safety scan, and diff check passed |
-| P3-T02 | Phase 3 | Snapshot-Based Task Persistence | Not Started | P3-T01 |  |
+| P3-T02 | Phase 3 | Snapshot-Based Task Persistence | Verified | P3-T01 | DSA commit `6774f61`; red persistence check failed on missing service, then `13 passed`; schema/history regression -> `12 passed`; Serenity suite -> `39 passed`; boundary guard -> `3 passed`; py_compile, safety scan, DB-table scan, and diff check passed |
 | P3-T03 | Phase 3 | Intelligence Service 接入 | Not Started | P3-T02 |  |
 | P3-T04 | Phase 3 | 专表升级决策 Gate | Not Started | P3-T03 |  |
 | P4-T01 | Phase 4 | Provenance Namespace | Not Started | P1-T02, P3-T02 |  |
@@ -1660,7 +1678,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On、Phase 2 Agent Tools（`P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）和 `P3-T01` Research Task Data Contract 已完成并验证。下一步从 `P3-T02` Snapshot-Based Task Persistence 继续，不改变既有交易语义，不新增 DB 专表。
+Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On、Phase 2 Agent Tools（`P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）以及 `P3-T01` Research Task Data Contract、`P3-T02` Snapshot-Based Task Persistence 已完成并验证。下一步从 `P3-T03` Intelligence Service 接入继续，不改变既有交易语义，不新增 DB 专表。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
@@ -1680,4 +1698,5 @@ Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On、Phase
 - [x] 执行 P2-T03。
 - [x] 执行 P2 Phase Review。
 - [x] 执行 P3-T01 Research Task Data Contract。
-- [ ] 执行 P3-T02 Snapshot-Based Task Persistence。
+- [x] 执行 P3-T02 Snapshot-Based Task Persistence。
+- [ ] 执行 P3-T03 Intelligence Service 接入。

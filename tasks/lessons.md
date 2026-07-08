@@ -1,5 +1,7 @@
 # Lessons
 
+- Snapshot persistence for research-only task metadata needs nested schema sanitization, not only top-level allowlists. Validate each `context_snapshot.serenity_research.tasks[]` entry with `SerenityResearchTask`, cap the list, and strip task-level trading fields before writing JSON.
+- Status updates inside historical JSON snapshots should support `history_id + task_id` precise targeting once duplicate `query_id/code/report_type` records are possible. Latest-row fallback is acceptable for whole-audit patching, but task status mutation needs a safer row anchor.
 - Pydantic schema contracts are the right first step before persistence. Define strict task objects, lifecycle transitions, old-record defaults, and trading-field rejection before writing snapshot or DB persistence logic.
 - At every stage boundary, refresh the development tracker, task log, lessons, tracker restart prompt, and final user-facing restart prompt before closing the turn; include completed scope, unfinished next task, latest Serenity/DSA commit ids, validation evidence, known blockers, and forbidden generated files.
 - Agent tool feature flags must gate exposure before intent matching. If a research-only tool is globally registered, `SERENITY_RESEARCH_ENABLED=false` must hide it even when the user explicitly asks for evidence quality, and tests should cover both flag-off and flag-on explicit-intent paths.
