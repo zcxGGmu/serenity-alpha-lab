@@ -3288,3 +3288,26 @@
 - Hardening focus: added import direction rules, allowed/forbidden call sites, packaging choices, phase gates, nested API contracts, `dsa://` provenance, failure taxonomy, config table, deployment defaults, observability, compliance copy, and phase-level Definition of Done.
 - Product boundary reinforced: DSA keeps trading semantics and product shell; Serenity-generated surfaces only describe research evidence quality and follow-up research tasks.
 - Validation: updated plan headings, new-document placeholder scan, referenced DSA/Serenity path checks, and `git diff --check` passed; historical `tasks/todo.md` text still contains older review wording outside this task.
+
+# DSA-First Serenity Core P1 Phase Review
+
+- [x] Reconfirm current Serenity and DSA repository state before review.
+- [x] Verify Phase 1 exit criteria against DSA code and tests.
+- [x] Run fresh backend API, service, boundary, and full Serenity test commands.
+- [x] Run fresh DSA Web smoke, build, and lint commands.
+- [x] Triage subagent review feedback and fix API schema defense gap in DSA.
+- [x] Update tracker with P1 Phase Review evidence and next Phase 2 status.
+- [x] Refresh restart prompt with completed scope, next step, commit ids, validation, blockers, and forbidden generated UI files.
+- [x] Update lessons with reusable patterns from this stage.
+- [x] Stage only P1 Phase Review documentation changes.
+- [x] Commit with a detailed Chinese message.
+
+## Review
+
+- Repository state: Serenity started from `8bfe65b` with pre-existing dirty generated UI outputs under `output/ui/*`; DSA started from clean `00325bd` on branch `codex/serenity-phase-0-evidence-bridge`.
+- Exit criteria confirmed: flag-off baseline-compatible behavior, flag-on optional research-only `serenity_research`, history persistence through `analysis_history.context_snapshot.serenity_research`, no Serenity DB table/migration, and no DSA trading-field rewrite.
+- Subagent review found two real API contract gaps. Red check: `python3.11 -m pytest tests/serenity/test_serenity_api_schema_contract.py::test_analysis_result_response_accepts_failed_open_serenity_research_audit tests/serenity/test_serenity_api_schema_contract.py::test_analysis_result_response_rejects_serenity_research_trading_fields -q` -> `2 failed`.
+- DSA fix committed as `1e2f9b6 fix(serenity): 收紧 Research Audit API 契约`; it makes `research_quality_score` optional for failed-open audits and forbids unexpected top-level `serenity_research` fields such as `operation_advice`.
+- Fresh DSA verification after fix: target red/green tests -> `2 passed`; schema py_compile -> pass; focused Phase 1 backend/API/schema tests -> `14 passed`; full `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; DSA Web smoke/panel/diagnostics -> `4 files passed / 17 tests passed`; Web build and lint -> pass.
+- Static review evidence: default flag scan confirms `SERENITY_RESEARCH_ENABLED=false`; storage scan confirms existing `context_snapshot.serenity_research`; migration inventory found no `migrations/` or `alembic/` directory and no Serenity table; forbidden Serenity trading-phrase scan only matched the broad-regex test function name `test_serenity_audit_incremental_overhead_smoke_under_threshold`.
+- Next stage: `P2-T01` Evidence Quality Agent Tool. Keep tools research-only, explicitly invoked, default-off/fail-open, and isolated from DSA trading advice fields.
