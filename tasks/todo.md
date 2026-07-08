@@ -1,3 +1,28 @@
+# DSA-First Serenity Core Status Handoff Phase
+
+- [x] Review current tracker, task log, lessons, and repository status.
+- [x] Update the tracker with latest completed and incomplete development status.
+- [x] Add a copyable restart prompt for continuing from the current progress.
+- [x] Record the recurring habit for phase-end status updates, verification, and commits.
+- [x] Validate markdown status, placeholder scan, and diff cleanliness.
+- [x] Commit this phase with a detailed Chinese commit message.
+
+## Design Check-In
+
+- User goal: update the latest development state so the next Codex session can continue without losing context.
+- Status truth: DSA-first plan and tracker are complete and committed at `81a5709`; implementation in the DSA repository has not started.
+- Next work: start from `G-T01`, then `G-T02`, `G-T03`, then `P0-T01`.
+- Hygiene rule: leave existing `output/ui/*` generated-output dirty changes untouched unless explicitly requested.
+- Habit rule: after every phase, update tracker/task status, verify, stage only owned files, and commit with a detailed Chinese message automatically.
+
+## Review
+
+- Implementation: updated `docs/dsa-first-serenity-core-development-tracker.md` with a current development status snapshot, explicit completed/incomplete tables, next-step sequence, workspace caveats, and a copyable restart prompt.
+- Status truth: DSA-first planning documents are complete; DSA implementation remains not started, with `G-T01`, `G-T02`, `G-T03`, and all P0-P4 tasks still open.
+- Habit persistence: updated `tasks/lessons.md` so future sessions automatically refresh tracker/task status, verify, stage only owned files, and commit after each phase.
+- Validation: tracker headings, targeted placeholder scan, restart-prompt markers, and `git diff --check` were run before this phase was staged.
+- Repository note: existing `output/ui/*` generated-output changes remain intentionally unstaged.
+
 # DSA-First Serenity Core Development Tracker Phase
 
 - [x] Review the current DSA-first Serenity Core development plan and tracking conventions.

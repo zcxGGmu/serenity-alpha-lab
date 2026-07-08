@@ -10,6 +10,81 @@
 
 ---
 
+## 当前开发状态快照
+
+**Updated:** 2026-07-08
+
+### 已完成
+
+| 事项 | 状态 | 证据 |
+| --- | --- | --- |
+| DSA-first Serenity Core 总体开发方案 | Completed | `docs/dsa-first-serenity-core-development-plan.md`，已在 commit `81a5709` 提交 |
+| DSA-first Serenity Core 进度跟踪清单 | Completed | `docs/dsa-first-serenity-core-development-tracker.md`，已在 commit `81a5709` 提交 |
+| 项目任务日志更新 | Completed | `tasks/todo.md` 已记录方案和 tracker 两个文档阶段 |
+| 长期协作习惯记录 | Completed | `tasks/lessons.md` 已记录阶段完成后精准 stage、验证并提交的规则 |
+
+### 未完成
+
+| 范围 | 当前状态 | 说明 |
+| --- | --- | --- |
+| DSA 代码集成 | Not Started | 尚未修改 `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` 的实现代码 |
+| Global tasks | Not Started | `G-T01`、`G-T02`、`G-T03` 尚未执行 |
+| Phase 0 Evidence Bridge POC | Not Started | `P0-T01` 至 `P0-T04` 尚未执行 |
+| Phase 1 Analysis Report Add-On | Not Started | 等 Phase 0 review 通过后再开始 |
+| Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
+| Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
+| Phase 4 Provenance Safety Guardrails | Not Started | 等 Phase 3 review 通过后再开始 |
+
+### 当前下一步
+
+从 Global guardrails 开始，不直接进入 UI、API 或数据库改造。
+
+1. 在 DSA 仓库创建或切换分支：`codex/serenity-phase-0-evidence-bridge`。
+2. 执行 `G-T01: 集成边界守卫`。
+3. 执行 `G-T02: 分支与提交规范`。
+4. 执行 `G-T03: 基线验证快照`。
+5. Global review 通过后再进入 `P0-T01: Serenity Core 最小契约抽取`。
+
+### 当前工作区注意事项
+
+- Serenity 当前仓库路径：`/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab`。
+- DSA 本地仓库路径：`/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis`。
+- 当前 Serenity 仓库仍有既有未提交的 generated UI 输出变更：`output/ui/analyses/manifest.json`、`output/ui/reports/deliverable-research-report.md`、`output/ui/runs.json`、`output/ui/analyses/topic-2bde5fabbc/`。
+- 上述 `output/ui/*` 变更不是 DSA-first Serenity Core 文档/规划阶段的一部分；除非用户明确要求，不要 stage、提交、回滚或覆盖它们。
+
+### 下次启动接续提示词
+
+下次新开会话时，可直接发送以下提示词：
+
+```text
+请继续在 /Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab 当前进度上开发。
+
+先阅读并遵守：
+1. docs/dsa-first-serenity-core-development-plan.md
+2. docs/dsa-first-serenity-core-development-tracker.md
+3. tasks/todo.md
+4. tasks/lessons.md
+
+当前状态：
+- 已完成并提交 DSA-first Serenity Core 方案、tracker 与当前状态交接；下次启动时以当前仓库 `HEAD` 为最新交接状态。
+- Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
+- DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
+- DSA 代码集成尚未开始；tracker 中 G-T01、G-T02、G-T03 以及 P0-P4 均未完成。
+- 下一步从 tracker 的 G-T01 集成边界守卫开始，再做 G-T02、G-T03，然后进入 P0-T01 Evidence Bridge POC。
+- 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
+- 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
+- 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
+
+工作习惯：
+- 每完成一个阶段性任务，立即更新 docs/dsa-first-serenity-core-development-tracker.md 和 tasks/todo.md，标清已完成、未完成、下一步。
+- 必要时更新 tasks/lessons.md，把可复用经验固化下来。
+- 运行新鲜验证命令。
+- 只 stage 本阶段相关文件。
+- 用详细中文 commit message 提交，不要等我提醒。
+```
+
+---
+
 ## 0. 使用规则
 
 ### 0.1 状态枚举
@@ -1480,6 +1555,9 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 | ID | 阶段 | 任务 | 状态 | 依赖 | 验证证据 |
 | --- | --- | --- | --- | --- | --- |
+| DOC-T01 | Planning | DSA-first Serenity Core 总体开发方案 | Completed | 用户方向：DSA 为主，Serenity Core 为辅 | commit `81a5709` |
+| DOC-T02 | Planning | DSA-first Serenity Core 进度跟踪清单 | Completed | DOC-T01 | commit `81a5709` |
+| DOC-T03 | Planning | 当前状态快照与下次启动接续提示词 | Completed | DOC-T02 | tracker 状态快照、接续提示词、`tasks/todo.md` 与 `tasks/lessons.md` 已更新 |
 | G-T01 | Global | 集成边界守卫 | Not Started | 当前方案 |  |
 | G-T02 | Global | 分支与提交规范 | Not Started | G-T01 |  |
 | G-T03 | Global | 基线验证快照 | Not Started | G-T01 |  |
