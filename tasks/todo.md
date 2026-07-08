@@ -1,3 +1,32 @@
+# DSA-First Serenity Core Global Guardrails Phase
+
+- [x] Confirm DSA branch `codex/serenity-phase-0-evidence-bridge` is active from the handoff HEAD.
+- [x] Implement G-T01 integration boundary guardrails in DSA docs, README, and `.env.example`.
+- [x] Implement G-T02 phase branch / PR / commit conventions in DSA contribution docs and boundary doc.
+- [x] Capture G-T03 baseline verification snapshot before Serenity code enters DSA runtime.
+- [x] Run fresh validation commands for G-T01, G-T02, and G-T03.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` with Global task evidence and next step.
+- [x] Stage only Global-phase files in DSA and tracker/todo files in Serenity; leave `output/ui/*` untouched.
+- [x] Commit the Global phase with detailed Chinese commit messages.
+
+## Design Check-In
+
+- User goal: continue from the DSA-first handoff and complete Global tasks before starting Phase 0 Evidence Bridge POC.
+- Execution order: G-T01 integration boundary guardrails, then G-T02 branch/commit conventions, then G-T03 baseline verification snapshot.
+- Product boundary: `daily_stock_analysis` remains the main product and runtime; Serenity Core is auxiliary evidence-quality, research-audit, evidence-gap, and safety-boundary support only.
+- Safety boundary: never map Serenity score or quality outputs into DSA `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, target price, position sizing, sniper points, stop loss, or take profit.
+- Repository hygiene: do not modify, stage, commit, or roll back existing Serenity `output/ui/*` generated-output dirty changes.
+
+## Review
+
+- DSA branch: created and worked on `codex/serenity-phase-0-evidence-bridge` from baseline commit `bfdee03`.
+- G-T01 implementation: added `docs/serenity-integration-boundaries.md`, README auxiliary research note, `.env.example` default `SERENITY_RESEARCH_ENABLED=false`, and static guardrail test `tests/test_serenity_integration_boundaries.py`.
+- G-T02 implementation: documented phase branch names, PR requirements, commit scopes, feature flag evidence, verification evidence, risk notes, and rollback requirements in the boundary doc and `docs/CONTRIBUTING.md`.
+- G-T03 implementation: added `docs/serenity-baseline-verification.md` with Python/Node versions, backend/frontend baseline commands, exit codes, environment blockers, and recovery conditions.
+- Validation: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` passed with `3 passed`; broad backend baseline failed due missing dependencies (`pandas`, `json_repair`) and Python 3.9 default; frontend lint/build failed because `apps/dsa-web/node_modules` is missing.
+- Boundary review: a read-only subagent confirmed the document/config coverage and recommended the static guardrail test, which is now implemented.
+- Status note: older historical sections below still describe the pre-Global handoff state at the time they were written; the current source of truth is this Global Guardrails Phase plus `docs/dsa-first-serenity-core-development-tracker.md`.
+
 # DSA-First Serenity Core Status Handoff Phase
 
 - [x] Review current tracker, task log, lessons, and repository status.

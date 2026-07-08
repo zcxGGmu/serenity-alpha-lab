@@ -28,8 +28,8 @@
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
 | DSA 代码集成 | Not Started | 尚未修改 `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` 的实现代码 |
-| Global tasks | Not Started | `G-T01`、`G-T02`、`G-T03` 尚未执行 |
-| Phase 0 Evidence Bridge POC | Not Started | `P0-T01` 至 `P0-T04` 尚未执行 |
+| Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
+| Phase 0 Evidence Bridge POC | Not Started | `P0-T01` 至 `P0-T04` 尚未执行；下一步从 P0-T01 开始 |
 | Phase 1 Analysis Report Add-On | Not Started | 等 Phase 0 review 通过后再开始 |
 | Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
 | Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
@@ -37,13 +37,12 @@
 
 ### 当前下一步
 
-从 Global guardrails 开始，不直接进入 UI、API 或数据库改造。
+Global guardrails 已完成；下一步进入 Phase 0 Evidence Bridge POC，不直接进入 UI、API 或数据库改造。
 
-1. 在 DSA 仓库创建或切换分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 执行 `G-T01: 集成边界守卫`。
-3. 执行 `G-T02: 分支与提交规范`。
-4. 执行 `G-T03: 基线验证快照`。
-5. Global review 通过后再进入 `P0-T01: Serenity Core 最小契约抽取`。
+1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
+2. 执行 `P0-T01: Serenity Core 最小契约抽取`。
+3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
+4. Phase 0 仅做本地 POC，不改 DSA API、UI、DB。
 
 ### 当前工作区注意事项
 
@@ -66,11 +65,13 @@
 4. tasks/lessons.md
 
 当前状态：
-- 已完成并提交 DSA-first Serenity Core 方案、tracker 与当前状态交接；下次启动时以当前仓库 `HEAD` 为最新交接状态。
+- 已完成 DSA-first Serenity Core Global guardrails；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
 - Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 - DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
-- DSA 代码集成尚未开始；tracker 中 G-T01、G-T02、G-T03 以及 P0-P4 均未完成。
-- 下一步从 tracker 的 G-T01 集成边界守卫开始，再做 G-T02、G-T03，然后进入 P0-T01 Evidence Bridge POC。
+- DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
+- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档和静态边界测试；尚未开始 Serenity runtime / Evidence Bridge 代码集成。
+- 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；前端缺 `apps/dsa-web/node_modules`。不要把这些既有失败归因于 Serenity。
+- 下一步从 tracker 的 `P0-T01: Serenity Core 最小契约抽取` 开始，然后继续 P0-T02、P0-T03、P0-T04。
 - 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
 - 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
@@ -147,15 +148,15 @@ Rollback Notes:
 ### G-T01: 集成边界守卫
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
 Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Evidence: DSA `docs/serenity-integration-boundaries.md`、`.env.example`、`README.md`、`docs/CONTRIBUTING.md`、`tests/test_serenity_integration_boundaries.py`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `git diff --check` -> exit 0.
+Decision Notes: 按实际 DSA 仓库结构将贡献规范落点从 tracker 原写法 `CONTRIBUTING.md` 校正为 `docs/CONTRIBUTING.md`。根据只读子代理审查，补充静态自动化边界测试，避免 G-T01 只有文档约束。
+Rollback Notes: 删除 DSA `docs/serenity-integration-boundaries.md` 与 `tests/test_serenity_integration_boundaries.py`，移除 `.env.example`、`README.md`、`docs/CONTRIBUTING.md` 中 Serenity 段落即可回滚；不影响运行时代码。
 
 **Purpose:** 防止后续迭代把 Serenity 辅助能力扩张成新的产品壳、交易建议引擎或 DSA 主链路阻塞点。
 
@@ -169,12 +170,13 @@ Rollback Notes:
 
 **Checklist:**
 
-- [ ] 写清 DSA owns / Serenity owns / forbidden call sites。
-- [ ] 写清 `SERENITY_RESEARCH_ENABLED=false` 的默认关闭策略。
-- [ ] 写清 fail-open 策略：Serenity 异常只进入 diagnostics，不影响 DSA analysis success。
-- [ ] 写清禁止字段映射：`sentiment_score`、`operation_advice`、`action`、`trend_prediction`、`target_price`、`position_sizing`、`sniper_points`、stop loss、take profit。
-- [ ] 写清 import 方向：DSA application layer -> Serenity services -> adapters -> core。
-- [ ] 写清跨仓库代码进入 DSA 的方式：复制、vendor、package 三选一，不允许运行时绝对路径 import。
+- [x] 写清 DSA owns / Serenity owns / forbidden call sites。
+- [x] 写清 `SERENITY_RESEARCH_ENABLED=false` 的默认关闭策略。
+- [x] 写清 fail-open 策略：Serenity 异常只进入 diagnostics，不影响 DSA analysis success。
+- [x] 写清禁止字段映射：`sentiment_score`、`operation_advice`、`action`、`trend_prediction`、`target_price`、`position_sizing`、`sniper_points`、stop loss、take profit。
+- [x] 写清 import 方向：DSA application layer -> Serenity services -> adapters -> core。
+- [x] 写清跨仓库代码进入 DSA 的方式：复制、vendor、package 三选一，不允许运行时绝对路径 import。
+- [x] 增加 G-T01 静态自动化守卫，阻断未来 core 反向 import、绝对路径 import 和 Serenity 质量输出写入 DSA 交易字段。
 
 **Validation:**
 
@@ -185,24 +187,25 @@ git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis diff --check
 
 **DoD:**
 
-- [ ] 文档中的允许/禁止边界可被工程师直接执行。
-- [ ] `.env.example` 包含默认关闭的 Serenity 配置。
-- [ ] README 只描述辅助研究能力，不暗示 Serenity 生成交易建议。
+- [x] 文档中的允许/禁止边界可被工程师直接执行。
+- [x] `.env.example` 包含默认关闭的 Serenity 配置。
+- [x] README 只描述辅助研究能力，不暗示 Serenity 生成交易建议。
+- [x] 静态测试覆盖默认关闭、fail-open、禁止字段映射、未来 `src/serenity/**` import 和字段污染边界。
 
 **Rollback:** 删除新增边界文档、移除 README 和 `.env.example` 的 Serenity 段落。
 
 ### G-T02: 分支与提交规范
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
 Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Evidence: DSA `docs/serenity-integration-boundaries.md` 第 7 节、`docs/CONTRIBUTING.md` Serenity Core 阶段集成规范；`git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis branch --show-current` -> `codex/serenity-phase-0-evidence-bridge`.
+Decision Notes: DSA 仓库无根目录 `CONTRIBUTING.md`，实际落点为 `docs/CONTRIBUTING.md`；阶段提交 scope 统一使用 `docs(serenity)`, `feat(serenity)`, `test(serenity)`。
+Rollback Notes: 恢复 `docs/CONTRIBUTING.md` 与边界文档中新增的 Serenity 分支、PR、commit 规范。
 
 **Purpose:** 保证长周期集成可审计、可回退、可分阶段合入。
 
@@ -215,11 +218,11 @@ Rollback Notes:
 
 **Checklist:**
 
-- [ ] 建立阶段分支命名：`codex/serenity-phase-0-evidence-bridge` 至 `codex/serenity-phase-4-provenance-safety`。
-- [ ] 每个阶段至少一个独立 PR，不把 P0-P4 堆成单次大改。
-- [ ] 提交信息使用 `feat(serenity): ...`、`test(serenity): ...`、`docs(serenity): ...`。
-- [ ] 每个 PR 描述必须包含 feature flag 状态、验证命令、回滚路径、未完成风险。
-- [ ] 每个阶段合入前记录 `git diff --stat` 和关键变更文件。
+- [x] 建立阶段分支命名：`codex/serenity-phase-0-evidence-bridge` 至 `codex/serenity-phase-4-provenance-safety`。
+- [x] 每个阶段至少一个独立 PR，不把 P0-P4 堆成单次大改。
+- [x] 提交信息使用 `feat(serenity): ...`、`test(serenity): ...`、`docs(serenity): ...`。
+- [x] 每个 PR 描述必须包含 feature flag 状态、验证命令、回滚路径、未完成风险。
+- [x] 每个阶段合入前记录 `git diff --stat` 和关键变更文件。
 
 **Validation:**
 
@@ -230,23 +233,23 @@ git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis branch --show-cur
 
 **DoD:**
 
-- [ ] 团队可以通过分支和 PR 判断每个阶段的完整性。
-- [ ] 任一阶段可单独 revert，不影响其他未发布阶段。
+- [x] 团队可以通过分支和 PR 判断每个阶段的完整性。
+- [x] 任一阶段可单独 revert，不影响其他未发布阶段。
 
 **Rollback:** 恢复 CONTRIBUTING 和边界文档中新增的 Serenity 分支规范。
 
 ### G-T03: 基线验证快照
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
 Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Evidence: DSA `docs/serenity-baseline-verification.md`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; backend baseline `python3.11 -m pytest -m "not network"` -> exit 2 due missing dependencies (`pandas`, `json_repair`); frontend `npm --prefix apps/dsa-web run lint` and `npm --prefix apps/dsa-web run build` -> exit 127 due missing `node_modules`.
+Decision Notes: 记录 Python 3.9 默认命令、Python 3.11 可用但依赖未安装、Node/npm 版本和前端依赖缺口；现有 baseline 失败不归因于 Serenity，因为尚未引入 Serenity runtime code。
+Rollback Notes: 删除 DSA `docs/serenity-baseline-verification.md`；该文档无运行时副作用。
 
 **Purpose:** 在任何 Serenity 代码进入 DSA 前，记录 DSA 当前可运行基线，避免后续无法判断回归来源。
 
@@ -258,11 +261,11 @@ Rollback Notes:
 
 **Checklist:**
 
-- [ ] 记录 Python 版本、Node 版本、包管理器、当前分支、当前 commit。
-- [ ] 运行 DSA 后端单元测试并记录结果。
-- [ ] 运行 DSA 前端类型检查、lint 或测试脚本并记录结果。
-- [ ] 如果测试因环境依赖失败，记录失败命令、错误摘要、缺失依赖、恢复条件。
-- [ ] 记录现有失败，不把历史失败归因于 Serenity 集成。
+- [x] 记录 Python 版本、Node 版本、包管理器、当前分支、当前 commit。
+- [x] 运行 DSA 后端单元测试并记录结果。
+- [x] 运行 DSA 前端类型检查、lint 或测试脚本并记录结果。
+- [x] 如果测试因环境依赖失败，记录失败命令、错误摘要、缺失依赖、恢复条件。
+- [x] 记录现有失败，不把历史失败归因于 Serenity 集成。
 
 **Validation:**
 
@@ -274,8 +277,8 @@ node --version
 
 **DoD:**
 
-- [ ] 有一份可审计的 baseline 文档。
-- [ ] 后续阶段能对比 baseline 判断新增风险。
+- [x] 有一份可审计的 baseline 文档。
+- [x] 后续阶段能对比 baseline 判断新增风险。
 
 **Rollback:** 删除 baseline 文档；不改变代码。
 
@@ -287,9 +290,9 @@ node --version
 
 **Phase Entry Criteria:**
 
-- [ ] G-T01 至 G-T03 已完成或明确豁免。
-- [ ] DSA 和 Serenity 当前仓库路径存在。
-- [ ] DSA 主分析链路 baseline 已记录。
+- [x] G-T01 至 G-T03 已完成或明确豁免。
+- [x] DSA 和 Serenity 当前仓库路径存在。
+- [x] DSA 主分析链路 baseline 已记录。
 
 **Phase Exit Criteria:**
 
@@ -1558,9 +1561,9 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | DOC-T01 | Planning | DSA-first Serenity Core 总体开发方案 | Completed | 用户方向：DSA 为主，Serenity Core 为辅 | commit `81a5709` |
 | DOC-T02 | Planning | DSA-first Serenity Core 进度跟踪清单 | Completed | DOC-T01 | commit `81a5709` |
 | DOC-T03 | Planning | 当前状态快照与下次启动接续提示词 | Completed | DOC-T02 | tracker 状态快照、接续提示词、`tasks/todo.md` 与 `tasks/lessons.md` 已更新 |
-| G-T01 | Global | 集成边界守卫 | Not Started | 当前方案 |  |
-| G-T02 | Global | 分支与提交规范 | Not Started | G-T01 |  |
-| G-T03 | Global | 基线验证快照 | Not Started | G-T01 |  |
+| G-T01 | Global | 集成边界守卫 | Verified | 当前方案 | DSA `tests/test_serenity_integration_boundaries.py` -> `3 passed`; `git diff --check` exit 0 |
+| G-T02 | Global | 分支与提交规范 | Verified | G-T01 | DSA branch `codex/serenity-phase-0-evidence-bridge`; DSA `docs/CONTRIBUTING.md` + boundary doc |
+| G-T03 | Global | 基线验证快照 | Verified | G-T01 | DSA `docs/serenity-baseline-verification.md`; baseline failures recorded as missing dependency setup |
 | P0-T01 | Phase 0 | Serenity Core 最小契约抽取 | Not Started | G-T01, G-T03 |  |
 | P0-T02 | Phase 0 | DSA Context 到 Evidence Adapter | Not Started | P0-T01 |  |
 | P0-T03 | Phase 0 | Evidence Quality Service POC | Not Started | P0-T02 |  |
@@ -1586,9 +1589,9 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-从 Phase 0 开始，不直接进入 UI 或数据库改造。
+Global guardrails 已完成。从 Phase 0 开始，不直接进入 UI 或数据库改造。
 
-- [ ] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
-- [ ] 完成 G-T01 至 G-T03。
+- [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
+- [x] 完成 G-T01 至 G-T03。
 - [ ] 执行 P0-T01 至 P0-T04。
 - [ ] Phase 0 review 通过后，再进入 Phase 1。
