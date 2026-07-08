@@ -1,3 +1,31 @@
+# DSA-First Serenity Core Phase 0 Review Gate
+
+- [x] Run enabled POC script smoke and confirm stdout audit JSON is parseable.
+- [x] Run Phase 0 Serenity test suite.
+- [x] Run static integration boundary guard.
+- [x] Run cross-repository runtime import scan under DSA `src/serenity`.
+- [x] Run py_compile and diff cleanliness checks.
+- [x] Confirm Phase 1 callsite in DSA `src/services/analysis_service.py`.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` and this task log with Phase 0 review evidence.
+
+## Design Check-In
+
+- User goal: close Phase 0 only after proving the local evidence bridge works and does not affect DSA runtime behavior.
+- Review scope: validate P0-T01 through P0-T04 together, including command-line POC output, unit tests, static boundary guard, import boundary, diff cleanliness, and Phase 1 entry point.
+- Baseline comparison: broad DSA baseline blockers remain the known G-T03 environment gaps (`pandas`, `json_repair`, missing frontend `node_modules`), not Serenity regressions.
+- Safety boundary: Phase 0 remains local-only and has not modified DSA API, UI, DB, providers, notifications, task queue, portfolio, backtest, alerts, or trading-decision fields.
+- Next phase constraint: Phase 1 must add only optional nested `serenity_research` / research-audit schema fields and preserve existing DSA response semantics.
+
+## Review
+
+- POC smoke: `python3.11 scripts/serenity_evidence_audit_poc.py --sample tests/fixtures/serenity/dsa_context_full.json --enabled` -> exit 0 with parseable JSON summary `status=blocked`, `enabled=True`, `research_only=True`, `evidence_count=6`, ticker `600519`.
+- Phase 0 tests: `python3.11 -m pytest tests/serenity -q` -> `13 passed`.
+- Boundary guard: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`.
+- Import boundary: `rg -n "/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab|serenity_alpha_lab" src/serenity` -> no cross-repo runtime imports.
+- Compile and diff: `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py src/serenity/services/*.py scripts/serenity_evidence_audit_poc.py` -> exit 0; `git diff --check` -> exit 0.
+- Phase 1 entry: confirmed DSA `src/services/analysis_service.py` builds `context_snapshot` in `_build_analysis_response`, which is the planned add-on callsite after schema work.
+- Result: Phase 0 exit criteria are met; next step is `P1-T01: API Schema 增加 Serenity Audit 类型`.
+
 # DSA-First Serenity Core P0-T04 CLI Script POC Runner Phase
 
 - [x] Write failing DSA script tests for disabled output, enabled audit JSON, and missing sample error handling.

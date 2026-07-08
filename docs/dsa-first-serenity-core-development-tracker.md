@@ -29,20 +29,20 @@
 | --- | --- | --- |
 | DSA 代码集成 | In Progress | Global tasks、`P0-T01`、`P0-T02`、`P0-T03`、`P0-T04` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；尚未改 API、UI、DB |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
-| Phase 0 Evidence Bridge POC | In Review | `P0-T01` 至 `P0-T04` 已完成并验证；下一步执行 Phase 0 review gate |
-| Phase 1 Analysis Report Add-On | Not Started | 等 Phase 0 review 通过后再开始 |
+| Phase 0 Evidence Bridge POC | Verified | `P0-T01` 至 `P0-T04` 与 Phase 0 review gate 已完成并验证 |
+| Phase 1 Analysis Report Add-On | Not Started | Phase 0 review 已通过；下一步从 `P1-T01` API Schema 增加 Serenity Audit 类型开始 |
 | Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
 | Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
 | Phase 4 Provenance Safety Guardrails | Not Started | 等 Phase 3 review 通过后再开始 |
 
 ### 当前下一步
 
-Global guardrails、P0-T01 core contract、P0-T02 DSA context adapter、P0-T03 evidence quality service 与 P0-T04 local POC runner 已完成；下一步执行 Phase 0 review gate，不直接进入 UI、API 或数据库改造。
+Global guardrails 与 Phase 0 Evidence Bridge POC 已完成并通过 review gate；下一步进入 Phase 1 Analysis Report Add-On，但仍保持默认关闭、fail-open 和不改变既有交易语义。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 执行 `P0 Phase Review`，确认 exit criteria 后再进入 Phase 1。
+2. 执行 `P1-T01: API Schema 增加 Serenity Audit 类型`。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
-4. Phase 0 仅做本地 POC，不改 DSA API、UI、DB。
+4. Phase 1 只增加 optional nested audit block，不改原字段语义，不让 Serenity audit 写入交易建议字段。
 
 ### 当前工作区注意事项
 
@@ -65,7 +65,7 @@ Global guardrails、P0-T01 core contract、P0-T02 DSA context adapter、P0-T03 e
 4. tasks/lessons.md
 
 当前状态：
-- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter、P0-T03 Evidence Quality Service POC 与 P0-T04 CLI / Script POC Runner；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
+- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter、P0-T03 Evidence Quality Service POC、P0-T04 CLI / Script POC Runner 与 Phase 0 review gate；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
 - Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 - DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
 - DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
@@ -73,9 +73,10 @@ Global guardrails、P0-T01 core contract、P0-T02 DSA context adapter、P0-T03 e
 - DSA P0-T02 已完成：已新增 `src/serenity/adapters/dsa_context_to_evidence.py`、`src/serenity/adapters/__init__.py` 和 `tests/serenity/adapters/test_dsa_context_to_evidence.py`；最新 DSA commit 为 `b85b72a`。
 - DSA P0-T03 已完成：已新增 `src/serenity/services/evidence_quality_service.py`、`src/serenity/services/__init__.py` 和 `tests/serenity/services/test_evidence_quality_service.py`；最新 DSA commit 为 `a382a0f`。
 - DSA P0-T04 已完成：已新增 `scripts/serenity_evidence_audit_poc.py`、`tests/serenity/test_evidence_audit_poc_script.py`、`tests/fixtures/serenity/dsa_context_full.json` 和 `docs/serenity-phase-0-poc.md`；最新 DSA commit 为 `e15e588`。
-- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter、evidence quality service POC 和本地 CLI/script runner；尚未开始 API / UI / DB 集成。
+- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter、evidence quality service POC 和本地 CLI/script runner；Phase 0 review gate 已通过，尚未开始 API / UI / DB 集成。
+- Phase 0 review 证据：`python3.11 -m pytest tests/serenity -q` -> `13 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; POC enabled smoke -> exit 0，输出 `enabled=True`, `research_only=True`, `evidence_count=6`, ticker `600519`; cross-repo import scan 无命中；`git diff --check` 通过；DSA status clean。
 - 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；前端缺 `apps/dsa-web/node_modules`。不要把这些既有失败归因于 Serenity。
-- 下一步从 tracker 的 `P0 Phase Review` 开始，确认 Phase 0 exit criteria 后再进入 Phase 1。
+- 下一步从 tracker 的 `P1-T01: API Schema 增加 Serenity Audit 类型` 开始。仅增加 optional nested `serenity_research` / research-audit schema，不改 DSA 原有字段语义。
 - 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
 - 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
@@ -502,23 +503,23 @@ python -m pytest tests/serenity/test_evidence_audit_poc_script.py -q
 ### P0 Phase Review
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
 Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Evidence: `python3.11 scripts/serenity_evidence_audit_poc.py --sample tests/fixtures/serenity/dsa_context_full.json --enabled` -> exit 0, parseable audit JSON with `status='blocked'`, `enabled=True`, `research_only=True`, `evidence_count=6`, ticker `600519`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity -q` -> `13 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py src/serenity/services/*.py scripts/serenity_evidence_audit_poc.py` -> exit 0; `rg -n "/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab|serenity_alpha_lab" src/serenity` -> no cross-repo runtime imports; `git diff --check` -> exit 0; DSA `git status --short` -> clean; Phase 1 callsite confirmed at DSA `src/services/analysis_service.py`.
+Decision Notes: Phase 0 exit criteria are met: local command outputs stable audit JSON, empty/failure paths are covered by tests, no API/UI/DB changes were introduced, no cross-repository runtime absolute import exists, and Serenity remains disabled-by-default/fail-open/research-only. Existing broad baseline environment failures remain unchanged from G-T03 (`pandas`, `json_repair`, frontend `node_modules` missing) and are not attributed to Serenity.
+Rollback Notes: Phase 0 can be reverted by removing DSA `src/serenity/`, `tests/serenity/`, `scripts/serenity_evidence_audit_poc.py`, `tests/fixtures/serenity/dsa_context_full.json`, `docs/serenity-phase-0-poc.md`, and prior Global-phase docs/config changes if a full rollback is required.
 
 **Review Checklist:**
 
-- [ ] `python -m pytest tests/serenity -q` 通过或记录明确的环境失败。
-- [ ] `rg -n "/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab|serenity_alpha_lab" /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity` 无 runtime absolute import。
-- [ ] `git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis diff --check` 通过。
-- [ ] 与 baseline 对比，DSA 原有测试没有新增失败。
-- [ ] Phase 1 接入点已经被确认：`src/services/analysis_service.py`。
+- [x] `python -m pytest tests/serenity -q` 通过或记录明确的环境失败。
+- [x] `rg -n "/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab|serenity_alpha_lab" /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity` 无 runtime absolute import。
+- [x] `git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis diff --check` 通过。
+- [x] 与 baseline 对比，DSA 原有测试没有新增失败。
+- [x] Phase 1 接入点已经被确认：`src/services/analysis_service.py`。
 
 ---
 
@@ -1593,7 +1594,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-Global guardrails、P0-T01、P0-T02、P0-T03 与 P0-T04 已完成。从 Phase 0 review gate 继续，不直接进入 UI 或数据库改造。
+Global guardrails 与 Phase 0 review gate 已完成。从 Phase 1 schema gate 继续，不改变既有交易语义。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
@@ -1601,4 +1602,5 @@ Global guardrails、P0-T01、P0-T02、P0-T03 与 P0-T04 已完成。从 Phase 0 
 - [x] 执行 P0-T02。
 - [x] 执行 P0-T03。
 - [x] 执行 P0-T04。
-- [ ] 执行 Phase 0 review gate，通过后再进入 Phase 1。
+- [x] 执行 Phase 0 review gate。
+- [ ] 执行 P1-T01。
