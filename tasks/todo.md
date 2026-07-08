@@ -1,3 +1,18 @@
+# DSA-First Serenity Core P1-T03 Latest Handoff Refresh
+
+- [x] Confirm DSA implementation is committed at `c193f17`.
+- [x] Confirm Serenity handoff docs are committed at `e2b0be6`.
+- [x] Confirm current completed scope through P1-T03 and unfinished next step P1-T04.
+- [x] Preserve existing Serenity `output/ui/*` generated dirty files without staging, modifying, or reverting them.
+- [x] Keep the reusable phase-end habit in `tasks/lessons.md`.
+
+## Review
+
+- Current completed scope: Global guardrails `G-T01` to `G-T03`, Phase 0 `P0-T01` to `P0-T04` plus Phase 0 review gate, Phase 1 `P1-T01` API Schema, `P1-T02` Analysis Service runtime attach, and `P1-T03` historical `context_snapshot.serenity_research` persistence are completed and verified.
+- Current unfinished scope: `P1-T04` Web 类型与 Evidence Quality Panel is the next development task; `P1-T05`, Phase 2 Agent Tools, Phase 3 workflow persistence, and Phase 4 provenance safety remain Not Started.
+- Verification evidence to carry forward: P1-T03 focused tests -> `8 passed`; `tests/serenity -q` -> `24 passed`; boundary guard -> `3 passed`; target `py_compile` and `git diff --check` passed.
+- Next startup should begin by reading the plan, tracker, this task log, and lessons, then continue from `P1-T04` without changing DSA trading semantics or touching Serenity generated UI outputs.
+
 # DSA-First Serenity Core P1-T03 History Snapshot Persistence Phase
 
 - [x] Write failing DSA tests for persisting optional `serenity_research` under existing `analysis_history.context_snapshot`.
