@@ -1,3 +1,62 @@
+# DSA-First Serenity Core P2-T02 Evidence Gap Agent Tool Phase
+
+- [x] Confirm P2-T02 entry criteria from tracker before implementation.
+- [x] Confirm existing P2-T01 Agent tool registration and fail-open pattern.
+- [x] Write failing DSA tests for `serenity_evidence_gaps` tool definition, registry discovery, gap task output, no-gap output, missing-context blocking, fail-open diagnostics, and trading-field isolation.
+- [x] Implement `src/serenity/agent_tools/evidence_gap_tool.py` using caller-provided low-sensitivity `context` only.
+- [x] Register the tool through `src/agent/tools/analysis_tools.py` without modifying Agent prompts, provider fetch paths, DB paths, or DSA trading fields.
+- [x] Ensure output includes gap id, reason, severity, source target, search prompt, acceptance criteria, after-import action, and Phase 3-ready task metadata.
+- [x] Sort gaps by severity, primary-source need, source coverage need, and stable ticker/gap order.
+- [x] Ensure no-gaps, missing-context, and failed-open outputs are stable, JSON-serializable, research-only, and safe for later persistence.
+- [x] Run fresh focused tests, registry tests, full Serenity tests, boundary guard, compile checks, forbidden trading-phrase scan, and diff cleanliness checks.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+- [x] Stage only P2-T02-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P2-T01` is complete at DSA commit `379ee1b`, with `serenity_evidence_quality` registered through `src/agent/tools/analysis_tools.py` and `ALL_ANALYSIS_TOOLS`.
+- Tracker scope: `P2-T02` requires tool name `serenity_evidence_gaps`, output of gap id/reason/source target/acceptance criteria/after-import action, sorting by severity/source coverage/primary-source need, and no database task creation.
+- Runtime boundary: the tool must be explicit-call only, research-only, fail-open, default-compatible, and must require caller-provided low-sensitivity `context` rather than fetching market/news/DB data.
+- Product boundary: do not change Agent prompts, decision agents, DSA trading advice fields, trend prediction, target price, position sizing, stop-loss/take-profit semantics, `sentiment_score`, providers, alerts, portfolio, backtest, or DB schemas.
+- Implementation pattern: follow P2-T01 helper shape with `_handle_serenity_*`, sanitized metadata, blocked `analysis_context_required`, catch-all failed-open diagnostics, JSON-safe output helpers, and `ToolDefinition` parameters for `context`, `symbol`, `market`, and `analysis_id`.
+
+## Design Check-In
+
+- User goal: start `P2-T02: Evidence Gap Agent Tool` after P2-T01, while keeping `daily_stock_analysis` as the primary product/runtime and Serenity as an auxiliary research evidence core.
+- Tool name: use tracker-required `serenity_evidence_gaps`.
+- Parameters: define optional `context` object for existing analysis context; define optional `symbol`, `market`, `analysis_id`, and `limit` as metadata/output controls only, never as data-fetch triggers.
+- Handler behavior: when `context` is missing or empty, return blocked `analysis_context_required` diagnostics and an empty task list; when context is present, use `EvidenceQualityService(enabled=True).evaluate(context)` and existing Serenity acquisition-queue logic to produce suggested research tasks.
+- Output shape: return JSON-serializable fields for `tool`, `research_only`, metadata, `status`, `gap_count`, `gaps`, `diagnostics`, and `boundaries`.
+- Gap item shape: include `gap_id`, `ticker`, `severity`, `reason`, `source_target`, `search_prompt`, `acceptance_criteria`, `after_import_action`, and `persistence_ready`.
+- No-gap behavior: return `status="ready"` or audit status with `gap_count=0`, empty `gaps`, and diagnostics showing no research gaps were generated from the provided context.
+- Fail-open: catch handler exceptions, log a sanitized warning, return `status="failed_open"`, `gap_count=0`, empty `gaps`, and no stack traces/local paths/raw exception messages.
+- Safety: descriptions, outputs, tests, docs, and restart prompt must avoid direct trading advice wording and must not contain DSA decision-field keys.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_gap_tool.py -q` should fail before implementation because the new tool/module is absent.
+- Focused pass: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_gap_tool.py -q`.
+- Registry pass: `python3.11 -m pytest tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_import_analysis_tools tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_all_tools_have_valid_schemas -q`.
+- Serenity pass: `python3.11 -m pytest tests/serenity -q`.
+- Boundary pass: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile src/serenity/agent_tools/evidence_gap_tool.py src/serenity/agent_tools/__init__.py src/agent/tools/analysis_tools.py tests/agent/tools/test_serenity_evidence_gap_tool.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity_evidence_gaps.*(买入|卖出|持有|目标价|仓位|止损|止盈)" src tests`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P2-T02 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Red behavior: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_gap_tool.py -q` first failed with `6 failed` because `src.serenity.agent_tools.evidence_gap_tool` and registry wiring did not exist.
+- Implementation: added DSA `src/serenity/agent_tools/evidence_gap_tool.py`, exported `serenity_evidence_gaps_tool`, and registered it through `src/agent/tools/analysis_tools.py` `ALL_ANALYSIS_TOOLS`.
+- Tool behavior: the tool is research-only, requires caller-provided low-sensitivity `context`, normalizes `EvidenceQualityService(enabled=True).evaluate(context)["acquisition_tasks"]` into Phase 3-ready gap suggestions, and returns blocked `analysis_context_required` diagnostics when context is absent.
+- Gap output: each suggestion includes `gap_id`, `ticker`, `gap_code`, `severity`, `reason`, `source_target`, `search_prompt`, `acceptance_criteria`, `after_import_action`, `persistence_ready`, and `task_type`; sorting prioritizes severity, primary-source need, coverage gaps, then stable ticker/gap order.
+- Boundary: no Agent prompts, factory behavior, decision agents, providers, DB paths, notification paths, portfolio paths, backtest paths, or DSA trading fields were changed; optional `symbol`, `market`, `analysis_id`, and `limit` are metadata/output controls only.
+- Verification: focused tool tests -> `6 passed`; focused registry import/schema tests -> `2 passed`; `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; forbidden phrase scan only matched existing broad-regex test function name; `git diff --check` -> pass.
+- Environment blocker: full `tests/test_agent_registry.py -q` remains blocked by known missing `pandas` dependency in unrelated `SkillAgent` import.
+- Commit: DSA `ab2ed1e` (`feat(serenity): 增加证据缺口 Agent 工具`).
+- Next step: execute `P2-T03: Agent Prompt Boundary Test` with explicit-call, research-only, fail-open tool boundaries.
+
+
 # DSA-First Serenity Core P2-T01 Evidence Quality Agent Tool Phase
 
 - [x] Confirm Phase 2 entry criteria from tracker before implementation.
