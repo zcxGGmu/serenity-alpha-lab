@@ -1,3 +1,34 @@
+# DSA-First Serenity Core P1-T05 HTTP / UI Smoke Phase
+
+- [x] Confirm existing DSA HTTP/API and Web report smoke entry points without changing product semantics.
+- [x] Add smoke coverage for `SERENITY_RESEARCH_ENABLED=false` response compatibility.
+- [x] Add smoke coverage for `SERENITY_RESEARCH_ENABLED=true` response containing optional `serenity_research`.
+- [x] Add smoke coverage for Web report page rendering the Evidence Quality Panel when audit exists.
+- [x] Add smoke coverage proving failed-open diagnostics do not block the report page.
+- [x] Record a rough audit performance measurement, including incremental elapsed time and an acceptable threshold.
+- [x] Run fresh focused/backend/frontend validation, boundary guard, lint/build where relevant, forbidden phrase scan, and diff cleanliness.
+- [x] Commit only P1-T05-related DSA files with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+
+## Design Check-In
+
+- User goal: execute `P1-T05: Phase 1 HTTP / UI Smoke` after P1-T04 Web Evidence Quality Panel, while keeping DSA as the primary product/runtime.
+- Scope: verify existing optional `serenity_research` behavior over HTTP/service-shaped responses and Web report rendering; do not add API fields beyond the existing optional nested audit block.
+- Flag-off compatibility: `SERENITY_RESEARCH_ENABLED=false` must keep responses baseline-compatible and omit `serenity_research`.
+- Flag-on behavior: `SERENITY_RESEARCH_ENABLED=true` may add only research-only evidence-quality metadata under optional `serenity_research`.
+- Failed-open behavior: auxiliary audit failures must surface diagnostics but not block report rendering or DSA analysis response construction.
+- Safety: Serenity output must not map into `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+
+## Review
+
+- Implementation: added DSA `tests/serenity/test_phase1_http_ui_smoke.py` for synchronous route-helper/API-shaped smoke coverage and `apps/dsa-web/src/pages/__tests__/HomePage.serenity-smoke.test.tsx` for historical report page smoke coverage.
+- HTTP smoke: flag-off responses stay baseline-compatible with no effective audit payload; flag-on responses add only optional research-only `serenity_research`; summary and strategy are compared against the flag-off baseline.
+- Failed-open smoke: backend returns safe `failed_open` diagnostics without changing baseline summary/strategy, and Web report rendering remains visible with the Evidence Quality Panel diagnostics copy.
+- Performance: rough mocked attach measurement reported samples `1.144,0.275,0.279,0.294,0.279 ms/response`, median `0.279 ms/response`, below the `25 ms/response` smoke threshold.
+- Verification: focused smoke/schema/service tests -> `12 passed`; full `tests/serenity -q` -> `28 passed`; boundary guard -> `3 passed`; DSA Web report smoke/panel/diagnostics tests -> `17 passed`; `npm --prefix apps/dsa-web run build` -> pass; `npm --prefix apps/dsa-web run lint` -> pass; forbidden Serenity trading-phrase scan -> no product-code matches; `git diff --check` -> pass.
+- Commit: DSA `00325bd` (`test(serenity): 增加 Phase 1 HTTP 与 UI Smoke 验证`).
+- Next step: execute `P1 Phase Review`; verify Phase 1 exit criteria as a whole before starting Phase 2 Agent Tools.
+
 # DSA-First Serenity Core P1-T04 Web Evidence Quality Panel Phase
 
 - [x] Write failing DSA Web tests for optional `serenity_research` rendering, missing-audit omission, failed-open messaging, and report placement.

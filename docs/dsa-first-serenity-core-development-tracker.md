@@ -27,20 +27,20 @@
 
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
-| DSA 代码集成 | In Progress | Global tasks、Phase 0、`P1-T01`、`P1-T02`、`P1-T03`、`P1-T04` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；尚未完成 Phase 1 HTTP/UI smoke 或 DB 专表 |
+| DSA 代码集成 | In Progress | Global tasks、Phase 0、`P1-T01`、`P1-T02`、`P1-T03`、`P1-T04`、`P1-T05` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 Phase 1 review gate，DB 专表仍未启动 |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
 | Phase 0 Evidence Bridge POC | Verified | `P0-T01` 至 `P0-T04` 与 Phase 0 review gate 已完成并验证 |
-| Phase 1 Analysis Report Add-On | In Progress | `P1-T01` API Schema、`P1-T02` Analysis Service 附加 Serenity Audit、`P1-T03` 历史记录 Context Snapshot 持久化与 `P1-T04` Web 类型/证据质量面板已完成并验证；下一步执行 `P1-T05` HTTP / UI Smoke |
+| Phase 1 Analysis Report Add-On | In Progress | `P1-T01` API Schema、`P1-T02` Analysis Service 附加 Serenity Audit、`P1-T03` 历史记录 Context Snapshot 持久化、`P1-T04` Web 类型/证据质量面板与 `P1-T05` HTTP / UI Smoke 已完成并验证；下一步执行 P1 Phase Review |
 | Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
 | Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
 | Phase 4 Provenance Safety Guardrails | Not Started | 等 Phase 3 review 通过后再开始 |
 
 ### 当前下一步
 
-Global guardrails、Phase 0 Evidence Bridge POC、`P1-T01` API Schema、`P1-T02` runtime attach、`P1-T03` history snapshot persistence 与 `P1-T04` Web 类型/证据质量面板已完成并通过验证；下一步继续 Phase 1 Analysis Report Add-On 的 HTTP / UI smoke，但仍保持默认关闭、fail-open 和不改变既有交易语义。
+Global guardrails、Phase 0 Evidence Bridge POC、`P1-T01` API Schema、`P1-T02` runtime attach、`P1-T03` history snapshot persistence、`P1-T04` Web 类型/证据质量面板与 `P1-T05` HTTP / UI Smoke 已完成并通过验证；下一步继续 Phase 1 review gate，但仍保持默认关闭、fail-open 和不改变既有交易语义。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 执行 `P1-T05: Phase 1 HTTP / UI Smoke`。
+2. 执行 `P1 Phase Review`。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
 4. Phase 1 只增加 optional nested audit block、runtime attach、历史 snapshot、UI 展示和 smoke 验证，不改原字段语义，不让 Serenity audit 写入交易建议字段。
 
@@ -73,16 +73,17 @@ Global guardrails、Phase 0 Evidence Bridge POC、`P1-T01` API Schema、`P1-T02`
 - DSA P0-T02 已完成：已新增 `src/serenity/adapters/dsa_context_to_evidence.py`、`src/serenity/adapters/__init__.py` 和 `tests/serenity/adapters/test_dsa_context_to_evidence.py`；最新 DSA commit 为 `b85b72a`。
 - DSA P0-T03 已完成：已新增 `src/serenity/services/evidence_quality_service.py`、`src/serenity/services/__init__.py` 和 `tests/serenity/services/test_evidence_quality_service.py`；最新 DSA commit 为 `a382a0f`。
 - DSA P0-T04 已完成：已新增 `scripts/serenity_evidence_audit_poc.py`、`tests/serenity/test_evidence_audit_poc_script.py`、`tests/fixtures/serenity/dsa_context_full.json` 和 `docs/serenity-phase-0-poc.md`；最新 DSA commit 为 `e15e588`。
-- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter、evidence quality service POC、本地 CLI/script runner、可选 `serenity_research` API schema、AnalysisService runtime attach、历史 `context_snapshot.serenity_research` 持久化和 Web 研究证据质量面板；Phase 0 review gate 已通过，Phase 1 正在进行，尚未完成 HTTP/UI smoke 或 DB 专表。
+- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter、evidence quality service POC、本地 CLI/script runner、可选 `serenity_research` API schema、AnalysisService runtime attach、历史 `context_snapshot.serenity_research` 持久化和 Web 研究证据质量面板；Phase 0 review gate 已通过，Phase 1 正在进行，HTTP/UI smoke 已完成；尚未完成 Phase 1 review gate 或 DB 专表。
 - DSA P1-T01 已完成：已新增 `api/v1/schemas/serenity.py`，在 `api/v1/schemas/analysis.py` 与 `api/v1/schemas/history.py` 暴露 optional `serenity_research`，并通过 lazy-load `api/v1/__init__.py` 避免 schema-only import 触发 endpoint/storage 依赖；最新 DSA commit 为 `10b9dda`。
 - DSA P1-T02 已完成：已在 `src/services/analysis_service.py` 的 base response 构建后按默认关闭的 `SERENITY_RESEARCH_ENABLED` 可选调用 `EvidenceQualityService`，顶层附加 research-only `serenity_research`；同步响应透传该 block；新增配置字段、配置注册表和中英文设置帮助；最新 DSA commit 为 `952c708`。
 - DSA P1-T03 已完成：已在 `src/storage.py` 支持将可选 research-only `serenity_research` 白名单摘要写入既有 `analysis_history.context_snapshot.serenity_research`，并在 `src/services/analysis_service.py` 后置 best-effort 补写已保存历史记录；覆盖直接保存、后置补写、共享 `query_id` 精准匹配、`SAVE_CONTEXT_SNAPSHOT=false` 兼容和交易字段隔离；最新 DSA commit 为 `c193f17`。
 - DSA P1-T04 已完成：已在 `apps/dsa-web/src/types/analysis.ts` 增加 optional `serenityResearch` 类型契约，新增 `SerenityEvidenceQualityPanel`，并在 `ReportSummary` 中将研究证据质量面板放在输入数据块摘要之后、运行诊断和数据追溯之前；覆盖有 audit、无 audit、failed-open 与挂载顺序；最新 DSA commit 为 `8d21280`。
+- DSA P1-T05 已完成：已新增 `tests/serenity/test_phase1_http_ui_smoke.py` 与 `apps/dsa-web/src/pages/__tests__/HomePage.serenity-smoke.test.tsx`，覆盖 flag-off baseline-compatible 响应、flag-on optional `serenity_research`、failed-open diagnostics 不阻断响应和 Web 报告页 Evidence Quality Panel 展示；性能粗测中位增量约 `0.279 ms/response`，低于 `25 ms/response` smoke 阈值；最新 DSA commit 为 `00325bd`。
 - Phase 0 review 证据：`python3.11 -m pytest tests/serenity -q` -> `13 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; POC enabled smoke -> exit 0，输出 `enabled=True`, `research_only=True`, `evidence_count=6`, ticker `600519`; cross-repo import scan 无命中；`git diff --check` 通过；DSA status clean。
 - 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；本轮已用 `npm --prefix apps/dsa-web ci` 恢复前端依赖并完成 P1-T04 前端验证。不要把既有 Python 缺依赖失败归因于 Serenity。
 - P1-T03 验证：`python3.11 -m pytest tests/serenity/test_analysis_history_serenity_snapshot.py tests/serenity/test_analysis_service_serenity.py -q` -> `8 passed`; `python3.11 -m pytest tests/serenity -q` -> `24 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; py_compile 目标 Python 文件通过；`git diff --check` 通过；DSA status clean。
 - P1-T04 验证：`npm --prefix apps/dsa-web test -- SerenityEvidenceQualityPanel` -> `1 passed`, `4 passed`; `npm --prefix apps/dsa-web test -- AnalysisContextSummary ReportDiagnostics SerenityEvidenceQualityPanel` -> `3 passed`, `14 passed`; `npm --prefix apps/dsa-web run build` -> pass; `npm --prefix apps/dsa-web run lint` -> pass; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity -q` -> `24 passed`; forbidden UI phrase scan 无命中；`git diff --check` 通过；最新 DSA commit `8d21280`。
-- 下一步从 tracker 的 `P1-T05: Phase 1 HTTP / UI Smoke` 开始。验证 flag off/on、failed-open 和 Web 报告展示路径，不新增交易建议语义，不改变 DSA 原有字段含义。
+- 下一步从 tracker 的 `P1 Phase Review` 开始。验证 Phase 1 exit criteria、flag off/on、failed-open、历史 snapshot、Web 展示和交易字段隔离，不新增交易建议语义，不改变 DSA 原有字段含义。
 - 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
 - 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
@@ -737,45 +738,47 @@ npm run build
 
 ### P1-T05: Phase 1 HTTP / UI Smoke
 
-Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Owner: Codex
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `00325bd`
+Evidence: DSA `tests/serenity/test_phase1_http_ui_smoke.py`, `apps/dsa-web/src/pages/__tests__/HomePage.serenity-smoke.test.tsx`, `docs/serenity-baseline-verification.md`; focused smoke/schema/service tests -> `12 passed`; full Serenity suite -> `28 passed`; boundary guard -> `3 passed`; DSA Web report smoke/panel/diagnostics tests -> `17 passed`; `npm --prefix apps/dsa-web run build` -> pass; `npm --prefix apps/dsa-web run lint` -> pass; audit incremental rough median -> `0.279 ms/response` below `25 ms/response`; forbidden Serenity trading-phrase scan -> no product-code matches; `git diff --check` -> pass.
+Decision Notes: Full FastAPI app import still touches known optional environment dependencies (`pandas`, `markdown2`), so P1-T05 uses focused synchronous route-helper and service-shaped smoke coverage rather than attributing broad app import failures to Serenity. Trading-field checks compare flag-on output to a flag-off baseline because DSA may independently normalize action labels from score/advice.
+Rollback Notes: P1-T05 adds tests and documentation only; remove the two smoke test files and the P1-T05 baseline documentation section to rollback this stage. Runtime rollback remains `SERENITY_RESEARCH_ENABLED=false` or reverting prior Phase 1 implementation commits.
 
 **Purpose:** 验证 API 与 Web 集成在 flag on/off 下均稳定。
 
 **Files:**
 
-- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/e2e/test_serenity_analysis_addon.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/test_phase1_http_ui_smoke.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web/src/pages/__tests__/HomePage.serenity-smoke.test.tsx`
 - Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-baseline-verification.md`
 
 **Dependencies:** P1-T02, P1-T03, P1-T04
 
 **Implementation Checklist:**
 
-- [ ] 写 HTTP smoke：flag off response 与 baseline 兼容。
-- [ ] 写 HTTP smoke：flag on response 包含 optional audit。
-- [ ] 写 UI smoke：报告页在有 audit 时展示 panel。
-- [ ] 写 UI smoke：failed-open diagnostics 不阻断报告页。
-- [ ] 记录性能粗测：audit 增量耗时和可接受阈值。
+- [x] 写 HTTP smoke：flag off response 与 baseline 兼容。
+- [x] 写 HTTP smoke：flag on response 包含 optional audit。
+- [x] 写 UI smoke：报告页在有 audit 时展示 panel。
+- [x] 写 UI smoke：failed-open diagnostics 不阻断报告页。
+- [x] 记录性能粗测：audit 增量耗时和可接受阈值。
 
 **Tests:**
 
 ```bash
-python -m pytest tests/e2e/test_serenity_analysis_addon.py -q
+python3.11 -m pytest tests/serenity/test_phase1_http_ui_smoke.py -q
+npm --prefix apps/dsa-web test -- HomePage.serenity-smoke
 ```
 
 **DoD:**
 
-- [ ] flag off/on 都通过 smoke。
-- [ ] failed-open 行为可被测试复现。
-- [ ] 性能增量记录在文档中。
+- [x] flag off/on 都通过 smoke。
+- [x] failed-open 行为可被测试复现。
+- [x] 性能增量记录在文档中。
 
 **Rollback:** 关闭 feature flag；如需代码回滚，revert Phase 1 PR。
 

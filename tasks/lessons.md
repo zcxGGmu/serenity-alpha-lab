@@ -121,3 +121,4 @@
 - When adding config registry keys, update both backend metadata and frontend settings-help locale maps in the same stage. The full config registry test checks every `help_key`, so a backend-only registration leaves the UI contract incomplete.
 - Do not use Python `py_compile` on TypeScript files. Validate Python with `py_compile`, and cover TypeScript locale/config changes through the repository's existing registry/help tests unless a frontend toolchain is available.
 - Tests that prove "Serenity does not change DSA trading fields" should compare against a flag-off baseline response, not hardcode expected action labels. DSA may normalize `action` from score/advice independently of Serenity.
+- Pydantic `model_dump()` keeps optional `None` fields by default. Smoke tests for backward compatibility should assert no effective payload value, or use explicit exclude-none output, instead of assuming optional fields disappear from dumps.
