@@ -1,3 +1,30 @@
+# DSA-First Serenity Core P0-T02 Context Adapter Phase
+
+- [x] Write DSA adapter tests for complete context, empty context, missing news/fundamentals, and legacy flat keys.
+- [x] Create standard-library-only `src/serenity/adapters/dsa_context_to_evidence.py` in DSA.
+- [x] Keep adapter input as plain `dict[str, Any]` and avoid binding to DSA large runtime objects.
+- [x] Preserve provenance through explicit source types and mark uncertain data as `unverified_context`.
+- [x] Verify adapter tests, core contract tests, static boundary guard, py_compile, and diff cleanliness.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` and this task log with P0-T02 evidence.
+- [x] Stage only P0-T02 handoff files in Serenity and commit with a detailed Chinese message.
+
+## Design Check-In
+
+- User goal: continue Phase 0 with `P0-T02: DSA Context 到 Evidence Adapter` after P0-T01 core contract is verified.
+- Scope: add only a deterministic adapter in DSA `src/serenity/adapters` plus focused tests; do not touch DSA API, UI, DB, providers, notifications, task queues, or report semantics.
+- Contract: adapter accepts ordinary context dictionaries and emits `EvidenceItem` values consumable by the P0-T01 core contract.
+- Source mapping: quote data -> `market_data`, technical blocks -> `technical_indicator`, fundamentals -> `fundamental`, news -> `news`, social context -> `social`, historical context -> `history_context`, uncertain legacy text -> `unverified_context`.
+- Safety: never map Serenity evidence or scores into DSA `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+
+## Review
+
+- Implementation: added DSA `src/serenity/adapters/dsa_context_to_evidence.py` and package initializer to convert DSA analysis context dictionaries into stable Serenity `EvidenceItem` records.
+- Input support: adapter handles `subject`, `blocks.quote`, `blocks.technical`, `blocks.fundamentals`, `blocks.news`, `social_context`, `history_context`, and legacy flat keys such as `trend_result`, `fundamental_context`, and `news_context`.
+- Boundary behavior: adapter is pure and deterministic, does not mutate input, does not call providers/API/DB/UI/notifications/task queues, and keeps uncertain context as `unverified_context`.
+- Verification: `python3.11 -m pytest tests/serenity/adapters/test_dsa_context_to_evidence.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py` -> exit 0; `git diff --check` -> exit 0.
+- Commit: DSA `b85b72a` (`feat(serenity): 增加 DSA Context Evidence Adapter`).
+- Next step: start `P0-T03: Evidence Quality Service POC`; still keep `SERENITY_RESEARCH_ENABLED=false` default and do not change DSA API, UI, DB, providers, notifications, task queue, or trading-decision fields.
+
 # DSA-First Serenity Core P0-T01 Core Contract Phase
 
 - [x] Write failing DSA core contract tests for normal evidence, empty evidence, and missing source metadata.

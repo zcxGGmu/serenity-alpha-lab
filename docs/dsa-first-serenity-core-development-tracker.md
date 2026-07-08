@@ -27,9 +27,9 @@
 
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
-| DSA 代码集成 | Not Started | 尚未修改 `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` 的实现代码 |
+| DSA 代码集成 | In Progress | Global tasks、`P0-T01`、`P0-T02` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；尚未改 API、UI、DB |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
-| Phase 0 Evidence Bridge POC | In Progress | `P0-T01` 已完成并验证；下一步从 P0-T02 DSA Context 到 Evidence Adapter 开始 |
+| Phase 0 Evidence Bridge POC | In Progress | `P0-T01`、`P0-T02` 已完成并验证；下一步从 `P0-T03` Evidence Quality Service POC 开始 |
 | Phase 1 Analysis Report Add-On | Not Started | 等 Phase 0 review 通过后再开始 |
 | Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
 | Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
@@ -37,10 +37,10 @@
 
 ### 当前下一步
 
-Global guardrails 与 P0-T01 core contract 已完成；下一步继续 Phase 0 Evidence Bridge POC，不直接进入 UI、API 或数据库改造。
+Global guardrails、P0-T01 core contract 与 P0-T02 DSA context adapter 已完成；下一步继续 Phase 0 Evidence Bridge POC，不直接进入 UI、API 或数据库改造。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 执行 `P0-T02: DSA Context 到 Evidence Adapter`。
+2. 执行 `P0-T03: Evidence Quality Service POC`。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
 4. Phase 0 仅做本地 POC，不改 DSA API、UI、DB。
 
@@ -65,14 +65,15 @@ Global guardrails 与 P0-T01 core contract 已完成；下一步继续 Phase 0 E
 4. tasks/lessons.md
 
 当前状态：
-- 已完成 DSA-first Serenity Core Global guardrails；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
+- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约与 P0-T02 DSA Context Evidence Adapter；下次启动时以当前仓库 `HEAD` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
 - Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 - DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
 - DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
-- DSA P0-T01 已完成：已在 DSA 内新增标准库-only `src/serenity/core/*` 最小研究契约和 `tests/serenity/core/test_core_contract.py`；最新 DSA commit 为 `4e34c78`。
-- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试和最小 Serenity core；尚未开始 DSA Context Adapter / service / API / UI / DB 集成。
+- DSA P0-T01 已完成：已在 DSA 内新增标准库-only `src/serenity/core/*` 最小研究契约和 `tests/serenity/core/test_core_contract.py`；DSA commit 为 `4e34c78`。
+- DSA P0-T02 已完成：已新增 `src/serenity/adapters/dsa_context_to_evidence.py`、`src/serenity/adapters/__init__.py` 和 `tests/serenity/adapters/test_dsa_context_to_evidence.py`；最新 DSA commit 为 `b85b72a`。
+- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core 和 DSA context adapter；尚未开始 service / API / UI / DB 集成。
 - 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；前端缺 `apps/dsa-web/node_modules`。不要把这些既有失败归因于 Serenity。
-- 下一步从 tracker 的 `P0-T02: DSA Context 到 Evidence Adapter` 开始，然后继续 P0-T03、P0-T04。
+- 下一步从 tracker 的 `P0-T03: Evidence Quality Service POC` 开始，然后继续 P0-T04。
 - 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
 - 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
@@ -360,15 +361,15 @@ PY
 ### P0-T02: DSA Context 到 Evidence Adapter
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `b85b72a`
+Evidence: DSA `src/serenity/adapters/dsa_context_to_evidence.py`, `src/serenity/adapters/__init__.py`, `tests/serenity/adapters/test_dsa_context_to_evidence.py`; `python3.11 -m pytest tests/serenity/adapters/test_dsa_context_to_evidence.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py src/serenity/adapters/*.py` -> exit 0; `git diff --check` -> exit 0.
+Decision Notes: Adapter 输入保持为普通 `dict[str, Any]`，支持 `subject`、`blocks.quote`、`blocks.technical`、`blocks.fundamentals`、`blocks.news`、`social_context`、`history_context` 以及 legacy flat keys；所有 evidence id 使用内容派生的稳定 id；无法证明来源的数据保留为 `unverified_context`，由 core readiness/coverage 继续识别；adapter 不调用 provider、API、DB、UI、notification 或 task queue。
+Rollback Notes: 删除 DSA `src/serenity/adapters/` 与 `tests/serenity/adapters/test_dsa_context_to_evidence.py`；不影响 DSA 原有主分析链路、API、UI 或 DB。
 
 **Purpose:** 将 DSA 分析上下文转成 Serenity EvidenceItem，保留来源、摘要、时间、ticker、数据类型与 provenance。
 
@@ -382,13 +383,13 @@ Rollback Notes:
 
 **Implementation Checklist:**
 
-- [ ] 定义 adapter 输入为普通 `dict[str, Any]`，避免直接绑定 DSA 大对象。
-- [ ] 从行情、基本面、技术指标、新闻、社交舆情、历史上下文中提取 evidence candidates。
-- [ ] 为每类 evidence 设置明确 `source_type`，例如 `market_data`、`fundamental`、`technical_indicator`、`news`、`social`、`history_context`。
-- [ ] 对无法证明来源的数据标记 `source_type="unverified_context"`，并让 readiness gate 可识别。
-- [ ] 生成稳定 `id`，避免同一上下文每次 run 产生不可追踪随机 id。
-- [ ] 不在 adapter 内调用任何外部数据源。
-- [ ] 不修改传入 context。
+- [x] 定义 adapter 输入为普通 `dict[str, Any]`，避免直接绑定 DSA 大对象。
+- [x] 从行情、基本面、技术指标、新闻、社交舆情、历史上下文中提取 evidence candidates。
+- [x] 为每类 evidence 设置明确 `source_type`，例如 `market_data`、`fundamental`、`technical_indicator`、`news`、`social`、`history_context`。
+- [x] 对无法证明来源的数据标记 `source_type="unverified_context"`，并让 readiness gate 可识别。
+- [x] 生成稳定 `id`，避免同一上下文每次 run 产生不可追踪随机 id。
+- [x] 不在 adapter 内调用任何外部数据源。
+- [x] 不修改传入 context。
 
 **Tests:**
 
@@ -398,9 +399,9 @@ python -m pytest tests/serenity/adapters/test_dsa_context_to_evidence.py -q
 
 **DoD:**
 
-- [ ] adapter 对完整 context、空 context、缺少新闻、缺少基本面的输入都有稳定输出。
-- [ ] adapter 输出的 EvidenceItem 可被 P0-T01 core 接收。
-- [ ] 没有网络请求、数据库写入或 provider 调用。
+- [x] adapter 对完整 context、空 context、缺少新闻、缺少基本面的输入都有稳定输出。
+- [x] adapter 输出的 EvidenceItem 可被 P0-T01 core 接收。
+- [x] 没有网络请求、数据库写入或 provider 调用。
 
 **Rollback:** 删除 adapter 与测试。
 
@@ -1566,7 +1567,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | G-T02 | Global | 分支与提交规范 | Verified | G-T01 | DSA branch `codex/serenity-phase-0-evidence-bridge`; DSA `docs/CONTRIBUTING.md` + boundary doc |
 | G-T03 | Global | 基线验证快照 | Verified | G-T01 | DSA `docs/serenity-baseline-verification.md`; baseline failures recorded as missing dependency setup |
 | P0-T01 | Phase 0 | Serenity Core 最小契约抽取 | Verified | G-T01, G-T03 | DSA commit `4e34c78`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile/import smoke passed |
-| P0-T02 | Phase 0 | DSA Context 到 Evidence Adapter | Not Started | P0-T01 |  |
+| P0-T02 | Phase 0 | DSA Context 到 Evidence Adapter | Verified | P0-T01 | DSA commit `b85b72a`; adapter tests -> `3 passed`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile and diff check passed |
 | P0-T03 | Phase 0 | Evidence Quality Service POC | Not Started | P0-T02 |  |
 | P0-T04 | Phase 0 | CLI / Script POC Runner | Not Started | P0-T03 |  |
 | P1-T01 | Phase 1 | API Schema 增加 Serenity Audit 类型 | Not Started | P0-T03 |  |
@@ -1590,10 +1591,11 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-Global guardrails 与 P0-T01 已完成。从 Phase 0 继续，不直接进入 UI 或数据库改造。
+Global guardrails、P0-T01 与 P0-T02 已完成。从 Phase 0 继续，不直接进入 UI 或数据库改造。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
 - [x] 执行 P0-T01。
-- [ ] 执行 P0-T02 至 P0-T04。
+- [x] 执行 P0-T02。
+- [ ] 执行 P0-T03 至 P0-T04。
 - [ ] Phase 0 review 通过后，再进入 Phase 1。
