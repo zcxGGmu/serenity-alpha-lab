@@ -1,3 +1,60 @@
+# DSA-First Serenity Core P2-T01 Evidence Quality Agent Tool Phase
+
+- [x] Confirm Phase 2 entry criteria from tracker before implementation.
+- [x] Confirm DSA Agent tool registration path uses `src/agent/factory.py` -> `ALL_*_TOOLS` lists -> `ToolRegistry.register()`.
+- [x] Write failing DSA tests for `serenity_evidence_quality` tool definition, registry discovery, JSON-serializable output, fail-open diagnostics, and trading-field isolation.
+- [x] Implement `src/serenity/agent_tools/evidence_quality_tool.py` with a research-only handler backed by `EvidenceQualityService`.
+- [x] Register the tool through the existing Agent tool aggregation path without making Agent prompts call it automatically.
+- [x] Keep inputs minimal and explicit: support `context` as the primary direct audit input, with optional `symbol`, `market`, and `analysis_id` metadata for response traceability only.
+- [x] Ensure tool output only covers evidence quality, readiness, coverage, top gaps, source warnings, diagnostics, and research-only boundaries.
+- [x] Ensure the tool never emits or maps to `buy`, `sell`, `hold`, `operation_advice`, `action`, `target_price`, `position_sizing`, `stop_loss`, `take_profit`, `trend_prediction`, `sniper_points`, or `sentiment_score`.
+- [x] Ensure tool failures return sanitized fail-open diagnostics without stack traces, local paths, or Agent-session-breaking exceptions.
+- [x] Run fresh focused tests, full Serenity tests, boundary guard, registry tests, compile checks, forbidden trading-phrase scan, and diff cleanliness checks.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+- [x] Stage only P2-T01-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Phase 1 exit criteria: satisfied by P1 Phase Review; latest DSA commit `1e2f9b6` verified optional `serenity_research`, flag-off compatibility, failed-open behavior, context snapshot persistence, Web panel, no Serenity DB table/migration, and no DSA trading-field changes.
+- Agent registry method: confirmed DSA builds a cached `ToolRegistry` in `src/agent/factory.py` by registering `ALL_DATA_TOOLS + ALL_ANALYSIS_TOOLS + ALL_SEARCH_TOOLS + ALL_MARKET_TOOLS + ALL_BACKTEST_TOOLS`.
+- Integration choice: add the P2-T01 tool to the existing analysis-tool aggregation path by importing a new `serenity_evidence_quality_tool` definition into `src/agent/tools/analysis_tools.py` and appending it to `ALL_ANALYSIS_TOOLS`.
+- User-query vs system-decision split: P2-T01 will only expose an explicit callable tool; it will not modify Agent prompts, DSA decision agents, trading signal generation, report strategy fields, or automatic tool invocation logic.
+- Scope boundary: Phase 2 remains research-only, explicit-call, default-compatible, fail-open, and DB-schema-neutral.
+
+## Design Check-In
+
+- User goal: start `P2-T01: Evidence Quality Agent Tool` after Phase 1 review, while keeping `daily_stock_analysis` as the product/runtime and Serenity as an auxiliary research-quality core.
+- Tool name: use tracker-required `serenity_evidence_quality`.
+- Parameters: define `context` as optional object for direct existing analysis context/audit input; define optional `symbol`, `market`, and `analysis_id` as metadata only, not as triggers for provider fetches or trading recomputation.
+- Handler behavior: call `EvidenceQualityService(enabled=True).evaluate(context)` only when a context object is provided; for missing/empty context, return a deterministic research-only blocked/unavailable payload with gaps explaining that analysis context evidence is required.
+- Output shape: return JSON-serializable fields for `tool`, `research_only`, `symbol`, `market`, `analysis_id`, `status`, `quality_score`, `readiness`, `coverage`, `top_gaps`, `source_warnings`, `diagnostics`, and `boundaries`.
+- Fail-open: catch all handler exceptions, log a sanitized warning, and return `status="failed_open"` with safe diagnostics; do not raise into `ToolRegistry.execute()`.
+- Safety: descriptions, outputs, tests, and docs must avoid direct trading advice language and must not include DSA trading-decision fields.
+- No automatic prompt behavior: do not modify `src/agent/factory.py`, Agent prompts, `decision_agent`, `intel_agent`, API endpoints, notifications, portfolio, backtest, alerts, or providers unless a test proves registry discovery cannot work through the existing aggregation path.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py -q` should fail before implementation because the new tool/module is absent.
+- Focused pass: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py -q`.
+- Registry pass: `python3.11 -m pytest tests/test_agent_registry.py -q`.
+- Serenity pass: `python3.11 -m pytest tests/serenity -q`.
+- Boundary pass: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile src/serenity/agent_tools/evidence_quality_tool.py src/agent/tools/analysis_tools.py tests/agent/tools/test_serenity_evidence_quality_tool.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity_evidence_quality.*(买入|卖出|持有|目标价|仓位|止损|止盈)" src tests`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P2-T01 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Red behavior: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py -q` first failed with `5 failed` because `src.serenity.agent_tools` and registry wiring did not exist.
+- Implementation: added DSA `src/serenity/agent_tools/evidence_quality_tool.py` and `__init__.py`, then registered `serenity_evidence_quality_tool` through `src/agent/tools/analysis_tools.py` `ALL_ANALYSIS_TOOLS`.
+- Tool behavior: the tool is research-only, requires caller-provided low-sensitivity `context` for audit execution, returns blocked `analysis_context_required` diagnostics when context is absent, and returns sanitized `failed_open` diagnostics on service exceptions.
+- Boundary: no Agent prompts, factory behavior, decision agents, providers, DB paths, notification paths, or DSA trading fields were changed; optional `symbol`, `market`, and `analysis_id` are traceability metadata only.
+- Verification: focused tool tests -> `5 passed`; focused registry import/schema tests -> `2 passed`; `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; forbidden phrase scan only matched existing broad-regex test function name; `git diff --check` -> pass.
+- Environment blocker: full `tests/test_agent_registry.py -q` still reaches `58 passed` then fails on known missing `pandas` dependency in unrelated `SkillAgent` import.
+- Commit: DSA `379ee1b` (`feat(serenity): 增加证据质量 Agent 工具`).
+- Next step: execute `P2-T02: Evidence Gap Agent Tool` with the same explicit-call, research-only, fail-open boundary.
+
 # DSA-First Serenity Core P1-T05 HTTP / UI Smoke Phase
 
 - [x] Confirm existing DSA HTTP/API and Web report smoke entry points without changing product semantics.
@@ -3310,4 +3367,4 @@
 - DSA fix committed as `1e2f9b6 fix(serenity): 收紧 Research Audit API 契约`; it makes `research_quality_score` optional for failed-open audits and forbids unexpected top-level `serenity_research` fields such as `operation_advice`.
 - Fresh DSA verification after fix: target red/green tests -> `2 passed`; schema py_compile -> pass; focused Phase 1 backend/API/schema tests -> `14 passed`; full `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; DSA Web smoke/panel/diagnostics -> `4 files passed / 17 tests passed`; Web build and lint -> pass.
 - Static review evidence: default flag scan confirms `SERENITY_RESEARCH_ENABLED=false`; storage scan confirms existing `context_snapshot.serenity_research`; migration inventory found no `migrations/` or `alembic/` directory and no Serenity table; forbidden Serenity trading-phrase scan only matched the broad-regex test function name `test_serenity_audit_incremental_overhead_smoke_under_threshold`.
-- Next stage: `P2-T01` Evidence Quality Agent Tool. Keep tools research-only, explicitly invoked, default-off/fail-open, and isolated from DSA trading advice fields.
+- Next stage: `P2-T02` Evidence Gap Agent Tool. Keep tools research-only, explicitly invoked, default-off/fail-open, and isolated from DSA trading advice fields.
