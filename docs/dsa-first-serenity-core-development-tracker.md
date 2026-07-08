@@ -65,7 +65,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 4. tasks/lessons.md
 
 当前状态：
-- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter、P0-T03 Evidence Quality Service POC、P0-T04 CLI / Script POC Runner、Phase 0 review gate、P1-T01 API Schema、P1-T02 Analysis Service runtime attach、P1-T03 History Snapshot persistence、P1-T04 Web Evidence Quality Panel、P1-T05 Phase 1 HTTP / UI Smoke、P1 Phase Review 与 P2-T01 Evidence Quality Agent Tool 与 P2-T02 Evidence Gap Agent Tool；下次启动时以当前 Serenity 仓库 `HEAD`、DSA commit `ab2ed1e` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
+- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter、P0-T03 Evidence Quality Service POC、P0-T04 CLI / Script POC Runner、Phase 0 review gate、P1-T01 API Schema、P1-T02 Analysis Service runtime attach、P1-T03 History Snapshot persistence、P1-T04 Web Evidence Quality Panel、P1-T05 Phase 1 HTTP / UI Smoke、P1 Phase Review、P2-T01 Evidence Quality Agent Tool 与 P2-T02 Evidence Gap Agent Tool；下次启动时以 Serenity 仓库当前 `HEAD`、DSA commit `ab2ed1e` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
 - Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 - DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
 - DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
@@ -81,6 +81,8 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - DSA P1-T05 已完成：已新增 `tests/serenity/test_phase1_http_ui_smoke.py` 与 `apps/dsa-web/src/pages/__tests__/HomePage.serenity-smoke.test.tsx`，覆盖 flag-off baseline-compatible 响应、flag-on optional `serenity_research`、failed-open diagnostics 不阻断响应和 Web 报告页 Evidence Quality Panel 展示；性能粗测中位增量约 `0.279 ms/response`，低于 `25 ms/response` smoke 阈值；最新 DSA commit 为 `00325bd`。
 - DSA P1 Phase Review 已完成：子代理只读审查发现 API schema 防御缺口；已在 DSA commit `1e2f9b6` 修复 `SerenityResearchAudit` 顶层额外字段放行和 failed-open `research_quality_score=None` 类型不兼容问题，新增回归测试覆盖 failed-open audit 和 forbidden trading field 拒绝。
 - DSA P2-T01 已完成：已新增 `src/serenity/agent_tools/evidence_quality_tool.py` 与 `src/serenity/agent_tools/__init__.py`，并通过 `src/agent/tools/analysis_tools.py` 的 `ALL_ANALYSIS_TOOLS` 显式注册 `serenity_evidence_quality`；tool 仅在调用方传入已有 low-sensitivity analysis `context` 时运行 `EvidenceQualityService(enabled=True)`，缺少 context 返回 `analysis_context_required` blocked diagnostics，异常返回 sanitized `failed_open` diagnostics，不抓取行情/新闻/DB、不修改 Agent prompt 或 DSA 交易字段；最新 DSA commit 为 `379ee1b`。
+- 当前完成范围：Global guardrails、Phase 0 Evidence Bridge POC（含 review gate）、Phase 1 Analysis Report Add-On（含 P1 Phase Review）、Phase 2 `P2-T01` Evidence Quality Agent Tool、Phase 2 `P2-T02` Evidence Gap Agent Tool。
+- 当前未完成范围：Phase 2 `P2-T03` Agent Prompt Boundary Test、P2 Phase Review、Phase 3 Intelligence Workflow Persistence、Phase 4 Provenance Safety Guardrails、DB 专表。
 - DSA P2-T02 已完成：已新增 `src/serenity/agent_tools/evidence_gap_tool.py`，更新 `src/serenity/agent_tools/__init__.py` 与 `src/agent/tools/analysis_tools.py` 注册 `serenity_evidence_gaps`；tool 仅规范化调用方提供的 low-sensitivity analysis `context` 中由 `EvidenceQualityService(enabled=True)` 产出的 `acquisition_tasks`，输出 gap id、ticker、severity、reason、source target、search prompt、acceptance criteria、after-import action 和 Phase 3-ready task metadata；缺少 context 返回 `analysis_context_required` blocked diagnostics，异常返回 sanitized `failed_open` diagnostics，不抓取行情/新闻/DB、不创建数据库任务、不修改 Agent prompt 或 DSA 交易字段；最新 DSA commit 为 `ab2ed1e`。
 - Phase 0 review 证据：`python3.11 -m pytest tests/serenity -q` -> `13 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; POC enabled smoke -> exit 0，输出 `enabled=True`, `research_only=True`, `evidence_count=6`, ticker `600519`; cross-repo import scan 无命中；`git diff --check` 通过；DSA status clean。
 - 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；本轮已用 `npm --prefix apps/dsa-web ci` 恢复前端依赖并完成 P1-T04 前端验证。不要把既有 Python 缺依赖失败归因于 Serenity。
@@ -101,6 +103,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - 运行新鲜验证命令。
 - 只 stage 本阶段相关文件。
 - 用详细中文 commit message 提交，不要等我提醒。
+- 阶段性任务完成后必须自动更新 tracker、tasks/todo.md、tasks/lessons.md、restart prompt、最新 commit id、验证证据、已知 blocker 和禁止 stage 文件；不要等用户提醒。
 ```
 
 ---
