@@ -1,3 +1,35 @@
+# DSA-First Serenity Core P1-T02 Analysis Service Runtime Attach Phase
+
+- [x] Write failing DSA service tests for flag-off, flag-on, fail-open, trading-field invariance, API schema parsing, and config env behavior.
+- [x] Add `serenity_research_enabled` config loading from `SERENITY_RESEARCH_ENABLED`, defaulting to false.
+- [x] Register `SERENITY_RESEARCH_ENABLED` in the config registry and settings-help locale maps.
+- [x] Attach optional top-level `serenity_research` after DSA base response construction.
+- [x] Keep `SERENITY_RESEARCH_ENABLED=false` path free of `EvidenceQualityService` instantiation and new response fields.
+- [x] Pass through optional `serenity_research` in sync API response construction.
+- [x] Verify py_compile, focused P1-T02 tests, full Serenity suite, static boundary guard, config registry suite, and diff cleanliness.
+- [x] Commit the DSA P1-T02 implementation with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, and reusable lessons with P1-T02 evidence.
+
+## Design Check-In
+
+- User goal: complete `P1-T02: Analysis Service 附加 Serenity Audit` after P1-T01 schema support, while keeping DSA as the primary product/runtime.
+- Scope: attach only optional research-audit metadata after the DSA base report is built; do not alter providers, DB schema, notifications, task queue, portfolio, backtest, alerts, or decision-generation logic.
+- Feature flag: `SERENITY_RESEARCH_ENABLED=false` remains the default; when disabled, the service does not instantiate or execute `EvidenceQualityService` and does not add `serenity_research` to responses.
+- Fail-open: audit exceptions produce a research-only `failed_open` audit block when enabled; DSA analysis response and trading fields remain available.
+- Boundary: Serenity output must not map into `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+- Deferred by design: P1-T02 attaches a top-level optional response block; P1-T03 remains responsible for durable `analysis_history.context_snapshot.serenity_research` persistence.
+
+## Review
+
+- Red behavior: initial P1-T02 service tests exposed that `AnalysisService` imported repository/storage and market-phase helpers at module import time, which pulled known missing `pandas` into lightweight Serenity tests.
+- Implementation: updated DSA `src/services/analysis_service.py` to lazy-load heavy dependencies, read `serenity_research_enabled`, evaluate `EvidenceQualityService(enabled=True)` only after base response construction, and attach top-level `serenity_research` when enabled.
+- Runtime API: updated `api/v1/endpoints/analysis.py` so synchronous analysis responses preserve the optional `serenity_research` block returned by `AnalysisService`.
+- Config/UI help: added `serenity_research_enabled` to `src/config.py`, registered `SERENITY_RESEARCH_ENABLED` in `src/core/config_registry.py`, and added Chinese/English settings-help copy in `apps/dsa-web/src/locales/settingsHelp.ts`.
+- Tests: added `tests/serenity/test_analysis_service_serenity.py` covering flag off, flag on, fail-open, baseline trading-field invariance, schema parsing, and config env parsing; extended `tests/test_config_registry.py` for registry metadata.
+- Verification: `python3.11 -m py_compile src/services/analysis_service.py src/config.py src/core/config_registry.py api/v1/endpoints/analysis.py tests/serenity/test_analysis_service_serenity.py tests/test_config_registry.py` -> exit 0; focused P1-T02/schema/config tests -> `8 passed`; `python3.11 -m pytest tests/serenity -q` -> `20 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_config_registry.py -q` -> `55 passed`; `git diff --check` -> exit 0.
+- Commit: DSA `952c708` (`feat(serenity): 附加可选 Research Audit 到分析响应`).
+- Next step: execute `P1-T03: 历史记录 Context Snapshot 持久化`; persist the already generated optional audit summary under existing `analysis_history.context_snapshot.serenity_research` without adding DB columns.
+
 # DSA-First Serenity Core P1-T01 API Schema Phase
 
 - [x] Add optional Serenity research-audit API schema contract in DSA.
