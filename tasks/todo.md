@@ -1,3 +1,56 @@
+# DSA-First Serenity Core P2-T03 Agent Prompt Boundary Test Phase
+
+- [x] Confirm P2-T03 entry criteria from tracker before implementation.
+- [x] Inspect existing Serenity Agent tool descriptions, outputs, registry wiring, and Agent prompt files.
+- [x] Write failing DSA boundary tests for research-only tool descriptions, no direct action wording in tool schemas/outputs, no DSA trading-field leakage, no Serenity references in default Agent prompts, and documentation examples.
+- [x] Run the focused red check and confirm it fails for the expected missing boundary-test/doc reasons.
+- [x] Add or adjust only the minimal documentation/tool metadata needed to satisfy the tests without changing Agent prompts, providers, DB paths, or DSA trading fields.
+- [x] Run fresh focused tests, P2 tool tests, registry tests, full Serenity tests, boundary guard, compile checks, forbidden phrase scan, and diff cleanliness checks.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+- [x] Stage only P2-T03-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P2-T01` is complete at DSA commit `379ee1b`, with explicit-call `serenity_evidence_quality` registered through `src/agent/tools/analysis_tools.py`.
+- Dependency: `P2-T02` is complete at DSA commit `ab2ed1e`, with explicit-call `serenity_evidence_gaps` registered through the same analysis-tool aggregation path.
+- Tracker scope: `P2-T03` requires automated tests proving Agent tool descriptions contain research-only boundaries, tool outputs avoid direct buy/sell/hold instructions, Serenity quality score does not write to DSA trading score fields, and boundary docs include explicit user-query examples.
+- Runtime boundary: do not modify Agent prompts to automatically call Serenity; default Agent decision flows must remain free of Serenity tool instructions unless the user explicitly asks for evidence quality or research gaps.
+- Product boundary: do not change DSA decision agents, report trading fields, providers, alerts, portfolio, backtest, DB schemas, or feature-flag defaults.
+
+## Design Check-In
+
+- User goal: execute `P2-T03: Agent Prompt Boundary Test` after P2-T01 and P2-T02 while keeping `daily_stock_analysis` as the primary product/runtime.
+- Test focus: add a single focused boundary test module under DSA `tests/agent/` that exercises public tool schemas, handler outputs, registry discovery, and representative Agent system prompts.
+- Documentation focus: extend DSA `docs/serenity-integration-boundaries.md` with allowed explicit user queries and forbidden automatic/system decision examples.
+- Safety: test assertions should recursively scan tool schemas and outputs for DSA trading-field keys and direct action wording while allowing existing research-only terms such as evidence, quality, readiness, coverage, diagnostics, and gaps.
+- Scope restraint: if tests pass by adding documentation and tightening metadata only, avoid changing tool handlers or Agent prompt generation.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py -q` should fail before implementation because the new boundary test/doc section does not exist.
+- Focused pass: `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py -q`.
+- P2 tool pass: `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py tests/agent/tools/test_serenity_evidence_gap_tool.py -q`.
+- Registry pass: `python3.11 -m pytest tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_import_analysis_tools tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_all_tools_have_valid_schemas -q`.
+- Serenity pass: `python3.11 -m pytest tests/serenity -q`.
+- Boundary pass: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile tests/agent/test_serenity_prompt_boundaries.py src/serenity/agent_tools/evidence_quality_tool.py src/serenity/agent_tools/evidence_gap_tool.py src/agent/tools/analysis_tools.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity_evidence_(quality|gaps).*(买入|卖出|持有|目标价|仓位|止损|止盈)" src tests`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P2-T03 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Red behavior: initial `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py -q` failed with `3 failed / 2 passed`; after isolating known optional `pandas` imports, the remaining failure proved the boundary doc lacked explicit Agent examples. Expanded executor-path red check then failed with `2 failed / 6 passed`, proving default legacy single-agent analysis still exposed `serenity_evidence_quality` and `serenity_evidence_gaps` to the model.
+- Implementation: added DSA `tests/agent/test_serenity_prompt_boundaries.py`, extended `docs/serenity-integration-boundaries.md` with allowed explicit Agent queries and forbidden automatic trading-field examples, and added a request-scoped Serenity tool gate in `src/agent/executor.py`.
+- Executor boundary: default `AgentExecutor.run()` and chat-style request filtering now remove `serenity_evidence_quality` and `serenity_evidence_gaps` from both OpenAI tool declarations and the registry passed to `run_agent_loop`; explicit research-quality / evidence-gap / source-coverage / readiness intent or `serenity_research_tools_enabled=True` keeps the tools available.
+- Prompt boundary: default Technical, Intel, Risk, and Decision Agent prompts do not instruct Serenity tool use, and their filtered registries do not include Serenity tools.
+- Documentation: DSA boundary docs now include “这份分析的证据质量如何？” and “下一步应该补哪些证据？” as allowed explicit examples, plus forbidden examples for automatic Serenity-driven trading advice and `sentiment_score` mutation.
+- Verification: focused P2-T03 suite -> `8 passed`; P2 tool regression -> `11 passed`; focused registry tests -> `2 passed`; `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; forbidden phrase scan only matched existing broad-regex test function name; `git diff --check` -> pass.
+- Environment blocker: full `tests/test_agent_registry.py -q` remains blocked by known missing `pandas` dependency in unrelated `SkillAgent` import.
+- Commit: DSA `213db24` (`test(serenity): 增加 Agent Prompt 边界守卫`).
+- Next step: execute P2 Phase Review; confirm Phase 2 exit criteria before Phase 3 persistence.
+
+
 # DSA-First Serenity Core P2-T02 Evidence Gap Agent Tool Phase
 
 - [x] Confirm P2-T02 entry criteria from tracker before implementation.
