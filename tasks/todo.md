@@ -1,3 +1,18 @@
+# DSA-First Serenity Core Handoff Status Refresh
+
+- [x] Re-read the current tracker, todo log, lessons, and development plan anchors.
+- [x] Confirm completed state through P1-T02 and unfinished next step P1-T03.
+- [x] Preserve existing `output/ui/*` generated dirty files without staging, modifying, or reverting them.
+- [x] Strengthen the phase-completion habit so future stages also update the restart prompt automatically.
+- [x] Verify documentation diff cleanliness and commit only this handoff documentation refresh.
+
+## Review
+
+- Current completed scope: Global guardrails `G-T01` to `G-T03`, Phase 0 `P0-T01` to `P0-T04` plus Phase 0 review gate, Phase 1 `P1-T01` API Schema, and Phase 1 `P1-T02` Analysis Service runtime attach are completed and verified.
+- Current unfinished scope: `P1-T03` historical `analysis_history.context_snapshot.serenity_research` persistence is the next development task; `P1-T04`, `P1-T05`, and later P2-P4 work remain Not Started.
+- Handoff habit: every stage completion must update the tracker, this todo log, reusable lessons when applicable, and the copyable restart prompt before staging and committing only owned files.
+- Commit status: documentation-only refresh validated and ready for a dedicated handoff commit.
+
 # DSA-First Serenity Core P1-T02 Analysis Service Runtime Attach Phase
 
 - [x] Write failing DSA service tests for flag-off, flag-on, fail-open, trading-field invariance, API schema parsing, and config env behavior.

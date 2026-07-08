@@ -84,7 +84,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、`P1-T01` API Schema 与 `P1-T0
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
 
 工作习惯：
-- 每完成一个阶段性任务，立即更新 docs/dsa-first-serenity-core-development-tracker.md 和 tasks/todo.md，标清已完成、未完成、下一步。
+- 每完成一个阶段性任务，立即更新 docs/dsa-first-serenity-core-development-tracker.md、tasks/todo.md 和本段下次启动接续提示词，标清已完成、未完成、下一步与验证证据。
 - 必要时更新 tasks/lessons.md，把可复用经验固化下来。
 - 运行新鲜验证命令。
 - 只 stage 本阶段相关文件。
