@@ -1,5 +1,6 @@
 # Lessons
 
+- P1-T03 showed that DSA analysis history is saved before `AnalysisService` formats the API response, so durable optional add-ons may need a best-effort post-save patch keyed by `query_id + code + report_type`; do not rely only on mutating `result.diagnostic_context_snapshot` after persistence.
 - At the end of each phase, always update the development tracker, `tasks/todo.md`, and the copyable restart prompt with completed items, incomplete items, current next step, and validation evidence; update `tasks/lessons.md` when a reusable habit changes, then verify, stage only owned files, and commit with a detailed Chinese message automatically.
 - After completing each discrete implementation or documentation phase, stage only the files owned by that phase, run fresh verification, and create a commit with a detailed Chinese message before moving to the next phase. Do not wait for the user to remind you in a later session.
 - When comparing an external reference repository with a local working copy, use the user-provided local path as the source of truth before writing development plans. Public clones are useful for broad context, but file-level implementation guidance must be based on the actual local repository state.

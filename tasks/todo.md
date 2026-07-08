@@ -1,3 +1,31 @@
+# DSA-First Serenity Core P1-T03 History Snapshot Persistence Phase
+
+- [x] Write failing DSA tests for persisting optional `serenity_research` under existing `analysis_history.context_snapshot`.
+- [x] Keep the write path DB-schema-neutral: no new columns, migrations, or changes to DSA trading fields.
+- [x] Ensure flag-off and missing-audit paths preserve existing snapshot behavior.
+- [x] Ensure history detail/schema paths can read back the nested research-only block from `context_snapshot.serenity_research`.
+- [x] Verify focused P1-T03 tests, full Serenity suite, boundary guard, py_compile, and diff cleanliness.
+- [x] Commit the DSA P1-T03 implementation with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+
+## Design Check-In
+
+- User goal: complete `P1-T03: 历史记录 Context Snapshot 持久化` after P1-T02 runtime attach, while keeping DSA as the primary product/runtime.
+- Scope: persist only the already generated optional `serenity_research` research-audit block inside the existing `analysis_history.context_snapshot` JSON.
+- Feature flag: `SERENITY_RESEARCH_ENABLED=false` remains the default; when the audit is absent, the saved snapshot remains unchanged.
+- Boundary: do not add DB columns or migrations, do not modify providers, notifications, task queue, portfolio, backtest, alerts, or DSA decision-generation logic.
+- Safety: Serenity output must remain research-only and must not map into `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+
+## Review
+
+- Red behavior: `test_build_analysis_response_persists_serenity_research_in_context_snapshot` first failed with missing `context_snapshot["serenity_research"]`; storage regression initially exposed known optional dependency gaps (`pandas`, `fake_useragent`) before reaching the intended persistence failure, so the test harness stubs those dependencies locally.
+- Implementation: updated DSA `src/services/analysis_service.py` to attach `serenity_research` back onto `result.diagnostic_context_snapshot`, keep `result.serenity_research` available for storage, and best-effort patch the already saved history row.
+- Storage: updated DSA `src/storage.py` to whitelist compact research-only audit keys into `analysis_history.context_snapshot.serenity_research`, add `update_analysis_history_serenity_research()`, avoid new DB columns/migrations, and leave `SAVE_CONTEXT_SNAPSHOT=false` records unchanged.
+- Tests: added `tests/serenity/test_analysis_history_serenity_snapshot.py` covering direct save, absent audit, post-save updater, shared `query_id` precision, snapshot-disabled compatibility, and forbidden trading-field exclusion; updated `tests/serenity/test_analysis_service_serenity.py` for P1-T03 snapshot semantics.
+- Verification: `python3.11 -m pytest tests/serenity/test_analysis_history_serenity_snapshot.py tests/serenity/test_analysis_service_serenity.py -q` -> `8 passed`; `python3.11 -m pytest tests/serenity -q` -> `24 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; target `py_compile` passed; `git diff --check` passed.
+- Commit: DSA `c193f17` (`feat(serenity): 持久化 Research Audit 历史快照`).
+- Next step: execute `P1-T04: Web 类型与 Evidence Quality Panel`; consume optional historical/runtime `serenity_research` without changing DSA decision semantics.
+
 # DSA-First Serenity Core Handoff Status Refresh
 
 - [x] Re-read the current tracker, todo log, lessons, and development plan anchors.
@@ -9,7 +37,7 @@
 ## Review
 
 - Current completed scope: Global guardrails `G-T01` to `G-T03`, Phase 0 `P0-T01` to `P0-T04` plus Phase 0 review gate, Phase 1 `P1-T01` API Schema, and Phase 1 `P1-T02` Analysis Service runtime attach are completed and verified.
-- Current unfinished scope: `P1-T03` historical `analysis_history.context_snapshot.serenity_research` persistence is the next development task; `P1-T04`, `P1-T05`, and later P2-P4 work remain Not Started.
+- Current unfinished scope: `P1-T04` Web 类型与 Evidence Quality Panel is the next development task; `P1-T05` and later P2-P4 work remain Not Started.
 - Handoff habit: every stage completion must update the tracker, this todo log, reusable lessons when applicable, and the copyable restart prompt before staging and committing only owned files.
 - Commit status: documentation-only refresh validated and ready for a dedicated handoff commit.
 
