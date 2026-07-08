@@ -1,5 +1,7 @@
 # Lessons
 
+- After completing each discrete implementation or documentation phase, stage only the files owned by that phase, run fresh verification, and create a commit with a detailed Chinese message before moving to the next phase. Do not wait for the user to remind you in a later session.
+- When comparing an external reference repository with a local working copy, use the user-provided local path as the source of truth before writing development plans. Public clones are useful for broad context, but file-level implementation guidance must be based on the actual local repository state.
 - README architecture diagrams should be visually QA'd after SVG export, not only XML-validated. Render PNGs, inspect for clipped labels and crowded nodes, fix the SVG layout, and then rerun link checks plus tests before calling the documentation update complete.
 - Saved project libraries need activity-state filters once cards show collaboration history. Let users filter active versus inactive projects and sort by activity count from the same review event log, while keeping the data operational rather than investment-directed.
 - Project cards need activity summaries once review events become operational. Reuse the durable event log to show latest activity and event count on cards and detail drawers so users can triage projects before opening the full timeline.

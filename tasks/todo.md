@@ -1,3 +1,27 @@
+# DSA-First Serenity Core Development Tracker Phase
+
+- [x] Review the current DSA-first Serenity Core development plan and tracking conventions.
+- [x] Create a detailed iterative development tracker under `docs/`.
+- [x] Include phase gates, task IDs, dependencies, files, tests, DoD, rollback, and evidence fields.
+- [x] Validate markdown headings, placeholder scan, and repository diff cleanliness.
+- [x] Record review notes and reusable lessons.
+
+## Design Check-In
+
+- User goal: generate a detailed and rigorous development progress checklist based on the current DSA-first Serenity Core plan so future iterations can execute against it.
+- Tracking target: use DSA as the main product and Serenity Core as an auxiliary evidence-quality and research-audit module.
+- Execution constraint: checklist must support phase-by-phase implementation, verification-before-done, fail-open behavior, feature-flag rollout, and explicit rollback.
+- Persistence constraint: keep `analysis_history.context_snapshot.serenity_research` as the first persistence target and gate any new dedicated table behind an explicit decision record.
+- Safety constraint: never map Serenity quality outputs into DSA trading advice, target prices, position sizing, trend prediction, sentiment score, or buy/sell semantics.
+
+## Review
+
+- Implementation: created `docs/dsa-first-serenity-core-development-tracker.md` as the long-running implementation tracker for the DSA-first Serenity Core integration plan.
+- Scope: tracker covers global guardrails, Phase 0 evidence bridge POC, Phase 1 report add-on, Phase 2 Agent tools, Phase 3 research-task persistence, Phase 4 provenance/safety guardrails, release readiness, risk decisions, and progress overview.
+- Engineering controls: every task includes owner/status metadata, dependencies, target files, implementation checklist, validation commands, DoD, rollback notes, and phase review gates.
+- Validation: heading scan completed, placeholder scan returned no matches, referenced DSA and source-plan paths exist, and `git diff --check` passed.
+- Repository note: unrelated generated UI output files were already dirty and were left untouched.
+
 # Serenity Alpha Lab Bilingual Diagram README Phase
 
 - [x] Inspect the requested `fireworks-tech-graph` skill and Claude Official style 6 reference.
@@ -2865,3 +2889,35 @@
 - Release verification: `make verify` -> `153 passed`, `doctor` reported required inputs ok, `run-cpo-pack` generated `combined 182 evidence items; ready memos 6; skipped 0`, and the coverage matrix rebuilt.
 - Product refresh: `PYTHONPATH=src python3 -m serenity_alpha_lab.cli build-ui --language both` rebuilt English and Chinese UI files; `serve-ui` restarted on port `8767` with server PID `56434`.
 - Local smoke: `/index.zh.html`, `/index.html`, `/analyze?query=HBM&language=zh`, `/api/runs`, `/analyses/hbm-6f259a8f14/index.zh.html`, and `/analyses/hbm-6f259a8f14/analysis-manifest.json` all returned HTTP 200; `/api/runs` includes manifest href, candidate tickers, quality score, and quality status.
+# DSA-First Serenity Core Development Plan Phase
+
+- [x] Review project lessons and current task-management requirements.
+- [x] Inspect current Serenity Alpha Lab architecture and reusable core boundaries.
+- [x] Research public and local `daily_stock_analysis` project structure.
+- [x] Re-anchor final conclusions to `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis`.
+- [x] Write a detailed development plan under `docs/`.
+- [x] Validate markdown references and repository diff.
+
+## Review
+
+- User goal: make `daily_stock_analysis` the primary product while using Serenity Alpha Lab as the auxiliary investment-research evidence system.
+- Architecture decision: preserve DSA as Web/API/Desktop/Bot/market-data/notification/portfolio/backtest shell; integrate Serenity as a narrow evidence-quality, readiness, audit, and evidence-gap layer.
+- Research correction: the final plan uses the local DSA path `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` as implementation evidence rather than relying only on the temporary public clone.
+- Deliverable: added `docs/dsa-first-serenity-core-development-plan.md` with phased architecture, file-level integration points, contracts, tasks, risks, and verification matrix.
+- Validation: placeholder scan, heading scan, referenced local-path existence check, and `git diff --check` passed; the new docs file is untracked until staged.
+
+# DSA-First Serenity Core Plan Hardening Phase
+
+- [x] Review `writing-plans` guidance and existing development plan.
+- [x] Run focused read-only review for engineering completeness gaps.
+- [x] Run focused read-only review for DSA/Serenity product architecture gaps.
+- [x] Inspect DSA schema, Agent registry, and intelligence persistence anchors.
+- [x] Expand the development plan with code-boundary, data-contract, migration, config, failure, observability, compliance, and Definition of Done details.
+- [x] Validate updated markdown, placeholder scan, referenced paths, and diff.
+
+## Review
+
+- User goal: further improve the DSA-first Serenity Core plan with best-practice implementation details for each part.
+- Hardening focus: added import direction rules, allowed/forbidden call sites, packaging choices, phase gates, nested API contracts, `dsa://` provenance, failure taxonomy, config table, deployment defaults, observability, compliance copy, and phase-level Definition of Done.
+- Product boundary reinforced: DSA keeps trading semantics and product shell; Serenity-generated surfaces only describe research evidence quality and follow-up research tasks.
+- Validation: updated plan headings, new-document placeholder scan, referenced DSA/Serenity path checks, and `git diff --check` passed; historical `tasks/todo.md` text still contains older review wording outside this task.

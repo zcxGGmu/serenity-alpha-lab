@@ -1,0 +1,1516 @@
+# DSA-First Serenity Core Development Tracker
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this tracker task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** 以 `daily_stock_analysis` 为主产品与主运行时，按阶段接入 Serenity Core 的证据质量、研究审计、补证闭环和安全边界能力，并让每次迭代都有明确状态、证据、回滚点和验收标准。
+
+**Architecture:** DSA 继续拥有 Web / API / Desktop / Bot、数据源、调度、通知、组合、回测、Agent 与交易报告语义；Serenity Core 只作为辅助研究内核，通过窄接口提供 evidence audit、readiness gate、coverage matrix、evidence gap task 和 provenance guardrail。所有集成默认关闭、fail-open、可回滚，不覆盖 DSA 原有买卖建议、评分、趋势、目标价、仓位或风控逻辑。
+
+**Tech Stack:** Python 3.10+ / FastAPI / SQLAlchemy / React + Vite / TypeScript / Zustand / deterministic Serenity evidence pipeline / JSONL bridge / pytest / Vitest / Playwright / Docker / GitHub Actions.
+
+---
+
+## 0. 使用规则
+
+### 0.1 状态枚举
+
+| 状态 | 含义 | 使用规则 |
+| --- | --- | --- |
+| `Not Started` | 尚未开始 | 默认状态，未产生代码或设计变更 |
+| `In Progress` | 正在实现 | 已有分支、草稿、测试或代码变更 |
+| `Blocked` | 被明确依赖阻塞 | 必须记录阻塞原因、负责人、解除条件 |
+| `In Review` | 已完成实现，等待审查 | 必须附 diff、测试证据和风险说明 |
+| `Verified` | 已按 DoD 验证 | 必须附新鲜验证命令与结果 |
+| `Released` | 已合入目标分支并发布 | 必须附版本、commit、部署或发布记录 |
+| `Deferred` | 主动延期 | 必须记录延期原因和重新评估条件 |
+| `Dropped` | 明确取消 | 必须说明取消原因和替代方案 |
+
+### 0.2 任务记录字段
+
+每个任务执行时必须补齐以下字段：
+
+```markdown
+Owner:
+Status:
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+```
+
+### 0.3 完成定义
+
+任一任务不能只因“代码写完”标记为完成。至少满足：
+
+- [ ] 需求已映射到明确的文件和接口。
+- [ ] 新增或修改的行为有测试覆盖，或记录了不写测试的具体原因。
+- [ ] 运行了任务指定的验证命令，并记录 exit code 与关键输出。
+- [ ] 失败路径、降级路径、空数据路径和 feature flag 关闭路径已验证。
+- [ ] 没有把 Serenity score 混入 DSA 交易建议、目标价、仓位、止损止盈、趋势预测或 `sentiment_score`。
+- [ ] 没有引入跨仓库绝对路径 import。
+- [ ] 没有让 Serenity audit 阻塞 DSA 主分析链路。
+- [ ] 已记录回滚方式。
+
+### 0.4 阶段门禁
+
+| 阶段 | 门禁目标 | 允许发布范围 |
+| --- | --- | --- |
+| Phase 0 | 证明 evidence bridge 可独立运行 | 仅本地 POC、无 API/UI/DB 变更 |
+| Phase 1 | 在 DSA 分析报告中可选展示 evidence quality | API schema + optional UI panel + context snapshot |
+| Phase 2 | Agent 可显式查询证据质量和缺口 | Agent tools，默认不影响主 prompt 决策 |
+| Phase 3 | 研究任务可持久化和复跑 | `context_snapshot.serenity_research` 优先，必要时再加表 |
+| Phase 4 | provenance 和 safety guardrails 可审计 | 报告安全扫描、引用溯源、发布门禁 |
+
+---
+
+## 1. 全局约束清单
+
+### G-T01: 集成边界守卫
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 防止后续迭代把 Serenity 辅助能力扩张成新的产品壳、交易建议引擎或 DSA 主链路阻塞点。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-integration-boundaries.md`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/README.md`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/.env.example`
+
+**Dependencies:** `docs/dsa-first-serenity-core-development-plan.md`
+
+**Checklist:**
+
+- [ ] 写清 DSA owns / Serenity owns / forbidden call sites。
+- [ ] 写清 `SERENITY_RESEARCH_ENABLED=false` 的默认关闭策略。
+- [ ] 写清 fail-open 策略：Serenity 异常只进入 diagnostics，不影响 DSA analysis success。
+- [ ] 写清禁止字段映射：`sentiment_score`、`operation_advice`、`action`、`trend_prediction`、`target_price`、`position_sizing`、`sniper_points`、stop loss、take profit。
+- [ ] 写清 import 方向：DSA application layer -> Serenity services -> adapters -> core。
+- [ ] 写清跨仓库代码进入 DSA 的方式：复制、vendor、package 三选一，不允许运行时绝对路径 import。
+
+**Validation:**
+
+```bash
+rg -n "SERENITY_RESEARCH_ENABLED|fail-open|sentiment_score|operation_advice|target_price|position_sizing" /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-integration-boundaries.md
+git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis diff --check
+```
+
+**DoD:**
+
+- [ ] 文档中的允许/禁止边界可被工程师直接执行。
+- [ ] `.env.example` 包含默认关闭的 Serenity 配置。
+- [ ] README 只描述辅助研究能力，不暗示 Serenity 生成交易建议。
+
+**Rollback:** 删除新增边界文档、移除 README 和 `.env.example` 的 Serenity 段落。
+
+### G-T02: 分支与提交规范
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 保证长周期集成可审计、可回退、可分阶段合入。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-integration-boundaries.md`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/CONTRIBUTING.md`
+
+**Dependencies:** G-T01
+
+**Checklist:**
+
+- [ ] 建立阶段分支命名：`codex/serenity-phase-0-evidence-bridge` 至 `codex/serenity-phase-4-provenance-safety`。
+- [ ] 每个阶段至少一个独立 PR，不把 P0-P4 堆成单次大改。
+- [ ] 提交信息使用 `feat(serenity): ...`、`test(serenity): ...`、`docs(serenity): ...`。
+- [ ] 每个 PR 描述必须包含 feature flag 状态、验证命令、回滚路径、未完成风险。
+- [ ] 每个阶段合入前记录 `git diff --stat` 和关键变更文件。
+
+**Validation:**
+
+```bash
+git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis status --short
+git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis branch --show-current
+```
+
+**DoD:**
+
+- [ ] 团队可以通过分支和 PR 判断每个阶段的完整性。
+- [ ] 任一阶段可单独 revert，不影响其他未发布阶段。
+
+**Rollback:** 恢复 CONTRIBUTING 和边界文档中新增的 Serenity 分支规范。
+
+### G-T03: 基线验证快照
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 在任何 Serenity 代码进入 DSA 前，记录 DSA 当前可运行基线，避免后续无法判断回归来源。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-baseline-verification.md`
+
+**Dependencies:** G-T01
+
+**Checklist:**
+
+- [ ] 记录 Python 版本、Node 版本、包管理器、当前分支、当前 commit。
+- [ ] 运行 DSA 后端单元测试并记录结果。
+- [ ] 运行 DSA 前端类型检查、lint 或测试脚本并记录结果。
+- [ ] 如果测试因环境依赖失败，记录失败命令、错误摘要、缺失依赖、恢复条件。
+- [ ] 记录现有失败，不把历史失败归因于 Serenity 集成。
+
+**Validation:**
+
+```bash
+git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis rev-parse --short HEAD
+python --version
+node --version
+```
+
+**DoD:**
+
+- [ ] 有一份可审计的 baseline 文档。
+- [ ] 后续阶段能对比 baseline 判断新增风险。
+
+**Rollback:** 删除 baseline 文档；不改变代码。
+
+---
+
+## 2. Phase 0: Evidence Bridge POC
+
+**Phase Goal:** 在不改 DSA API、UI、DB 的前提下，证明 DSA analysis context 可以被转换为 Serenity EvidenceItem，并生成稳定的 evidence-quality audit JSON。
+
+**Phase Entry Criteria:**
+
+- [ ] G-T01 至 G-T03 已完成或明确豁免。
+- [ ] DSA 和 Serenity 当前仓库路径存在。
+- [ ] DSA 主分析链路 baseline 已记录。
+
+**Phase Exit Criteria:**
+
+- [ ] 本地命令可从 DSA sample context 输出 audit JSON。
+- [ ] 失败输入、空输入、缺 source 输入均有确定输出。
+- [ ] 没有 API/UI/DB 变更。
+- [ ] 没有跨仓库 runtime absolute import。
+
+### P0-T01: Serenity Core 最小契约抽取
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 从 Serenity Alpha Lab 抽出 DSA 集成所需的最小核心，不携带 UI、CLI、memo pack、local server 或生成物。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/evidence.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/retrieval.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/scoring.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/source_coverage.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/readiness.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/acquisition_queue.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/__init__.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/core/test_core_contract.py`
+
+**Dependencies:** G-T01, G-T03
+
+**Implementation Checklist:**
+
+- [ ] 复制或重建 `EvidenceItem` 的最小字段：`id`、`title`、`source_type`、`publisher`、`published_at`、`url`、`excerpt`、`claims`、`symbols`、`metadata`。
+- [ ] 保留 deterministic scoring / coverage / readiness 逻辑所需函数。
+- [ ] 删除或不迁入 Serenity UI、CLI、memo pack、HTTP server、output writer、absolute path defaults。
+- [ ] 所有 core module 只依赖 Python 标准库和同目录 core module。
+- [ ] 为空 evidence list 返回稳定 audit 结果，而不是抛异常。
+- [ ] 为缺失 source metadata 的 evidence 产生 gap，而不是补虚假 source。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/core/test_core_contract.py -q
+python - <<'PY'
+from src.serenity.core.evidence import EvidenceItem
+print(EvidenceItem.__name__)
+PY
+```
+
+**DoD:**
+
+- [ ] `src/serenity/core/*` 没有 import DSA provider、FastAPI、SQLAlchemy、React asset、notification、task queue。
+- [ ] 测试覆盖正常 evidence、空 evidence、缺 source evidence。
+- [ ] `python -m pytest tests/serenity/core/test_core_contract.py -q` 通过。
+
+**Rollback:** 删除 `/src/serenity/core/` 和对应测试，不影响 DSA 原有代码。
+
+### P0-T02: DSA Context 到 Evidence Adapter
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 将 DSA 分析上下文转成 Serenity EvidenceItem，保留来源、摘要、时间、ticker、数据类型与 provenance。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/adapters/dsa_context_to_evidence.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/adapters/__init__.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/adapters/test_dsa_context_to_evidence.py`
+
+**Dependencies:** P0-T01
+
+**Implementation Checklist:**
+
+- [ ] 定义 adapter 输入为普通 `dict[str, Any]`，避免直接绑定 DSA 大对象。
+- [ ] 从行情、基本面、技术指标、新闻、社交舆情、历史上下文中提取 evidence candidates。
+- [ ] 为每类 evidence 设置明确 `source_type`，例如 `market_data`、`fundamental`、`technical_indicator`、`news`、`social`、`history_context`。
+- [ ] 对无法证明来源的数据标记 `source_type="unverified_context"`，并让 readiness gate 可识别。
+- [ ] 生成稳定 `id`，避免同一上下文每次 run 产生不可追踪随机 id。
+- [ ] 不在 adapter 内调用任何外部数据源。
+- [ ] 不修改传入 context。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/adapters/test_dsa_context_to_evidence.py -q
+```
+
+**DoD:**
+
+- [ ] adapter 对完整 context、空 context、缺少新闻、缺少基本面的输入都有稳定输出。
+- [ ] adapter 输出的 EvidenceItem 可被 P0-T01 core 接收。
+- [ ] 没有网络请求、数据库写入或 provider 调用。
+
+**Rollback:** 删除 adapter 与测试。
+
+### P0-T03: Evidence Quality Service POC
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 提供 DSA 可调用的窄服务接口，输入 DSA context，输出 Serenity audit JSON。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/services/evidence_quality_service.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/services/__init__.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/services/test_evidence_quality_service.py`
+
+**Dependencies:** P0-T02
+
+**Implementation Checklist:**
+
+- [ ] 定义 `EvidenceQualityService.evaluate(context: dict[str, Any]) -> dict[str, Any]`。
+- [ ] 输出字段包含 `enabled`、`status`、`quality_score`、`readiness`、`coverage`、`evidence_count`、`gaps`、`diagnostics`。
+- [ ] 默认配置关闭时返回 `enabled=false` 和最小 diagnostics。
+- [ ] 开启配置时调用 adapter、scoring、coverage、readiness。
+- [ ] 捕获异常并返回 `status="failed_open"`，不向上抛出影响 DSA 主链路。
+- [ ] 记录异常类型和安全摘要，不记录 secrets 或完整用户敏感输入。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/services/test_evidence_quality_service.py -q
+```
+
+**DoD:**
+
+- [ ] disabled、enabled、empty context、adapter exception 四类测试通过。
+- [ ] 服务输出可 JSON 序列化。
+- [ ] 失败路径为 fail-open。
+
+**Rollback:** 删除 service 与测试。
+
+### P0-T04: CLI / Script POC Runner
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 用最小脚本证明 evidence bridge 可独立运行，供后续 Phase 1 接入前验证。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/scripts/serenity_evidence_audit_poc.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/test_evidence_audit_poc_script.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-phase-0-poc.md`
+
+**Dependencies:** P0-T03
+
+**Implementation Checklist:**
+
+- [ ] 脚本接受 sample JSON 路径作为输入。
+- [ ] 脚本输出 audit JSON 到 stdout。
+- [ ] 脚本支持 `--enabled` 显式开启，默认关闭。
+- [ ] 示例文档记录 sample 输入、命令、输出字段解释。
+- [ ] 不读取 DSA DB，不启动 FastAPI，不调用行情 provider。
+
+**Tests:**
+
+```bash
+python scripts/serenity_evidence_audit_poc.py --sample tests/fixtures/serenity/dsa_context_full.json --enabled
+python -m pytest tests/serenity/test_evidence_audit_poc_script.py -q
+```
+
+**DoD:**
+
+- [ ] POC 可在本地命令行稳定输出 audit JSON。
+- [ ] stdout 是可解析 JSON。
+- [ ] 文档说明 Phase 0 未修改 API/UI/DB。
+
+**Rollback:** 删除 POC script、测试和 Phase 0 POC 文档。
+
+### P0 Phase Review
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Review Checklist:**
+
+- [ ] `python -m pytest tests/serenity -q` 通过或记录明确的环境失败。
+- [ ] `rg -n "/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab|serenity_alpha_lab" /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity` 无 runtime absolute import。
+- [ ] `git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis diff --check` 通过。
+- [ ] 与 baseline 对比，DSA 原有测试没有新增失败。
+- [ ] Phase 1 接入点已经被确认：`src/services/analysis_service.py`。
+
+---
+
+## 3. Phase 1: Analysis Report Add-On
+
+**Phase Goal:** 在 DSA 分析完成后，以可选附加块的形式返回和展示 Serenity evidence-quality audit，不改变 DSA 原有核心分析结果。
+
+**Phase Entry Criteria:**
+
+- [ ] Phase 0 exit criteria 已满足。
+- [ ] `SERENITY_RESEARCH_ENABLED` 默认关闭。
+- [ ] API schema 添加策略已确认：新增 optional nested block，不改原字段语义。
+
+**Phase Exit Criteria:**
+
+- [ ] API response 支持 optional `serenity_research`。
+- [ ] 历史记录优先写入 `analysis_history.context_snapshot.serenity_research`。
+- [ ] Web UI 在报告摘要后展示可选 evidence-quality panel。
+- [ ] feature flag 关闭时 UI/API 与原行为一致。
+
+### P1-T01: API Schema 增加 Serenity Audit 类型
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 为 Serenity audit 提供稳定 API contract，同时保持向后兼容。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/api/v1/schemas/analysis.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/api/v1/schemas/history.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/api/v1/test_analysis_schema.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/api/v1/test_history_schema.py`
+
+**Dependencies:** P0-T03
+
+**Implementation Checklist:**
+
+- [ ] 新增 nested model：`SerenityEvidenceGap`、`SerenityCoverageSummary`、`SerenityReadinessSummary`、`SerenityResearchAudit`。
+- [ ] 在 analysis response 中新增 optional `serenity_research: SerenityResearchAudit | None`。
+- [ ] 在 history schema 中从 `context_snapshot.serenity_research` 暴露同名 optional block。
+- [ ] 保持旧 response fixture 不需要新增字段也能通过解析。
+- [ ] 禁止修改既有交易语义字段类型或含义。
+
+**Tests:**
+
+```bash
+python -m pytest tests/api/v1/test_analysis_schema.py tests/api/v1/test_history_schema.py -q
+```
+
+**DoD:**
+
+- [ ] 旧 payload 和新 payload 均可解析。
+- [ ] 新 block 缺省时为 `None` 或不出现，不破坏旧客户端。
+- [ ] schema 字段命名明确区分 evidence quality 与 investment advice。
+
+**Rollback:** 移除 schema 新增类型和 optional 字段。
+
+### P1-T02: Analysis Service 附加 Serenity Audit
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 在 DSA base report 生成后调用 EvidenceQualityService，附加 audit block。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/services/analysis_service.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/config.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/services/test_analysis_service_serenity.py`
+
+**Dependencies:** P1-T01
+
+**Implementation Checklist:**
+
+- [ ] 读取 `SERENITY_RESEARCH_ENABLED`，默认 false。
+- [ ] 在 base `AnalysisResult` 已完成后构造 context snapshot。
+- [ ] 调用 `EvidenceQualityService.evaluate(...)`，捕获异常并写 diagnostics。
+- [ ] 将结果附加到 response optional block。
+- [ ] feature flag 关闭时不实例化或不执行 expensive audit。
+- [ ] 不改变评分、趋势、建议、买卖点、风险警报生成逻辑。
+
+**Tests:**
+
+```bash
+python -m pytest tests/services/test_analysis_service_serenity.py -q
+```
+
+**DoD:**
+
+- [ ] flag off 测试证明 response 不含或为空 `serenity_research`。
+- [ ] flag on 测试证明 response 包含 audit。
+- [ ] service exception 测试证明 DSA analysis 仍成功。
+- [ ] 测试断言原 DSA 字段未被 Serenity 改写。
+
+**Rollback:** 移除 `analysis_service.py` 中 Serenity service 调用和 config 项。
+
+### P1-T03: 历史记录 Context Snapshot 持久化
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 按方案优先将 Serenity audit 写入现有 `analysis_history.context_snapshot.serenity_research`，避免过早新增表。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/storage.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/services/analysis_service.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/storage/test_analysis_history_serenity_snapshot.py`
+
+**Dependencies:** P1-T02
+
+**Implementation Checklist:**
+
+- [ ] 确认 `context_snapshot` 当前类型和序列化路径。
+- [ ] 写入 `context_snapshot["serenity_research"]`，不新增顶层 DB 列。
+- [ ] 历史读取时保留该 block。
+- [ ] 老记录缺少该 block 时正常返回。
+- [ ] snapshot 只存摘要、gap、coverage、readiness、diagnostics，不存完整原始新闻或 secrets。
+
+**Tests:**
+
+```bash
+python -m pytest tests/storage/test_analysis_history_serenity_snapshot.py -q
+```
+
+**DoD:**
+
+- [ ] 新历史记录可读回 `serenity_research`。
+- [ ] 老历史记录兼容。
+- [ ] 没有新增 migration。
+
+**Rollback:** 停止写入 `context_snapshot.serenity_research`；保留已存在历史数据为无害额外 JSON。
+
+### P1-T04: Web 类型与 Evidence Quality Panel
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 在 DSA Web 报告中展示研究证据质量，不改变主要交易结论区。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web/src/types/analysis.ts`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web/src/components/report/SerenityEvidenceQualityPanel.tsx`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web/src/components/report/ReportSummary.tsx`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web/src/components/report/AnalysisContextSummary.tsx`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web/src/components/report/SerenityEvidenceQualityPanel.test.tsx`
+
+**Dependencies:** P1-T01
+
+**Implementation Checklist:**
+
+- [ ] 在 TypeScript types 中新增 optional `serenity_research`。
+- [ ] Panel 显示 quality score、readiness、source coverage、evidence count、top gaps、diagnostics。
+- [ ] Panel 文案明确为“研究证据质量”，不是“买卖建议增强”。
+- [ ] 没有 audit 时不渲染 panel 或显示轻量空态。
+- [ ] failed-open 时显示“辅助研究审计不可用，主分析未受影响”。
+- [ ] Panel 放在 DSA decision summary 之后，避免抢占主结论。
+
+**Tests:**
+
+```bash
+cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web
+npm test -- SerenityEvidenceQualityPanel
+npm run typecheck
+```
+
+**DoD:**
+
+- [ ] 有 audit、无 audit、failed-open 三种 UI 状态均有测试。
+- [ ] TypeScript 类型检查通过。
+- [ ] UI 文案不出现 target price、position sizing、buy/sell/hold 映射。
+
+**Rollback:** 移除 panel、types 新字段和 ReportSummary 挂载点。
+
+### P1-T05: Phase 1 HTTP / UI Smoke
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 验证 API 与 Web 集成在 flag on/off 下均稳定。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/e2e/test_serenity_analysis_addon.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-baseline-verification.md`
+
+**Dependencies:** P1-T02, P1-T03, P1-T04
+
+**Implementation Checklist:**
+
+- [ ] 写 HTTP smoke：flag off response 与 baseline 兼容。
+- [ ] 写 HTTP smoke：flag on response 包含 optional audit。
+- [ ] 写 UI smoke：报告页在有 audit 时展示 panel。
+- [ ] 写 UI smoke：failed-open diagnostics 不阻断报告页。
+- [ ] 记录性能粗测：audit 增量耗时和可接受阈值。
+
+**Tests:**
+
+```bash
+python -m pytest tests/e2e/test_serenity_analysis_addon.py -q
+```
+
+**DoD:**
+
+- [ ] flag off/on 都通过 smoke。
+- [ ] failed-open 行为可被测试复现。
+- [ ] 性能增量记录在文档中。
+
+**Rollback:** 关闭 feature flag；如需代码回滚，revert Phase 1 PR。
+
+### P1 Phase Review
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Review Checklist:**
+
+- [ ] `SERENITY_RESEARCH_ENABLED=false` 时 DSA API/UI 行为与 baseline 一致。
+- [ ] `SERENITY_RESEARCH_ENABLED=true` 时只新增 optional evidence-quality block。
+- [ ] 历史记录使用 `context_snapshot.serenity_research`。
+- [ ] 没有新增 Serenity 专用表。
+- [ ] 没有修改 DSA 原有交易建议字段。
+
+---
+
+## 4. Phase 2: Agent Tools
+
+**Phase Goal:** 让 DSA Agent 可以被用户显式调用 Serenity research-quality 能力，但 Agent 默认交易决策链路不被 Serenity 自动改写。
+
+**Phase Entry Criteria:**
+
+- [ ] Phase 1 exit criteria 已满足。
+- [ ] Agent tool 注册方式已确认。
+- [ ] 用户查询语义与系统自动决策语义已分离。
+
+**Phase Exit Criteria:**
+
+- [ ] Agent registry 中有 evidence quality / evidence gap tools。
+- [ ] Tools 只返回研究审计和补证建议。
+- [ ] Tool error fail-open，不中断 Agent 会话。
+- [ ] Tool 文案不生成交易建议。
+
+### P2-T01: Evidence Quality Agent Tool
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 提供 Agent 可调用工具，用于回答“这份分析证据质量如何”。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/agent/tools/registry.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/agent/tools/analysis_tools.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/agent_tools/evidence_quality_tool.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/agent/tools/test_serenity_evidence_quality_tool.py`
+
+**Dependencies:** P1-T02
+
+**Implementation Checklist:**
+
+- [ ] 定义 tool name：`serenity_evidence_quality`。
+- [ ] 参数包含 `symbol`、`market`、`analysis_id` 或 `context`，根据 DSA 现有 Agent 工具模式选择最小输入。
+- [ ] 输出包含 quality score、readiness、coverage、top gaps、source warning。
+- [ ] Tool description 明确 research-only。
+- [ ] Tool 不调用交易建议重算逻辑。
+- [ ] Tool 失败时返回 diagnostics，而不是抛异常终止 Agent。
+
+**Tests:**
+
+```bash
+python -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py -q
+```
+
+**DoD:**
+
+- [ ] Tool 已注册且可发现。
+- [ ] Tool 输出可 JSON 序列化。
+- [ ] Tool 不修改 Agent 交易信号。
+
+**Rollback:** 从 registry 移除 tool 并删除 `src/serenity/agent_tools/evidence_quality_tool.py`。
+
+### P2-T02: Evidence Gap Agent Tool
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 提供 Agent 可调用工具，用于回答“下一步应该补哪些证据”。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/agent/tools/registry.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/agent/tools/analysis_tools.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/agent_tools/evidence_gap_tool.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/agent/tools/test_serenity_evidence_gap_tool.py`
+
+**Dependencies:** P2-T01
+
+**Implementation Checklist:**
+
+- [ ] 定义 tool name：`serenity_evidence_gaps`。
+- [ ] 输出 gap id、reason、source target、acceptance criteria、after-import action。
+- [ ] 将 gaps 按 severity、source coverage、primary-source need 排序。
+- [ ] 文案避免“应买入/卖出”，改用“补证后再提升研究置信度”。
+- [ ] Tool 不创建数据库任务；Phase 2 只返回建议。
+
+**Tests:**
+
+```bash
+python -m pytest tests/agent/tools/test_serenity_evidence_gap_tool.py -q
+```
+
+**DoD:**
+
+- [ ] 有 gaps、无 gaps、audit failed-open 三种输出均稳定。
+- [ ] 输出可被后续 Phase 3 转成持久任务。
+
+**Rollback:** 从 registry 移除 tool 并删除 gap tool。
+
+### P2-T03: Agent Prompt Boundary Test
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 防止 Agent 把 Serenity research-only 输出误用为交易建议。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/agent/test_serenity_prompt_boundaries.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-integration-boundaries.md`
+
+**Dependencies:** P2-T01, P2-T02
+
+**Implementation Checklist:**
+
+- [ ] 测试 Agent tool descriptions 包含 research-only 边界。
+- [ ] 测试 tool output 不含 direct buy/sell/hold instruction。
+- [ ] 测试 Serenity quality score 不写入 trading score 字段。
+- [ ] 文档补充 Agent 使用示例：用户显式问证据质量时才调用。
+
+**Tests:**
+
+```bash
+python -m pytest tests/agent/test_serenity_prompt_boundaries.py -q
+```
+
+**DoD:**
+
+- [ ] Agent 工具边界有自动化测试。
+- [ ] 文档有用户查询示例和禁止示例。
+
+**Rollback:** 移除测试和文档新增段落；保留 Phase 2 tools 需重新评估。
+
+### P2 Phase Review
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Review Checklist:**
+
+- [ ] Agent tools 只在显式调用时使用。
+- [ ] Tools 输出不覆盖 DSA 决策字段。
+- [ ] Agent 工具测试通过。
+- [ ] 关闭 feature flag 时 tools 不暴露或返回 disabled diagnostics。
+
+---
+
+## 5. Phase 3: Intelligence Workflow Persistence
+
+**Phase Goal:** 将 Serenity gaps 变成可追踪研究任务，并逐步对齐 DSA intelligence workflow；优先使用现有 JSON snapshot 和 intelligence service，不急于新建专表。
+
+**Phase Entry Criteria:**
+
+- [ ] Phase 2 exit criteria 已满足。
+- [ ] 研究任务字段、生命周期和 owner 语义已确认。
+- [ ] 已明确何时需要新表。
+
+**Phase Exit Criteria:**
+
+- [ ] Evidence gaps 可在历史或 intelligence workflow 中追踪。
+- [ ] 任务状态支持 open / collecting / verified / dismissed。
+- [ ] 完成任务后可触发 rerun 或生成 rerun 指引。
+- [ ] 新表决策有证据支持；未满足条件时继续使用 snapshot。
+
+### P3-T01: Research Task Data Contract
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 定义 DSA 中可持久化的 Serenity research task 结构。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-research-task-contract.md`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/api/v1/schemas/history.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/api/v1/test_serenity_research_task_schema.py`
+
+**Dependencies:** P1-T03, P2-T02
+
+**Implementation Checklist:**
+
+- [ ] 定义 `task_id`、`symbol`、`market`、`gap_type`、`reason`、`source_target`、`acceptance_criteria`、`status`、`created_at`、`updated_at`、`verified_at`。
+- [ ] 定义状态机：`open -> collecting -> verified`，以及 `open -> dismissed`。
+- [ ] 定义 rerun context：`analysis_id`、`quality_before`、`quality_after`、`rerun_url`。
+- [ ] 明确哪些字段进入 `context_snapshot.serenity_research.tasks`。
+- [ ] 明确哪些字段未来可能迁入专表。
+
+**Tests:**
+
+```bash
+python -m pytest tests/api/v1/test_serenity_research_task_schema.py -q
+```
+
+**DoD:**
+
+- [ ] schema 可表达至少 primary-source、risk-coverage、demand-validation、invalidation-plan 四类 gap。
+- [ ] 老历史记录兼容。
+
+**Rollback:** 删除 task contract 文档和 schema 新增任务字段。
+
+### P3-T02: Snapshot-Based Task Persistence
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 在不新增数据库表的情况下，把 evidence gaps 转成可回读任务。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/storage.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/services/analysis_service.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/services/research_task_service.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/services/test_research_task_service.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/storage/test_serenity_research_tasks_snapshot.py`
+
+**Dependencies:** P3-T01
+
+**Implementation Checklist:**
+
+- [ ] 从 audit gaps 生成 deterministic task ids。
+- [ ] 将 tasks 写入 `context_snapshot.serenity_research.tasks`。
+- [ ] 如果同一 analysis rerun 产生同一 gap，保持 task id 稳定。
+- [ ] 支持状态更新写回 snapshot。
+- [ ] 对 snapshot 太大设置上限，例如最多保留 top 20 tasks 和摘要字段。
+- [ ] 不引入新数据库 migration。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/services/test_research_task_service.py tests/storage/test_serenity_research_tasks_snapshot.py -q
+```
+
+**DoD:**
+
+- [ ] tasks 可持久化、回读、状态更新。
+- [ ] snapshot size 有上限。
+- [ ] 空 gaps 产生明确 empty state。
+
+**Rollback:** 停止生成 tasks；已写入 snapshot 的 tasks 作为历史附加 JSON 保留。
+
+### P3-T03: Intelligence Service 接入
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 将 research task 暴露给 DSA intelligence workflow，而不是创建第二套 Serenity 工作台。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/services/intelligence_service.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/api/v1/endpoints/intelligence.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/services/test_intelligence_service_serenity_tasks.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/api/v1/test_intelligence_serenity_tasks.py`
+
+**Dependencies:** P3-T02
+
+**Implementation Checklist:**
+
+- [ ] 在 intelligence service 中读取 research tasks。
+- [ ] 支持按 symbol、status、gap_type 过滤。
+- [ ] 支持 task status update endpoint 或复用现有 action endpoint。
+- [ ] 确保权限、用户上下文和历史记录访问规则与 DSA 现有模式一致。
+- [ ] 不把 Serenity 任务页面做成独立产品壳。
+
+**Tests:**
+
+```bash
+python -m pytest tests/services/test_intelligence_service_serenity_tasks.py tests/api/v1/test_intelligence_serenity_tasks.py -q
+```
+
+**DoD:**
+
+- [ ] Intelligence API 能返回和更新 research tasks。
+- [ ] 权限与 DSA 现有 history/intelligence 规则一致。
+- [ ] 没有新增 UI 大页面，除非 DSA 现有 intelligence UI 需要轻量展示。
+
+**Rollback:** 移除 intelligence service/endpoints 的 Serenity task 分支。
+
+### P3-T04: 专表升级决策 Gate
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 只有在确有需求时才从 snapshot 升级为 dedicated tables。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-persistence-decision-record.md`
+- Optional Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/migrations/versions/<revision>_create_serenity_research_tasks.py`
+- Optional Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/storage.py`
+
+**Dependencies:** P3-T03
+
+**Decision Criteria:** 只有满足至少两项才进入专表实现。
+
+- [ ] 需要跨 report 过滤任务。
+- [ ] 需要任务 owner / assignee。
+- [ ] 需要审计 trail。
+- [ ] 需要任务恢复和重试队列。
+- [ ] snapshot size 或查询性能不可接受。
+
+**Implementation Checklist If Table Is Approved:**
+
+- [ ] 设计 `serenity_research_tasks` 表。
+- [ ] 设计 `serenity_research_task_events` 表。
+- [ ] 提供 snapshot -> table migration 或 lazy backfill 策略。
+- [ ] API 保持向后兼容。
+- [ ] rollback plan 包含 migration downgrade。
+
+**Tests If Table Is Approved:**
+
+```bash
+python -m pytest tests/storage/test_serenity_research_tasks_table.py -q
+alembic upgrade head
+alembic downgrade -1
+```
+
+**DoD:**
+
+- [ ] 有明确 decision record。
+- [ ] 如果未批准专表，文档记录继续使用 snapshot 的原因。
+- [ ] 如果批准专表，migration upgrade/downgrade 均验证。
+
+**Rollback:** 如果专表实现出现风险，回退到 snapshot persistence，并执行 migration downgrade。
+
+### P3 Phase Review
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Review Checklist:**
+
+- [ ] Research task 生命周期可追踪。
+- [ ] Snapshot 优先原则被遵守或有明确 decision record。
+- [ ] Rerun context 不包含交易建议改写。
+- [ ] Intelligence workflow 复用 DSA 现有产品能力。
+
+---
+
+## 6. Phase 4: Provenance Safety Guardrails
+
+**Phase Goal:** 为 DSA 报告增加可审计 provenance、引用纪律和 report safety guardrails，确保 research-only 辅助信息不会污染交易建议语义。
+
+**Phase Entry Criteria:**
+
+- [ ] Phase 3 exit criteria 已满足。
+- [ ] DSA 报告生成路径和引用字段已确认。
+- [ ] 安全扫描词表、允许引用例外和误报处理策略已确认。
+
+**Phase Exit Criteria:**
+
+- [ ] 报告中的 Serenity block 有 provenance namespace。
+- [ ] Safety scanner 能区分产品生成文案与 quoted source excerpt。
+- [ ] 发布前验证包含 report safety scan。
+- [ ] 用户可查看 evidence audit trail 或 diagnostics。
+
+### P4-T01: Provenance Namespace
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 给 Serenity audit、gap、task 和 source reference 建立稳定 provenance namespace。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/provenance.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/services/evidence_quality_service.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/api/v1/schemas/analysis.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/core/test_provenance.py`
+
+**Dependencies:** P1-T02, P3-T02
+
+**Implementation Checklist:**
+
+- [ ] 定义 provenance id 格式：`serenity:<analysis_id>:<evidence_id>` 或同等稳定方案。
+- [ ] 为 audit summary、coverage、gap、task 添加 source refs。
+- [ ] source ref 包含 title、publisher、url、published_at、excerpt hash 或 claim id。
+- [ ] 不存完整敏感上下文。
+- [ ] 对缺 source 的 evidence 显示 explicit missing provenance。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/core/test_provenance.py -q
+```
+
+**DoD:**
+
+- [ ] provenance id 稳定且不泄露本地绝对路径。
+- [ ] 缺引用不是静默通过，而是形成 diagnostics 或 gap。
+
+**Rollback:** 从 audit schema 中移除 provenance block。
+
+### P4-T02: Report Safety Scanner
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 扫描 DSA + Serenity 报告，防止 research-only block 产生直接投资指令或越界承诺。
+
+**Files:**
+
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/core/report_safety.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/core/test_report_safety.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-integration-boundaries.md`
+
+**Dependencies:** P4-T01
+
+**Implementation Checklist:**
+
+- [ ] 定义 forbidden generated phrases：直接买入/卖出/持有命令、目标价承诺、仓位建议、保证收益、确定性预测。
+- [ ] 定义 allowed quoted source excerpt 区域，避免误杀外部来源引用。
+- [ ] 扫描 Serenity-generated copy、tool output、UI panel copy。
+- [ ] 输出 severity、location、matched phrase、remediation。
+- [ ] 默认只拦截 Serenity report section 发布，不拦截 DSA 主链路。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/core/test_report_safety.py -q
+```
+
+**DoD:**
+
+- [ ] forbidden generated phrase 被拦截。
+- [ ] quoted source excerpt 的合法引用不误报。
+- [ ] scanner 输出可用于 CI 或 release checklist。
+
+**Rollback:** 禁用 scanner gate，保留日志模式。
+
+### P4-T03: Release Checklist 集成
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 将 Serenity 集成验证加入 DSA 发布流程。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/RELEASE_CHECKLIST.md`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/.github/workflows/ci.yml`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/scripts/serenity_release_check.py`
+- Test: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/test_release_check.py`
+
+**Dependencies:** P4-T02
+
+**Implementation Checklist:**
+
+- [ ] Release checklist 添加 flag off/on 验证。
+- [ ] CI 添加 Serenity unit tests。
+- [ ] CI 添加 report safety scanner。
+- [ ] CI 不要求外部数据源或真实 broker token。
+- [ ] release script 输出 machine-readable summary。
+
+**Tests:**
+
+```bash
+python scripts/serenity_release_check.py
+python -m pytest tests/serenity/test_release_check.py -q
+```
+
+**DoD:**
+
+- [ ] CI 可在无真实 secrets 环境运行。
+- [ ] Release checklist 明确 Serenity failure 的处理方式。
+- [ ] 发布流程包含 rollback command 或 revert PR 指引。
+
+**Rollback:** 从 CI 移除 Serenity release check，保留本地手动检查。
+
+### P4-T04: Observability and Diagnostics
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Purpose:** 让 Serenity audit 的运行状态、失败原因和性能开销可见。
+
+**Files:**
+
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/serenity/services/evidence_quality_service.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/src/services/analysis_service.py`
+- Create: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/tests/serenity/services/test_evidence_quality_observability.py`
+- Modify: `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/docs/serenity-baseline-verification.md`
+
+**Dependencies:** P1-T02, P4-T02
+
+**Implementation Checklist:**
+
+- [ ] Structured log 包含 `serenity.enabled`、`serenity.status`、`evidence_count`、`gap_count`、`duration_ms`。
+- [ ] diagnostics 包含 disabled、failed_open、completed 三类状态。
+- [ ] 不记录完整用户输入、token、cookies、provider secrets。
+- [ ] 性能指标可用于判断是否默认开启。
+
+**Tests:**
+
+```bash
+python -m pytest tests/serenity/services/test_evidence_quality_observability.py -q
+```
+
+**DoD:**
+
+- [ ] 关键状态可在日志或 diagnostics 中定位。
+- [ ] failed-open 的错误摘要可读且不泄露敏感信息。
+
+**Rollback:** 保留 fail-open，移除新增 structured logging 字段。
+
+### P4 Phase Review
+
+Owner:
+Status: Not Started
+Started:
+Updated:
+Branch:
+PR:
+Commit:
+Evidence:
+Decision Notes:
+Rollback Notes:
+
+**Review Checklist:**
+
+- [ ] Provenance 可追踪。
+- [ ] Safety scanner 有自动化测试。
+- [ ] Release checklist 已接入。
+- [ ] Observability 不泄露敏感信息。
+- [ ] Serenity 仍是辅助研究内核，不是交易建议引擎。
+
+---
+
+## 7. 跨阶段验证矩阵
+
+| 验证项 | Phase 0 | Phase 1 | Phase 2 | Phase 3 | Phase 4 |
+| --- | --- | --- | --- | --- | --- |
+| `git diff --check` | Required | Required | Required | Required | Required |
+| Serenity unit tests | Required | Required | Required | Required | Required |
+| DSA backend baseline tests | Baseline | Required | Required | Required | Required |
+| DSA API schema compatibility | Not Applicable | Required | Required | Required | Required |
+| Web typecheck / UI tests | Not Applicable | Required | If touched | If touched | If touched |
+| Agent tool tests | Not Applicable | Not Applicable | Required | Required | Required |
+| Storage / migration tests | Not Applicable | Snapshot only | Snapshot only | Required | Required |
+| Report safety scan | Not Applicable | Advisory | Advisory | Advisory | Required |
+| Feature flag off smoke | Required | Required | Required | Required | Required |
+| Feature flag on smoke | Required | Required | Required | Required | Required |
+| Rollback rehearsal | Required | Required | Required | Required | Required |
+
+### Recommended Full Verification Command Set
+
+根据 DSA 实际脚本名称调整，但每个阶段必须记录实际执行命令和结果。
+
+```bash
+git -C /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis diff --check
+python -m pytest tests/serenity -q
+python -m pytest tests/services tests/api/v1 -q
+cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm run typecheck
+cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm test -- --run
+```
+
+---
+
+## 8. 风险与决策日志
+
+### D-001: DSA 为主、Serenity 为辅
+
+- **Status:** Accepted
+- **Decision:** DSA 保留产品入口和交易分析能力；Serenity 只提供证据质量与研究审计辅助。
+- **Reason:** DSA 已拥有完整产品能力，Serenity 的优势是 evidence discipline，不是替代 DSA UI/runtime。
+- **Risk:** 如果后续把 Serenity UI/run center/dashboard 迁入 DSA，会形成双产品壳。
+- **Guardrail:** 禁止迁移 Serenity UI 作为 DSA 基座。
+
+### D-002: Snapshot 先于 Dedicated Tables
+
+- **Status:** Accepted
+- **Decision:** 首个持久化目标是 `analysis_history.context_snapshot.serenity_research`。
+- **Reason:** 降低 migration 风险，适合 Phase 1/2 的 optional add-on。
+- **Risk:** 后续跨报告任务管理可能查询困难。
+- **Guardrail:** Phase 3 通过 P3-T04 专表升级决策 gate 处理。
+
+### D-003: Fail-Open 默认
+
+- **Status:** Accepted
+- **Decision:** Serenity audit 失败不影响 DSA 主分析成功。
+- **Reason:** Serenity 是辅助证据质量层，不应破坏用户日常股票分析。
+- **Risk:** 用户可能误以为没有 audit 就是证据质量良好。
+- **Guardrail:** failed-open diagnostics 必须明确展示“审计不可用”。
+
+### D-004: 不混合评分语义
+
+- **Status:** Accepted
+- **Decision:** Serenity quality score 不写入 DSA trading score 或 sentiment score。
+- **Reason:** 证据质量与投资结论是两个不同维度。
+- **Risk:** UI 或 Agent 为了简洁可能合并分数。
+- **Guardrail:** schema、UI、Agent boundary tests 明确禁止映射。
+
+---
+
+## 9. 迭代执行节奏
+
+### 9.1 每个任务的执行顺序
+
+1. 将任务状态改为 `In Progress`。
+2. 创建或切换阶段分支。
+3. 写 failing test 或兼容性测试。
+4. 运行测试确认失败或记录已有失败原因。
+5. 实现最小代码。
+6. 运行任务指定测试。
+7. 运行阶段必要 smoke。
+8. 更新本 tracker 的 Evidence / Decision Notes / Rollback Notes。
+9. 将任务状态改为 `In Review`。
+10. 审查通过后记录 commit / PR。
+11. 验证通过后改为 `Verified`。
+
+### 9.2 每个阶段的最小交付包
+
+| 阶段 | 最小交付 | 不应包含 |
+| --- | --- | --- |
+| Phase 0 | Core + Adapter + Service POC + tests | API、UI、DB migration |
+| Phase 1 | Optional API block + snapshot + UI panel | Agent tools、new tables |
+| Phase 2 | Agent research-quality tools | 自动改写交易建议 |
+| Phase 3 | Research task tracking | 未经 gate 的新表 |
+| Phase 4 | Provenance + safety + release checks | 阻塞 DSA 主链路的 hard dependency |
+
+### 9.3 任务拆分原则
+
+- [ ] 一个 PR 只完成一个阶段或一个明确子任务。
+- [ ] 能用 snapshot 解决的，不先建表。
+- [ ] 能用 optional field 解决的，不改已有字段语义。
+- [ ] 能用 adapter 解决的，不让 core import DSA。
+- [ ] 能用 fail-open 解决的，不让辅助审计阻塞主流程。
+- [ ] 每次引入 UI 前先有 API contract 和 fixtures。
+- [ ] 每次引入 persistence 前先有 schema tests。
+
+---
+
+## 10. Release Readiness Checklist
+
+### Pre-Merge
+
+- [ ] 本 tracker 对应任务状态、Evidence、Rollback Notes 已更新。
+- [ ] `tasks/todo.md` 已记录当前阶段 review。
+- [ ] 相关文档更新，包括边界、配置、运行、回滚。
+- [ ] 所有新增 config 默认关闭。
+- [ ] 所有新增 API 字段 optional。
+- [ ] 所有新增 UI 对缺失字段有空态。
+- [ ] 所有新增 Agent tool 有 research-only 边界。
+- [ ] 所有新增持久化有兼容老数据测试。
+
+### Verification
+
+- [ ] `git diff --check` 通过。
+- [ ] 后端测试通过或记录环境失败。
+- [ ] 前端 typecheck/test 通过或记录未触达原因。
+- [ ] Feature flag off smoke 通过。
+- [ ] Feature flag on smoke 通过。
+- [ ] Failed-open smoke 通过。
+- [ ] Safety scanner 通过。
+- [ ] 无新增 secrets、绝对本地路径、未授权外部网络依赖。
+
+### Release
+
+- [ ] PR 描述包含用户可见变化。
+- [ ] PR 描述包含风险和回滚。
+- [ ] Release checklist 更新。
+- [ ] 部署后检查 API health、analysis run、history read、UI report render。
+- [ ] 若发现 Serenity 相关故障，先关闭 feature flag，再评估 revert。
+
+---
+
+## 11. 进度总览
+
+| ID | 阶段 | 任务 | 状态 | 依赖 | 验证证据 |
+| --- | --- | --- | --- | --- | --- |
+| G-T01 | Global | 集成边界守卫 | Not Started | 当前方案 |  |
+| G-T02 | Global | 分支与提交规范 | Not Started | G-T01 |  |
+| G-T03 | Global | 基线验证快照 | Not Started | G-T01 |  |
+| P0-T01 | Phase 0 | Serenity Core 最小契约抽取 | Not Started | G-T01, G-T03 |  |
+| P0-T02 | Phase 0 | DSA Context 到 Evidence Adapter | Not Started | P0-T01 |  |
+| P0-T03 | Phase 0 | Evidence Quality Service POC | Not Started | P0-T02 |  |
+| P0-T04 | Phase 0 | CLI / Script POC Runner | Not Started | P0-T03 |  |
+| P1-T01 | Phase 1 | API Schema 增加 Serenity Audit 类型 | Not Started | P0-T03 |  |
+| P1-T02 | Phase 1 | Analysis Service 附加 Serenity Audit | Not Started | P1-T01 |  |
+| P1-T03 | Phase 1 | 历史记录 Context Snapshot 持久化 | Not Started | P1-T02 |  |
+| P1-T04 | Phase 1 | Web 类型与 Evidence Quality Panel | Not Started | P1-T01 |  |
+| P1-T05 | Phase 1 | Phase 1 HTTP / UI Smoke | Not Started | P1-T02, P1-T03, P1-T04 |  |
+| P2-T01 | Phase 2 | Evidence Quality Agent Tool | Not Started | P1-T02 |  |
+| P2-T02 | Phase 2 | Evidence Gap Agent Tool | Not Started | P2-T01 |  |
+| P2-T03 | Phase 2 | Agent Prompt Boundary Test | Not Started | P2-T01, P2-T02 |  |
+| P3-T01 | Phase 3 | Research Task Data Contract | Not Started | P1-T03, P2-T02 |  |
+| P3-T02 | Phase 3 | Snapshot-Based Task Persistence | Not Started | P3-T01 |  |
+| P3-T03 | Phase 3 | Intelligence Service 接入 | Not Started | P3-T02 |  |
+| P3-T04 | Phase 3 | 专表升级决策 Gate | Not Started | P3-T03 |  |
+| P4-T01 | Phase 4 | Provenance Namespace | Not Started | P1-T02, P3-T02 |  |
+| P4-T02 | Phase 4 | Report Safety Scanner | Not Started | P4-T01 |  |
+| P4-T03 | Phase 4 | Release Checklist 集成 | Not Started | P4-T02 |  |
+| P4-T04 | Phase 4 | Observability and Diagnostics | Not Started | P1-T02, P4-T02 |  |
+
+---
+
+## 12. 当前推荐下一步
+
+从 Phase 0 开始，不直接进入 UI 或数据库改造。
+
+- [ ] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
+- [ ] 完成 G-T01 至 G-T03。
+- [ ] 执行 P0-T01 至 P0-T04。
+- [ ] Phase 0 review 通过后，再进入 Phase 1。
