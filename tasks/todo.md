@@ -39,6 +39,7 @@
 - Final verification: prompt-boundary suite -> `11 passed`; P2 tool regression -> `11 passed`; focused registry import/schema -> `2 passed`; `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; static flag/boundary scan confirmed default `SERENITY_RESEARCH_ENABLED=false`; forbidden phrase scan only matched boundary docs and existing broad-regex smoke test name; `git diff --check` -> pass.
 - Environment blocker: full `tests/test_agent_registry.py -q` still fails on unrelated missing `pandas` in `src/storage.py` via `SkillAgent` import; latest full run was `1 failed, 58 passed`.
 - Decision: Phase 2 is Verified. Next step is `P3-T01: Research Task Data Contract`, still snapshot-first and DB-table-neutral until the tracker's dedicated-table gate is satisfied.
+- Handoff habit reinforced: after every future stage-level task, update tracker status, task log, lessons, tracker restart prompt, and the final copyable restart prompt before closing.
 
 # DSA-First Serenity Core P2-T03 Agent Prompt Boundary Test Phase
 

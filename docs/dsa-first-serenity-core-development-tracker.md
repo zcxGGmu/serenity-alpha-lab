@@ -142,6 +142,7 @@ P2 Phase Review 验证证据：
   - tasks/todo.md
   - tasks/lessons.md（如有可复用经验）
   - tracker 内“下次启动接续提示词”
+  - 最终回复中的可直接复制启动提示词
 - restart prompt 必须包含：已完成范围、未完成下一步、最新 Serenity/DSA commit id、验证证据、已知环境 blocker、禁止 stage 的文件
 - 只 stage 本阶段相关文件
 - 用详细中文 commit message 提交

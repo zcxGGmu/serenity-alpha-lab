@@ -1,5 +1,6 @@
 # Lessons
 
+- At every stage boundary, refresh the development tracker, task log, lessons, tracker restart prompt, and final user-facing restart prompt before closing the turn; include completed scope, unfinished next task, latest Serenity/DSA commit ids, validation evidence, known blockers, and forbidden generated files.
 - Agent tool feature flags must gate exposure before intent matching. If a research-only tool is globally registered, `SERENITY_RESEARCH_ENABLED=false` must hide it even when the user explicitly asks for evidence quality, and tests should cover both flag-off and flag-on explicit-intent paths.
 - Do not trust request-provided context flags as security or boundary gates. External context such as `serenity_research_tools_enabled=True` can bypass product semantics unless the executor ignores it or validates it as server-owned state.
 - Specialist agents should default to an empty tool whitelist when skill metadata lacks `required_tools`. Falling back to the global registry can silently expose auxiliary or research-only tools outside their intended intent boundary.
