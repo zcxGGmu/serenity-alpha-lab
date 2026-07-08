@@ -1,5 +1,8 @@
 # Lessons
 
+- Agent tool feature flags must gate exposure before intent matching. If a research-only tool is globally registered, `SERENITY_RESEARCH_ENABLED=false` must hide it even when the user explicitly asks for evidence quality, and tests should cover both flag-off and flag-on explicit-intent paths.
+- Do not trust request-provided context flags as security or boundary gates. External context such as `serenity_research_tools_enabled=True` can bypass product semantics unless the executor ignores it or validates it as server-owned state.
+- Specialist agents should default to an empty tool whitelist when skill metadata lacks `required_tools`. Falling back to the global registry can silently expose auxiliary or research-only tools outside their intended intent boundary.
 - DSA Web API clients deep-convert backend `snake_case` payloads into `camelCase`, so frontend types and report components should model optional add-ons as camelCase fields such as `serenityResearch` even when backend schemas and storage use `serenity_research`.
 - After every stage-level task, automatically refresh the tracker, task log, lessons when relevant, and copyable restart prompt before finishing; the user explicitly wants this treated as a standing habit, not a one-off request.
 - P1-T03 showed that DSA analysis history is saved before `AnalysisService` formats the API response, so durable optional add-ons may need a best-effort post-save patch keyed by `query_id + code + report_type`; do not rely only on mutating `result.diagnostic_context_snapshot` after persistence.

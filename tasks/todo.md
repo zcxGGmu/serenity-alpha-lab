@@ -1,3 +1,45 @@
+# DSA-First Serenity Core P2 Phase Review
+
+- [x] Confirm P2 Phase Review entry criteria from tracker before review.
+- [x] Re-audit Phase 2 Agent tool definitions, handlers, registry wiring, executor gate, and boundary docs.
+- [x] Verify Serenity Agent tools remain research-only, explicit-call, fail-open, and caller-context-only.
+- [x] Run fresh focused P2 tool tests, prompt-boundary tests, registry tests, Serenity tests, integration boundary guard, compile checks, forbidden phrase scan, and diff checks.
+- [x] Confirm `SERENITY_RESEARCH_ENABLED=false` default and disabled/blocked diagnostics behavior.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+- [x] Stage only P2 Phase Review-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P2-T01` is complete at DSA commit `379ee1b`, with research-only `serenity_evidence_quality` registered through `src/agent/tools/analysis_tools.py`.
+- Dependency: `P2-T02` is complete at DSA commit `ab2ed1e`, with research-only `serenity_evidence_gaps` registered through the same aggregation path.
+- Dependency: `P2-T03` is complete at DSA commit `213db24`, with request-scoped executor gating and prompt-boundary tests proving default Agent paths do not expose Serenity tools.
+- Review scope: confirm Phase 2 exit criteria before Phase 3 persistence, without changing DSA trading semantics, provider paths, notification paths, portfolio/backtest logic, or DB schema.
+- Known blocker: full `tests/test_agent_registry.py -q` may still fail on unrelated missing `pandas` in `SkillAgent`; use focused registry tests for Phase 2 review evidence and record the blocker explicitly.
+
+## Planned Verification
+
+- `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py -q`
+- `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py tests/agent/tools/test_serenity_evidence_gap_tool.py -q`
+- `python3.11 -m pytest tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_import_analysis_tools tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_all_tools_have_valid_schemas -q`
+- `python3.11 -m pytest tests/serenity -q`
+- `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`
+- `python3.11 -m py_compile src/serenity/agent_tools/evidence_quality_tool.py src/serenity/agent_tools/evidence_gap_tool.py src/serenity/agent_tools/__init__.py src/agent/tools/analysis_tools.py src/agent/executor.py tests/agent/test_serenity_prompt_boundaries.py tests/agent/tools/test_serenity_evidence_quality_tool.py tests/agent/tools/test_serenity_evidence_gap_tool.py`
+- `rg -n "SERENITY_RESEARCH_ENABLED=false|serenity_evidence_quality|serenity_evidence_gaps|serenity_research_tools_enabled" .env.example docs src tests`
+- `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity_evidence_(quality|gaps).*(买入|卖出|持有|目标价|仓位|止损|止盈)" src tests docs`
+- `git diff --check`
+
+## Review
+
+- Entry review: P2-T01, P2-T02, and P2-T03 were already verified; P2 Phase Review focused on exit criteria before Phase 3 persistence.
+- Initial local red check: `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py::test_single_agent_executor_hides_serenity_tools_when_feature_flag_is_off -q` failed because explicit research-quality requests still exposed Serenity tools while `SERENITY_RESEARCH_ENABLED=false`.
+- First fix: DSA commit `18f5d13` added executor-level config gating so feature-flag-off requests hide `serenity_evidence_quality` and `serenity_evidence_gaps` even for explicit research-quality wording.
+- Subagent review: found two Important issues: external `context.serenity_research_tools_enabled=True` could bypass explicit-intent gating, and Specialist `SkillAgent` with empty/missing `required_tools` could fall back to the full global registry.
+- Reviewer red check: `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py::test_single_agent_executor_ignores_external_context_tool_override tests/agent/test_serenity_prompt_boundaries.py::test_skill_agent_without_required_tools_does_not_receive_global_serenity_registry -q` failed with `2 failed`, proving both issues were real.
+- Final fix: DSA commit `f74720f` removed external context override from the executor gate and made `SkillAgent` default to an empty tool whitelist unless a skill explicitly declares `required_tools`.
+- Final verification: prompt-boundary suite -> `11 passed`; P2 tool regression -> `11 passed`; focused registry import/schema -> `2 passed`; `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; static flag/boundary scan confirmed default `SERENITY_RESEARCH_ENABLED=false`; forbidden phrase scan only matched boundary docs and existing broad-regex smoke test name; `git diff --check` -> pass.
+- Environment blocker: full `tests/test_agent_registry.py -q` still fails on unrelated missing `pandas` in `src/storage.py` via `SkillAgent` import; latest full run was `1 failed, 58 passed`.
+- Decision: Phase 2 is Verified. Next step is `P3-T01: Research Task Data Contract`, still snapshot-first and DB-table-neutral until the tracker's dedicated-table gate is satisfied.
+
 # DSA-First Serenity Core P2-T03 Agent Prompt Boundary Test Phase
 
 - [x] Confirm P2-T03 entry criteria from tracker before implementation.

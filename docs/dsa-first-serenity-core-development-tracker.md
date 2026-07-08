@@ -27,22 +27,22 @@
 
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
-| DSA 代码集成 | In Progress | Global tasks、Phase 0、Phase 1、`P2-T01`、`P2-T02` 与 `P2-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 P2 Phase Review，DB 专表仍未启动 |
+| DSA 代码集成 | In Progress | Global tasks、Phase 0、Phase 1 与 Phase 2 Agent Tools 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 Phase 3 Intelligence Workflow Persistence，DB 专表仍未启动 |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
 | Phase 0 Evidence Bridge POC | Verified | `P0-T01` 至 `P0-T04` 与 Phase 0 review gate 已完成并验证 |
 | Phase 1 Analysis Report Add-On | Verified | `P1-T01` API Schema、`P1-T02` Analysis Service 附加 Serenity Audit、`P1-T03` 历史记录 Context Snapshot 持久化、`P1-T04` Web 类型/证据质量面板、`P1-T05` HTTP / UI Smoke 与 P1 Phase Review 已完成并验证 |
-| Phase 2 Agent Tools | In Progress | `P2-T01` Evidence Quality Agent Tool、`P2-T02` Evidence Gap Agent Tool 与 `P2-T03` Agent Prompt Boundary Test 已完成并验证；下一步从 P2 Phase Review 开始 |
-| Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
+| Phase 2 Agent Tools | Verified | `P2-T01` Evidence Quality Agent Tool、`P2-T02` Evidence Gap Agent Tool、`P2-T03` Agent Prompt Boundary Test 与 P2 Phase Review 已完成并验证；review 修复了 feature flag 与 specialist fallback 两个边界缺口 |
+| Phase 3 Intelligence Workflow Persistence | Not Started | 下一步从 `P3-T01` Research Task Data Contract 开始 |
 | Phase 4 Provenance Safety Guardrails | Not Started | 等 Phase 3 review 通过后再开始 |
 
 ### 当前下一步
 
-Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On（含 `P1-T01` 至 `P1-T05` 与 P1 Phase Review）和 Phase 2 `P2-T01` Evidence Quality Agent Tool、`P2-T02` Evidence Gap Agent Tool、`P2-T03` Agent Prompt Boundary Test 已完成并通过验证；下一步继续 Phase 2 的 P2 Phase Review，但仍保持显式调用、fail-open 和不改变既有交易语义。
+Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On（含 `P1-T01` 至 `P1-T05` 与 P1 Phase Review）和 Phase 2 Agent Tools（含 `P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）已完成并通过验证；下一步进入 Phase 3 Intelligence Workflow Persistence，从 `P3-T01` Research Task Data Contract 开始，但仍优先使用 snapshot，不急于新增 DB 专表。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 从 P2 Phase Review 开始。
+2. 从 `P3-T01` Research Task Data Contract 开始。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
-4. Phase 2 只允许 Agent 显式查询研究证据质量、来源覆盖、readiness 和补证任务；不得让 Serenity tool 自动改写交易建议、目标价、仓位、趋势预测或 `sentiment_score`。
+4. Phase 3 只允许把 Serenity gaps 设计为可追踪研究任务，不得把 Serenity score 或 task 状态映射到 DSA 交易建议、目标价、仓位、趋势预测或 `sentiment_score`。
 
 ### 当前工作区注意事项
 
@@ -65,46 +65,86 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 4. tasks/lessons.md
 
 当前状态：
-- 已完成 DSA-first Serenity Core Global guardrails、P0-T01 Core 契约、P0-T02 DSA Context Evidence Adapter、P0-T03 Evidence Quality Service POC、P0-T04 CLI / Script POC Runner、Phase 0 review gate、P1-T01 API Schema、P1-T02 Analysis Service runtime attach、P1-T03 History Snapshot persistence、P1-T04 Web Evidence Quality Panel、P1-T05 Phase 1 HTTP / UI Smoke、P1 Phase Review、P2-T01 Evidence Quality Agent Tool、P2-T02 Evidence Gap Agent Tool 与 P2-T03 Agent Prompt Boundary Test；下次启动时以 Serenity commit `0cd191b`、DSA commit `213db24` 和 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 为最新交接状态。
-- Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
-- DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
-- DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
-- DSA P0-T01 已完成：已在 DSA 内新增标准库-only `src/serenity/core/*` 最小研究契约和 `tests/serenity/core/test_core_contract.py`；DSA commit 为 `4e34c78`。
-- DSA P0-T02 已完成：已新增 `src/serenity/adapters/dsa_context_to_evidence.py`、`src/serenity/adapters/__init__.py` 和 `tests/serenity/adapters/test_dsa_context_to_evidence.py`；最新 DSA commit 为 `b85b72a`。
-- DSA P0-T03 已完成：已新增 `src/serenity/services/evidence_quality_service.py`、`src/serenity/services/__init__.py` 和 `tests/serenity/services/test_evidence_quality_service.py`；最新 DSA commit 为 `a382a0f`。
-- DSA P0-T04 已完成：已新增 `scripts/serenity_evidence_audit_poc.py`、`tests/serenity/test_evidence_audit_poc_script.py`、`tests/fixtures/serenity/dsa_context_full.json` 和 `docs/serenity-phase-0-poc.md`；最新 DSA commit 为 `e15e588`。
-- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试、最小 Serenity core、DSA context adapter、evidence quality service POC、本地 CLI/script runner、可选 `serenity_research` API schema、AnalysisService runtime attach、历史 `context_snapshot.serenity_research` 持久化、Web 研究证据质量面板、Phase 1 HTTP/UI smoke 和 P2-T01 research-only `serenity_evidence_quality` Agent tool 和 P2-T02 research-only `serenity_evidence_gaps` Agent tool；Phase 0 与 Phase 1 review gates 均已通过；尚未启动 Phase 3、Phase 4 或 DB 专表。
-- DSA P1-T01 已完成：已新增 `api/v1/schemas/serenity.py`，在 `api/v1/schemas/analysis.py` 与 `api/v1/schemas/history.py` 暴露 optional `serenity_research`，并通过 lazy-load `api/v1/__init__.py` 避免 schema-only import 触发 endpoint/storage 依赖；最新 DSA commit 为 `10b9dda`。
-- DSA P1-T02 已完成：已在 `src/services/analysis_service.py` 的 base response 构建后按默认关闭的 `SERENITY_RESEARCH_ENABLED` 可选调用 `EvidenceQualityService`，顶层附加 research-only `serenity_research`；同步响应透传该 block；新增配置字段、配置注册表和中英文设置帮助；最新 DSA commit 为 `952c708`。
-- DSA P1-T03 已完成：已在 `src/storage.py` 支持将可选 research-only `serenity_research` 白名单摘要写入既有 `analysis_history.context_snapshot.serenity_research`，并在 `src/services/analysis_service.py` 后置 best-effort 补写已保存历史记录；覆盖直接保存、后置补写、共享 `query_id` 精准匹配、`SAVE_CONTEXT_SNAPSHOT=false` 兼容和交易字段隔离；最新 DSA commit 为 `c193f17`。
-- DSA P1-T04 已完成：已在 `apps/dsa-web/src/types/analysis.ts` 增加 optional `serenityResearch` 类型契约，新增 `SerenityEvidenceQualityPanel`，并在 `ReportSummary` 中将研究证据质量面板放在输入数据块摘要之后、运行诊断和数据追溯之前；覆盖有 audit、无 audit、failed-open 与挂载顺序；最新 DSA commit 为 `8d21280`。
-- DSA P1-T05 已完成：已新增 `tests/serenity/test_phase1_http_ui_smoke.py` 与 `apps/dsa-web/src/pages/__tests__/HomePage.serenity-smoke.test.tsx`，覆盖 flag-off baseline-compatible 响应、flag-on optional `serenity_research`、failed-open diagnostics 不阻断响应和 Web 报告页 Evidence Quality Panel 展示；性能粗测中位增量约 `0.279 ms/response`，低于 `25 ms/response` smoke 阈值；最新 DSA commit 为 `00325bd`。
-- DSA P1 Phase Review 已完成：子代理只读审查发现 API schema 防御缺口；已在 DSA commit `1e2f9b6` 修复 `SerenityResearchAudit` 顶层额外字段放行和 failed-open `research_quality_score=None` 类型不兼容问题，新增回归测试覆盖 failed-open audit 和 forbidden trading field 拒绝。
-- DSA P2-T01 已完成：已新增 `src/serenity/agent_tools/evidence_quality_tool.py` 与 `src/serenity/agent_tools/__init__.py`，并通过 `src/agent/tools/analysis_tools.py` 的 `ALL_ANALYSIS_TOOLS` 显式注册 `serenity_evidence_quality`；tool 仅在调用方传入已有 low-sensitivity analysis `context` 时运行 `EvidenceQualityService(enabled=True)`，缺少 context 返回 `analysis_context_required` blocked diagnostics，异常返回 sanitized `failed_open` diagnostics，不抓取行情/新闻/DB、不修改 Agent prompt 或 DSA 交易字段；最新 DSA commit 为 `379ee1b`。
-- 当前完成范围：Global guardrails、Phase 0 Evidence Bridge POC（含 review gate）、Phase 1 Analysis Report Add-On（含 P1 Phase Review）、Phase 2 `P2-T01` Evidence Quality Agent Tool、Phase 2 `P2-T02` Evidence Gap Agent Tool、Phase 2 `P2-T03` Agent Prompt Boundary Test。
-- 当前未完成范围：P2 Phase Review、Phase 3 Intelligence Workflow Persistence、Phase 4 Provenance Safety Guardrails、DB 专表。
-- DSA P2-T02 已完成：已新增 `src/serenity/agent_tools/evidence_gap_tool.py`，更新 `src/serenity/agent_tools/__init__.py` 与 `src/agent/tools/analysis_tools.py` 注册 `serenity_evidence_gaps`；tool 仅规范化调用方提供的 low-sensitivity analysis `context` 中由 `EvidenceQualityService(enabled=True)` 产出的 `acquisition_tasks`，输出 gap id、ticker、severity、reason、source target、search prompt、acceptance criteria、after-import action 和 Phase 3-ready task metadata；缺少 context 返回 `analysis_context_required` blocked diagnostics，异常返回 sanitized `failed_open` diagnostics，不抓取行情/新闻/DB、不创建数据库任务、不修改 Agent prompt 或 DSA 交易字段；最新 DSA commit 为 `ab2ed1e`。
-- DSA P2-T03 已完成：已新增 `tests/agent/test_serenity_prompt_boundaries.py`，更新 `src/agent/executor.py` 为 legacy single-agent path 增加 request-scoped Serenity tool gate，并更新 `docs/serenity-integration-boundaries.md` 的显式调用/禁止示例；默认分析与默认多 Agent prompts 不自动暴露或指示 `serenity_evidence_quality` / `serenity_evidence_gaps`，仅显式研究质量、证据缺口、来源覆盖或 readiness 意图可暴露 tools；最新 DSA commit 为 `213db24`。
-- Phase 0 review 证据：`python3.11 -m pytest tests/serenity -q` -> `13 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; POC enabled smoke -> exit 0，输出 `enabled=True`, `research_only=True`, `evidence_count=6`, ticker `600519`; cross-repo import scan 无命中；`git diff --check` 通过；DSA status clean。
-- 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；本轮已用 `npm --prefix apps/dsa-web ci` 恢复前端依赖并完成 P1-T04 前端验证。不要把既有 Python 缺依赖失败归因于 Serenity。
-- P1-T03 验证：`python3.11 -m pytest tests/serenity/test_analysis_history_serenity_snapshot.py tests/serenity/test_analysis_service_serenity.py -q` -> `8 passed`; `python3.11 -m pytest tests/serenity -q` -> `24 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; py_compile 目标 Python 文件通过；`git diff --check` 通过；DSA status clean。
-- P1-T04 验证：`npm --prefix apps/dsa-web test -- SerenityEvidenceQualityPanel` -> `1 passed`, `4 passed`; `npm --prefix apps/dsa-web test -- AnalysisContextSummary ReportDiagnostics SerenityEvidenceQualityPanel` -> `3 passed`, `14 passed`; `npm --prefix apps/dsa-web run build` -> pass; `npm --prefix apps/dsa-web run lint` -> pass; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity -q` -> `24 passed`; forbidden UI phrase scan 无命中；`git diff --check` 通过；最新 DSA commit `8d21280`。
-- P1-T05 验证：`python3.11 -m py_compile tests/serenity/test_phase1_http_ui_smoke.py src/services/analysis_service.py api/v1/endpoints/analysis.py` -> pass；`python3.11 -m pytest tests/serenity/test_phase1_http_ui_smoke.py tests/serenity/test_analysis_service_serenity.py tests/serenity/test_serenity_api_schema_contract.py -q` -> `12 passed`；`python3.11 -m pytest tests/serenity -q` -> `28 passed`；`python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`；`npm --prefix apps/dsa-web test -- HomePage.serenity-smoke SerenityEvidenceQualityPanel AnalysisContextSummary ReportDiagnostics` -> `17 passed`；`npm --prefix apps/dsa-web run build` -> pass；`npm --prefix apps/dsa-web run lint` -> pass；性能粗测中位增量 `0.279 ms/response`，低于 `25 ms/response` smoke 阈值；最新 DSA commit `00325bd`。
-- P1 Phase Review 验证：red check `python3.11 -m pytest tests/serenity/test_serenity_api_schema_contract.py::test_analysis_result_response_accepts_failed_open_serenity_research_audit tests/serenity/test_serenity_api_schema_contract.py::test_analysis_result_response_rejects_serenity_research_trading_fields -q` -> `2 failed`，证明 failed-open audit 分数类型和 forbidden trading field 放行问题真实存在；修复后同命令 -> `2 passed`；`python3.11 -m py_compile api/v1/schemas/serenity.py tests/serenity/test_serenity_api_schema_contract.py` -> pass；`python3.11 -m pytest tests/serenity/test_phase1_http_ui_smoke.py tests/serenity/test_analysis_service_serenity.py tests/serenity/test_serenity_api_schema_contract.py -q` -> `14 passed`；`python3.11 -m pytest tests/serenity -q` -> `30 passed`；`python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`；`npm --prefix apps/dsa-web test -- HomePage.serenity-smoke SerenityEvidenceQualityPanel AnalysisContextSummary ReportDiagnostics` -> `4 files passed / 17 tests passed`；`npm --prefix apps/dsa-web run build` -> pass；`npm --prefix apps/dsa-web run lint` -> pass；flag scan confirms default `SERENITY_RESEARCH_ENABLED=false`; storage scan confirms reuse of `analysis_history.context_snapshot.serenity_research`; migration inventory found no `migrations/` or `alembic/` directory and no Serenity table; forbidden Serenity trading-phrase scan found only test function name `test_serenity_audit_incremental_overhead_smoke_under_threshold` due broad regex.
-- P2-T01 验证：red check `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py -q` -> `5 failed`，证明新 tool module/registry 尚不存在；修复后同命令 -> `5 passed`；`python3.11 -m pytest tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_import_analysis_tools tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_all_tools_have_valid_schemas -q` -> `2 passed`；`python3.11 -m pytest tests/serenity -q` -> `30 passed`；`python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`；`python3.11 -m py_compile src/serenity/agent_tools/evidence_quality_tool.py src/agent/tools/analysis_tools.py tests/agent/tools/test_serenity_evidence_quality_tool.py` -> pass；forbidden Serenity trading-phrase scan found only existing broad-regex test function name `test_serenity_audit_incremental_overhead_smoke_under_threshold`; `git diff --check` -> pass；full `tests/test_agent_registry.py -q` currently reaches `58 passed` then fails on known missing `pandas` dependency in unrelated `SkillAgent` import.
-- P2-T02 验证：red check `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_gap_tool.py -q` -> `6 failed`，证明新 tool module/registry 尚不存在；修复后同命令 -> `6 passed`；`python3.11 -m pytest tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_import_analysis_tools tests/test_agent_registry.py::TestBuiltinToolDefinitions::test_all_tools_have_valid_schemas -q` -> `2 passed`；`python3.11 -m pytest tests/serenity -q` -> `30 passed`；`python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`；`python3.11 -m py_compile src/serenity/agent_tools/evidence_gap_tool.py src/serenity/agent_tools/__init__.py src/agent/tools/analysis_tools.py tests/agent/tools/test_serenity_evidence_gap_tool.py` -> pass；forbidden Serenity trading-phrase scan found only existing broad-regex test function name `test_serenity_audit_incremental_overhead_smoke_under_threshold`; `git diff --check` -> pass；full `tests/test_agent_registry.py -q` remains blocked by known missing `pandas` dependency in unrelated `SkillAgent` import.
-- 下一步从 tracker 的 P2 Phase Review 开始。Phase 2 必须保持 Agent tools research-only、显式调用、fail-open，不新增交易建议语义，不改变 DSA 原有字段含义。
-- 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
-- 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
-- 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
+- Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
+- DSA 仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
+- DSA 分支：codex/serenity-phase-0-evidence-bridge
+- Serenity 最新提交：9a01e0a docs(serenity): 刷新 P2-T03 接续提示词（本次 P2 Phase Review 文档提交后请以新 Serenity commit 为准）
+- DSA 最新提交：f74720f fix(serenity): 修复 Agent 工具显式边界绕过
+
+已完成：
+- Global guardrails：G-T01、G-T02、G-T03
+- Phase 0 Evidence Bridge POC：P0-T01、P0-T02、P0-T03、P0-T04 与 Phase 0 review gate
+- Phase 1 Analysis Report Add-On：P1-T01、P1-T02、P1-T03、P1-T04、P1-T05 与 P1 Phase Review
+- Phase 2 Agent Tools：P2-T01、P2-T02、P2-T03 与 P2 Phase Review
+- 已新增 research-only `serenity_evidence_quality` Agent tool
+- 已新增 research-only `serenity_evidence_gaps` Agent tool
+- 两个 tool 均通过 DSA `src/agent/tools/analysis_tools.py` 的 `ALL_ANALYSIS_TOOLS` 注册
+- tools 只审计调用方提供的 low-sensitivity analysis `context`
+- 缺少 context 返回 `analysis_context_required` blocked diagnostics
+- 异常返回 sanitized `failed_open` diagnostics
+- 不抓取行情、新闻或 DB，不修改 DSA 交易字段
+- P2-T03 已新增 `tests/agent/test_serenity_prompt_boundaries.py`
+- legacy single-agent `AgentExecutor` 已有 request-scoped Serenity tool gate：默认分析不向模型暴露 `serenity_evidence_quality` / `serenity_evidence_gaps`
+- P2 Phase Review 已进一步收紧 gate：`SERENITY_RESEARCH_ENABLED=false` 时即使显式研究质量请求也不暴露 tools；`SERENITY_RESEARCH_ENABLED=true` 时仍必须由用户文本显式包含研究质量、证据缺口、来源覆盖或 readiness 意图才暴露 tools
+- P2 Phase Review 已移除外部请求 `context.serenity_research_tools_enabled=True` 的绕过能力
+- P2 Phase Review 已修复 Specialist `SkillAgent` 空 `required_tools` 时回退全量 registry 的问题；现在默认空工具白名单，仅 skill 明确 required tools 时授权工具
+
+未完成下一步：
+- 从 tracker 的 `P3-T01: Research Task Data Contract` 开始
+- Phase 3 Intelligence Workflow Persistence 尚未开始
+- Phase 4 Provenance Safety Guardrails 尚未开始
+- DB 专表尚未启动；目前仍使用 `analysis_history.context_snapshot.serenity_research`
+
+边界要求：
+- daily_stock_analysis 仍是主产品和主运行时
+- Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助
+- 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score
+- 不新增交易建议语义，不改变 DSA 原有字段含义
+- 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略
+- Phase 3 研究任务只能表示 evidence gaps / follow-up research，不得自动创建交易建议或修改 DSA trading fields
+- 继续优先使用 snapshot / metadata；只有通过 tracker 的专表升级决策 gate 后才允许新增 DB 专表
+
+P2 Phase Review 验证证据：
+- feature flag red check `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py::test_single_agent_executor_hides_serenity_tools_when_feature_flag_is_off -q` -> `1 failed`
+- feature flag 修复后 focused check -> `2 passed`
+- 子代理只读审查发现两个 Important 问题：外部 context override 绕过显式意图门禁；Specialist SkillAgent 空 required_tools 回退全量 registry
+- reviewer red check `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py::test_single_agent_executor_ignores_external_context_tool_override tests/agent/test_serenity_prompt_boundaries.py::test_skill_agent_without_required_tools_does_not_receive_global_serenity_registry -q` -> `2 failed`
+- reviewer fixes 后同命令 -> `2 passed`
+- final prompt boundary suite `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py -q` -> `11 passed`
+- `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py tests/agent/tools/test_serenity_evidence_gap_tool.py -q` -> `11 passed`
+- focused registry import/schema tests -> `2 passed`
+- `python3.11 -m pytest tests/serenity -q` -> `30 passed`
+- `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`
+- target `py_compile` -> pass
+- static flag/boundary scan confirmed default `SERENITY_RESEARCH_ENABLED=false` and Serenity tool registrations
+- forbidden phrase scan only matched boundary docs and existing broad-regex smoke test name
+- `git diff --check` -> pass
+
+已知环境 blocker：
+- full `python3.11 -m pytest tests/test_agent_registry.py -q` 目前仍会因缺少 `pandas` 在 unrelated `SkillAgent` import -> `src/storage.py` 处失败；最近一次结果为 `1 failed, 58 passed`
+- 这是既有环境依赖缺口，不要归因于 Serenity P2 Phase Review
+
+当前工作区注意事项：
+- DSA 工作区应为 clean，HEAD 为 `f74720f`
+- Serenity 仓库仍有既有未提交 generated UI 输出变更：
+  - output/ui/analyses/manifest.json
+  - output/ui/reports/deliverable-research-report.md
+  - output/ui/runs.json
+  - output/ui/analyses/topic-2bde5fabbc/
+- 不要修改、stage、提交或回滚这些 output/ui/* 生成物，除非我明确要求
 
 工作习惯：
-- 每完成一个阶段性任务，立即更新 docs/dsa-first-serenity-core-development-tracker.md、tasks/todo.md 和本段下次启动接续提示词，标清已完成、未完成、下一步与验证证据。
-- 必要时更新 tasks/lessons.md，把可复用经验固化下来。
-- 运行新鲜验证命令。
-- 只 stage 本阶段相关文件。
-- 用详细中文 commit message 提交，不要等我提醒。
-- 阶段性任务完成后必须自动更新 tracker、tasks/todo.md、tasks/lessons.md、restart prompt、最新 commit id、验证证据、已知 blocker 和禁止 stage 文件；不要等用户提醒。
+- 每个阶段性任务开始前，先在 `tasks/todo.md` 写可勾选计划
+- 实现前核对 tracker entry criteria
+- 运行新鲜验证命令
+- 每完成阶段性任务后，自动更新：
+  - docs/dsa-first-serenity-core-development-tracker.md
+  - tasks/todo.md
+  - tasks/lessons.md（如有可复用经验）
+  - tracker 内“下次启动接续提示词”
+- restart prompt 必须包含：已完成范围、未完成下一步、最新 Serenity/DSA commit id、验证证据、已知环境 blocker、禁止 stage 的文件
+- 只 stage 本阶段相关文件
+- 用详细中文 commit message 提交
 ```
 
 ---
@@ -972,23 +1012,23 @@ python -m pytest tests/agent/test_serenity_prompt_boundaries.py -q
 
 ### P2 Phase Review
 
-Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Owner: Codex
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `f74720f`
+Evidence: red check `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py::test_single_agent_executor_hides_serenity_tools_when_feature_flag_is_off -q` -> `1 failed`, proving explicit research-quality requests still exposed Serenity tools when `SERENITY_RESEARCH_ENABLED=false`; fix commit `18f5d13` added config-gated exposure. Subagent review then found two Important boundary gaps; red check `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py::test_single_agent_executor_ignores_external_context_tool_override tests/agent/test_serenity_prompt_boundaries.py::test_skill_agent_without_required_tools_does_not_receive_global_serenity_registry -q` -> `2 failed`, proving external context override and SkillAgent empty-required-tools fallback exposed global Serenity tools; fix commit `f74720f` removed the external context override and made SkillAgent default to an empty tool whitelist. Final verification: `python3.11 -m pytest tests/agent/test_serenity_prompt_boundaries.py -q` -> `11 passed`; `python3.11 -m pytest tests/agent/tools/test_serenity_evidence_quality_tool.py tests/agent/tools/test_serenity_evidence_gap_tool.py -q` -> `11 passed`; focused registry import/schema tests -> `2 passed`; `python3.11 -m pytest tests/serenity -q` -> `30 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; target `py_compile` -> pass; static flag/boundary scan confirmed default `SERENITY_RESEARCH_ENABLED=false` and Serenity tool registrations; forbidden phrase scan only matched boundary docs and existing broad-regex smoke test name; `git diff --check` -> pass.
+Decision Notes: P2 Phase Review confirmed evidence-quality and evidence-gap Agent tools remain research-only, caller-context-only, fail-open, JSON-safe, and isolated from DSA trading fields. Review hardened the executor so Serenity tools are exposed only when `SERENITY_RESEARCH_ENABLED=true` and user text explicitly asks about research quality, evidence gaps, source coverage, or readiness; request-provided `context.serenity_research_tools_enabled=True` no longer bypasses intent gating. Specialist `SkillAgent` now defaults to no tools when a skill has no `required_tools`, avoiding full-registry fallback exposure. The handler-level feature-flag defense-in-depth suggestion is recorded as Minor and deferred until a shared filtered-registry/helper layer is introduced.
+Rollback Notes: Revert DSA commits `f74720f` and `18f5d13` to restore prior P2-T03 behavior, then reassess P2 Phase Review before starting Phase 3. If only the SkillAgent fallback change causes issues, restore `self.tool_names` default behavior in `src/agent/skills/skill_agent.py` and keep the executor feature flag gate; rerun P2 prompt-boundary tests before proceeding.
 
 **Review Checklist:**
 
-- [ ] Agent tools 只在显式调用时使用。
-- [ ] Tools 输出不覆盖 DSA 决策字段。
-- [ ] Agent 工具测试通过。
-- [ ] 关闭 feature flag 时 tools 不暴露或返回 disabled diagnostics。
+- [x] Agent tools 只在显式调用时使用。
+- [x] Tools 输出不覆盖 DSA 决策字段。
+- [x] Agent 工具测试通过。
+- [x] 关闭 feature flag 时 tools 不暴露或返回 disabled diagnostics。
 
 ---
 
@@ -1606,7 +1646,8 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | P2-T01 | Phase 2 | Evidence Quality Agent Tool | Verified | P1-T02 | DSA commit `379ee1b`; red-green tool tests -> `5 failed` then `5 passed`; focused registry tests -> `2 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile, forbidden phrase scan, and diff check passed |
 | P2-T02 | Phase 2 | Evidence Gap Agent Tool | Verified | P2-T01 | DSA commit `ab2ed1e`; red-green tool tests -> `6 failed` then `6 passed`; focused registry tests -> `2 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile, forbidden phrase scan, and diff check passed |
 | P2-T03 | Phase 2 | Agent Prompt Boundary Test | Verified | P2-T01, P2-T02 | DSA commit `213db24`; red-green prompt boundary tests -> `3 failed / 2 passed`, executor exposure check -> `2 failed / 6 passed`, final focused suite -> `8 passed`; P2 tool regression -> `11 passed`; registry tests -> `2 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile, forbidden phrase scan, and diff check passed |
-| P3-T01 | Phase 3 | Research Task Data Contract | Not Started | P1-T03, P2-T02 |  |
+| P2-REV | Phase 2 | Phase 2 Review Gate | Verified | P2-T01, P2-T02, P2-T03 | DSA commit `f74720f`; feature flag red check -> `1 failed` then fixed in `18f5d13`; reviewer boundary red check -> `2 failed` then fixed in `f74720f`; prompt boundary -> `11 passed`; P2 tool regression -> `11 passed`; focused registry import/schema -> `2 passed`; Serenity suite -> `30 passed`; boundary guard -> `3 passed`; py_compile and diff check passed |
+| P3-T01 | Phase 3 | Research Task Data Contract | Not Started | P1-T03, P2-T02, P2-REV |  |
 | P3-T02 | Phase 3 | Snapshot-Based Task Persistence | Not Started | P3-T01 |  |
 | P3-T03 | Phase 3 | Intelligence Service 接入 | Not Started | P3-T02 |  |
 | P3-T04 | Phase 3 | 专表升级决策 Gate | Not Started | P3-T03 |  |
@@ -1619,7 +1660,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On 和 Phase 2 `P2-T01` Evidence Quality Agent Tool、`P2-T02` Evidence Gap Agent Tool、`P2-T03` Agent Prompt Boundary Test 已完成并验证。下一步从 P2 Phase Review 继续，不改变既有交易语义。
+Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On 和 Phase 2 Agent Tools（`P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）已完成并验证。下一步从 `P3-T01` Research Task Data Contract 继续，不改变既有交易语义。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
@@ -1636,3 +1677,6 @@ Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On 和 Pha
 - [x] 执行 P1 Phase Review。
 - [x] 执行 P2-T01。
 - [x] 执行 P2-T02。
+- [x] 执行 P2-T03。
+- [x] 执行 P2 Phase Review。
+- [ ] 执行 P3-T01 Research Task Data Contract。
