@@ -1,3 +1,29 @@
+# DSA-First Serenity Core P1-T01 API Schema Phase
+
+- [x] Add optional Serenity research-audit API schema contract in DSA.
+- [x] Expose optional `serenity_research` on analysis response schema.
+- [x] Expose optional `serenity_research` from history `context_snapshot`.
+- [x] Preserve old payload parsing and avoid changing existing trading-decision fields.
+- [x] Verify focused schema tests, full Serenity tests, boundary guard, py_compile, forbidden-field scan, and diff cleanliness.
+- [x] Commit the DSA P1-T01 implementation with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` and this task log with P1-T01 evidence.
+
+## Design Check-In
+
+- User goal: enter Phase 1 by adding a backward-compatible API contract for Serenity research audit without attaching runtime behavior yet.
+- Scope: add optional schema models and optional nested fields only; no provider calls, DB writes, notification changes, task queue changes, UI rendering, or report mutation.
+- Safety boundary: `serenity_research` remains evidence-quality / readiness / source-coverage metadata and must not map into DSA `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+- Compatibility: old analysis/history payloads must parse without the new block, and schema-only imports must not require unrelated runtime dependencies.
+- Next phase constraint: `P1-T02` may attach audit only after base report creation, behind default-off `SERENITY_RESEARCH_ENABLED`, and must fail open.
+
+## Review
+
+- Implementation: added DSA `api/v1/schemas/serenity.py`, updated `api/v1/schemas/analysis.py` with optional `serenity_research: SerenityResearchAudit | None`, updated `api/v1/schemas/history.py` to derive optional `serenity_research` from `context_snapshot.serenity_research`, and exported the schema from `api/v1/schemas/__init__.py`.
+- Compatibility fix: updated DSA `api/v1/__init__.py` to lazy-load `api_v1_router`, so schema-only imports do not trigger endpoint/storage dependencies in environments missing `pandas`.
+- Verification: pure schema import smoke passed; `python3.11 -m pytest tests/serenity/test_serenity_api_schema_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/serenity -q` -> `16 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; schema + Serenity `py_compile` passed; static scan found no forbidden decision fields in `api/v1/schemas/serenity.py`; `git diff --check` passed.
+- Commit: DSA `10b9dda` (`feat(serenity): 增加可选 Research Audit API Schema`).
+- Next step: execute `P1-T02: Analysis Service 附加 Serenity Audit`; keep the audit optional, default-off, fail-open, and research-only.
+
 # DSA-First Serenity Core Phase 0 Review Gate
 
 - [x] Run enabled POC script smoke and confirm stdout audit JSON is parseable.
