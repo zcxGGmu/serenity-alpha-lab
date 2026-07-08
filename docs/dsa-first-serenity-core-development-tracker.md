@@ -29,7 +29,7 @@
 | --- | --- | --- |
 | DSA 代码集成 | Not Started | 尚未修改 `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` 的实现代码 |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
-| Phase 0 Evidence Bridge POC | Not Started | `P0-T01` 至 `P0-T04` 尚未执行；下一步从 P0-T01 开始 |
+| Phase 0 Evidence Bridge POC | In Progress | `P0-T01` 已完成并验证；下一步从 P0-T02 DSA Context 到 Evidence Adapter 开始 |
 | Phase 1 Analysis Report Add-On | Not Started | 等 Phase 0 review 通过后再开始 |
 | Phase 2 Agent Tools | Not Started | 等 Phase 1 review 通过后再开始 |
 | Phase 3 Intelligence Workflow Persistence | Not Started | 等 Phase 2 review 通过后再开始 |
@@ -37,10 +37,10 @@
 
 ### 当前下一步
 
-Global guardrails 已完成；下一步进入 Phase 0 Evidence Bridge POC，不直接进入 UI、API 或数据库改造。
+Global guardrails 与 P0-T01 core contract 已完成；下一步继续 Phase 0 Evidence Bridge POC，不直接进入 UI、API 或数据库改造。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 执行 `P0-T01: Serenity Core 最小契约抽取`。
+2. 执行 `P0-T02: DSA Context 到 Evidence Adapter`。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
 4. Phase 0 仅做本地 POC，不改 DSA API、UI、DB。
 
@@ -69,9 +69,10 @@ Global guardrails 已完成；下一步进入 Phase 0 Evidence Bridge POC，不�
 - Serenity 当前仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 - DSA 本地仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis。
 - DSA Global tasks 已完成：G-T01 集成边界守卫、G-T02 分支与提交规范、G-T03 基线验证快照均为 Verified。
-- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档和静态边界测试；尚未开始 Serenity runtime / Evidence Bridge 代码集成。
+- DSA P0-T01 已完成：已在 DSA 内新增标准库-only `src/serenity/core/*` 最小研究契约和 `tests/serenity/core/test_core_contract.py`；最新 DSA commit 为 `4e34c78`。
+- DSA 已新增默认关闭的 `SERENITY_RESEARCH_ENABLED=false`、Serenity 边界文档、baseline 文档、静态边界测试和最小 Serenity core；尚未开始 DSA Context Adapter / service / API / UI / DB 集成。
 - 当前 broad baseline 失败来自环境依赖缺口：Python 3.11 下缺 `pandas`、`json_repair`；前端缺 `apps/dsa-web/node_modules`。不要把这些既有失败归因于 Serenity。
-- 下一步从 tracker 的 `P0-T01: Serenity Core 最小契约抽取` 开始，然后继续 P0-T02、P0-T03、P0-T04。
+- 下一步从 tracker 的 `P0-T02: DSA Context 到 Evidence Adapter` 开始，然后继续 P0-T03、P0-T04。
 - 保持 daily_stock_analysis 为主产品和主运行时；Serenity Core 只做证据质量、研究审计、补证闭环和安全边界辅助。
 - 不要把 Serenity score 映射到 DSA 的交易建议、目标价、仓位、止损止盈、趋势预测或 sentiment_score。
 - 不要修改、stage、提交或回滚 Serenity 仓库里既有的 output/ui/* 生成物脏改动，除非我明确要求。
@@ -304,15 +305,15 @@ node --version
 ### P0-T01: Serenity Core 最小契约抽取
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-08
+Updated: 2026-07-08
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `4e34c78`
+Evidence: DSA `src/serenity/core/*`, `src/serenity/__init__.py`, `tests/serenity/core/test_core_contract.py`; `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py` -> exit 0; `from src.serenity.core.evidence import EvidenceItem` smoke -> `EvidenceItem`.
+Decision Notes: 以 DSA-facing EvidenceItem 字段重建最小 core，而不是直接复制 Serenity Alpha Lab 原模型字段；所有模块只用标准库和同目录 core 依赖，不引入 UI、CLI、memo pack、HTTP server、output writer、provider、SQLAlchemy、FastAPI、notification 或 task queue。缺 source metadata 明确产生 `missing_source_metadata` gap，不补虚假 source。
+Rollback Notes: 删除 DSA `/src/serenity/` 和 `/tests/serenity/core/test_core_contract.py`；不会影响 DSA 原有代码路径。
 
 **Purpose:** 从 Serenity Alpha Lab 抽出 DSA 集成所需的最小核心，不携带 UI、CLI、memo pack、local server 或生成物。
 
@@ -331,12 +332,12 @@ Rollback Notes:
 
 **Implementation Checklist:**
 
-- [ ] 复制或重建 `EvidenceItem` 的最小字段：`id`、`title`、`source_type`、`publisher`、`published_at`、`url`、`excerpt`、`claims`、`symbols`、`metadata`。
-- [ ] 保留 deterministic scoring / coverage / readiness 逻辑所需函数。
-- [ ] 删除或不迁入 Serenity UI、CLI、memo pack、HTTP server、output writer、absolute path defaults。
-- [ ] 所有 core module 只依赖 Python 标准库和同目录 core module。
-- [ ] 为空 evidence list 返回稳定 audit 结果，而不是抛异常。
-- [ ] 为缺失 source metadata 的 evidence 产生 gap，而不是补虚假 source。
+- [x] 复制或重建 `EvidenceItem` 的最小字段：`id`、`title`、`source_type`、`publisher`、`published_at`、`url`、`excerpt`、`claims`、`symbols`、`metadata`。
+- [x] 保留 deterministic scoring / coverage / readiness 逻辑所需函数。
+- [x] 删除或不迁入 Serenity UI、CLI、memo pack、HTTP server、output writer、absolute path defaults。
+- [x] 所有 core module 只依赖 Python 标准库和同目录 core module。
+- [x] 为空 evidence list 返回稳定 audit 结果，而不是抛异常。
+- [x] 为缺失 source metadata 的 evidence 产生 gap，而不是补虚假 source。
 
 **Tests:**
 
@@ -350,9 +351,9 @@ PY
 
 **DoD:**
 
-- [ ] `src/serenity/core/*` 没有 import DSA provider、FastAPI、SQLAlchemy、React asset、notification、task queue。
-- [ ] 测试覆盖正常 evidence、空 evidence、缺 source evidence。
-- [ ] `python -m pytest tests/serenity/core/test_core_contract.py -q` 通过。
+- [x] `src/serenity/core/*` 没有 import DSA provider、FastAPI、SQLAlchemy、React asset、notification、task queue。
+- [x] 测试覆盖正常 evidence、空 evidence、缺 source evidence。
+- [x] `python -m pytest tests/serenity/core/test_core_contract.py -q` 通过。
 
 **Rollback:** 删除 `/src/serenity/core/` 和对应测试，不影响 DSA 原有代码。
 
@@ -1564,7 +1565,7 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | G-T01 | Global | 集成边界守卫 | Verified | 当前方案 | DSA `tests/test_serenity_integration_boundaries.py` -> `3 passed`; `git diff --check` exit 0 |
 | G-T02 | Global | 分支与提交规范 | Verified | G-T01 | DSA branch `codex/serenity-phase-0-evidence-bridge`; DSA `docs/CONTRIBUTING.md` + boundary doc |
 | G-T03 | Global | 基线验证快照 | Verified | G-T01 | DSA `docs/serenity-baseline-verification.md`; baseline failures recorded as missing dependency setup |
-| P0-T01 | Phase 0 | Serenity Core 最小契约抽取 | Not Started | G-T01, G-T03 |  |
+| P0-T01 | Phase 0 | Serenity Core 最小契约抽取 | Verified | G-T01, G-T03 | DSA commit `4e34c78`; core contract -> `3 passed`; boundary guard -> `3 passed`; py_compile/import smoke passed |
 | P0-T02 | Phase 0 | DSA Context 到 Evidence Adapter | Not Started | P0-T01 |  |
 | P0-T03 | Phase 0 | Evidence Quality Service POC | Not Started | P0-T02 |  |
 | P0-T04 | Phase 0 | CLI / Script POC Runner | Not Started | P0-T03 |  |
@@ -1589,9 +1590,10 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 
 ## 12. 当前推荐下一步
 
-Global guardrails 已完成。从 Phase 0 开始，不直接进入 UI 或数据库改造。
+Global guardrails 与 P0-T01 已完成。从 Phase 0 继续，不直接进入 UI 或数据库改造。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
-- [ ] 执行 P0-T01 至 P0-T04。
+- [x] 执行 P0-T01。
+- [ ] 执行 P0-T02 至 P0-T04。
 - [ ] Phase 0 review 通过后，再进入 Phase 1。

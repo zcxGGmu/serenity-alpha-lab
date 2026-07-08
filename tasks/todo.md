@@ -1,3 +1,30 @@
+# DSA-First Serenity Core P0-T01 Core Contract Phase
+
+- [x] Write failing DSA core contract tests for normal evidence, empty evidence, and missing source metadata.
+- [x] Create minimal standard-library `src/serenity/core/*` modules in DSA.
+- [x] Keep core deterministic and free of DSA provider/API/UI/notification/task-queue imports.
+- [x] Verify P0-T01 core contract tests and the Global static boundary guard.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md` and this task log with P0-T01 evidence.
+- [x] Stage only P0-T01 files and commit with a detailed Chinese message.
+
+## Design Check-In
+
+- User goal: start Phase 0 from `P0-T01: Serenity Core 最小契约抽取` after Global guardrails are verified.
+- Scope: copy/rebuild only minimal evidence, retrieval, scoring, source coverage, readiness, and acquisition queue logic into DSA `src/serenity/core`.
+- Contract: `EvidenceItem` uses DSA-facing fields `id`, `title`, `source_type`, `publisher`, `published_at`, `url`, `excerpt`, `claims`, `symbols`, and `metadata`.
+- Safety: no Serenity UI, CLI, memo pack, local server, generated output, provider fetches, SQLAlchemy, FastAPI, React assets, notifications, task queue, or cross-repository absolute-path import.
+- Empty/missing-source behavior: empty evidence returns stable audit objects; evidence missing source metadata produces explicit gaps rather than fabricated source values.
+
+## Review
+
+- Red test: `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` initially failed with `ModuleNotFoundError: No module named 'src.serenity.core.acquisition_queue'`.
+- Implementation: added DSA `src/serenity/core` modules for EvidenceItem, deterministic retrieval, research scoring, source coverage, readiness audit, and acquisition queue, plus package initializers.
+- Contract: `EvidenceItem` uses `id`, `title`, `source_type`, `publisher`, `published_at`, `url`, `excerpt`, `claims`, `symbols`, and `metadata`; output audit dicts stay research-only and avoid DSA trading fields.
+- Gap handling: empty evidence returns stable blocked audit objects; missing source metadata creates `missing_source_metadata` coverage and acquisition tasks without fabricating publisher, URL, or excerpt.
+- Verification: `python3.11 -m pytest tests/serenity/core/test_core_contract.py -q` -> `3 passed`; `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q` -> `3 passed`; `python3.11 -m py_compile src/serenity/__init__.py src/serenity/core/*.py` -> exit 0; `EvidenceItem` import smoke passed.
+- Commit: DSA `4e34c78` (`feat(serenity): 抽取最小 Core 研究契约`).
+- Next step: start `P0-T02: DSA Context 到 Evidence Adapter`; still do not change DSA API, UI, DB, providers, notifications, task queue, or trading-decision fields.
+
 # DSA-First Serenity Core Global Guardrails Phase
 
 - [x] Confirm DSA branch `codex/serenity-phase-0-evidence-bridge` is active from the handoff HEAD.
