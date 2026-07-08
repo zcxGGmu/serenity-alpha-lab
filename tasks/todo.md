@@ -1,17 +1,45 @@
+# DSA-First Serenity Core P1-T04 Web Evidence Quality Panel Phase
+
+- [x] Write failing DSA Web tests for optional `serenity_research` rendering, missing-audit omission, failed-open messaging, and report placement.
+- [x] Add TypeScript types for the existing optional `serenity_research` API/history payload without changing DSA trading fields.
+- [x] Create `SerenityEvidenceQualityPanel` as a research-only evidence-quality panel.
+- [x] Mount the panel after the input-data context summary and before run diagnostics/traceability.
+- [x] Verify focused frontend tests, TypeScript build/check path when available, backend Serenity boundary guard, and diff cleanliness.
+- [x] Commit the DSA P1-T04 implementation with a detailed Chinese message.
+- [x] Update `docs/dsa-first-serenity-core-development-tracker.md`, this task log, reusable lessons if needed, and the restart prompt.
+
+## Design Check-In
+
+- User goal: complete `P1-T04: Web 类型与 Evidence Quality Panel` after P1-T03 persisted optional `serenity_research` into runtime responses and historical `context_snapshot`.
+- Scope: consume only existing optional `serenity_research` from `AnalysisResult.serenityResearch` or historical `AnalysisReport.details.serenityResearch`; do not add API, DB, provider, notification, task queue, portfolio, backtest, alert, or decision-generation behavior.
+- Placement: keep DSA decision summary, strategy, and news first; render Serenity evidence quality after `AnalysisContextSummary` and before diagnostics/traceability.
+- UI states: no audit renders nothing; normal audit shows quality score, readiness, source coverage, evidence count, top gaps/tasks, and diagnostics summary; `failed_open` states say the auxiliary research audit is unavailable and the main analysis is unaffected.
+- Safety: panel text must stay research-only and must not map Serenity score into `sentiment_score`, `operation_advice`, `action`, `trend_prediction`, `target_price`, `position_sizing`, `sniper_points`, `stop_loss`, or `take_profit`.
+
+## Review
+
+- Red behavior: `npm --prefix apps/dsa-web test -- SerenityEvidenceQualityPanel` initially failed because `SerenityEvidenceQualityPanel` did not exist, proving the new report panel and type surface were missing.
+- Implementation: added DSA Web `SerenityResearchAudit` TypeScript types in `apps/dsa-web/src/types/analysis.ts`, created `SerenityEvidenceQualityPanel`, exported it from the report index, and mounted it in `ReportSummary`.
+- UI behavior: runtime `AnalysisResult.serenityResearch` and historical `AnalysisReport.details.serenityResearch` are consumed as optional research-only inputs; no audit renders nothing, normal audit renders quality/readiness/coverage/gaps/tasks/diagnostics, and failed-open explains the auxiliary audit is unavailable while the main analysis is unaffected.
+- Placement: panel renders after `AnalysisContextSummary` and before run diagnostics/data traceability, leaving DSA overview, strategy, and news as the primary report sections.
+- Verification: `npm --prefix apps/dsa-web test -- SerenityEvidenceQualityPanel` -> `1 passed`, `4 passed`; `npm --prefix apps/dsa-web test -- AnalysisContextSummary ReportDiagnostics SerenityEvidenceQualityPanel` -> `3 passed`, `14 passed`; `npm --prefix apps/dsa-web run build` -> pass; `npm --prefix apps/dsa-web run lint` -> pass; boundary guard -> `3 passed`; `tests/serenity -q` -> `24 passed`; forbidden UI phrase scan -> no matches; `git diff --check` -> pass.
+- Commit: DSA `8d21280` (`feat(serenity): 增加 Web 研究证据质量面板`).
+- Next step: execute `P1-T05: Phase 1 HTTP / UI Smoke`, verifying flag off/on, failed-open, and Web report rendering without changing DSA trading semantics.
+
 # DSA-First Serenity Core P1-T03 Latest Handoff Refresh
 
 - [x] Confirm DSA implementation is committed at `c193f17`.
 - [x] Confirm Serenity handoff docs are committed at `e2b0be6`.
-- [x] Confirm current completed scope through P1-T03 and unfinished next step P1-T04.
+- [x] Confirm current completed scope through P1-T04 and unfinished next step P1-T05.
 - [x] Preserve existing Serenity `output/ui/*` generated dirty files without staging, modifying, or reverting them.
 - [x] Keep the reusable phase-end habit in `tasks/lessons.md`.
 
 ## Review
 
-- Current completed scope: Global guardrails `G-T01` to `G-T03`, Phase 0 `P0-T01` to `P0-T04` plus Phase 0 review gate, Phase 1 `P1-T01` API Schema, `P1-T02` Analysis Service runtime attach, and `P1-T03` historical `context_snapshot.serenity_research` persistence are completed and verified.
-- Current unfinished scope: `P1-T04` Web 类型与 Evidence Quality Panel is the next development task; `P1-T05`, Phase 2 Agent Tools, Phase 3 workflow persistence, and Phase 4 provenance safety remain Not Started.
-- Verification evidence to carry forward: P1-T03 focused tests -> `8 passed`; `tests/serenity -q` -> `24 passed`; boundary guard -> `3 passed`; target `py_compile` and `git diff --check` passed.
-- Next startup should begin by reading the plan, tracker, this task log, and lessons, then continue from `P1-T04` without changing DSA trading semantics or touching Serenity generated UI outputs.
+- Current completed scope: Global guardrails `G-T01` to `G-T03`, Phase 0 `P0-T01` to `P0-T04` plus Phase 0 review gate, Phase 1 `P1-T01` API Schema, `P1-T02` Analysis Service runtime attach, `P1-T03` historical `context_snapshot.serenity_research` persistence, and `P1-T04` Web evidence quality panel are completed and verified.
+- Current unfinished scope: `P1-T05` Phase 1 HTTP / UI Smoke is the next development task; Phase 2 Agent Tools, Phase 3 workflow persistence, and Phase 4 provenance safety remain Not Started.
+- Verification evidence to carry forward: P1-T04 frontend panel test -> `4 passed`; related report tests -> `14 passed`; `npm --prefix apps/dsa-web run build` and `npm --prefix apps/dsa-web run lint` passed; `tests/serenity -q` -> `24 passed`; boundary guard -> `3 passed`; `git diff --check` passed.
+- Next startup should begin by reading the plan, tracker, this task log, and lessons, then continue from `P1-T05` without changing DSA trading semantics or touching Serenity generated UI outputs.
 
 # DSA-First Serenity Core P1-T03 History Snapshot Persistence Phase
 

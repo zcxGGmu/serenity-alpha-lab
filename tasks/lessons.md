@@ -1,5 +1,6 @@
 # Lessons
 
+- DSA Web API clients deep-convert backend `snake_case` payloads into `camelCase`, so frontend types and report components should model optional add-ons as camelCase fields such as `serenityResearch` even when backend schemas and storage use `serenity_research`.
 - After every stage-level task, automatically refresh the tracker, task log, lessons when relevant, and copyable restart prompt before finishing; the user explicitly wants this treated as a standing habit, not a one-off request.
 - P1-T03 showed that DSA analysis history is saved before `AnalysisService` formats the API response, so durable optional add-ons may need a best-effort post-save patch keyed by `query_id + code + report_type`; do not rely only on mutating `result.diagnostic_context_snapshot` after persistence.
 - At the end of each phase, always update the development tracker, `tasks/todo.md`, and the copyable restart prompt with completed items, incomplete items, current next step, and validation evidence; update `tasks/lessons.md` when a reusable habit changes, then verify, stage only owned files, and commit with a detailed Chinese message automatically.
