@@ -1,3 +1,46 @@
+# DSA-First Serenity Core P3-T03 Intelligence Service Integration Phase
+
+- [x] Review Phase 3 / P3-T03 entry criteria from tracker before implementation.
+- [x] Inspect existing DSA Intelligence Service, intelligence API schemas/endpoints, analysis history snapshot helpers, and P3-T02 task persistence behavior.
+- [x] Write failing DSA Intelligence Service tests proving Serenity research tasks can be listed by stock code and status from existing `analysis_history.context_snapshot.serenity_research.tasks`.
+- [x] Write failing DSA Intelligence Service tests proving valid task status updates delegate to existing snapshot-only storage helpers and invalid updates fail open without mutating trading fields.
+- [x] Implement snapshot-first research task listing and status update methods in `src/services/intelligence_service.py` without adding DB tables, migrations, provider fetches, Agent prompt changes, or DSA trading-field mappings.
+- [x] Add minimal API/schema exposure only if needed for the Intelligence workflow contract, keeping all fields research-only and optional.
+- [x] Run focused red/green tests, P3 task regressions, intelligence API/service regressions, boundary guard, compile checks, forbidden trading-field scan, DB-table scan, and diff check.
+- [x] Update tracker, this task log, lessons if reusable patterns emerge, and the restart prompt.
+- [x] Stage only P3-T03-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P3-T02` is verified at DSA commit `6774f61`, with deterministic, bounded Serenity research tasks already persisted in existing history snapshots.
+- Tracker scope: `P3-T03` connects those snapshot tasks to the existing DSA Intelligence Service workflow so users can query and update follow-up research tasks by stock/status.
+- Persistence boundary: continue snapshot-first. Do not add `serenity_research_tasks` tables, migrations, repository task models, or new background queues before the P3-T04 dedicated-table decision gate.
+- Product boundary: research tasks can only represent evidence gaps and follow-up research. They must not create or alter DSA trading advice, target price, position sizing, stop loss / take profit, trend prediction, `sentiment_score`, `operation_advice`, `action`, or `sniper_points`.
+- Design choice before implementation: keep Intelligence Service methods as thin orchestration over existing `analysis_history.context_snapshot.serenity_research.tasks` and `DatabaseManager.update_analysis_history_serenity_research_task_status()`.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_list_serenity_research_tasks_filters_snapshot_tasks_by_symbol_and_status tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_update_serenity_research_task_status_uses_existing_snapshot_helper -q` should fail before implementation because the Intelligence Service methods do not exist.
+- Focused pass: `python3.11 -m pytest tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_list_serenity_research_tasks_filters_snapshot_tasks_by_symbol_and_status tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_update_serenity_research_task_status_uses_existing_snapshot_helper -q`.
+- P3 regression: `python3.11 -m pytest tests/serenity/services/test_research_task_service.py tests/storage/test_serenity_research_tasks_snapshot.py tests/api/v1/test_serenity_research_task_schema.py -q`.
+- Intelligence regression: `python3.11 -m pytest tests/test_intelligence_service.py tests/test_intelligence_api.py -q`.
+- Boundary pass: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile src/services/intelligence_service.py api/v1/schemas/intelligence.py api/v1/endpoints/intelligence.py tests/test_intelligence_service.py tests/test_intelligence_api.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity.*(买入|卖出|持有|目标价|仓位|止损|止盈)" api src tests docs`.
+- DB-table scan: `rg -n "serenity_research_tasks|CREATE TABLE.*serenity|op\\.create_table\\(|create_table\\(" .`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P3-T03 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Red service check: `python3.11 -m pytest tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_list_serenity_research_tasks_filters_snapshot_tasks_by_symbol_and_status tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_update_serenity_research_task_status_uses_existing_snapshot_helper -q` failed with `2 failed` because `IntelligenceService` had no Serenity research task list/update methods.
+- Red API check: `python3.11 -m pytest tests/test_intelligence_api.py::IntelligenceApiTestCase::test_list_serenity_research_tasks_from_intelligence_api tests/test_intelligence_api.py::IntelligenceApiTestCase::test_update_serenity_research_task_status_from_intelligence_api -q` failed with `2 failed` because the new intelligence routes returned 404.
+- Implementation: DSA commit `4c6f51b` added snapshot-first `IntelligenceService.list_serenity_research_tasks()` and `update_serenity_research_task_status()`, plus minimal research-only intelligence schemas and endpoints.
+- API behavior: `GET /api/v1/intelligence/serenity-research/tasks` lists validated snapshot tasks by symbol/status/gap type and returns row anchors; `PATCH /api/v1/intelligence/serenity-research/tasks/{task_id}/status` writes valid lifecycle transitions through the existing snapshot helper.
+- Boundary: no DB table, migration, provider fetch, Agent prompt change, independent Serenity workbench, UI large page, or DSA trading-field mapping was added; list output validates through `SerenityResearchTask` and strips trading fields.
+- Verification: focused service/API tests -> `5 passed`; P3 regression -> `22 passed`; intelligence service/API regression -> `40 passed, 1 warning`; boundary guard -> `3 passed`; target `py_compile` -> pass; safety scan only matched existing boundary/baseline docs and broad-regex smoke test name; DB-table scan matched function/test names plus contract doc mention only; `git diff --check` -> pass.
+- Next step: execute `P3-T04: 专表升级决策 Gate`, still snapshot-first unless the tracker gate justifies a dedicated table.
+
 # DSA-First Serenity Core P3-T02 Snapshot-Based Task Persistence Phase
 
 - [x] Review Phase 3 / P3-T02 entry criteria from tracker before implementation.
