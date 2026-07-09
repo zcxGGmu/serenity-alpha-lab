@@ -3780,3 +3780,25 @@
 - Fresh verification: focused P4/API/snapshot/intelligence regression -> `54 passed, 1 warning`; Serenity regression -> `42 passed`; intelligence/API/storage regression -> `25 passed, 1 warning`; boundary guard -> `3 passed`; target `py_compile`, `git diff --check`, safety scan, DB-table scan, and provenance local-path scan passed.
 - DB-table scan note: matches are existing function/test names plus contract/decision docs only; no `serenity_research_tasks` or `serenity_research_task_events` table/migration was added.
 - Next stage: Phase 4 `P4-T02` Report Safety Scanner. Keep scanner scoped to Serenity-generated research-only surfaces and quoted-source exceptions; do not block or rewrite DSA main trading report fields.
+
+# DSA-First Serenity Core P4-T03 Release Checklist Integration
+
+- [x] Confirm P4-T03 release-gate scope, existing DSA CI entry points, and protected generated Serenity UI files.
+- [x] Add failing release-check tests for machine-readable summary, flag off/on commands, report safety scanner execution, no-secrets/offline behavior, and rollback guidance.
+- [x] Implement `scripts/serenity_release_check.py` as an offline deterministic gate that runs focused Serenity tests, compiles Serenity modules, scans representative Serenity-generated report sections, and emits JSON summary.
+- [x] Update `.github/workflows/ci.yml` so CI runs the Serenity release check without market-data providers, real broker tokens, database migrations, notifications, or external secrets.
+- [x] Create/update DSA `docs/RELEASE_CHECKLIST.md` with flag-off/flag-on validation, failure handling, and rollback/revert instructions.
+- [x] Run focused red/green release-check tests, P4 regression, boundary guard, target `py_compile`, safety/DB/local-path scans, and `git diff --check`.
+- [x] Update tracker, this task log review, lessons if reusable behavior changed, and the copyable restart prompt with P4-T03 evidence.
+- [x] Stage and commit only owned DSA P4-T03 files plus Serenity tracker/task docs; do not touch protected `output/ui/*` generated artifacts.
+
+## Review
+
+- Repository state: Serenity started from `9c574c3` with protected pre-existing generated UI dirt under `output/ui/*`; DSA started from clean `41a8878` on `codex/serenity-phase-0-evidence-bridge`.
+- Red checks: focused release-check tests failed on missing `scripts/serenity_release_check.py` and `docs/RELEASE_CHECKLIST.md`; workflow wiring test then failed because tag-release workflows did not run `python scripts/serenity_release_check.py`.
+- Implementation: DSA commit `d3127c5` adds offline `scripts/serenity_release_check.py`, `docs/RELEASE_CHECKLIST.md`, release-check tests, and CI/tag-release/desktop-release workflow gates.
+- Release gate behavior: JSON output includes schema/status/errors/warnings/checks/rollback; checks cover flag-off baseline, flag-on research audit, Serenity unit tests, representative report safety scan, and Serenity compile.
+- Boundary confirmed: no DB table/migration, provider fetch, broker token, notification dispatch, UI page, Agent prompt mutation, or DSA trading-field semantic change was added.
+- Verification: release-check tests -> `6 passed`; actual release gate -> `status passed, errors 0, warnings 0`; P4 focused regression -> `21 passed`; broader Serenity/Agent/boundary regression -> `85 passed`; `py_compile`, `git diff --check`, and local-path scan passed.
+- Scan note: broad boundary scan matched existing non-Serenity Docker smoke imports for `NotificationService` / `data_provider` plus release-checklist wording; P4-T03 artifacts themselves do not import provider, notification, FastAPI, scheduler, DB migration, or broker code.
+- Next stage: Phase 4 `P4-T04` Observability and Diagnostics. Keep diagnostics/logging sanitized, fail-open, and limited to research audit status/performance; do not log full user input, tokens, cookies, provider secrets, or trading-field rewrites.
