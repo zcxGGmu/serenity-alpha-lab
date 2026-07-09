@@ -7,6 +7,11 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+node_modules/
+.vite/
+playwright-report/
+test-results/
+apps/serenity-web/.cache/
 
 # Virtual environments
 .venv/
