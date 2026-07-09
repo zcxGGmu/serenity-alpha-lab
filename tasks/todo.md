@@ -3943,3 +3943,49 @@
 - Targeted verification: `python3 -m pytest tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q` -> `36 passed, 2 warnings`; `git diff --check` passed; static runtime scan for DSA checkout imports returned no matches.
 - Full verification: `make verify` -> `173 passed, 2 warnings`; `doctor` ok; `run-cpo-pack` completed with 182 combined evidence items, 6 ready memos, 0 skipped; coverage matrix regenerated successfully.
 - Commit scope: stage/commit only Phase 1 owned files and docs while excluding protected `output/ui/*` artifacts.
+
+# Serenity-Led DSA Migration Phase 2 Market Data Provider Migration
+
+- [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 2 edits.
+- [x] Inspect DSA source provider contracts, stock-code routing, normalization behavior, fallback order, and diagnostics.
+- [x] Add failing Serenity tests for provider contracts, normalized quote payloads, stock-code routing, fallback diagnostics, and default-off credential behavior.
+- [x] Implement Serenity-owned `src/serenity_alpha_lab/market_data/*` modules without runtime imports from the external DSA checkout.
+- [x] Keep all provider tests stubbed: no live credentials, external network, DSA runtime imports, generated caches, SQLite DB, `.venv`, or `node_modules`.
+- [x] Run targeted market-data tests, import-boundary guard, static runtime scan, diff hygiene, and broader verification as feasible.
+- [x] Update migration tracker, task log review, lessons, and copyable restart prompt after verification.
+- [x] Commit completed Phase 2 work with a detailed Chinese commit message, excluding protected generated UI artifacts.
+
+## Phase 2 Entry Criteria Check-In
+
+- Primary runtime: `serenity-alpha-lab`; DSA remains source-only and must not be imported at runtime.
+- Source scope: use DSA `data_provider/*`, `src/services/stock_code_utils.py`, `src/services/market_symbol_utils.py`, `src/services/stock_service.py`, and related tests as source references only.
+- Implementation approach: create a small Serenity-owned provider contract first, then add deterministic normalization, market/stock-code routing, fallback diagnostics, and default-off credential metadata.
+- Research boundary: market data is evidence input only. Do not add recommendation language, target-price promises, position sizing, live broker actions, alerts, notifications, portfolio/backtest behavior, or report-generation conclusions in Phase 2.
+- Test boundary: all Phase 2 tests must use in-process stubs and must pass without market-data credentials, external network, or DSA checkout imports.
+- Protected artifacts stay local-only: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/`.
+
+## Phase 2 Planned Verification
+
+- Red check: `python3 -m pytest tests/test_market_data.py -q` should fail before implementation because Serenity-owned market-data modules do not exist yet.
+- Focused pass: `python3 -m pytest tests/test_market_data.py -q`.
+- Migration guard: `python3 -m pytest tests/test_dsa_migration_boundaries.py -q`.
+- Static import scan: `rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab`.
+- Network/live dependency scan: inspect Phase 2 tests and market-data modules for direct `requests`, live provider SDK calls, DSA checkout path imports, `.venv`, `node_modules`, `__pycache__`, SQLite DB, or generated cache references.
+- Diff hygiene: `git diff --check`.
+- Broader verification: run `python3 -m pytest tests/test_market_data.py tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q`, then `make verify` if the focused suite and guardrails are clean.
+
+## Review
+
+- Repository state: Serenity Phase 2 work started from `f964b95` on `main`; DSA source repository remains at `95a4b51`; protected pre-existing generated UI dirt under `output/ui/*` remains visible and must not be staged, committed, reverted, or overwritten.
+- Source inspection: read DSA `data_provider/base.py`, `data_provider/realtime_types.py`, `src/services/stock_code_utils.py`, `src/services/market_symbol_utils.py`, `src/services/stock_service.py`, and related provider tests to extract the minimal provider DTO, routing, fallback, and diagnostic contract.
+- Red check: `python3 -m pytest tests/test_market_data.py -q` initially failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.market_data'`.
+- Implementation: added Serenity-owned `src/serenity_alpha_lab/market_data/*` with provider config/base contract, `MarketSymbol`, normalized `RealtimeQuote` / `DailyBar`, deterministic stock-code routing, quote/bar normalization, and a stub-driven `MarketDataManager` fallback layer.
+- Routing behavior: representative DSA formats now normalize for CN A/B/BJ, HK canonical `HK` + 5 digits, JP `.T`, KR `.KS/.KQ`, TW `.TW/.TWO`, and US tickers while keeping provider-facing routing metadata under Serenity-owned types.
+- Provider behavior: credentialed providers are skipped by default when their env var is absent, called when the env var is present, and all tests use in-process stubs with no live network or external provider SDK imports.
+- Diagnostics behavior: fallback attempts record provider/status/duration/error type/fallback target, raw exception messages are replaced with sanitized summaries, and fallback success marks `fallback_from` as the first failed provider.
+- Review fix: independent review flagged non-finite numeric payloads; added regression coverage for `price="inf"` and changed `_safe_float()` to require `math.isfinite()` so non-standard market data is treated as unavailable.
+- Targeted verification: `python3 -m pytest tests/test_market_data.py -q` -> `7 passed`; targeted API/CLI/boundary suite `python3 -m pytest tests/test_market_data.py tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q` -> `43 passed, 2 warnings`.
+- Static checks: target `py_compile` passed; runtime import scan for `daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` under `src/serenity_alpha_lab` returned no matches; live dependency/cache scan over Phase 2 modules/tests returned no real provider SDK, network, SQLite, `.venv`, `node_modules`, or `__pycache__` references.
+- Diff hygiene: `git diff --check` passed. Generated `__pycache__` created by `py_compile` was removed before staging.
+- Full verification: `make verify` -> `180 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix regenerated successfully.
+- Next step: after commit, begin Phase 3 by wiring stubbed market data into a Serenity-owned stock analysis pipeline that converts provider outputs into evidence items and readiness-gated research signals.

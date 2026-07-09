@@ -36,6 +36,7 @@
 | --- | --- | --- |
 | Phase 0: Migration Baseline And Contract | Completed | Serenity commit `b9b0fcb`; `docs/serenity-led-dsa-source-inventory.md`; `tests/test_dsa_migration_boundaries.py`; `make verify` passed |
 | Phase 1: Serenity App Runtime Foundation | Completed | Serenity commit `d7187ca`; adds `src/serenity_alpha_lab/app/*`, CLI `serve-app`, and `tests/test_app_api.py`; `make verify` passed with 173 passed |
+| Phase 2: Market Data Provider Migration | Completed | Adds Serenity-owned `src/serenity_alpha_lab/market_data/*` and `tests/test_market_data.py`; targeted verification passed with `43 passed, 2 warnings`; `make verify` passed with 180 tests |
 
 Previous DSA-first integration work is useful source research but is no longer the governing product direction.
 
@@ -43,7 +44,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 | Phase | Status | Scope |
 | --- | --- | --- |
-| Phase 2: Market Data Provider Migration | Next | Port DSA provider contracts into Serenity-owned `market_data` modules with stubbed tests and default-off credentials |
+| Phase 3: Stock Analysis Pipeline Migration | Next | Port DSA analysis context builder and core pipeline into Serenity-owned modules, converting provider outputs into evidence items with readiness gates |
 
 ### Phase Completion Status
 
@@ -51,8 +52,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 | --- | --- | --- |
 | Phase 0: Migration Baseline And Contract | Completed | Baseline/inventory/guardrails committed in `b9b0fcb` |
 | Phase 1: Serenity App Runtime Foundation | Completed | Commit `d7187ca`; app config/API skeleton/CLI wiring implemented; targeted tests, boundary scan, static import scan, and full `make verify` passed |
-| Phase 2: Market Data Provider Migration | Not Started | Next phase after Phase 1 verification commit |
-| Phase 3: Stock Analysis Pipeline Migration | Not Started | Awaiting Phase 2 |
+| Phase 2: Market Data Provider Migration | Completed | Serenity-owned provider contracts, quote/bar normalization, stock-code routing, fallback diagnostics, and stubbed tests implemented; full verification passed |
+| Phase 3: Stock Analysis Pipeline Migration | Not Started | Next phase after Phase 2 verification commit |
 | Phase 4: Report And Safety Integration | Not Started | Awaiting Phase 3 |
 | Phase 5: Web Workbench Migration | Not Started | Awaiting Phase 4 |
 | Phase 6: Portfolio, Backtest, Alerts, Notifications | Not Started | Awaiting Phase 5 |
@@ -82,13 +83,26 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Phase commit habit | Completed | Task log and lessons now require committing every verified phase-level task with protected generated UI outputs excluded |
 | Phase 0 commit | Completed | Serenity commit `b9b0fcb` (`docs: 完成 Serenity 主导的 DSA 迁移 Phase 0 基线`) |
 
+## Completed Phase 2 Market Data Provider Migration
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Serenity-owned provider contracts | Completed | `src/serenity_alpha_lab/market_data/contracts.py` defines provider config/base contract, normalized quote/bar DTOs, and provider diagnostics |
+| Stock-code routing and normalization | Completed | `src/serenity_alpha_lab/market_data/symbols.py` and `normalization.py` cover CN/HK/JP/KR/TW/US representative DSA formats and standard quote/bar coercion |
+| Fallback diagnostics | Completed | `MarketDataManager` records attempt status, fallback target, sanitized error type/message, and `fallback_from` using stub providers |
+| Default-off credentials | Completed | Credentialed providers are skipped unless their configured env var exists; tests assert no provider call without credentials |
+| Stubbed tests | Completed | `tests/test_market_data.py` uses only in-process stubs; no live credentials, external network, or DSA runtime import |
+| Targeted verification | Completed | `python3 -m pytest tests/test_market_data.py tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q` -> `43 passed, 2 warnings`; `py_compile`, static import scan, live dependency/cache scan, and `git diff --check` passed |
+| Full verification | Completed | `make verify` -> `180 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok |
+| Independent review fix | Completed | Added regression for non-finite provider prices and changed `_safe_float()` to reject `inf` / `-inf` / `NaN` |
+
 ## Next Task
 
-Start Phase 2:
+Start Phase 3:
 
-1. Add Serenity-owned market-data provider contracts under `src/serenity_alpha_lab/market_data/*`.
-2. Migrate DSA provider normalization and stock-code routing into Serenity-owned modules.
-3. Add stubbed provider tests with no live credentials or external network dependency.
+1. Port DSA analysis context builder and core pipeline into Serenity-owned `src/serenity_alpha_lab/analysis/*`.
+2. Convert normalized market data outputs into Serenity evidence items with provenance and source coverage metadata.
+3. Add readiness gates before report generation and verify one stubbed stock analysis end-to-end without network.
 
 ## Copyable Restart Prompt
 
@@ -110,21 +124,25 @@ Start Phase 2:
 仓库：
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
-- Serenity 当前 HEAD：以 `git rev-parse --short HEAD` 为准；Phase 1 commit 为 d7187ca，Phase 0 baseline commit 为 b9b0fcb。
+- Serenity 当前 HEAD：以 `git rev-parse --short HEAD` 为准；Phase 2 completed in this session and should be recorded as the latest commit after staging; Phase 1 commit 为 d7187ca，Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 当前状态：
 - Phase 0: Migration Baseline And Contract 已完成并提交。
 - Phase 0 commit：b9b0fcb（`docs: 完成 Serenity 主导的 DSA 迁移 Phase 0 基线`）。
-- 最新状态文档：本 tracker 已刷新到 Phase 1 completed / Phase 2 next；若需要精确 commit，以 `git rev-parse --short HEAD` 为准。
+- 最新状态文档：本 tracker 已刷新到 Phase 2 completed pending commit / Phase 3 next；若需要精确 commit，以 `git rev-parse --short HEAD` 为准。
 - Phase 1: Serenity App Runtime Foundation 已完成并提交，commit 为 d7187ca（`feat: 完成 Serenity App Runtime Foundation`）。
 - Phase 1 已添加 Serenity-owned app runtime：`src/serenity_alpha_lab/app/config.py`、`src/serenity_alpha_lab/app/local_api.py`、`src/serenity_alpha_lab/app/__init__.py`。
 - Phase 1 API skeleton endpoints：`GET /health`、`GET /version`、`GET /run-state`；默认 research-only、无市场数据凭据也可启动；`/run-state` 兼容现有 `{ "runs": [...] }` 和旧 top-level list 两种 JSON 形状。
 - Phase 1 CLI：新增 `serenity-alpha-lab serve-app`，不触发 `build_dashboard`，并保留 `build-ui` / `serve-ui` 静态 dashboard 命令。
 - Phase 1 tests：`tests/test_app_api.py` 与 `tests/test_cli.py::test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard` 覆盖无凭据启动、health/version/run-state、CLI wiring、静态 UI 不被 rebuild。
-- 当前 targeted 验证证据：`python3 -m pytest tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q` -> 36 passed, 2 warnings；`git diff --check` passed；`rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab` 无命中。
-- 当前 full verification 证据：`make verify` -> 173 passed, 2 warnings；doctor ok；run-cpo-pack ok（182 combined evidence items, 6 ready memos, 0 skipped）；coverage matrix ok。
-- 下一步从 Phase 2: Market Data Provider Migration 开始。
+- Phase 2: Market Data Provider Migration 已完成，等待本轮 stage/commit。
+- Phase 2 新增 Serenity-owned market data runtime：`src/serenity_alpha_lab/market_data/contracts.py`、`src/serenity_alpha_lab/market_data/symbols.py`、`src/serenity_alpha_lab/market_data/normalization.py`、`src/serenity_alpha_lab/market_data/manager.py`、`src/serenity_alpha_lab/market_data/__init__.py`。
+- Phase 2 覆盖 provider contracts、CN/HK/JP/KR/TW/US stock-code routing、realtime quote normalization、daily bar normalization、provider fallback diagnostics、credential default-off behavior、non-finite numeric rejection。
+- Phase 2 tests：`tests/test_market_data.py` 全部使用 in-process stubs，不依赖 live credentials、外部网络、provider SDK 或 DSA runtime import。
+- 当前 targeted 验证证据：`python3 -m pytest tests/test_market_data.py -q` -> 7 passed；`python3 -m pytest tests/test_market_data.py tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q` -> 43 passed, 2 warnings；target `py_compile` passed；`git diff --check` passed；runtime static import scan 无 DSA checkout import 命中；live dependency/cache scan 无真实 provider/network/cache 命中。
+- 当前 full verification 证据：`make verify` -> 180 passed, 2 warnings；doctor ok；run-cpo-pack ok（182 evidence items, 6 ready memos, 0 skipped）；coverage matrix ok。
+- 下一步从 Phase 3: Stock Analysis Pipeline Migration 开始。
 
 注意：
 - 不要修改、stage、提交或回滚 Serenity 既有 generated UI 输出：
