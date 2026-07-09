@@ -4038,3 +4038,56 @@
 - Full verification: `make verify` -> `184 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
 - Commit: Phase 3 implementation committed as `3cf14b3` (`feat: 完成 Serenity 股票分析流水线迁移`), with protected generated `output/ui/*` artifacts excluded.
 - Next step: after commit, begin Phase 4 by migrating report templates and safety integration so Phase 3 research signals can produce Markdown/UI-visible reports with provenance refs and report-safety scans.
+
+# Serenity-Led DSA Migration Phase 4 Report And Safety Integration
+
+- [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 4 edits.
+- [x] Inspect DSA source report templates and Serenity's existing report/UI generation surfaces to identify the smallest Serenity-owned migration boundary.
+- [x] Write failing report-template tests for Markdown generation from a stubbed stock analysis result, including DSA-derived sections adapted to Serenity research-only semantics.
+- [x] Write failing provenance tests proving every key report claim carries stable provenance refs or explicit missing-provenance diagnostics.
+- [x] Write failing report-safety tests proving unsupported recommendation language, target-price promises, position sizing, guaranteed returns, and deterministic trading instructions are blocked in generated report surfaces.
+- [x] Implement a Serenity-owned report generator that renders stubbed stock analysis output into Markdown without runtime imports from the DSA checkout.
+- [x] Implement provenance attachment for key claims using Phase 3 evidence IDs, source refs, claim IDs, and missing-source diagnostics instead of raw source paths.
+- [x] Implement report safety scans in the report generation path and fail closed for unsupported Serenity-generated recommendation language while allowing clearly attributed quoted source excerpts.
+- [x] Add a stubbed no-network end-to-end report generation path that produces both Markdown and a UI-visible report artifact or API-visible report payload without modifying protected `output/ui/*`.
+- [x] Run targeted report tests, analysis pipeline regression, migration boundary guard, report safety scan, static DSA import scan, protected-output status check, `git diff --check`, and full `make verify` if targeted checks pass.
+- [x] Update migration tracker, task log review, lessons if reusable behavior changes, and copyable restart prompt after verification.
+- [x] Commit completed Phase 4 work with a detailed Chinese message, excluding protected generated UI artifacts.
+
+## Phase 4 Entry Criteria Check-In
+
+- Repository state: Serenity starts from HEAD `5718928`; Phase 3 implementation commit is `3cf14b3`; Phase 3 handoff docs commit is `5718928`; DSA source repository remains at `95a4b51`.
+- Scope boundary: Phase 4 owns report templates, provenance refs for key claims, report safety scans, and stubbed Markdown/UI-visible report generation. It must not begin Phase 5 Web Workbench migration, portfolio/backtest, alerts, notifications, bot, desktop, Docker, or live provider work.
+- Runtime boundary: Serenity code must not runtime-import from `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis`; DSA templates can be studied and adapted into Serenity-owned modules only.
+- Protected artifacts: do not modify, stage, commit, overwrite, or revert `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+- Research boundary: generated report language must remain evidence-first and research-only. Do not emit direct buy/sell/hold instructions, standalone recommendations, target-price promises, position sizing, guaranteed returns, deterministic forecasts, live broker actions, or unsupported actionability language.
+- Provenance boundary: every key claim in generated Serenity reports must include stable provenance refs to Phase 3 evidence IDs/source refs or an explicit missing-provenance diagnostic; do not use raw local paths as provenance IDs.
+- Test boundary: Phase 4 verification must use stubbed stock analysis inputs only, with no live credentials, external network, provider SDK dependency, DSA runtime import, generated cache, SQLite runtime DB, `.venv`, or `node_modules`.
+
+## Phase 4 Planned Verification
+
+- Red template check: targeted report generator tests should fail before implementation because Serenity has no Phase 4 report generator/templates.
+- Red provenance check: targeted provenance tests should fail before implementation because key report claims do not yet carry mandatory refs/diagnostics.
+- Red safety check: targeted report safety tests should fail before implementation because unsupported recommendation language is not yet blocked in the report generation path.
+- Focused pass: run the new Phase 4 report tests once implementation is in place.
+- Regression pass: run `python3 -m pytest tests/test_analysis_pipeline.py tests/test_dsa_migration_boundaries.py -q` plus the new report tests.
+- Boundary guard: run `python3 -m pytest tests/test_dsa_migration_boundaries.py -q`.
+- Static import scan: `rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab`.
+- Safety scan: scan Phase 4 report modules/tests/docs for unsupported generated recommendation phrases and verify expected test fixtures are the only intentional matches.
+- Protected-output status check: `git status --short output/ui` must show only pre-existing protected dirt, with no Phase 4-generated modifications staged or committed.
+- Diff hygiene: `git diff --check`.
+- Full verification: run `make verify` after focused checks pass.
+
+## Phase 4 Review
+
+- Implementation: added `src/serenity_alpha_lab/analysis/report.py`, a Serenity-owned stock-analysis report generator that adapts DSA report structures into research-only sections: Intelligence Brief, Data View, Research Readiness Guardrails, Signal Attribution, Historical Comparison, Key Claims And Provenance, and Research Boundary.
+- Provenance: key claims use stable `claim:{symbol}:...` IDs and carry Phase 3 evidence IDs / `serenity://market-data/...` source refs; missing refs emit explicit `missing-provenance:*` diagnostics instead of raw local paths.
+- Safety: report generation runs `scan_report_text()` before artifacts are written and raises `ReportSafetyViolation` for unsupported recommendation language; scanner now reports every forbidden phrase on a generated line while continuing to ignore clearly quoted source evidence lines.
+- Stubbed E2E: CLI `analyze-stock --stub` uses deterministic in-process quote/daily-bar data and writes `reports/stock-analysis-report.md`, `analysis-report-manifest.json`, and `index.html` under caller-selected output directories, avoiding protected `output/ui/*`.
+- Red checks: `python3 -m pytest tests/test_analysis_report.py -q` first failed with missing `serenity_alpha_lab.analysis.report`; later focused CLI/report tests failed because the artifact lacked `ui_path` and CLI lacked `analyze-stock`.
+- Focused verification: `python3 -m pytest tests/test_analysis_report.py tests/test_cli.py::test_cli_analyze_stock_stub_writes_report_artifacts -q` -> `5 passed`.
+- Regression verification: `python3 -m pytest tests/test_analysis_report.py tests/test_report_safety.py tests/test_analysis_pipeline.py tests/test_dsa_migration_boundaries.py tests/test_cli.py::test_cli_analyze_stock_stub_writes_report_artifacts -q` -> `14 passed, 2 warnings`.
+- Static verification: target `py_compile` passed; runtime DSA checkout import scan returned no matches; Phase 4 safety phrase scan matched only scanner constants and intentional tests; `git diff --check` passed.
+- Full verification: `make verify` -> `189 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
+- Protected output status: pre-existing generated UI dirt remains visible under `output/ui/*`; Phase 4 implementation writes only test tmpdirs by default and did not intentionally modify, stage, commit, overwrite, or revert protected generated UI artifacts.
+- Commit: Phase 4 implementation committed as `3253f13` (`feat: 完成 Serenity 报告与安全集成迁移`), with protected generated `output/ui/*` artifacts excluded. After handoff-docs commit, start Phase 5 Web Workbench Migration with a new `tasks/todo.md` checklist.
