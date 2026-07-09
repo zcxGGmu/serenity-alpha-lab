@@ -4187,7 +4187,7 @@
 - [x] Add focused pytest coverage for research validation, monitor default-off behavior, no-secret API startup, and forbidden trading automation vocabulary.
 - [x] Run focused Phase 6 regressions, migration boundary guard, static DSA import/path scan, research-only safety scan, protected-output status check, `git diff --check`, and broader verification as feasible.
 - [x] Update migration tracker, task log review, lessons if reusable behavior changes, and copyable restart prompt after verification.
-- [ ] Commit completed Phase 6 work with a detailed Chinese message, excluding protected generated `output/ui/*` artifacts.
+- [x] Commit completed Phase 6 work with a detailed Chinese message, excluding protected generated `output/ui/*` artifacts.
 
 ## Phase 6 Entry Criteria Check-In
 
@@ -4228,7 +4228,7 @@
 
 ## Phase 6 Implementation Review
 
-- Status: Phase 6 implementation is complete and verified in the current working tree; commit is pending.
+- Status: Phase 6 implementation is complete, verified, and committed in `639e255`.
 - Implemented: `src/serenity_alpha_lab/research_validation.py` with portfolio research snapshots and historical validation summaries. These outputs carry `research_only`, validation scopes, evidence IDs, missing-evidence diagnostics, and disabled automation diagnostics.
 - Implemented: `src/serenity_alpha_lab/research_monitors.py` with default-off research monitor rules, dry-run evaluations, notification dispatch plans, and evidence-backed handoff records. Delivery remains disabled unless explicitly enabled and configured.
 - Implemented: `AppRuntimeConfig` and local API `/health` diagnostics for research monitor enablement, notification enablement, delivery status, and configured channel count, without exposing secret/token/password values.
@@ -4237,4 +4237,5 @@
 - Static verification: runtime DSA checkout import/path scan under `src/serenity_alpha_lab` returned no matches; Phase 6 safety scan matched only test absence assertions; `git diff --check` passed.
 - Full verification: `make verify` -> `194 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
 - Protected output status: pre-existing protected `output/ui/*` dirty files remain visible and unstaged; Phase 6 did not intentionally modify, stage, commit, overwrite, or revert them.
-- Next action: stage only Phase 6-owned files and commit as `feat: 完成 Serenity Phase 6 研究验证与监控迁移`, excluding protected generated `output/ui/*` artifacts.
+- Commit: Phase 6 implementation committed as `639e255` (`feat: 完成 Serenity Phase 6 研究验证与监控迁移`) with protected generated `output/ui/*` artifacts excluded.
+- Next action: commit this Phase 6 closeout documentation, then begin Phase 7 Agent, Bot, Desktop, Docker, CI planning.
