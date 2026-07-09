@@ -36,6 +36,7 @@
 - Protected output status: pre-existing generated UI dirt remains visible in `git status` under `output/ui/*`; this stage did not intentionally edit, stage, commit, or revert those protected files.
 - Review note: independent read-only source inspection found additional DSA migration surfaces for scheduler/run-flow/task services, market phase logic, frontend pages/stores/types, notification routing/contracts, and DSA `src/serenity/*`; the inventory was updated to include them.
 - Commit habit: phase-level work must be committed immediately after verification and tracker/todo/lessons/restart-prompt refresh, with protected generated UI outputs excluded from staging.
+- Commit: Serenity `b9b0fcb` (`docs: 完成 Serenity 主导的 DSA 迁移 Phase 0 基线`) contains the Phase 0 plan/tracker, DSA source inventory, import-boundary guard test, task log, and lessons updates.
 - Next step: begin Phase 1 by adding a Serenity-owned app config model and local API skeleton with health/version/run-state endpoints, startup tests without market-data credentials, and CLI `serve-app` wiring.
 
 # DSA-First Serenity Core P4-T04 Observability and Diagnostics

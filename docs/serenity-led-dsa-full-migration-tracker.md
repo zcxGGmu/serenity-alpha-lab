@@ -27,18 +27,35 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD `e911f6d`; protected generated UI dirt under `output/ui/*` remains untouched |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Use `git rev-parse --short HEAD` for current HEAD; Phase 0 baseline commit is `b9b0fcb`; protected generated UI dirt under `output/ui/*` remains untouched |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; local `.venv` now has core dependencies except optional `alphasift` Git dependency |
 
 ### Completed Migration Work
 
-No full DSA migration phases are complete yet. Previous DSA-first integration work is useful source research but is no longer the governing product direction.
+| Phase | Status | Evidence |
+| --- | --- | --- |
+| Phase 0: Migration Baseline And Contract | Completed | Serenity commit `b9b0fcb`; `docs/serenity-led-dsa-source-inventory.md`; `tests/test_dsa_migration_boundaries.py`; `make verify` passed |
+
+Previous DSA-first integration work is useful source research but is no longer the governing product direction.
 
 ### Next Phase
 
 | Phase | Status | Scope |
 | --- | --- | --- |
-| Phase 0: Migration Baseline And Contract | Completed | Inventory DSA capabilities, add import-boundary tests, and verify current Serenity baseline |
+| Phase 1: Serenity App Runtime Foundation | Not Started | Add Serenity-owned app config model, local API skeleton, startup tests without credentials, and CLI `serve-app` wiring |
+
+### Phase Completion Status
+
+| Phase | Status | Notes |
+| --- | --- | --- |
+| Phase 0: Migration Baseline And Contract | Completed | Baseline/inventory/guardrails committed in `b9b0fcb` |
+| Phase 1: Serenity App Runtime Foundation | Not Started | Next active phase |
+| Phase 2: Market Data Provider Migration | Not Started | Awaiting Phase 1 |
+| Phase 3: Stock Analysis Pipeline Migration | Not Started | Awaiting Phase 2 |
+| Phase 4: Report And Safety Integration | Not Started | Awaiting Phase 3 |
+| Phase 5: Web Workbench Migration | Not Started | Awaiting Phase 4 |
+| Phase 6: Portfolio, Backtest, Alerts, Notifications | Not Started | Awaiting Phase 5 |
+| Phase 7: Agent, Bot, Desktop, Docker, CI | Not Started | Awaiting Phase 6 |
 
 ### Known Constraints
 
@@ -62,6 +79,7 @@ No full DSA migration phases are complete yet. Previous DSA-first integration wo
 | Current Serenity baseline | Completed | `make verify` passed: `168 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix written |
 | Diff hygiene | Completed | `git diff --check` passed |
 | Phase commit habit | Completed | Task log and lessons now require committing every verified phase-level task with protected generated UI outputs excluded |
+| Phase 0 commit | Completed | Serenity commit `b9b0fcb` (`docs: 完成 Serenity 主导的 DSA 迁移 Phase 0 基线`) |
 
 ## Next Task
 
@@ -93,7 +111,7 @@ Start Phase 1:
 仓库：
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
-- Serenity 当前 HEAD：以 `git rev-parse --short HEAD` 为准，当前已知为 e911f6d
+- Serenity 当前 HEAD：以 `git rev-parse --short HEAD` 为准；Phase 0 baseline commit 为 b9b0fcb
 - DSA 当前 HEAD：95a4b51
 
 当前状态：
@@ -101,6 +119,7 @@ Start Phase 1:
 - 新计划：docs/serenity-led-dsa-full-migration-plan.md
 - 新 tracker：docs/serenity-led-dsa-full-migration-tracker.md
 - Phase 0: Migration Baseline And Contract 已完成。
+- Phase 0 commit：b9b0fcb（`docs: 完成 Serenity 主导的 DSA 迁移 Phase 0 基线`）。
 - DSA source inventory artifact：docs/serenity-led-dsa-source-inventory.md
 - Import-boundary guard：tests/test_dsa_migration_boundaries.py
 - 验证证据：`python3 -m pytest tests/test_dsa_migration_boundaries.py -q` -> 3 passed；`make verify` -> 168 passed, doctor ok, run-cpo-pack ok, coverage matrix ok；runtime static scan无 DSA checkout import 命中；`git diff --check` passed。
@@ -116,5 +135,5 @@ Start Phase 1:
 - 不要在 Serenity runtime 中从 DSA checkout 做跨仓库 import。
 - 不要复制 DSA .venv、node_modules、__pycache__、SQLite runtime DB 或生成缓存。
 - 每个阶段性任务开始前，先在 tasks/todo.md 写可勾选计划。
-- 每个阶段性任务完成后，更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，并提供新的可复制启动提示词。
+- 每个阶段性任务完成后，更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，提供新的可复制启动提示词，并只暂存/提交本阶段拥有的文件；不要暂存受保护的 `output/ui/*`。
 ```
