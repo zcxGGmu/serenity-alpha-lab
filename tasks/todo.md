@@ -4094,4 +4094,71 @@
 
 # Current Migration Next Step
 
-- Next phase: Phase 5 Web Workbench Migration is not started. Before implementation, add a new Phase 5 checklist to `tasks/todo.md` covering app import/recreate decision, navigation shell, Home/Analysis/History/Settings pages, Serenity evidence/readiness/provenance/safety panels, Vitest coverage, and Playwright smoke.
+- Current state: Phase 5 Web Workbench Migration planning is complete; implementation has not started.
+- Next implementation task: scaffold the smallest Serenity-owned `apps/serenity-web` Vite/React app from the checklist below, with Home, Analysis, History, Settings, report semantics panels, Vitest coverage, and Playwright smoke.
+
+# Serenity-Led DSA Migration Phase 5 Web Workbench Migration
+
+- [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 5 edits.
+- [x] Decide the Web Workbench migration approach from local source inspection, documenting why Serenity should either import the DSA React app as `apps/serenity-web` or recreate pages incrementally.
+- [ ] Scaffold the Serenity-owned web app/toolchain only under `apps/serenity-web`, excluding DSA `node_modules`, `dist`, `.vite`, generated caches, runtime DBs, and unrelated desktop/bot assets.
+- [ ] Migrate or recreate the navigation shell with Serenity product identity and core routes: Home, Analysis, History, and Settings.
+- [ ] Add a Serenity report semantics layer that models Phase 4 artifacts: `analysis-report-manifest.json`, Markdown report hrefs, evidence IDs, key-claim provenance refs, readiness status, source coverage, and report safety diagnostics.
+- [ ] Adapt DSA report/UI patterns into Serenity-owned evidence, readiness, provenance, source-coverage, skeptical-review, and report-safety panels without preserving unsupported trading-advice language.
+- [ ] Add a Home page that explains current research workflow state and links to the latest stubbed stock-analysis report artifact without depending on protected `output/ui/*`.
+- [ ] Add an Analysis page that can render a stubbed/fixture stock-analysis report package and clearly labels all outputs as research-only triage, not trade execution advice.
+- [ ] Add a History page that reads local report/run package metadata through Serenity-owned fixtures or API-compatible sample data, not by importing from the DSA checkout.
+- [ ] Add a Settings page for local/runtime status and default-off integrations, keeping secrets absent and external providers disabled unless explicitly configured.
+- [ ] Add Vitest coverage for report semantics: readiness gating, provenance visibility, source coverage, report safety messages, and forbidden trading-language absence.
+- [ ] Add Playwright smoke coverage for the Serenity-owned app shell and the primary report-reading flow.
+- [ ] Run focused frontend tests, Playwright smoke, Serenity Python migration boundary guard, static DSA import/path scan, protected-output status check, `git diff --check`, and broader verification as feasible.
+- [ ] Update migration tracker, task log review, lessons if reusable behavior changes, and copyable restart prompt after verification.
+- [ ] Commit completed Phase 5 work with a detailed Chinese message, excluding protected generated `output/ui/*` artifacts.
+
+## Phase 5 Entry Criteria Check-In
+
+- Primary runtime: `serenity-alpha-lab`; DSA remains source-only and must not be imported at runtime.
+- Repository state: Serenity starts from HEAD `52f679a` on `codex/phase-4-report-safety`; Phase 4 implementation commit is `3253f13`; DSA source repository remains at `95a4b51`.
+- Protected artifacts stay local-only: do not modify, stage, commit, overwrite, or revert `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+- Source inspection result: Serenity currently has no existing `package.json`, Vite, Vitest, or Playwright config; DSA has a mature `apps/dsa-web` Vite/React app, but it includes broad product surfaces and local dependencies that should not be copied wholesale.
+- Phase 5 approach decision: recreate incrementally as a Serenity-owned `apps/serenity-web` app, borrowing DSA patterns and selected component ideas only. This avoids dragging DSA runtime assumptions, authentication, alerts, portfolio/backtest, notification, Agent/chat, `node_modules`, and trading-oriented vocabulary into the Serenity shell before later phases own those capabilities.
+- Implementation boundary: Phase 5 owns the first Serenity web workbench shell, core pages, report artifact rendering, and frontend tests only. It must not begin Phase 6 portfolio/backtest/alerts/notifications or Phase 7 Agent/bot/desktop/Docker/CI work.
+- Research boundary: UI copy must remain evidence-first and research-only. Do not render direct buy/sell/hold instructions, standalone recommendations, target-price promises, position sizing, guaranteed returns, deterministic forecasts, live broker actions, or unsupported actionability language.
+- Data boundary: the first web workbench should read deterministic fixtures or local artifacts generated by Phase 4 paths; do not require live market data credentials, external network, DSA API/backend, DSA checkout imports, SQLite runtime DB, or protected `output/ui/*`.
+
+## Phase 5 Planned Verification
+
+- Red semantics check: new Vitest tests for report readiness/provenance/safety semantics should fail before the corresponding Serenity web modules exist.
+- Red smoke check: new Playwright smoke should fail before the Serenity app shell/routes exist.
+- Focused frontend pass: run `npm test -- --run` or the app-specific equivalent inside `apps/serenity-web` after implementation.
+- Frontend build pass: run the app build command from `apps/serenity-web` after focused tests pass.
+- Playwright smoke pass: run the app-specific smoke command covering Home, Analysis, History, Settings, and the report-reading flow.
+- Python migration guard: run `python3 -m pytest tests/test_dsa_migration_boundaries.py -q`.
+- Static DSA import/path scan: `rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab apps/serenity-web`.
+- Protected-output status check: `git status --short output/ui` must show only pre-existing protected dirt, with no Phase 5-generated files staged or committed.
+- Cache/dependency exclusion check: verify `apps/serenity-web` does not contain copied `node_modules`, `dist`, `.vite`, `__pycache__`, SQLite DB, or generated runtime caches.
+- Safety language scan: scan Phase 5 web source/tests for unsupported generated recommendation phrases and verify intentional test fixtures are the only matches.
+- Diff hygiene: `git diff --check`.
+- Broader verification: run `make verify` after focused frontend/backend guardrails are clean, unless frontend dependency installation or environment constraints require recording a narrower verified scope.
+
+## Phase 5 Implementation Plan Check-In
+
+- Recommended first implementation slice: scaffold the smallest Serenity-owned Vite/React app under `apps/serenity-web` with static fixture data and route-level smoke coverage, then add report semantic panels before expanding page depth.
+- Files expected to be created or modified:
+  - Create: `apps/serenity-web/package.json`, Vite/Vitest/Playwright/TypeScript configs, `index.html`, and `src/*`.
+  - Create: Serenity-owned report fixture/types/components for manifest, readiness, provenance, source coverage, and report safety semantics.
+  - Create: `apps/serenity-web/e2e/*` and `apps/serenity-web/src/**/*.test.*` for Vitest and Playwright coverage.
+  - Modify: `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, `tasks/lessons.md` only during closeout.
+  - Do not modify: protected `output/ui/*` generated artifacts.
+- Checkpoint before coding: implementation should proceed only after this Phase 5 checklist is accepted or adjusted.
+
+## Phase 5 Planning Checkpoint Review
+
+- Status: Phase 5 planning is complete; implementation is not started.
+- Approach decision: recreate incrementally as a Serenity-owned `apps/serenity-web` app, borrowing DSA patterns and selected component ideas only. Do not wholesale import DSA `apps/dsa-web`.
+- Rationale: Serenity currently has no frontend toolchain, while DSA `apps/dsa-web` is broad and includes auth, alerts, portfolio/backtest, notifications, Agent/chat, local dependencies, and trading-oriented vocabulary that belongs to later phases or must be adapted carefully.
+- Protected output status: existing `output/ui/*` generated artifacts remain dirty and protected; this planning checkpoint did not intentionally modify, stage, overwrite, or revert them.
+- Completed in this checkpoint: Phase 5 checklist, entry criteria, approach decision, planned verification, and implementation check-in were written into `tasks/todo.md`.
+- Not completed: no `apps/serenity-web` files, frontend package/toolchain, React routes, Vitest tests, or Playwright smoke tests have been created yet.
+- Next action: begin Phase 5 implementation from the checklist by scaffolding the smallest Serenity-owned Vite/React workbench and adding report semantic tests first.
+- Handoff habit: user reconfirmed that every phase-level task completion must automatically update tracker, task log, lessons, restart prompt, and protected-file notes before final handoff.
