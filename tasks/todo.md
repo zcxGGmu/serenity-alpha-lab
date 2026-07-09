@@ -3989,3 +3989,51 @@
 - Diff hygiene: `git diff --check` passed. Generated `__pycache__` created by `py_compile` was removed before staging.
 - Full verification: `make verify` -> `180 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix regenerated successfully.
 - Next step: after commit, begin Phase 3 by wiring stubbed market data into a Serenity-owned stock analysis pipeline that converts provider outputs into evidence items and readiness-gated research signals.
+
+# Serenity-Led DSA Migration Phase 3 Stock Analysis Pipeline Migration
+
+- [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 3 edits.
+- [x] Inspect DSA source analysis context builder, core pipeline, analyzer service, report renderer, and related tests as source references only.
+- [x] Add failing Serenity tests for a stock analysis context builder that turns normalized quotes/daily bars into evidence items with provenance and source coverage metadata.
+- [x] Add failing Serenity tests for a core analysis pipeline that produces research-only signals, diagnostics, readiness gate output, and report-blocked behavior when evidence is insufficient.
+- [x] Implement Serenity-owned `src/serenity_alpha_lab/analysis/*` modules without runtime imports from the external DSA checkout.
+- [x] Keep all Phase 3 tests stubbed: no live credentials, external network, provider SDK, DSA runtime import, generated cache, SQLite DB, `.venv`, or `node_modules`.
+- [x] Run targeted analysis pipeline tests, market-data regressions, import-boundary guard, static runtime scan, diff hygiene, and broader verification as feasible.
+- [x] Update migration tracker, task log review, lessons, and copyable restart prompt after verification.
+- [x] Commit completed Phase 3 work with a detailed Chinese message, excluding protected generated UI artifacts.
+
+## Phase 3 Entry Criteria Check-In
+
+- Primary runtime: `serenity-alpha-lab`; DSA remains source-only and must not be imported at runtime.
+- Source scope: use DSA `src/services/analysis_context_builder.py`, `src/core/pipeline.py`, `src/services/analysis_service.py`, `src/services/report_renderer.py`, `src/stock_analyzer.py`, and related tests as references for shape and behavior only.
+- Implementation approach: create a small Serenity-owned `analysis` package with explicit contracts, a deterministic context builder, market-data-to-evidence conversion, research-signal derivation, readiness gating, and diagnostics.
+- Research boundary: migrated DSA action-like fields become auditable research signals only. Do not add buy/sell/hold instructions, target-price promises, position sizing, live broker actions, alerts, notifications, portfolio/backtest behavior, or final report generation in Phase 3.
+- Readiness boundary: report generation must be blocked or marked unavailable when the pipeline lacks enough source coverage/readiness; Phase 4 will own full report templates and safety scanning.
+- Test boundary: all Phase 3 tests must use in-process stub market-data providers and deterministic sample bars/quotes; they must pass without market-data credentials, external network, or DSA checkout imports.
+- Protected artifacts stay local-only: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/`.
+
+## Phase 3 Planned Verification
+
+- Red check: `python3 -m pytest tests/test_analysis_pipeline.py -q` should fail before implementation because Serenity-owned analysis modules do not exist yet.
+- Focused pass: `python3 -m pytest tests/test_analysis_pipeline.py -q`.
+- Regression pass: `python3 -m pytest tests/test_analysis_pipeline.py tests/test_market_data.py tests/test_dsa_migration_boundaries.py -q`.
+- Static import scan: `rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab`.
+- Live dependency/cache scan: inspect Phase 3 modules/tests for direct `requests`, live provider SDK calls, DSA checkout path imports, `.venv`, `node_modules`, `__pycache__`, SQLite DB, or generated cache references.
+- Target compile: `python3 -m py_compile src/serenity_alpha_lab/analysis/*.py`.
+- Diff hygiene: `git diff --check`.
+- Broader verification: run `make verify` if focused regressions and guardrails are clean.
+
+## Review
+
+- Repository state: Serenity Phase 3 work started from `cb0e2b5` on `main`; DSA source repository remains at `95a4b51`; protected pre-existing generated UI dirt under `output/ui/*` remains visible and must not be staged, committed, reverted, or overwritten.
+- Source inspection: read DSA `src/services/analysis_context_builder.py`, `src/core/pipeline.py`, `src/services/analysis_service.py`, `src/services/report_renderer.py`, `src/stock_analyzer.py`, and related tests to extract the minimal context-builder, pipeline, diagnostics, and decision-boundary behavior.
+- Red check: `python3 -m pytest tests/test_analysis_pipeline.py -q` initially failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.analysis'`.
+- Implementation: added Serenity-owned `src/serenity_alpha_lab/analysis/*` with `AnalysisSubject`, `StockAnalysisContext`, `StockAnalysisPipeline`, readiness gate, report gate, research signals, diagnostics, and JSON-safe result output.
+- Evidence conversion: normalized quotes and daily bars now become Serenity `EvidenceItem` objects with stable internal IDs, `serenity://market-data/...` provenance URLs, source excerpts, source coverage metadata, and primary/fact or risk claim types.
+- Readiness behavior: source coverage gates classify outputs as `ready`, `needs_work`, or `blocked`; report generation is marked available only when readiness is ready, leaving full templates and safety scanning to Phase 4.
+- Research-only boundary: Phase 3 emits research signals, evidence IDs, coverage flags, and diagnostics; output scans assert no DSA trading-field leakage such as `operation_advice`, `target_price`, `position_sizing`, `stop_loss`, or `take_profit`.
+- Runtime boundary: added `MarketDataManager.get_daily_bars()` so the default pipeline has a Serenity-owned daily-bar path while tests still use in-process stubs with no live credentials, network, provider SDK, DSA runtime import, SQLite DB, generated cache, `.venv`, or `node_modules`.
+- Targeted verification: red/green target `tests/test_analysis_pipeline.py` -> `3 passed`; focused market-data regression `tests/test_analysis_pipeline.py tests/test_market_data.py` -> `11 passed`; Phase 3/API boundary regression `tests/test_analysis_pipeline.py tests/test_market_data.py tests/test_dsa_migration_boundaries.py` -> `14 passed, 2 warnings`.
+- Static checks: target `py_compile` passed; runtime import scan for `daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` under `src/serenity_alpha_lab` returned no matches; live dependency/cache scan over Phase 3 modules/tests returned no matches; `git diff --check` passed.
+- Full verification: `make verify` -> `184 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
+- Next step: after commit, begin Phase 4 by migrating report templates and safety integration so Phase 3 research signals can produce Markdown/UI-visible reports with provenance refs and report-safety scans.

@@ -6,12 +6,13 @@ import time
 from typing import Iterable, Optional
 
 from .contracts import (
+    DailyBar,
     MarketDataProvider,
     ProviderAttemptDiagnostic,
     ProviderDiagnostics,
     ProviderFetchResult,
 )
-from .normalization import normalize_realtime_quote
+from .normalization import normalize_daily_bars, normalize_realtime_quote
 from .symbols import normalize_market_symbol
 
 
@@ -138,3 +139,30 @@ class MarketDataManager:
             attempts=attempts,
         )
         return ProviderFetchResult(quote=None, diagnostics=diagnostics)
+
+    def get_daily_bars(
+        self,
+        stock_code: str,
+        *,
+        days: int = 30,
+        timeout_seconds: Optional[float] = None,
+    ) -> list[DailyBar]:
+        symbol = normalize_market_symbol(stock_code)
+        candidates = self._providers_for_market(symbol.market)
+
+        for provider in candidates:
+            if not provider.credentials_available():
+                continue
+            try:
+                rows = provider.fetch_daily_bars(
+                    symbol,
+                    days=days,
+                    timeout_seconds=timeout_seconds or provider.config.timeout_seconds,
+                )
+            except Exception:
+                continue
+            normalized = normalize_daily_bars(rows or [], symbol=symbol, source=provider.name)
+            if normalized:
+                return normalized
+
+        return []

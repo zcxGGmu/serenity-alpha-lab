@@ -118,11 +118,11 @@ DSA has practical trading-oriented fields such as score, trend, operation advice
 
 ### Phase 3: Stock Analysis Pipeline Migration
 
-- [ ] Port DSA analysis context builder and core pipeline into Serenity-owned modules.
-- [ ] Convert raw provider outputs into Serenity evidence items.
-- [ ] Add evidence coverage/readiness gates before report generation.
-- [ ] Add analysis result schema that preserves useful DSA fields as research signals.
-- [ ] Verify one stubbed stock analysis end-to-end without network.
+- [x] Port DSA analysis context builder and core pipeline into Serenity-owned modules.
+- [x] Convert raw provider outputs into Serenity evidence items.
+- [x] Add evidence coverage/readiness gates before report generation.
+- [x] Add analysis result schema that preserves useful DSA fields as research signals.
+- [x] Verify one stubbed stock analysis end-to-end without network.
 
 ### Phase 4: Report And Safety Integration
 

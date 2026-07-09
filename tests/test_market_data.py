@@ -35,6 +35,7 @@ class StubProvider(MarketDataProvider):
         )
         self.quote_result = quote_result
         self.error = error
+        self.daily_rows: list[object] = []
         self.calls: list[str] = []
 
     def fetch_realtime_quote(self, symbol, *, timeout_seconds: float | None = None):
@@ -42,6 +43,12 @@ class StubProvider(MarketDataProvider):
         if self.error is not None:
             raise self.error
         return self.quote_result
+
+    def fetch_daily_bars(self, symbol, *, days: int = 30, timeout_seconds: float | None = None):
+        self.calls.append(f"{symbol.provider_code}:{days}")
+        if self.error is not None:
+            raise self.error
+        return list(self.daily_rows)
 
 
 def test_normalize_market_symbol_routes_dsa_stock_code_formats():
@@ -209,3 +216,23 @@ def test_market_data_manager_calls_credentialed_provider_when_env_is_present(mon
     assert result.quote.price == 190.25
     assert provider.calls == ["AAPL"]
     assert result.diagnostics.status == "ok"
+
+
+def test_market_data_manager_returns_normalized_daily_bars_without_network():
+    provider = StubProvider(
+        name="daily",
+        priority=1,
+        supported_markets=("us",),
+    )
+    provider.daily_rows = [
+        {"date": "2026-07-08", "open": "10.1", "high": "10.8", "low": "9.9", "close": "10.4", "volume": "1200"}
+    ]
+    manager = MarketDataManager([provider])
+
+    bars = manager.get_daily_bars("AAPL", days=5)
+
+    assert len(bars) == 1
+    assert provider.calls == ["AAPL:5"]
+    assert bars[0].code == "AAPL"
+    assert bars[0].source == "daily"
+    assert bars[0].close == 10.4
