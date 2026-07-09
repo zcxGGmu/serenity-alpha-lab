@@ -1,3 +1,49 @@
+# DSA-First Serenity Core P4-T02 Report Safety Scanner
+
+- [x] Review Phase 4 / P4-T02 entry criteria from tracker before implementation.
+- [x] Inspect DSA Serenity-generated report surfaces: evidence-quality audit payloads, Agent tool outputs, UI panel copy, and boundary docs.
+- [x] Write failing tests in DSA `tests/serenity/core/test_report_safety.py` for generated forbidden phrases, quoted excerpt exemptions, structured diagnostics, and DSA-main-report exemption.
+- [x] Implement DSA `src/serenity/core/report_safety.py` as a deterministic scanner scoped to Serenity-generated research-only surfaces.
+- [x] Keep the scanner advisory / gate-ready for Serenity sections only; do not block DSA base analysis, provider fetches, notifications, DB writes, or DSA trading fields.
+- [x] Update DSA `docs/serenity-integration-boundaries.md` with scanner scope, allowed quoted-source behavior, and release-check usage.
+- [x] Run focused red/green scanner tests, Serenity regression, boundary guard, target `py_compile`, forbidden trading-field scan, DB-table scan, local-path scan, and `git diff --check`.
+- [x] Update tracker, this task log, lessons if reusable patterns emerge, and the restart prompt.
+- [x] Stage only P4-T02-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P4-T01` is verified at DSA commit `c7e7c58`, with stable provenance IDs, sanitized `source_refs`, missing-source diagnostics, and snapshot-first provenance propagation.
+- Tracker scope: `P4-T02` adds a report safety scanner that detects Serenity-generated direct investment instructions, target-price promises, position sizing, guaranteed returns, and deterministic forecasts.
+- Product boundary: DSA main reports may keep existing trading semantics. The scanner must target Serenity-generated research-only panels, tool outputs, optional memo/copy blocks, and release-check payloads; quoted external source excerpts may contain investment-action language when clearly marked as excerpts.
+- Runtime boundary: P4-T02 must not add DB tables, migrations, provider fetches, Agent prompt mutations, notification changes, UI pages, or mappings from Serenity scores/tasks to `operation_advice`, `action`, target price, position sizing, stop loss / take profit, trend prediction, `sentiment_score`, or `sniper_points`.
+- Design choice before implementation: build a pure core module that accepts explicit text sections / nested payloads and returns structured findings with `severity`, `location`, `matched_phrase`, `rule_id`, and `remediation`.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/serenity/core/test_report_safety.py -q` should fail before implementation because `src.serenity.core.report_safety` does not exist.
+- Focused pass: `python3.11 -m pytest tests/serenity/core/test_report_safety.py -q`.
+- P4 regression: `python3.11 -m pytest tests/serenity/core/test_report_safety.py tests/serenity/core/test_provenance.py tests/serenity/test_serenity_api_schema_contract.py tests/serenity/services/test_evidence_quality_service.py tests/serenity/services/test_research_task_service.py -q`.
+- Serenity regression: `python3.11 -m pytest tests/serenity -q`.
+- Boundary guard: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile src/serenity/core/report_safety.py tests/serenity/core/test_report_safety.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity.*(买入|卖出|持有|目标价|仓位|止损|止盈)" api src tests docs`.
+- DB-table scan: `rg -n "serenity_research_tasks|serenity_research_task_events|CREATE TABLE.*serenity|op\\.create_table\\(|create_table\\(" .`.
+- Local-path scan: `rg -n "/Users/zq|serenity-alpha-lab|daily_stock_analysis" src/serenity api/v1/schemas tests/serenity/core/test_report_safety.py`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P4-T02 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Red check: `python3.11 -m pytest tests/serenity/core/test_report_safety.py -q` failed during collection because `src.serenity.core.report_safety` did not exist.
+- Implementation: DSA commit `41a8878` added deterministic pure-core `src/serenity/core/report_safety.py`, focused scanner tests, and `docs/serenity-integration-boundaries.md` scanner scope / severity / quoted-source documentation.
+- Scanner behavior: Serenity-generated direct buy/sell/hold/add/reduce language, target-price promises, position sizing, guaranteed returns, deterministic forecasts, and DSA trading fields inside Serenity payloads return `error` findings with `severity`, `rule_id`, `location`, `matched_phrase`, and `remediation`.
+- Scope boundary: scanner defaults to Serenity-generated sections or explicit scan sections only; `dsa_main_report` and ordinary top-level `coverage` / `readiness` / `tasks` payloads remain out of scope and do not block DSA main analysis.
+- Quoted-source boundary: quoted source excerpts require a sanitized `provenance_id` to emit an allowed `info` finding; missing provenance produces a warning instead of silent exemption.
+- Review loop: first independent review found nested quoted excerpts were skipped and generic top-level scope was too broad; both were fixed with regression tests. Re-review reported Ready to merge Yes with no Critical / Important / Minor issues.
+- Verification: focused scanner -> `12 passed`; P4 regression -> `33 passed`; Serenity regression -> `54 passed`; boundary guard -> `3 passed`; target `py_compile` -> pass; safety scan only matched expected docs/tests; DB-table scan matched existing snapshot APIs/docs only; local-path scan -> no matches; `git diff --check` -> pass.
+- Boundary: no DB table, migration, provider fetch, Agent prompt, UI page, notification change, DSA trading-field mapping, or DSA trading semantic change was added.
+- Next step: execute `P4-T03: Release Checklist 集成`, using the scanner as the release-check target while keeping DSA main report path fail-open.
+
 # DSA-First Serenity Core P3-T04 Dedicated Table Decision Gate
 
 - [x] Review Phase 3 / P3-T04 entry criteria from tracker before any implementation.

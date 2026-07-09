@@ -1,5 +1,7 @@
 # Lessons
 
+- Report safety scanners need explicit surface roles, not broad key-name inference. Treat Serenity-generated sections and explicit scan sections as in scope, keep DSA main report fields out of scope, and add regression tests so generic top-level keys such as `coverage`, `readiness`, or `tasks` do not accidentally become Serenity-gated.
+- Quoted source excerpt exemptions must require provenance. A quoted excerpt with investment-action language can be allowed as an info finding only when it carries a sanitized provenance id; missing provenance should warn instead of silently passing.
 - Dedicated-table decision gates should count only current product needs, not future risks. If fewer than two table criteria are met, write a decision record that keeps snapshot-first persistence and records performance, concurrency, and audit gaps as future triggers instead of creating schema prematurely.
 - Snapshot persistence for research-only task metadata needs nested schema sanitization, not only top-level allowlists. Validate each `context_snapshot.serenity_research.tasks[]` entry with `SerenityResearchTask`, cap the list, and strip task-level trading fields before writing JSON.
 - Status updates inside historical JSON snapshots should support `history_id + task_id` precise targeting once duplicate `query_id/code/report_type` records are possible. Latest-row fallback is acceptable for whole-audit patching, but task status mutation needs a safer row anchor.
