@@ -3691,3 +3691,24 @@
 - Fresh DSA verification after fix: target red/green tests -> `2 passed`; schema py_compile -> pass; focused Phase 1 backend/API/schema tests -> `14 passed`; full `tests/serenity -q` -> `30 passed`; boundary guard -> `3 passed`; DSA Web smoke/panel/diagnostics -> `4 files passed / 17 tests passed`; Web build and lint -> pass.
 - Static review evidence: default flag scan confirms `SERENITY_RESEARCH_ENABLED=false`; storage scan confirms existing `context_snapshot.serenity_research`; migration inventory found no `migrations/` or `alembic/` directory and no Serenity table; forbidden Serenity trading-phrase scan only matched the broad-regex test function name `test_serenity_audit_incremental_overhead_smoke_under_threshold`.
 - Next stage: `P2-T02` Evidence Gap Agent Tool. Keep tools research-only, explicitly invoked, default-off/fail-open, and isolated from DSA trading advice fields.
+
+# DSA-First Serenity Core P3 Phase Review
+
+- [x] Reconfirm Serenity and DSA repo state, branch heads, and protected dirty generated UI files.
+- [x] Audit Phase 3 tracker criteria against DSA Phase 3 docs, schemas, services, API routes, and tests.
+- [x] Verify research task lifecycle, snapshot-first persistence, rerun context boundaries, and intelligence workflow reuse.
+- [x] Confirm no DB table, migration, repository model, queue, provider fetch, Agent prompt mutation, or trading-field mapping was added.
+- [x] Run focused Phase 3 regressions, intelligence regressions, boundary guard, target `py_compile`, safety scan, DB-table scan, and `git diff --check`.
+- [x] Triage independent review findings and fix only blocker gaps if any appear.
+- [x] Update tracker status, task log review, lessons if reusable behavior changed, and copyable restart prompt.
+- [x] Stage and commit only owned P3 Phase Review documentation changes; do not touch `output/ui/*` generated artifacts.
+
+## Review
+
+- Repository state: Serenity started from `1498feb` on `main` with protected pre-existing generated UI dirt under `output/ui/*`; DSA was clean on `codex/serenity-phase-0-evidence-bridge` at `61b52ce`.
+- Phase 3 exit criteria confirmed: evidence gaps are persisted and listed through `analysis_history.context_snapshot.serenity_research.tasks`, task states support `open / collecting / verified / dismissed`, rerun context remains research-quality-only, and P3-T04 documents why snapshot-first remains the approved persistence path.
+- Product boundary confirmed: Intelligence Service/API reuses existing DSA workflow and row anchors (`history_id`, `query_id`, `stock_code`, `report_type`); no DB table, migration, repository model, queue, provider fetch, Agent prompt mutation, independent Serenity workbench, or trading-field mapping was added.
+- Independent review found no blocking issues and ran a broader P3 target with `65 passed, 1 warning`.
+- Fresh verification: focused P3 regression -> `27 passed`; intelligence regression -> `40 passed, 1 warning`; boundary guard -> `3 passed`; target `py_compile` -> pass; safety scan matched expected Serenity docs/code/tests only; DB-table scan matched function/test names and contract/decision docs only; `git diff --check` -> pass.
+- Stale command note: `python3.11 -m pytest tests/serenity/test_dsa_boundary_guardrails.py -q` failed because that path does not exist; replaced with the actual `tests/test_serenity_integration_boundaries.py` boundary guard above.
+- Next stage: Phase 4 `P4-T01` Provenance Namespace. Keep the work limited to provenance namespace, citation discipline, report safety diagnostics, and research-only boundaries; do not reopen DB-table work without a separate gate.
