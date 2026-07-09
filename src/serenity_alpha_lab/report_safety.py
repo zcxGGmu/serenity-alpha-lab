@@ -42,21 +42,14 @@ def scan_report_safety(paths: Sequence[str | Path]) -> ReportSafetyResult:
     for path in paths:
         report_path = Path(path)
         files_scanned += 1
-        for line_number, line in enumerate(report_path.read_text(encoding="utf-8").splitlines(), start=1):
-            if _is_quoted_source_evidence_line(line):
-                continue
-            phrase = _first_forbidden_phrase(line)
-            if phrase:
-                findings.append(
-                    ReportSafetyFinding(
-                        path=report_path,
-                        line_number=line_number,
-                        phrase=phrase,
-                        line=line.strip(),
-                    )
-                )
+        findings.extend(_scan_text(report_path.read_text(encoding="utf-8"), report_path))
 
     return ReportSafetyResult(files_scanned=files_scanned, findings=findings)
+
+
+def scan_report_text(markdown: str, *, path: str | Path = "<generated-report>") -> ReportSafetyResult:
+    report_path = Path(path)
+    return ReportSafetyResult(files_scanned=1, findings=_scan_text(markdown, report_path))
 
 
 def render_report_safety_markdown(result: ReportSafetyResult) -> str:
@@ -90,12 +83,26 @@ def render_report_safety_markdown(result: ReportSafetyResult) -> str:
     return "\n".join(lines)
 
 
-def _first_forbidden_phrase(line: str) -> str:
+def _forbidden_phrases(line: str) -> list[str]:
     normalized = re.sub(r"\s+", " ", line.lower())
-    for phrase in FORBIDDEN_PHRASES:
-        if phrase in normalized:
-            return phrase
-    return ""
+    return [phrase for phrase in FORBIDDEN_PHRASES if phrase in normalized]
+
+
+def _scan_text(markdown: str, path: Path) -> list[ReportSafetyFinding]:
+    findings: list[ReportSafetyFinding] = []
+    for line_number, line in enumerate(markdown.splitlines(), start=1):
+        if _is_quoted_source_evidence_line(line):
+            continue
+        for phrase in _forbidden_phrases(line):
+            findings.append(
+                ReportSafetyFinding(
+                    path=path,
+                    line_number=line_number,
+                    phrase=phrase,
+                    line=line.strip(),
+                )
+            )
+    return findings
 
 
 def _is_quoted_source_evidence_line(line: str) -> bool:

@@ -10,6 +10,8 @@ import sys
 from typing import Sequence
 
 from .acquisition_queue import build_acquisition_queue, render_acquisition_queue_markdown
+from .analysis import StockAnalysisPipeline
+from .analysis.report import write_stock_analysis_report_artifacts
 from .app import AppRuntimeConfig, serve_app
 from .coverage_matrix import build_coverage_matrix, render_coverage_matrix_markdown
 from .evidence_audit import audit_evidence, render_audit_markdown
@@ -17,6 +19,7 @@ from .evidence import dedupe_evidence, load_evidence_files, write_evidence_jsonl
 from .evidence_intake import append_intake_evidence, build_intake_evidence, parse_factor_impacts
 from .financial_metrics import build_metrics_catalog, render_metrics_catalog_json
 from .github_importer import fetch_repo_documents, import_github_repos, load_repo_specs
+from .market_data import DailyBar, ProviderAttemptDiagnostic, ProviderDiagnostics, ProviderFetchResult, RealtimeQuote
 from .memo import generate_memo
 from .memo_pack import build_memo_pack, write_memo_pack
 from .official_report import load_official_report_specs, official_report_specs_to_evidence
@@ -84,6 +87,21 @@ def build_scan_report_safety_parser() -> argparse.ArgumentParser:
     parser.add_argument("scan-report-safety")
     parser.add_argument("--reports", required=True, nargs="+", help="Generated Markdown report path(s) to scan.")
     parser.add_argument("--out", required=True, help="Markdown safety scan output path.")
+    return parser
+
+
+def build_analyze_stock_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run a Serenity-owned stock analysis and write report artifacts.")
+    parser.add_argument("analyze-stock")
+    parser.add_argument("--stock-code", required=True, help="Stock code or ticker to analyze.")
+    parser.add_argument("--stock-name", default="", help="Optional company name.")
+    parser.add_argument("--query", default="", help="Research query for the report.")
+    parser.add_argument("--out-dir", required=True, help="Output directory for Markdown, manifest, and UI report artifacts.")
+    parser.add_argument(
+        "--stub",
+        action="store_true",
+        help="Use deterministic in-process market data instead of live providers.",
+    )
     return parser
 
 
@@ -600,6 +618,78 @@ def _render_resolved_topic_header(resolved) -> str:
     )
 
 
+class _StubStockAnalysisMarketData:
+    def get_realtime_quote(self, stock_code: str) -> ProviderFetchResult:
+        code = stock_code.upper().lstrip("$")
+        quote = RealtimeQuote(
+            code=code,
+            name=f"{code} Stub Company",
+            source="stub",
+            fetched_at="2026-07-09T09:30:00+00:00",
+            provider_timestamp="2026-07-09T09:29:55+00:00",
+            market="us",
+            currency="USD",
+            price=42.5,
+            change_pct=2.4,
+            volume=1_250_000,
+            pe_ratio=28.1,
+            data_quality="ok",
+        )
+        return ProviderFetchResult(
+            quote=quote,
+            diagnostics=ProviderDiagnostics(
+                symbol=code,
+                market="us",
+                status="ok",
+                attempts=[ProviderAttemptDiagnostic(provider="stub", status="ok", duration_ms=3)],
+            ),
+        )
+
+    def get_daily_bars(self, stock_code: str, *, days: int = 30) -> list[DailyBar]:
+        code = stock_code.upper().lstrip("$")
+        return [
+            DailyBar(
+                code=code,
+                date="2026-07-08",
+                source="stub",
+                market="us",
+                currency="USD",
+                open=41.0,
+                high=43.0,
+                low=40.8,
+                close=42.5,
+                volume=1_400_000,
+                pct_chg=2.4,
+            ),
+            DailyBar(
+                code=code,
+                date="2026-07-07",
+                source="stub",
+                market="us",
+                currency="USD",
+                open=40.8,
+                high=41.8,
+                low=40.1,
+                close=41.5,
+                volume=1_100_000,
+                pct_chg=1.0,
+            ),
+            DailyBar(
+                code=code,
+                date="2026-07-06",
+                source="stub",
+                market="us",
+                currency="USD",
+                open=43.2,
+                high=43.4,
+                low=40.4,
+                close=41.1,
+                volume=1_700_000,
+                pct_chg=-4.2,
+            ),
+        ]
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args_list = list(argv) if argv is not None else sys.argv[1:]
     if args_list and args_list[0] == "import-github":
@@ -647,6 +737,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         output.write_text(render_report_safety_markdown(result), encoding="utf-8")
         print(f"Wrote report safety scan to {output}")
         return 0 if result.passed else 4
+
+    if args_list and args_list[0] == "analyze-stock":
+        args = build_analyze_stock_parser().parse_args(args_list)
+        pipeline = StockAnalysisPipeline(market_data=_StubStockAnalysisMarketData() if args.stub else None)
+        result = pipeline.analyze(args.stock_code, stock_name=args.stock_name, query=args.query)
+        artifact = write_stock_analysis_report_artifacts(result, args.out_dir)
+        print(f"Wrote stock analysis report to {artifact.markdown_path}")
+        print(f"Wrote stock analysis UI to {artifact.ui_path}")
+        return 0
 
     if args_list and args_list[0] == "audit-evidence":
         args = build_audit_parser().parse_args(args_list)

@@ -238,6 +238,38 @@ def test_cli_scan_report_safety_allows_quoted_source_evidence(tmp_path):
     assert "**Findings:** 0" in text
 
 
+def test_cli_analyze_stock_stub_writes_report_artifacts(tmp_path):
+    out_dir = tmp_path / "stock-analysis"
+
+    exit_code = main(
+        [
+            "analyze-stock",
+            "--stock-code",
+            "AAPL",
+            "--stock-name",
+            "Apple Inc.",
+            "--query",
+            "AAPL market data research",
+            "--out-dir",
+            str(out_dir),
+            "--stub",
+        ]
+    )
+
+    assert exit_code == 0
+    report = (out_dir / "reports" / "stock-analysis-report.md").read_text(encoding="utf-8")
+    manifest = json.loads((out_dir / "analysis-report-manifest.json").read_text(encoding="utf-8"))
+    html = (out_dir / "index.html").read_text(encoding="utf-8")
+
+    assert "# Serenity Stock Analysis Report" in report
+    assert "## Key Claims And Provenance" in report
+    assert "serenity:market-data:AAPL:quote:2026-07-09" in report
+    assert manifest["reports"]["stock_analysis"] == "reports/stock-analysis-report.md"
+    assert manifest["safety"]["passed"] is True
+    assert 'data-report-href="reports/stock-analysis-report.md"' in html
+    assert "research only" in html.lower()
+
+
 def test_cli_build_coverage_matrix_writes_theme_universe_report(tmp_path):
     evidence = tmp_path / "evidence.jsonl"
     evidence.write_text(
