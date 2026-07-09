@@ -1,5 +1,6 @@
 # Lessons
 
+- Dedicated-table decision gates should count only current product needs, not future risks. If fewer than two table criteria are met, write a decision record that keeps snapshot-first persistence and records performance, concurrency, and audit gaps as future triggers instead of creating schema prematurely.
 - Snapshot persistence for research-only task metadata needs nested schema sanitization, not only top-level allowlists. Validate each `context_snapshot.serenity_research.tasks[]` entry with `SerenityResearchTask`, cap the list, and strip task-level trading fields before writing JSON.
 - Status updates inside historical JSON snapshots should support `history_id + task_id` precise targeting once duplicate `query_id/code/report_type` records are possible. Latest-row fallback is acceptable for whole-audit patching, but task status mutation needs a safer row anchor.
 - Pydantic schema contracts are the right first step before persistence. Define strict task objects, lifecycle transitions, old-record defaults, and trading-field rejection before writing snapshot or DB persistence logic.

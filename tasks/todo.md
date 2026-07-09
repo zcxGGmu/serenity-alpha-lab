@@ -1,3 +1,43 @@
+# DSA-First Serenity Core P3-T04 Dedicated Table Decision Gate
+
+- [x] Review Phase 3 / P3-T04 entry criteria from tracker before any implementation.
+- [x] Inspect current DSA snapshot task listing, status update behavior, API exposure, storage helpers, and task contract.
+- [x] Evaluate each dedicated-table criterion with concrete code/test evidence: cross-report filtering, owner/assignee, audit trail, recovery/retry queue, and snapshot size/query performance.
+- [x] Create DSA decision record `docs/serenity-persistence-decision-record.md` documenting whether a dedicated table is approved.
+- [x] If fewer than two criteria are met, explicitly keep snapshot-first persistence and do not add DB tables, migrations, repository models, queues, provider fetches, Agent prompt changes, UI pages, or DSA trading-field mappings.
+- [x] Run fresh P3/intelligence regressions, boundary guard, compile checks, forbidden trading-field scan, DB-table scan, and diff check.
+- [x] Update tracker, this task log, lessons if reusable patterns emerge, and the restart prompt.
+- [x] Stage only P3-T04-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P3-T03` is verified at DSA commit `4c6f51b`, with Intelligence Service/API able to list and update Serenity research tasks from existing `analysis_history.context_snapshot.serenity_research.tasks`.
+- Tracker scope: `P3-T04` is a decision gate only. Dedicated tables require at least two current, concrete needs across cross-report filtering, owner/assignee, audit trail, recovery/retry queue, or unacceptable snapshot size/query performance.
+- Current bias: keep snapshot-first unless the evidence gate is met. Do not create `serenity_research_tasks`, `serenity_research_task_events`, migrations, repository task models, or backfill logic without the gate passing.
+- Product boundary: research tasks remain evidence gaps / follow-up research only and must not create or alter DSA trading advice, target price, position sizing, stop loss / take profit, trend prediction, `sentiment_score`, `operation_advice`, `action`, or `sniper_points`.
+- Design choice before implementation: produce a decision record first; if the gate does not pass, close P3-T04 as Verified with no runtime/schema/persistence changes.
+
+## Planned Verification
+
+- P3 regression: `python3.11 -m pytest tests/serenity/services/test_research_task_service.py tests/storage/test_serenity_research_tasks_snapshot.py tests/api/v1/test_serenity_research_task_schema.py -q`.
+- Intelligence regression: `python3.11 -m pytest tests/test_intelligence_service.py tests/test_intelligence_api.py -q`.
+- Boundary pass: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Compile pass: `python3.11 -m py_compile docs/serenity-persistence-decision-record.md` is not applicable; instead run `python3.11 -m py_compile src/services/intelligence_service.py api/v1/schemas/intelligence.py api/v1/endpoints/intelligence.py src/storage.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity.*(买入|卖出|持有|目标价|仓位|止损|止盈)" api src tests docs`.
+- DB-table scan: `rg -n "serenity_research_tasks|serenity_research_task_events|CREATE TABLE.*serenity|op\\.create_table\\(|create_table\\(" .`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P3-T04 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Gate decision: only the cross-report filtering criterion is currently met; owner/assignee, audit trail, recovery/retry queue, and unacceptable snapshot performance are not current product requirements.
+- Decision record: DSA `docs/serenity-persistence-decision-record.md` records the decision to keep snapshot-first persistence and not create `serenity_research_tasks` or `serenity_research_task_events`.
+- Commit: DSA `61b52ce` (`docs(serenity): 记录 P3-T04 专表升级决策`) added the decision record.
+- Subagent review: read-only reviewer agreed the gate does not pass because only one criterion is met, and recommended documenting snapshot scan limits, missing optimistic locking, and missing event-level audit history as future table triggers.
+- Boundary: no DB table, migration, repository model, backfill, queue, provider fetch, Agent prompt change, UI page, or DSA trading-field mapping was added.
+- Verification: P3 regression -> `22 passed`; intelligence regression -> `40 passed, 1 warning`; boundary guard -> `3 passed`; target `py_compile` -> pass; safety scan only matched existing boundary/baseline docs and broad-regex smoke test name; DB-table scan matched existing function/test names plus contract/decision docs only; `git diff --check` -> pass.
+- Next step: execute P3 Phase Review, still snapshot-first and DB-table-neutral.
+
 # DSA-First Serenity Core P3-T03 Intelligence Service Integration Phase
 
 - [x] Review Phase 3 / P3-T03 entry criteria from tracker before implementation.
