@@ -4091,3 +4091,7 @@
 - Full verification: `make verify` -> `189 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
 - Protected output status: pre-existing generated UI dirt remains visible under `output/ui/*`; Phase 4 implementation writes only test tmpdirs by default and did not intentionally modify, stage, commit, overwrite, or revert protected generated UI artifacts.
 - Commit: Phase 4 implementation committed as `3253f13` (`feat: 完成 Serenity 报告与安全集成迁移`), with protected generated `output/ui/*` artifacts excluded. After handoff-docs commit, start Phase 5 Web Workbench Migration with a new `tasks/todo.md` checklist.
+
+# Current Migration Next Step
+
+- Next phase: Phase 5 Web Workbench Migration is not started. Before implementation, add a new Phase 5 checklist to `tasks/todo.md` covering app import/recreate decision, navigation shell, Home/Analysis/History/Settings pages, Serenity evidence/readiness/provenance/safety panels, Vitest coverage, and Playwright smoke.

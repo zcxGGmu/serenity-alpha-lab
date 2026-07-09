@@ -73,6 +73,32 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Do not preserve DSA trading-language fields as unqualified advice; migrate them into evidence-backed research signals.
 - After each phase-level task is verified, update tracker/todo/lessons/restart prompt and commit only owned phase files with a detailed Chinese commit message. Protected generated `output/ui/*` artifacts must remain unstaged unless explicitly requested.
 
+## Development Status Summary
+
+### Completed
+
+- Phase 0: Migration Baseline And Contract — complete and committed in `b9b0fcb`.
+- Phase 1: Serenity App Runtime Foundation — complete and committed in `d7187ca`.
+- Phase 2: Market Data Provider Migration — implementation committed in `8686d80`; handoff docs committed in `cb0e2b5`.
+- Phase 3: Stock Analysis Pipeline Migration — implementation committed in `3cf14b3`; handoff docs committed in `5718928`.
+- Phase 4: Report And Safety Integration — implementation committed in `3253f13`; handoff docs committed in current HEAD.
+
+### Not Started / Pending
+
+- Phase 5: Web Workbench Migration — next active phase. Start by writing a Phase 5 checklist in `tasks/todo.md` before implementation.
+- Phase 6: Portfolio, Backtest, Alerts, Notifications — pending Phase 5.
+- Phase 7: Agent, Bot, Desktop, Docker, CI — pending Phase 6.
+
+### Current Branch And Protected State
+
+- Current branch: `codex/phase-4-report-safety`.
+- Current HEAD: Phase 4 handoff-docs commit; verify with `git log -1 --oneline`.
+- Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
+  - `output/ui/analyses/manifest.json`
+  - `output/ui/reports/deliverable-research-report.md`
+  - `output/ui/runs.json`
+  - `output/ui/analyses/topic-2bde5fabbc/`
+
 ## Completed Phase 0 Baseline
 
 | Item | Status | Evidence |
