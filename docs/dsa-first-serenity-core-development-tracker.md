@@ -68,7 +68,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - DSA 分支：codex/serenity-phase-0-evidence-bridge
-- Serenity 最新提交：请以下次启动时 `git rev-parse --short HEAD` 为准；当前 tracker 将刷新到 P4-T03 完成后的状态
+- Serenity 最新提交：268a3c1 docs(serenity): 记录 P4-T03 发布检查集成；若该 restart prompt 后续再因记录自身哈希而提交，请以 `git rev-parse --short HEAD` 为准
 - DSA 最新提交：d3127c5 feat(serenity): 接入发布检查清单
 
 已完成：
