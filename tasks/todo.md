@@ -1,3 +1,43 @@
+# Serenity-Led DSA Migration Phase 0 Baseline And Contract
+
+- [x] Confirm protected generated UI outputs remain untouched by this stage.
+- [x] Capture DSA source capability inventory as a Serenity-owned artifact.
+- [x] Add an executable import-boundary guard test proving Serenity runtime does not import from the external DSA checkout.
+- [x] Verify current Serenity baseline before any code migration.
+- [x] Update migration tracker, this task log, reusable lessons, and restart prompt after verification.
+- [x] Commit completed Phase 0 work with a detailed Chinese commit message, excluding protected generated UI artifacts.
+
+## Phase 0 Entry Criteria Check-In
+
+- Product direction: `serenity-alpha-lab` remains the primary product shell and future runtime; `daily_stock_analysis` is the source system to migrate from.
+- Scope boundary: Phase 0 creates migration guardrails and inventory only. Do not copy DSA runtime modules, generated caches, SQLite DBs, `.venv`, `node_modules`, or `__pycache__`.
+- Runtime boundary: Serenity code must not runtime-import from `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis`.
+- Protected artifacts: do not modify, stage, commit, or revert existing generated UI output under `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+- Research boundary: future DSA trading semantics must be adapted into Serenity evidence-first, provenance-aware, readiness-gated, source-coverage-aware, safety-scanned, research-only outputs.
+
+## Phase 0 Planned Verification
+
+- Inventory artifact review: confirm DSA source surfaces are categorized by CLI, API/Web, market data, analysis pipeline, search/news, Agent, strategy, reporting, history/storage, portfolio/backtest, alerts/notifications, Bot/Desktop/Docker/CI, and generated/cache exclusions.
+- Boundary guard: `python3 -m pytest tests/test_dsa_migration_boundaries.py -q`.
+- Baseline: `make verify`.
+- Broader tests if baseline needs direct pytest evidence: `python3 -m pytest tests -q`.
+- Doctor: `PYTHONPATH=src python3 -m serenity_alpha_lab.cli doctor`.
+- Static import scan: `rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab`.
+- Diff hygiene: `git diff --check`.
+- Status check: verify only Phase 0-owned docs/tests and pre-existing allowed task docs are changed; protected `output/ui/*` remains unmodified by this stage.
+- Commit check: stage and commit only migration plan/tracker, Phase 0 inventory, import-boundary test, task log, and lessons. Do not stage protected `output/ui/*`.
+
+## Phase 0 Review
+
+- Inventory artifact: created `docs/serenity-led-dsa-source-inventory.md` with DSA source surfaces for CLI/scheduler, API/Web, market data, analysis pipeline, market phase, search/news/intelligence, Agent/LLM, strategy, reports/templates, history/storage, portfolio/backtest, alerts/notifications, Bot/Desktop/Docker/CI, tests, DSA Serenity bridge code, and generated/runtime exclusions.
+- Guard test: added `tests/test_dsa_migration_boundaries.py`, scanning Serenity runtime Python AST for external DSA checkout path literals, forbidden DSA source-package imports, and accidental `src/daily_stock_analysis` package creation.
+- No migration code copied: Phase 0 added only docs/tests/task tracking and did not import DSA runtime modules into Serenity.
+- Baseline verification: `python3 -m pytest tests/test_dsa_migration_boundaries.py -q` -> `3 passed, 2 warnings`; runtime static scan over `src/serenity_alpha_lab` -> no matches; `make verify` -> `168 passed, 2 warnings`, doctor ok, `run-cpo-pack` completed with 182 evidence items / 6 ready memos / 0 skipped, coverage matrix written; `git diff --check` -> pass.
+- Protected output status: pre-existing generated UI dirt remains visible in `git status` under `output/ui/*`; this stage did not intentionally edit, stage, commit, or revert those protected files.
+- Review note: independent read-only source inspection found additional DSA migration surfaces for scheduler/run-flow/task services, market phase logic, frontend pages/stores/types, notification routing/contracts, and DSA `src/serenity/*`; the inventory was updated to include them.
+- Commit habit: phase-level work must be committed immediately after verification and tracker/todo/lessons/restart-prompt refresh, with protected generated UI outputs excluded from staging.
+- Next step: begin Phase 1 by adding a Serenity-owned app config model and local API skeleton with health/version/run-state endpoints, startup tests without market-data credentials, and CLI `serve-app` wiring.
+
 # DSA-First Serenity Core P4-T04 Observability and Diagnostics
 
 - [x] Review Phase 4 / P4-T04 entry criteria from tracker before implementation.
@@ -3849,3 +3889,25 @@
 - Verification: release-check tests -> `6 passed`; actual release gate -> `status passed, errors 0, warnings 0`; P4 focused regression -> `21 passed`; broader Serenity/Agent/boundary regression -> `85 passed`; `py_compile`, `git diff --check`, and local-path scan passed.
 - Scan note: broad boundary scan matched existing non-Serenity Docker smoke imports for `NotificationService` / `data_provider` plus release-checklist wording; P4-T03 artifacts themselves do not import provider, notification, FastAPI, scheduler, DB migration, or broker code.
 - Next stage: Phase 4 `P4-T04` Observability and Diagnostics. Keep diagnostics/logging sanitized, fail-open, and limited to research audit status/performance; do not log full user input, tokens, cookies, provider secrets, or trading-field rewrites.
+
+# Serenity-Led Full DSA Migration Reset
+
+- [x] Treat `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` as the primary project and future runtime.
+- [x] Treat `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` as the source system whose complete product capabilities must be migrated.
+- [x] Inventory DSA product surfaces: CLI, FastAPI/Web, market data providers, scheduler, notifications, portfolio/backtest, Agent tools, strategy YAML, report templates, storage, desktop/bot, Docker/CI.
+- [x] Map each DSA capability into Serenity-owned modules without copying generated `output/ui/*` artifacts or making cross-repository runtime imports.
+- [x] Preserve DSA's practical stock-analysis functions while adapting output semantics to Serenity's evidence-first investment research philosophy.
+- [x] Define guardrails for migrated trading-language features: no unsupported certainty, no untraceable recommendations, and all actionable conclusions must carry evidence/provenance/readiness context.
+- [x] Write a replacement migration plan/tracker that supersedes the old DSA-first wording.
+- [x] Validate the new plan against both repositories before implementation starts.
+
+## Review
+
+- User correction: `serenity-alpha-lab` remains the primary project, product shell, and future runtime; `daily_stock_analysis` is the source system to migrate from.
+- Direction fix: replaced the mistaken DSA-first continuation with a Serenity-led full DSA migration plan and tracker.
+- Source inventory: DSA capabilities to migrate include CLI, API/Web, market data providers, analysis pipeline, search/news, Agent, strategy YAML, report templates, storage/history, portfolio/backtest, alerts, notifications, bot, desktop, Docker, and CI.
+- Migration boundary: no runtime imports from the external DSA checkout; do not copy DSA `.venv`, `node_modules`, `__pycache__`, runtime SQLite DB, generated caches, or protected Serenity `output/ui/*` artifacts.
+- Product semantics: DSA trading-oriented outputs must become evidence-backed Serenity research signals with provenance, readiness, source coverage, skeptical review, and report-safety guardrails.
+- Deliverables: added `docs/serenity-led-dsa-full-migration-plan.md` and `docs/serenity-led-dsa-full-migration-tracker.md`; corrected `tasks/lessons.md`.
+- Validation: new docs exist, `git diff --check` passed, and placeholder scan only matched ordinary historical wording such as "later" in existing lessons/task history plus "later code moves" in the new plan.
+- Next step: start Phase 0 by creating a DSA source inventory artifact, adding an import-boundary guard test, and verifying the current Serenity baseline before code migration.
