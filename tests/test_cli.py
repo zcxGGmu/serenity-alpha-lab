@@ -598,6 +598,48 @@ def test_cli_serve_ui_builds_dashboard_and_invokes_server(tmp_path, monkeypatch)
     assert "**研究问题:** 存储芯片" in memo
 
 
+def test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard(tmp_path, monkeypatch):
+    from serenity_alpha_lab import cli
+
+    calls = []
+
+    def fail_build_dashboard(**_kwargs):
+        raise AssertionError("serve-app should not rebuild the static dashboard")
+
+    def fake_serve_app(config):
+        calls.append(config)
+
+    monkeypatch.setattr(cli, "build_dashboard", fail_build_dashboard)
+    monkeypatch.setattr(cli, "serve_app", fake_serve_app)
+
+    runs_path = tmp_path / "runs.json"
+    dashboard_path = tmp_path / "index.html"
+
+    exit_code = main(
+        [
+            "serve-app",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "8123",
+            "--runs-path",
+            str(runs_path),
+            "--dashboard-path",
+            str(dashboard_path),
+        ]
+    )
+
+    assert exit_code == 0
+    assert len(calls) == 1
+    config = calls[0]
+    assert config.host == "0.0.0.0"
+    assert config.port == 8123
+    assert config.runs_path == runs_path
+    assert config.dashboard_path == dashboard_path
+    assert config.require_market_data_credentials is False
+    assert config.research_only is True
+
+
 def test_cli_run_cpo_pack_fails_fast_when_required_inputs_are_missing(tmp_path, capsys):
     missing_base = tmp_path / "missing-base.jsonl"
     missing_sec = tmp_path / "missing-sec.json"

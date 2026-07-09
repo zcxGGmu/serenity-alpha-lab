@@ -3912,3 +3912,34 @@
 - Deliverables: added `docs/serenity-led-dsa-full-migration-plan.md` and `docs/serenity-led-dsa-full-migration-tracker.md`; corrected `tasks/lessons.md`.
 - Validation: new docs exist, `git diff --check` passed, and placeholder scan only matched ordinary historical wording such as "later" in existing lessons/task history plus "later code moves" in the new plan.
 - Next step: start Phase 0 by creating a DSA source inventory artifact, adding an import-boundary guard test, and verifying the current Serenity baseline before code migration.
+
+# Serenity-Led DSA Migration Phase 1 App Runtime Foundation
+
+- [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 1 edits.
+- [x] Add Serenity-owned app runtime config model for local API/Web startup without market-data credentials.
+- [x] Add local API skeleton with `/health`, `/version`, and `/run-state` endpoints.
+- [x] Add tests proving API creation/startup contract works without market-data credentials or DSA checkout imports.
+- [x] Wire CLI command `serve-app` to the Serenity API while preserving existing `build-ui` and `serve-ui` static dashboard commands.
+- [x] Run targeted API/CLI tests, import-boundary guard, static runtime scan, and full verification as feasible.
+- [x] Update migration tracker, task log review, lessons, and copyable restart prompt after verification.
+- [x] Commit completed Phase 1 work with a detailed Chinese commit message, excluding protected generated UI artifacts.
+
+## Phase 1 Entry Criteria Check-In
+
+- Primary runtime: `serenity-alpha-lab`; DSA remains source-only and must not be imported at runtime.
+- Protected generated artifacts stay local-only: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/`.
+- Implementation approach: add a small Serenity-owned `app` package with explicit config defaults, no required secrets, and thin API endpoints that expose health/version/run-state only.
+- CLI approach: add `serve-app` as a new subcommand and keep current static dashboard commands unchanged.
+- Verification approach: use focused tests first, then migration guard/static scan, then wider repository verification before commit.
+
+## Review
+
+- Repository state: Serenity Phase 1 work started from `da56d0d` on `main`; DSA source repository remains at `95a4b51`; protected pre-existing generated UI dirt under `output/ui/*` remains unstaged and must not be committed.
+- Red checks: new `tests/test_app_api.py` initially failed because `serenity_alpha_lab.__version__` / `serenity_alpha_lab.app` did not exist; CLI `serve-app` test initially failed before the command and API wiring existed.
+- Implementation: added Serenity-owned `AppRuntimeConfig`, standard-library local API handler, `/health`, `/version`, `/run-state`, package version export, and `serve-app` CLI command.
+- API behavior: startup requires no market-data credentials by default, reports research-only and external-integration-off status, exposes package version, and reads run state from existing `{ "runs": [...] }` records while preserving legacy top-level list compatibility.
+- CLI behavior: `serve-app` calls `serve_app(AppRuntimeConfig(...))` directly and does not rebuild static dashboard output; existing `build-ui` and `serve-ui` branches remain unchanged.
+- Review fix: independent review caught that `/run-state` originally only accepted a top-level list; fixed loader and test fixture to match current `output/ui/runs.json` schema.
+- Targeted verification: `python3 -m pytest tests/test_app_api.py tests/test_cli.py tests/test_dsa_migration_boundaries.py -q` -> `36 passed, 2 warnings`; `git diff --check` passed; static runtime scan for DSA checkout imports returned no matches.
+- Full verification: `make verify` -> `173 passed, 2 warnings`; `doctor` ok; `run-cpo-pack` completed with 182 combined evidence items, 6 ready memos, 0 skipped; coverage matrix regenerated successfully.
+- Commit scope: stage/commit only Phase 1 owned files and docs while excluding protected `output/ui/*` artifacts.

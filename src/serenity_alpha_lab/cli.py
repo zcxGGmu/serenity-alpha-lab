@@ -10,6 +10,7 @@ import sys
 from typing import Sequence
 
 from .acquisition_queue import build_acquisition_queue, render_acquisition_queue_markdown
+from .app import AppRuntimeConfig, serve_app
 from .coverage_matrix import build_coverage_matrix, render_coverage_matrix_markdown
 from .evidence_audit import audit_evidence, render_audit_markdown
 from .evidence import dedupe_evidence, load_evidence_files, write_evidence_jsonl
@@ -319,6 +320,29 @@ def build_serve_ui_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--host", default="127.0.0.1", help="Host interface for the local preview server.")
     parser.add_argument("--port", default=8000, type=int, help="Port for the local preview server.")
+    return parser
+
+
+def build_serve_app_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Serve the Serenity-owned local API runtime.")
+    parser.add_argument("serve-app")
+    parser.add_argument("--host", default="127.0.0.1", help="Host interface for the local API server.")
+    parser.add_argument("--port", default=8010, type=int, help="Port for the local API server.")
+    parser.add_argument(
+        "--runs-path",
+        default="output/ui/runs.json",
+        help="Run-state JSON path read by the local API.",
+    )
+    parser.add_argument(
+        "--dashboard-path",
+        default="output/ui/index.html",
+        help="Static dashboard path associated with the local API runtime.",
+    )
+    parser.add_argument(
+        "--require-market-data-credentials",
+        action="store_true",
+        help="Require configured market-data credentials before starting the API.",
+    )
     return parser
 
 
@@ -786,6 +810,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             analyze_callback=analyze_theme,
             ingest_callback=ingest_evidence,
             resolve_callback=resolve_theme,
+        )
+        return 0
+
+    if args_list and args_list[0] == "serve-app":
+        args = build_serve_app_parser().parse_args(args_list)
+        serve_app(
+            AppRuntimeConfig(
+                host=args.host,
+                port=args.port,
+                runs_path=Path(args.runs_path),
+                dashboard_path=Path(args.dashboard_path),
+                require_market_data_credentials=args.require_market_data_credentials,
+            )
         )
         return 0
 
