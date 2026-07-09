@@ -1,5 +1,6 @@
 # Lessons
 
+- Observability logs should be allowlisted, not merely redacted. For Serenity failed-open paths, log structured status/count/version fields and exception type only; do not put sanitized exception bodies in warning messages because they can still contain raw query text, provider payload fragments, or unpublished notes.
 - Report safety scanners need explicit surface roles, not broad key-name inference. Treat Serenity-generated sections and explicit scan sections as in scope, keep DSA main report fields out of scope, and add regression tests so generic top-level keys such as `coverage`, `readiness`, or `tasks` do not accidentally become Serenity-gated.
 - Quoted source excerpt exemptions must require provenance. A quoted excerpt with investment-action language can be allowed as an info finding only when it carries a sanitized provenance id; missing provenance should warn instead of silently passing.
 - Dedicated-table decision gates should count only current product needs, not future risks. If fewer than two table criteria are met, write a decision record that keeps snapshot-first persistence and records performance, concurrency, and audit gaps as future triggers instead of creating schema prematurely.

@@ -1,3 +1,50 @@
+# DSA-First Serenity Core P4-T04 Observability and Diagnostics
+
+- [x] Review Phase 4 / P4-T04 entry criteria from tracker before implementation.
+- [x] Inspect DSA Serenity audit generation, existing run diagnostics, structured logging patterns, and release-check docs.
+- [x] Write failing DSA tests in `tests/serenity/services/test_evidence_quality_observability.py` for disabled, completed, and failed-open diagnostics plus safe structured log fields.
+- [x] Implement P4-T04 observability with deterministic, low-sensitivity diagnostics: `serenity.enabled`, `serenity.status`, `evidence_count`, `gap_count`, `duration_ms`, generated/core version, and sanitized `error_type`.
+- [x] Ensure diagnostics and logs never include raw user input, stack traces, tokens, cookies, provider secrets, full provider payloads, unpublished notes, or absolute local paths.
+- [x] Update DSA `docs/serenity-baseline-verification.md` with observability fields, operator checks, and rollback guidance.
+- [x] Run focused red/green tests, P4/Serenity regressions, boundary guard, release check, compile checks, forbidden trading-field scan, local-path/sensitive-leak scan, DB-table scan, and `git diff --check`.
+- [x] Update tracker, this task log, lessons if reusable patterns emerge, and the restart prompt.
+- [x] Stage only P4-T04-related files and commit with a detailed Chinese commit message.
+
+## Entry Criteria Check-In
+
+- Dependency: `P4-T03` is verified at DSA commit `d3127c5`, with offline release check wired into PR CI, tag release, and desktop release workflows.
+- Tracker scope: `P4-T04` adds observability and diagnostics for Serenity audit runtime state, failure reasons, and performance overhead.
+- Product boundary: diagnostics are research-quality metadata only. They must not alter DSA base analysis, provider fetches, notifications, Agent prompt semantics, UI pages, DB tables, migrations, or trading fields such as `operation_advice`, `action`, target price, position sizing, stop loss / take profit, trend prediction, `sentiment_score`, or `sniper_points`.
+- Runtime boundary: `SERENITY_RESEARCH_ENABLED=false` remains the default; disabled and failed-open paths must be visible but non-blocking.
+- Privacy boundary: logs and API diagnostics may include enumerated status, counts, duration, core version, generated timestamp, and sanitized error type/message, but never stack traces, raw user input, API keys, cookies, provider secrets, full provider payloads, unpublished notes, or local absolute paths.
+- Design choice before implementation: keep observability inside existing snapshot/response diagnostics and structured logger events; do not add metrics backend or persistence schema.
+
+## Planned Verification
+
+- Red check: `python3.11 -m pytest tests/serenity/services/test_evidence_quality_observability.py -q` should fail before implementation because P4-T04 diagnostics/logging are incomplete.
+- Focused pass: `python3.11 -m pytest tests/serenity/services/test_evidence_quality_observability.py -q`.
+- P4 regression: `python3.11 -m pytest tests/serenity/services/test_evidence_quality_observability.py tests/serenity/test_analysis_service_serenity.py tests/serenity/services/test_evidence_quality_service.py tests/serenity/core/test_report_safety.py tests/serenity/core/test_provenance.py tests/serenity/test_release_check.py -q`.
+- Serenity regression: `python3.11 -m pytest tests/serenity -q`.
+- Boundary guard: `python3.11 -m pytest tests/test_serenity_integration_boundaries.py -q`.
+- Release gate: `python3.11 scripts/serenity_release_check.py`.
+- Compile pass: `python3.11 -m py_compile src/serenity/services/evidence_quality_service.py src/services/analysis_service.py tests/serenity/services/test_evidence_quality_observability.py`.
+- Safety scan: `rg -n "serenity.*(buy|sell|hold|target_price|position_sizing|stop_loss|take_profit|operation_advice|trend_prediction|sentiment_score|sniper_points)|serenity.*(买入|卖出|持有|目标价|仓位|止损|止盈)" api src tests docs`.
+- Sensitive/local-path scan: `rg -n "api[_-]?key|token|cookie|secret|traceback|stack trace|/Users/zq|serenity-alpha-lab|daily_stock_analysis" src/serenity src/services/analysis_service.py tests/serenity/services/test_evidence_quality_observability.py docs/serenity-baseline-verification.md`.
+- DB-table scan: `rg -n "serenity_research_tasks|serenity_research_task_events|CREATE TABLE.*serenity|op\.create_table\(|create_table\(" .`.
+- Diff check: `git diff --check`.
+- Status check: verify DSA stages only P4-T04 files and Serenity generated `output/ui/*` remains untouched.
+
+## Review
+
+- Red check: `python3.11 -m pytest tests/serenity/services/test_evidence_quality_observability.py -q` failed with `5 failed` because diagnostics lacked `status` / `duration_ms` / `core_version` and `AnalysisService` emitted no structured Serenity audit events.
+- Implementation: DSA commit `95a4b51` added low-sensitivity observability diagnostics to `EvidenceQualityService`, structured Serenity audit events in `AnalysisService`, focused P4-T04 tests, and DSA baseline runbook documentation.
+- Diagnostics: disabled, completed, and failed-open audits now include `enabled`, `status`, `fail_open`, `reason`, `duration_ms`, `evidence_count`, `gap_count`, `generated_at`, `core_version`, and safe error metadata where applicable.
+- Privacy fix: completed diagnostics use `query_present` instead of raw query, and failed-open warning logs only include exception type after independent review flagged sanitized exception-body logging as too risky.
+- Structured logs: `serenity_audit_completed` / `serenity_audit_failed` events include `serenity.enabled`, `serenity.status`, analysis id, stock code, evidence/gap counts, duration, error type, core version, and generated_at.
+- Verification: focused observability -> `5 passed`; P4 focused regression -> `35 passed`; Serenity regression -> `65 passed`; boundary guard -> `3 passed`; release gate -> `status passed, errors 0, warnings 0`; target `py_compile` -> pass; safety scan matched expected docs/tests only; sensitive/local-path scan matched expected docs/tests/tokenizer identifiers only; DB-table scan matched existing snapshot API/test/doc names only; `git diff --check` -> pass.
+- Boundary: no DB table, migration, provider fetch, Agent prompt, UI page, notification change, DSA trading-field mapping, or DSA trading semantic change was added.
+- Next step: execute `P4 Phase Review`, confirming provenance, scanner, release gate, observability, and research-only boundaries across Phase 4.
+
 # DSA-First Serenity Core P4-T02 Report Safety Scanner
 
 - [x] Review Phase 4 / P4-T02 entry criteria from tracker before implementation.

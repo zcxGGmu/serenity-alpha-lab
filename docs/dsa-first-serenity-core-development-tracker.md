@@ -27,22 +27,22 @@
 
 | 范围 | 当前状态 | 说明 |
 | --- | --- | --- |
-| DSA 代码集成 | In Progress | Global tasks、Phase 0、Phase 1、Phase 2 Agent Tools、Phase 3 Intelligence Workflow Persistence（含 `P3-T01` 至 `P3-T04` 与 P3 Phase Review）以及 Phase 4 `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 Phase 4 `P4-T04` Observability and Diagnostics，DB 专表仍未启动 |
+| DSA 代码集成 | In Progress | Global tasks、Phase 0、Phase 1、Phase 2 Agent Tools、Phase 3 Intelligence Workflow Persistence（含 `P3-T01` 至 `P3-T04` 与 P3 Phase Review）以及 Phase 4 `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成、`P4-T04` Observability and Diagnostics 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证；下一步为 `P4 Phase Review`，DB 专表仍未启动 |
 | Global tasks | Verified | `G-T01`、`G-T02`、`G-T03` 已在 DSA 分支 `codex/serenity-phase-0-evidence-bridge` 完成并验证 |
 | Phase 0 Evidence Bridge POC | Verified | `P0-T01` 至 `P0-T04` 与 Phase 0 review gate 已完成并验证 |
 | Phase 1 Analysis Report Add-On | Verified | `P1-T01` API Schema、`P1-T02` Analysis Service 附加 Serenity Audit、`P1-T03` 历史记录 Context Snapshot 持久化、`P1-T04` Web 类型/证据质量面板、`P1-T05` HTTP / UI Smoke 与 P1 Phase Review 已完成并验证 |
 | Phase 2 Agent Tools | Verified | `P2-T01` Evidence Quality Agent Tool、`P2-T02` Evidence Gap Agent Tool、`P2-T03` Agent Prompt Boundary Test 与 P2 Phase Review 已完成并验证；review 修复了 feature flag 与 specialist fallback 两个边界缺口 |
 | Phase 3 Intelligence Workflow Persistence | Verified | `P3-T01` Research Task Data Contract、`P3-T02` Snapshot-Based Task Persistence、`P3-T03` Intelligence Service 接入、`P3-T04` 专表升级决策 Gate 与 P3 Phase Review 已完成并验证；P3-T04 决策为继续 snapshot-first，不新增 DB 专表 |
-| Phase 4 Provenance Safety Guardrails | In Progress | `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner 与 `P4-T03` Release Checklist 集成已完成并验证；下一步从 `P4-T04` Observability and Diagnostics 开始 |
+| Phase 4 Provenance Safety Guardrails | In Progress | `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成与 `P4-T04` Observability and Diagnostics 已完成并验证；下一步从 `P4 Phase Review` 开始 |
 
 ### 当前下一步
 
-Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On（含 `P1-T01` 至 `P1-T05` 与 P1 Phase Review）、Phase 2 Agent Tools（含 `P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）、Phase 3 Intelligence Workflow Persistence（含 `P3-T01` 至 `P3-T04` 与 P3 Phase Review）以及 Phase 4 `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成已完成并通过验证；下一步继续 Phase 4 Provenance Safety Guardrails，从 `P4-T04` Observability and Diagnostics 开始。P3-T04 已决策继续 snapshot-first，不新增 DB 专表。
+Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On（含 `P1-T01` 至 `P1-T05` 与 P1 Phase Review）、Phase 2 Agent Tools（含 `P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）、Phase 3 Intelligence Workflow Persistence（含 `P3-T01` 至 `P3-T04` 与 P3 Phase Review）以及 Phase 4 `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成、`P4-T04` Observability and Diagnostics 已完成并通过验证；下一步继续 Phase 4 Provenance Safety Guardrails，从 `P4 Phase Review` 开始。P3-T04 已决策继续 snapshot-first，不新增 DB 专表。
 
 1. 保持 DSA 仓库分支：`codex/serenity-phase-0-evidence-bridge`。
-2. 从 `P4-T04` Observability and Diagnostics 开始。
+2. 从 `P4 Phase Review` 开始。
 3. 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略。
-4. Phase 4 只允许增加 provenance namespace、引用纪律、安全扫描和 diagnostics，不得把 Serenity score 或 task 状态映射到 DSA 交易建议、目标价、仓位、趋势预测或 `sentiment_score`。
+4. Phase 4 review 只验证 provenance namespace、引用纪律、安全扫描、release gate 和 diagnostics，不得把 Serenity score 或 task 状态映射到 DSA 交易建议、目标价、仓位、趋势预测或 `sentiment_score`。
 
 ### 当前工作区注意事项
 
@@ -68,8 +68,8 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - DSA 分支：codex/serenity-phase-0-evidence-bridge
-- Serenity 最新提交：268a3c1 docs(serenity): 记录 P4-T03 发布检查集成；若该 restart prompt 后续再因记录自身哈希而提交，请以 `git rev-parse --short HEAD` 为准
-- DSA 最新提交：d3127c5 feat(serenity): 接入发布检查清单
+- Serenity 最新提交：dad7848 docs(serenity): 明确 P4-T03 接续提交说明；若该 restart prompt 后续再因记录自身哈希而提交，请以 `git rev-parse --short HEAD` 为准
+- DSA 最新提交：95a4b51 feat(serenity): 增加审计观测与诊断
 
 已完成：
 - Global guardrails：G-T01、G-T02、G-T03
@@ -77,7 +77,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - Phase 1 Analysis Report Add-On：P1-T01、P1-T02、P1-T03、P1-T04、P1-T05 与 P1 Phase Review
 - Phase 2 Agent Tools：P2-T01、P2-T02、P2-T03 与 P2 Phase Review
 - Phase 3 Intelligence Workflow Persistence：P3-T01 Research Task Data Contract、P3-T02 Snapshot-Based Task Persistence、P3-T03 Intelligence Service 接入、P3-T04 专表升级决策 Gate 与 P3 Phase Review
-- Phase 4 Provenance Safety Guardrails：P4-T01 Provenance Namespace、P4-T02 Report Safety Scanner、P4-T03 Release Checklist 集成
+- Phase 4 Provenance Safety Guardrails：P4-T01 Provenance Namespace、P4-T02 Report Safety Scanner、P4-T03 Release Checklist 集成、P4-T04 Observability and Diagnostics
 - 已新增 research-only `serenity_evidence_quality` Agent tool
 - 已新增 research-only `serenity_evidence_gaps` Agent tool
 - 两个 tool 均通过 DSA `src/agent/tools/analysis_tools.py` 的 `ALL_ANALYSIS_TOOLS` 注册
@@ -137,11 +137,18 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - P4-T03 已把 release check 接入 DSA tag release workflow 与 desktop release workflow，避免 tag release 绕过 PR-only CI
 - P4-T03 report safety gate 只扫描 representative Serenity-generated research-only payload，不扫描或改写 DSA 主报告交易字段
 - P4-T03 未新增 DB 表、migration、provider fetch、Agent prompt、UI page、通知变更、交易建议字段映射或 DSA trading field 语义变更
+- P4-T04 已新增 DSA `tests/serenity/services/test_evidence_quality_observability.py`
+- P4-T04 已让 `EvidenceQualityService` 在 disabled、completed、failed_open 三类状态输出低敏 diagnostics：`enabled`、`status`、`fail_open`、`reason`、`duration_ms`、`evidence_count`、`gap_count`、`generated_at`、`core_version`、`error_type`、`message`、`query_present`、`tickers`、`limit`
+- P4-T04 已从 completed diagnostics 移除 raw query，只保留 `query_present`
+- P4-T04 已在 `AnalysisService` 中记录 `serenity_audit_completed` / `serenity_audit_failed` structured log event，包含 `serenity.enabled`、`serenity.status`、analysis id、stock code、evidence/gap counts、duration、error type、core version、generated_at
+- P4-T04 failed-open warning logs 只记录 exception type，不记录 raw exception body、traceback、token、cookie、secret、本地路径、provider payload 或用户原文
+- P4-T04 已更新 DSA `docs/serenity-baseline-verification.md`，记录 safe diagnostics fields、structured log schema、operator checks 和 rollback
+- P4-T04 未新增 DB 表、migration、provider fetch、Agent prompt、UI page、通知变更、交易建议字段映射或 DSA trading field 语义变更
 
 未完成下一步：
-- 从 tracker 的 `P4-T04` Observability and Diagnostics 开始
+- 从 tracker 的 `P4 Phase Review` 开始
 - Phase 3 Intelligence Workflow Persistence 已完成
-- Phase 4 Provenance Safety Guardrails 已完成 `P4-T01`、`P4-T02`、`P4-T03`，尚未完成 `P4-T04`
+- Phase 4 Provenance Safety Guardrails 已完成 `P4-T01`、`P4-T02`、`P4-T03`、`P4-T04`，尚未完成 `P4 Phase Review`
 - DB 专表尚未启动；目前仍使用 `analysis_history.context_snapshot.serenity_research`
 
 边界要求：
@@ -152,7 +159,7 @@ Global guardrails、Phase 0 Evidence Bridge POC、Phase 1 Analysis Report Add-On
 - 继续保持 `SERENITY_RESEARCH_ENABLED=false` 默认关闭和 fail-open 策略
 - Phase 3 研究任务只能表示 evidence gaps / follow-up research，不得自动创建交易建议或修改 DSA trading fields
 - 继续优先使用 snapshot / metadata；P3-T04 已明确当前不通过专表升级 gate
-- Phase 4 只能增加 provenance safety guardrails，不新增 DB migration/table，除非后续单独重新打开专表决策 gate
+- Phase 4 review 只能验证 provenance safety guardrails，不新增 DB migration/table，除非后续单独重新打开专表决策 gate
 
 P3-T01 验证证据：
 - red check `python3.11 -m pytest tests/api/v1/test_serenity_research_task_schema.py -q` -> collection error，缺少 `SerenityResearchTask` / `SerenityResearchTaskStatusTransition`
@@ -231,7 +238,7 @@ P4-T02 验证证据：
 - 这是既有环境依赖缺口，不要归因于 Serenity P3/P4
 
 当前工作区注意事项：
-- DSA 工作区完成 P4-T03 后应为 clean，HEAD 为 `d3127c5`
+- DSA 工作区完成 P4-T04 后应为 clean，HEAD 为 `95a4b51`
 - Serenity 仓库仍有既有未提交 generated UI 输出变更：
   - output/ui/analyses/manifest.json
   - output/ui/reports/deliverable-research-report.md
@@ -1529,15 +1536,15 @@ python -m pytest tests/serenity/test_release_check.py -q
 ### P4-T04: Observability and Diagnostics
 
 Owner:
-Status: Not Started
-Started:
-Updated:
-Branch:
+Status: Verified
+Started: 2026-07-09
+Updated: 2026-07-09
+Branch: `codex/serenity-phase-0-evidence-bridge`
 PR:
-Commit:
-Evidence:
-Decision Notes:
-Rollback Notes:
+Commit: DSA `95a4b51` (`feat(serenity): 增加审计观测与诊断`)
+Evidence: Red observability tests failed because diagnostics lacked `status` / `duration_ms` / `core_version` and `AnalysisService` emitted no structured Serenity audit events; focused observability -> `5 passed`; P4 focused regression -> `35 passed`; Serenity regression -> `65 passed`; boundary guard -> `3 passed`; release gate -> `status passed, errors 0, warnings 0`; target `py_compile`, safety scan, sensitive/local-path scan, DB-table scan, and `git diff --check` passed. Independent review initially blocked raw exception-body warning logs; fix removed exception body logging and added `generated_at` to structured events, then focused/regression checks passed again.
+Decision Notes: Keep observability inside existing audit diagnostics and structured logger events only; do not add a metrics backend, DB table, migration, provider fetch, notification path, UI page, or any mapping into DSA trading fields. Completed diagnostics expose `query_present` instead of raw query.
+Rollback Notes: Keep `SERENITY_RESEARCH_ENABLED=false`, or revert DSA commit `95a4b51` to remove expanded diagnostics, structured log events, observability tests, and baseline runbook updates without schema migration.
 
 **Purpose:** 让 Serenity audit 的运行状态、失败原因和性能开销可见。
 
@@ -1552,10 +1559,10 @@ Rollback Notes:
 
 **Implementation Checklist:**
 
-- [ ] Structured log 包含 `serenity.enabled`、`serenity.status`、`evidence_count`、`gap_count`、`duration_ms`。
-- [ ] diagnostics 包含 disabled、failed_open、completed 三类状态。
-- [ ] 不记录完整用户输入、token、cookies、provider secrets。
-- [ ] 性能指标可用于判断是否默认开启。
+- [x] Structured log 包含 `serenity.enabled`、`serenity.status`、`evidence_count`、`gap_count`、`duration_ms`。
+- [x] diagnostics 包含 disabled、failed_open、completed 三类状态。
+- [x] 不记录完整用户输入、token、cookies、provider secrets。
+- [x] 性能指标可用于判断是否默认开启。
 
 **Tests:**
 
@@ -1565,8 +1572,8 @@ python -m pytest tests/serenity/services/test_evidence_quality_observability.py 
 
 **DoD:**
 
-- [ ] 关键状态可在日志或 diagnostics 中定位。
-- [ ] failed-open 的错误摘要可读且不泄露敏感信息。
+- [x] 关键状态可在日志或 diagnostics 中定位。
+- [x] failed-open 的错误摘要可读且不泄露敏感信息。
 
 **Rollback:** 保留 fail-open，移除新增 structured logging 字段。
 
@@ -1763,13 +1770,13 @@ cd /Users/zq/Desktop/ai-projs/trading/daily_stock_analysis/apps/dsa-web && npm t
 | P4-T01 | Phase 4 | Provenance Namespace | Verified | P1-T02, P3-T02 | DSA commit `c7e7c58`; red provenance check failed on missing core module, then focused P4 check -> `7 passed`; focused P4/API/snapshot/intelligence regression -> `54 passed, 1 warning`; Serenity regression -> `42 passed`; intelligence/API/storage regression -> `25 passed, 1 warning`; boundary guard -> `3 passed`; py_compile, safety scan, DB-table scan, provenance local-path scan, and diff check passed |
 | P4-T02 | Phase 4 | Report Safety Scanner | Verified | P4-T01 | DSA commit `41a8878`; red scanner check failed on missing core module, then focused scanner -> `12 passed`; P4 regression -> `33 passed`; Serenity regression -> `54 passed`; boundary guard -> `3 passed`; re-review -> Ready to merge Yes; py_compile, safety scan, DB-table scan, local-path scan, and diff check passed |
 | P4-T03 | Phase 4 | Release Checklist 集成 | Verified | P4-T02 | DSA commit `d3127c5`; red release-check tests failed on missing script/checklist; tag-release workflow red check failed before workflow wiring; focused release-check tests -> `6 passed`; actual release gate -> `status passed, errors 0, warnings 0`; P4 focused regression -> `21 passed`; broader Serenity/Agent/boundary regression -> `85 passed`; py_compile, diff check, local-path scan passed; no DB/provider/notification/trading semantic changes |
-| P4-T04 | Phase 4 | Observability and Diagnostics | Not Started | P1-T02, P4-T02 |  |
+| P4-T04 | Phase 4 | Observability and Diagnostics | Verified | P1-T02, P4-T02 | DSA commit `95a4b51`; red observability check failed on missing diagnostics status/duration/core_version and missing structured log events; focused observability -> `5 passed`; P4 focused regression -> `35 passed`; Serenity regression -> `65 passed`; boundary guard -> `3 passed`; release gate -> `status passed, errors 0, warnings 0`; py_compile and diff checks passed; safety scan, sensitive/local-path scan, DB-table scan reviewed expected docs/tests only; independent review initially blocked raw exception-body warning logs, then fixed to log only error type and generated_at structured event |
 
 ---
 
 ## 12. 当前推荐下一步
 
-Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On、Phase 2 Agent Tools（`P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）、Phase 3 Intelligence Workflow Persistence（`P3-T01`、`P3-T02`、`P3-T03`、`P3-T04` 与 P3 Phase Review）以及 Phase 4 `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成已完成并验证。下一步从 `P4-T04` Observability and Diagnostics 继续，不改变既有交易语义；P3-T04 已明确当前继续 snapshot-first，不新增 DB 专表。
+Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On、Phase 2 Agent Tools（`P2-T01`、`P2-T02`、`P2-T03` 与 P2 Phase Review）、Phase 3 Intelligence Workflow Persistence（`P3-T01`、`P3-T02`、`P3-T03`、`P3-T04` 与 P3 Phase Review）以及 Phase 4 `P4-T01` Provenance Namespace、`P4-T02` Report Safety Scanner、`P4-T03` Release Checklist 集成、`P4-T04` Observability and Diagnostics 已完成并验证。下一步从 `P4 Phase Review` 继续，不改变既有交易语义；P3-T04 已明确当前继续 snapshot-first，不新增 DB 专表。
 
 - [x] 创建 DSA 集成分支：`codex/serenity-phase-0-evidence-bridge`。
 - [x] 完成 G-T01 至 G-T03。
@@ -1796,4 +1803,5 @@ Global guardrails、Phase 0 review gate、Phase 1 Analysis Report Add-On、Phase
 - [x] 执行 P4-T01 Provenance Namespace。
 - [x] 执行 P4-T02 Report Safety Scanner。
 - [x] 执行 P4-T03 Release Checklist 集成。
-- [ ] 执行 P4-T04 Observability and Diagnostics。
+- [x] 执行 P4-T04 Observability and Diagnostics。
+- [ ] 执行 P4 Phase Review。
