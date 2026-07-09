@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `52f679a` (`docs: 刷新 Phase 4 开发状态`); Phase 5 planning checklist has been added to `tasks/todo.md` but implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `f8e87d0` (`feat: 完成 Serenity Web Workbench 迁移`); Phase 5 implementation is complete and committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -39,7 +39,7 @@
 | Phase 2: Market Data Provider Migration | Completed | Serenity implementation commit `8686d80`; handoff docs commit `cb0e2b5`; adds `src/serenity_alpha_lab/market_data/*` and `tests/test_market_data.py`; `make verify` passed with 180 tests |
 | Phase 3: Stock Analysis Pipeline Migration | Completed | Commit `3cf14b3`; adds Serenity-owned `src/serenity_alpha_lab/analysis/*`, market-data daily-bar manager path, and `tests/test_analysis_pipeline.py`; focused regression passed with `14 passed, 2 warnings`; full `make verify` passed with 184 tests |
 | Phase 4: Report And Safety Integration | Completed | Commit `3253f13`; adds `src/serenity_alpha_lab/analysis/report.py`, report safety text scanning, CLI `analyze-stock --stub`, and `tests/test_analysis_report.py`; targeted regression passed with `14 passed, 2 warnings`; full `make verify` passed with 189 tests |
-| Phase 5 planning checkpoint | Completed | `tasks/todo.md` now contains Phase 5 entry criteria, approach decision, planned verification, and implementation check-in; no Phase 5 app/source files have been created yet |
+| Phase 5 Web Workbench Migration | Completed | Commit `f8e87d0`; Serenity-owned `apps/serenity-web` Vite/React workbench scaffolded with Home, Analysis, History, Settings, Phase 4 report semantics panels, Vitest semantics coverage, and Playwright smoke |
 
 Previous DSA-first integration work is useful source research but is no longer the governing product direction.
 
@@ -47,7 +47,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 | Phase | Status | Scope |
 | --- | --- | --- |
-| Phase 5: Web Workbench Migration | Planned / Next Implementation | Incrementally recreate a Serenity-owned `apps/serenity-web` workbench around Phase 4 report artifacts, evidence/readiness/provenance/source-coverage/safety panels, Vitest semantics coverage, and Playwright smoke |
+| Phase 5: Web Workbench Migration | Completed | Commit `f8e87d0`; Serenity-owned `apps/serenity-web` workbench now covers Home, Analysis, History, Settings, report-reader flow, Phase 4 report semantics panels, Vitest, and Playwright smoke |
 
 ### Phase Completion Status
 
@@ -58,8 +58,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Phase 2: Market Data Provider Migration | Completed | Commit `8686d80`; provider contracts, quote/bar normalization, stock-code routing, fallback diagnostics, and stubbed tests implemented; full verification passed |
 | Phase 3: Stock Analysis Pipeline Migration | Completed | Commit `3cf14b3`; Serenity-owned context builder and core pipeline convert normalized market data into evidence items, readiness-gated research signals, diagnostics, and report-gate status |
 | Phase 4: Report And Safety Integration | Completed | Serenity-owned stock-analysis report generator renders DSA-derived research-only sections, key-claim provenance refs, safety-scanned Markdown, manifest, and UI-visible artifact from stubbed analysis |
-| Phase 5: Web Workbench Migration | Planning Complete / Implementation Not Started | Phase 5 checklist exists in `tasks/todo.md`; selected approach is to recreate incrementally under `apps/serenity-web`, not wholesale import DSA `apps/dsa-web` |
-| Phase 6: Portfolio, Backtest, Alerts, Notifications | Not Started | Awaiting Phase 5 |
+| Phase 5: Web Workbench Migration | Completed | Commit `f8e87d0`; incrementally recreated under `apps/serenity-web`; no wholesale DSA React import, no DSA runtime imports, and no copied DSA generated caches |
+| Phase 6: Portfolio, Backtest, Alerts, Notifications | Not Started | Next phase |
 | Phase 7: Agent, Bot, Desktop, Docker, CI | Not Started | Awaiting Phase 6 |
 
 ### Known Constraints
@@ -83,19 +83,18 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 2: Market Data Provider Migration — implementation committed in `8686d80`; handoff docs committed in `cb0e2b5`.
 - Phase 3: Stock Analysis Pipeline Migration — implementation committed in `3cf14b3`; handoff docs committed in `5718928`.
 - Phase 4: Report And Safety Integration — implementation committed in `3253f13`; handoff docs committed in current HEAD.
-- Phase 5 planning checkpoint — complete in `tasks/todo.md`; no implementation commit yet.
+- Phase 5 Web Workbench Migration — complete and committed in `f8e87d0`.
 
 ### Not Started / Pending
 
-- Phase 5 implementation: Web Workbench Migration — next active task. Start coding from the Phase 5 checklist already added to `tasks/todo.md`.
-- Phase 6: Portfolio, Backtest, Alerts, Notifications — pending Phase 5.
+- Phase 6: Portfolio, Backtest, Alerts, Notifications — next active migration phase.
 - Phase 7: Agent, Bot, Desktop, Docker, CI — pending Phase 6.
 
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
-- Current HEAD: `52f679a` (`docs: 刷新 Phase 4 开发状态`); verify with `git log -1 --oneline`.
-- Current uncommitted owned docs change: Phase 5 planning/status documentation in `tasks/todo.md`, this tracker, and `tasks/lessons.md` once closeout is applied.
+- Current HEAD: `f8e87d0` (`feat: 完成 Serenity Web Workbench 迁移`); verify with `git log -1 --oneline`.
+- Current uncommitted owned closeout docs: `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, and `tasks/lessons.md`.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -156,15 +155,30 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Regression verification | Completed | `python3 -m pytest tests/test_analysis_report.py tests/test_report_safety.py tests/test_analysis_pipeline.py tests/test_dsa_migration_boundaries.py tests/test_cli.py::test_cli_analyze_stock_stub_writes_report_artifacts -q` -> `14 passed, 2 warnings` |
 | Static/full verification | Completed | `py_compile` passed for Phase 4 modules/tests; runtime DSA checkout import scan returned no matches; safety phrase scan matched only scanner constants and intentional tests; `git diff --check` passed; `make verify` -> `189 passed, 2 warnings`, doctor ok, run-cpo-pack ok, coverage matrix ok |
 
+## Completed Phase 5 Web Workbench Migration
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Serenity-owned frontend toolchain | Completed | Added `apps/serenity-web` with Vite, React, TypeScript, Vitest, Playwright, `package.json`, `package-lock.json`, and local config files; generated install/build/test artifacts are ignored and not tracked |
+| Core product shell and routes | Completed | `src/App.tsx` and `src/routes.ts` expose only Home, Analysis, History, and Settings for Phase 5; route tests reject early chat, portfolio, backtest, alerts, DSA branding, and source-app route drift |
+| Report artifact UI semantics | Completed | `ReportSemanticsPanel` and `ReportReader` render fixture-backed readiness, provenance, source coverage, skeptical review, report safety, Markdown href, manifest href, and research-only boundary semantics |
+| Phase 5 pages | Completed | Home summarizes workflow state, Analysis renders report semantics and opens the report reader, History shows local report package metadata, and Settings documents default-off local/runtime guardrails |
+| Vitest semantics coverage | Completed | `apps/serenity-web/src/components/ReportSemantics.test.tsx` covers readiness, provenance refs, source coverage, skeptical review, safety boundary, and forbidden trading-language absence; `src/routes.test.ts` covers exact Phase 5 routes |
+| Playwright smoke coverage | Completed | `apps/serenity-web/e2e/app-shell.spec.ts` covers shell navigation across Home, Analysis, History, Settings plus the report-reader flow and `data-report-href` Markdown handoff |
+| Focused frontend verification | Completed | `npm run build` -> exit 0; `npm test -- --run` -> 2 files, 4 tests passed; `npm run test:smoke -- --reporter=line` -> 1 msedge smoke passed |
+| Migration guard verification | Completed | `python3 -m pytest tests/test_dsa_migration_boundaries.py -q` -> 3 passed, 2 warnings; static scan for external DSA checkout/import/path returned no matches under `src/serenity_alpha_lab apps/serenity-web` |
+| Full verification | Completed | `make verify` -> 189 passed, 2 warnings; doctor ok; run-cpo-pack ok; coverage matrix ok |
+| Protected output hygiene | Completed | `git status --short output/ui` still shows only pre-existing protected generated output dirt; Phase 5 did not stage, commit, revert, or overwrite protected `output/ui/*` artifacts |
+
 ## Next Task
 
-Start Phase 5 implementation from the completed checklist:
+Start Phase 6: Portfolio, Backtest, Alerts, Notifications.
 
-1. Keep the Phase 5 approach decision: recreate incrementally as `apps/serenity-web`, borrowing DSA patterns only; do not wholesale import `apps/dsa-web`.
-2. Scaffold the smallest Serenity-owned Vite/React workbench with Home, Analysis, History, and Settings routes.
-3. Add report semantics panels for Phase 4 artifacts: readiness, provenance, source coverage, skeptical review, and report safety.
-4. Add Vitest coverage for report semantics and Playwright smoke against the Serenity-owned app.
-5. Keep protected `output/ui/*` artifacts untouched and unstaged.
+1. Migrate portfolio and backtest concepts as research validation tools, not trading automation.
+2. Migrate alert rules as evidence-backed research monitors with default-off notification delivery.
+3. Add local-only/default-off config checks and no-secret startup tests.
+4. Preserve Serenity evidence-first provenance, readiness, source coverage, skeptical review, report safety, and research-only guardrails.
+5. Continue excluding protected `output/ui/*` artifacts from staging and commits.
 
 ## Copyable Restart Prompt
 
@@ -186,7 +200,7 @@ Start Phase 5 implementation from the completed checklist:
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- Serenity 当前 HEAD：52f679a（docs: 刷新 Phase 4 开发状态）；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
+- Serenity 当前 HEAD：f8e87d0（feat: 完成 Serenity Web Workbench 迁移）；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 已完成：
@@ -195,32 +209,32 @@ Start Phase 5 implementation from the completed checklist:
 - Phase 2: Market Data Provider Migration 已完成并提交。
 - Phase 3: Stock Analysis Pipeline Migration 已完成并提交，commit 为 3cf14b3。
 - Phase 4: Report And Safety Integration 已完成实现与验证，implementation commit 为 3253f13。
-- Phase 5: Web Workbench Migration 的可勾选计划已经写入 tasks/todo.md；实现尚未开始。
-- Phase 4 新增/更新：
-  - src/serenity_alpha_lab/analysis/report.py：Serenity-owned stock-analysis report generator、key-claim provenance refs、safety gate、Markdown/manifest/UI artifact writer。
-  - src/serenity_alpha_lab/report_safety.py：新增 `scan_report_text()`，并按行返回所有禁用短语命中。
-  - src/serenity_alpha_lab/cli.py：新增 `analyze-stock --stub`，用 deterministic in-process market data 生成 no-network Markdown 和 UI-visible report artifacts。
-  - tests/test_analysis_report.py：覆盖 DSA-derived research-only sections、关键 claim provenance、安全阻断和 artifact 写入。
-  - tests/test_cli.py：覆盖 `analyze-stock --stub` 端到端 artifact 写入。
+- Phase 5: Web Workbench Migration 已完成实现、验证并提交，implementation commit 为 f8e87d0。
+- Phase 5 新增/更新：
+  - apps/serenity-web/package.json、package-lock.json、Vite/Vitest/Playwright/TypeScript configs：Serenity-owned frontend toolchain。
+  - apps/serenity-web/src/App.tsx、src/routes.ts、src/pages/*：Home、Analysis、History、Settings core routes。
+  - apps/serenity-web/src/components/ReportSemanticsPanel.tsx、ReportReader.tsx：Phase 4 report artifact UI 语义层。
+  - apps/serenity-web/src/data/sampleReportArtifact.ts、src/types.ts：fixture-backed manifest/report semantics model。
+  - apps/serenity-web/src/components/ReportSemantics.test.tsx、src/routes.test.ts：Vitest report semantics and route-boundary coverage。
+  - apps/serenity-web/e2e/app-shell.spec.ts：Playwright smoke for app shell and report-reader flow。
+  - .gitignore：ignore frontend dependency/build/test artifacts.
 
 当前验证证据：
-- Red check: `python3 -m pytest tests/test_analysis_report.py -q` initially failed with `ModuleNotFoundError: No module named 'serenity_alpha_lab.analysis.report'`.
-- Red integration check later failed because artifact lacked `ui_path` and CLI lacked `analyze-stock`.
-- Focused green: `python3 -m pytest tests/test_analysis_report.py tests/test_cli.py::test_cli_analyze_stock_stub_writes_report_artifacts -q` -> 5 passed.
-- Regression: `python3 -m pytest tests/test_analysis_report.py tests/test_report_safety.py tests/test_analysis_pipeline.py tests/test_dsa_migration_boundaries.py tests/test_cli.py::test_cli_analyze_stock_stub_writes_report_artifacts -q` -> 14 passed, 2 warnings.
-- Target `py_compile` passed for Phase 4 modules/tests.
-- Runtime static import scan for `daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` under `src/serenity_alpha_lab` returned no matches.
-- Phase 4 safety phrase scan matched only scanner constants and intentional test fixtures.
+- Red check: `npm test -- --run` initially failed because Vitest could not resolve `./ReportSemanticsPanel` and `../data/sampleReportArtifact`.
+- Dependency setup: first `npm install` timed out; second install failed because Playwright range resolved to unavailable `playwright@1.61.1`; pinned `@playwright/test` to `1.58.2`, then `npm install --prefer-offline --no-audit --no-fund` succeeded.
+- Focused frontend green: `npm run build` -> exit 0; `npm test -- --run` -> 2 test files, 4 tests passed.
+- Playwright smoke: bundled Chromium download timed out; smoke uses installed Microsoft Edge channel. `npm run test:smoke -- --reporter=line` -> 1 passed.
+- Python migration guard: `python3 -m pytest tests/test_dsa_migration_boundaries.py -q` -> 3 passed, 2 warnings.
+- Runtime static import/path scan for `daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis|apps/dsa-web` under `src/serenity_alpha_lab apps/serenity-web` returned no matches.
+- Phase 5 safety phrase scan under `apps/serenity-web` returned no matches.
+- Cache/dependency cleanup: removed `apps/serenity-web/node_modules`, `dist`, `test-results`, `playwright-report`, `.vite`, and `.cache`; generated-cache scan returned no matches.
 - `git diff --check` passed.
 - Full verification: `make verify` -> 189 passed, 2 warnings；doctor ok；run-cpo-pack ok（182 evidence items, 6 ready memos, 0 skipped）；coverage matrix ok。
 
 未完成 / 下一步：
-- Phase 5: Web Workbench Migration 实现尚未开始；计划已完成。
-- 已决策：不要 wholesale import DSA React app；在 Serenity 中增量重建 `apps/serenity-web`，只借鉴 DSA shell/report component 模式。
-- 从 tasks/todo.md 的 Phase 5 checklist 开始实现。
-- 先 scaffold Serenity-owned Vite/React app，包含 Home、Analysis、History、Settings。
-- 增加 Phase 4 report artifact 的 UI 语义层：readiness、provenance、source coverage、skeptical review、report safety。
-- 增加 Vitest report semantics 覆盖和 Playwright smoke。
+- Phase 5 implementation 已提交为 `f8e87d0`；本次 closeout docs 提交时继续排除 protected `output/ui/*`。
+- 下一阶段：Phase 6 Portfolio, Backtest, Alerts, Notifications。
+- Phase 6 要把 portfolio/backtest 迁移为 research validation，把 alerts/notifications 迁移为 default-off research monitors，不做交易自动化。
 
 注意：
 - 不要修改、stage、提交或回滚 Serenity 既有 generated UI 输出：
@@ -230,7 +244,7 @@ Start Phase 5 implementation from the completed checklist:
   - output/ui/analyses/topic-2bde5fabbc/
 - 当前工作树中这些 `output/ui/*` 仍显示为本地脏文件/目录，视为受保护外部状态；提交时必须显式排除。
 - 不要在 Serenity runtime 中从 DSA checkout 做跨仓库 import。
-- 不要复制 DSA .venv、node_modules、__pycache__、SQLite runtime DB 或生成缓存。
+- 不要复制 DSA .venv、node_modules、__pycache__、SQLite runtime DB 或生成缓存；Phase 5 前端本地 `node_modules/dist/test-results/playwright-report` 也必须保持未追踪、提交前清理。
 - 每个阶段性任务开始前，先在 tasks/todo.md 写可勾选计划。
 - 每个阶段性任务完成后，自动更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，提供新的可复制启动提示词，并只暂存/提交本阶段拥有的文件；不要暂存受保护的 output/ui/*。用户已再次确认希望把这个习惯长期保留。
 ```

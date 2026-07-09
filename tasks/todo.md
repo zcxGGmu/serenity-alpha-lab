@@ -4094,26 +4094,26 @@
 
 # Current Migration Next Step
 
-- Current state: Phase 5 Web Workbench Migration planning is complete; implementation has not started.
+- Current state: Phase 5 Web Workbench Migration implementation is complete and committed in `f8e87d0`.
 - Next implementation task: scaffold the smallest Serenity-owned `apps/serenity-web` Vite/React app from the checklist below, with Home, Analysis, History, Settings, report semantics panels, Vitest coverage, and Playwright smoke.
 
 # Serenity-Led DSA Migration Phase 5 Web Workbench Migration
 
 - [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 5 edits.
 - [x] Decide the Web Workbench migration approach from local source inspection, documenting why Serenity should either import the DSA React app as `apps/serenity-web` or recreate pages incrementally.
-- [ ] Scaffold the Serenity-owned web app/toolchain only under `apps/serenity-web`, excluding DSA `node_modules`, `dist`, `.vite`, generated caches, runtime DBs, and unrelated desktop/bot assets.
-- [ ] Migrate or recreate the navigation shell with Serenity product identity and core routes: Home, Analysis, History, and Settings.
-- [ ] Add a Serenity report semantics layer that models Phase 4 artifacts: `analysis-report-manifest.json`, Markdown report hrefs, evidence IDs, key-claim provenance refs, readiness status, source coverage, and report safety diagnostics.
-- [ ] Adapt DSA report/UI patterns into Serenity-owned evidence, readiness, provenance, source-coverage, skeptical-review, and report-safety panels without preserving unsupported trading-advice language.
-- [ ] Add a Home page that explains current research workflow state and links to the latest stubbed stock-analysis report artifact without depending on protected `output/ui/*`.
-- [ ] Add an Analysis page that can render a stubbed/fixture stock-analysis report package and clearly labels all outputs as research-only triage, not trade execution advice.
-- [ ] Add a History page that reads local report/run package metadata through Serenity-owned fixtures or API-compatible sample data, not by importing from the DSA checkout.
-- [ ] Add a Settings page for local/runtime status and default-off integrations, keeping secrets absent and external providers disabled unless explicitly configured.
-- [ ] Add Vitest coverage for report semantics: readiness gating, provenance visibility, source coverage, report safety messages, and forbidden trading-language absence.
-- [ ] Add Playwright smoke coverage for the Serenity-owned app shell and the primary report-reading flow.
-- [ ] Run focused frontend tests, Playwright smoke, Serenity Python migration boundary guard, static DSA import/path scan, protected-output status check, `git diff --check`, and broader verification as feasible.
-- [ ] Update migration tracker, task log review, lessons if reusable behavior changes, and copyable restart prompt after verification.
-- [ ] Commit completed Phase 5 work with a detailed Chinese message, excluding protected generated `output/ui/*` artifacts.
+- [x] Scaffold the Serenity-owned web app/toolchain only under `apps/serenity-web`, excluding DSA `node_modules`, `dist`, `.vite`, generated caches, runtime DBs, and unrelated desktop/bot assets.
+- [x] Migrate or recreate the navigation shell with Serenity product identity and core routes: Home, Analysis, History, and Settings.
+- [x] Add a Serenity report semantics layer that models Phase 4 artifacts: `analysis-report-manifest.json`, Markdown report hrefs, evidence IDs, key-claim provenance refs, readiness status, source coverage, and report safety diagnostics.
+- [x] Adapt DSA report/UI patterns into Serenity-owned evidence, readiness, provenance, source-coverage, skeptical-review, and report-safety panels without preserving unsupported trading-advice language.
+- [x] Add a Home page that explains current research workflow state and links to the latest stubbed stock-analysis report artifact without depending on protected `output/ui/*`.
+- [x] Add an Analysis page that can render a stubbed/fixture stock-analysis report package and clearly labels all outputs as research-only triage, not trade execution advice.
+- [x] Add a History page that reads local report/run package metadata through Serenity-owned fixtures or API-compatible sample data, not by importing from the DSA checkout.
+- [x] Add a Settings page for local/runtime status and default-off integrations, keeping secrets absent and external providers disabled unless explicitly configured.
+- [x] Add Vitest coverage for report semantics: readiness gating, provenance visibility, source coverage, report safety messages, and forbidden trading-language absence.
+- [x] Add Playwright smoke coverage for the Serenity-owned app shell and the primary report-reading flow.
+- [x] Run focused frontend tests, Playwright smoke, Serenity Python migration boundary guard, static DSA import/path scan, protected-output status check, `git diff --check`, and broader verification as feasible.
+- [x] Update migration tracker, task log review, lessons if reusable behavior changes, and copyable restart prompt after verification.
+- [x] Commit completed Phase 5 work with a detailed Chinese message, excluding protected generated `output/ui/*` artifacts.
 
 ## Phase 5 Entry Criteria Check-In
 
@@ -4162,3 +4162,14 @@
 - Not completed: no `apps/serenity-web` files, frontend package/toolchain, React routes, Vitest tests, or Playwright smoke tests have been created yet.
 - Next action: begin Phase 5 implementation from the checklist by scaffolding the smallest Serenity-owned Vite/React workbench and adding report semantic tests first.
 - Handoff habit: user reconfirmed that every phase-level task completion must automatically update tracker, task log, lessons, restart prompt, and protected-file notes before final handoff.
+
+## Phase 5 Implementation Review
+
+- Status: Phase 5 implementation is complete and committed in `f8e87d0`.
+- Implemented: Serenity-owned `apps/serenity-web` Vite/React workbench with Home, Analysis, History, Settings, report semantics panel, report reader, typed fixture artifact, and app-local package/tooling config.
+- Tests: Vitest covers report semantics, provenance refs, source coverage, report safety boundary, forbidden trading-language absence, and exact Phase 5 route inventory; Playwright smoke covers shell navigation and report-reader flow.
+- Verification: `npm run build` passed; `npm test -- --run` -> 2 files / 4 tests passed; `npm run test:smoke -- --reporter=line` -> 1 msedge smoke passed; `python3 -m pytest tests/test_dsa_migration_boundaries.py -q` -> 3 passed, 2 warnings; static DSA import/path scan returned no matches; safety phrase scan returned no matches; generated frontend cache scan returned no matches after cleanup; `git diff --check` passed; `make verify` -> 189 passed, 2 warnings.
+- Environment notes: bundled Playwright Chromium download timed out, so smoke uses installed Microsoft Edge channel; `@playwright/test` is pinned to `1.58.2` because the open range resolved to unavailable `playwright@1.61.1` in the current registry.
+- Protected output status: pre-existing protected `output/ui/*` dirty files remain untouched and unstaged.
+- Commit: Phase 5 implementation committed as `f8e87d0` (`feat: 完成 Serenity Web Workbench 迁移`) with protected generated `output/ui/*` artifacts excluded.
+- Next action: commit this Phase 5 closeout documentation, then begin Phase 6 planning/implementation.
