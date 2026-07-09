@@ -4094,8 +4094,8 @@
 
 # Current Migration Next Step
 
-- Current state: Phase 5 Web Workbench Migration implementation is complete and committed in `f8e87d0`.
-- Next implementation task: scaffold the smallest Serenity-owned `apps/serenity-web` Vite/React app from the checklist below, with Home, Analysis, History, Settings, report semantics panels, Vitest coverage, and Playwright smoke.
+- Current state: Phase 5 Web Workbench Migration implementation is complete and committed in `f8e87d0`; Phase 5 handoff documentation is committed in `5cf2f31`.
+- Next implementation task: Phase 6 Portfolio, Backtest, Alerts, Notifications, migrated as research validation and default-off research monitors without trading automation.
 
 # Serenity-Led DSA Migration Phase 5 Web Workbench Migration
 
@@ -4173,3 +4173,68 @@
 - Protected output status: pre-existing protected `output/ui/*` dirty files remain untouched and unstaged.
 - Commit: Phase 5 implementation committed as `f8e87d0` (`feat: 完成 Serenity Web Workbench 迁移`) with protected generated `output/ui/*` artifacts excluded.
 - Next action: commit this Phase 5 closeout documentation, then begin Phase 6 planning/implementation.
+
+# Serenity-Led DSA Migration Phase 6 Portfolio, Backtest, Alerts, Notifications
+
+- [x] Confirm protected generated UI outputs remain untouched and unstaged before Phase 6 edits.
+- [x] Use DSA portfolio/backtest/alerts/notification files as source reference only, with no Serenity runtime imports from the DSA checkout.
+- [x] Implement portfolio research snapshots as validation artifacts, not account brokerage, order placement, or position-sizing automation.
+- [x] Implement historical backtest validation summaries as research evidence, not future-performance claims or direct trade instructions.
+- [x] Implement research monitor rules as local dry-run evidence/readiness monitors, default disabled.
+- [x] Implement notification dispatch plans as default-off handoff metadata with explicit config checks, not live delivery.
+- [x] Add no-secret startup/API health diagnostics for research monitors and notification delivery status.
+- [x] Add evidence-backed monitor/report handoff records carrying evidence IDs and research-only boundaries.
+- [x] Add focused pytest coverage for research validation, monitor default-off behavior, no-secret API startup, and forbidden trading automation vocabulary.
+- [x] Run focused Phase 6 regressions, migration boundary guard, static DSA import/path scan, research-only safety scan, protected-output status check, `git diff --check`, and broader verification as feasible.
+- [x] Update migration tracker, task log review, lessons if reusable behavior changes, and copyable restart prompt after verification.
+- [ ] Commit completed Phase 6 work with a detailed Chinese message, excluding protected generated `output/ui/*` artifacts.
+
+## Phase 6 Entry Criteria Check-In
+
+- Primary runtime: `serenity-alpha-lab`; DSA remains source-only and must not be imported at runtime.
+- Repository state: Serenity starts from HEAD `5cf2f31`; Phase 5 implementation commit is `f8e87d0`; Phase 5 handoff docs commit is `5cf2f31`; DSA source repository remains at `95a4b51`.
+- Protected artifacts stay local-only: do not modify, stage, commit, overwrite, or revert `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+- Source inspection result: Serenity currently has app config/API, analysis pipeline/report modules, and Phase 5 web shell, but no portfolio/backtest/alert/notification runtime modules. DSA has broad portfolio CRUD, backtest persistence, alert evaluation, and notification sender surfaces that include trading/account semantics and live channel assumptions.
+- Phase 6 approach decision: create Serenity-owned pure Python modules first: `research_validation.py` for portfolio/backtest research validation and `research_monitors.py` for alerts/notifications as default-off dry-run monitor/handoff records. Only add local API health diagnostics in this phase unless tests prove a narrower endpoint is required.
+- Implementation boundary: Phase 6 owns research validation contracts, monitor dry-run contracts, default-off notification capability metadata, and local startup diagnostics. It must not begin Phase 7 Agent/bot/desktop/Docker/CI work.
+- Research boundary: portfolio/backtest outputs must read as validation evidence and historical diagnostics only. Alerts/notifications must read as evidence-backed research monitor handoffs only. Do not emit direct buy/sell/hold instructions, standalone recommendations, target-price promises, position sizing, stop-loss/take-profit instructions, guaranteed returns, deterministic forecasts, live broker actions, or delivery automation.
+- Data boundary: Phase 6 uses deterministic in-process tests and local config only. Do not require live market data credentials, external network, provider SDK dependency, DSA API/backend, DSA checkout imports, SQLite runtime DB, generated cache, `.venv`, or `node_modules`.
+
+## Phase 6 Planned Verification
+
+- Red validation check: `python3 -m pytest tests/test_research_validation.py -q` should fail before implementation because `serenity_alpha_lab.research_validation` does not exist.
+- Red monitor check: `python3 -m pytest tests/test_research_monitors.py -q` should fail before implementation because `serenity_alpha_lab.research_monitors` does not exist.
+- Red API config check: targeted `tests/test_app_api.py` health diagnostics test should fail before implementation because `research_monitors` health metadata is absent.
+- Focused pass: run `python3 -m pytest tests/test_research_validation.py tests/test_research_monitors.py tests/test_app_api.py tests/test_dsa_migration_boundaries.py -q`.
+- Static DSA import/path scan: `rg -n "daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis" src/serenity_alpha_lab`.
+- Research-only safety scan: scan Phase 6 modules/tests for unsupported trading automation terms and verify test-only absence assertions are the only intentional matches.
+- Protected-output status check: `git status --short output/ui` must show only pre-existing protected dirt, with no Phase 6-generated files staged or committed.
+- Diff hygiene: `git diff --check`.
+- Full verification: run `make verify` after focused checks pass.
+
+## Phase 6 Implementation Plan Check-In
+
+- Detailed plan document: `docs/superpowers/plans/2026-07-09-serenity-alpha-lab-phase-6-research-validation-monitors.md`.
+- Recommended first implementation slice: write red tests for `research_validation.py` and `research_monitors.py`, then implement the smallest pure dataclass modules that satisfy research-only semantics before touching API health diagnostics.
+- Files expected to be created or modified:
+  - Create: `src/serenity_alpha_lab/research_validation.py`.
+  - Create: `src/serenity_alpha_lab/research_monitors.py`.
+  - Create: `tests/test_research_validation.py`.
+  - Create: `tests/test_research_monitors.py`.
+  - Modify: `src/serenity_alpha_lab/app/config.py`, `src/serenity_alpha_lab/app/local_api.py`, and `tests/test_app_api.py` for no-secret/default-off health diagnostics.
+  - Modify during closeout: `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, and `tasks/lessons.md` only after verification.
+  - Do not modify: protected `output/ui/*` generated artifacts.
+- Checkpoint before coding: implementation should proceed only after this Phase 6 checklist is accepted or adjusted.
+
+## Phase 6 Implementation Review
+
+- Status: Phase 6 implementation is complete and verified in the current working tree; commit is pending.
+- Implemented: `src/serenity_alpha_lab/research_validation.py` with portfolio research snapshots and historical validation summaries. These outputs carry `research_only`, validation scopes, evidence IDs, missing-evidence diagnostics, and disabled automation diagnostics.
+- Implemented: `src/serenity_alpha_lab/research_monitors.py` with default-off research monitor rules, dry-run evaluations, notification dispatch plans, and evidence-backed handoff records. Delivery remains disabled unless explicitly enabled and configured.
+- Implemented: `AppRuntimeConfig` and local API `/health` diagnostics for research monitor enablement, notification enablement, delivery status, and configured channel count, without exposing secret/token/password values.
+- Red checks: Phase 6 validation/monitor tests first failed with missing module imports; API health test first failed with missing `research_monitors` health metadata.
+- Focused verification: `python3 -m pytest tests/test_research_validation.py tests/test_research_monitors.py -q` -> `4 passed`; targeted API health -> `1 passed`; focused Phase 6 regression -> `12 passed, 2 warnings`.
+- Static verification: runtime DSA checkout import/path scan under `src/serenity_alpha_lab` returned no matches; Phase 6 safety scan matched only test absence assertions; `git diff --check` passed.
+- Full verification: `make verify` -> `194 passed, 2 warnings`; doctor ok; `run-cpo-pack` completed with 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
+- Protected output status: pre-existing protected `output/ui/*` dirty files remain visible and unstaged; Phase 6 did not intentionally modify, stage, commit, overwrite, or revert them.
+- Next action: stage only Phase 6-owned files and commit as `feat: 完成 Serenity Phase 6 研究验证与监控迁移`, excluding protected generated `output/ui/*` artifacts.

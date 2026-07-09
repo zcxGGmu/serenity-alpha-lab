@@ -61,6 +61,12 @@ def _health_payload(config: AppRuntimeConfig) -> dict[str, Any]:
         "external_integrations": {
             "enabled": config.external_integrations_enabled,
         },
+        "research_monitors": {
+            "enabled": config.research_monitors_enabled,
+            "notifications_enabled": config.research_monitor_notifications_enabled,
+            "delivery_status": "enabled" if config.research_monitor_notifications_enabled else "disabled",
+            "configured_channel_count": len(config.configured_notification_channels),
+        },
         "market_data": {
             "enabled": config.market_data_enabled,
             "credentials_required": config.require_market_data_credentials,

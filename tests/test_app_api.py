@@ -5,7 +5,7 @@ from http.server import ThreadingHTTPServer
 
 from serenity_alpha_lab import __version__
 from serenity_alpha_lab.app import AppRuntimeConfig, create_api_handler
-from serenity_alpha_lab.app.local_api import _load_run_records
+from serenity_alpha_lab.app.local_api import _health_payload, _load_run_records
 
 
 def _get_json(url: str) -> dict:
@@ -26,6 +26,22 @@ def test_app_runtime_config_defaults_to_local_research_only_without_market_data_
     assert config.market_data_enabled is False
     assert config.external_integrations_enabled is False
     assert config.research_only is True
+
+
+def test_health_payload_reports_research_monitors_default_off_without_secrets(monkeypatch):
+    monkeypatch.delenv("SERENITY_NOTIFICATION_CHANNELS", raising=False)
+
+    payload = _health_payload(AppRuntimeConfig())
+
+    assert payload["research_only"] is True
+    assert payload["research_monitors"]["enabled"] is False
+    assert payload["research_monitors"]["notifications_enabled"] is False
+    assert payload["research_monitors"]["delivery_status"] == "disabled"
+    assert payload["research_monitors"]["configured_channel_count"] == 0
+    rendered = str(payload).lower()
+    assert "token" not in rendered
+    assert "secret" not in rendered
+    assert "password" not in rendered
 
 
 def test_local_api_serves_health_version_and_run_state_without_credentials(monkeypatch, tmp_path):

@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `f8e87d0` (`feat: 完成 Serenity Web Workbench 迁移`); Phase 5 implementation is complete and committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `5cf2f31` (`docs: 记录 Phase 5 Web Workbench 迁移交接`); Phase 6 implementation is verified in the current working tree and pending commit; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -40,6 +40,7 @@
 | Phase 3: Stock Analysis Pipeline Migration | Completed | Commit `3cf14b3`; adds Serenity-owned `src/serenity_alpha_lab/analysis/*`, market-data daily-bar manager path, and `tests/test_analysis_pipeline.py`; focused regression passed with `14 passed, 2 warnings`; full `make verify` passed with 184 tests |
 | Phase 4: Report And Safety Integration | Completed | Commit `3253f13`; adds `src/serenity_alpha_lab/analysis/report.py`, report safety text scanning, CLI `analyze-stock --stub`, and `tests/test_analysis_report.py`; targeted regression passed with `14 passed, 2 warnings`; full `make verify` passed with 189 tests |
 | Phase 5 Web Workbench Migration | Completed | Commit `f8e87d0`; Serenity-owned `apps/serenity-web` Vite/React workbench scaffolded with Home, Analysis, History, Settings, Phase 4 report semantics panels, Vitest semantics coverage, and Playwright smoke |
+| Phase 6 Portfolio, Backtest, Alerts, Notifications | Verified / Pending Commit | Adds Serenity-owned `research_validation.py`, `research_monitors.py`, no-secret/default-off API health diagnostics, and focused tests; `make verify` passed with 194 tests |
 
 Previous DSA-first integration work is useful source research but is no longer the governing product direction.
 
@@ -59,8 +60,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Phase 3: Stock Analysis Pipeline Migration | Completed | Commit `3cf14b3`; Serenity-owned context builder and core pipeline convert normalized market data into evidence items, readiness-gated research signals, diagnostics, and report-gate status |
 | Phase 4: Report And Safety Integration | Completed | Serenity-owned stock-analysis report generator renders DSA-derived research-only sections, key-claim provenance refs, safety-scanned Markdown, manifest, and UI-visible artifact from stubbed analysis |
 | Phase 5: Web Workbench Migration | Completed | Commit `f8e87d0`; incrementally recreated under `apps/serenity-web`; no wholesale DSA React import, no DSA runtime imports, and no copied DSA generated caches |
-| Phase 6: Portfolio, Backtest, Alerts, Notifications | Not Started | Next phase |
-| Phase 7: Agent, Bot, Desktop, Docker, CI | Not Started | Awaiting Phase 6 |
+| Phase 6: Portfolio, Backtest, Alerts, Notifications | Verified / Pending Commit | Portfolio/backtest migrated as research validation; alerts/notifications migrated as default-off research monitors and handoff records; no trading automation |
+| Phase 7: Agent, Bot, Desktop, Docker, CI | Not Started | Awaiting Phase 6 commit |
 
 ### Known Constraints
 
@@ -87,14 +88,14 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 ### Not Started / Pending
 
-- Phase 6: Portfolio, Backtest, Alerts, Notifications — next active migration phase.
+- Phase 6: Portfolio, Backtest, Alerts, Notifications — implementation verified in current working tree and pending commit.
 - Phase 7: Agent, Bot, Desktop, Docker, CI — pending Phase 6.
 
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
-- Current HEAD: `f8e87d0` (`feat: 完成 Serenity Web Workbench 迁移`); verify with `git log -1 --oneline`.
-- Current uncommitted owned closeout docs: `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, and `tasks/lessons.md`.
+- Current HEAD: `5cf2f31` (`docs: 记录 Phase 5 Web Workbench 迁移交接`); verify with `git log -1 --oneline`.
+- Current uncommitted owned Phase 6 files: `src/serenity_alpha_lab/research_validation.py`, `src/serenity_alpha_lab/research_monitors.py`, `src/serenity_alpha_lab/app/config.py`, `src/serenity_alpha_lab/app/local_api.py`, `tests/test_research_validation.py`, `tests/test_research_monitors.py`, `tests/test_app_api.py`, `docs/superpowers/plans/2026-07-09-serenity-alpha-lab-phase-6-research-validation-monitors.md`, `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, and `tasks/lessons.md`.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -170,14 +171,29 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Full verification | Completed | `make verify` -> 189 passed, 2 warnings; doctor ok; run-cpo-pack ok; coverage matrix ok |
 | Protected output hygiene | Completed | `git status --short output/ui` still shows only pre-existing protected generated output dirt; Phase 5 did not stage, commit, revert, or overwrite protected `output/ui/*` artifacts |
 
+## Completed Phase 6 Portfolio, Backtest, Alerts, Notifications
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Phase 6 implementation plan | Completed | `docs/superpowers/plans/2026-07-09-serenity-alpha-lab-phase-6-research-validation-monitors.md` records the TDD tasks, file boundaries, and research-only/default-off monitor scope |
+| Portfolio research validation | Completed | `src/serenity_alpha_lab/research_validation.py` adds `PortfolioObservation` and `PortfolioResearchSnapshot` as research-only validation artifacts with evidence IDs and automation disabled diagnostics |
+| Historical backtest validation | Completed | `BacktestObservation` and `BacktestValidationSummary` summarize historical validation evidence, positive/negative counts, average return, evidence IDs, and `historical_validation_only` diagnostics without future-performance promises |
+| Default-off research monitors | Completed | `src/serenity_alpha_lab/research_monitors.py` adds `ResearchMonitorRule`, dry-run evaluations, handoff records, and notification dispatch plans that are disabled unless explicitly enabled and configured |
+| No-secret API startup diagnostics | Completed | `AppRuntimeConfig` and `/health` payload now expose research monitor enablement, notification enablement, delivery status, and configured channel count without secret/token/password values |
+| Red/green TDD evidence | Completed | New Phase 6 tests first failed on missing modules; API health test failed with missing `research_monitors`; after implementation `tests/test_research_validation.py tests/test_research_monitors.py` -> `4 passed`, and targeted API health -> `1 passed` |
+| Focused regression | Completed | `python3 -m pytest tests/test_research_validation.py tests/test_research_monitors.py tests/test_app_api.py tests/test_dsa_migration_boundaries.py -q` -> `12 passed, 2 warnings` |
+| Boundary and safety scans | Completed | Runtime DSA scan under `src/serenity_alpha_lab` returned no matches; Phase 6 safety scan matched only absence assertions in tests; `git diff --check` passed |
+| Full verification | Completed | `make verify` -> `194 passed, 2 warnings`; doctor ok; run-cpo-pack ok; coverage matrix ok |
+| Protected output hygiene | Completed | `git status --short output/ui` still shows only pre-existing protected generated output dirt; Phase 6 did not stage, commit, revert, or overwrite protected `output/ui/*` artifacts |
+
 ## Next Task
 
-Start Phase 6: Portfolio, Backtest, Alerts, Notifications.
+Commit Phase 6, then start Phase 7: Agent, Bot, Desktop, Docker, CI.
 
-1. Migrate portfolio and backtest concepts as research validation tools, not trading automation.
-2. Migrate alert rules as evidence-backed research monitors with default-off notification delivery.
-3. Add local-only/default-off config checks and no-secret startup tests.
-4. Preserve Serenity evidence-first provenance, readiness, source coverage, skeptical review, report safety, and research-only guardrails.
+1. Stage and commit only Phase 6-owned files, excluding protected `output/ui/*`.
+2. Begin Phase 7 by planning Agent, Bot, Desktop, Docker, and CI migration boundaries.
+3. Preserve Serenity evidence-first provenance, readiness, source coverage, skeptical review, report safety, and research-only guardrails.
+4. Keep optional/bot/desktop/Docker integrations default-off until explicitly configured.
 5. Continue excluding protected `output/ui/*` artifacts from staging and commits.
 
 ## Copyable Restart Prompt
@@ -200,7 +216,7 @@ Start Phase 6: Portfolio, Backtest, Alerts, Notifications.
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- Serenity 当前 HEAD：f8e87d0（feat: 完成 Serenity Web Workbench 迁移）；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
+- Serenity 当前 HEAD：5cf2f31（docs: 记录 Phase 5 Web Workbench 迁移交接）；Phase 6 implementation 当前已验证、待提交；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 已完成：
@@ -210,31 +226,30 @@ Start Phase 6: Portfolio, Backtest, Alerts, Notifications.
 - Phase 3: Stock Analysis Pipeline Migration 已完成并提交，commit 为 3cf14b3。
 - Phase 4: Report And Safety Integration 已完成实现与验证，implementation commit 为 3253f13。
 - Phase 5: Web Workbench Migration 已完成实现、验证并提交，implementation commit 为 f8e87d0。
-- Phase 5 新增/更新：
-  - apps/serenity-web/package.json、package-lock.json、Vite/Vitest/Playwright/TypeScript configs：Serenity-owned frontend toolchain。
-  - apps/serenity-web/src/App.tsx、src/routes.ts、src/pages/*：Home、Analysis、History、Settings core routes。
-  - apps/serenity-web/src/components/ReportSemanticsPanel.tsx、ReportReader.tsx：Phase 4 report artifact UI 语义层。
-  - apps/serenity-web/src/data/sampleReportArtifact.ts、src/types.ts：fixture-backed manifest/report semantics model。
-  - apps/serenity-web/src/components/ReportSemantics.test.tsx、src/routes.test.ts：Vitest report semantics and route-boundary coverage。
-  - apps/serenity-web/e2e/app-shell.spec.ts：Playwright smoke for app shell and report-reader flow。
-  - .gitignore：ignore frontend dependency/build/test artifacts.
+- Phase 6: Portfolio, Backtest, Alerts, Notifications 已完成实现与验证，等待提交。
+- Phase 6 新增/更新：
+  - src/serenity_alpha_lab/research_validation.py：portfolio research snapshots and historical validation summaries。
+  - src/serenity_alpha_lab/research_monitors.py：default-off research monitor rules, dry-run evaluations, dispatch plans, and handoff records。
+  - src/serenity_alpha_lab/app/config.py、src/serenity_alpha_lab/app/local_api.py：no-secret/default-off research monitor health diagnostics。
+  - tests/test_research_validation.py、tests/test_research_monitors.py、tests/test_app_api.py：Phase 6 TDD coverage。
+  - docs/superpowers/plans/2026-07-09-serenity-alpha-lab-phase-6-research-validation-monitors.md：Phase 6 execution plan。
 
 当前验证证据：
-- Red check: `npm test -- --run` initially failed because Vitest could not resolve `./ReportSemanticsPanel` and `../data/sampleReportArtifact`.
-- Dependency setup: first `npm install` timed out; second install failed because Playwright range resolved to unavailable `playwright@1.61.1`; pinned `@playwright/test` to `1.58.2`, then `npm install --prefer-offline --no-audit --no-fund` succeeded.
-- Focused frontend green: `npm run build` -> exit 0; `npm test -- --run` -> 2 test files, 4 tests passed.
-- Playwright smoke: bundled Chromium download timed out; smoke uses installed Microsoft Edge channel. `npm run test:smoke -- --reporter=line` -> 1 passed.
-- Python migration guard: `python3 -m pytest tests/test_dsa_migration_boundaries.py -q` -> 3 passed, 2 warnings.
-- Runtime static import/path scan for `daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis|apps/dsa-web` under `src/serenity_alpha_lab apps/serenity-web` returned no matches.
-- Phase 5 safety phrase scan under `apps/serenity-web` returned no matches.
-- Cache/dependency cleanup: removed `apps/serenity-web/node_modules`, `dist`, `test-results`, `playwright-report`, `.vite`, and `.cache`; generated-cache scan returned no matches.
+- Red validation check: `python3 -m pytest tests/test_research_validation.py tests/test_research_monitors.py -q` initially failed with missing `serenity_alpha_lab.research_validation` and `serenity_alpha_lab.research_monitors` modules.
+- Green validation/monitor check: `python3 -m pytest tests/test_research_validation.py tests/test_research_monitors.py -q` -> 4 passed.
+- Red API health check: `python3 -m pytest tests/test_app_api.py::test_health_payload_reports_research_monitors_default_off_without_secrets -q` failed with `KeyError: 'research_monitors'`.
+- Green API health check: `python3 -m pytest tests/test_app_api.py::test_health_payload_reports_research_monitors_default_off_without_secrets -q` -> 1 passed.
+- Focused regression: `python3 -m pytest tests/test_research_validation.py tests/test_research_monitors.py tests/test_app_api.py tests/test_dsa_migration_boundaries.py -q` -> 12 passed, 2 warnings.
+- Runtime static import/path scan for `daily_stock_analysis|/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` under `src/serenity_alpha_lab` returned no matches.
+- Phase 6 safety scan matched only absence assertions in `tests/test_research_validation.py`; no production module matches.
 - `git diff --check` passed.
-- Full verification: `make verify` -> 189 passed, 2 warnings；doctor ok；run-cpo-pack ok（182 evidence items, 6 ready memos, 0 skipped）；coverage matrix ok。
+- Protected output status: `git status --short output/ui` still shows only protected generated UI dirt.
+- Full verification: `make verify` -> 194 passed, 2 warnings；doctor ok；run-cpo-pack ok（182 evidence items, 6 ready memos, 0 skipped）；coverage matrix ok。
 
 未完成 / 下一步：
-- Phase 5 implementation 已提交为 `f8e87d0`；本次 closeout docs 提交时继续排除 protected `output/ui/*`。
-- 下一阶段：Phase 6 Portfolio, Backtest, Alerts, Notifications。
-- Phase 6 要把 portfolio/backtest 迁移为 research validation，把 alerts/notifications 迁移为 default-off research monitors，不做交易自动化。
+- 提交 Phase 6 implementation，提交时继续排除 protected `output/ui/*`。
+- 下一阶段：Phase 7 Agent, Bot, Desktop, Docker, CI。
+- Phase 7 要把 DSA Agent/bot/desktop/docker/CI 能力迁移为 Serenity-owned、evidence-grounded、default-off/local-first 的运行与发布能力，不做交易自动化。
 
 注意：
 - 不要修改、stage、提交或回滚 Serenity 既有 generated UI 输出：

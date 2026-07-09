@@ -15,6 +15,9 @@ class AppRuntimeConfig:
     market_data_env_var: str = "SERENITY_MARKET_DATA_API_KEY"
     external_integrations_enabled: bool = False
     research_only: bool = True
+    research_monitors_enabled: bool = False
+    research_monitor_notifications_enabled: bool = False
+    notification_channels_env_var: str = "SERENITY_NOTIFICATION_CHANNELS"
 
     @property
     def market_data_api_key(self) -> str:
@@ -23,6 +26,11 @@ class AppRuntimeConfig:
     @property
     def market_data_enabled(self) -> bool:
         return bool(self.market_data_api_key)
+
+    @property
+    def configured_notification_channels(self) -> list[str]:
+        value = os.getenv(self.notification_channels_env_var, "")
+        return [item.strip().lower() for item in value.split(",") if item.strip()]
 
     def validate_startup(self) -> None:
         if self.require_market_data_credentials and not self.market_data_api_key:
