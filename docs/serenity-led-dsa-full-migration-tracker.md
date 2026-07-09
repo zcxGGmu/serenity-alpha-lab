@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Use `git rev-parse --short HEAD` for current HEAD; Phase 0 baseline commit is `b9b0fcb`; Phase 1 commit is `d7187ca`; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD `8686d80`; Phase 2 commit is `8686d80`; Phase 1 commit is `d7187ca`; Phase 0 baseline commit is `b9b0fcb`; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; local `.venv` now has core dependencies except optional `alphasift` Git dependency |
 
 ### Completed Migration Work
@@ -124,19 +124,19 @@ Start Phase 3:
 仓库：
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
-- Serenity 当前 HEAD：以 `git rev-parse --short HEAD` 为准；Phase 2 completed in this session and should be recorded as the latest commit after staging; Phase 1 commit 为 d7187ca，Phase 0 baseline commit 为 b9b0fcb。
+- Serenity 当前 HEAD：`8686d80`；Phase 2 commit 为 8686d80，Phase 1 commit 为 d7187ca，Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 当前状态：
 - Phase 0: Migration Baseline And Contract 已完成并提交。
 - Phase 0 commit：b9b0fcb（`docs: 完成 Serenity 主导的 DSA 迁移 Phase 0 基线`）。
-- 最新状态文档：本 tracker 已刷新到 Phase 2 completed pending commit / Phase 3 next；若需要精确 commit，以 `git rev-parse --short HEAD` 为准。
+- 最新状态文档：本 tracker 已刷新到 Phase 2 completed / Phase 3 next；若需要精确 commit，以 `git rev-parse --short HEAD` 为准。
 - Phase 1: Serenity App Runtime Foundation 已完成并提交，commit 为 d7187ca（`feat: 完成 Serenity App Runtime Foundation`）。
 - Phase 1 已添加 Serenity-owned app runtime：`src/serenity_alpha_lab/app/config.py`、`src/serenity_alpha_lab/app/local_api.py`、`src/serenity_alpha_lab/app/__init__.py`。
 - Phase 1 API skeleton endpoints：`GET /health`、`GET /version`、`GET /run-state`；默认 research-only、无市场数据凭据也可启动；`/run-state` 兼容现有 `{ "runs": [...] }` 和旧 top-level list 两种 JSON 形状。
 - Phase 1 CLI：新增 `serenity-alpha-lab serve-app`，不触发 `build_dashboard`，并保留 `build-ui` / `serve-ui` 静态 dashboard 命令。
 - Phase 1 tests：`tests/test_app_api.py` 与 `tests/test_cli.py::test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard` 覆盖无凭据启动、health/version/run-state、CLI wiring、静态 UI 不被 rebuild。
-- Phase 2: Market Data Provider Migration 已完成，等待本轮 stage/commit。
+- Phase 2: Market Data Provider Migration 已完成并提交，commit 为 8686d80（`feat: 完成 Serenity 市场数据 Provider 迁移`）。
 - Phase 2 新增 Serenity-owned market data runtime：`src/serenity_alpha_lab/market_data/contracts.py`、`src/serenity_alpha_lab/market_data/symbols.py`、`src/serenity_alpha_lab/market_data/normalization.py`、`src/serenity_alpha_lab/market_data/manager.py`、`src/serenity_alpha_lab/market_data/__init__.py`。
 - Phase 2 覆盖 provider contracts、CN/HK/JP/KR/TW/US stock-code routing、realtime quote normalization、daily bar normalization、provider fallback diagnostics、credential default-off behavior、non-finite numeric rejection。
 - Phase 2 tests：`tests/test_market_data.py` 全部使用 in-process stubs，不依赖 live credentials、外部网络、provider SDK 或 DSA runtime import。
