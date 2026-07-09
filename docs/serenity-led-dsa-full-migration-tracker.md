@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `639e255` (`feat: 完成 Serenity Phase 6 研究验证与监控迁移`); Phase 6 implementation is complete and committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `1c2eddf` (`docs: 记录 Phase 6 研究验证与监控迁移交接`); Phase 6 implementation and handoff docs are complete and committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -40,7 +40,7 @@
 | Phase 3: Stock Analysis Pipeline Migration | Completed | Commit `3cf14b3`; adds Serenity-owned `src/serenity_alpha_lab/analysis/*`, market-data daily-bar manager path, and `tests/test_analysis_pipeline.py`; focused regression passed with `14 passed, 2 warnings`; full `make verify` passed with 184 tests |
 | Phase 4: Report And Safety Integration | Completed | Commit `3253f13`; adds `src/serenity_alpha_lab/analysis/report.py`, report safety text scanning, CLI `analyze-stock --stub`, and `tests/test_analysis_report.py`; targeted regression passed with `14 passed, 2 warnings`; full `make verify` passed with 189 tests |
 | Phase 5 Web Workbench Migration | Completed | Commit `f8e87d0`; Serenity-owned `apps/serenity-web` Vite/React workbench scaffolded with Home, Analysis, History, Settings, Phase 4 report semantics panels, Vitest semantics coverage, and Playwright smoke |
-| Phase 6 Portfolio, Backtest, Alerts, Notifications | Completed | Commit `639e255`; adds Serenity-owned `research_validation.py`, `research_monitors.py`, no-secret/default-off API health diagnostics, and focused tests; `make verify` passed with 194 tests |
+| Phase 6 Portfolio, Backtest, Alerts, Notifications | Completed | Implementation commit `639e255`; handoff docs commit `1c2eddf`; adds Serenity-owned `research_validation.py`, `research_monitors.py`, no-secret/default-off API health diagnostics, and focused tests; `make verify` passed with 194 tests |
 
 Previous DSA-first integration work is useful source research but is no longer the governing product direction.
 
@@ -94,8 +94,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
-- Current HEAD: `639e255` (`feat: 完成 Serenity Phase 6 研究验证与监控迁移`); verify with `git log -1 --oneline`.
-- Current uncommitted owned closeout docs: `docs/serenity-led-dsa-full-migration-tracker.md` and `tasks/todo.md`.
+- Current HEAD: `1c2eddf` (`docs: 记录 Phase 6 研究验证与监控迁移交接`); verify with `git log -1 --oneline`.
+- Current owned migration docs are up to date for Phase 6; only protected generated UI artifacts should remain dirty.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -215,7 +215,7 @@ Start Phase 7: Agent, Bot, Desktop, Docker, CI.
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- Serenity 当前 HEAD：639e255（feat: 完成 Serenity Phase 6 研究验证与监控迁移）；Phase 6 implementation commit 为 639e255；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
+- Serenity 当前 HEAD：1c2eddf（docs: 记录 Phase 6 研究验证与监控迁移交接）；Phase 6 handoff docs commit 为 1c2eddf；Phase 6 implementation commit 为 639e255；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 已完成：
