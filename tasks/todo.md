@@ -3712,3 +3712,25 @@
 - Fresh verification: focused P3 regression -> `27 passed`; intelligence regression -> `40 passed, 1 warning`; boundary guard -> `3 passed`; target `py_compile` -> pass; safety scan matched expected Serenity docs/code/tests only; DB-table scan matched function/test names and contract/decision docs only; `git diff --check` -> pass.
 - Stale command note: `python3.11 -m pytest tests/serenity/test_dsa_boundary_guardrails.py -q` failed because that path does not exist; replaced with the actual `tests/test_serenity_integration_boundaries.py` boundary guard above.
 - Next stage: Phase 4 `P4-T01` Provenance Namespace. Keep the work limited to provenance namespace, citation discipline, report safety diagnostics, and research-only boundaries; do not reopen DB-table work without a separate gate.
+
+# DSA-First Serenity Core P4-T01 Provenance Namespace
+
+- [x] Confirm DSA Phase 4 provenance boundaries and existing audit/task output surfaces.
+- [x] Add failing provenance core tests for stable IDs, sanitized refs, missing-source diagnostics, and task refs.
+- [x] Implement `src/serenity/core/provenance.py` without DB, provider, UI, or trading-field dependencies.
+- [x] Attach provenance refs to audit summary, coverage, acquisition tasks, and persisted research tasks.
+- [x] Extend API schema only for research-only provenance fields and forbid trading semantic leakage.
+- [x] Run focused P4 provenance/service/schema regressions, boundary guard, py_compile, safety scan, DB-table scan, and `git diff --check`.
+- [x] Update tracker, task log review, lessons, and restart prompt with P4-T01 evidence before final handoff.
+
+## Review
+
+- Repository state: Serenity started from `095c697` on `main` with protected pre-existing generated UI dirt under `output/ui/*`; DSA started from clean `61b52ce` on `codex/serenity-phase-0-evidence-bridge`.
+- Implementation: DSA commit `c7e7c58` adds `src/serenity/core/provenance.py`, `SerenitySourceRef`, top-level `SerenityAuditProvenance`, and `source_refs` on coverage, coverage flags, acquisition tasks, and persisted research tasks.
+- Provenance behavior: source refs use stable IDs shaped as `serenity:<analysis_id>:<evidence_id>`, internal `dsa://analysis/<analysis_id>/evidence/<evidence_id>` URIs, external URL sanitization, excerpt hashes, claim IDs, and explicit missing-source diagnostics.
+- Product boundary confirmed: P4-T01 stays snapshot-first and research-only; it adds no DB table, migration, provider fetch, Agent prompt mutation, trade recommendation mapping, target price, position sizing, stop-loss/take-profit, trend prediction, or `sentiment_score` linkage.
+- Red check: `python3.11 -m pytest tests/serenity/core/test_provenance.py tests/serenity/services/test_evidence_quality_service.py::test_evidence_quality_service_enabled_outputs_research_only_audit tests/serenity/services/test_evidence_quality_service.py::test_evidence_quality_service_empty_context_returns_stable_blocked_audit tests/serenity/services/test_research_task_service.py::test_build_tasks_from_audit_generates_schema_valid_stable_ids tests/serenity/test_serenity_api_schema_contract.py::test_analysis_result_response_accepts_optional_serenity_research_audit -q` failed during collection because `src.serenity.core.provenance` did not exist.
+- Target green check: same focused command after implementation -> `7 passed`.
+- Fresh verification: focused P4/API/snapshot/intelligence regression -> `54 passed, 1 warning`; Serenity regression -> `42 passed`; intelligence/API/storage regression -> `25 passed, 1 warning`; boundary guard -> `3 passed`; target `py_compile`, `git diff --check`, safety scan, DB-table scan, and provenance local-path scan passed.
+- DB-table scan note: matches are existing function/test names plus contract/decision docs only; no `serenity_research_tasks` or `serenity_research_task_events` table/migration was added.
+- Next stage: Phase 4 `P4-T02` Report Safety Scanner. Keep scanner scoped to Serenity-generated research-only surfaces and quoted-source exceptions; do not block or rewrite DSA main trading report fields.
