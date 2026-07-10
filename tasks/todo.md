@@ -4687,7 +4687,7 @@
 - [x] Run focused lifecycle tests, full Vitest, frontend build, fixture/runtime scans, DSA boundary scans, and diff hygiene.
 - [x] Complete independent specification review followed by code-quality review; convert valid findings into Red -> Green regressions.
 - [x] Commit only Task 5-owned source, tests, App, main, styles, and types as implementation commit `b2b483f`.
-- [ ] Commit Task 5 tracker, todo, lesson, and restart-prompt closeout without protected outputs.
+- [x] Commit Task 5 tracker, todo, lesson, and restart-prompt closeout as `fbfed1e` without protected outputs.
 - [x] Keep all protected `output/ui/*` entries untouched and unstaged.
 
 ## Runtime Parity Task 5 Entry Check-In
@@ -4724,7 +4724,7 @@
 
 ## Runtime Parity Task 5 Review
 
-- Completed: injectable source/App lifecycle is committed in `b2b483f`; the production sample fixture is removed.
+- Completed: injectable source/App lifecycle is committed in `b2b483f`; handoff documentation is committed in `fbfed1e`; the production sample fixture is removed.
 - Verification: source initial Red, App lifecycle Red, two review-hardening Reds, final source + App `67 passed`, full Vitest `135 passed`, build, scans, and diff checks passed.
 - Reviews: independent specification review PASS; independent code-quality review found one Important non-2xx body `TypeError` misclassification, which was converted into a failing regression, fixed, and re-reviewed PASS.
 - Not Started: Task 6 actual coverage/latest-only History/Vite/Playwright flow and Task 7 full parity verification.

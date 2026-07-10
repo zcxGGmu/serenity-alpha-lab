@@ -102,6 +102,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 4 handoff documentation — complete and committed in `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`); tracker, todo, reusable lesson, protected state, verification evidence, and the exact Task 5 source-test Red boundary were synchronized after the implementation commit.
 - Runtime-parity Task 4 review hardening — complete and committed in `2ad297a` (`test: 收紧股票分析工件完整投影回归`); the valid decoder case now compares the entire `ReportArtifact` projection, and `ReportSemantics` locks Focus/External plus structured coverage message/recommendation rendering. Fresh focused `67 passed`, full Vitest `68 passed`, and production build passed.
 - Runtime-parity Task 5 injectable source/App lifecycle — complete and committed in `b2b483f` (`feat: 接入可注入股票分析工件来源`); initial source Red failed on the missing module, App lifecycle Red failed against the fixture-bound runtime, and review-driven Red loops covered malformed/invalid error bodies, per-status reason allowlists, body-stage abort/network behavior, StrictMode replay, non-artifact routes, blocked-link absence, and stale-response protection. Final full Vitest passed with `135 passed`; production build, fixture/DSA/safety scans, `git diff --check`, specification review, and code-quality re-review passed.
+- Runtime-parity Task 5 handoff documentation — complete and committed in `fbfed1e` (`docs: 记录 runtime parity Task 5 交接`); tracker, todo, reusable lesson, protected state, verification evidence, and the exact Task 6 restart boundary were synchronized after the implementation commit.
 
 ### Unfinished, Blocked, And Deferred
 
@@ -114,6 +115,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 - Current branch: `codex/phase-4-report-safety`.
 - Runtime-parity Task 5 implementation commit: `b2b483f` (`feat: 接入可注入股票分析工件来源`).
+- Runtime-parity Task 5 handoff documentation commit: `fbfed1e` (`docs: 记录 runtime parity Task 5 交接`).
 - Latest pre-refresh status commit: `9a0b0d3` (`docs: 刷新 runtime parity Task 4 审查加固状态`).
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
@@ -273,6 +275,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
 | Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
 | Task 5 injectable source/App lifecycle | Completed | `b2b483f` removes the production sample fixture, adds the sanitized HTTP source and allowlisted backend reasons, injects the production source in `main.tsx`, and implements loading/ready/unavailable/blocked/retry/abort/stale behavior |
+| Task 5 handoff documentation | Completed | `fbfed1e` records final verification, review hardening, protected state, reusable lesson, and the Task 6 Red boundary |
 | Production implementation | In Progress | Tasks 1-5 are complete through `b2b483f`; Task 6 History/Vite/Playwright parity and Task 7 full verification remain Not Started |
 | Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
 | External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
@@ -318,8 +321,9 @@ Begin Task 6 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- 本次文档刷新前 HEAD：b2b483f（feat: 接入可注入股票分析工件来源）；本次文档提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
+- 本次状态刷新前 HEAD：fbfed1e（docs: 记录 runtime parity Task 5 交接）；本次状态提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
 - 最新 runtime parity production implementation commit：b2b483f（feat: 接入可注入股票分析工件来源）。
+- 最新 Task 5 handoff docs commit：fbfed1e（docs: 记录 runtime parity Task 5 交接）。
 - 最新 runtime parity review-hardening commit：2ad297a（test: 收紧股票分析工件完整投影回归）。
 - 最新 Task 4 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
