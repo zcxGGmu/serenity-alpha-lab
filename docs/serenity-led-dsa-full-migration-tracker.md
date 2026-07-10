@@ -115,6 +115,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 - Current branch: `codex/phase-4-report-safety`.
 - Runtime-parity Task 6 implementation commit: `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`).
+- Runtime-parity Task 6 handoff documentation commit: `9c462cd` (`docs: 记录 runtime parity Task 6 交接`).
 - Runtime-parity Task 5 implementation commit: `b2b483f` (`feat: 接入可注入股票分析工件来源`).
 - Runtime-parity Task 5 handoff documentation commit: `fbfed1e` (`docs: 记录 runtime parity Task 5 交接`).
 - Latest pre-handoff status commit: `25891f8` (`docs: 刷新 runtime parity Task 5 最终状态`).
@@ -278,6 +279,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Task 5 injectable source/App lifecycle | Completed | `b2b483f` removes the production sample fixture, adds the sanitized HTTP source and allowlisted backend reasons, injects the production source in `main.tsx`, and implements loading/ready/unavailable/blocked/retry/abort/stale behavior |
 | Task 5 handoff documentation | Completed | `fbfed1e` records final verification, review hardening, protected state, reusable lesson, and the Task 6 Red boundary |
 | Task 6 actual coverage/latest-only History/Vite/Playwright | Completed | `901fa15` adds a non-default actual-coverage regression, latest-only History semantics, loopback Vite `/api` proxy, NVDA canonical browser flow, blocked no-link flow, and review-driven selector hardening |
+| Task 6 handoff documentation | Completed | `9c462cd` records Red/Green evidence, clean-start browser and real proxy verification, independent review closure, protected state, the reusable proxy lesson, and the exact Task 7 boundary |
 | Production implementation | In Progress | Tasks 1-6 are complete through `901fa15`; Task 7 full verification and final closeout remain Not Started |
 | Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
 | External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
@@ -323,8 +325,9 @@ Begin Task 7 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 
 仓库状态：
 - 当前分支：codex/phase-4-report-safety
-- 本次 Task 6 handoff 文档提交前 HEAD：901fa15（feat: 完成最新研究工件 Web 运行时对等）；本次文档提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
+- 本次状态刷新前 HEAD：9c462cd（docs: 记录 runtime parity Task 6 交接）；本次状态提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
 - Task 6 implementation：901fa15
+- Task 6 handoff：9c462cd
 - Task 5 implementation：b2b483f
 - Task 5 handoff：fbfed1e
 - DSA 当前 HEAD：95a4b51

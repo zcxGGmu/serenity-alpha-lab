@@ -4768,6 +4768,7 @@
 - Boundary evidence: fixture/DSA scan matched `sampleReportArtifact` only inside explicit production-isolation assertions; trading vocabulary matched only decoder forbidden constants and negative tests; `git diff --check` passed.
 - Review evidence: independent specification review found the missing `App.test.tsx` plan/staging entry and page-wide AAPL assertion gap; both were fixed and re-reviewed PASS. Independent code-quality review found substring coverage assertions and incomplete blocked-link scanning; both were tightened and re-reviewed PASS.
 - Implementation commit: `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`).
+- Handoff documentation commit: `9c462cd` (`docs: 记录 runtime parity Task 6 交接`).
 - Protected state: the same four startup `output/ui/*` entries remained external, unmodified by Task 6, and unstaged.
 
 ## Runtime Parity Task 6 Review
@@ -4777,3 +4778,21 @@
 - Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Next action: start Task 7 with the focused backend verification command in the detailed runtime-parity plan; do not begin any deferred capability.
+
+# Runtime Parity Task 6 Final Status Refresh
+
+- [x] Record implementation commit `901fa15` and handoff documentation commit `9c462cd`.
+- [x] Keep Task 7 full verification as the only Not Started runtime-parity task.
+- [x] Preserve Docker image/container smoke as Environment Blocked.
+- [x] Preserve history/static-hosting/Electron/live-adapter/trading work as Deferred.
+- [x] Refresh the copyable restart prompt with the Task 7 focused backend command.
+- [x] Verify diff hygiene, active tracker status, and protected-output exclusion before the final status commit.
+
+## Runtime Parity Task 6 Final Status Refresh Review
+
+- Completed: Phase 0-7 and runtime-parity Tasks 1-6; Task 6 implementation `901fa15` and handoff documentation `9c462cd`.
+- Not Started: Task 7 full backend/frontend/release verification, documentation reconciliation, and final runtime-parity closeout.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` remains unavailable.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four startup `output/ui/*` entries remain external and unstaged.
+- Next action: run the Task 7 focused backend verification command before any other implementation or deferred work.
