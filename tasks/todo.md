@@ -4258,7 +4258,7 @@
 - [x] Run focused Red/Green tests, full backend/frontend verification, Docker smoke when available, static scans, and protected-output checks.
 - [x] Update migration tracker, task review, lessons, and copyable restart prompt after verification.
 - [x] Commit Phase 7 implementation files with a detailed Chinese message, explicitly excluding protected `output/ui/*`.
-- [ ] Commit Phase 7 handoff documentation with final commit IDs and fresh verification evidence.
+- [x] Commit Phase 7 handoff documentation with final commit IDs and fresh verification evidence.
 
 ## Phase 7 Entry Criteria Check-In
 
@@ -4321,5 +4321,5 @@
 - Boundary/safety verification: external DSA checkout path and DSA import scans returned no matches; the sole `daily_stock_analysis` string is the release gate assertion that `.dockerignore` excludes it; trading vocabulary appears only in Agent forbidden-field constants; `git diff --check` passed.
 - Protected output status: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain the same pre-existing protected dirty state and were excluded from `f2fd7cd`.
 - Implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
-- Handoff docs commit: pending; after commit, refresh this review and the tracker restart prompt with the actual commit ID.
+- Handoff docs commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`); the tracker restart prompt now records the finalized handoff ID.
 - Next action: plan post-migration runtime parity, starting with canonical backend artifact/API integration for `apps/serenity-web`; rerun Docker smoke when a daemon is available.

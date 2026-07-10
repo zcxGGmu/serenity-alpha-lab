@@ -87,7 +87,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 4: Report And Safety Integration — implementation committed in `3253f13`; handoff docs committed in current HEAD.
 - Phase 5 Web Workbench Migration — complete and committed in `f8e87d0`.
 - Phase 6: Portfolio, Backtest, Alerts, Notifications — implementation committed in `639e255`; handoff docs committed in `1c2eddf`.
-- Phase 7: Agent, Bot, Desktop, Docker, CI — implementation committed in `f2fd7cd`; handoff documentation is being finalized.
+- Phase 7: Agent, Bot, Desktop, Docker, CI — implementation committed in `f2fd7cd`; handoff docs committed in `8bba5e0`.
 
 ### Pending Hardening
 
@@ -100,8 +100,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Current branch: `codex/phase-4-report-safety`.
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
-- Phase 7 handoff documentation commit is pending this closeout update.
-- Current owned migration docs are being refreshed for the Phase 7 completion checkpoint; only protected generated UI artifacts should remain dirty after documentation commits.
+- Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
+- Phase 7 handoff documentation is finalized; after this status refresh, only protected generated UI artifacts should remain dirty.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -256,7 +256,7 @@ Plan the first post-migration hardening slice.
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
-- Phase 7 handoff docs commit：待本次 closeout 文档提交后刷新
+- Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 planning commit：eddf32c
 - DSA 当前 HEAD：95a4b51
 
