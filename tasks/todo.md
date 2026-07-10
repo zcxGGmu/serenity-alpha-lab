@@ -4796,3 +4796,24 @@
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the same four startup `output/ui/*` entries remain external and unstaged.
 - Next action: run the Task 7 focused backend verification command before any other implementation or deferred work.
+
+# Runtime Parity Task 6 Latest Development Status Refresh
+
+- [x] Reconcile branch `codex/phase-4-report-safety`, pre-refresh HEAD `30e65dd`, recent Task 6 commits, and the four protected output paths.
+- [x] Update the migration plan with Task 6 implementation, handoff, and latest status-refresh commits.
+- [x] Split the tracker status into Completed runtime-parity implementation and Not Started Task 7 verification closeout.
+- [x] Refresh the copyable restart prompt so the next session begins from Task 7 and verifies the post-refresh HEAD.
+- [x] Reconfirm the automatic stage-closeout habit without adding another duplicate lesson.
+- [x] Run documentation consistency, diff-hygiene, staged-file, and protected-output checks.
+- [x] Prepare a docs-only commit containing the owned migration plan, tracker, and task log.
+
+## Runtime Parity Task 6 Latest Development Status Refresh Review
+
+- Completed: Phase 0-7 and runtime-parity Tasks 1-6 through implementation `901fa15`, handoff `9c462cd`, and pre-refresh status commit `30e65dd`.
+- Not Started: Task 7 focused/full backend verification, frontend verification, unified release gate with `--skip-docker-smoke`, disposable-artifact API smoke, documentation reconciliation, and final runtime-parity closeout.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` remains unavailable.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
+- Protected state: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain external dirty state and must stay unstaged and unused as fixtures.
+- Lesson decision: `tasks/lessons.md` already records the automatic tracker/todo/lesson/restart-prompt closeout habit repeatedly, so no duplicate lesson is added.
+- Documentation verification: `git diff --check` passed; Markdown fences are balanced; the tracker contains all four status categories, the current `30e65dd` baseline, Task 7 next action, and the copyable restart prompt.
+- Next action: run the exact Task 7 focused backend verification command from the detailed runtime-parity plan before any deferred implementation.

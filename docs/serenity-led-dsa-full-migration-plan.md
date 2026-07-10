@@ -176,7 +176,7 @@ Additional checks when Web/API work begins:
 
 ## 7. Immediate Next Step
 
-Phase 0-7 and post-migration runtime-parity Tasks 1-6 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`).
+Phase 0-7 and post-migration runtime-parity Tasks 1-6 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and the latest verified status refresh is `30e65dd`.
 
 Continue with Task 7 of the approved design and detailed TDD plan:
 

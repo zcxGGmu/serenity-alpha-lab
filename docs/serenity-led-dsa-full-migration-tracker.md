@@ -280,11 +280,22 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Task 5 handoff documentation | Completed | `fbfed1e` records final verification, review hardening, protected state, reusable lesson, and the Task 6 Red boundary |
 | Task 6 actual coverage/latest-only History/Vite/Playwright | Completed | `901fa15` adds a non-default actual-coverage regression, latest-only History semantics, loopback Vite `/api` proxy, NVDA canonical browser flow, blocked no-link flow, and review-driven selector hardening |
 | Task 6 handoff documentation | Completed | `9c462cd` records Red/Green evidence, clean-start browser and real proxy verification, independent review closure, protected state, the reusable proxy lesson, and the exact Task 7 boundary |
-| Production implementation | In Progress | Tasks 1-6 are complete through `901fa15`; Task 7 full verification and final closeout remain Not Started |
+| Task 6 final status refresh | Completed | `30e65dd` synchronizes the migration plan, tracker, task log, Task 7 boundary, and protected-output status after the Task 6 handoff |
+| Runtime-parity implementation | Completed | Tasks 1-6 are complete through implementation `901fa15`, handoff `9c462cd`, and final status refresh `30e65dd` |
+| Runtime-parity verification closeout | Not Started | Task 7 focused/full backend, frontend, release-gate, disposable-artifact smoke, documentation reconciliation, and final closeout have not started |
 | Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
 | External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
 
 Planning self-review confirms the plan covers every approved design requirement, contains exact file paths and commands, names intended red failures, uses stable DTO/error contracts, preserves actual coverage data, and contains no undefined implementation placeholder.
+
+## Current Development Status
+
+- **Completed:** Phase 0-7 and runtime-parity Tasks 1-6. The latest implementation is `901fa15`, Task 6 handoff is `9c462cd`, and the latest pre-refresh status commit is `30e65dd`.
+- **Not Started:** Task 7 full backend/frontend/release verification, disposable-artifact API smoke, documentation reconciliation, and final runtime-parity closeout.
+- **Environment Blocked:** Real Docker image build and no-secret container `/health` smoke remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable. Only the unified gate with `--skip-docker-smoke` may be claimed after it is rerun successfully.
+- **Deferred:** History aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
+- **Protected State:** Do not modify, stage, commit, revert, overwrite, read as fixtures, or otherwise consume `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+- **Standing Closeout Habit:** After every verified stage-level task, automatically refresh and commit this tracker, `tasks/todo.md`, any genuinely new reusable lesson, and the copyable restart prompt before the final response.
 
 ## Next Task
 
@@ -325,9 +336,10 @@ Begin Task 7 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 
 仓库状态：
 - 当前分支：codex/phase-4-report-safety
-- 本次状态刷新前 HEAD：9c462cd（docs: 记录 runtime parity Task 6 交接）；本次状态提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
+- 本次状态刷新前 HEAD：30e65dd（docs: 刷新 runtime parity Task 6 最终状态）；本次状态提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
 - Task 6 implementation：901fa15
 - Task 6 handoff：9c462cd
+- Task 6 final status refresh：30e65dd
 - Task 5 implementation：b2b483f
 - Task 5 handoff：fbfed1e
 - DSA 当前 HEAD：95a4b51
@@ -342,6 +354,7 @@ Completed：
 - Playwright 已覆盖 409 artifact_blocked / report_safety_failed，确认 blocked state 无 report/manifest links。
 - Task 6 规格审查和代码质量复审均通过；所有有效发现已转成测试加固并复审 PASS。
 - Task 6 implementation 已提交为 901fa15。
+- Task 6 handoff 已提交为 9c462cd，最终状态刷新已提交为 30e65dd。
 
 Task 6 验证证据：
 - Focused Red：ReportSemantics + App -> 15 passed / 1 failed；唯一失败是缺少 latest-only History 文案。
