@@ -4393,3 +4393,23 @@
 - Verification: placeholder scan for the new spec passed after replacing one vague follow-on phrase; `git diff --check` and staged diff checks passed; the design commit contains only the approved spec, tracker, todo, and lessons.
 - Protected output status: the same four pre-existing `output/ui/*` entries remain dirty and were not staged, committed, reverted, or overwritten.
 - Written-spec review gate: review `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`; after confirmation, create and commit the detailed implementation plan before production edits.
+
+# Post-Migration Runtime Parity Status Refresh
+
+- [x] Reconcile current HEAD, design commit, design handoff commit, and protected generated output status.
+- [x] Mark completed design work separately from not-started implementation planning and production implementation.
+- [x] Preserve Docker smoke as Environment Blocked and external runtime capabilities as Deferred.
+- [x] Refresh the tracker copyable restart prompt with the exact next action and current commits.
+- [x] Reaffirm the automatic stage-closeout documentation habit in `tasks/lessons.md`.
+- [ ] Create the detailed Red-Green-Refactor implementation plan after the design review checkpoint.
+- [ ] Commit the implementation planning checkpoint before writing production code.
+- [ ] Start the first implementation task with failing backend manifest/API tests.
+
+## Status Refresh Review
+
+- Completed: Phase 0-7 migration; runtime-parity source audit; API-first design approval; design spec `948970b`; design handoff `14237a9`; focused baseline evidence.
+- Not Started: detailed implementation plan, backend manifest/API tests, backend implementation, frontend decoder/source/App state implementation, Playwright canonical-artifact flow, and full verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, and release publishing.
+- Protected state: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain external dirty state and must not be staged, committed, reverted, or overwritten.
+- Next action: read the approved design, create the exact implementation plan under `docs/superpowers/plans/`, mirror it into this checklist, commit planning docs, then begin TDD with backend red tests.

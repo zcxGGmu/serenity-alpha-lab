@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 0-7 are complete; post-migration runtime-parity design checkpoint is committed in `948970b`; production parity implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Latest development handoff before this status refresh is `14237a9`; read the actual current HEAD with `git log -1 --oneline`; Phase 0-7 and the runtime-parity design checkpoint are complete, while detailed implementation planning and production parity implementation have not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -108,6 +108,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
 - Phase 7 final completion status refresh commit: `6d1fcbb` (`docs: 刷新 Phase 7 完成状态`).
 - Post-migration runtime parity design checkpoint commit: `948970b` (`docs: 固化 post-migration runtime parity 设计`).
+- Post-migration runtime parity design handoff commit: `14237a9` (`docs: 记录 runtime parity 设计交接`).
 - Approved post-migration runtime parity design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
@@ -265,11 +266,13 @@ Review and plan the approved first post-migration hardening slice.
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
+- 最新开发交接基线：14237a9（docs: 记录 runtime parity 设计交接）；粘贴本提示词后先运行 git log -1 --oneline 获取状态刷新后的实际 HEAD。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
 - Phase 7 planning commit：eddf32c
 - Post-migration runtime parity design checkpoint commit：948970b（docs: 固化 post-migration runtime parity 设计）
+- Post-migration runtime parity design handoff commit：14237a9（docs: 记录 runtime parity 设计交接）
 - Post-migration runtime parity approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md
 - DSA 当前 HEAD：95a4b51
 
@@ -297,10 +300,12 @@ Phase 7 已完成：
 - 已审计 apps/serenity-web fixture 数据入口、Serenity canonical stock-analysis manifest、local API、测试和发布边界。
 - 已批准 API-first latest artifact 方案：版本化 manifest、只读 /api/artifacts/stock-analysis/latest API、严格 TypeScript decoder/adapter、显式 loading/unavailable/blocked 状态。
 - 设计明确不在首个 slice 中迁移 history aggregation、旧预览写 API、serve-app 静态托管、Electron、外部 adapter 或交易自动化。
+- 设计 spec 已提交为 948970b；设计状态交接已提交为 14237a9。
 
 未完成 / 下一步：
-- Not Started：先审查 approved design，然后写详细 Red-Green-Refactor implementation plan 和 tasks/todo.md 可勾选实施步骤；生产实现尚未开始。
-- Not Started（首个实现 slice）：让 apps/serenity-web 消费 canonical latest stock-analysis artifact API，移除生产运行时 sample fixture fallback，并保留 evidence/provenance/readiness/source coverage/skeptical review/report safety/research-only 语义。
+- Not Started：详细 Red-Green-Refactor implementation plan 尚未创建，tasks/todo.md 的实施步骤尚未展开。
+- Not Started（首个实现 slice）：生产代码和新测试均尚未开始；下一步先写并提交实施计划，然后从 backend manifest/API 红测试开始。
+- Not Started（目标行为）：让 apps/serenity-web 消费 canonical latest stock-analysis artifact API，移除生产运行时 sample fixture fallback，并保留 evidence/provenance/readiness/source coverage/skeptical review/report safety/research-only 语义。
 - Environment Blocked：Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
 - Deferred：不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计、威胁建模和批准。
 
@@ -314,6 +319,7 @@ Phase 7 已完成：
 - 不要在 Serenity runtime 中跨仓库 import DSA。
 - 不要复制 DSA .venv、node_modules、__pycache__、SQLite runtime DB 或生成缓存。
 - 每个阶段性任务完成后，自动更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，明确区分 Completed / Not Started / Environment Blocked / Deferred，并只暂存/提交拥有的文件；这是长期项目习惯，不要等待用户再次提醒。
+- 每次启动先运行 git status --short 和 git log -5 --oneline --decorate，核对当前 HEAD、受保护输出和 tracker 状态后再继续。
 ```
 
 ## Historical Phase 7 Planning Restart Prompt (Superseded)
