@@ -4595,7 +4595,7 @@
 - [x] Run TypeScript build and static boundary scans for fixture/runtime separation and forbidden trading vocabulary.
 - [x] Complete independent specification and code-quality reviews, converting valid findings into new Red -> Green regressions.
 - [x] Commit only Task 4-owned frontend implementation files, explicitly excluding protected `output/ui/*`.
-- [ ] Refresh tracker, task review, restart prompt, and reusable lessons only if a new reusable rule emerged; commit the handoff separately.
+- [x] Refresh tracker, task review, restart prompt, and reusable lessons only if a new reusable rule emerged; commit the handoff separately.
 
 ## Runtime Parity Task 4 Entry Check-In
 
@@ -4630,3 +4630,20 @@
 - Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` remains unavailable.
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Next action: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`, run it Red for the missing source module, and implement only the sanitized injectable HTTP source before writing App lifecycle tests.
+
+# Runtime Parity Task 4 Handoff Status Refresh
+
+- [x] Reconcile implementation commit `4d95ec3`, handoff docs commit `c61ef1b`, final frontend evidence, and protected output state.
+- [x] Record Task 4 as Completed and Task 5 source/App lifecycle as the exact Not Started next slice.
+- [x] Preserve Docker real smoke as Environment Blocked and history/static-hosting/Electron/live-adapter/trading work as Deferred.
+- [x] Refresh the tracker copyable restart prompt with the Task 5 source-test Red command and current implementation/handoff commits.
+- [x] Verify documentation diff hygiene and stage only tracker/todo for the final status refresh.
+
+## Runtime Parity Task 4 Handoff Status Refresh Review
+
+- Completed: runtime-parity Tasks 1-4, including Task 4 implementation `4d95ec3` and handoff documentation `c61ef1b`.
+- Not Started: Task 5 `ReportArtifactSource` and App lifecycle, remaining Task 6 History/Vite/Playwright work, and Task 7 full verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four external `output/ui/*` entries remain dirty and must stay unstaged, unmodified, unreverted, and unused as fixtures.
+- Next action: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`; run `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts` and confirm Red because `reportArtifactSource.ts` does not exist.

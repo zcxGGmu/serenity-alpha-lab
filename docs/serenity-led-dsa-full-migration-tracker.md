@@ -99,6 +99,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 3 read-only artifact API/config/CLI — complete and committed in `f984174` (`feat: 暴露只读最新股票分析工件 API`); initial Red produced `7 failed, 5 passed` for the missing config field, unknown CLI option, and generic artifact-route 404. Review-driven Red -> Green loops added exact summary/manifest distinctions, all-route error mapping, missing Markdown classification, generic 404 compatibility, and cross-platform local-path leakage rejection without rejecting valid HTTPS/Serenity URLs, IPv6 hosts, HTML closing tags, or allowlisted market symbols. Final focused tests passed with `69 passed`; backend parity passed with `115 passed, 2 warnings`.
 - Runtime-parity Task 3 handoff documentation — complete and committed in `09094ef` (`docs: 记录 runtime parity Task 3 交接`); the tracker, task log, verification evidence, protected output state, and Task 4 restart instructions were synchronized after the implementation commit.
 - Runtime-parity Task 4 strict frontend decoder/view model — complete and committed in `4d95ec3` (`feat: 添加严格股票分析工件解码器`); initial Red failed during collection because `canonicalReportArtifact.ts` did not exist. Review-driven Red -> Green loops covered camelCase forbidden keys, impossible calendar dates, legacy sample/panel compatibility, structured safety line numbers, nested array rejection, recursive unknown-field stripping, safe value text, exact API hrefs, provenance URL safety, and detached projections. Final focused tests passed with `67 passed`; full Vitest passed with `68 passed`; production build, `git diff --check`, fixture/runtime boundary, DSA path scan, specification review, and code-quality review passed.
+- Runtime-parity Task 4 handoff documentation — complete and committed in `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`); tracker, todo, reusable lesson, protected state, verification evidence, and the exact Task 5 source-test Red boundary were synchronized after the implementation commit.
 
 ### Unfinished, Blocked, And Deferred
 
@@ -127,6 +128,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 3 implementation commit: `f984174` (`feat: 暴露只读最新股票分析工件 API`).
 - Runtime-parity Task 3 handoff docs commit: `09094ef` (`docs: 记录 runtime parity Task 3 交接`).
 - Runtime-parity Task 4 implementation commit: `4d95ec3` (`feat: 添加严格股票分析工件解码器`).
+- Runtime-parity Task 4 handoff docs commit: `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`).
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
@@ -260,6 +262,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Planning status refresh | Completed | `e864cf9` (`docs: 刷新 runtime parity 规划交接状态`) |
 | Task 3 handoff documentation | Completed | `09094ef` (`docs: 记录 runtime parity Task 3 交接`) records the final backend API evidence and exact Task 4 restart boundary |
 | Task 4 strict frontend decoder/view model | Completed | `4d95ec3` (`feat: 添加严格股票分析工件解码器`) adds separate frontend status/finding types, field-by-field canonical decoding, fixed API href validation, finite coverage checks, provenance validation, recursive forbidden-field rejection, test-only fixtures, and type-compatible semantics rendering |
+| Task 4 handoff documentation | Completed | `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`) records the final decoder evidence, scope correction, protected state, reusable lesson, and exact Task 5 restart boundary |
 | Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
 | Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
@@ -310,7 +313,7 @@ Begin Task 5 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
 - 最新 runtime parity implementation commit：4d95ec3（feat: 添加严格股票分析工件解码器）。
-- 最新已记录 handoff docs commit：本次 Task 4 交接提交后填写；状态刷新后的实际 HEAD 仍须在启动时通过 git log -5 --oneline --decorate 核对。
+- 最新已记录 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）；本次状态刷新提交后的实际 HEAD 仍须在启动时通过 git log -5 --oneline --decorate 核对。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
@@ -327,6 +330,7 @@ Begin Task 5 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Post-migration runtime parity Task 3 implementation commit：f984174（feat: 暴露只读最新股票分析工件 API）
 - Post-migration runtime parity Task 3 handoff docs commit：09094ef（docs: 记录 runtime parity Task 3 交接）
 - Post-migration runtime parity Task 4 implementation commit：4d95ec3（feat: 添加严格股票分析工件解码器）
+- Post-migration runtime parity Task 4 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）
 - DSA 当前 HEAD：95a4b51
 
 Phase 7 已完成：
