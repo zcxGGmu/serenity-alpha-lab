@@ -73,6 +73,12 @@ export interface ReportArtifact {
   keyClaims: KeyClaim[];
 }
 
+export type ArtifactAvailability =
+  | { status: 'loading' }
+  | { status: 'ready'; artifact: ReportArtifact }
+  | { status: 'unavailable'; reason: string }
+  | { status: 'blocked'; reason: string };
+
 export interface RouteItem {
   path: string;
   label: string;

@@ -83,6 +83,7 @@ main {
 
 .hero-panel,
 .page-header,
+.artifact-state,
 .semantics-panel,
 .history-item,
 .summary-card {
@@ -94,12 +95,14 @@ main {
 
 .hero-panel,
 .page-header,
+.artifact-state,
 .semantics-panel {
   padding: 24px;
 }
 
 .hero-panel h1,
-.page-header h1 {
+.page-header h1,
+.artifact-state h1 {
   font-size: clamp(2rem, 4vw, 4rem);
   letter-spacing: 0;
   line-height: 1.05;
@@ -107,10 +110,21 @@ main {
 }
 
 .hero-panel p,
-.page-header p {
+.page-header p,
+.artifact-state p {
   color: #4a5568;
   line-height: 1.7;
   max-width: 760px;
+}
+
+.artifact-state {
+  align-content: center;
+  min-height: 280px;
+}
+
+.artifact-state .primary-button {
+  justify-self: start;
+  margin-top: 8px;
 }
 
 .page-header {
