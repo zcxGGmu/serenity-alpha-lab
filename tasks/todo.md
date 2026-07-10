@@ -4553,6 +4553,7 @@
 ## Runtime Parity Task 3 Review
 
 - Completed: read-only latest stock-analysis summary, validated manifest, and Markdown API routes plus config/CLI wiring are implemented and committed in `f984174`.
+- Handoff documentation: tracker, task review, protected state, verification evidence, and Task 4 restart instructions are committed in `09094ef` (`docs: 记录 runtime parity Task 3 交接`).
 - TDD evidence: initial Red `7 failed, 5 passed`; review hardening produced targeted Red failures for path leakage, malformed URLs, route distinction, and compatibility before each Green fix.
 - Final verification: focused `69 passed`; backend parity `115 passed, 2 warnings`; compile/diff/runtime-boundary checks and independent review passed.
 - Not Started: Task 4 strict frontend decoder/view model, Task 5 source/App lifecycle, Playwright canonical flow, and full implementation verification.
@@ -4560,3 +4561,21 @@
 - Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the same four `output/ui/*` entries remain external dirty state and were not staged, committed, reverted, overwritten, or used as fixtures.
 - Next action: begin Task 4 by creating `apps/serenity-web/src/artifacts/canonicalReportArtifact.test.ts`, run the decoder test command red for the missing decoder/types, then implement only the strict wire decoder and view-model slice.
+
+# Runtime Parity Task 3 Handoff Status Refresh
+
+- [x] Reconcile current branch, HEAD `09094ef`, Task 3 implementation commit `f984174`, verification evidence, and protected output state.
+- [x] Record the Task 3 handoff commit explicitly in the migration tracker, task review, and copyable restart prompt.
+- [x] Reconfirm Completed, Not Started, Environment Blocked, Deferred, next action, and the standing automatic closeout habit.
+- [x] Run documentation diff checks and confirm only owned handoff files are staged.
+- [x] Commit the handoff refresh while leaving protected `output/ui/*` unstaged.
+
+## Handoff Status Refresh Review
+
+- Completed: Phase 0-7, runtime-parity design/planning, Task 1 canonical manifest, Task 2 pure artifact repository, Task 3 API/config/CLI, and Task 3 handoff commit `09094ef`.
+- Not Started: Task 4 strict frontend decoder/view model, Task 5 source/App lifecycle, report semantics/History/Vite/Playwright slices, and full implementation verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four external `output/ui/*` entries remain dirty and must not be modified, staged, committed, reverted, overwritten, or used as fixtures.
+- Standing habit: every verified stage must automatically refresh and commit the tracker, `tasks/todo.md`, reusable lessons when changed, and the copyable restart prompt before final handoff; `tasks/lessons.md` already records this rule, so this refresh does not add another duplicate lesson.
+- Next action: execute Task 4 with the strict decoder test Red first, then implement only frontend wire types, decoder, test fixture, and report semantics test migration.
