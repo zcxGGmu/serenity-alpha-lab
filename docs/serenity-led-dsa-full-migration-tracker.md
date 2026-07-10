@@ -21,7 +21,7 @@
 | Serenity-led direction reset | Completed | User clarified that `serenity-alpha-lab` remains primary and DSA should be fully migrated into it |
 | Old DSA-first direction | Superseded | `docs/dsa-first-serenity-core-development-plan.md` and tracker are historical and should not drive new implementation |
 | Lessons correction | Completed | `tasks/lessons.md` records Serenity-led DSA migration as the governing rule |
-| Task checklist correction | Completed | `tasks/todo.md` tracks Serenity-led migration phases and the approved Phase 7 implementation checklist |
+| Task checklist correction | Completed | `tasks/todo.md` tracks Serenity-led migration phases, the completed Phase 7 checklist, and the approved post-migration runtime-parity design checkpoint |
 
 ### Repository State
 
@@ -49,8 +49,9 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 | Workstream | Status | Scope |
 | --- | --- | --- |
-| Post-migration runtime parity plan | Not Started | Write a new design boundary and `tasks/todo.md` checklist before implementation |
-| Canonical backend artifact/API integration for `apps/serenity-web` | Not Started | Replace fixture-only runtime data with Serenity-owned canonical backend artifacts/APIs while preserving evidence, provenance, readiness, source coverage, skeptical review, report safety, and research-only semantics |
+| Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
+| Detailed runtime parity implementation plan | Not Started | After written-spec review, create a Red-Green-Refactor checklist with exact files, tests, commands, acceptance criteria, and commit checkpoints |
+| Canonical backend artifact/API integration for `apps/serenity-web` | Not Started | Implement a versioned stock-analysis manifest, read-only latest-artifact API, strict Web decoder/adapter, and explicit loading/unavailable/blocked states without fixture fallback |
 | Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
 | Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
 
@@ -94,7 +95,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 ### Unfinished, Blocked, And Deferred
 
-- **Not started:** post-migration runtime parity planning and canonical backend artifact/API integration for `apps/serenity-web`.
+- **Completed design checkpoint:** the API-first latest stock-analysis artifact boundary is approved and documented.
+- **Not started:** detailed runtime parity implementation planning and production implementation for `apps/serenity-web`.
 - **Environment blocked:** Docker image build and no-secret container `/health` smoke because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
 - **Deferred by design:** LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing until separately designed and approved.
 
@@ -105,6 +107,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
 - Phase 7 final completion status refresh commit: `6d1fcbb` (`docs: 刷新 Phase 7 完成状态`).
+- Approved post-migration runtime parity design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
@@ -230,13 +233,15 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 ## Next Task
 
-Plan the first post-migration hardening slice.
+Review and plan the approved first post-migration hardening slice.
 
 1. Keep all Phase 0-7 migration behavior and research-only boundaries stable.
-2. Prioritize canonical backend artifact/API integration for `apps/serenity-web` so desktop parity can be evaluated against real local data instead of fixtures.
-3. When a Docker daemon is available, run the default release gate without `--skip-docker-smoke` and record image build plus no-secret `/health` evidence.
-4. Do not begin Electron, updater, live Bot platform, LLM provider, notification delivery, broker, or release-publishing work without a separate approved design and threat model.
-5. Continue excluding protected `output/ui/*` artifacts from staging and commits.
+2. Review `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
+3. After written-spec confirmation, write the detailed Red-Green-Refactor implementation plan and mirror its checklist into `tasks/todo.md`.
+4. Implement the versioned latest-artifact API and strict Web runtime source only after the planning check-in is complete.
+5. When a Docker daemon is available, run the default release gate without `--skip-docker-smoke` and record image build plus no-secret `/health` evidence.
+6. Do not begin Electron, updater, live Bot platform, LLM provider, notification delivery, broker, or release-publishing work without a separate approved design and threat model.
+7. Continue excluding protected `output/ui/*` artifacts from staging and commits.
 
 ## Copyable Restart Prompt
 
@@ -263,6 +268,7 @@ Plan the first post-migration hardening slice.
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
 - Phase 7 planning commit：eddf32c
+- Post-migration runtime parity approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md
 - DSA 当前 HEAD：95a4b51
 
 Phase 7 已完成：
@@ -285,9 +291,14 @@ Phase 7 已完成：
 - DSA external path/import scan 无匹配；唯一 daily_stock_analysis 名称是 release gate 对 .dockerignore 的防护断言。
 - git diff --check passed。
 
+已完成设计 checkpoint：
+- 已审计 apps/serenity-web fixture 数据入口、Serenity canonical stock-analysis manifest、local API、测试和发布边界。
+- 已批准 API-first latest artifact 方案：版本化 manifest、只读 /api/artifacts/stock-analysis/latest API、严格 TypeScript decoder/adapter、显式 loading/unavailable/blocked 状态。
+- 设计明确不在首个 slice 中迁移 history aggregation、旧预览写 API、serve-app 静态托管、Electron、外部 adapter 或交易自动化。
+
 未完成 / 下一步：
-- Not Started：先为 post-migration runtime parity 写新的设计边界和 tasks/todo.md 可勾选计划；实现前先 check-in。
-- Not Started（推荐第一项）：让 apps/serenity-web 消费 canonical backend artifact/API，而不是 fixture-only data，为未来 desktop parity 提供真实运行时基础。
+- Not Started：先审查 approved design，然后写详细 Red-Green-Refactor implementation plan 和 tasks/todo.md 可勾选实施步骤；生产实现尚未开始。
+- Not Started（首个实现 slice）：让 apps/serenity-web 消费 canonical latest stock-analysis artifact API，移除生产运行时 sample fixture fallback，并保留 evidence/provenance/readiness/source coverage/skeptical review/report safety/research-only 语义。
 - Environment Blocked：Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
 - Deferred：不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计、威胁建模和批准。
 

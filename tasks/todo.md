@@ -4340,3 +4340,46 @@
 - Environment blocker: real Docker image build and no-secret container `/health` smoke remain unverified until a Docker daemon is available.
 - Deferred scope: Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, and release publishing require separate approved design and threat-model work.
 - Verification: `git diff --check` passed; the owned diff contains only `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, and `tasks/lessons.md`; protected `output/ui/*` remains unstaged.
+
+# Post-Migration Runtime Parity Design Checkpoint
+
+- [x] Re-read the migration plan, tracker, current task log, reusable lessons, and current Git state.
+- [x] Audit `apps/serenity-web` fixture entrypoints, view-model consumers, Vitest coverage, Playwright smoke, and development transport.
+- [x] Audit the Serenity-owned local API, stock-analysis report writer, canonical manifest shape, run-state contract, and desktop parity prerequisite.
+- [x] Generate a canonical stock-analysis artifact in a temporary directory and compare its real manifest with the Web fixture contract.
+- [x] Establish focused baselines: Python API/report/CLI tests and frontend Vitest.
+- [x] Compare API-first, full same-origin runtime, and direct static-manifest approaches.
+- [x] Approve the API-first latest stock-analysis artifact approach.
+- [x] Write the approved design specification.
+- [x] Record design boundaries, acceptance criteria, TDD strategy, environment blockers, deferred scope, and protected-file constraints.
+- [ ] Complete written-spec review and create the detailed Red-Green-Refactor implementation plan.
+- [ ] Mirror the implementation plan into this task log with exact test and verification commands.
+- [ ] Commit the planning checkpoint before production implementation.
+- [ ] Begin implementation with failing backend manifest/API tests.
+
+## Runtime Parity Design Entry Criteria Check-In
+
+- Primary runtime: Serenity remains the owner of the API, Web app, artifacts, and future desktop runtime; DSA remains source reference only.
+- Approved first slice: versioned canonical stock-analysis manifest, read-only latest-artifact API, strict frontend decoder/adapter, injectable artifact source, and explicit loading/unavailable/blocked states.
+- Production fixture boundary: `sampleReportArtifact` may remain test data but must not remain a production `App` dependency after implementation.
+- Evidence boundary: the browser must not synthesize readiness, source coverage, skeptical review, report safety, research-only state, key claims, or provenance.
+- API boundary: read only the configured stock-analysis artifact directory; do not accept filesystem paths from requests or expose local absolute paths.
+- Transport boundary: use relative `/api/...` calls and a Vite loopback proxy for development; do not add wildcard CORS or claim production static-hosting parity.
+- Deferred in this slice: history aggregation, `/run-state` redesign, old preview API migration, `serve-app` static Web hosting, Electron/updater, live adapters, LLM providers, notification delivery, broker/order actions, and publishing.
+- Protected artifacts: do not modify, stage, commit, revert, or use the existing dirty `output/ui/*` files as test fixtures.
+
+## Runtime Parity Design Artifacts
+
+- Approved design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
+- Implementation plan: Not Started; create only after written-spec review.
+- Production implementation: Not Started.
+
+## Runtime Parity Design Verification Evidence
+
+- Git baseline: branch `codex/phase-4-report-safety`; starting HEAD `28ab2d8`; protected `output/ui/*` entries remain the only pre-existing dirty state.
+- Canonical artifact audit: temporary `analyze-stock --stub` output produced `analysis-report-manifest.json`, `reports/stock-analysis-report.md`, and `index.html`; the manifest preserved research-only, safety, key claims, and provenance but lacked the Web's query/readiness/source-coverage/skeptical-review fields.
+- Focused Python baseline: `python3 -m pytest tests/test_app_api.py tests/test_analysis_report.py tests/test_cli.py -q` -> `40 passed`.
+- Frontend baseline: `npm --prefix apps/serenity-web test` -> `2 files / 4 tests passed`.
+- Design choice: API-first latest artifact is preferred over direct static parsing because it gives the Web a stable allowlisted DTO without coupling it to Markdown or filesystem layout.
+- Known environment blocker: Docker daemon remains unavailable at `/Users/zq/.orbstack/run/docker.sock`; no real image build or container `/health` claim is made.
+- Next action: review the approved spec, then use `writing-plans` to create the exact Red-Green-Refactor implementation plan before editing production code.
