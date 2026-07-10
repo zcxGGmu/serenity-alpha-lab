@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-6 are complete through Web runtime parity commit `901fa15`. The Web loads the relative latest-artifact API through a strict decoder and sanitized source, renders actual canonical coverage and structured findings, labels History as latest-only, proxies `/api` to loopback during Vite development, and has non-AAPL plus blocked Playwright coverage. Task 7 full verification and final documentation reconciliation remain Not Started; protected generated UI dirt under `output/ui/*` remains untouched and unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-6 are complete. Task 7 verification and documentation reconciliation passed from baseline `ac253c1`; the closeout documentation and final status commits are in progress. Real Docker smoke remains environment blocked; protected generated UI dirt under `output/ui/*` remains external and unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -51,7 +51,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | --- | --- | --- |
 | Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design committed in `948970b`; spec: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
 | Detailed runtime parity implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` maps exact files, red failures, minimal implementations, focused/full verification, protected-file checks, and commit checkpoints |
-| Canonical backend artifact/API integration for `apps/serenity-web` | In Progress | Tasks 1-6 are complete through `901fa15`; next run Task 7 full backend/frontend/release verification and final runtime-parity documentation reconciliation |
+| Canonical backend artifact/API integration for `apps/serenity-web` | In Progress | Tasks 1-6 implementation and Task 7 verification/reconciliation are complete; only the closeout documentation and final status commits remain |
 | Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
 | Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
 
@@ -106,8 +106,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 ### Unfinished, Blocked, And Deferred
 
-- **Completed:** the API-first artifact boundary, detailed Red-Green-Refactor plan, Task 1 versioned canonical manifest, Task 2 pure allowlisted repository, Task 3 read-only API/config/CLI, Task 4 strict frontend decoder/view model, Task 5 injectable source/App lifecycle, and Task 6 actual coverage/latest-only History/Vite/Playwright flow.
-- **Not started:** Task 7 full backend/frontend/release verification, documentation reconciliation, and final runtime-parity closeout.
+- **Completed:** the API-first artifact boundary, detailed Red-Green-Refactor plan, Tasks 1-6 implementation, and Task 7 full backend/frontend/release verification, disposable-artifact API smoke, and documentation reconciliation.
+- **Not started:** the Task 7 closeout documentation commit and final status-refresh commit.
 - **Environment blocked:** Docker image build and no-secret container `/health` smoke because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
 - **Deferred by design:** LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing until separately designed and approved.
 
@@ -118,7 +118,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 6 handoff documentation commit: `9c462cd` (`docs: 记录 runtime parity Task 6 交接`).
 - Runtime-parity Task 5 implementation commit: `b2b483f` (`feat: 接入可注入股票分析工件来源`).
 - Runtime-parity Task 5 handoff documentation commit: `fbfed1e` (`docs: 记录 runtime parity Task 5 交接`).
-- Latest pre-handoff status commit: `25891f8` (`docs: 刷新 runtime parity Task 5 最终状态`).
+- Task 6 final status refresh: `30e65dd` (`docs: 刷新 runtime parity Task 6 最终状态`).
+- Task 7 entry baseline: `ac253c1` (`docs: 更新 runtime parity 最新开发交接状态`).
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
@@ -138,7 +139,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 4 implementation commit: `4d95ec3` (`feat: 添加严格股票分析工件解码器`).
 - Runtime-parity Task 4 handoff docs commit: `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`).
 - Runtime-parity Task 4 review-hardening commit: `2ad297a` (`test: 收紧股票分析工件完整投影回归`).
-- Task 6 production implementation is finalized; this handoff refresh records the Task 7 verification boundary while protected generated UI artifacts remain the only unrelated dirty state.
+- Task 7 verification and documentation reconciliation are complete; this handoff prepares the closeout documentation commit and final status-refresh commit while protected generated UI artifacts remain the only unrelated dirty state.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -282,7 +283,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Task 6 handoff documentation | Completed | `9c462cd` records Red/Green evidence, clean-start browser and real proxy verification, independent review closure, protected state, the reusable proxy lesson, and the exact Task 7 boundary |
 | Task 6 final status refresh | Completed | `30e65dd` synchronizes the migration plan, tracker, task log, Task 7 boundary, and protected-output status after the Task 6 handoff |
 | Runtime-parity implementation | Completed | Tasks 1-6 are complete through implementation `901fa15`, handoff `9c462cd`, and final status refresh `30e65dd` |
-| Runtime-parity verification closeout | Not Started | Task 7 focused/full backend, frontend, release-gate, disposable-artifact smoke, documentation reconciliation, and final closeout have not started |
+| Runtime-parity verification closeout | In Progress | Task 7 verification passed workspace-isolated focused `115 passed, 2 warnings`, full `287 passed, 2 warnings`, Vitest `5 files / 137 tests`, frontend build, clean-start Chromium Playwright `2/2`, unified release gate `9 passed / 1 skipped / 0 errors`, boundary scans, and disposable summary/manifest/report API smoke; two closeout commits remain |
 | Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
 | External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
 
@@ -290,23 +291,22 @@ Planning self-review confirms the plan covers every approved design requirement,
 
 ## Current Development Status
 
-- **Completed:** Phase 0-7 and runtime-parity Tasks 1-6. The latest implementation is `901fa15`, Task 6 handoff is `9c462cd`, and the latest pre-refresh status commit is `30e65dd`.
-- **Not Started:** Task 7 full backend/frontend/release verification, disposable-artifact API smoke, documentation reconciliation, and final runtime-parity closeout.
-- **Environment Blocked:** Real Docker image build and no-secret container `/health` smoke remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable. Only the unified gate with `--skip-docker-smoke` may be claimed after it is rerun successfully.
+- **Completed:** Phase 0-7, runtime-parity Tasks 1-6, and Task 7 verification/documentation reconciliation. Task 6 implementation is `901fa15`, handoff is `9c462cd`, final Task 6 status is `30e65dd`, and Task 7 started from `ac253c1`. Fresh Task 7 evidence includes focused `115 passed, 2 warnings`, full `287 passed, 2 warnings`, Vitest `137/137`, frontend build, clean-start Chromium Playwright `2/2`, unified gate `9 passed / 1 skipped / 0 errors`, passing boundary scans, and passing disposable-artifact API smoke.
+- **Not Started:** the Task 7 closeout documentation commit and final status-refresh commit. No implementation or verification step remains.
+- **Environment Blocked:** Real Docker image build, no-secret container `/health` smoke, and the no-skip unified release gate remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
 - **Deferred:** History aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
 - **Protected State:** Do not modify, stage, commit, revert, overwrite, read as fixtures, or otherwise consume `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
 - **Standing Closeout Habit:** After every verified stage-level task, automatically refresh and commit this tracker, `tasks/todo.md`, any genuinely new reusable lesson, and the copyable restart prompt before the final response.
 
 ## Next Task
 
-Begin Task 7 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+No approved runtime-parity implementation or verification task remains. Complete the two Task 7 closeout commits.
 
-1. Run the focused backend verification command exactly as listed in Task 7.
-2. Run `make verify`, the complete frontend verification, and `PYTHONPATH=src python3 scripts/verify_offline_release.py --skip-docker-smoke` while Docker remains unavailable.
-3. Verify the canonical summary, validated manifest, Markdown route, and Vite loopback proxy with a disposable artifact under `/tmp`.
-4. Reconcile final runtime-parity evidence and create the closeout documentation/status commits.
-5. Do not claim Docker image build or no-secret container `/health` smoke until the no-skip command succeeds.
-6. Do not start history aggregation, `/run-state` redesign, static hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation.
+1. Commit the closeout plan/tracker/todo/lesson documents.
+2. Refresh tracker/todo with that actual commit hash and create the final status commit.
+3. When Docker/OrbStack becomes available, run `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` without `--skip-docker-smoke`.
+4. Record Docker image-build and no-secret container `/health` evidence only if that real command succeeds.
+5. Do not start history aggregation, `/run-state` redesign, production static hosting/reverse proxying, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation without a separate approved design.
 
 ## Copyable Restart Prompt
 
@@ -330,60 +330,42 @@ Begin Task 7 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - serenity-alpha-lab 是主体项目、产品壳和未来运行时。
 - daily_stock_analysis 是功能迁移来源，不是主体运行时。
 - 禁止从 DSA checkout 做跨仓库 runtime import 或运行时文件读取。
-- 当前属于 post-migration runtime parity / release hardening，不做交易自动化。
+- post-migration runtime parity Task 7 验证与文档对账已完成；当前先完成两个 closeout commits，之后仅剩环境依赖的 Docker 实烟验证。
 - 严格保持 evidence-first、provenance、readiness、真实 source coverage、skeptical review、report safety 和 research-only guardrails。
-- 所有实现严格执行 Red -> Green -> Refactor。
+- 未经新的批准设计，不开始任何 deferred capability。
 
 仓库状态：
 - 当前分支：codex/phase-4-report-safety
-- 本次状态刷新前 HEAD：30e65dd（docs: 刷新 runtime parity Task 6 最终状态）；本次状态提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
+- Task 7 entry baseline：ac253c1（docs: 更新 runtime parity 最新开发交接状态）
 - Task 6 implementation：901fa15
 - Task 6 handoff：9c462cd
 - Task 6 final status refresh：30e65dd
-- Task 5 implementation：b2b483f
-- Task 5 handoff：fbfed1e
+- Task 7 closeout documentation：首个 closeout commit 的实际 hash 将在 final status commit 中回填。
+- Task 7 final status refresh：第二个提交完成后作为当前 HEAD；后续启动时通过 git log -5 --oneline --decorate 核对实际 hash。
 - DSA 当前 HEAD：95a4b51
 
 Completed：
 - Phase 0-7 已全部完成。
-- Runtime parity Tasks 1-6 已完成。
-- Task 6 已保留真实 canonical coverage 字段，并新增非默认计数回归，防止固定 fixture 文案假通过。
-- History 已明确标注 “Latest available artifact”，并说明完整 run history 由独立 source 后续实现。
-- Vite dev server 已仅将 /api 代理到 http://127.0.0.1:8010，changeOrigin=false；未增加 CORS、rewrite 或生产静态托管。
-- Playwright 已使用 NVDA canonical interception 覆盖 Home、Analysis、Report Reader、History、Settings、API-relative links 和整页无 AAPL fixture fallback。
-- Playwright 已覆盖 409 artifact_blocked / report_safety_failed，确认 blocked state 无 report/manifest links。
-- Task 6 规格审查和代码质量复审均通过；所有有效发现已转成测试加固并复审 PASS。
-- Task 6 implementation 已提交为 901fa15。
-- Task 6 handoff 已提交为 9c462cd，最终状态刷新已提交为 30e65dd。
+- Runtime parity Tasks 1-6 已完成；Task 7 verification/documentation reconciliation 已完成。
+- Task 7 仅执行验证、文档对账和 closeout，没有修改生产 runtime code。
+- Workspace-isolated focused backend：PYTHONPATH="$PWD/src" -> 115 passed, 2 warnings。
+- Workspace-isolated make verify：287 passed, 2 warnings；doctor ok；CPO pack 182 evidence items / 6 ready memos / 0 skipped；coverage matrix completed。
+- Frontend：Vitest 5 files / 137 tests passed；production build passed。
+- Clean-start browser：安装与 Playwright 1.58.2 匹配的 bundled Chromium 后，CI=1 Playwright 2/2 passed；4175 在运行前后均无监听。
+- 本机 Edge 有一个用户窗口，clean-launch 探针出现 allocator/close hang，因此没有关闭用户浏览器；不要把该环境现象误记为应用失败。
+- Unified release gate：CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py --skip-docker-smoke -> status passed，9 passed / 1 skipped / 0 errors；唯一 skipped 为 docker_smoke / explicitly_disabled_by_caller。
+- Boundary：外部 DSA checkout path 无匹配；DSA package import 无匹配；生产 App/main 无 sampleReportArtifact；唯一 daily_stock_analysis 文本是 release_gate.py 的 Docker ignore 防护规则；report safety 通过；scoped diff hygiene 通过。
+- Disposable API smoke：/tmp AAPL stub artifact 的 summary、manifest、report 均 HTTP 200；JSON/Markdown content types 正确；summary Cache-Control=no-store；报告链接为 API-relative；无仓库路径、临时目录或 output/ui 路径泄漏；server 和临时目录已清理。
+- 验证前发现裸 python3 会导入 /Users/zq/Desktop/ai-projs/posp/agent-test/serenity-alpha-lab；后续所有 Python 证据必须显式使用 PYTHONPATH="$PWD/src" 并核对 serenity_alpha_lab.__file__。
 
-Task 6 验证证据：
-- Focused Red：ReportSemantics + App -> 15 passed / 1 failed；唯一失败是缺少 latest-only History 文案。
-- Playwright Red：1 passed / 1 failed；NVDA flow 仅在 History latest-only 文案失败，blocked flow 已通过。
-- Focused Green：2 files / 16 tests passed。
-- Full Vitest：5 files / 137 tests passed。
-- Frontend build：passed。
-- Clean-start Playwright Edge：2/2 passed。
-- Real Vite proxy：使用 /tmp disposable stub artifact，4176 代理 JSON 与 8010 backend JSON 完全一致；HTTP 200、application/json、Cache-Control: no-store。
-- fixture/DSA/safety boundary scans 和 git diff --check passed。
-
-Not Started / 下一步：
-- 立即执行 Task 7：full verification、documentation reconciliation 和 final runtime-parity closeout。
-- 首先运行：
-  python3 -m pytest \
-    tests/test_analysis_pipeline.py \
-    tests/test_analysis_report.py \
-    tests/test_stock_analysis_artifacts.py \
-    tests/test_app_api.py \
-    tests/test_cli.py \
-    tests/test_dsa_migration_boundaries.py \
-    tests/test_report_safety.py \
-    -q
-- 然后按 Task 7 运行 make verify、完整 frontend verification、带 --skip-docker-smoke 的 unified release gate、disposable artifact API smoke 和最终文档/状态提交。
-- 不要提前开始 history aggregation、/run-state redesign、static hosting、wildcard CORS 或任何 deferred capability。
+Not Started：
+- Task 7 closeout documentation commit。
+- 使用实际 closeout commit hash 刷新 tracker/todo 后的 final status commit。
 
 Environment Blocked：
 - Docker daemon 仍无法连接 /Users/zq/.orbstack/run/docker.sock。
-- Docker 可用后才能运行不带 --skip-docker-smoke 的 unified release gate。
+- Docker 可用后运行：
+  CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py
 - 在真实命令通过前，不得宣称 image build 或 no-secret container /health smoke 已完成。
 
 Deferred：
@@ -395,13 +377,17 @@ Deferred：
 - broker/order actions、交易自动化、release publishing
 
 保护状态：
-不要修改、stage、提交、回滚、覆盖或用作 fixture：
+不要修改、读取内容、stage、提交、回滚、覆盖或用作 fixture：
 - output/ui/analyses/manifest.json
 - output/ui/reports/deliverable-research-report.md
 - output/ui/runs.json
 - output/ui/analyses/topic-2bde5fabbc/
 
-每个阶段性任务完成后，自动更新并提交 tracker、tasks/todo.md、必要的新 lesson 和 copyable restart prompt；明确记录 Completed、Not Started、Environment Blocked、Deferred、最新 commits、验证证据、下一步和受保护文件。
+下一步：
+- 先完成 Task 7 closeout documentation commit 和 final status commit。
+- 如果 Docker/OrbStack daemon 可用，只执行不带 --skip-docker-smoke 的 unified release gate，并记录真实 image build 与 no-secret container /health evidence。
+- 如果用户批准新的 follow-on design，再单独规划；否则不要开始 Deferred capability。
+- 每个阶段性任务完成后，自动更新并提交 tracker、tasks/todo.md、必要的新 lesson 和 copyable restart prompt；明确记录 Completed、Not Started、Environment Blocked、Deferred、最新 commits、验证证据、下一步和受保护文件。
 ```
 
 ## Historical Runtime Parity Task 6 Restart Prompt (Superseded)

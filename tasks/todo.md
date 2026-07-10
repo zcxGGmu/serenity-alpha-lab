@@ -4817,3 +4817,47 @@
 - Lesson decision: `tasks/lessons.md` already records the automatic tracker/todo/lesson/restart-prompt closeout habit repeatedly, so no duplicate lesson is added.
 - Documentation verification: `git diff --check` passed; Markdown fences are balanced; the tracker contains all four status categories, the current `30e65dd` baseline, Task 7 next action, and the copyable restart prompt.
 - Next action: run the exact Task 7 focused backend verification command from the detailed runtime-parity plan before any deferred implementation.
+
+# Runtime Parity Task 7: Full Verification And Final Closeout
+
+- [x] Reconcile branch `codex/phase-4-report-safety`, HEAD `ac253c1`, Task 6 commits, approved Task 7 plan, lessons, and protected output state.
+- [x] Run the exact focused backend verification command and record fresh pass counts.
+- [x] Run `make verify` and record the full Python, doctor, CPO pack, and coverage-matrix evidence.
+- [x] Run full frontend Vitest, production build, and clean Playwright smoke.
+- [x] Run the unified offline release gate with `--skip-docker-smoke` and preserve Docker smoke as Environment Blocked.
+- [x] Run DSA runtime path/import, production fixture, report-safety, and diff-hygiene scans.
+- [x] Generate a disposable `/tmp` stock-analysis artifact and verify summary, manifest, and Markdown API routes without path leakage.
+- [x] Reconcile migration plan, tracker, task review, and copyable restart prompt with Completed, Not Started, Environment Blocked, and Deferred categories.
+- [x] Add a `tasks/lessons.md` entry only if Task 7 produces a genuinely new reusable lesson.
+- [x] Verify protected/generated/cache state, stage only owned documentation, and commit the runtime-parity closeout.
+- [ ] Refresh the tracker and task log with the actual handoff commit HEAD, verify again, and create the final status commit if required.
+
+## Runtime Parity Task 7 Entry Check-In
+
+- Completed prerequisite: Phase 0-7 and runtime-parity Tasks 1-6 are complete through Task 6 implementation `901fa15`, handoff `9c462cd`, final status refresh `30e65dd`, and current handoff baseline `ac253c1`.
+- Current scope: verification and documentation reconciliation only; no production-code change is planned unless a fresh verification failure proves a real regression.
+- Not Started at entry: focused/full backend verification, complete frontend verification, skip-Docker unified release gate, disposable-artifact API smoke, final documentation reconciliation, and closeout commits.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` remains unavailable. No Docker success claim is allowed without a fresh no-skip gate.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
+- Protected state: do not modify, stage, commit, revert, overwrite, read as fixtures, or otherwise consume `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+
+## Runtime Parity Task 7 Verification Evidence
+
+- Import isolation correction: bare `python3` resolved `serenity_alpha_lab` from `/Users/zq/Desktop/ai-projs/posp/agent-test/serenity-alpha-lab`; accepted backend evidence was rerun with `PYTHONPATH="$PWD/src"` and resolved the current workspace package.
+- Focused backend: workspace-isolated Task 7 command passed with `115 passed, 2 warnings`.
+- Full backend: workspace-isolated `make verify` passed with `287 passed, 2 warnings`; doctor reported required and optional inputs `ok`; CPO pack completed with 182 evidence items, 6 ready memos, and 0 skipped; coverage matrix completed.
+- Frontend unit/build: full Vitest passed with `5 files / 137 tests`; `tsc -b && vite build` passed with 1695 modules transformed.
+- Browser: the exact local command initially passed `2/2` while a pre-existing Vite listener was present. After removing that stale listener, the installed Edge channel could not clean-launch while one user Edge window remained open and emitted allocator/close hangs. The user browser was not terminated. Playwright 1.58.2 bundled Chromium was installed outside the repository, and `CI=1` clean-start Playwright passed `2/2` with port `4175` clean before and after.
+- Unified release gate: `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py --skip-docker-smoke` passed with 9 checks passed, 1 skipped, and 0 errors. `python_tests` reported `287 passed, 2 warnings`; frontend unit/build/smoke passed; Docker static rules passed; only `docker_smoke` was skipped with `explicitly_disabled_by_caller`.
+- Boundary and safety: external DSA checkout path scan returned no matches; DSA package import scan returned no matches; production `App.tsx`/`main.tsx` had no `sampleReportArtifact`; the only runtime `daily_stock_analysis` text was the release-gate assertion that `.dockerignore` excludes it; report-safety regression passed; `git diff --check -- . ':(exclude)output/ui/**'` passed.
+- Disposable API smoke: AAPL stub generation under `/tmp` returned summary, manifest, and Markdown routes with HTTP 200. Summary/manifest were `application/json; charset=utf-8`; report was `text/markdown; charset=utf-8`; summary used `Cache-Control: no-store`; canonical counts were 4 evidence, 3 primary, and 1 risk; report links were API-relative; no repository path, temporary directory, or `output/ui/` path leaked. The API process stopped, port `8010` was released, and the temporary directory was removed.
+- Cleanup: frontend `dist`, `test-results`, and `playwright-report` were removed after verification; ports `4175` and `8010` were clean; non-protected tracked changes were limited to the four Task 7 closeout documents.
+
+## Runtime Parity Task 7 Pre-Commit Review
+
+- Completed: Phase 0-7, runtime-parity Tasks 1-6, and Task 7 full backend/frontend/release verification, boundary scans, disposable API smoke, documentation reconciliation, and a new verification-isolation lesson.
+- Not Started: the Task 7 closeout documentation commit and final status-refresh commit. No implementation or verification step remains.
+- Environment Blocked: real Docker image build, no-secret container `/health` smoke, and the no-skip unified release gate remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
+- Protected state: the four startup `output/ui/*` entries remain external dirty state and must stay unread, unstaged, and uncommitted.
+- Next action: verify documentation consistency and protected/generated state, create the Task 7 closeout documentation commit, then refresh tracker/todo with that actual commit hash and create the final status commit.

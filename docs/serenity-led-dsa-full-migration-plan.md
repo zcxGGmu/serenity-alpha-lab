@@ -174,15 +174,19 @@ Additional checks when Web/API work begins:
 - Playwright smoke covers primary workflow.
 - Network-dependent providers are stubbed in CI.
 
-## 7. Immediate Next Step
+## 7. Runtime Parity Closeout
 
-Phase 0-7 and post-migration runtime-parity Tasks 1-6 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and the latest verified status refresh is `30e65dd`.
+Phase 0-7 and post-migration runtime-parity Tasks 1-6 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and its final status refresh is `30e65dd`. Task 7 completed full verification and documentation reconciliation from baseline `ac253c1` without changing production runtime code; the closeout documentation and final status commits remain to be created.
 
-Continue with Task 7 of the approved design and detailed TDD plan:
+Fresh Task 7 evidence:
 
-1. Run the focused backend verification listed in Task 7 without changing production code.
-2. Run `make verify`, complete frontend verification, and the unified offline release gate with `--skip-docker-smoke` while the Docker daemon remains unavailable.
-3. Verify representative API behavior with a disposable artifact under `/tmp`, never with protected `output/ui/*`.
-4. Reconcile final implementation evidence and create the runtime-parity closeout commits.
+1. Workspace-isolated focused backend verification passed with `115 passed, 2 warnings`.
+2. Workspace-isolated `make verify` passed with `287 passed, 2 warnings`; doctor was healthy; the CPO pack completed with 182 evidence items, 6 ready memos, and 0 skipped; the coverage matrix completed.
+3. Full Vitest passed with `5 files / 137 tests`; the production frontend build passed; clean-start Chromium Playwright passed `2/2` with port `4175` clean before and after the run.
+4. The unified offline release gate passed with 9 required checks passed, 0 errors, and only Docker smoke explicitly skipped.
+5. External DSA checkout path/import and production fixture scans passed; report-safety regression passed; scoped diff hygiene passed while excluding protected `output/ui/**`.
+6. A disposable `/tmp` AAPL artifact returned canonical summary, validated manifest, and Markdown report responses with HTTP 200, correct content types, `Cache-Control: no-store` on the summary, API-relative report links, and no repository, temporary-directory, or protected-output path leakage. The server and temporary state were removed.
 
-Do not claim Docker image build or no-secret container `/health` smoke until the real no-skip command succeeds. Do not start history aggregation, `/run-state` redesign, static Web hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation during Task 7 verification.
+No implementation or verification step remains Not Started; only the two Task 7 closeout commits remain. The only environment follow-up after closeout is the real Docker image build and no-secret container `/health` smoke: rerun `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` when `/Users/zq/.orbstack/run/docker.sock` becomes available. Do not claim Docker completion before that command succeeds.
+
+History aggregation, `/run-state` redesign, production static Web hosting or reverse proxying, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing remain Deferred and require a separate approved design.
