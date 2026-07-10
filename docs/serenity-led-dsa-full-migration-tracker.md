@@ -98,8 +98,9 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 2 pure artifact repository — complete and committed in `e276ce2` (`feat: 添加只读股票分析工件仓库`); initial collection Red failed on the missing module, review-driven Red loops covered deterministic classification, finite numeric checks, forbidden keys, fixed allowlists, provenance URL safety, exact paths, manifest/report symlink escape and loop handling, and stable exception sanitization. Final repository tests passed with `27 passed`; focused manifest/repository/DSA-boundary regression passed with `38 passed, 2 warnings`.
 - Runtime-parity Task 3 read-only artifact API/config/CLI — complete and committed in `f984174` (`feat: 暴露只读最新股票分析工件 API`); initial Red produced `7 failed, 5 passed` for the missing config field, unknown CLI option, and generic artifact-route 404. Review-driven Red -> Green loops added exact summary/manifest distinctions, all-route error mapping, missing Markdown classification, generic 404 compatibility, and cross-platform local-path leakage rejection without rejecting valid HTTPS/Serenity URLs, IPv6 hosts, HTML closing tags, or allowlisted market symbols. Final focused tests passed with `69 passed`; backend parity passed with `115 passed, 2 warnings`.
 - Runtime-parity Task 3 handoff documentation — complete and committed in `09094ef` (`docs: 记录 runtime parity Task 3 交接`); the tracker, task log, verification evidence, protected output state, and Task 4 restart instructions were synchronized after the implementation commit.
-- Runtime-parity Task 4 strict frontend decoder/view model — complete and committed in `4d95ec3` (`feat: 添加严格股票分析工件解码器`); initial Red failed during collection because `canonicalReportArtifact.ts` did not exist. Review-driven Red -> Green loops covered camelCase forbidden keys, impossible calendar dates, legacy sample/panel compatibility, structured safety line numbers, nested array rejection, recursive unknown-field stripping, safe value text, exact API hrefs, provenance URL safety, and detached projections. Final focused tests passed with `67 passed`; full Vitest passed with `68 passed`; production build, `git diff --check`, fixture/runtime boundary, DSA path scan, specification review, and code-quality review passed.
+- Runtime-parity Task 4 strict frontend decoder/view model — complete and committed in `4d95ec3` (`feat: 添加严格股票分析工件解码器`); initial Red failed during collection because `canonicalReportArtifact.ts` did not exist. Review-driven Red -> Green loops covered camelCase forbidden keys, impossible calendar dates, legacy sample/panel compatibility, structured safety line numbers, nested array rejection, recursive unknown-field stripping, safe value text, exact API hrefs, provenance URL safety, and detached projections. Final focused tests passed with `67 passed`; full Vitest passed with `68 passed`; production build, `git diff --check`, fixture/runtime boundary, DSA path scan, and specification review passed, with the final quality-review test blind spot resolved in `2ad297a`.
 - Runtime-parity Task 4 handoff documentation — complete and committed in `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`); tracker, todo, reusable lesson, protected state, verification evidence, and the exact Task 5 source-test Red boundary were synchronized after the implementation commit.
+- Runtime-parity Task 4 review hardening — complete and committed in `2ad297a` (`test: 收紧股票分析工件完整投影回归`); the valid decoder case now compares the entire `ReportArtifact` projection, and `ReportSemantics` locks Focus/External plus structured coverage message/recommendation rendering. Fresh focused `67 passed`, full Vitest `68 passed`, and production build passed.
 
 ### Unfinished, Blocked, And Deferred
 
@@ -129,6 +130,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 3 handoff docs commit: `09094ef` (`docs: 记录 runtime parity Task 3 交接`).
 - Runtime-parity Task 4 implementation commit: `4d95ec3` (`feat: 添加严格股票分析工件解码器`).
 - Runtime-parity Task 4 handoff docs commit: `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`).
+- Runtime-parity Task 4 review-hardening commit: `2ad297a` (`test: 收紧股票分析工件完整投影回归`).
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
@@ -261,7 +263,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Planning checkpoint commit | Completed | `ddff62b` (`docs: 完成 post-migration runtime parity 实施规划`) |
 | Planning status refresh | Completed | `e864cf9` (`docs: 刷新 runtime parity 规划交接状态`) |
 | Task 3 handoff documentation | Completed | `09094ef` (`docs: 记录 runtime parity Task 3 交接`) records the final backend API evidence and exact Task 4 restart boundary |
-| Task 4 strict frontend decoder/view model | Completed | `4d95ec3` (`feat: 添加严格股票分析工件解码器`) adds separate frontend status/finding types, field-by-field canonical decoding, fixed API href validation, finite coverage checks, provenance validation, recursive forbidden-field rejection, test-only fixtures, and type-compatible semantics rendering |
+| Task 4 strict frontend decoder/view model | Completed | `4d95ec3` adds the production decoder/view model and `2ad297a` locks the complete projected object plus all currently rendered canonical coverage/finding fields |
 | Task 4 handoff documentation | Completed | `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`) records the final decoder evidence, scope correction, protected state, reusable lesson, and exact Task 5 restart boundary |
 | Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
@@ -331,6 +333,7 @@ Begin Task 5 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Post-migration runtime parity Task 3 handoff docs commit：09094ef（docs: 记录 runtime parity Task 3 交接）
 - Post-migration runtime parity Task 4 implementation commit：4d95ec3（feat: 添加严格股票分析工件解码器）
 - Post-migration runtime parity Task 4 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）
+- Post-migration runtime parity Task 4 review-hardening commit：2ad297a（test: 收紧股票分析工件完整投影回归）
 - DSA 当前 HEAD：95a4b51
 
 Phase 7 已完成：
@@ -377,6 +380,7 @@ Completed：
 - Task 4 已按 TDD 完成并提交为 `4d95ec3`：初始 decoder Red 因 `canonicalReportArtifact.ts` 缺失在 collection 阶段失败；实现独立 wire/view-model 类型、逐字段投影、固定 API href、有限非负 coverage、timezone-aware 严格时间戳、完整 provenance URL、递归 forbidden-key 和未知字段剥离。
 - Task 4 review hardening 通过多轮 Red -> Green 覆盖 camelCase `targetPrice`、非法日历日期、旧 sample/ReportSemantics 类型兼容、structured safety line number、数组嵌套 forbidden field、递归未知字段与安全 value 文本；规格复审 PASS，代码质量复审确认可提交且 Minor 已修。
 - Task 4 最终验证：decoder + semantics focused -> `67 passed`；full Vitest -> `68 passed`；`npm --prefix apps/serenity-web run build`、`git diff --check`、fixture/runtime boundary、DSA path scan 和 protected-output staging check 通过。
+- Task 4 最终质量复核进一步指出有效 payload 只做部分字段断言；已在 `2ad297a` 改为完整 `ReportArtifact` equality，并补齐 Focus/External、coverage message/recommendation 展示断言。加固后 focused `67 passed`、full Vitest `68 passed`、build passed。
 
 Not Started / 下一步：
 - Task 5 injectable HTTP source/App lifecycle、剩余 History/Vite/Playwright canonical-artifact flow 和完整实现验证尚未开始。

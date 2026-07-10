@@ -4623,7 +4623,8 @@
 - Final focused verification: decoder + `ReportSemantics` -> `67 passed`.
 - Final full frontend verification: Vitest -> `68 passed`; `npm --prefix apps/serenity-web run build` -> passed.
 - Boundary verification: `git diff --check` passed; production `App.tsx`/`main.tsx` gained no test-fixture import; Task 4 production code has no external DSA path/import; forbidden trading/broker/order vocabulary appears only in decoder rejection constants and negative tests.
-- Review evidence: independent specification review PASS; independent code-quality review found no Critical/Important issues, declared the slice submit-ready, and its two Minor findings were converted into tests and fixed.
+- Review evidence: independent specification review PASS; an initial code-quality review declared the slice submit-ready and its two Minor findings were converted into tests and fixed. A later final review found one Important complete-projection test blind spot, which was fixed in `2ad297a`.
+- Post-handoff review hardening: a later quality-review result identified one Important test blind spot because the valid decoder case used partial matching. Commit `2ad297a` replaces it with complete `reportArtifactFixture` equality and adds Focus/External plus coverage message/recommendation assertions; focused `67 passed`, full Vitest `68 passed`, and build passed afterward.
 - Scope decision: `ReportSemanticsPanel.tsx` and the legacy `sampleReportArtifact.ts` were minimally updated because the new shared `ReportArtifact` type otherwise broke runtime tests/build. Deleting the sample remains Task 5 work after `App` production source injection; no HTTP source, App lifecycle, Vite, History, or Playwright implementation was added.
 - Protected state: the same four `output/ui/*` entries remain external dirty state and were excluded from implementation staging.
 - Not Started: Task 5 injectable source/App lifecycle, remaining Task 6 History/Vite/Playwright work, and Task 7 full parity verification.
@@ -4641,7 +4642,7 @@
 
 ## Runtime Parity Task 4 Handoff Status Refresh Review
 
-- Completed: runtime-parity Tasks 1-4, including Task 4 implementation `4d95ec3` and handoff documentation `c61ef1b`.
+- Completed: runtime-parity Tasks 1-4, including Task 4 implementation `4d95ec3`, handoff documentation `c61ef1b`, and review-hardening commit `2ad297a`.
 - Not Started: Task 5 `ReportArtifactSource` and App lifecycle, remaining Task 6 History/Vite/Playwright work, and Task 7 full verification.
 - Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
