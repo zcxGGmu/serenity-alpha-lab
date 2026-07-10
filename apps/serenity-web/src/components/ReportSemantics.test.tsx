@@ -13,8 +13,10 @@ describe('ReportSemanticsPanel', () => {
     expect(screen.getAllByText(/^ready$/i)).not.toHaveLength(0);
     expect(screen.getAllByText(/source coverage/i)).not.toHaveLength(0);
     expect(screen.getByText(/evidence 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/focus 4/i)).toBeInTheDocument();
     expect(screen.getByText(/primary 3/i)).toBeInTheDocument();
     expect(screen.getByText(/risk 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/external 0/i)).toBeInTheDocument();
     expect(screen.getByText(/provenance/i)).toBeInTheDocument();
     expect(screen.getByText(/serenity:market-data:MSFT:quote:2026-07-10/i)).toBeInTheDocument();
     expect(screen.getAllByText(/skeptical review/i)).not.toHaveLength(0);
@@ -75,6 +77,12 @@ describe('ReportSemanticsPanel', () => {
 
     expect(screen.getByText('missing_primary_source_depth')).toBeInTheDocument();
     expect(screen.getByText('warning')).toBeInTheDocument();
+    expect(
+      screen.getByText('Primary-source depth is incomplete.'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Collect another primary source.'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Line 12')).toBeInTheDocument();
     expect(screen.getByText('unsupported actionability')).toBeInTheDocument();
     expect(

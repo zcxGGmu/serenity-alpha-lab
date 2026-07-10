@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { canonicalReportArtifactWireFixture } from '../test/fixtures/reportArtifacts';
+import {
+  canonicalReportArtifactWireFixture,
+  reportArtifactFixture,
+} from '../test/fixtures/reportArtifacts';
 import { decodeCanonicalReportArtifact } from './canonicalReportArtifact';
 
 type JsonRecord = Record<string, unknown>;
@@ -464,31 +467,7 @@ describe('decodeCanonicalReportArtifact', () => {
 
     const artifact = decodeCanonicalReportArtifact(payload);
 
-    expect(artifact).toMatchObject({
-      schemaVersion: 1,
-      artifactType: 'stock_analysis_report',
-      symbol: 'MSFT',
-      company: 'Microsoft Corporation',
-      generatedAt: '2026-07-10T00:00:00+00:00',
-      researchOnly: true,
-      markdownHref: '/api/artifacts/stock-analysis/latest/report',
-      manifestHref: '/api/artifacts/stock-analysis/latest/manifest',
-      reportGate: {
-        status: 'available',
-        reason: 'readiness_ready',
-        researchOnly: true,
-      },
-      sourceCoverage: {
-        evidenceCount: 4,
-        focusEvidenceCount: 4,
-        primaryCount: 3,
-        riskCount: 1,
-        externalNonSerenityCount: 0,
-      },
-    });
-    expect(artifact.keyClaims[0].provenanceRefs[0].evidenceId).toBe(
-      'serenity:market-data:MSFT:quote:2026-07-10',
-    );
+    expect(artifact).toEqual(reportArtifactFixture);
     expect(artifact).not.toHaveProperty('internal_debug');
     expect(JSON.stringify(artifact)).not.toContain('internal_state');
     expect(JSON.stringify(artifact)).not.toContain('local_path');
