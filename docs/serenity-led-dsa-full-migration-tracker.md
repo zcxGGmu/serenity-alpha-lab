@@ -12,7 +12,7 @@
 
 ## Current Status Snapshot
 
-**Updated:** 2026-07-09
+**Updated:** 2026-07-10
 
 ### Direction
 
@@ -21,13 +21,13 @@
 | Serenity-led direction reset | Completed | User clarified that `serenity-alpha-lab` remains primary and DSA should be fully migrated into it |
 | Old DSA-first direction | Superseded | `docs/dsa-first-serenity-core-development-plan.md` and tracker are historical and should not drive new implementation |
 | Lessons correction | Completed | `tasks/lessons.md` records Serenity-led DSA migration as the governing rule |
-| Task checklist correction | Completed | `tasks/todo.md` tracks Serenity-led migration phases and current Phase 4 closeout |
+| Task checklist correction | Completed | `tasks/todo.md` tracks Serenity-led migration phases and the approved Phase 7 implementation checklist |
 
 ### Repository State
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `1c2eddf` (`docs: 记录 Phase 6 研究验证与监控迁移交接`); Phase 6 implementation and handoff docs are complete and committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `d73dd3a` (`docs: 刷新 Phase 6 后续开发状态`); Phase 7 design and detailed implementation planning are prepared locally; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -48,7 +48,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 | Phase | Status | Scope |
 | --- | --- | --- |
-| Phase 5: Web Workbench Migration | Completed | Commit `f8e87d0`; Serenity-owned `apps/serenity-web` workbench now covers Home, Analysis, History, Settings, report-reader flow, Phase 4 report semantics panels, Vitest, and Playwright smoke |
+| Phase 7: Agent, Bot, Desktop, Docker, CI | Planning Complete / Implementation Not Started | Approved safety-first scope: evidence-grounded Agent tools, platform-neutral default-off Bot, desktop readiness contract, non-root no-secret Docker runtime, and unified offline application release gate |
 
 ### Phase Completion Status
 
@@ -61,7 +61,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Phase 4: Report And Safety Integration | Completed | Serenity-owned stock-analysis report generator renders DSA-derived research-only sections, key-claim provenance refs, safety-scanned Markdown, manifest, and UI-visible artifact from stubbed analysis |
 | Phase 5: Web Workbench Migration | Completed | Commit `f8e87d0`; incrementally recreated under `apps/serenity-web`; no wholesale DSA React import, no DSA runtime imports, and no copied DSA generated caches |
 | Phase 6: Portfolio, Backtest, Alerts, Notifications | Completed | Commit `639e255`; portfolio/backtest migrated as research validation; alerts/notifications migrated as default-off research monitors and handoff records; no trading automation |
-| Phase 7: Agent, Bot, Desktop, Docker, CI | Not Started | Next phase |
+| Phase 7: Agent, Bot, Desktop, Docker, CI | Planning Complete / Implementation Not Started | Design and detailed TDD plan are complete; start with failing Agent contract/tool tests |
 
 ### Known Constraints
 
@@ -85,17 +85,17 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 3: Stock Analysis Pipeline Migration — implementation committed in `3cf14b3`; handoff docs committed in `5718928`.
 - Phase 4: Report And Safety Integration — implementation committed in `3253f13`; handoff docs committed in current HEAD.
 - Phase 5 Web Workbench Migration — complete and committed in `f8e87d0`.
+- Phase 6: Portfolio, Backtest, Alerts, Notifications — implementation committed in `639e255`; handoff docs committed in `1c2eddf`.
 
 ### Not Started / Pending
 
-- Phase 6: Portfolio, Backtest, Alerts, Notifications — complete and committed in `639e255`.
-- Phase 7: Agent, Bot, Desktop, Docker, CI — next active migration phase.
+- Phase 7 implementation — planning complete; Agent/Bot/Desktop/Docker/CI production files and tests have not been created yet.
 
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
-- Current HEAD: `1c2eddf` (`docs: 记录 Phase 6 研究验证与监控迁移交接`); verify with `git log -1 --oneline`.
-- Current owned migration docs are up to date for Phase 6; only protected generated UI artifacts should remain dirty.
+- Current HEAD: `d73dd3a` (`docs: 刷新 Phase 6 后续开发状态`); verify with `git log -1 --oneline`.
+- Phase 7 design, implementation plan, checklist, and lessons updates are the only intended owned planning changes before the planning commit.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -186,14 +186,29 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Full verification | Completed | `make verify` -> `194 passed, 2 warnings`; doctor ok; run-cpo-pack ok; coverage matrix ok |
 | Protected output hygiene | Completed | `git status --short output/ui` still shows only pre-existing protected generated output dirt; Phase 6 did not stage, commit, revert, or overwrite protected `output/ui/*` artifacts |
 
+## Phase 7 Planning Checkpoint
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Approved scope | Completed | User approved the safety-first minimum complete migration: Agent tools, platform-neutral Bot, desktop readiness, Docker, and CI; no LLM runtime, live Bot adapters, notifications, Electron, updater, installer, or release publishing |
+| Design specification | Completed | `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-phase-7-runtime-release-design.md` |
+| Detailed TDD plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-phase-7-agent-bot-runtime-release.md` |
+| Agent boundary | Completed | Explicit caller context, default-off visibility, caller allowlist, no implicit I/O, readiness/evidence propagation, recursive trading-field rejection, sanitized failures |
+| Bot boundary | Completed | Platform-neutral contracts and commands over Serenity analysis/Agent outputs; default-off with no platform SDK or outbound delivery |
+| Desktop decision | Completed | Add loopback runtime/readiness contract only; defer Electron and auto-update until backend artifact/API parity and separate threat-model gates |
+| Docker/CI decision | Completed | Non-root no-secret API/Web container plus one machine-readable release gate for Python/frontend/browser/Docker checks across PR/branch/tag workflows |
+| Protected output hygiene | Completed | Planning did not intentionally modify, stage, overwrite, copy, or revert protected `output/ui/*` artifacts |
+| Implementation status | Not Started | Start with `tests/test_research_agents.py` red tests from Task 1 |
+
 ## Next Task
 
-Start Phase 7: Agent, Bot, Desktop, Docker, CI.
+Execute Phase 7 Task 1: Evidence-Grounded Agent Contracts And Tools.
 
-1. Begin Phase 7 by planning Agent, Bot, Desktop, Docker, and CI migration boundaries.
-2. Preserve Serenity evidence-first provenance, readiness, source coverage, skeptical review, report safety, and research-only guardrails.
-3. Keep optional/bot/desktop/Docker integrations default-off until explicitly configured.
-4. Continue excluding protected `output/ui/*` artifacts from staging and commits.
+1. Read the approved Phase 7 design and detailed implementation plan.
+2. Write `tests/test_research_agents.py` first and verify the expected missing-module Red failure.
+3. Implement only the minimal Agent contracts/tools/runtime required by the tests.
+4. Run the focused Agent, analysis, report, and migration-boundary regression before moving to the Bot task.
+5. Continue excluding protected `output/ui/*` artifacts from staging and commits.
 
 ## Copyable Restart Prompt
 
@@ -205,6 +220,8 @@ Start Phase 7: Agent, Bot, Desktop, Docker, CI.
 2. docs/serenity-led-dsa-full-migration-tracker.md
 3. tasks/todo.md
 4. tasks/lessons.md
+5. docs/superpowers/specs/2026-07-10-serenity-alpha-lab-phase-7-runtime-release-design.md
+6. docs/superpowers/plans/2026-07-10-serenity-alpha-lab-phase-7-agent-bot-runtime-release.md
 
 当前方向：
 - serenity-alpha-lab 仍然是主体项目、产品壳和未来运行时。
@@ -215,7 +232,7 @@ Start Phase 7: Agent, Bot, Desktop, Docker, CI.
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- Serenity 当前 HEAD：1c2eddf（docs: 记录 Phase 6 研究验证与监控迁移交接）；Phase 6 handoff docs commit 为 1c2eddf；Phase 6 implementation commit 为 639e255；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
+- Serenity 当前 HEAD：d73dd3a（docs: 刷新 Phase 6 后续开发状态）；Phase 6 handoff docs commit 为 1c2eddf；Phase 6 implementation commit 为 639e255；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 已完成：
@@ -226,6 +243,11 @@ Start Phase 7: Agent, Bot, Desktop, Docker, CI.
 - Phase 4: Report And Safety Integration 已完成实现与验证，implementation commit 为 3253f13。
 - Phase 5: Web Workbench Migration 已完成实现、验证并提交，implementation commit 为 f8e87d0。
 - Phase 6: Portfolio, Backtest, Alerts, Notifications 已完成实现、验证并提交，implementation commit 为 639e255。
+- Phase 7 设计与详细实施计划已完成，生产实现尚未开始。
+- Phase 7 approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-phase-7-runtime-release-design.md。
+- Phase 7 implementation plan：docs/superpowers/plans/2026-07-10-serenity-alpha-lab-phase-7-agent-bot-runtime-release.md。
+- Phase 7 approved scope：evidence-grounded Agent tools、platform-neutral default-off Bot、desktop readiness contract、non-root no-secret Docker、unified offline application release gate。
+- Phase 7 excluded scope：trading-oriented Agent prompt、LLM runtime、live Bot adapters、notifications、Electron/updater/installer、release publishing。
 - Phase 6 新增/更新：
   - src/serenity_alpha_lab/research_validation.py：portfolio research snapshots and historical validation summaries。
   - src/serenity_alpha_lab/research_monitors.py：default-off research monitor rules, dry-run evaluations, dispatch plans, and handoff records。
@@ -246,8 +268,9 @@ Start Phase 7: Agent, Bot, Desktop, Docker, CI.
 - Full verification: `make verify` -> 194 passed, 2 warnings；doctor ok；run-cpo-pack ok（182 evidence items, 6 ready memos, 0 skipped）；coverage matrix ok。
 
 未完成 / 下一步：
-- 下一阶段：Phase 7 Agent, Bot, Desktop, Docker, CI。
-- Phase 7 要把 DSA Agent/bot/desktop/docker/CI 能力迁移为 Serenity-owned、evidence-grounded、default-off/local-first 的运行与发布能力，不做交易自动化。
+- 开始 Phase 7 Task 1：先写 tests/test_research_agents.py 红测试，覆盖 default-off visibility、explicit caller context、allowlist、readiness/evidence propagation、recursive trading-field rejection 和 sanitized failure。
+- 红测试必须先因 serenity_alpha_lab.agents 模块缺失而失败，再实现最小 Agent contracts/tools/runtime。
+- 完成 Task 1 后运行 Agent + analysis pipeline + report + DSA migration boundary focused regression，再进入 Bot 任务。
 
 注意：
 - 不要修改、stage、提交或回滚 Serenity 既有 generated UI 输出：

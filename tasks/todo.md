@@ -4240,3 +4240,66 @@
 - Commit: Phase 6 implementation committed as `639e255` (`feat: 完成 Serenity Phase 6 研究验证与监控迁移`) with protected generated `output/ui/*` artifacts excluded.
 - Closeout docs commit: Phase 6 handoff documentation committed as `1c2eddf` (`docs: 记录 Phase 6 研究验证与监控迁移交接`).
 - Next action: begin Phase 7 Agent, Bot, Desktop, Docker, CI planning.
+
+# Serenity-Led DSA Migration Phase 7 Agent, Bot, Desktop, Docker, CI
+
+- [x] Confirm the Phase 7 architecture and desktop boundary before implementation.
+- [x] Audit DSA Agent/Bot/Desktop/Docker/CI source surfaces without runtime imports or copied generated state.
+- [x] Write the approved Phase 7 design specification.
+- [x] Write the detailed Red-Green-Refactor implementation plan.
+- [x] Confirm protected generated `output/ui/*` artifacts remain untouched and unstaged during planning.
+- [ ] Add Serenity-owned evidence-grounded Agent contracts, tools, allowlisting, and safety boundaries.
+- [ ] Add a platform-neutral default-off research Bot over Serenity-owned analysis services.
+- [ ] Add no-secret Agent/Bot/Desktop capability diagnostics to local API health.
+- [ ] Add a loopback-only desktop runtime plan with Electron packaging and auto-update explicitly deferred.
+- [ ] Add a machine-readable offline application release gate and CLI wrapper.
+- [ ] Add a non-root no-secret Docker API/Web runtime without scheduled analysis or outbound integrations.
+- [ ] Expand CI so pull requests, branch pushes, and tag pushes use the same Python/frontend/browser/Docker release gate.
+- [ ] Run focused Red/Green tests, full backend/frontend verification, Docker smoke when available, static scans, and protected-output checks.
+- [ ] Update migration tracker, task review, lessons, and copyable restart prompt after verification.
+- [ ] Commit Phase 7 implementation files with a detailed Chinese message, explicitly excluding protected `output/ui/*`.
+- [ ] Commit Phase 7 handoff documentation with final commit IDs and fresh verification evidence.
+
+## Phase 7 Entry Criteria Check-In
+
+- Primary runtime: `serenity-alpha-lab`; DSA remains source-only and must not be imported at runtime.
+- Repository state: Serenity starts Phase 7 planning from HEAD `d73dd3a` on `codex/phase-4-report-safety`; Phase 6 implementation commit is `639e255`; Phase 6 handoff commit is `1c2eddf`; DSA source remains at `95a4b51`.
+- Protected artifacts stay local-only: do not modify, stage, commit, overwrite, copy into Docker images, or revert `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, or `output/ui/analyses/topic-2bde5fabbc/`.
+- Approved approach: migrate evidence-grounded Agent tools, a platform-neutral Bot, runtime diagnostics, a desktop readiness contract, Docker, and CI. Do not migrate the DSA trading-oriented Agent prompt, LLM providers, conversation DB, live Bot platforms, webhooks, notifications, Electron implementation, updater, installers, or release publishing.
+- Agent boundary: tools require caller-provided Serenity analysis context, are hidden unless explicitly enabled and allowlisted, perform no fetch/database/delivery work, preserve evidence/readiness/coverage/report-gate states, and recursively reject trading fields.
+- Bot boundary: commands reuse Serenity analysis and Agent tool outputs, remain disabled by default, do not load platform SDKs, and never convert `blocked` or `needs_work` into recommendations.
+- Desktop boundary: implement only a loopback local Web/API runtime plan and defer Electron/updater packaging until canonical backend artifact/API parity.
+- Docker boundary: non-root, no-secret startup, API/Web only, no scheduler, no providers, no notifications, no broker actions, and no protected generated output input.
+- CI boundary: one machine-readable release gate covers Python, frontend, browser smoke, report safety, migration boundary, Docker rules, and no-secret startup for PR/branch/tag paths.
+
+## Phase 7 Planning Artifacts
+
+- Approved design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-phase-7-runtime-release-design.md`.
+- Detailed implementation plan: `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-phase-7-agent-bot-runtime-release.md`.
+- Recommended execution: use subagent-driven development task-by-task, with TDD for each implementation slice and specification/quality review before moving to the next task.
+
+## Phase 7 Planned Verification
+
+- Agent red/green: `python3 -m pytest tests/test_research_agents.py -q`.
+- Bot red/green: `python3 -m pytest tests/test_research_bot.py -q`.
+- Desktop/API red/green: `python3 -m pytest tests/test_desktop_runtime.py tests/test_app_api.py -q`.
+- Release/Docker red/green: `python3 -m pytest tests/test_release_gate.py -q`.
+- Focused regression: Agent/Bot/Desktop/release/API/analysis/report/migration-boundary tests.
+- Python compile: Agent, Bot, desktop, release-gate, and release CLI modules.
+- Frontend: `npm test -- --run`, `npm run build`, and Playwright smoke under `apps/serenity-web`.
+- Docker: build image and start local API without secrets when Docker is available; verify `/health`.
+- Static DSA boundary scan under Serenity runtime, scripts, Docker, web, and workflow files.
+- Research-only safety scan for forbidden trading fields and automation terms.
+- Full backend verification: `make verify`.
+- Unified gate: `PYTHONPATH=src python3 scripts/verify_offline_release.py`.
+- Diff hygiene: `git diff --check`.
+- Protected-output check: compare `git status --short output/ui` and explicit protected diffs before/after implementation.
+
+## Phase 7 Planning Checkpoint Review
+
+- Status: design and detailed implementation planning are complete; production implementation has not started.
+- Scope decision: use the approved safety-first minimum complete migration. Agent tools, Bot commands, desktop readiness, Docker, and CI are included; LLM runtime, live Bot adapters, notifications, Electron, updater, installer, and release publishing are excluded.
+- Source audit result: DSA provides useful tool registry, explicit-context research tool, message normalization, command dispatch, non-root container, desktop loopback, and offline release-gate patterns, but its trading Agent prompts, market commands, credential-heavy workflows, auto-update, scheduled analysis, and notification behavior must not be copied.
+- Serenity integration result: reuse `StockAnalysisPipeline`, evidence IDs, readiness, source coverage, report gate, report safety, app health, and Phase 6 default-off monitor conventions.
+- Protected output status: planning did not intentionally modify, stage, overwrite, copy, or revert protected generated `output/ui/*`.
+- Next action after written-spec review: execute Task 1 from the Phase 7 implementation plan using failing Agent tests first.
