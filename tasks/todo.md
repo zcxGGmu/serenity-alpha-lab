@@ -4352,8 +4352,8 @@
 - [x] Approve the API-first latest stock-analysis artifact approach.
 - [x] Write the approved design specification.
 - [x] Record design boundaries, acceptance criteria, TDD strategy, environment blockers, deferred scope, and protected-file constraints.
-- [ ] Complete written-spec review and create the detailed Red-Green-Refactor implementation plan.
-- [ ] Mirror the implementation plan into this task log with exact test and verification commands.
+- [x] Complete written-spec review and create the detailed Red-Green-Refactor implementation plan.
+- [x] Mirror the implementation plan into this task log with exact test and verification commands.
 - [ ] Commit the planning checkpoint before production implementation.
 - [ ] Begin implementation with failing backend manifest/API tests.
 
@@ -4371,7 +4371,7 @@
 ## Runtime Parity Design Artifacts
 
 - Approved design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
-- Implementation plan: Not Started; create only after written-spec review.
+- Implementation plan: Completed at `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 - Production implementation: Not Started.
 
 ## Runtime Parity Design Verification Evidence
@@ -4382,17 +4382,17 @@
 - Frontend baseline: `npm --prefix apps/serenity-web test` -> `2 files / 4 tests passed`.
 - Design choice: API-first latest artifact is preferred over direct static parsing because it gives the Web a stable allowlisted DTO without coupling it to Markdown or filesystem layout.
 - Known environment blocker: Docker daemon remains unavailable at `/Users/zq/.orbstack/run/docker.sock`; no real image build or container `/health` claim is made.
-- Next action: review the approved spec, then use `writing-plans` to create the exact Red-Green-Refactor implementation plan before editing production code.
+- Next action: commit the planning checkpoint, then add and run the two canonical-manifest red tests from Task 1 of the implementation plan.
 
 ## Runtime Parity Design Checkpoint Review
 
-- Status: design checkpoint complete and committed; detailed implementation planning and production code remain Not Started.
+- Status: design checkpoint and detailed implementation planning are complete; production code and new red tests remain Not Started.
 - Design commit: `948970b` (`docs: 固化 post-migration runtime parity 设计`).
 - Approved boundary: versioned canonical stock-analysis manifest, read-only latest-artifact API, strict Web decoder/adapter, injectable artifact source, explicit loading/unavailable/blocked states, and no production sample fallback.
 - Scope exclusions remain active: no history aggregation, old preview API migration, `serve-app` static hosting, permissive CORS, Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, or publishing.
 - Verification: placeholder scan for the new spec passed after replacing one vague follow-on phrase; `git diff --check` and staged diff checks passed; the design commit contains only the approved spec, tracker, todo, and lessons.
 - Protected output status: the same four pre-existing `output/ui/*` entries remain dirty and were not staged, committed, reverted, or overwritten.
-- Written-spec review gate: review `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`; after confirmation, create and commit the detailed implementation plan before production edits.
+- Written-spec review gate: passed; the detailed implementation plan is complete and must be committed before production edits.
 
 # Post-Migration Runtime Parity Status Refresh
 
@@ -4401,15 +4401,68 @@
 - [x] Preserve Docker smoke as Environment Blocked and external runtime capabilities as Deferred.
 - [x] Refresh the tracker copyable restart prompt with the exact next action and current commits.
 - [x] Reaffirm the automatic stage-closeout documentation habit in `tasks/lessons.md`.
-- [ ] Create the detailed Red-Green-Refactor implementation plan after the design review checkpoint.
+- [x] Create the detailed Red-Green-Refactor implementation plan after the design review checkpoint.
 - [ ] Commit the implementation planning checkpoint before writing production code.
 - [ ] Start the first implementation task with failing backend manifest/API tests.
 
 ## Status Refresh Review
 
-- Completed: Phase 0-7 migration; runtime-parity source audit; API-first design approval; design spec `948970b`; design handoff `14237a9`; focused baseline evidence.
-- Not Started: detailed implementation plan, backend manifest/API tests, backend implementation, frontend decoder/source/App state implementation, Playwright canonical-artifact flow, and full verification.
+- Completed: Phase 0-7 migration; runtime-parity source audit; API-first design approval; design spec `948970b`; design handoff `14237a9`; focused baseline evidence; detailed implementation plan.
+- Not Started: backend manifest/API tests, backend implementation, frontend decoder/source/App state implementation, Playwright canonical-artifact flow, and implementation verification.
 - Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, and release publishing.
 - Protected state: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain external dirty state and must not be staged, committed, reverted, or overwritten.
-- Next action: read the approved design, create the exact implementation plan under `docs/superpowers/plans/`, mirror it into this checklist, commit planning docs, then begin TDD with backend red tests.
+- Next action: commit planning docs, then begin TDD with the versioned canonical-manifest and missing-risk skeptical-review red tests in `tests/test_analysis_report.py`.
+
+# Post-Migration Runtime Parity Implementation Planning Checkpoint
+
+- [x] Cross-check every approved design requirement against an implementation task.
+- [x] Create `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+- [x] Record exact create/modify/test files before defining implementation tasks.
+- [x] Lock the canonical summary DTO and sanitized `{error: {code, reason}}` envelope.
+- [x] Resolve the fixture-only coverage mismatch by preserving real evidence/focus/primary/risk/external counts and structured flags.
+- [x] Define manifest Red -> Green -> Refactor steps for `tests/test_analysis_report.py`.
+- [x] Define pure artifact repository red tests for schema, research-only, safety, readiness, report gate, source coverage, skeptical review, provenance, forbidden keys, and path containment.
+- [x] Define local API red tests for latest summary, manifest, Markdown, 404, 409, 422, content types, no-store, and no local-path leakage.
+- [x] Define config and CLI red tests for `stock_analysis_artifact_dir`.
+- [x] Define frontend wire decoder tests for every fail-closed semantic and unsafe href.
+- [x] Define injectable `ReportArtifactSource` and loading/ready/unavailable/blocked/retry/abort App tests.
+- [x] Define production `sampleReportArtifact` import-removal checks.
+- [x] Define real coverage and structured finding component tests.
+- [x] Define Vite loopback proxy and controlled non-AAPL Playwright API interception.
+- [x] List focused backend/frontend regressions, build, browser smoke, migration boundary, safety, and full verification commands.
+- [x] Record expected failure reason for every red command.
+- [x] Add commit checkpoints after manifest, repository, API/config/CLI, decoder, App source/lifecycle, Web/Playwright, and final closeout slices.
+- [x] Self-review the plan for spec coverage, placeholders, type/signature consistency, actual coverage counts, and protected-file safety.
+- [x] Reconcile the historical Phase 0-7 completion markers in the migration plan.
+- [x] Refresh tracker, todo, lessons, and the copyable restart prompt for planning completion.
+- [ ] Commit planning-only files, explicitly excluding protected `output/ui/*`.
+- [ ] Add the Task 1 canonical-manifest and missing-risk skeptical-review tests to `tests/test_analysis_report.py`.
+- [ ] Run:
+  `python3 -m pytest tests/test_analysis_report.py::test_write_stock_analysis_manifest_includes_runtime_parity_semantics tests/test_analysis_report.py::test_write_stock_analysis_manifest_emits_missing_risk_counter_thesis -q`
+  and confirm the expected red failure is missing `generated_at` injection and canonical manifest fields.
+- [ ] Implement the minimal versioned manifest and deterministic skeptical review in `src/serenity_alpha_lab/analysis/report.py`.
+- [ ] Run:
+  `python3 -m pytest tests/test_analysis_pipeline.py tests/test_analysis_report.py tests/test_report_safety.py tests/test_dsa_migration_boundaries.py -q`
+  and commit the green manifest slice.
+- [ ] Create `tests/test_stock_analysis_artifacts.py` and run it red before creating `src/serenity_alpha_lab/app/stock_analysis_artifacts.py`.
+- [ ] Implement and commit the pure allowlisted repository with stable 404/409/422 errors and path containment.
+- [ ] Extend `tests/test_app_api.py` and `tests/test_cli.py`, run them red, then implement artifact routes, config, and CLI wiring.
+- [ ] Create strict frontend decoder tests and implementation, move fixtures under `src/test/fixtures`, and remove the production sample fixture path.
+- [ ] Create HTTP source and App lifecycle tests, run them red, then implement source injection and explicit states.
+- [ ] Update report semantics, latest-only History, Vite proxy, and non-AAPL Playwright interception through Red -> Green -> Refactor.
+- [ ] Run focused backend verification, `make verify`, full Vitest, frontend build, Playwright smoke, unified release gate with explicit Docker skip if still blocked, path/import/safety scans, and `git diff --check`.
+- [ ] Update and commit final tracker/todo/lessons/restart handoff with actual implementation commits and verification evidence.
+
+## Planning Checkpoint Review
+
+- Status: planning complete; backend/frontend/Playwright production implementation and new red tests are Not Started.
+- Plan artifact: `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+- Spec coverage: versioned manifest, read-only API, strict decoder, injectable source, App lifecycle, real coverage data, structured findings, Vite transport, Playwright, verification, and commit checkpoints are all mapped.
+- Pre-implementation baselines only: Python focused baseline `40 passed`; frontend Vitest baseline `2 files / 4 tests passed`.
+- Planning validation: approved design cross-check complete; placeholder and type/signature review complete; protected-file boundary retained.
+- Not Started: no production code changed and no runtime-parity red test has been executed.
+- Environment Blocked: Docker image build and no-secret container `/health` smoke remain unverified while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live adapters, LLM providers, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the four existing `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
+- Next action: commit this planning checkpoint, then execute Task 1 exactly as written in the implementation plan.

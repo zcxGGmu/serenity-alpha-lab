@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Latest development handoff before this status refresh is `14237a9`; read the actual current HEAD with `git log -1 --oneline`; Phase 0-7 and the runtime-parity design checkpoint are complete, while detailed implementation planning and production parity implementation have not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Starting HEAD for the runtime-parity planning checkpoint is `0efe2bf`; Phase 0-7, the approved runtime-parity design, and the detailed implementation plan are complete, while production parity implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -50,7 +50,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Workstream | Status | Scope |
 | --- | --- | --- |
 | Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design committed in `948970b`; spec: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
-| Detailed runtime parity implementation plan | Not Started | After written-spec review, create a Red-Green-Refactor checklist with exact files, tests, commands, acceptance criteria, and commit checkpoints |
+| Detailed runtime parity implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` maps exact files, red failures, minimal implementations, focused/full verification, protected-file checks, and commit checkpoints |
 | Canonical backend artifact/API integration for `apps/serenity-web` | Not Started | Implement a versioned stock-analysis manifest, read-only latest-artifact API, strict Web decoder/adapter, and explicit loading/unavailable/blocked states without fixture fallback |
 | Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
 | Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
@@ -88,15 +88,17 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 1: Serenity App Runtime Foundation — complete and committed in `d7187ca`.
 - Phase 2: Market Data Provider Migration — implementation committed in `8686d80`; handoff docs committed in `cb0e2b5`.
 - Phase 3: Stock Analysis Pipeline Migration — implementation committed in `3cf14b3`; handoff docs committed in `5718928`.
-- Phase 4: Report And Safety Integration — implementation committed in `3253f13`; handoff docs committed in current HEAD.
+- Phase 4: Report And Safety Integration — implementation committed in `3253f13`; later migration and runtime-parity status commits supersede its handoff HEAD.
 - Phase 5 Web Workbench Migration — complete and committed in `f8e87d0`.
 - Phase 6: Portfolio, Backtest, Alerts, Notifications — implementation committed in `639e255`; handoff docs committed in `1c2eddf`.
 - Phase 7: Agent, Bot, Desktop, Docker, CI — implementation committed in `f2fd7cd`; handoff docs committed in `8bba5e0`.
+- Post-migration runtime parity design — approved in `948970b`; design handoff committed in `14237a9`.
+- Detailed runtime parity implementation planning — complete in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`; production implementation remains unstarted.
 
 ### Unfinished, Blocked, And Deferred
 
-- **Completed design checkpoint:** the API-first latest stock-analysis artifact boundary is approved and documented.
-- **Not started:** detailed runtime parity implementation planning and production implementation for `apps/serenity-web`.
+- **Completed design and planning checkpoints:** the API-first latest stock-analysis artifact boundary is approved and the detailed Red-Green-Refactor plan is written.
+- **Not started:** backend manifest/API red tests, backend implementation, frontend decoder/source/App lifecycle, Playwright canonical-artifact flow, and implementation verification.
 - **Environment blocked:** Docker image build and no-secret container `/health` smoke because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
 - **Deferred by design:** LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing until separately designed and approved.
 
@@ -109,7 +111,9 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 7 final completion status refresh commit: `6d1fcbb` (`docs: 刷新 Phase 7 完成状态`).
 - Post-migration runtime parity design checkpoint commit: `948970b` (`docs: 固化 post-migration runtime parity 设计`).
 - Post-migration runtime parity design handoff commit: `14237a9` (`docs: 记录 runtime parity 设计交接`).
+- Post-migration runtime parity pre-planning status refresh: `0efe2bf` (`docs: 刷新 runtime parity 开发状态与启动提示`).
 - Approved post-migration runtime parity design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
+- Detailed post-migration runtime parity plan: `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
@@ -214,7 +218,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Desktop decision | Completed | Add loopback runtime/readiness contract only; defer Electron and auto-update until backend artifact/API parity and separate threat-model gates |
 | Docker/CI decision | Completed | Non-root no-secret API/Web container plus one machine-readable release gate for Python/frontend/browser/Docker checks across PR/branch/tag workflows |
 | Protected output hygiene | Completed | Planning did not intentionally modify, stage, overwrite, copy, or revert protected `output/ui/*` artifacts |
-| Implementation status | Not Started | Start with `tests/test_research_agents.py` red tests from Task 1 |
+| Implementation status | Completed | Implementation committed in `f2fd7cd`; focused Phase 7 regression, hardening regression, `make verify`, frontend checks, and the unified offline release gate passed with Docker real smoke explicitly blocked by environment |
 
 ## Completed Phase 7 Agent, Bot, Desktop, Docker, CI
 
@@ -233,28 +237,49 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Boundary and safety scans | Completed | No external DSA checkout path or DSA import under runtime/scripts/Docker/web/workflow surfaces; one intentional `daily_stock_analysis` match enforces `.dockerignore`; trading vocabulary matches only Agent forbidden-field constants; `git diff --check` passed |
 | Protected output hygiene | Completed | `git status --short output/ui` remains the same four pre-existing protected entries; implementation commit `f2fd7cd` explicitly excluded them |
 
+## Post-Migration Runtime Parity Planning Checkpoint
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Written-spec review | Completed | Approved design re-read against the migration tracker, current backend, current Web fixture path, release boundaries, and protected state |
+| Detailed implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` |
+| Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
+| Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
+| Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
+| Production implementation | Not Started | No new backend, frontend, or Playwright production code has been written; no red tests have been run yet |
+| Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
+| External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
+
+Planning self-review confirms the plan covers every approved design requirement, contains exact file paths and commands, names intended red failures, uses stable DTO/error contracts, preserves actual coverage data, and contains no undefined implementation placeholder.
+
 ## Next Task
 
-Review and plan the approved first post-migration hardening slice.
+Begin Task 1 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 
-1. Keep all Phase 0-7 migration behavior and research-only boundaries stable.
-2. Review `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
-3. After written-spec confirmation, write the detailed Red-Green-Refactor implementation plan and mirror its checklist into `tasks/todo.md`.
-4. Implement the versioned latest-artifact API and strict Web runtime source only after the planning check-in is complete.
-5. When a Docker daemon is available, run the default release gate without `--skip-docker-smoke` and record image build plus no-secret `/health` evidence.
-6. Do not begin Electron, updater, live Bot platform, LLM provider, notification delivery, broker, or release-publishing work without a separate approved design and threat model.
-7. Continue excluding protected `output/ui/*` artifacts from staging and commits.
+1. Extend `tests/test_analysis_report.py` with the versioned canonical-manifest and missing-risk skeptical-review tests.
+2. Run the two focused tests and confirm they fail because `generated_at` injection and canonical manifest fields do not exist.
+3. Implement only the minimal `src/serenity_alpha_lab/analysis/report.py` changes required to make those tests pass.
+4. Run report/pipeline/safety/migration-boundary regression before the manifest checkpoint commit.
+5. Continue Task 2 only after Task 1 is green and committed.
+6. Keep protected `output/ui/*` state unstaged and preserve all Deferred and Environment Blocked boundaries.
 
 ## Copyable Restart Prompt
 
 ```text
 请继续在 /Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab 当前进度上开发。
 
+开始前首先运行：
+- git status --short
+- git log -5 --oneline --decorate
+
 先阅读并遵守：
 1. docs/serenity-led-dsa-full-migration-plan.md
 2. docs/serenity-led-dsa-full-migration-tracker.md
-3. tasks/todo.md
-4. tasks/lessons.md
+3. docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md
+4. docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md
+5. tasks/todo.md
+6. tasks/lessons.md
+7. 仓库根目录 AGENTS.md（如果存在）
 
 当前方向：
 - serenity-alpha-lab 仍然是主体项目、产品壳和未来运行时。
@@ -266,7 +291,7 @@ Review and plan the approved first post-migration hardening slice.
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- 最新开发交接基线：14237a9（docs: 记录 runtime parity 设计交接）；粘贴本提示词后先运行 git log -1 --oneline 获取状态刷新后的实际 HEAD。
+- Runtime parity planning 起始 HEAD：0efe2bf（docs: 刷新 runtime parity 开发状态与启动提示）；planning checkpoint 提交后先运行 git log -1 --oneline 获取实际最新 HEAD。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
@@ -274,6 +299,7 @@ Review and plan the approved first post-migration hardening slice.
 - Post-migration runtime parity design checkpoint commit：948970b（docs: 固化 post-migration runtime parity 设计）
 - Post-migration runtime parity design handoff commit：14237a9（docs: 记录 runtime parity 设计交接）
 - Post-migration runtime parity approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md
+- Post-migration runtime parity implementation plan：docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md
 - DSA 当前 HEAD：95a4b51
 
 Phase 7 已完成：
@@ -296,18 +322,30 @@ Phase 7 已完成：
 - DSA external path/import scan 无匹配；唯一 daily_stock_analysis 名称是 release gate 对 .dockerignore 的防护断言。
 - git diff --check passed。
 
-已完成设计 checkpoint：
+Completed：
+- Phase 0-7 已全部完成。
 - 已审计 apps/serenity-web fixture 数据入口、Serenity canonical stock-analysis manifest、local API、测试和发布边界。
 - 已批准 API-first latest artifact 方案：版本化 manifest、只读 /api/artifacts/stock-analysis/latest API、严格 TypeScript decoder/adapter、显式 loading/unavailable/blocked 状态。
 - 设计明确不在首个 slice 中迁移 history aggregation、旧预览写 API、serve-app 静态托管、Electron、外部 adapter 或交易自动化。
 - 设计 spec 已提交为 948970b；设计状态交接已提交为 14237a9。
+- 详细 Red-Green-Refactor implementation plan 已创建并同步到 tasks/todo.md。
+- 计划锁定 canonical summary DTO、稳定 error envelope、真实 source coverage counts、结构化 safety/coverage findings、纯 artifact repository、injectable ReportArtifactSource、App lifecycle、Vite proxy、Playwright 和完整验证/提交检查点。
+- 规划前 focused baseline：Python 40 passed；Frontend Vitest 2 files / 4 tests passed。它们仅是实施前 baseline，不是新 runtime parity 的实现证据。
 
-未完成 / 下一步：
-- Not Started：详细 Red-Green-Refactor implementation plan 尚未创建，tasks/todo.md 的实施步骤尚未展开。
-- Not Started（首个实现 slice）：生产代码和新测试均尚未开始；下一步先写并提交实施计划，然后从 backend manifest/API 红测试开始。
-- Not Started（目标行为）：让 apps/serenity-web 消费 canonical latest stock-analysis artifact API，移除生产运行时 sample fixture fallback，并保留 evidence/provenance/readiness/source coverage/skeptical review/report safety/research-only 语义。
-- Environment Blocked：Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
-- Deferred：不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计、威胁建模和批准。
+Not Started / 下一步：
+- 新 backend/frontend/Playwright 生产代码和 runtime-parity 红测试均尚未开始。
+- 先提交 planning checkpoint；不得把规划完成描述为 runtime parity 实现完成。
+- 然后扩展 tests/test_analysis_report.py，新增 versioned canonical-manifest 和 missing-risk skeptical-review 红测试。
+- 红测试命令：
+  python3 -m pytest tests/test_analysis_report.py::test_write_stock_analysis_manifest_includes_runtime_parity_semantics tests/test_analysis_report.py::test_write_stock_analysis_manifest_emits_missing_risk_counter_thesis -q
+- 预期失败：write_stock_analysis_report_artifacts 尚不接受 generated_at，manifest 尚无 schema_version、query、generated_at、readiness、report_gate、source_coverage、skeptical_review 和 safety boundary。
+- 红测试确认按预期失败后，只实现 Task 1 的最小 report.py 变更，再运行 focused report/pipeline/safety/migration-boundary regression。
+
+Environment Blocked：
+- Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
+
+Deferred：
+- 不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计、威胁建模和批准。
 
 保护状态：
 - 不要修改、stage、提交或回滚：

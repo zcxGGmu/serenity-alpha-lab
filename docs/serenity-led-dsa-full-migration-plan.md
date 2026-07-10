@@ -93,28 +93,28 @@ DSA has practical trading-oriented fields such as score, trend, operation advice
 
 ### Phase 0: Migration Baseline And Contract
 
-- [ ] Freeze current Serenity generated UI outputs as protected local artifacts.
-- [ ] Capture DSA runtime capability inventory from code and tests.
-- [ ] Write import-boundary tests proving Serenity does not runtime-import the external DSA checkout.
-- [ ] Define migrated package layout and naming conventions.
-- [ ] Define config ownership and default-off external integration behavior.
-- [ ] Verify current Serenity `make verify` baseline before migration edits.
+- [x] Freeze current Serenity generated UI outputs as protected local artifacts.
+- [x] Capture DSA runtime capability inventory from code and tests.
+- [x] Write import-boundary tests proving Serenity does not runtime-import the external DSA checkout.
+- [x] Define migrated package layout and naming conventions.
+- [x] Define config ownership and default-off external integration behavior.
+- [x] Verify current Serenity `make verify` baseline before migration edits.
 
 ### Phase 1: Serenity App Runtime Foundation
 
-- [ ] Add Serenity-owned app config model for local API/Web runtime.
-- [ ] Add local API skeleton with health, version, and run-state endpoints.
-- [ ] Add tests for API startup without market-data credentials.
-- [ ] Wire CLI command `serve-app` to the Serenity API.
-- [ ] Keep existing static dashboard commands working.
+- [x] Add Serenity-owned app config model for local API/Web runtime.
+- [x] Add local API skeleton with health, version, and run-state endpoints.
+- [x] Add tests for API startup without market-data credentials.
+- [x] Wire CLI command `serve-app` to the Serenity API.
+- [x] Keep existing static dashboard commands working.
 
 ### Phase 2: Market Data Provider Migration
 
-- [ ] Port DSA provider contracts into `market_data`.
-- [ ] Migrate provider normalization and stock-code routing.
-- [ ] Add provider fallback order with timeouts and diagnostics.
-- [ ] Add tests using stubs, not live market data.
-- [ ] Keep optional provider credentials default-off.
+- [x] Port DSA provider contracts into `market_data`.
+- [x] Migrate provider normalization and stock-code routing.
+- [x] Add provider fallback order with timeouts and diagnostics.
+- [x] Add tests using stubs, not live market data.
+- [x] Keep optional provider credentials default-off.
 
 ### Phase 3: Stock Analysis Pipeline Migration
 
@@ -126,35 +126,35 @@ DSA has practical trading-oriented fields such as score, trend, operation advice
 
 ### Phase 4: Report And Safety Integration
 
-- [ ] Migrate report templates into Serenity report generation.
-- [ ] Add report safety scans for all generated actionability language.
-- [ ] Attach provenance refs to every key claim.
-- [ ] Add tests that unsupported recommendation language fails.
-- [ ] Produce Markdown and UI-visible reports from one stubbed analysis.
+- [x] Migrate report templates into Serenity report generation.
+- [x] Add report safety scans for all generated actionability language.
+- [x] Attach provenance refs to every key claim.
+- [x] Add tests that unsupported recommendation language fails.
+- [x] Produce Markdown and UI-visible reports from one stubbed analysis.
 
 ### Phase 5: Web Workbench Migration
 
-- [ ] Decide whether to import DSA React app as `apps/serenity-web` or incrementally recreate pages.
-- [ ] Migrate navigation shell and core pages: Home, Analysis, History, Settings.
-- [ ] Adapt DSA report components to Serenity evidence/readiness panels.
-- [ ] Add Vitest coverage for key report semantics.
-- [ ] Add Playwright smoke against the Serenity-owned app.
+- [x] Decide whether to import DSA React app as `apps/serenity-web` or incrementally recreate pages.
+- [x] Migrate navigation shell and core pages: Home, Analysis, History, Settings.
+- [x] Adapt DSA report components to Serenity evidence/readiness panels.
+- [x] Add Vitest coverage for key report semantics.
+- [x] Add Playwright smoke against the Serenity-owned app.
 
 ### Phase 6: Portfolio, Backtest, Alerts, Notifications
 
-- [ ] Migrate portfolio and backtest models as research validation tools.
-- [ ] Migrate alert rules as research monitors, not trading automation.
-- [ ] Migrate notification channels default-off with explicit config checks.
-- [ ] Add tests for no-secret startup and local-only operation.
-- [ ] Add evidence-backed alert/report handoff records.
+- [x] Migrate portfolio and backtest models as research validation tools.
+- [x] Migrate alert rules as research monitors, not trading automation.
+- [x] Migrate notification channels default-off with explicit config checks.
+- [x] Add tests for no-secret startup and local-only operation.
+- [x] Add evidence-backed alert/report handoff records.
 
 ### Phase 7: Agent, Bot, Desktop, Docker, CI
 
-- [ ] Migrate DSA Agent tools into Serenity evidence-grounded agents.
-- [ ] Migrate bot commands around Serenity-owned analysis services.
-- [ ] Evaluate desktop packaging only after web/API parity.
-- [ ] Add Docker/CI release gates for Serenity app runtime.
-- [ ] Add a full offline release checklist.
+- [x] Migrate DSA Agent tools into Serenity evidence-grounded agents.
+- [x] Migrate bot commands around Serenity-owned analysis services.
+- [x] Evaluate desktop packaging only after web/API parity.
+- [x] Add Docker/CI release gates for Serenity app runtime.
+- [x] Add a full offline release checklist.
 
 ## 6. Verification Matrix
 
@@ -176,4 +176,6 @@ Additional checks when Web/API work begins:
 
 ## 7. Immediate Next Step
 
-Start with Phase 0. Do not copy large DSA directories wholesale yet. First create executable migration guardrails and a small inventory artifact so later code moves can be reviewed module-by-module.
+Phase 0-7 are complete. Continue with the approved post-migration runtime-parity slice in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` and the detailed TDD plan in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+
+Begin implementation with failing canonical-manifest tests in `tests/test_analysis_report.py`. Do not skip Red -> Green -> Refactor, do not use the protected `output/ui/*` state as a fixture, and do not expand into history aggregation, static Web hosting, Electron, live adapters, notifications, broker/order actions, or trading automation.
