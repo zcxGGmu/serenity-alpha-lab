@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 7 design and detailed implementation planning are committed in `eddf32c`; production implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 7 implementation is committed in `f2fd7cd`; Agent/Bot/Desktop/Docker/CI are Serenity-owned and research-only; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -41,14 +41,15 @@
 | Phase 4: Report And Safety Integration | Completed | Commit `3253f13`; adds `src/serenity_alpha_lab/analysis/report.py`, report safety text scanning, CLI `analyze-stock --stub`, and `tests/test_analysis_report.py`; targeted regression passed with `14 passed, 2 warnings`; full `make verify` passed with 189 tests |
 | Phase 5 Web Workbench Migration | Completed | Commit `f8e87d0`; Serenity-owned `apps/serenity-web` Vite/React workbench scaffolded with Home, Analysis, History, Settings, Phase 4 report semantics panels, Vitest semantics coverage, and Playwright smoke |
 | Phase 6 Portfolio, Backtest, Alerts, Notifications | Completed | Implementation commit `639e255`; handoff docs commit `1c2eddf`; adds Serenity-owned `research_validation.py`, `research_monitors.py`, no-secret/default-off API health diagnostics, and focused tests; `make verify` passed with 194 tests |
+| Phase 7 Agent, Bot, Desktop, Docker, CI | Completed | Implementation commit `f2fd7cd`; adds evidence-grounded Agent tools, platform-neutral default-off Bot, desktop readiness contract, no-secret health diagnostics, non-root Docker runtime, unified offline release gate, and PR/branch/tag CI; `make verify` passed with 221 tests |
 
 Previous DSA-first integration work is useful source research but is no longer the governing product direction.
 
-### Next Phase
+### Next Work
 
-| Phase | Status | Scope |
+| Workstream | Status | Scope |
 | --- | --- | --- |
-| Phase 7: Agent, Bot, Desktop, Docker, CI | Planning Complete / Implementation Not Started | Approved safety-first scope: evidence-grounded Agent tools, platform-neutral default-off Bot, desktop readiness contract, non-root no-secret Docker runtime, and unified offline application release gate |
+| Post-migration runtime parity and release hardening | Pending Planning | Connect the web workbench to canonical backend artifacts/APIs, rerun Docker build/health smoke when a daemon is available, and keep Electron/updater/live Bot/LLM integrations behind separate threat-model and explicit-enable gates |
 
 ### Phase Completion Status
 
@@ -61,7 +62,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Phase 4: Report And Safety Integration | Completed | Serenity-owned stock-analysis report generator renders DSA-derived research-only sections, key-claim provenance refs, safety-scanned Markdown, manifest, and UI-visible artifact from stubbed analysis |
 | Phase 5: Web Workbench Migration | Completed | Commit `f8e87d0`; incrementally recreated under `apps/serenity-web`; no wholesale DSA React import, no DSA runtime imports, and no copied DSA generated caches |
 | Phase 6: Portfolio, Backtest, Alerts, Notifications | Completed | Commit `639e255`; portfolio/backtest migrated as research validation; alerts/notifications migrated as default-off research monitors and handoff records; no trading automation |
-| Phase 7: Agent, Bot, Desktop, Docker, CI | Planning Complete / Implementation Not Started | Design and detailed TDD plan are complete; start with failing Agent contract/tool tests |
+| Phase 7: Agent, Bot, Desktop, Docker, CI | Completed | Implementation commit `f2fd7cd`; research Agent/Bot contracts, desktop readiness, Docker, release gate, and unified CI are implemented and verified; no trading automation or external adapters |
 
 ### Known Constraints
 
@@ -86,16 +87,21 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 4: Report And Safety Integration — implementation committed in `3253f13`; handoff docs committed in current HEAD.
 - Phase 5 Web Workbench Migration — complete and committed in `f8e87d0`.
 - Phase 6: Portfolio, Backtest, Alerts, Notifications — implementation committed in `639e255`; handoff docs committed in `1c2eddf`.
+- Phase 7: Agent, Bot, Desktop, Docker, CI — implementation committed in `f2fd7cd`; handoff documentation is being finalized.
 
-### Not Started / Pending
+### Pending Hardening
 
-- Phase 7 implementation — planning complete; Agent/Bot/Desktop/Docker/CI production files and tests have not been created yet.
+- Docker image build and no-secret `/health` smoke remain environment-blocked locally because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
+- Canonical backend artifact/API parity for the web workbench is the next prerequisite before reconsidering Electron packaging.
+- LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing remain explicit non-goals until separately designed and approved.
 
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
-- Current owned migration docs are up to date for the Phase 7 planning checkpoint; only protected generated UI artifacts should remain dirty before implementation.
+- Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
+- Phase 7 handoff documentation commit is pending this closeout update.
+- Current owned migration docs are being refreshed for the Phase 7 completion checkpoint; only protected generated UI artifacts should remain dirty after documentation commits.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -201,17 +207,98 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Protected output hygiene | Completed | Planning did not intentionally modify, stage, overwrite, copy, or revert protected `output/ui/*` artifacts |
 | Implementation status | Not Started | Start with `tests/test_research_agents.py` red tests from Task 1 |
 
+## Completed Phase 7 Agent, Bot, Desktop, Docker, CI
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Evidence-grounded Agent tools | Completed | `src/serenity_alpha_lab/agents/*` adds frozen contracts, default-off registration, caller allowlists, explicit analysis context, deterministic summary/gap tools, recursive forbidden-field scans, JSON-safe results, fail-closed readiness states, and sanitized `failed_open` diagnostics |
+| Platform-neutral research Bot | Completed | `src/serenity_alpha_lab/bot/*` adds normalized messages/responses, explicit command aliases, monotonic sliding-window limits, injected analysis service reuse, Agent-tool reuse, report-safety scanning, sanitized errors, and no platform SDK or outbound delivery |
+| Runtime health and desktop readiness | Completed | `AppRuntimeConfig` and `/health` expose non-secret Agent/Bot/Desktop capability status; `desktop_runtime.py` records loopback-only local Web/API commands, deferred packaging, disabled updates, unbundled credentials, and parity requirements |
+| Offline release gate | Completed | `release_gate.py` and `scripts/verify_offline_release.py` provide machine-readable `passed`/`blocked`/`skipped` results with reasons, explicit browser/Docker skip controls, bounded path-sanitized output, default-off integration environment, and nonzero blocked exit status |
+| Docker runtime | Completed | `.dockerignore`, `docker/Dockerfile`, and `docker/docker-compose.yml` define a multi-stage web build, Python 3.11 non-root API/Web runtime, standard-library `/health` check, no-secret/default-off environment, and protected output/cache exclusions |
+| Unified CI | Completed | `.github/workflows/verify.yml` uses Python 3.11, Node 20, Chromium, and the same offline release gate for pull requests, branch pushes, and tag pushes; local Playwright remains on installed Edge |
+| Red/green TDD | Completed | Agent, Bot, Desktop/API, release/Docker, and workflow tests each failed before their implementation; final focused Phase 7 regression passed with `39 passed, 2 warnings`, followed by hardening regression `24 passed` |
+| Full backend verification | Completed | Fresh `make verify` -> `221 passed, 2 warnings`; doctor ok; `run-cpo-pack` -> 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok |
+| Unified release verification | Completed | `PYTHONPATH=src python3 scripts/verify_offline_release.py --skip-docker-smoke` -> `passed`, 9 checks passed, browser smoke passed on local Edge, Docker static passed, Docker smoke explicitly skipped |
+| Docker environment limitation | Recorded | `docker info` failed because `/Users/zq/.orbstack/run/docker.sock` was unavailable; no Docker build or container health claim is made |
+| Boundary and safety scans | Completed | No external DSA checkout path or DSA import under runtime/scripts/Docker/web/workflow surfaces; one intentional `daily_stock_analysis` match enforces `.dockerignore`; trading vocabulary matches only Agent forbidden-field constants; `git diff --check` passed |
+| Protected output hygiene | Completed | `git status --short output/ui` remains the same four pre-existing protected entries; implementation commit `f2fd7cd` explicitly excluded them |
+
 ## Next Task
 
-Execute Phase 7 Task 1: Evidence-Grounded Agent Contracts And Tools.
+Plan the first post-migration hardening slice.
 
-1. Read the approved Phase 7 design and detailed implementation plan.
-2. Write `tests/test_research_agents.py` first and verify the expected missing-module Red failure.
-3. Implement only the minimal Agent contracts/tools/runtime required by the tests.
-4. Run the focused Agent, analysis, report, and migration-boundary regression before moving to the Bot task.
+1. Keep all Phase 0-7 migration behavior and research-only boundaries stable.
+2. Prioritize canonical backend artifact/API integration for `apps/serenity-web` so desktop parity can be evaluated against real local data instead of fixtures.
+3. When a Docker daemon is available, run the default release gate without `--skip-docker-smoke` and record image build plus no-secret `/health` evidence.
+4. Do not begin Electron, updater, live Bot platform, LLM provider, notification delivery, broker, or release-publishing work without a separate approved design and threat model.
 5. Continue excluding protected `output/ui/*` artifacts from staging and commits.
 
 ## Copyable Restart Prompt
+
+```text
+请继续在 /Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab 当前进度上开发。
+
+先阅读并遵守：
+1. docs/serenity-led-dsa-full-migration-plan.md
+2. docs/serenity-led-dsa-full-migration-tracker.md
+3. tasks/todo.md
+4. tasks/lessons.md
+
+当前方向：
+- serenity-alpha-lab 仍然是主体项目、产品壳和未来运行时。
+- daily_stock_analysis 是完整功能迁移来源，不是主体运行时。
+- Phase 0-7 已完成；后续属于 post-migration runtime parity / release hardening，不做交易自动化。
+- 所有后续改动继续兼容 evidence-first、provenance、readiness、source coverage、skeptical review、report safety、research-only guardrails。
+
+仓库：
+- Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
+- DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
+- 当前分支：codex/phase-4-report-safety
+- Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
+- Phase 7 handoff docs commit：待本次 closeout 文档提交后刷新
+- Phase 7 planning commit：eddf32c
+- DSA 当前 HEAD：95a4b51
+
+Phase 7 已完成：
+- src/serenity_alpha_lab/agents/*：explicit-context、allowlisted、default-off、evidence-grounded research tools；递归阻断 trading/broker/order 字段；未知 readiness fail-closed；异常仅暴露 error_type。
+- src/serenity_alpha_lab/bot/*：platform-neutral status/analyze/evidence-gaps commands；default-off；注入分析服务；monotonic rate limit；Agent 输出复用；report safety 二次扫描；无平台 SDK 或外发。
+- src/serenity_alpha_lab/desktop_runtime.py：loopback-only local Web/API plan；Electron/updater/installer deferred；credentials not bundled。
+- src/serenity_alpha_lab/app/config.py、local_api.py：no-secret Agent/Bot/Desktop health diagnostics。
+- src/serenity_alpha_lab/release_gate.py、scripts/verify_offline_release.py：machine-readable offline gate，required failures block，browser/Docker 只能由调用方显式 skip，结果始终带 reason 并净化 repo 绝对路径。
+- .dockerignore、docker/Dockerfile、docker/docker-compose.yml：Node build + Python 3.11 non-root API/Web runtime；外部能力 default-off；不复制 output/ui、DSA checkout、DB、node_modules 或缓存。
+- .github/workflows/verify.yml：PR、branch、tag 共用 Python 3.11 + Node 20 + Chromium + unified gate；本机 Playwright 使用 Edge。
+
+最终验证：
+- Focused Phase 7 regression：39 passed, 2 warnings。
+- Agent/Bot/release hardening regression：24 passed。
+- make verify：221 passed, 2 warnings；doctor ok；run-cpo-pack 182 evidence items / 6 ready / 0 skipped；coverage matrix ok。
+- Unified gate：PYTHONPATH=src python3 scripts/verify_offline_release.py --skip-docker-smoke -> passed；9 checks passed，Docker smoke 1 skipped。
+- Frontend：Vitest 4 passed；build passed；Playwright Edge smoke 1 passed。
+- Docker static + docker compose config passed。
+- Docker real smoke 未运行：docker info 无法连接 /Users/zq/.orbstack/run/docker.sock，必须记录为环境阻塞，不能宣称通过。
+- DSA external path/import scan 无匹配；唯一 daily_stock_analysis 名称是 release gate 对 .dockerignore 的防护断言。
+- git diff --check passed。
+
+下一步：
+- 先为 post-migration hardening 写新的可勾选计划和设计边界。
+- 推荐第一项：让 apps/serenity-web 消费 canonical backend artifact/API，而不是 fixture-only data，为未来 desktop parity 提供真实运行时基础。
+- Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
+- 不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计和批准。
+
+保护状态：
+- 不要修改、stage、提交或回滚：
+  - output/ui/analyses/manifest.json
+  - output/ui/reports/deliverable-research-report.md
+  - output/ui/runs.json
+  - output/ui/analyses/topic-2bde5fabbc/
+- 当前这些 output/ui/* 仍是受保护外部脏状态；提交时必须显式排除。
+- 不要在 Serenity runtime 中跨仓库 import DSA。
+- 不要复制 DSA .venv、node_modules、__pycache__、SQLite runtime DB 或生成缓存。
+- 每个阶段性任务完成后更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，并只暂存/提交拥有的文件。
+```
+
+## Historical Phase 7 Planning Restart Prompt (Superseded)
 
 ```text
 请继续在 /Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab 当前进度上开发。

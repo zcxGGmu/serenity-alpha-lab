@@ -4248,16 +4248,16 @@
 - [x] Write the approved Phase 7 design specification.
 - [x] Write the detailed Red-Green-Refactor implementation plan.
 - [x] Confirm protected generated `output/ui/*` artifacts remain untouched and unstaged during planning.
-- [ ] Add Serenity-owned evidence-grounded Agent contracts, tools, allowlisting, and safety boundaries.
-- [ ] Add a platform-neutral default-off research Bot over Serenity-owned analysis services.
-- [ ] Add no-secret Agent/Bot/Desktop capability diagnostics to local API health.
-- [ ] Add a loopback-only desktop runtime plan with Electron packaging and auto-update explicitly deferred.
-- [ ] Add a machine-readable offline application release gate and CLI wrapper.
-- [ ] Add a non-root no-secret Docker API/Web runtime without scheduled analysis or outbound integrations.
-- [ ] Expand CI so pull requests, branch pushes, and tag pushes use the same Python/frontend/browser/Docker release gate.
-- [ ] Run focused Red/Green tests, full backend/frontend verification, Docker smoke when available, static scans, and protected-output checks.
-- [ ] Update migration tracker, task review, lessons, and copyable restart prompt after verification.
-- [ ] Commit Phase 7 implementation files with a detailed Chinese message, explicitly excluding protected `output/ui/*`.
+- [x] Add Serenity-owned evidence-grounded Agent contracts, tools, allowlisting, and safety boundaries.
+- [x] Add a platform-neutral default-off research Bot over Serenity-owned analysis services.
+- [x] Add no-secret Agent/Bot/Desktop capability diagnostics to local API health.
+- [x] Add a loopback-only desktop runtime plan with Electron packaging and auto-update explicitly deferred.
+- [x] Add a machine-readable offline application release gate and CLI wrapper.
+- [x] Add a non-root no-secret Docker API/Web runtime without scheduled analysis or outbound integrations.
+- [x] Expand CI so pull requests, branch pushes, and tag pushes use the same Python/frontend/browser/Docker release gate.
+- [x] Run focused Red/Green tests, full backend/frontend verification, Docker smoke when available, static scans, and protected-output checks.
+- [x] Update migration tracker, task review, lessons, and copyable restart prompt after verification.
+- [x] Commit Phase 7 implementation files with a detailed Chinese message, explicitly excluding protected `output/ui/*`.
 - [ ] Commit Phase 7 handoff documentation with final commit IDs and fresh verification evidence.
 
 ## Phase 7 Entry Criteria Check-In
@@ -4304,3 +4304,22 @@
 - Serenity integration result: reuse `StockAnalysisPipeline`, evidence IDs, readiness, source coverage, report gate, report safety, app health, and Phase 6 default-off monitor conventions.
 - Protected output status: planning did not intentionally modify, stage, overwrite, copy, or revert protected generated `output/ui/*`.
 - Next action after written-spec review: execute Task 1 from the Phase 7 implementation plan using failing Agent tests first.
+
+## Phase 7 Implementation Review
+
+- Status: Phase 7 production implementation is complete and committed in `f2fd7cd`.
+- Agent implementation: added frozen research tool contracts, explicit caller context, default-off visibility, allowlists, deterministic research summary/evidence-gap tools, recursive trading/broker/order field rejection, JSON-safe output, fail-closed unknown readiness states, and sanitized `failed_open` diagnostics.
+- Bot implementation: added platform-neutral `status`, `analyze`, and `evidence-gaps` commands over an injected analysis service and Agent tool results; Bot is default-off, uses monotonic sliding-window limits, report-safety scans rendered text, and has no platform SDK or outbound delivery.
+- Runtime/desktop implementation: added no-secret Agent/Bot/Desktop `/health` diagnostics plus a loopback-only local Web/API desktop readiness contract with Electron, updater, installer, credentials, public bind, and external network explicitly disabled or deferred.
+- Release implementation: added a machine-readable offline release plan/runner and CLI wrapper with explicit `passed`/`blocked`/`skipped` reasons, caller-controlled browser/Docker skips, bounded path-sanitized output, default-off integrations, and nonzero blocked exit status.
+- Docker/CI implementation: added strict `.dockerignore`, Node-to-Python multi-stage non-root image, API/Web Compose services, standard-library healthcheck, CI Python 3.11 + Node 20 + Chromium, and one unified gate for PR/branch/tag paths.
+- Red/green evidence: Agent, Bot, Desktop/API, release gate, Docker static, and workflow tests all failed before their target implementation. Final focused regression -> `39 passed, 2 warnings`; hardening regression -> `24 passed`.
+- Full backend verification: fresh `make verify` -> `221 passed, 2 warnings`; doctor ok; run-cpo-pack -> 182 evidence items, 6 ready memos, 0 skipped; coverage matrix ok.
+- Frontend verification: Vitest -> 2 files / 4 tests passed; `npm run build` passed; Playwright local Edge smoke -> 1 passed.
+- Unified release verification: `PYTHONPATH=src python3 scripts/verify_offline_release.py --skip-docker-smoke` -> `passed`, error count 0, nine checks passed, one explicit Docker smoke skip.
+- Docker environment note: Docker CLI and Compose config are available, but `docker info` cannot connect to `/Users/zq/.orbstack/run/docker.sock`; image build and container `/health` smoke are not claimed.
+- Boundary/safety verification: external DSA checkout path and DSA import scans returned no matches; the sole `daily_stock_analysis` string is the release gate assertion that `.dockerignore` excludes it; trading vocabulary appears only in Agent forbidden-field constants; `git diff --check` passed.
+- Protected output status: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain the same pre-existing protected dirty state and were excluded from `f2fd7cd`.
+- Implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
+- Handoff docs commit: pending; after commit, refresh this review and the tracker restart prompt with the actual commit ID.
+- Next action: plan post-migration runtime parity, starting with canonical backend artifact/API integration for `apps/serenity-web`; rerun Docker smoke when a daemon is available.
