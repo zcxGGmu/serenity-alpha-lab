@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 0-7 are complete; Phase 7 implementation `f2fd7cd`, handoff docs `8bba5e0`, and final completion status refresh `6d1fcbb` are committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 0-7 are complete; post-migration runtime-parity design checkpoint is committed in `948970b`; production parity implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -49,7 +49,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 | Workstream | Status | Scope |
 | --- | --- | --- |
-| Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
+| Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design committed in `948970b`; spec: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
 | Detailed runtime parity implementation plan | Not Started | After written-spec review, create a Red-Green-Refactor checklist with exact files, tests, commands, acceptance criteria, and commit checkpoints |
 | Canonical backend artifact/API integration for `apps/serenity-web` | Not Started | Implement a versioned stock-analysis manifest, read-only latest-artifact API, strict Web decoder/adapter, and explicit loading/unavailable/blocked states without fixture fallback |
 | Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
@@ -107,6 +107,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
 - Phase 7 final completion status refresh commit: `6d1fcbb` (`docs: 刷新 Phase 7 完成状态`).
+- Post-migration runtime parity design checkpoint commit: `948970b` (`docs: 固化 post-migration runtime parity 设计`).
 - Approved post-migration runtime parity design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
@@ -268,6 +269,7 @@ Review and plan the approved first post-migration hardening slice.
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
 - Phase 7 planning commit：eddf32c
+- Post-migration runtime parity design checkpoint commit：948970b（docs: 固化 post-migration runtime parity 设计）
 - Post-migration runtime parity approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md
 - DSA 当前 HEAD：95a4b51
 

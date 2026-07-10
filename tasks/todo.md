@@ -4383,3 +4383,13 @@
 - Design choice: API-first latest artifact is preferred over direct static parsing because it gives the Web a stable allowlisted DTO without coupling it to Markdown or filesystem layout.
 - Known environment blocker: Docker daemon remains unavailable at `/Users/zq/.orbstack/run/docker.sock`; no real image build or container `/health` claim is made.
 - Next action: review the approved spec, then use `writing-plans` to create the exact Red-Green-Refactor implementation plan before editing production code.
+
+## Runtime Parity Design Checkpoint Review
+
+- Status: design checkpoint complete and committed; detailed implementation planning and production code remain Not Started.
+- Design commit: `948970b` (`docs: 固化 post-migration runtime parity 设计`).
+- Approved boundary: versioned canonical stock-analysis manifest, read-only latest-artifact API, strict Web decoder/adapter, injectable artifact source, explicit loading/unavailable/blocked states, and no production sample fallback.
+- Scope exclusions remain active: no history aggregation, old preview API migration, `serve-app` static hosting, permissive CORS, Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, or publishing.
+- Verification: placeholder scan for the new spec passed after replacing one vague follow-on phrase; `git diff --check` and staged diff checks passed; the design commit contains only the approved spec, tracker, todo, and lessons.
+- Protected output status: the same four pre-existing `output/ui/*` entries remain dirty and were not staged, committed, reverted, or overwritten.
+- Written-spec review gate: review `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`; after confirmation, create and commit the detailed implementation plan before production edits.
