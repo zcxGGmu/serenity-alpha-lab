@@ -4437,12 +4437,12 @@
 - [x] Reconcile the historical Phase 0-7 completion markers in the migration plan.
 - [x] Refresh tracker, todo, lessons, and the copyable restart prompt for planning completion.
 - [x] Commit planning-only files as `ddff62b`, explicitly excluding protected `output/ui/*`.
-- [ ] Add the Task 1 canonical-manifest and missing-risk skeptical-review tests to `tests/test_analysis_report.py`.
-- [ ] Run:
+- [x] Add the Task 1 canonical-manifest and missing-risk skeptical-review tests to `tests/test_analysis_report.py`.
+- [x] Run:
   `python3 -m pytest tests/test_analysis_report.py::test_write_stock_analysis_manifest_includes_runtime_parity_semantics tests/test_analysis_report.py::test_write_stock_analysis_manifest_emits_missing_risk_counter_thesis -q`
   and confirm the expected red failure is missing `generated_at` injection and canonical manifest fields.
-- [ ] Implement the minimal versioned manifest and deterministic skeptical review in `src/serenity_alpha_lab/analysis/report.py`.
-- [ ] Run:
+- [x] Implement the minimal versioned manifest and deterministic skeptical review in `src/serenity_alpha_lab/analysis/report.py`.
+- [x] Run:
   `python3 -m pytest tests/test_analysis_pipeline.py tests/test_analysis_report.py tests/test_report_safety.py tests/test_dsa_migration_boundaries.py -q`
   and commit the green manifest slice.
 - [ ] Create `tests/test_stock_analysis_artifacts.py` and run it red before creating `src/serenity_alpha_lab/app/stock_analysis_artifacts.py`.
@@ -4478,7 +4478,7 @@
 - [x] Reaffirm in `tasks/lessons.md` that every stage-level completion automatically refreshes and commits tracker/todo/lessons/restart prompt before the final response.
 - [x] Verify documentation diff hygiene and commit only owned handoff documents, excluding protected `output/ui/*`.
 
-## Handoff Status Refresh Review
+## Handoff Status Refresh Review (Historical At `405d286`)
 
 - Completed: Phase 0-7 migration, runtime-parity design, detailed implementation planning, planning checkpoint `ddff62b`, and planning status refresh `e864cf9`.
 - Not Started: Task 1 red tests, canonical manifest implementation, artifact repository/API, frontend decoder/source/App lifecycle, Playwright canonical-artifact flow, and implementation verification.
@@ -4486,3 +4486,26 @@
 - Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: only the same four external `output/ui/*` entries remain dirty and they must stay unstaged.
 - Next action: add and run the two Task 1 red tests in `tests/test_analysis_report.py`, confirm the expected missing `generated_at` and canonical manifest behavior, then implement only the minimal `analysis/report.py` Green step.
+
+# Runtime Parity Task 1: Versioned Canonical Manifest
+
+- [x] Add the two approved canonical-manifest red tests and fixed UTC timestamp fixture.
+- [x] Confirm both tests fail because `write_stock_analysis_report_artifacts()` rejects the unknown `generated_at` keyword.
+- [x] Implement one generated timestamp reused by Markdown and manifest.
+- [x] Add versioned manifest fields, actual readiness/report-gate/source-coverage data, deterministic skeptical review, explicit safety boundary, and preserved key-claim provenance.
+- [x] Add review-driven Red -> Green coverage for non-UTC normalization, naive datetime rejection, and the exact 14-field top-level allowlist.
+- [x] Run `tests/test_analysis_report.py` -> `8 passed`.
+- [x] Run focused pipeline/report/safety/migration-boundary regression -> `17 passed, 2 warnings`.
+- [x] Run `git diff --check`, `py_compile`, independent specification review, and independent code-quality review.
+- [x] Commit only `src/serenity_alpha_lab/analysis/report.py` and `tests/test_analysis_report.py` as `bc281f5`.
+- [x] Confirm protected `output/ui/*` entries remain unstaged and unchanged by this slice.
+
+## Runtime Parity Task 1 Review
+
+- Completed: canonical manifest contract and deterministic skeptical review are implemented and committed in `bc281f5`.
+- Verification evidence: original Red `2 failed`; review-hardening Red `2 failed`; report Green `8 passed`; focused regression `17 passed, 2 warnings`; diff/compile/spec/quality checks passed.
+- Not Started: Task 2 pure artifact repository, Task 3 API/config/CLI, frontend decoder/source/App lifecycle, Playwright canonical flow, and full implementation verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
+- Next action: create `tests/test_stock_analysis_artifacts.py`, run it red for missing `serenity_alpha_lab.app.stock_analysis_artifacts`, then implement only the Task 2 pure repository slice.
