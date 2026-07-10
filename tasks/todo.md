@@ -4466,3 +4466,23 @@
 - Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live adapters, LLM providers, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the four existing `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
 - Next action: execute Task 1 exactly as written in the implementation plan.
+
+# Runtime Parity Planning Handoff Status Refresh
+
+- [x] Reconcile current branch, HEAD `e864cf9`, planning commit `ddff62b`, design commits, and protected generated output status.
+- [x] Mark Phase 0-7, approved design, detailed implementation plan, and planning handoff as Completed.
+- [x] Keep backend manifest/API red tests, backend implementation, frontend decoder/source/App lifecycle, Playwright flow, and implementation verification as Not Started.
+- [x] Preserve real Docker image build and no-secret container `/health` smoke as Environment Blocked.
+- [x] Preserve history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live adapters, LLM providers, notification delivery, broker/order actions, trading automation, and release publishing as Deferred.
+- [x] Refresh the tracker copyable restart prompt with the exact first red-test command, expected failure, latest commits, blockers, protected files, and long-term closeout habit.
+- [x] Reaffirm in `tasks/lessons.md` that every stage-level completion automatically refreshes and commits tracker/todo/lessons/restart prompt before the final response.
+- [x] Verify documentation diff hygiene and commit only owned handoff documents, excluding protected `output/ui/*`.
+
+## Handoff Status Refresh Review
+
+- Completed: Phase 0-7 migration, runtime-parity design, detailed implementation planning, planning checkpoint `ddff62b`, and planning status refresh `e864cf9`.
+- Not Started: Task 1 red tests, canonical manifest implementation, artifact repository/API, frontend decoder/source/App lifecycle, Playwright canonical-artifact flow, and implementation verification.
+- Environment Blocked: Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` is available.
+- Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: only the same four external `output/ui/*` entries remain dirty and they must stay unstaged.
+- Next action: add and run the two Task 1 red tests in `tests/test_analysis_report.py`, confirm the expected missing `generated_at` and canonical manifest behavior, then implement only the minimal `analysis/report.py` Green step.

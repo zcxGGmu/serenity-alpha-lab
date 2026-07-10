@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity planning checkpoint committed in `ddff62b`; the final status-refresh commit is the current HEAD shown by `git log -1 --oneline`; Phase 0-7, the approved design, and the detailed implementation plan are complete, while production parity implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Latest completed planning-status handoff before this refresh is `e864cf9`; the current documentation refresh is the actual HEAD shown by `git log -1 --oneline`; Phase 0-7, the approved design, and the detailed implementation plan are complete, while production parity implementation and its first red tests have not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -115,6 +115,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Approved post-migration runtime parity design: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md`.
 - Detailed post-migration runtime parity plan: `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 - Post-migration runtime parity planning checkpoint commit: `ddff62b` (`docs: 完成 post-migration runtime parity 实施规划`).
+- Post-migration runtime parity planning status refresh: `e864cf9` (`docs: 刷新 runtime parity 规划交接状态`).
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
@@ -245,6 +246,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Written-spec review | Completed | Approved design re-read against the migration tracker, current backend, current Web fixture path, release boundaries, and protected state |
 | Detailed implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` |
 | Planning checkpoint commit | Completed | `ddff62b` (`docs: 完成 post-migration runtime parity 实施规划`) |
+| Planning status refresh | Completed | `e864cf9` (`docs: 刷新 runtime parity 规划交接状态`) |
 | Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
 | Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
@@ -293,7 +295,7 @@ Begin Task 1 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- Runtime parity planning checkpoint commit：ddff62b（docs: 完成 post-migration runtime parity 实施规划）；当前 status refresh 为实际 HEAD，启动后先运行 git log -1 --oneline 核对。
+- 最新已提交开发状态刷新：e864cf9（docs: 刷新 runtime parity 规划交接状态）；当前 handoff refresh 为实际 HEAD，启动后先运行 git log -1 --oneline 核对。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
@@ -303,6 +305,7 @@ Begin Task 1 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Post-migration runtime parity approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md
 - Post-migration runtime parity implementation plan：docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md
 - Post-migration runtime parity planning checkpoint commit：ddff62b（docs: 完成 post-migration runtime parity 实施规划）
+- Post-migration runtime parity planning status refresh：e864cf9（docs: 刷新 runtime parity 规划交接状态）
 - DSA 当前 HEAD：95a4b51
 
 Phase 7 已完成：
@@ -334,6 +337,7 @@ Completed：
 - 详细 Red-Green-Refactor implementation plan 已创建并同步到 tasks/todo.md。
 - 计划锁定 canonical summary DTO、稳定 error envelope、真实 source coverage counts、结构化 safety/coverage findings、纯 artifact repository、injectable ReportArtifactSource、App lifecycle、Vite proxy、Playwright 和完整验证/提交检查点。
 - 规划前 focused baseline：Python 40 passed；Frontend Vitest 2 files / 4 tests passed。它们仅是实施前 baseline，不是新 runtime parity 的实现证据。
+- Planning checkpoint `ddff62b` 和 planning status refresh `e864cf9` 已提交；本次只刷新交接文档，不改变“生产实现未开始”的状态。
 
 Not Started / 下一步：
 - 新 backend/frontend/Playwright 生产代码和 runtime-parity 红测试均尚未开始。
