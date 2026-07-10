@@ -11,6 +11,7 @@ class AppRuntimeConfig:
     port: int = 8010
     runs_path: Path = Path("output/ui/runs.json")
     dashboard_path: Path = Path("output/ui/index.html")
+    stock_analysis_artifact_dir: Path = Path("output/stock-analysis")
     require_market_data_credentials: bool = False
     market_data_env_var: str = "SERENITY_MARKET_DATA_API_KEY"
     external_integrations_enabled: bool = False

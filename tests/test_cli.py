@@ -646,6 +646,7 @@ def test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard(tm
 
     runs_path = tmp_path / "runs.json"
     dashboard_path = tmp_path / "index.html"
+    artifact_dir = tmp_path / "stock-analysis"
 
     exit_code = main(
         [
@@ -658,6 +659,8 @@ def test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard(tm
             str(runs_path),
             "--dashboard-path",
             str(dashboard_path),
+            "--stock-analysis-artifact-dir",
+            str(artifact_dir),
         ]
     )
 
@@ -668,6 +671,7 @@ def test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard(tm
     assert config.port == 8123
     assert config.runs_path == runs_path
     assert config.dashboard_path == dashboard_path
+    assert config.stock_analysis_artifact_dir == artifact_dir
     assert config.require_market_data_credentials is False
     assert config.research_only is True
 

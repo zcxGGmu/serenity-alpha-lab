@@ -357,6 +357,11 @@ def build_serve_app_parser() -> argparse.ArgumentParser:
         help="Static dashboard path associated with the local API runtime.",
     )
     parser.add_argument(
+        "--stock-analysis-artifact-dir",
+        default="output/stock-analysis",
+        help="Read-only stock-analysis artifact directory exposed by the local API.",
+    )
+    parser.add_argument(
         "--require-market-data-credentials",
         action="store_true",
         help="Require configured market-data credentials before starting the API.",
@@ -920,6 +925,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 port=args.port,
                 runs_path=Path(args.runs_path),
                 dashboard_path=Path(args.dashboard_path),
+                stock_analysis_artifact_dir=Path(
+                    args.stock_analysis_artifact_dir
+                ),
                 require_market_data_credentials=args.require_market_data_credentials,
             )
         )

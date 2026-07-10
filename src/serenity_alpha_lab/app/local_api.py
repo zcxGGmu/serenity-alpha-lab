@@ -3,6 +3,7 @@ from __future__ import annotations
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from pathlib import Path
+import re
 from typing import Any
 from urllib.parse import urlparse
 
@@ -10,10 +11,62 @@ from serenity_alpha_lab import __version__
 from serenity_alpha_lab.desktop_runtime import build_desktop_runtime_plan
 
 from .config import AppRuntimeConfig
+from .stock_analysis_artifacts import (
+    ArtifactRepositoryError,
+    StockAnalysisArtifactRepository,
+)
+
+_ALLOWED_ARTIFACT_API_PATHS = {
+    "/api/artifacts/stock-analysis/latest/manifest",
+    "/api/artifacts/stock-analysis/latest/report",
+}
+_TRUSTED_URL_PATTERN = re.compile(
+    r"""(?ix)
+    \b
+    (?:https?|serenity)://
+    [^\s<>(){}"'`]+
+    """
+)
+_HTML_CLOSING_TAG_PATTERN = re.compile(
+    r"</[A-Za-z][A-Za-z0-9:-]*\s*>",
+    re.IGNORECASE,
+)
+_ALLOWED_MARKET_SYMBOLS = {
+    "/6A",
+    "/6B",
+    "/6C",
+    "/6E",
+    "/6J",
+    "/6S",
+    "/CL",
+    "/ES",
+    "/GC",
+    "/HG",
+    "/NG",
+    "/NQ",
+    "/RTY",
+    "/SI",
+    "/YM",
+    "/ZB",
+    "/ZF",
+    "/ZN",
+    "/ZT",
+}
+_MARKET_SYMBOL_BOUNDARY = frozenset(",.;:!?)]}")
+_WINDOWS_DRIVE_PATH_PATTERN = re.compile(
+    r"(?i)(?<![A-Za-z0-9_])[A-Z]:[\\/](?=[^\r\n])"
+)
+_WINDOWS_UNC_PATH_PATTERN = re.compile(
+    r"(?<!\\)\\\\[^\\\r\n]+\\[^\\\r\n]+"
+)
+_FILE_URI_PATTERN = re.compile(r"(?i)\bfile:(?=[\\/])")
 
 
 def create_api_handler(config: AppRuntimeConfig):
     config.validate_startup()
+    repository = StockAnalysisArtifactRepository(
+        config.stock_analysis_artifact_dir,
+    )
 
     class SerenityAppRequestHandler(BaseHTTPRequestHandler):
         server_version = "SerenityAlphaLabAPI/0.1"
@@ -29,6 +82,28 @@ def create_api_handler(config: AppRuntimeConfig):
             if parsed.path == "/run-state":
                 self._send_json(_run_state_payload(config.runs_path))
                 return
+            try:
+                if parsed.path == "/api/artifacts/stock-analysis/latest":
+                    payload = repository.load_latest_summary()
+                    _reject_local_path_leakage(payload)
+                    self._send_json(payload)
+                    return
+                if parsed.path == "/api/artifacts/stock-analysis/latest/manifest":
+                    payload = repository.load_latest_manifest()
+                    _reject_local_path_leakage(payload)
+                    self._send_json(payload)
+                    return
+                if parsed.path == "/api/artifacts/stock-analysis/latest/report":
+                    report = repository.load_latest_report()
+                    _reject_local_path_leakage(report)
+                    self._send_text(
+                        report,
+                        content_type="text/markdown; charset=utf-8",
+                    )
+                    return
+            except ArtifactRepositoryError as exc:
+                self._send_json(exc.to_payload(), status=exc.status_code)
+                return
             self._send_json({"error": "not_found", "path": parsed.path}, status=404)
 
         def log_message(self, format: str, *args: object) -> None:
@@ -43,7 +118,108 @@ def create_api_handler(config: AppRuntimeConfig):
             self.end_headers()
             self.wfile.write(body)
 
+        def _send_text(
+            self,
+            text: str,
+            *,
+            content_type: str,
+            status: int = 200,
+        ) -> None:
+            body = text.encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
     return SerenityAppRequestHandler
+
+
+def _reject_local_path_leakage(value: object) -> None:
+    if isinstance(value, str):
+        if _contains_local_path(value):
+            raise ArtifactRepositoryError(
+                422,
+                "artifact_invalid",
+                "local_path_detected",
+            )
+        return
+    if isinstance(value, dict):
+        for item in value.values():
+            _reject_local_path_leakage(item)
+        return
+    if isinstance(value, (list, tuple)):
+        for item in value:
+            _reject_local_path_leakage(item)
+
+
+def _contains_local_path(value: str) -> bool:
+    masked = value
+    for allowed_path in _ALLOWED_ARTIFACT_API_PATHS:
+        masked = masked.replace(allowed_path, "")
+    masked = _mask_trusted_urls(masked)
+
+    return any(
+        pattern.search(masked) is not None
+        for pattern in (
+            _WINDOWS_DRIVE_PATH_PATTERN,
+            _WINDOWS_UNC_PATH_PATTERN,
+            _FILE_URI_PATTERN,
+        )
+    ) or _contains_posix_absolute_path(masked)
+
+
+def _mask_trusted_urls(value: str) -> str:
+    def replace(match: re.Match[str]) -> str:
+        candidate = match.group(0)
+        try:
+            parsed = urlparse(candidate)
+            hostname = parsed.hostname
+        except ValueError:
+            return "/invalid-url"
+        if (
+            parsed.scheme.lower() in {"http", "https", "serenity"}
+            and parsed.netloc
+            and hostname
+        ):
+            return ""
+        return candidate.partition("://")[2]
+
+    return _TRUSTED_URL_PATTERN.sub(replace, value)
+
+
+def _contains_posix_absolute_path(value: str) -> bool:
+    value = _HTML_CLOSING_TAG_PATTERN.sub("", value)
+    for index, character in enumerate(value):
+        if character != "/":
+            continue
+        if index > 0 and (
+            value[index - 1].isalnum()
+            or value[index - 1] in {"_", "/"}
+        ):
+            continue
+        if index + 1 >= len(value):
+            continue
+        if value[index + 1].isspace() or value[index + 1] == "/":
+            continue
+        if _is_allowed_market_symbol(value, index):
+            continue
+        return True
+    return False
+
+
+def _is_allowed_market_symbol(value: str, index: int) -> bool:
+    for market_symbol in _ALLOWED_MARKET_SYMBOLS:
+        if not value.startswith(market_symbol, index):
+            continue
+        end = index + len(market_symbol)
+        return (
+            end == len(value)
+            or value[end].isspace()
+            or value[end] in _MARKET_SYMBOL_BOUNDARY
+        )
+    return False
 
 
 def serve_app(config: AppRuntimeConfig) -> None:
