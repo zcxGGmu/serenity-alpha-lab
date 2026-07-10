@@ -9,9 +9,12 @@ export function HistoryPage({ artifact }: HistoryPageProps) {
     <section className="page-grid">
       <div className="page-header">
         <div>
-          <p className="eyebrow">Local run memory</p>
+          <p className="eyebrow">Latest available artifact</p>
           <h1>History</h1>
-          <p>Phase 5 shows report history as Serenity-owned research artifacts.</p>
+          <p>
+            This page shows the latest validated stock-analysis artifact. Complete run
+            history is deferred to a separate source.
+          </p>
         </div>
       </div>
       <article className="history-item">

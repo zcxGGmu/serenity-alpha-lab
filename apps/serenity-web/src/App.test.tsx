@@ -209,6 +209,30 @@ describe('App artifact lifecycle', () => {
     expect(screen.queryByText('AAPL stale fixture')).not.toBeInTheDocument();
   });
 
+  it('labels History as the latest available artifact rather than complete history', async () => {
+    window.history.replaceState({}, '', '/history');
+
+    render(
+      <App artifactSource={sourceFrom(() => Promise.resolve(reportArtifactFixture))} />,
+    );
+
+    expect(
+      await screen.findByRole('heading', { name: 'History' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/latest available artifact/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /this page shows the latest validated stock-analysis artifact/i,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/complete run history is deferred to a separate source/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText('MSFT market data research')).toBeInTheDocument();
+  });
+
   it('keeps Settings available while the artifact request is pending', () => {
     window.history.replaceState({}, '', '/settings');
     const loadLatest = vi.fn<ReportArtifactSource['loadLatest']>(

@@ -25,6 +25,33 @@ describe('ReportSemanticsPanel', () => {
     expect(screen.getByText(/research only; not investment advice/i)).toBeInTheDocument();
   });
 
+  it('renders the actual canonical source coverage counts', () => {
+    const artifact = {
+      ...reportArtifactFixture,
+      sourceCoverage: {
+        ...reportArtifactFixture.sourceCoverage,
+        evidenceCount: 7,
+        focusEvidenceCount: 5,
+        primaryCount: 4,
+        riskCount: 2,
+        externalNonSerenityCount: 1,
+      },
+    };
+
+    render(<ReportSemanticsPanel artifact={artifact} />);
+
+    const coverageCard = screen.getByText(/^source coverage$/i).closest('article');
+    expect(coverageCard).not.toBeNull();
+    const coverage = within(coverageCard!);
+
+    expect(coverage.getByText(/^evidence 7$/i)).toBeInTheDocument();
+    expect(coverage.getByText(/^focus 5$/i)).toBeInTheDocument();
+    expect(coverage.getByText(/^primary 4$/i)).toBeInTheDocument();
+    expect(coverage.getByText(/^risk 2$/i)).toBeInTheDocument();
+    expect(coverage.getByText(/^external 1$/i)).toBeInTheDocument();
+    expect(coverage.queryByText(/collected|required/i)).not.toBeInTheDocument();
+  });
+
   it('keeps unsupported trading vocabulary out of rendered report semantics', () => {
     const { container } = render(<ReportSemanticsPanel artifact={reportArtifactFixture} />);
 
@@ -75,18 +102,25 @@ describe('ReportSemanticsPanel', () => {
 
     render(<ReportSemanticsPanel artifact={artifact} />);
 
-    expect(screen.getByText('missing_primary_source_depth')).toBeInTheDocument();
-    expect(screen.getByText('warning')).toBeInTheDocument();
+    const coverageCard = screen.getByText(/^source coverage$/i).closest('article');
+    const safetyCard = screen.getByText(/^report safety$/i).closest('article');
+    expect(coverageCard).not.toBeNull();
+    expect(safetyCard).not.toBeNull();
+    const coverage = within(coverageCard!);
+    const safety = within(safetyCard!);
+
+    expect(coverage.getByText('missing_primary_source_depth')).toBeInTheDocument();
+    expect(coverage.getByText('warning')).toBeInTheDocument();
     expect(
-      screen.getByText('Primary-source depth is incomplete.'),
+      coverage.getByText('Primary-source depth is incomplete.'),
     ).toBeInTheDocument();
     expect(
-      screen.getByText('Collect another primary source.'),
+      coverage.getByText('Collect another primary source.'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Line 12')).toBeInTheDocument();
-    expect(screen.getByText('unsupported actionability')).toBeInTheDocument();
+    expect(safety.getByText('Line 12')).toBeInTheDocument();
+    expect(safety.getByText('unsupported actionability')).toBeInTheDocument();
     expect(
-      screen.getByText('This line crossed the research-only boundary.'),
+      safety.getByText('This line crossed the research-only boundary.'),
     ).toBeInTheDocument();
   });
 });
