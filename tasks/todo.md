@@ -4579,3 +4579,54 @@
 - Protected state: the same four external `output/ui/*` entries remain dirty and must not be modified, staged, committed, reverted, overwritten, or used as fixtures.
 - Standing habit: every verified stage must automatically refresh and commit the tracker, `tasks/todo.md`, reusable lessons when changed, and the copyable restart prompt before final handoff; `tasks/lessons.md` already records this rule, so this refresh does not add another duplicate lesson.
 - Next action: execute Task 4 with the strict decoder test Red first, then implement only frontend wire types, decoder, test fixture, and report semantics test migration.
+
+# Runtime Parity Task 4: Strict Frontend Decoder And View Model
+
+- [x] Reconfirm the Task 4 boundary, protected output state, current branch, and focused frontend baseline.
+- [x] Review the canonical backend summary allowlist and validation rules before defining browser tests.
+- [x] Create test-only canonical wire and projected report fixtures without reading protected `output/ui/*`.
+- [x] Create the strict decoder fail-closed test matrix before any production decoder implementation.
+- [x] Run the exact decoder command and confirm Red because the decoder module/types do not exist.
+- [x] Add separate readiness/report-gate/source-coverage unions and structured coverage/safety finding types.
+- [x] Implement field-by-field wire decoding with no network-object casts or spreads.
+- [x] Enforce finite non-negative coverage values, API-relative hrefs, provenance completeness, and recursive forbidden-field rejection.
+- [x] Move `ReportSemantics` tests to the test-only fixture and make the minimum type-compatible semantics adjustment required by the canonical model.
+- [x] Run decoder plus `ReportSemantics` focused Green regression.
+- [x] Run TypeScript build and static boundary scans for fixture/runtime separation and forbidden trading vocabulary.
+- [x] Complete independent specification and code-quality reviews, converting valid findings into new Red -> Green regressions.
+- [x] Commit only Task 4-owned frontend implementation files, explicitly excluding protected `output/ui/*`.
+- [ ] Refresh tracker, task review, restart prompt, and reusable lessons only if a new reusable rule emerged; commit the handoff separately.
+
+## Runtime Parity Task 4 Entry Check-In
+
+- Completed prerequisite: backend Tasks 1-3 are committed in `bc281f5`, `e276ce2`, and `f984174`; Task 3 handoff is `09094ef`.
+- Current implementation scope: frontend wire types, pure decoder/adapter, test-only fixtures, and `ReportSemantics` fixture migration.
+- Explicitly excluded: HTTP `ReportArtifactSource`, `App` lifecycle, Vite proxy, History redesign, Playwright flow, static hosting, CORS, and any mutation or trading automation.
+- TDD rule: the first decoder command must fail for the missing decoder/type contract before production code is added.
+- Safety rule: canonical payloads fail closed on incomplete research-only, readiness, coverage, skeptical-review, safety, href, provenance, or recursive forbidden-field semantics.
+- Protected state: do not modify, stage, commit, revert, overwrite, or use as fixtures the four existing `output/ui/*` entries.
+
+## Runtime Parity Task 4 Planned Verification
+
+- Red: `npm --prefix apps/serenity-web test -- src/artifacts/canonicalReportArtifact.test.ts`.
+- Focused Green: `npm --prefix apps/serenity-web test -- src/artifacts/canonicalReportArtifact.test.ts src/components/ReportSemantics.test.tsx`.
+- Type/build: `npm --prefix apps/serenity-web run build`.
+- Fixture boundary: production `App.tsx` may continue using the legacy sample only until Task 5; tests must use `src/test/fixtures/reportArtifacts.ts`, and Task 4 must not introduce any new production import from test fixtures.
+- Runtime boundary: scan Task 4-owned production code for external DSA paths/imports and unsupported trading/broker/order vocabulary.
+- Diff hygiene: `git diff --check`, staged-file inspection, and protected-output exclusion before commit.
+
+## Runtime Parity Task 4 Review
+
+- Completed: strict frontend canonical decoder/view model is committed in `4d95ec3` (`feat: 添加严格股票分析工件解码器`).
+- Initial Red: `npm --prefix apps/serenity-web test -- src/artifacts/canonicalReportArtifact.test.ts` failed during collection because `./canonicalReportArtifact` did not exist.
+- Green and hardening: the first implementation exposed a camelCase forbidden-key gap (`targetPrice`), `ReportSemantics` exposed the legacy `primarySources` dependency, production build exposed the legacy sample type dependency, strict timestamp review exposed JavaScript invalid-date normalization, and code-quality review exposed missing safety line-number rendering. Each issue was preserved as a failing test before the minimal fix.
+- Final focused verification: decoder + `ReportSemantics` -> `67 passed`.
+- Final full frontend verification: Vitest -> `68 passed`; `npm --prefix apps/serenity-web run build` -> passed.
+- Boundary verification: `git diff --check` passed; production `App.tsx`/`main.tsx` gained no test-fixture import; Task 4 production code has no external DSA path/import; forbidden trading/broker/order vocabulary appears only in decoder rejection constants and negative tests.
+- Review evidence: independent specification review PASS; independent code-quality review found no Critical/Important issues, declared the slice submit-ready, and its two Minor findings were converted into tests and fixed.
+- Scope decision: `ReportSemanticsPanel.tsx` and the legacy `sampleReportArtifact.ts` were minimally updated because the new shared `ReportArtifact` type otherwise broke runtime tests/build. Deleting the sample remains Task 5 work after `App` production source injection; no HTTP source, App lifecycle, Vite, History, or Playwright implementation was added.
+- Protected state: the same four `output/ui/*` entries remain external dirty state and were excluded from implementation staging.
+- Not Started: Task 5 injectable source/App lifecycle, remaining Task 6 History/Vite/Playwright work, and Task 7 full parity verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` remains unavailable.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Next action: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`, run it Red for the missing source module, and implement only the sanitized injectable HTTP source before writing App lifecycle tests.
