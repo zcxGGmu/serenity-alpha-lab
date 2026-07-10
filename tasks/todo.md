@@ -4445,8 +4445,8 @@
 - [x] Run:
   `python3 -m pytest tests/test_analysis_pipeline.py tests/test_analysis_report.py tests/test_report_safety.py tests/test_dsa_migration_boundaries.py -q`
   and commit the green manifest slice.
-- [ ] Create `tests/test_stock_analysis_artifacts.py` and run it red before creating `src/serenity_alpha_lab/app/stock_analysis_artifacts.py`.
-- [ ] Implement and commit the pure allowlisted repository with stable 404/409/422 errors and path containment.
+- [x] Create `tests/test_stock_analysis_artifacts.py` and run it red before creating `src/serenity_alpha_lab/app/stock_analysis_artifacts.py`.
+- [x] Implement and commit the pure allowlisted repository with stable 404/409/422 errors and path containment.
 - [ ] Extend `tests/test_app_api.py` and `tests/test_cli.py`, run them red, then implement artifact routes, config, and CLI wiring.
 - [ ] Create strict frontend decoder tests and implementation, move fixtures under `src/test/fixtures`, and remove the production sample fixture path.
 - [ ] Create HTTP source and App lifecycle tests, run them red, then implement source injection and explicit states.
@@ -4509,3 +4509,27 @@
 - Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the same four `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
 - Next action: create `tests/test_stock_analysis_artifacts.py`, run it red for missing `serenity_alpha_lab.app.stock_analysis_artifacts`, then implement only the Task 2 pure repository slice.
+
+# Runtime Parity Task 2: Pure Artifact Repository
+
+- [x] Create the canonical artifact fixture and repository contract tests.
+- [x] Confirm initial collection Red because `serenity_alpha_lab.app.stock_analysis_artifacts` does not exist.
+- [x] Implement `ArtifactRepositoryError`, `StockAnalysisArtifactRepository`, app exports, allowlisted summary/manifest projection, and Markdown loading.
+- [x] Enforce deterministic schema/research-only/report-gate/safety/boundary/readiness/source-coverage/skeptical-review/provenance validation.
+- [x] Reject recursive trading/broker/order keys, bool/non-finite coverage values, unsupported schemas, missing provenance, invalid JSON, and non-canonical paths.
+- [x] Add review-driven Red -> Green coverage for classification order, exact top-level/nested values, unknown-field stripping, trusted provenance URL schemes, exact `index.html`, manifest/report symlink escape and loops, and invalid configured roots.
+- [x] Run repository tests -> `27 passed`.
+- [x] Run focused manifest/repository/DSA-boundary regression -> `38 passed, 2 warnings`.
+- [x] Run `git diff --check`, `py_compile`, independent specification review, and independent code-quality review.
+- [x] Commit only the repository slice as `e276ce2`.
+- [x] Confirm protected `output/ui/*` entries remain unstaged and unchanged by this slice.
+
+## Runtime Parity Task 2 Review
+
+- Completed: pure read-only stock-analysis artifact repository is implemented and committed in `e276ce2`.
+- Verification evidence: initial collection Red; validation-order Red `2 failed`; boundary-hardening Red `3 failed`; spec-hardening Red `6 failed`; quality-hardening Red `3 failed`; repository Green `27 passed`; focused regression `38 passed, 2 warnings`.
+- Not Started: Task 3 API/config/CLI, frontend decoder/source/App lifecycle, Playwright canonical flow, and full implementation verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
+- Next action: extend `tests/test_app_api.py` and `tests/test_cli.py`, run Task 3 red for missing config/CLI/routes, then implement only the API/config/CLI slice.

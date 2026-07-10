@@ -181,3 +181,5 @@
 - When a stage-level handoff or restart prompt is requested, perform the tracker/todo/lessons/restart-prompt refresh and commit it in the same turn; do not merely quote stale status text or wait for another reminder.
 - Canonical artifact timestamps must be timezone-aware and normalized to UTC before both human and machine rendering. Reject naive datetimes so a Markdown `UTC` label can never disagree with the manifest ISO offset.
 - Canonical manifest tests should assert the exact approved top-level allowlist, not only individual required fields. This catches accidental path leakage, internal-state exposure, and unreviewed contract expansion.
+- Fixed-name artifact readers must validate resolved containment for both manifest and report files, reject symlink escapes and loops, and convert `OSError`, `RuntimeError`, and `ValueError` into stable sanitized repository errors.
+- Allowlisting keys is insufficient when allowlisted values can contain local paths or malformed URLs. Validate canonical path literals and trusted provenance URL schemes before returning manifest or summary DTOs.

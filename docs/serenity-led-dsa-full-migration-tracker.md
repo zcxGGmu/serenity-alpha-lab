@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Task 1 is complete in `bc281f5`: the canonical manifest is versioned, reuses one UTC timestamp, carries readiness/report-gate/source-coverage/skeptical-review/safety semantics, and preserves key-claim provenance. Task 2 pure artifact repository and all later API/Web slices remain unstarted; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-2 are complete: canonical manifest `bc281f5` and pure read-only artifact repository `e276ce2`. The repository enforces version/research-only/safety/readiness/coverage/skeptical-review/provenance contracts, fixed allowlists, sanitized 404/409/422 errors, trusted provenance URL schemes, exact canonical paths, and symlink containment. Task 3 API/config/CLI and later Web slices remain unstarted; protected generated UI dirt under `output/ui/*` remains untouched and unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -51,7 +51,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | --- | --- | --- |
 | Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design committed in `948970b`; spec: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
 | Detailed runtime parity implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` maps exact files, red failures, minimal implementations, focused/full verification, protected-file checks, and commit checkpoints |
-| Canonical backend artifact/API integration for `apps/serenity-web` | In Progress | Task 1 versioned canonical manifest is committed in `bc281f5`; next implement the pure allowlisted artifact repository, then the read-only latest-artifact API, strict Web decoder/adapter, and explicit loading/unavailable/blocked states |
+| Canonical backend artifact/API integration for `apps/serenity-web` | In Progress | Task 1 manifest `bc281f5` and Task 2 repository `e276ce2` are complete; next wire runtime config, CLI, and the three read-only artifact API routes, then continue strict Web decoder/adapter and explicit loading/unavailable/blocked states |
 | Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
 | Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
 
@@ -95,11 +95,12 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Post-migration runtime parity design — approved in `948970b`; design handoff committed in `14237a9`.
 - Detailed runtime parity implementation planning — complete in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 - Runtime-parity Task 1 canonical manifest — complete and committed in `bc281f5` (`feat: 完善版本化股票分析工件清单`); Red failed on missing `generated_at`, Green passed, UTC injection hardening was added through an additional Red -> Green loop, and focused regression passed with `17 passed, 2 warnings`.
+- Runtime-parity Task 2 pure artifact repository — complete and committed in `e276ce2` (`feat: 添加只读股票分析工件仓库`); initial collection Red failed on the missing module, review-driven Red loops covered deterministic classification, finite numeric checks, forbidden keys, fixed allowlists, provenance URL safety, exact paths, manifest/report symlink escape and loop handling, and stable exception sanitization. Final repository tests passed with `27 passed`; focused manifest/repository/DSA-boundary regression passed with `38 passed, 2 warnings`.
 
 ### Unfinished, Blocked, And Deferred
 
-- **Completed:** the API-first artifact boundary, detailed Red-Green-Refactor plan, and Task 1 versioned canonical manifest contract.
-- **Not started:** Task 2 pure artifact repository, Task 3 API/config/CLI, frontend decoder/source/App lifecycle, Playwright canonical-artifact flow, and full implementation verification.
+- **Completed:** the API-first artifact boundary, detailed Red-Green-Refactor plan, Task 1 versioned canonical manifest, and Task 2 pure allowlisted repository.
+- **Not started:** Task 3 API/config/CLI, frontend decoder/source/App lifecycle, Playwright canonical-artifact flow, and full implementation verification.
 - **Environment blocked:** Docker image build and no-secret container `/health` smoke because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
 - **Deferred by design:** LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing until separately designed and approved.
 
@@ -118,6 +119,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Post-migration runtime parity planning checkpoint commit: `ddff62b` (`docs: 完成 post-migration runtime parity 实施规划`).
 - Post-migration runtime parity planning status refresh: `e864cf9` (`docs: 刷新 runtime parity 规划交接状态`).
 - Runtime-parity Task 1 implementation commit: `bc281f5` (`feat: 完善版本化股票分析工件清单`).
+- Runtime-parity Task 1 handoff commit: `eaacbbf` (`docs: 记录 runtime parity Task 1 交接`).
+- Runtime-parity Task 2 implementation commit: `e276ce2` (`feat: 添加只读股票分析工件仓库`).
 - Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
@@ -252,7 +255,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
 | Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
-| Production implementation | In Progress | Task 1 canonical manifest contract is complete in `bc281f5`; pure repository, API/config/CLI, frontend decoder/source/App lifecycle, Playwright flow, and full verification remain Not Started |
+| Production implementation | In Progress | Task 1 canonical manifest `bc281f5` and Task 2 pure repository `e276ce2` are complete; API/config/CLI, frontend decoder/source/App lifecycle, Playwright flow, and full verification remain Not Started |
 | Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
 | External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
 
@@ -260,14 +263,14 @@ Planning self-review confirms the plan covers every approved design requirement,
 
 ## Next Task
 
-Begin Task 2 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+Begin Task 3 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 
-1. Create `tests/test_stock_analysis_artifacts.py` with the canonical fixture, valid normalization, sanitized 404/409/422, forbidden-field, provenance, invalid JSON, and path-containment tests.
-2. Run `python3 -m pytest tests/test_stock_analysis_artifacts.py -q`.
-3. Confirm collection fails because `serenity_alpha_lab.app.stock_analysis_artifacts` does not exist.
-4. Implement only the pure read-only repository and exports required by Task 2.
-5. Run repository Green plus `tests/test_analysis_report.py tests/test_stock_analysis_artifacts.py tests/test_dsa_migration_boundaries.py`.
-6. Commit only the repository slice, keep protected `output/ui/*` unstaged, and preserve Deferred and Environment Blocked boundaries.
+1. Extend `tests/test_app_api.py` with valid latest summary/manifest/Markdown routes plus sanitized 404/409/422 classifications.
+2. Extend `tests/test_cli.py` and config defaults for `stock_analysis_artifact_dir`.
+3. Run `python3 -m pytest tests/test_app_api.py tests/test_cli.py::test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard -q`.
+4. Confirm Red failures because `AppRuntimeConfig` lacks the artifact directory, the CLI option is unknown, and artifact routes return generic 404.
+5. Implement only runtime config, CLI wiring, and the three read-only artifact routes with `Cache-Control: no-store`.
+6. Run Task 3 Green and the backend parity regression, commit only owned files, and keep protected `output/ui/*` unstaged.
 
 ## Copyable Restart Prompt
 
@@ -297,7 +300,7 @@ Begin Task 2 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- 最新 runtime parity implementation commit：bc281f5（feat: 完善版本化股票分析工件清单）；当前 handoff refresh 为实际 HEAD，启动后先运行 git log -1 --oneline 核对。
+- 最新 runtime parity implementation commit：e276ce2（feat: 添加只读股票分析工件仓库）；当前 handoff refresh 为实际 HEAD，启动后先运行 git log -1 --oneline 核对。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
@@ -309,6 +312,8 @@ Begin Task 2 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Post-migration runtime parity planning checkpoint commit：ddff62b（docs: 完成 post-migration runtime parity 实施规划）
 - Post-migration runtime parity planning status refresh：e864cf9（docs: 刷新 runtime parity 规划交接状态）
 - Post-migration runtime parity Task 1 implementation commit：bc281f5（feat: 完善版本化股票分析工件清单）
+- Post-migration runtime parity Task 1 handoff commit：eaacbbf（docs: 记录 runtime parity Task 1 交接）
+- Post-migration runtime parity Task 2 implementation commit：e276ce2（feat: 添加只读股票分析工件仓库）
 - DSA 当前 HEAD：95a4b51
 
 Phase 7 已完成：
@@ -344,14 +349,17 @@ Completed：
 - Task 1 已按 TDD 完成并提交为 `bc281f5`：两条 canonical-manifest 红测试先因 `generated_at` 缺失失败；实现版本化 manifest、单次 UTC 时间复用、真实 source coverage、evidence-backed skeptical review、明确 research-only safety boundary 和 key-claim provenance。
 - 代码质量复审发现非 UTC/naive datetime 可能造成时间语义矛盾；新增红测试后实现 UTC 归一化与 naive 拒绝，并锁定 manifest 14 个顶层字段。
 - Task 1 Green：`tests/test_analysis_report.py` -> `8 passed`；focused report/pipeline/safety/migration-boundary regression -> `17 passed, 2 warnings`；`git diff --check`、`py_compile`、规格审查和代码质量复审均通过。
+- Task 2 已按 TDD 完成并提交为 `e276ce2`：首次运行 `tests/test_stock_analysis_artifacts.py` 因模块不存在产生 collection Red；实现纯标准库、只读、逐层 allowlisted repository 与稳定 404/409/422 error envelope。
+- Task 2 review hardening 继续通过 Red -> Green 覆盖 validation order、missing safety/boundary、finite numeric/bool、unknown-field stripping、forbidden-key containing 规则、exact report/UI paths、manifest/report symlink escape 与 loop、trusted provenance URL、bool schema、invalid configured root 和原生异常封装。
+- Task 2 Green：repository tests -> `27 passed`；focused manifest/repository/DSA-boundary regression -> `38 passed, 2 warnings`；`git diff --check`、`py_compile` 和代码质量复审通过。
 
 Not Started / 下一步：
-- Task 2 pure artifact repository、Task 3 API/config/CLI、frontend decoder/source/App lifecycle、Playwright canonical-artifact flow 和完整实现验证尚未开始。
-- 创建 `tests/test_stock_analysis_artifacts.py`，覆盖 canonical fixture、allowlisted summary、validated manifest/report、404/409/422 sanitized errors、schema/research-only/safety/readiness/provenance/forbidden-key/path containment。
+- Task 3 API/config/CLI、frontend decoder/source/App lifecycle、Playwright canonical-artifact flow 和完整实现验证尚未开始。
+- 扩展 `tests/test_app_api.py` 与 `tests/test_cli.py`，覆盖三个只读 artifact routes、Cache-Control/content-type、404/409/422、无本机路径泄漏、config default 和 CLI option。
 - 红测试命令：
-  python3 -m pytest tests/test_stock_analysis_artifacts.py -q
-- 预期失败：collection error，因为 `serenity_alpha_lab.app.stock_analysis_artifacts` 尚不存在。
-- 红测试确认按预期失败后，只实现 Task 2 的纯只读 repository 和 `app/__init__.py` exports，再运行 repository + manifest + DSA migration boundary regression。
+  python3 -m pytest tests/test_app_api.py tests/test_cli.py::test_cli_serve_app_invokes_serenity_api_without_building_static_dashboard -q
+- 预期失败：`AppRuntimeConfig` 尚无 `stock_analysis_artifact_dir`，CLI option 尚不存在，artifact routes 返回 generic 404。
+- 红测试确认按预期失败后，只实现 Task 3 config/CLI/three read-only routes，再运行 backend parity regression。
 
 Environment Blocked：
 - Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
