@@ -4674,3 +4674,61 @@
 - Exact next action: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`, run the focused Vitest command Red for the missing source module, then implement only the sanitized injectable HTTP source before writing App lifecycle tests.
 - Standing habit: after every verified stage-level task, automatically refresh and commit the tracker, `tasks/todo.md`, `tasks/lessons.md` only when a non-duplicate reusable lesson exists, and the copyable restart prompt before the final response.
 - Documentation verification: `git diff --check` passed; the owned diff is limited to the migration plan, migration tracker, and task log; the four protected `output/ui/*` entries remain external and unstaged.
+
+# Runtime Parity Task 5: Injectable Artifact Source And App Lifecycle
+
+- [x] Create `reportArtifactSource.test.ts` before any source implementation.
+- [x] Confirm the exact focused source command fails because `reportArtifactSource.ts` is missing.
+- [x] Implement only `ReportArtifactSource`, `ReportArtifactLoadError`, relative latest-artifact fetch, sanitized HTTP classification, JSON decoding, decoder failure, network failure, and abort handling.
+- [x] Run focused source Green tests before creating any App lifecycle test.
+- [x] Create `App.test.tsx` covering loading, ready, unavailable, blocked, retry, abort, stale responses, Settings, Not Found, and production fixture separation.
+- [x] Confirm App lifecycle Red before modifying `App.tsx`.
+- [x] Implement injectable App lifecycle, production source injection, stable state UI, retry, abort, and stale-response protection without fixture fallback.
+- [x] Run focused lifecycle tests, full Vitest, frontend build, fixture/runtime scans, DSA boundary scans, and diff hygiene.
+- [x] Complete independent specification review followed by code-quality review; convert valid findings into Red -> Green regressions.
+- [x] Commit only Task 5-owned source, tests, App, main, styles, and types as implementation commit `b2b483f`.
+- [ ] Commit Task 5 tracker, todo, lesson, and restart-prompt closeout without protected outputs.
+- [x] Keep all protected `output/ui/*` entries untouched and unstaged.
+
+## Runtime Parity Task 5 Entry Check-In
+
+- Completed prerequisite: runtime-parity Tasks 1-4 are committed through `4d95ec3`, `c61ef1b`, and review hardening `2ad297a`; current HEAD is `5bfa0a1`.
+- Current scope: injectable read-only HTTP artifact source and App loading/ready/unavailable/blocked lifecycle only.
+- Explicitly excluded: History semantics redesign, Vite proxy, Playwright, static hosting, wildcard CORS, history aggregation, `/run-state` redesign, mutation endpoints, live adapters, broker/order actions, and trading automation.
+- TDD boundary: source tests must fail for the missing module before source implementation; App tests must fail against the fixture-bound App before App implementation.
+- Safety boundary: errors expose only stable availability kind and sanitized reason; blocked artifacts render no report or manifest links; no unavailable or blocked path falls back to sample data.
+- Protected state: do not modify, stage, commit, revert, overwrite, or use as fixtures the four existing `output/ui/*` entries.
+
+## Runtime Parity Task 5 Planned Verification
+
+- Source Red/Green: `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts`.
+- Lifecycle Red/Green: `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts src/App.test.tsx`.
+- Focused regression: canonical decoder, source, App lifecycle, and `ReportSemantics`.
+- Broader frontend: full Vitest and `npm --prefix apps/serenity-web run build`.
+- Boundaries: production App/main fixture-import scan, external DSA path/import scan, forbidden trading vocabulary scan, `git diff --check`, staged-file inspection, and protected-output exclusion.
+
+## Runtime Parity Task 5 Verification Evidence
+
+- Source initial Red: `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts` failed during collection because `./reportArtifactSource` did not exist.
+- Source initial Green: the same focused command passed with `11 passed`.
+- App lifecycle Red: source + App command produced `7 failed, 13 passed`; failures showed the fixture-bound App had no loading/error lifecycle, source injection, abort/stale handling, or production fixture separation.
+- App lifecycle initial Green: source + App command passed with `20 passed`.
+- Review-hardening Red: new HTTP invalid-JSON classification, reason allowlist, body abort/network, cross-realm abort, and non-artifact-route tests produced `9 failed, 18 passed`.
+- Review-hardening Green: source + App command passed with `27 passed`.
+- Quality-review Red: non-2xx body-stream `TypeError` regression produced `3 failed, 64 passed`; the implementation now preserves already-received 404/409/422 safety classification before treating successful-response body `TypeError` as network failure.
+- Final focused verification: source + App passed with `67 passed`.
+- Final full frontend verification: `npm --prefix apps/serenity-web test` passed with `5 files / 135 tests`; `npm --prefix apps/serenity-web run build` passed.
+- Boundary verification: production `App.tsx` and `main.tsx` contain no sample/test fixture import; `apps/serenity-web/src` contains no external DSA checkout path/import; Task 5 production files contain no unsupported trading/broker/order language; `git diff --check` passed.
+- Protected state: the same four `output/ui/*` entries were already dirty in the startup `git status --short`; Task 5 did not read, modify, revert, stage, or use them as fixtures. They remain external and unstaged.
+- Stale-response scope: Retry is available only after the previous request has settled, so no reachable UI state can keep an old retry request pending. The concurrency regression instead replaces the injected source while the first request is pending, starts a newer request, and proves the older response cannot overwrite the newer result; retry itself is separately covered as a second fresh load.
+
+## Runtime Parity Task 5 Review
+
+- Completed: injectable source/App lifecycle is committed in `b2b483f`; the production sample fixture is removed.
+- Verification: source initial Red, App lifecycle Red, two review-hardening Reds, final source + App `67 passed`, full Vitest `135 passed`, build, scans, and diff checks passed.
+- Reviews: independent specification review PASS; independent code-quality review found one Important non-2xx body `TypeError` misclassification, which was converted into a failing regression, fixed, and re-reviewed PASS.
+- Not Started: Task 6 actual coverage/latest-only History/Vite/Playwright flow and Task 7 full parity verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
+- Deferred: history aggregation, `/run-state` redesign, static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four startup `output/ui/*` entries remain external and unstaged.
+- Next action: start Task 6 with the `ReportSemantics` + `App` Red assertions for actual coverage and latest-only History.

@@ -176,14 +176,14 @@ Additional checks when Web/API work begins:
 
 ## 7. Immediate Next Step
 
-Phase 0-7 and post-migration runtime-parity Tasks 1-4 are complete. Continue with Task 5 of the approved design in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` and the detailed TDD plan in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+Phase 0-7 and post-migration runtime-parity Tasks 1-5 are complete. Continue with Task 6 of the approved design in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` and the detailed TDD plan in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 
 The exact next Red step is:
 
-1. Create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`.
-2. Run `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts`.
-3. Confirm failure because `apps/serenity-web/src/artifacts/reportArtifactSource.ts` does not exist.
-4. Implement only the injectable `ReportArtifactSource`, `ReportArtifactLoadError`, relative latest-artifact request, sanitized 404/409/422 classification, invalid-JSON and decoder-failure handling, and network/abort classification.
-5. After the source tests are Green, add `App.test.tsx` lifecycle Red coverage before modifying `App.tsx`.
+1. Extend `apps/serenity-web/src/components/ReportSemantics.test.tsx` and `apps/serenity-web/src/App.test.tsx` with the Task 6 actual-coverage and latest-only History assertions.
+2. Run `npm --prefix apps/serenity-web test -- src/components/ReportSemantics.test.tsx src/App.test.tsx`.
+3. Confirm Red because History does not yet label the latest-only limitation and the remaining Task 6 browser flow is not wired.
+4. Implement only actual canonical coverage rendering, latest-only History copy, the loopback Vite `/api` proxy, and non-AAPL Playwright route interception.
+5. Run frontend Vitest, production build, and Playwright smoke before starting Task 7 full verification.
 
-Do not skip Red -> Green -> Refactor, do not use the protected `output/ui/*` state as a fixture, and do not start History aggregation, Vite proxy, Playwright, static Web hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation during the Task 5 source slice.
+Do not skip Red -> Green -> Refactor, do not use the protected `output/ui/*` state as a fixture, and do not start history aggregation, `/run-state` redesign, static Web hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation during Task 6.

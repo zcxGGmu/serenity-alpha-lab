@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-4 are complete: canonical manifest `bc281f5`, pure read-only artifact repository `e276ce2`, read-only artifact API/config/CLI `f984174`, strict frontend decoder/view model `4d95ec3`, and complete-projection review hardening `2ad297a`. Task 4 handoff is `c61ef1b`; the latest pre-refresh status commit is `9a0b0d3`. The Web validates the canonical summary field-by-field, preserves real coverage/safety/provenance semantics, rejects unsafe hrefs and recursive trading/broker/order fields, and uses test-only canonical fixtures. Task 5 injectable source/App lifecycle and later browser flow remain unstarted; protected generated UI dirt under `output/ui/*` remains untouched and unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-5 are complete through injectable source/App lifecycle commit `b2b483f`. The Web now loads the relative latest-artifact API through a strict decoder, uses sanitized per-status error classification, renders loading/ready/unavailable/blocked states, retries with fresh requests, aborts cleanup, rejects stale responses, keeps Settings/Not Found independent, and has no production sample-fixture fallback. Task 6 History/Vite/Playwright parity remains Not Started; protected generated UI dirt under `output/ui/*` remains untouched and unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -51,7 +51,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | --- | --- | --- |
 | Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design committed in `948970b`; spec: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
 | Detailed runtime parity implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` maps exact files, red failures, minimal implementations, focused/full verification, protected-file checks, and commit checkpoints |
-| Canonical backend artifact/API integration for `apps/serenity-web` | In Progress | Tasks 1-4 are complete through strict decoder/view model commit `4d95ec3`; next add the injectable HTTP source and explicit loading/ready/unavailable/blocked App lifecycle, then complete remaining History/Vite/Playwright parity |
+| Canonical backend artifact/API integration for `apps/serenity-web` | In Progress | Tasks 1-5 are complete through injectable source/App lifecycle commit `b2b483f`; next complete actual coverage/latest-only History semantics, the Vite loopback proxy, and non-AAPL Playwright parity |
 | Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
 | Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
 
@@ -101,17 +101,19 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Runtime-parity Task 4 strict frontend decoder/view model — complete and committed in `4d95ec3` (`feat: 添加严格股票分析工件解码器`); initial Red failed during collection because `canonicalReportArtifact.ts` did not exist. Review-driven Red -> Green loops covered camelCase forbidden keys, impossible calendar dates, legacy sample/panel compatibility, structured safety line numbers, nested array rejection, recursive unknown-field stripping, safe value text, exact API hrefs, provenance URL safety, and detached projections. Final focused tests passed with `67 passed`; full Vitest passed with `68 passed`; production build, `git diff --check`, fixture/runtime boundary, DSA path scan, and specification review passed, with the final quality-review test blind spot resolved in `2ad297a`.
 - Runtime-parity Task 4 handoff documentation — complete and committed in `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`); tracker, todo, reusable lesson, protected state, verification evidence, and the exact Task 5 source-test Red boundary were synchronized after the implementation commit.
 - Runtime-parity Task 4 review hardening — complete and committed in `2ad297a` (`test: 收紧股票分析工件完整投影回归`); the valid decoder case now compares the entire `ReportArtifact` projection, and `ReportSemantics` locks Focus/External plus structured coverage message/recommendation rendering. Fresh focused `67 passed`, full Vitest `68 passed`, and production build passed.
+- Runtime-parity Task 5 injectable source/App lifecycle — complete and committed in `b2b483f` (`feat: 接入可注入股票分析工件来源`); initial source Red failed on the missing module, App lifecycle Red failed against the fixture-bound runtime, and review-driven Red loops covered malformed/invalid error bodies, per-status reason allowlists, body-stage abort/network behavior, StrictMode replay, non-artifact routes, blocked-link absence, and stale-response protection. Final full Vitest passed with `135 passed`; production build, fixture/DSA/safety scans, `git diff --check`, specification review, and code-quality re-review passed.
 
 ### Unfinished, Blocked, And Deferred
 
-- **Completed:** the API-first artifact boundary, detailed Red-Green-Refactor plan, Task 1 versioned canonical manifest, Task 2 pure allowlisted repository, Task 3 read-only API/config/CLI, and Task 4 strict frontend decoder/view model.
-- **Not started:** Task 5 injectable HTTP source/App lifecycle, the remaining History/Vite/Playwright canonical-artifact flow, and full implementation verification.
+- **Completed:** the API-first artifact boundary, detailed Red-Green-Refactor plan, Task 1 versioned canonical manifest, Task 2 pure allowlisted repository, Task 3 read-only API/config/CLI, Task 4 strict frontend decoder/view model, and Task 5 injectable source/App lifecycle.
+- **Not started:** Task 6 actual coverage/latest-only History/Vite/Playwright canonical-artifact flow and Task 7 full implementation verification.
 - **Environment blocked:** Docker image build and no-secret container `/health` smoke because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
 - **Deferred by design:** LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing until separately designed and approved.
 
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
+- Runtime-parity Task 5 implementation commit: `b2b483f` (`feat: 接入可注入股票分析工件来源`).
 - Latest pre-refresh status commit: `9a0b0d3` (`docs: 刷新 runtime parity Task 4 审查加固状态`).
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
@@ -270,7 +272,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
 | Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
-| Production implementation | In Progress | Tasks 1-4 are complete through decoder/view model commit `4d95ec3`; Task 5 injectable source/App lifecycle, remaining History/Vite/Playwright flow, and full verification remain Not Started |
+| Task 5 injectable source/App lifecycle | Completed | `b2b483f` removes the production sample fixture, adds the sanitized HTTP source and allowlisted backend reasons, injects the production source in `main.tsx`, and implements loading/ready/unavailable/blocked/retry/abort/stale behavior |
+| Production implementation | In Progress | Tasks 1-5 are complete through `b2b483f`; Task 6 History/Vite/Playwright parity and Task 7 full verification remain Not Started |
 | Docker real smoke | Environment Blocked | `/Users/zq/.orbstack/run/docker.sock` remains unavailable; no image-build or container-health claim is made |
 | External runtime capabilities | Deferred | History aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, and release publishing remain outside this slice |
 
@@ -278,15 +281,14 @@ Planning self-review confirms the plan covers every approved design requirement,
 
 ## Next Task
 
-Begin Task 5 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+Begin Task 6 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 
-1. Create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`.
-2. Test the relative `/api/artifacts/stock-analysis/latest` request, `AbortSignal`, stable 404/409/422 classification, invalid JSON, decoder failures, network `TypeError`, and `AbortError`.
-3. Run `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts`.
-4. Confirm Red because `reportArtifactSource.ts` does not exist.
-5. Implement only `ReportArtifactSource`, `ReportArtifactLoadError`, sanitized error-envelope parsing, and production HTTP loading through `decodeCanonicalReportArtifact`.
-6. Then add `App.test.tsx` Red coverage for loading/ready/unavailable/blocked/retry/abort/stale responses before modifying `App.tsx`.
-7. Do not start History, Vite proxy, Playwright, static hosting, CORS, or any mutation/trading automation in Task 5.
+1. Extend `ReportSemantics.test.tsx` and `App.test.tsx` with actual coverage and latest-only History assertions.
+2. Run `npm --prefix apps/serenity-web test -- src/components/ReportSemantics.test.tsx src/App.test.tsx`.
+3. Confirm Red before changing History/Vite/Playwright production files.
+4. Implement actual canonical coverage rendering, latest-only History labeling, the loopback Vite `/api` proxy, and non-AAPL Playwright interception.
+5. Run full Vitest, frontend build, and Playwright smoke.
+6. Do not start history aggregation, `/run-state` redesign, static hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation.
 
 ## Copyable Restart Prompt
 
@@ -316,8 +318,8 @@ Begin Task 5 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- 本次文档刷新前 HEAD：9a0b0d3（docs: 刷新 runtime parity Task 4 审查加固状态）；本次文档提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
-- 最新 runtime parity production implementation commit：4d95ec3（feat: 添加严格股票分析工件解码器）。
+- 本次文档刷新前 HEAD：b2b483f（feat: 接入可注入股票分析工件来源）；本次文档提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
+- 最新 runtime parity production implementation commit：b2b483f（feat: 接入可注入股票分析工件来源）。
 - 最新 runtime parity review-hardening commit：2ad297a（test: 收紧股票分析工件完整投影回归）。
 - 最新 Task 4 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
@@ -385,14 +387,17 @@ Completed：
 - Task 4 review hardening 通过多轮 Red -> Green 覆盖 camelCase `targetPrice`、非法日历日期、旧 sample/ReportSemantics 类型兼容、structured safety line number、数组嵌套 forbidden field、递归未知字段与安全 value 文本；规格复审 PASS，代码质量复审确认可提交且 Minor 已修。
 - Task 4 最终验证：decoder + semantics focused -> `67 passed`；full Vitest -> `68 passed`；`npm --prefix apps/serenity-web run build`、`git diff --check`、fixture/runtime boundary、DSA path scan 和 protected-output staging check 通过。
 - Task 4 最终质量复核进一步指出有效 payload 只做部分字段断言；已在 `2ad297a` 改为完整 `ReportArtifact` equality，并补齐 Focus/External、coverage message/recommendation 展示断言。加固后 focused `67 passed`、full Vitest `68 passed`、build passed。
+- Task 5 已按 TDD 完成并提交为 `b2b483f`：source 初始 Red 因模块缺失失败，App 初始 Red 为 `7 failed, 13 passed`，review-hardening Red 为 `9 failed, 18 passed`，quality-review Red 为 `3 failed, 64 passed`。
+- Task 5 实现相对 latest-artifact GET、严格 decoder、404/409/422 与 reason allowlist、invalid JSON/decoder/network/abort 分类、loading/ready/unavailable/blocked/retry/abort/stale lifecycle、StrictMode replay、Settings/Not Found 独立访问，并删除 production sample fixture。
+- Task 5 最终验证：source + App `67 passed`；full Vitest `135 passed`；production build、fixture/DSA/safety scans、`git diff --check`、规格复审与代码质量复审 PASS。
 
 Not Started / 下一步：
-- Task 5 injectable HTTP source/App lifecycle、剩余 History/Vite/Playwright canonical-artifact flow 和完整实现验证尚未开始。
-- 首先创建 `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`，只测试 source contract、sanitized errors、relative API endpoint、AbortSignal、invalid JSON、decoder failure 和 network/abort 分类。
+- Task 6 actual coverage/latest-only History/Vite/Playwright canonical-artifact flow 和 Task 7 完整实现验证尚未开始。
+- 首先扩展 `apps/serenity-web/src/components/ReportSemantics.test.tsx` 与 `apps/serenity-web/src/App.test.tsx`，锁定 actual coverage 和 `Latest available artifact`。
 - 红测试命令：
-  npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts
-- 预期失败：`reportArtifactSource.ts` 尚不存在。
-- source Green 后再写 `App.test.tsx` Red；不要提前实现 History、Vite proxy、Playwright、static hosting、CORS 或 mutation/trading automation。
+  npm --prefix apps/serenity-web test -- src/components/ReportSemantics.test.tsx src/App.test.tsx
+- 预期失败：History 尚未标注 latest-only 限制；随后再实现 Vite proxy 与 Playwright 非 AAPL flow。
+- 不要提前实现 history aggregation、`/run-state` redesign、static hosting、wildcard CORS 或 mutation/trading automation。
 
 Environment Blocked：
 - Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
