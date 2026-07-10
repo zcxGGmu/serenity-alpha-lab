@@ -4354,7 +4354,7 @@
 - [x] Record design boundaries, acceptance criteria, TDD strategy, environment blockers, deferred scope, and protected-file constraints.
 - [x] Complete written-spec review and create the detailed Red-Green-Refactor implementation plan.
 - [x] Mirror the implementation plan into this task log with exact test and verification commands.
-- [ ] Commit the planning checkpoint before production implementation.
+- [x] Commit the planning checkpoint before production implementation.
 - [ ] Begin implementation with failing backend manifest/API tests.
 
 ## Runtime Parity Design Entry Criteria Check-In
@@ -4382,7 +4382,7 @@
 - Frontend baseline: `npm --prefix apps/serenity-web test` -> `2 files / 4 tests passed`.
 - Design choice: API-first latest artifact is preferred over direct static parsing because it gives the Web a stable allowlisted DTO without coupling it to Markdown or filesystem layout.
 - Known environment blocker: Docker daemon remains unavailable at `/Users/zq/.orbstack/run/docker.sock`; no real image build or container `/health` claim is made.
-- Next action: commit the planning checkpoint, then add and run the two canonical-manifest red tests from Task 1 of the implementation plan.
+- Next action: add and run the two canonical-manifest red tests from Task 1 of the implementation plan.
 
 ## Runtime Parity Design Checkpoint Review
 
@@ -4402,7 +4402,7 @@
 - [x] Refresh the tracker copyable restart prompt with the exact next action and current commits.
 - [x] Reaffirm the automatic stage-closeout documentation habit in `tasks/lessons.md`.
 - [x] Create the detailed Red-Green-Refactor implementation plan after the design review checkpoint.
-- [ ] Commit the implementation planning checkpoint before writing production code.
+- [x] Commit the implementation planning checkpoint before writing production code.
 - [ ] Start the first implementation task with failing backend manifest/API tests.
 
 ## Status Refresh Review
@@ -4412,7 +4412,7 @@
 - Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, and release publishing.
 - Protected state: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain external dirty state and must not be staged, committed, reverted, or overwritten.
-- Next action: commit planning docs, then begin TDD with the versioned canonical-manifest and missing-risk skeptical-review red tests in `tests/test_analysis_report.py`.
+- Next action: begin TDD with the versioned canonical-manifest and missing-risk skeptical-review red tests in `tests/test_analysis_report.py`.
 
 # Post-Migration Runtime Parity Implementation Planning Checkpoint
 
@@ -4436,7 +4436,7 @@
 - [x] Self-review the plan for spec coverage, placeholders, type/signature consistency, actual coverage counts, and protected-file safety.
 - [x] Reconcile the historical Phase 0-7 completion markers in the migration plan.
 - [x] Refresh tracker, todo, lessons, and the copyable restart prompt for planning completion.
-- [ ] Commit planning-only files, explicitly excluding protected `output/ui/*`.
+- [x] Commit planning-only files as `ddff62b`, explicitly excluding protected `output/ui/*`.
 - [ ] Add the Task 1 canonical-manifest and missing-risk skeptical-review tests to `tests/test_analysis_report.py`.
 - [ ] Run:
   `python3 -m pytest tests/test_analysis_report.py::test_write_stock_analysis_manifest_includes_runtime_parity_semantics tests/test_analysis_report.py::test_write_stock_analysis_manifest_emits_missing_risk_counter_thesis -q`
@@ -4456,7 +4456,7 @@
 
 ## Planning Checkpoint Review
 
-- Status: planning complete; backend/frontend/Playwright production implementation and new red tests are Not Started.
+- Status: planning complete and committed in `ddff62b`; backend/frontend/Playwright production implementation and new red tests are Not Started.
 - Plan artifact: `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 - Spec coverage: versioned manifest, read-only API, strict decoder, injectable source, App lifecycle, real coverage data, structured findings, Vite transport, Playwright, verification, and commit checkpoints are all mapped.
 - Pre-implementation baselines only: Python focused baseline `40 passed`; frontend Vitest baseline `2 files / 4 tests passed`.
@@ -4465,4 +4465,4 @@
 - Environment Blocked: Docker image build and no-secret container `/health` smoke remain unverified while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
 - Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live adapters, LLM providers, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the four existing `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
-- Next action: commit this planning checkpoint, then execute Task 1 exactly as written in the implementation plan.
+- Next action: execute Task 1 exactly as written in the implementation plan.
