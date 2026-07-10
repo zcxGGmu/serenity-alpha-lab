@@ -4323,3 +4323,20 @@
 - Implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Handoff docs commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`); the tracker restart prompt now records the finalized handoff ID.
 - Next action: plan post-migration runtime parity, starting with canonical backend artifact/API integration for `apps/serenity-web`; rerun Docker smoke when a daemon is available.
+
+# Post-Migration Development Status And Restart Handoff Refresh
+
+- [x] Reconcile the current branch, Phase 0-7 commits, verification evidence, and protected generated output state.
+- [x] Separate completed migration work from not-started parity work, environment-blocked Docker verification, and explicitly deferred capabilities.
+- [x] Refresh the tracker repository snapshot, next-work table, current branch state, and copyable restart prompt.
+- [x] Record the standing automatic stage-closeout habit in `tasks/lessons.md`.
+- [x] Verify documentation diff hygiene and commit only owned status documents, excluding protected `output/ui/*`.
+
+## Review
+
+- Status: complete; documentation diff hygiene passed and only owned status documents are included in the closeout commit.
+- Completed scope: Phase 0-7 implementation, verification, handoff documentation, and final Phase 7 status refresh are complete.
+- Unfinished scope: post-migration runtime parity planning and canonical backend artifact/API integration for `apps/serenity-web` have not started.
+- Environment blocker: real Docker image build and no-secret container `/health` smoke remain unverified until a Docker daemon is available.
+- Deferred scope: Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, and release publishing require separate approved design and threat-model work.
+- Verification: `git diff --check` passed; the owned diff contains only `docs/serenity-led-dsa-full-migration-tracker.md`, `tasks/todo.md`, and `tasks/lessons.md`; protected `output/ui/*` remains unstaged.

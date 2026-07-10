@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 7 implementation is committed in `f2fd7cd`; Agent/Bot/Desktop/Docker/CI are Serenity-owned and research-only; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 0-7 are complete; Phase 7 implementation `f2fd7cd`, handoff docs `8bba5e0`, and final completion status refresh `6d1fcbb` are committed; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -49,7 +49,10 @@ Previous DSA-first integration work is useful source research but is no longer t
 
 | Workstream | Status | Scope |
 | --- | --- | --- |
-| Post-migration runtime parity and release hardening | Pending Planning | Connect the web workbench to canonical backend artifacts/APIs, rerun Docker build/health smoke when a daemon is available, and keep Electron/updater/live Bot/LLM integrations behind separate threat-model and explicit-enable gates |
+| Post-migration runtime parity plan | Not Started | Write a new design boundary and `tasks/todo.md` checklist before implementation |
+| Canonical backend artifact/API integration for `apps/serenity-web` | Not Started | Replace fixture-only runtime data with Serenity-owned canonical backend artifacts/APIs while preserving evidence, provenance, readiness, source coverage, skeptical review, report safety, and research-only semantics |
+| Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
+| Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
 
 ### Phase Completion Status
 
@@ -89,11 +92,11 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 6: Portfolio, Backtest, Alerts, Notifications — implementation committed in `639e255`; handoff docs committed in `1c2eddf`.
 - Phase 7: Agent, Bot, Desktop, Docker, CI — implementation committed in `f2fd7cd`; handoff docs committed in `8bba5e0`.
 
-### Pending Hardening
+### Unfinished, Blocked, And Deferred
 
-- Docker image build and no-secret `/health` smoke remain environment-blocked locally because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
-- Canonical backend artifact/API parity for the web workbench is the next prerequisite before reconsidering Electron packaging.
-- LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing remain explicit non-goals until separately designed and approved.
+- **Not started:** post-migration runtime parity planning and canonical backend artifact/API integration for `apps/serenity-web`.
+- **Environment blocked:** Docker image build and no-secret container `/health` smoke because the Docker/OrbStack daemon socket is unavailable; Docker static rules and Compose parsing passed.
+- **Deferred by design:** LLM runtime, live Bot adapters, notification delivery, Electron/updater/installer, broker actions, and release publishing until separately designed and approved.
 
 ### Current Branch And Protected State
 
@@ -101,7 +104,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
-- Phase 7 handoff documentation is finalized; after this status refresh, only protected generated UI artifacts should remain dirty.
+- Phase 7 final completion status refresh commit: `6d1fcbb` (`docs: 刷新 Phase 7 完成状态`).
+- Phase 7 handoff documentation is finalized; only protected generated UI artifacts should remain dirty before the next planned development slice.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -257,6 +261,7 @@ Plan the first post-migration hardening slice.
 - 当前分支：codex/phase-4-report-safety
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
+- Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）
 - Phase 7 planning commit：eddf32c
 - DSA 当前 HEAD：95a4b51
 
@@ -280,11 +285,11 @@ Phase 7 已完成：
 - DSA external path/import scan 无匹配；唯一 daily_stock_analysis 名称是 release gate 对 .dockerignore 的防护断言。
 - git diff --check passed。
 
-下一步：
-- 先为 post-migration hardening 写新的可勾选计划和设计边界。
-- 推荐第一项：让 apps/serenity-web 消费 canonical backend artifact/API，而不是 fixture-only data，为未来 desktop parity 提供真实运行时基础。
-- Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
-- 不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计和批准。
+未完成 / 下一步：
+- Not Started：先为 post-migration runtime parity 写新的设计边界和 tasks/todo.md 可勾选计划；实现前先 check-in。
+- Not Started（推荐第一项）：让 apps/serenity-web 消费 canonical backend artifact/API，而不是 fixture-only data，为未来 desktop parity 提供真实运行时基础。
+- Environment Blocked：Docker daemon 可用后，运行不带 --skip-docker-smoke 的 unified gate，补充镜像 build 和 no-secret /health 证据。
+- Deferred：不要开始 Electron、auto-update、live Bot adapters、LLM provider、notification delivery、broker/order 或 release publishing，除非另行设计、威胁建模和批准。
 
 保护状态：
 - 不要修改、stage、提交或回滚：
@@ -295,7 +300,7 @@ Phase 7 已完成：
 - 当前这些 output/ui/* 仍是受保护外部脏状态；提交时必须显式排除。
 - 不要在 Serenity runtime 中跨仓库 import DSA。
 - 不要复制 DSA .venv、node_modules、__pycache__、SQLite runtime DB 或生成缓存。
-- 每个阶段性任务完成后更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，并只暂存/提交拥有的文件。
+- 每个阶段性任务完成后，自动更新 tracker、tasks/todo.md、tasks/lessons.md 和 restart prompt，明确区分 Completed / Not Started / Environment Blocked / Deferred，并只暂存/提交拥有的文件；这是长期项目习惯，不要等待用户再次提醒。
 ```
 
 ## Historical Phase 7 Planning Restart Prompt (Superseded)
