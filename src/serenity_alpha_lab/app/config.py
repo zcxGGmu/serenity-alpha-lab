@@ -18,6 +18,10 @@ class AppRuntimeConfig:
     research_monitors_enabled: bool = False
     research_monitor_notifications_enabled: bool = False
     notification_channels_env_var: str = "SERENITY_NOTIFICATION_CHANNELS"
+    research_agents_enabled: bool = False
+    research_bot_enabled: bool = False
+    research_bot_platform_delivery_enabled: bool = False
+    desktop_packaging_status: str = "deferred_until_runtime_parity"
 
     @property
     def market_data_api_key(self) -> str:

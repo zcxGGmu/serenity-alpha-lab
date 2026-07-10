@@ -7,6 +7,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from serenity_alpha_lab import __version__
+from serenity_alpha_lab.desktop_runtime import build_desktop_runtime_plan
 
 from .config import AppRuntimeConfig
 
@@ -54,6 +55,9 @@ def serve_app(config: AppRuntimeConfig) -> None:
 
 
 def _health_payload(config: AppRuntimeConfig) -> dict[str, Any]:
+    desktop = build_desktop_runtime_plan(
+        packaging_status=config.desktop_packaging_status,
+    )
     return {
         "status": "ok",
         "service": "serenity-alpha-lab-api",
@@ -66,6 +70,21 @@ def _health_payload(config: AppRuntimeConfig) -> dict[str, Any]:
             "notifications_enabled": config.research_monitor_notifications_enabled,
             "delivery_status": "enabled" if config.research_monitor_notifications_enabled else "disabled",
             "configured_channel_count": len(config.configured_notification_channels),
+        },
+        "research_agents": {
+            "enabled": config.research_agents_enabled,
+            "execution": "explicit_context_only",
+        },
+        "research_bot": {
+            "enabled": config.research_bot_enabled,
+            "platform_delivery": "disabled",
+        },
+        "desktop": {
+            "runtime_mode": desktop.runtime_mode,
+            "packaging_status": desktop.packaging_status,
+            "automatic_updates_enabled": desktop.automatic_updates_enabled,
+            "credentials_bundled": desktop.credentials_bundled,
+            "public_bind_enabled": desktop.public_bind_enabled,
         },
         "market_data": {
             "enabled": config.market_data_enabled,

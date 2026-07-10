@@ -44,6 +44,27 @@ def test_health_payload_reports_research_monitors_default_off_without_secrets(mo
     assert "password" not in rendered
 
 
+def test_health_reports_agent_bot_and_desktop_capabilities_default_off():
+    payload = _health_payload(AppRuntimeConfig())
+
+    assert payload["research_agents"] == {
+        "enabled": False,
+        "execution": "explicit_context_only",
+    }
+    assert payload["research_bot"]["enabled"] is False
+    assert payload["research_bot"]["platform_delivery"] == "disabled"
+    assert payload["desktop"]["runtime_mode"] == "local_web_api"
+    assert payload["desktop"]["packaging_status"] == "deferred_until_runtime_parity"
+    assert payload["desktop"]["automatic_updates_enabled"] is False
+    assert payload["desktop"]["credentials_bundled"] is False
+    assert payload["desktop"]["public_bind_enabled"] is False
+    rendered = str(payload).lower()
+    assert "token" not in rendered
+    assert "secret" not in rendered
+    assert "password" not in rendered
+    assert "/users/" not in rendered
+
+
 def test_local_api_serves_health_version_and_run_state_without_credentials(monkeypatch, tmp_path):
     monkeypatch.delenv("SERENITY_MARKET_DATA_API_KEY", raising=False)
     monkeypatch.delenv("DSA_MARKET_DATA_API_KEY", raising=False)

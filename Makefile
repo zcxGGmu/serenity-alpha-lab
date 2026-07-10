@@ -1,6 +1,6 @@
 SERENITY_ALPHA_LAB ?= $(shell python3 -c 'import shutil, sysconfig; print(shutil.which("serenity-alpha-lab") or sysconfig.get_path("scripts") + "/serenity-alpha-lab")')
 
-.PHONY: test e2e doctor smoke run-cpo-pack coverage-matrix ui serve-ui verify clean-pack
+.PHONY: test e2e doctor smoke run-cpo-pack coverage-matrix ui serve-ui verify clean-pack frontend-test frontend-build frontend-smoke release-check
 
 test:
 	python3 -m pytest tests -q
@@ -32,6 +32,18 @@ serve-ui:
 	PYTHONPATH=src python3 -m serenity_alpha_lab.cli serve-ui
 
 verify: test doctor run-cpo-pack coverage-matrix
+
+frontend-test:
+	cd apps/serenity-web && npm test -- --run
+
+frontend-build:
+	cd apps/serenity-web && npm run build
+
+frontend-smoke:
+	cd apps/serenity-web && npm run test:smoke -- --reporter=line
+
+release-check:
+	PYTHONPATH=src python3 scripts/verify_offline_release.py
 
 clean-pack:
 	rm -rf output/packs/cpo-guarded

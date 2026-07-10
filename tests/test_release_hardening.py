@@ -37,6 +37,10 @@ def test_release_makefile_exposes_standard_targets():
     assert "ui:" in makefile
     assert "serve-ui:" in makefile
     assert "verify:" in makefile
+    assert "frontend-test:" in makefile
+    assert "frontend-build:" in makefile
+    assert "frontend-smoke:" in makefile
+    assert "release-check:" in makefile
     assert "clean-pack:" in makefile
     assert ".PHONY: test e2e doctor smoke run-cpo-pack coverage-matrix ui serve-ui verify clean-pack" in makefile
     assert "verify: test doctor run-cpo-pack coverage-matrix" in makefile
@@ -52,6 +56,7 @@ def test_release_makefile_exposes_standard_targets():
     assert 'sysconfig.get_path("scripts")' in makefile
     assert "$(SERENITY_ALPHA_LAB) doctor" in makefile
     assert "$(SERENITY_ALPHA_LAB) run-cpo-pack" in makefile
+    assert "scripts/verify_offline_release.py" in makefile
 
 
 def test_operations_doc_describes_stable_product_run():
@@ -97,9 +102,16 @@ def test_ci_workflow_runs_release_gate():
     workflow = (ROOT / ".github" / "workflows" / "verify.yml").read_text(encoding="utf-8")
 
     assert "name: Verify" in workflow
-    assert 'python-version: "3.9"' in workflow
-    assert "make smoke" in workflow
-    assert "make verify" in workflow
+    assert "pull_request:" in workflow
+    assert "branches:" in workflow
+    assert "tags:" in workflow
+    assert 'python-version: "3.11"' in workflow
+    assert 'node-version: "20"' in workflow
+    assert "npm ci" in workflow
+    assert "playwright install --with-deps chromium" in workflow
+    assert 'SERENITY_RESEARCH_AGENTS_ENABLED: "false"' in workflow
+    assert 'SERENITY_RESEARCH_BOT_ENABLED: "false"' in workflow
+    assert "scripts/verify_offline_release.py" in workflow
 
 
 def test_install_doc_describes_installed_smoke_path():
