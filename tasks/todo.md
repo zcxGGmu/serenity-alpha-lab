@@ -4447,7 +4447,7 @@
   and commit the green manifest slice.
 - [x] Create `tests/test_stock_analysis_artifacts.py` and run it red before creating `src/serenity_alpha_lab/app/stock_analysis_artifacts.py`.
 - [x] Implement and commit the pure allowlisted repository with stable 404/409/422 errors and path containment.
-- [ ] Extend `tests/test_app_api.py` and `tests/test_cli.py`, run them red, then implement artifact routes, config, and CLI wiring.
+- [x] Extend `tests/test_app_api.py` and `tests/test_cli.py`, run them red, then implement artifact routes, config, and CLI wiring.
 - [ ] Create strict frontend decoder tests and implementation, move fixtures under `src/test/fixtures`, and remove the production sample fixture path.
 - [ ] Create HTTP source and App lifecycle tests, run them red, then implement source injection and explicit states.
 - [ ] Update report semantics, latest-only History, Vite proxy, and non-AAPL Playwright interception through Red -> Green -> Refactor.
@@ -4533,3 +4533,30 @@
 - Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the same four `output/ui/*` entries remain external dirty state and must not be staged, committed, reverted, overwritten, or used as fixtures.
 - Next action: extend `tests/test_app_api.py` and `tests/test_cli.py`, run Task 3 red for missing config/CLI/routes, then implement only the API/config/CLI slice.
+
+# Runtime Parity Task 3: Read-Only Artifact API, Runtime Config, And CLI
+
+- [x] Add API response helpers and canonical temporary artifact fixtures without reading protected `output/ui/*`.
+- [x] Add valid latest summary, validated manifest, and Markdown route tests with exact content type, no-store, API-relative href, and no local-path leakage assertions.
+- [x] Add sanitized missing/blocked/invalid/escaped classifications and preserve the existing generic 404 payload.
+- [x] Add `AppRuntimeConfig.stock_analysis_artifact_dir` default and `serve-app --stock-analysis-artifact-dir` CLI override tests.
+- [x] Confirm the initial Red command fails with `7 failed, 5 passed` because the config field, CLI option, and artifact routes are missing.
+- [x] Implement only the config field, CLI wiring, one read-only repository instance, and the three GET routes.
+- [x] Catch only `ArtifactRepositoryError` and return stable `404/409/422` envelopes with `Cache-Control: no-store`.
+- [x] Add review-driven Red -> Green coverage for summary/manifest distinction, all-route error mapping, missing Markdown, generic 404 compatibility, and response resource closure.
+- [x] Add cross-platform local-path leakage Red -> Green coverage for POSIX, Windows drive, UNC, file URI, malformed URL, Unicode paths, trusted HTTP/HTTPS/Serenity URLs, IPv6, HTML closing tags, and finite allowlisted market symbols.
+- [x] Run focused repository/API/CLI tests -> `69 passed`.
+- [x] Run backend parity regression -> `115 passed, 2 warnings`.
+- [x] Run `py_compile`, `git diff --check`, DSA runtime import/path scan, protected-output status check, and independent code review -> PASS.
+- [x] Commit only Task 3 owned files as `f984174` (`feat: 暴露只读最新股票分析工件 API`).
+
+## Runtime Parity Task 3 Review
+
+- Completed: read-only latest stock-analysis summary, validated manifest, and Markdown API routes plus config/CLI wiring are implemented and committed in `f984174`.
+- TDD evidence: initial Red `7 failed, 5 passed`; review hardening produced targeted Red failures for path leakage, malformed URLs, route distinction, and compatibility before each Green fix.
+- Final verification: focused `69 passed`; backend parity `115 passed, 2 warnings`; compile/diff/runtime-boundary checks and independent review passed.
+- Not Started: Task 4 strict frontend decoder/view model, Task 5 source/App lifecycle, Playwright canonical flow, and full implementation verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, static Web hosting, Electron/updater, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Protected state: the same four `output/ui/*` entries remain external dirty state and were not staged, committed, reverted, overwritten, or used as fixtures.
+- Next action: begin Task 4 by creating `apps/serenity-web/src/artifacts/canonicalReportArtifact.test.ts`, run the decoder test command red for the missing decoder/types, then implement only the strict wire decoder and view-model slice.
