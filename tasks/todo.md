@@ -4298,6 +4298,7 @@
 ## Phase 7 Planning Checkpoint Review
 
 - Status: design and detailed implementation planning are complete; production implementation has not started.
+- Planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Scope decision: use the approved safety-first minimum complete migration. Agent tools, Bot commands, desktop readiness, Docker, and CI are included; LLM runtime, live Bot adapters, notifications, Electron, updater, installer, and release publishing are excluded.
 - Source audit result: DSA provides useful tool registry, explicit-context research tool, message normalization, command dispatch, non-root container, desktop loopback, and offline release-gate patterns, but its trading Agent prompts, market commands, credential-heavy workflows, auto-update, scheduled analysis, and notification behavior must not be copied.
 - Serenity integration result: reuse `StockAnalysisPipeline`, evidence IDs, readiness, source coverage, report gate, report safety, app health, and Phase 6 default-off monitor conventions.

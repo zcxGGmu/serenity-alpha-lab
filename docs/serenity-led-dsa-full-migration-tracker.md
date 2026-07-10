@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Current HEAD is `d73dd3a` (`docs: 刷新 Phase 6 后续开发状态`); Phase 7 design and detailed implementation planning are prepared locally; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Phase 7 design and detailed implementation planning are committed in `eddf32c`; production implementation has not started; protected generated UI dirt under `output/ui/*` remains untouched and must stay unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -94,8 +94,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
-- Current HEAD: `d73dd3a` (`docs: 刷新 Phase 6 后续开发状态`); verify with `git log -1 --oneline`.
-- Phase 7 design, implementation plan, checklist, and lessons updates are the only intended owned planning changes before the planning commit.
+- Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
+- Current owned migration docs are up to date for the Phase 7 planning checkpoint; only protected generated UI artifacts should remain dirty before implementation.
 - Protected generated UI artifacts remain intentionally dirty and must not be staged, committed, reverted, or overwritten unless explicitly requested:
   - `output/ui/analyses/manifest.json`
   - `output/ui/reports/deliverable-research-report.md`
@@ -193,6 +193,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Approved scope | Completed | User approved the safety-first minimum complete migration: Agent tools, platform-neutral Bot, desktop readiness, Docker, and CI; no LLM runtime, live Bot adapters, notifications, Electron, updater, installer, or release publishing |
 | Design specification | Completed | `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-phase-7-runtime-release-design.md` |
 | Detailed TDD plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-phase-7-agent-bot-runtime-release.md` |
+| Planning commit | Completed | `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`) |
 | Agent boundary | Completed | Explicit caller context, default-off visibility, caller allowlist, no implicit I/O, readiness/evidence propagation, recursive trading-field rejection, sanitized failures |
 | Bot boundary | Completed | Platform-neutral contracts and commands over Serenity analysis/Agent outputs; default-off with no platform SDK or outbound delivery |
 | Desktop decision | Completed | Add loopback runtime/readiness contract only; defer Electron and auto-update until backend artifact/API parity and separate threat-model gates |
@@ -232,7 +233,7 @@ Execute Phase 7 Task 1: Evidence-Grounded Agent Contracts And Tools.
 - Serenity 仓库路径：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA 源仓库路径：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- Serenity 当前 HEAD：d73dd3a（docs: 刷新 Phase 6 后续开发状态）；Phase 6 handoff docs commit 为 1c2eddf；Phase 6 implementation commit 为 639e255；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
+- Phase 7 planning commit：eddf32c（docs: 完成 Serenity Phase 7 研究运行与发布规划）；Phase 6 handoff docs commit 为 1c2eddf；Phase 6 implementation commit 为 639e255；Phase 5 handoff docs commit 为 5cf2f31；Phase 5 implementation commit 为 f8e87d0；Phase 5 planning docs commit 为 d0136e0；Phase 4 implementation commit 为 3253f13；Phase 3 handoff docs commit 为 5718928；Phase 3 implementation commit 为 3cf14b3；Phase 2 handoff docs commit 为 cb0e2b5；Phase 2 implementation commit 为 8686d80；Phase 1 commit 为 d7187ca；Phase 0 baseline commit 为 b9b0fcb。
 - DSA 当前 HEAD：95a4b51
 
 已完成：
@@ -244,6 +245,7 @@ Execute Phase 7 Task 1: Evidence-Grounded Agent Contracts And Tools.
 - Phase 5: Web Workbench Migration 已完成实现、验证并提交，implementation commit 为 f8e87d0。
 - Phase 6: Portfolio, Backtest, Alerts, Notifications 已完成实现、验证并提交，implementation commit 为 639e255。
 - Phase 7 设计与详细实施计划已完成，生产实现尚未开始。
+- Phase 7 planning commit 为 eddf32c。
 - Phase 7 approved design：docs/superpowers/specs/2026-07-10-serenity-alpha-lab-phase-7-runtime-release-design.md。
 - Phase 7 implementation plan：docs/superpowers/plans/2026-07-10-serenity-alpha-lab-phase-7-agent-bot-runtime-release.md。
 - Phase 7 approved scope：evidence-grounded Agent tools、platform-neutral default-off Bot、desktop readiness contract、non-root no-secret Docker、unified offline application release gate。
