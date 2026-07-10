@@ -176,7 +176,7 @@ Additional checks when Web/API work begins:
 
 ## 7. Runtime Parity Closeout
 
-Phase 0-7 and post-migration runtime-parity Tasks 1-6 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and its final status refresh is `30e65dd`. Task 7 completed full verification and documentation reconciliation from baseline `ac253c1` without changing production runtime code; the closeout documentation and final status commits remain to be created.
+Phase 0-7 and post-migration runtime-parity Tasks 1-7 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and its final status refresh is `30e65dd`. Task 7 completed full verification and documentation reconciliation from baseline `ac253c1` without changing production runtime code; its closeout documentation is committed in `e26fee2`, and the final status refresh is recorded by the current commit.
 
 Fresh Task 7 evidence:
 
@@ -187,6 +187,6 @@ Fresh Task 7 evidence:
 5. External DSA checkout path/import and production fixture scans passed; report-safety regression passed; scoped diff hygiene passed while excluding protected `output/ui/**`.
 6. A disposable `/tmp` AAPL artifact returned canonical summary, validated manifest, and Markdown report responses with HTTP 200, correct content types, `Cache-Control: no-store` on the summary, API-relative report links, and no repository, temporary-directory, or protected-output path leakage. The server and temporary state were removed.
 
-No implementation or verification step remains Not Started; only the two Task 7 closeout commits remain. The only environment follow-up after closeout is the real Docker image build and no-secret container `/health` smoke: rerun `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` when `/Users/zq/.orbstack/run/docker.sock` becomes available. Do not claim Docker completion before that command succeeds.
+No approved runtime-parity task remains Not Started. The only environment follow-up is the real Docker image build and no-secret container `/health` smoke: rerun `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` when `/Users/zq/.orbstack/run/docker.sock` becomes available. Do not claim Docker completion before that command succeeds.
 
 History aggregation, `/run-state` redesign, production static Web hosting or reverse proxying, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing remain Deferred and require a separate approved design.

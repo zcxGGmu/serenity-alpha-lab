@@ -4830,7 +4830,7 @@
 - [x] Reconcile migration plan, tracker, task review, and copyable restart prompt with Completed, Not Started, Environment Blocked, and Deferred categories.
 - [x] Add a `tasks/lessons.md` entry only if Task 7 produces a genuinely new reusable lesson.
 - [x] Verify protected/generated/cache state, stage only owned documentation, and commit the runtime-parity closeout.
-- [ ] Refresh the tracker and task log with the actual handoff commit HEAD, verify again, and create the final status commit if required.
+- [x] Refresh the tracker and task log with the actual handoff commit HEAD, verify again, and create the final status commit if required.
 
 ## Runtime Parity Task 7 Entry Check-In
 
@@ -4861,3 +4861,13 @@
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
 - Protected state: the four startup `output/ui/*` entries remain external dirty state and must stay unread, unstaged, and uncommitted.
 - Next action: verify documentation consistency and protected/generated state, create the Task 7 closeout documentation commit, then refresh tracker/todo with that actual commit hash and create the final status commit.
+
+## Runtime Parity Task 7 Final Review
+
+- Completed: Phase 0-7 and runtime-parity Tasks 1-7; Task 7 verification, documentation reconciliation, and the closeout documentation commit `e26fee2` are complete. The current commit records the final status refresh.
+- Not Started: no approved runtime-parity task remains.
+- Environment Blocked: real Docker image build, no-secret container `/health` smoke, and the no-skip unified release gate remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
+- Verification evidence: workspace-isolated focused `115 passed, 2 warnings`; full `287 passed, 2 warnings`; Vitest `137/137`; frontend build; clean-start Chromium Playwright `2/2`; unified release gate `9 passed / 1 skipped / 0 errors`; passing boundary/safety scans; passing disposable API smoke.
+- Protected state: the same four startup `output/ui/*` entries remain external dirty state and are excluded from both Task 7 commits.
+- Next action: when Docker becomes available, run `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` without `--skip-docker-smoke`; otherwise do not begin Deferred capability without a separate approved design.
