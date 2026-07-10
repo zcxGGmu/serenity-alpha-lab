@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-4 are complete: canonical manifest `bc281f5`, pure read-only artifact repository `e276ce2`, read-only artifact API/config/CLI `f984174`, and strict frontend decoder/view model `4d95ec3`. The Web now validates the canonical summary field-by-field, preserves real coverage/safety/provenance semantics, rejects unsafe hrefs and recursive trading/broker/order fields, and uses test-only canonical fixtures. Task 5 injectable source/App lifecycle and later browser flow remain unstarted; protected generated UI dirt under `output/ui/*` remains untouched and unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-4 are complete: canonical manifest `bc281f5`, pure read-only artifact repository `e276ce2`, read-only artifact API/config/CLI `f984174`, strict frontend decoder/view model `4d95ec3`, and complete-projection review hardening `2ad297a`. Task 4 handoff is `c61ef1b`; the latest pre-refresh status commit is `9a0b0d3`. The Web validates the canonical summary field-by-field, preserves real coverage/safety/provenance semantics, rejects unsafe hrefs and recursive trading/broker/order fields, and uses test-only canonical fixtures. Task 5 injectable source/App lifecycle and later browser flow remain unstarted; protected generated UI dirt under `output/ui/*` remains untouched and unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -112,6 +112,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 ### Current Branch And Protected State
 
 - Current branch: `codex/phase-4-report-safety`.
+- Latest pre-refresh status commit: `9a0b0d3` (`docs: 刷新 runtime parity Task 4 审查加固状态`).
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
@@ -265,6 +266,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Task 3 handoff documentation | Completed | `09094ef` (`docs: 记录 runtime parity Task 3 交接`) records the final backend API evidence and exact Task 4 restart boundary |
 | Task 4 strict frontend decoder/view model | Completed | `4d95ec3` adds the production decoder/view model and `2ad297a` locks the complete projected object plus all currently rendered canonical coverage/finding fields |
 | Task 4 handoff documentation | Completed | `c61ef1b` (`docs: 记录 runtime parity Task 4 交接`) records the final decoder evidence, scope correction, protected state, reusable lesson, and exact Task 5 restart boundary |
+| Task 4 status refresh | Completed | `9a0b0d3` (`docs: 刷新 runtime parity Task 4 审查加固状态`) synchronizes the final review-hardening evidence before this documentation-only refresh |
 | Backend task mapping | Completed | Manifest, pure repository, latest summary, validated manifest, Markdown endpoint, config, CLI, 404/409/422, path safety, provenance, and leakage tests are mapped to Red -> Green -> Refactor tasks |
 | Frontend task mapping | Completed | Strict decoder, real coverage counts, structured findings, injectable source, loading/ready/unavailable/blocked states, retry/abort behavior, fixture removal, Vite proxy, and non-AAPL Playwright interception are mapped |
 | Planning baseline | Completed | Pre-implementation evidence remains `40 passed` for focused Python tests and `2 files / 4 tests passed` for Vitest; these are baselines, not runtime-parity implementation evidence |
@@ -314,8 +316,10 @@ Begin Task 5 of `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migra
 - Serenity：/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab
 - DSA source：/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis
 - 当前分支：codex/phase-4-report-safety
-- 最新 runtime parity implementation commit：4d95ec3（feat: 添加严格股票分析工件解码器）。
-- 最新已记录 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）；本次状态刷新提交后的实际 HEAD 仍须在启动时通过 git log -5 --oneline --decorate 核对。
+- 本次文档刷新前 HEAD：9a0b0d3（docs: 刷新 runtime parity Task 4 审查加固状态）；本次文档提交后的实际 HEAD 必须在启动时通过 git log -5 --oneline --decorate 核对。
+- 最新 runtime parity production implementation commit：4d95ec3（feat: 添加严格股票分析工件解码器）。
+- 最新 runtime parity review-hardening commit：2ad297a（test: 收紧股票分析工件完整投影回归）。
+- 最新 Task 4 handoff docs commit：c61ef1b（docs: 记录 runtime parity Task 4 交接）。
 - Phase 7 implementation commit：f2fd7cd（feat: 完成 Serenity Phase 7 研究运行与发布能力迁移）
 - Phase 7 handoff docs commit：8bba5e0（docs: 记录 Phase 7 研究运行与发布迁移交接）
 - Phase 7 final status refresh commit：6d1fcbb（docs: 刷新 Phase 7 完成状态）

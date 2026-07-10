@@ -176,6 +176,14 @@ Additional checks when Web/API work begins:
 
 ## 7. Immediate Next Step
 
-Phase 0-7 are complete. Continue with the approved post-migration runtime-parity slice in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` and the detailed TDD plan in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+Phase 0-7 and post-migration runtime-parity Tasks 1-4 are complete. Continue with Task 5 of the approved design in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` and the detailed TDD plan in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
 
-Begin implementation with failing canonical-manifest tests in `tests/test_analysis_report.py`. Do not skip Red -> Green -> Refactor, do not use the protected `output/ui/*` state as a fixture, and do not expand into history aggregation, static Web hosting, Electron, live adapters, notifications, broker/order actions, or trading automation.
+The exact next Red step is:
+
+1. Create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`.
+2. Run `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts`.
+3. Confirm failure because `apps/serenity-web/src/artifacts/reportArtifactSource.ts` does not exist.
+4. Implement only the injectable `ReportArtifactSource`, `ReportArtifactLoadError`, relative latest-artifact request, sanitized 404/409/422 classification, invalid-JSON and decoder-failure handling, and network/abort classification.
+5. After the source tests are Green, add `App.test.tsx` lifecycle Red coverage before modifying `App.tsx`.
+
+Do not skip Red -> Green -> Refactor, do not use the protected `output/ui/*` state as a fixture, and do not start History aggregation, Vite proxy, Playwright, static Web hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation during the Task 5 source slice.

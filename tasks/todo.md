@@ -4648,3 +4648,29 @@
 - Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the same four external `output/ui/*` entries remain dirty and must stay unstaged, unmodified, unreverted, and unused as fixtures.
 - Next action: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`; run `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts` and confirm Red because `reportArtifactSource.ts` does not exist.
+
+# Runtime Parity Task 4 Latest Status And Restart Prompt Refresh
+
+- [x] Reconcile branch `codex/phase-4-report-safety`, pre-refresh HEAD `9a0b0d3`, recent Task 4 commits, and protected output state.
+- [x] Update the migration plan immediate-next-step section from obsolete Task 1 instructions to the exact Task 5 source-test Red boundary.
+- [x] Refresh the tracker status snapshot and copyable restart prompt with explicit Completed, Not Started, Environment Blocked, and Deferred sections.
+- [x] Reconfirm the standing automatic stage-closeout habit without duplicating the existing reusable lesson.
+- [x] Run documentation diff and staged-file checks, then commit only owned documentation files.
+
+## Runtime Parity Task 4 Latest Status Refresh Check-In
+
+- Documentation-only scope: no Task 5 source, App lifecycle, History, Vite, Playwright, backend, or runtime production code changes.
+- Current verified implementation state: Tasks 1-4 are complete; Task 4 implementation is `4d95ec3`, handoff documentation is `c61ef1b`, review hardening is `2ad297a`, and the latest pre-refresh status commit is `9a0b0d3`.
+- Exact next Red: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`, then run `npm --prefix apps/serenity-web test -- src/artifacts/reportArtifactSource.test.ts` and require failure because `reportArtifactSource.ts` is absent.
+- Protected state: keep the existing four `output/ui/*` entries unstaged, unmodified, unreverted, and unused as fixtures.
+- Lesson decision: `tasks/lessons.md` already records the automatic closeout habit multiple times, so this refresh must not add another duplicate lesson.
+
+## Runtime Parity Task 4 Latest Status Refresh Review
+
+- Completed: Phase 0-7 and runtime-parity Tasks 1-4; Task 4 production implementation `4d95ec3`, handoff documentation `c61ef1b`, review hardening `2ad297a`, and pre-refresh status commit `9a0b0d3`.
+- Not Started: Task 5 injectable `ReportArtifactSource` and App lifecycle, Task 6 History/Vite/Playwright canonical-artifact flow, and Task 7 full parity verification.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Exact next action: create `apps/serenity-web/src/artifacts/reportArtifactSource.test.ts`, run the focused Vitest command Red for the missing source module, then implement only the sanitized injectable HTTP source before writing App lifecycle tests.
+- Standing habit: after every verified stage-level task, automatically refresh and commit the tracker, `tasks/todo.md`, `tasks/lessons.md` only when a non-duplicate reusable lesson exists, and the copyable restart prompt before the final response.
+- Documentation verification: `git diff --check` passed; the owned diff is limited to the migration plan, migration tracker, and task log; the four protected `output/ui/*` entries remain external and unstaged.
