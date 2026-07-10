@@ -1,4 +1,19 @@
-export type ReportStatus = 'ready' | 'needs_work' | 'blocked' | 'available';
+export type ReadinessStatus = 'ready' | 'needs_work' | 'blocked';
+export type ReportGateStatus = 'available' | 'blocked';
+export type SourceCoverageStatus = 'ready' | 'needs_work' | 'blocked';
+
+export interface CoverageFlag {
+  code: string;
+  severity: string;
+  message: string;
+  recommendation: string;
+}
+
+export interface SafetyFinding {
+  lineNumber: number;
+  phrase: string;
+  line: string;
+}
 
 export interface ProvenanceRef {
   evidenceId: string;
@@ -14,33 +29,42 @@ export interface KeyClaim {
   diagnostics: string[];
 }
 
-export interface SourceCoverageSummary {
-  status: ReportStatus;
-  primarySources: {
-    collected: number;
-    required: number;
-  };
-  flags: string[];
-}
-
 export interface ReportArtifact {
+  schemaVersion: 1;
+  artifactType: 'stock_analysis_report';
   symbol: string;
   company: string;
   query: string;
   generatedAt: string;
-  researchOnly: boolean;
+  researchOnly: true;
   markdownHref: string;
   manifestHref: string;
   readiness: {
-    status: ReportStatus;
+    status: ReadinessStatus;
     reason: string;
     flags: string[];
   };
-  sourceCoverage: SourceCoverageSummary;
+  reportGate: {
+    status: ReportGateStatus;
+    reason: string;
+    researchOnly: true;
+  };
+  sourceCoverage: {
+    status: SourceCoverageStatus;
+    focusTicker: string;
+    evidenceCount: number;
+    focusEvidenceCount: number;
+    primaryCount: number;
+    riskCount: number;
+    methodologyShare: number;
+    placeholderShare: number;
+    externalNonSerenityCount: number;
+    flags: CoverageFlag[];
+  };
   safety: {
-    passed: boolean;
+    passed: true;
     boundary: string;
-    findings: string[];
+    findings: SafetyFinding[];
   };
   skepticalReview: {
     summary: string;

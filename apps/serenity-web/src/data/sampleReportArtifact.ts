@@ -1,25 +1,49 @@
 import type { ReportArtifact } from '../types';
 
 export const sampleReportArtifact: ReportArtifact = {
+  schemaVersion: 1,
+  artifactType: 'stock_analysis_report',
   symbol: 'AAPL',
   company: 'Apple Inc.',
   query: 'AAPL market data research',
-  generatedAt: '2026-07-09 09:30 UTC',
+  generatedAt: '2026-07-09T09:30:00+00:00',
   researchOnly: true,
-  markdownHref: 'reports/stock-analysis-report.md',
-  manifestHref: 'analysis-report-manifest.json',
+  markdownHref: '/api/artifacts/stock-analysis/latest/report',
+  manifestHref: '/api/artifacts/stock-analysis/latest/manifest',
   readiness: {
     status: 'needs_work',
     reason: 'readiness_not_ready',
     flags: ['missing_primary_source_depth', 'needs_recent_risk_evidence'],
   },
+  reportGate: {
+    status: 'blocked',
+    reason: 'readiness_not_ready',
+    researchOnly: true,
+  },
   sourceCoverage: {
     status: 'needs_work',
-    primarySources: {
-      collected: 3,
-      required: 5,
-    },
-    flags: ['primary-source-depth:needs-work', 'risk-coverage:watch'],
+    focusTicker: 'AAPL',
+    evidenceCount: 4,
+    focusEvidenceCount: 4,
+    primaryCount: 3,
+    riskCount: 1,
+    methodologyShare: 0,
+    placeholderShare: 0,
+    externalNonSerenityCount: 0,
+    flags: [
+      {
+        code: 'missing_primary_source_depth',
+        severity: 'warning',
+        message: 'Primary-source depth is below the publish-quality threshold.',
+        recommendation: 'Collect another primary source.',
+      },
+      {
+        code: 'needs_recent_risk_evidence',
+        severity: 'warning',
+        message: 'Recent downside evidence should be refreshed.',
+        recommendation: 'Collect recent risk or invalidation evidence.',
+      },
+    ],
   },
   safety: {
     passed: true,

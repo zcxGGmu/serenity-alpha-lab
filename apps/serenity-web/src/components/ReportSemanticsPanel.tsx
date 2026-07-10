@@ -28,14 +28,22 @@ export function ReportSemanticsPanel({ artifact }: ReportSemanticsPanelProps) {
 
         <article className="semantic-card">
           <p className="metric-label">Source coverage</p>
-          <strong>
-            Primary {artifact.sourceCoverage.primarySources.collected}/
-            {artifact.sourceCoverage.primarySources.required}
-          </strong>
+          <strong>Evidence {artifact.sourceCoverage.evidenceCount}</strong>
+          <span>Focus {artifact.sourceCoverage.focusEvidenceCount}</span>
+          <span>Primary {artifact.sourceCoverage.primaryCount}</span>
+          <span>Risk {artifact.sourceCoverage.riskCount}</span>
+          <span>
+            External {artifact.sourceCoverage.externalNonSerenityCount}
+          </span>
           <span>{formatStatus(artifact.sourceCoverage.status)}</span>
           <ul>
             {artifact.sourceCoverage.flags.map((flag) => (
-              <li key={flag}>{flag}</li>
+              <li key={flag.code}>
+                <strong>{flag.code}</strong>
+                <span>{flag.severity}</span>
+                <span>{flag.message}</span>
+                <small>{flag.recommendation}</small>
+              </li>
             ))}
           </ul>
         </article>
@@ -47,7 +55,11 @@ export function ReportSemanticsPanel({ artifact }: ReportSemanticsPanelProps) {
           {artifact.safety.findings.length > 0 ? (
             <ul>
               {artifact.safety.findings.map((finding) => (
-                <li key={finding}>{finding}</li>
+                <li key={`${finding.lineNumber}:${finding.phrase}`}>
+                  <small>Line {finding.lineNumber}</small>
+                  <strong>{finding.phrase}</strong>
+                  <span>{finding.line}</span>
+                </li>
               ))}
             </ul>
           ) : (
