@@ -4732,3 +4732,48 @@
 - Deferred: history aggregation, `/run-state` redesign, static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
 - Protected state: the same four startup `output/ui/*` entries remain external and unstaged.
 - Next action: start Task 6 with the `ReportSemantics` + `App` Red assertions for actual coverage and latest-only History.
+
+# Runtime Parity Task 6: Actual Coverage, Latest-Only History, Vite Proxy, And Playwright
+
+- [x] Confirm Task 6 scope against the approved design and detailed runtime-parity plan.
+- [x] Add a non-default actual canonical coverage regression in `ReportSemantics.test.tsx`.
+- [x] Add a latest-only History regression in `App.test.tsx`.
+- [x] Run the focused semantics/App command and capture the expected Red before production edits.
+- [x] Implement only latest-only History copy and any minimal report-semantics adjustment required by the Red tests.
+- [x] Add the loopback-only Vite `/api` proxy without CORS, rewriting, or production static hosting.
+- [x] Replace the fixture-bound Playwright smoke with intercepted non-AAPL canonical and blocked artifact flows.
+- [x] Run focused/full Vitest, production build, Playwright smoke, boundary scans, and diff/protected-file checks.
+- [x] Complete independent specification review followed by code-quality review; convert valid findings into test hardening and re-review to PASS.
+- [x] Commit only Task 6-owned implementation files as `901fa15`, explicitly excluding protected `output/ui/*`.
+- [x] Refresh and commit tracker, todo review, the proxy-verification lesson, and the copyable Task 7 restart prompt.
+
+## Runtime Parity Task 6 Entry Check-In
+
+- Completed prerequisite: runtime-parity Tasks 1-5 are committed through implementation `b2b483f`, handoff `fbfed1e`, and status refresh `25891f8`.
+- Current scope: actual canonical coverage regression, latest-only History labeling, loopback Vite `/api` proxy, and non-AAPL/blocked Playwright interception.
+- Existing-state reconciliation: Task 4 review hardening already changed `ReportSemanticsPanel` to render actual evidence/focus/primary/risk/external counts and structured coverage/safety findings. Task 6 must preserve that implementation and add a non-default-value regression rather than manufacture a false missing-coverage failure.
+- Expected initial Red: the combined `ReportSemantics.test.tsx` + `App.test.tsx` command should fail only because History does not yet expose `Latest available artifact` and the explicit deferred-history explanation.
+- Explicitly excluded: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, mutation endpoints, Electron, live adapters, notification delivery, broker/order actions, trading automation, and Task 7 full verification.
+- Protected state: do not modify, stage, commit, revert, overwrite, read as fixtures, or otherwise consume the four existing `output/ui/*` entries.
+- Environment block: real Docker image build and no-secret container `/health` smoke remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+
+## Runtime Parity Task 6 Verification Evidence
+
+- Initial focused Red: `npm --prefix apps/serenity-web test -- src/components/ReportSemantics.test.tsx src/App.test.tsx` produced `15 passed, 1 failed`; the only failure was the missing `Latest available artifact` History label. The non-default canonical coverage regression already passed because Task 4 had implemented actual counts.
+- Initial Playwright Red: `npm --prefix apps/serenity-web run test:smoke -- --reporter=line` produced `1 passed, 1 failed`; the NVDA flow failed only on the missing latest-only History copy, while the `409 artifact_blocked / report_safety_failed` flow passed with no artifact links.
+- Focused Green: the final semantics/App command passed with `2 files / 16 tests`.
+- Full frontend Green: `npm --prefix apps/serenity-web test` passed with `5 files / 137 tests`; `npm --prefix apps/serenity-web run build` passed.
+- Browser Green: a clean-start local Edge run passed `2/2` Playwright tests, covering NVDA Home/Analysis/Reader/History/Settings semantics, exact API-relative links, page-wide absence of AAPL fallback, and the blocked no-link state.
+- Real proxy evidence: a disposable stub artifact under `/tmp` returned identical canonical JSON from the current backend on `127.0.0.1:8010` and the current Vite proxy on `127.0.0.1:4176`; the proxied response was `200`, `application/json; charset=utf-8`, and `Cache-Control: no-store`.
+- Boundary evidence: fixture/DSA scan matched `sampleReportArtifact` only inside explicit production-isolation assertions; trading vocabulary matched only decoder forbidden constants and negative tests; `git diff --check` passed.
+- Review evidence: independent specification review found the missing `App.test.tsx` plan/staging entry and page-wide AAPL assertion gap; both were fixed and re-reviewed PASS. Independent code-quality review found substring coverage assertions and incomplete blocked-link scanning; both were tightened and re-reviewed PASS.
+- Implementation commit: `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`).
+- Protected state: the same four startup `output/ui/*` entries remained external, unmodified by Task 6, and unstaged.
+
+## Runtime Parity Task 6 Review
+
+- Completed: runtime-parity Tasks 1-6, including actual canonical coverage regression, latest-only History semantics, loopback Vite `/api` proxy, non-AAPL canonical Playwright flow, blocked flow, independent reviews, and implementation commit `901fa15`.
+- Not Started: Task 7 full backend/frontend/release verification, documentation reconciliation, and final runtime-parity closeout.
+- Environment Blocked: real Docker image build and no-secret container `/health` smoke until `/Users/zq/.orbstack/run/docker.sock` becomes available.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider adapters, notification delivery, broker/order actions, trading automation, and release publishing.
+- Next action: start Task 7 with the focused backend verification command in the detailed runtime-parity plan; do not begin any deferred capability.

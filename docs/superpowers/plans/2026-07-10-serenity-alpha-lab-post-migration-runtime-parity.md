@@ -1784,6 +1784,7 @@ git commit -m "feat: 接入可注入股票分析工件来源"
 **Files:**
 - Modify: `apps/serenity-web/src/components/ReportSemanticsPanel.tsx`
 - Modify: `apps/serenity-web/src/components/ReportSemantics.test.tsx`
+- Modify: `apps/serenity-web/src/App.test.tsx`
 - Modify: `apps/serenity-web/src/pages/HistoryPage.tsx`
 - Modify: `apps/serenity-web/vite.config.ts`
 - Modify: `apps/serenity-web/e2e/app-shell.spec.ts`
@@ -1958,6 +1959,7 @@ Expected: matches only inside negative regression assertions or fixed forbidden-
 git add \
   apps/serenity-web/src/components/ReportSemanticsPanel.tsx \
   apps/serenity-web/src/components/ReportSemantics.test.tsx \
+  apps/serenity-web/src/App.test.tsx \
   apps/serenity-web/src/pages/HistoryPage.tsx \
   apps/serenity-web/vite.config.ts \
   apps/serenity-web/e2e/app-shell.spec.ts
@@ -2070,9 +2072,9 @@ Generate a disposable artifact:
 ```bash
 tmp_dir="$(mktemp -d)"
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli analyze-stock \
-  AAPL \
-  --stub \
-  --out-dir "$tmp_dir"
+  --stock-code AAPL \
+  --out-dir "$tmp_dir" \
+  --stub
 PYTHONPATH=src python3 -m serenity_alpha_lab.cli serve-app \
   --host 127.0.0.1 \
   --port 8010 \

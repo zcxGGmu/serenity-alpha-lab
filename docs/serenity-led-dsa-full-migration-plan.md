@@ -176,14 +176,13 @@ Additional checks when Web/API work begins:
 
 ## 7. Immediate Next Step
 
-Phase 0-7 and post-migration runtime-parity Tasks 1-5 are complete. Continue with Task 6 of the approved design in `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` and the detailed TDD plan in `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md`.
+Phase 0-7 and post-migration runtime-parity Tasks 1-6 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`).
 
-The exact next Red step is:
+Continue with Task 7 of the approved design and detailed TDD plan:
 
-1. Extend `apps/serenity-web/src/components/ReportSemantics.test.tsx` and `apps/serenity-web/src/App.test.tsx` with the Task 6 actual-coverage and latest-only History assertions.
-2. Run `npm --prefix apps/serenity-web test -- src/components/ReportSemantics.test.tsx src/App.test.tsx`.
-3. Confirm Red because History does not yet label the latest-only limitation and the remaining Task 6 browser flow is not wired.
-4. Implement only actual canonical coverage rendering, latest-only History copy, the loopback Vite `/api` proxy, and non-AAPL Playwright route interception.
-5. Run frontend Vitest, production build, and Playwright smoke before starting Task 7 full verification.
+1. Run the focused backend verification listed in Task 7 without changing production code.
+2. Run `make verify`, complete frontend verification, and the unified offline release gate with `--skip-docker-smoke` while the Docker daemon remains unavailable.
+3. Verify representative API behavior with a disposable artifact under `/tmp`, never with protected `output/ui/*`.
+4. Reconcile final implementation evidence and create the runtime-parity closeout commits.
 
-Do not skip Red -> Green -> Refactor, do not use the protected `output/ui/*` state as a fixture, and do not start history aggregation, `/run-state` redesign, static Web hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation during Task 6.
+Do not claim Docker image build or no-secret container `/health` smoke until the real no-skip command succeeds. Do not start history aggregation, `/run-state` redesign, static Web hosting, wildcard CORS, Electron, live adapters, notifications, broker/order actions, release publishing, or trading automation during Task 7 verification.
