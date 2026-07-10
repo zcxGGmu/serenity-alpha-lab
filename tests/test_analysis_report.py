@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 import json
+
+import pytest
 
 from serenity_alpha_lab.analysis import StockAnalysisPipeline
 from serenity_alpha_lab.analysis.report import (
@@ -15,6 +18,9 @@ from serenity_alpha_lab.market_data import (
     ProviderFetchResult,
     RealtimeQuote,
 )
+
+
+FIXED_GENERATED_AT = datetime(2026, 7, 10, 0, 0, tzinfo=timezone.utc)
 
 
 class StubMarketDataManager:
@@ -198,3 +204,121 @@ def test_write_stock_analysis_report_artifacts_creates_markdown_and_manifest(tmp
     assert manifest["safety"]["passed"] is True
     assert manifest["key_claims"]
     assert all(claim["provenance_refs"] for claim in manifest["key_claims"])
+
+
+def test_write_stock_analysis_manifest_includes_runtime_parity_semantics(tmp_path) -> None:
+    result = _ready_analysis()
+
+    artifact = write_stock_analysis_report_artifacts(
+        result,
+        tmp_path,
+        generated_at=FIXED_GENERATED_AT,
+    )
+
+    report_text = artifact.markdown_path.read_text(encoding="utf-8")
+    manifest = json.loads(artifact.manifest_path.read_text(encoding="utf-8"))
+
+    assert "**Generated:** 2026-07-10 00:00 UTC" in report_text
+    assert manifest["schema_version"] == 1
+    assert manifest["artifact_type"] == "stock_analysis_report"
+    assert set(manifest) == {
+        "schema_version",
+        "artifact_type",
+        "symbol",
+        "stock_name",
+        "query",
+        "generated_at",
+        "research_only",
+        "readiness",
+        "report_gate",
+        "source_coverage",
+        "skeptical_review",
+        "reports",
+        "safety",
+        "key_claims",
+    }
+    assert manifest["query"] == "AAPL market data research"
+    assert manifest["generated_at"] == "2026-07-10T00:00:00+00:00"
+    assert manifest["research_only"] is True
+    assert manifest["readiness"] == {
+        "status": result.readiness.status,
+        "reason": result.report_gate.reason,
+        "flags": result.readiness.flag_codes,
+    }
+    assert manifest["report_gate"] == result.report_gate.to_dict()
+    assert manifest["source_coverage"]["status"] == result.readiness.status
+    assert manifest["source_coverage"]["focus_ticker"] == "AAPL"
+    assert manifest["source_coverage"]["evidence_count"] == len(result.evidence)
+    assert manifest["source_coverage"]["primary_count"] == 3
+    assert manifest["source_coverage"]["risk_count"] == 1
+    assert manifest["source_coverage"]["flags"] == []
+    assert manifest["skeptical_review"]["summary"] == (
+        "Risk coverage uses 1 risk or invalidation evidence item."
+    )
+    assert manifest["skeptical_review"]["counter_thesis"] == [
+        "AAPL closed at 41.1 on 2026-07-06"
+    ]
+    assert manifest["safety"]["boundary"] == "research only; not investment advice"
+    assert all(claim["provenance_refs"] for claim in manifest["key_claims"])
+
+
+def test_write_stock_analysis_manifest_emits_missing_risk_counter_thesis(tmp_path) -> None:
+    manager = StubMarketDataManager(
+        quote_result(price=42.5),
+        daily_bars(include_risk_bar=False),
+    )
+    result = StockAnalysisPipeline(market_data=manager).analyze(
+        "AAPL",
+        stock_name="Apple Inc.",
+        query="AAPL market data research",
+    )
+
+    artifact = write_stock_analysis_report_artifacts(
+        result,
+        tmp_path,
+        generated_at=FIXED_GENERATED_AT,
+    )
+    manifest = json.loads(artifact.manifest_path.read_text(encoding="utf-8"))
+
+    assert manifest["source_coverage"]["risk_count"] == 0
+    assert manifest["skeptical_review"]["summary"] == (
+        "Risk coverage is incomplete because no risk or invalidation evidence item is available."
+    )
+    assert manifest["skeptical_review"]["counter_thesis"] == [
+        "missing_risk_coverage: No negative, risk, or invalidation evidence was retrieved for AAPL."
+    ]
+
+
+def test_write_stock_analysis_manifest_normalizes_generated_at_to_utc(tmp_path) -> None:
+    result = _ready_analysis()
+    generated_at = datetime(
+        2026,
+        7,
+        10,
+        8,
+        0,
+        tzinfo=timezone(timedelta(hours=8)),
+    )
+
+    artifact = write_stock_analysis_report_artifacts(
+        result,
+        tmp_path,
+        generated_at=generated_at,
+    )
+
+    report_text = artifact.markdown_path.read_text(encoding="utf-8")
+    manifest = json.loads(artifact.manifest_path.read_text(encoding="utf-8"))
+
+    assert "**Generated:** 2026-07-10 00:00 UTC" in report_text
+    assert manifest["generated_at"] == "2026-07-10T00:00:00+00:00"
+
+
+def test_write_stock_analysis_manifest_rejects_naive_generated_at(tmp_path) -> None:
+    result = _ready_analysis()
+
+    with pytest.raises(ValueError, match="generated_at must be timezone-aware"):
+        write_stock_analysis_report_artifacts(
+            result,
+            tmp_path,
+            generated_at=datetime(2026, 7, 10, 0, 0),
+        )

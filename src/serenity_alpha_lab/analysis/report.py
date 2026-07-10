@@ -62,10 +62,12 @@ class ReportSafetyViolation(ValueError):
 def render_stock_analysis_report_markdown(
     result: StockAnalysisResult,
     *,
+    generated_at: datetime | None = None,
     additional_generated_sections: Mapping[str, str] | None = None,
 ) -> str:
     key_claims = build_key_claims(result)
-    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generated_at_value = _resolve_generated_at(generated_at)
+    generated_at_label = generated_at_value.strftime("%Y-%m-%d %H:%M UTC")
     lines = [
         "# Serenity Stock Analysis Report",
         "",
@@ -73,7 +75,7 @@ def render_stock_analysis_report_markdown(
         f"**Company:** {result.stock_name or 'n/a'}",
         f"**Market:** {result.market}",
         f"**Query:** {result.context.query}",
-        f"**Generated:** {generated_at}",
+        f"**Generated:** {generated_at_label}",
         "**Report nature:** research only; not investment advice.",
         "",
         "## Intelligence Brief",
@@ -155,14 +157,23 @@ def render_stock_analysis_report_markdown(
     return markdown
 
 
-def write_stock_analysis_report_artifacts(result: StockAnalysisResult, output_dir: str | Path) -> StockAnalysisReportArtifact:
+def write_stock_analysis_report_artifacts(
+    result: StockAnalysisResult,
+    output_dir: str | Path,
+    *,
+    generated_at: datetime | None = None,
+) -> StockAnalysisReportArtifact:
     root = Path(output_dir)
     reports_dir = root / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     markdown_path = reports_dir / "stock-analysis-report.md"
     manifest_path = root / "analysis-report-manifest.json"
     ui_path = root / "index.html"
-    markdown = render_stock_analysis_report_markdown(result)
+    generated_at_value = _resolve_generated_at(generated_at)
+    markdown = render_stock_analysis_report_markdown(
+        result,
+        generated_at=generated_at_value,
+    )
     key_claims = build_key_claims(result)
     safety = scan_report_text(markdown, path=markdown_path)
     if not safety.passed:
@@ -171,12 +182,25 @@ def write_stock_analysis_report_artifacts(result: StockAnalysisResult, output_di
     manifest_path.write_text(
         json.dumps(
             {
+                "schema_version": 1,
+                "artifact_type": "stock_analysis_report",
                 "symbol": result.symbol,
                 "stock_name": result.stock_name,
-                "research_only": True,
+                "query": result.context.query,
+                "generated_at": generated_at_value.isoformat(),
+                "research_only": result.research_only,
+                "readiness": {
+                    "status": result.readiness.status,
+                    "reason": result.report_gate.reason,
+                    "flags": list(result.readiness.flag_codes),
+                },
+                "report_gate": result.report_gate.to_dict(),
+                "source_coverage": build_source_coverage_summary(result),
+                "skeptical_review": build_skeptical_review(result),
                 "reports": {"stock_analysis": "reports/stock-analysis-report.md", "ui": "index.html"},
                 "safety": {
                     "passed": safety.passed,
+                    "boundary": "research only; not investment advice",
                     "findings": [
                         {
                             "line_number": finding.line_number,
@@ -201,6 +225,87 @@ def write_stock_analysis_report_artifacts(result: StockAnalysisResult, output_di
         key_claims=key_claims,
         safety_findings=list(safety.findings),
     )
+
+
+def _resolve_generated_at(generated_at: datetime | None) -> datetime:
+    if generated_at is None:
+        return datetime.now(timezone.utc)
+    if generated_at.tzinfo is None or generated_at.utcoffset() is None:
+        raise ValueError("generated_at must be timezone-aware")
+    return generated_at.astimezone(timezone.utc)
+
+
+def build_source_coverage_summary(result: StockAnalysisResult) -> dict[str, object]:
+    coverage = result.readiness.source_coverage
+    flags = []
+    for raw_flag in coverage.get("flags", []):
+        if not isinstance(raw_flag, Mapping):
+            continue
+        flags.append(
+            {
+                "code": str(raw_flag.get("code", "")),
+                "severity": str(raw_flag.get("severity", "")),
+                "message": str(raw_flag.get("message", "")),
+                "recommendation": str(raw_flag.get("recommendation", "")),
+            }
+        )
+    return {
+        "status": result.readiness.status,
+        "focus_ticker": str(coverage.get("focus_ticker") or result.symbol),
+        "evidence_count": int(coverage.get("evidence_count", 0)),
+        "focus_evidence_count": int(coverage.get("focus_evidence_count", 0)),
+        "primary_count": int(coverage.get("primary_count", 0)),
+        "risk_count": int(coverage.get("risk_count", 0)),
+        "methodology_share": float(coverage.get("methodology_share", 0.0)),
+        "placeholder_share": float(coverage.get("placeholder_share", 0.0)),
+        "external_non_serenity_count": int(
+            coverage.get("external_non_serenity_count", 0)
+        ),
+        "flags": flags,
+    }
+
+
+def build_skeptical_review(result: StockAnalysisResult) -> dict[str, object]:
+    risk_items = [
+        item
+        for item in result.evidence
+        if str(item.get("claim_type")) in {"risk", "invalidation"}
+        or str(item.get("direction")) == "negative"
+    ]
+    if risk_items:
+        return {
+            "summary": (
+                f"Risk coverage uses {len(risk_items)} risk or invalidation "
+                "evidence item."
+            ),
+            "counter_thesis": [
+                str(item.get("claim", "")).strip()
+                for item in risk_items
+                if str(item.get("claim", "")).strip()
+            ],
+        }
+    missing_risk = next(
+        (
+            flag
+            for flag in result.readiness.source_coverage.get("flags", [])
+            if isinstance(flag, Mapping)
+            and flag.get("code") == "missing_risk_coverage"
+        ),
+        None,
+    )
+    diagnostic = (
+        "missing_risk_coverage: "
+        + str(missing_risk.get("message", "")).strip()
+        if isinstance(missing_risk, Mapping)
+        else "missing_risk_coverage: No risk evidence is available."
+    )
+    return {
+        "summary": (
+            "Risk coverage is incomplete because no risk or invalidation "
+            "evidence item is available."
+        ),
+        "counter_thesis": [diagnostic],
+    }
 
 
 def build_key_claims(result: StockAnalysisResult) -> list[KeyClaim]:
