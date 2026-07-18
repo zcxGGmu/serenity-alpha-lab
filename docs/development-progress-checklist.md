@@ -3,7 +3,7 @@
 > 清单版本：v1.0<br>
 > 创建日期：2026-07-18<br>
 > 架构基线：[AI 股票研究与量化平台开发方案](./ai-stock-quant-platform-development-plan.md) v2.0<br>
-> 上游候选基线：`ZhuLinsen/daily_stock_analysis v3.26.1`，正式实施以 Phase 0 锁定结果为准<br>
+> 上游锁定基线：`ZhuLinsen/daily_stock_analysis v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`<br>
 > 当前状态：[开发状态快照](./development-status.md)
 > 使用方式：本文件是 MVP 开发的权威执行账本；任务状态、依赖、验收证据和范围变化均在此更新
 
@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 0/13 | G0 | DSA 可重复基线、金标、SBOM |
+| P0 上游接管 | 1 | READY | 1/13 | G0 | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **0/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **1/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -107,16 +107,19 @@ P0 基线
 
 ### SAL-P0-001 锁定候选上游基线
 
-- [ ] [READY] 选择 DSA release/commit 并记录选择依据
-- 元数据：优先级 P0 | 负责人 TL | 估算 0.5d | 实际 - | 依赖 -
+- [x] [DONE] 选择 DSA release/commit 并记录选择依据
+- 元数据：优先级 P0 | 负责人 TL | 估算 0.5d | 实际 0.5d | 依赖 - | 开始 2026-07-19 | 完成 2026-07-19
 - 交付物：候选版本评估、commit SHA、发布日期、已知问题、选择/放弃理由。
 - 验收：
   - 比较最新稳定 release 与目标 main commit 的测试、修复和兼容风险。
   - 由 TL 批准唯一候选基线；未经 Gate 不再漂移。
+- 结果：锁定 `ZhuLinsen/daily_stock_analysis v3.26.1`，commit `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`，release 发布时间 `2026-07-12T10:57:39Z`。
+- 放弃候选：`main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` 比 release 多 2 个 commit、19 个文件变更，涉及未发布 DecisionSignal API/Web/服务语义扩展，登记为后续同步候选。
+- 验收证据：见 [DSA 上游基线选择记录](./upstream-baseline-selection.md)；已记录 release/main SHA、GitHub release/compare/actions 验证、已知风险与后续处理。
 
 ### SAL-P0-002 导入 DSA Git 历史
 
-- [ ] [TODO] 在当前仓库保留 DSA 历史并配置 `origin/upstream`
+- [ ] [READY] 在当前仓库保留 DSA 历史并配置 `origin/upstream`
 - 元数据：优先级 P0 | 负责人 TL | 估算 1d | 实际 - | 依赖 SAL-P0-001
 - 交付物：上游历史、不可变基线标签、remote 配置说明。
 - 验收：
@@ -1337,18 +1340,19 @@ P0 基线
 | RSK-003 | Agent 引用/幻觉 | 高 | 高 | 无依据数字/错引 | Evidence、Validator、金标 | AI | G5 | OPEN |
 | RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | Policy、fallback、契约探针 | BE | G2 | OPEN |
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
+| RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 先锁定 `v3.26.1`，SAL-P0-002 后建立同步候选登记；未发布 commit 不作为初始基线 | TL | SAL-P0-012 | OPEN |
 
 ### 13.2 决策
 
 | 决策 ID | 日期 | 问题 | 结论 | ADR/证据 | 影响任务 | 复审日期 |
 |---|---|---|---|---|---|---|
-| DEC-001 | - | DSA 正式基线 | 待 P0 决定 | ADR-001 | SAL-P0-001 | G0 |
+| DEC-001 | 2026-07-19 | DSA 正式基线 | 采用 `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；拒绝未发布 `main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` 作为初始基线 | [upstream-baseline-selection.md](./upstream-baseline-selection.md)；ADR-001 待 SAL-P1-001 正式化 | SAL-P0-001,SAL-P0-002 | G0 |
 
 ## 14. 验收证据登记
 
 | Evidence ID | 任务/Gate | 类型 | 路径/URL | commit/版本 | 评审人 | 日期 |
 |---|---|---|---|---|---|---|
-| AEV-001 | - | CI/报告/截图/Artifact/签字 | - | - | - | - |
+| AEV-001 | SAL-P0-001 | 报告/API 查询记录 | [upstream-baseline-selection.md](./upstream-baseline-selection.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; candidate `main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` | TL | 2026-07-19 |
 
 允许的证据：
 
@@ -1386,4 +1390,4 @@ P0 基线
 
 ## 17. 下一步
 
-首个可执行任务是 `SAL-P0-001`。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
+当前可执行任务是 `SAL-P0-002`。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
