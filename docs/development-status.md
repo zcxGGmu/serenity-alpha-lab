@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-19<br>
-> 最近阶段性任务：`SAL-P0-005` DSA Web 基线尝试 checkpoint（最终提交以 `git log -1 --oneline` 为准）<br>
+> 最近阶段性任务：`SAL-P0-011` DSA 供应链基线尝试 checkpoint（最终提交以 `git log -1 --oneline` 为准）<br>
 > 工作区要求：恢复时必须重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P0 上游接管与行为基线<br>
 > 当前 Gate：G0，未通过<br>
 > 任务完成度：3/129<br>
-> 当前可执行任务：`SAL-P0-011` 建立供应链基线（`SAL-P0-004`、`SAL-P0-005` 阻塞中）<br>
+> 当前可执行任务：`SAL-P0-006` 建立 Desktop、CLI 与 Bot Smoke 基线（`SAL-P0-004`、`SAL-P0-005`、`SAL-P0-011` 阻塞中）<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -32,7 +32,8 @@
 
 - `SAL-P0-004` 后端离线测试基线阻塞：AlphaSift Git 依赖无法从 GitHub 443 克隆，后端/CI 依赖安装未完成，证据见 [DSA 后端离线测试基线尝试记录](./backend-offline-test-baseline.md)。
 - `SAL-P0-005` Web 测试与构建基线阻塞：`npm ci`、lint、build 已通过，但 Vitest 存在 JP/KR 市场区域测试契约矛盾，Playwright smoke 因缺少 `DSA_WEB_SMOKE_PASSWORD` 全部跳过；证据见 [DSA Web 测试与构建基线尝试记录](./web-baseline-test-build.md)。
-- `SAL-P0-004` 至 `SAL-P0-012` 尚未完整建立后端/Web/Desktop/Docker 基线、API/DB/报告金标、SBOM 与上游维护文档。
+- `SAL-P0-011` 供应链基线阻塞：已完成 Web audit、Node 许可证、Python 动态依赖和 Docker CLI/SBOM 插件初筛，但 Python 已安装 SBOM 受 AlphaSift Git 依赖阻塞，镜像 SBOM 受 Docker daemon 未运行阻塞；证据见 [DSA 供应链基线尝试记录](./supply-chain-baseline.md)。
+- `SAL-P0-004` 至 `SAL-P0-012` 尚未完整建立后端/Web/Desktop/Docker 基线、API/DB/报告金标、完整 SBOM 与上游维护文档。
 - `SAL-P0-013` Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
 
 ### 全局未完成
@@ -43,7 +44,7 @@
 - 本地仓库仍未配置本项目 `origin` 远端；当前无托管 URL，已登记为开放风险，后续确定地址后补绑。
 - DSA Python 依赖尚未正式锁定，仍含范围版本和 AlphaSift Git 依赖；当前仅通过隔离 cache/worktree 降低污染，供应链与锁文件后续任务继续处理。
 - 当前 Windows PATH 未安装 Python 3.11，Docker daemon 未运行；已用 uv 准备 Python 3.11.15，但 `SAL-P0-004` 仍阻塞于 AlphaSift Git 依赖可达性，`SAL-P0-007` 需启动 Docker daemon。
-- Web lockfile 可安装并构建，但 npm audit 暴露 16 个漏洞（10 个 high）；不得在 P0 基线记录中直接运行 `npm audit fix` 改写上游 lockfile，需由 `SAL-P0-011` 登记供应链处置计划。
+- Web lockfile 可安装并构建，但 npm audit 暴露 16 个漏洞（10 个 high），且 lockfile 混用 `registry.npmjs.org` 与 `registry.npmmirror.com`；不得在 P0 基线记录中直接运行 `npm audit fix` 改写上游 lockfile。
 
 ## 当前决策与约束
 
@@ -58,11 +59,12 @@
 
 ## 下一步
 
-1. 并行领取 `SAL-P0-011`：生成 Web/Python 供应链基线，至少登记 npm audit high、AlphaSift 动态 Git 依赖、许可证与后续处置责任人。
-2. 解除 `SAL-P0-005` 阻塞：明确 JP/KR 市场区域契约，提供 `DSA_WEB_SMOKE_PASSWORD` 与可运行 backend webui-only 环境，再重跑 Vitest 和真实 Playwright smoke。
-3. 同步解除 `SAL-P0-004` 阻塞：恢复 GitHub 访问、配置 AlphaSift 镜像或准备离线 wheel，再重新运行 `-InstallCiTools`。
-4. 后续确定本项目托管 URL 后，补充配置 `origin` remote 并复验 `origin/upstream` 双 remote 约束。
-5. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
+1. 并行领取 `SAL-P0-006`：确认 Desktop、CLI 与 Bot smoke 的可执行入口；若依赖后端 Python 安装或真实密钥，必须按阻塞记录分类，不得伪造通过。
+2. 解除 `SAL-P0-011` 阻塞：提供 AlphaSift Git/镜像/wheel，启动 Docker daemon，补齐 Python SBOM、镜像 digest、镜像 SBOM 和漏洞摘要。
+3. 解除 `SAL-P0-005` 阻塞：明确 JP/KR 市场区域契约，提供 `DSA_WEB_SMOKE_PASSWORD` 与可运行 backend webui-only 环境，再重跑 Vitest 和真实 Playwright smoke。
+4. 同步解除 `SAL-P0-004` 阻塞：恢复 GitHub 访问、配置 AlphaSift 镜像或准备离线 wheel，再重新运行 `-InstallCiTools`。
+5. 后续确定本项目托管 URL 后，补充配置 `origin` remote 并复验 `origin/upstream` 双 remote 约束。
+6. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
 
 ## 会话恢复步骤
 
@@ -87,7 +89,7 @@
 
 随后执行 git status --short --branch 和 git log -2 --oneline，确认当前状态。
 
-当前应并行推进 SAL-P0-011：建立供应链基线，登记 Web npm audit high、AlphaSift 动态 Git 依赖、许可证和后续处置计划；同时不要把 SAL-P0-004 或 SAL-P0-005 标为完成，前者因 AlphaSift Git 依赖无法克隆处于 BLOCKED，后者因 Web Vitest JP/KR 契约矛盾与 smoke 凭证缺失处于 BLOCKED。
+当前应并行推进 SAL-P0-006：确认 Desktop、CLI 与 Bot smoke 基线入口；同时不要把 `SAL-P0-004`、`SAL-P0-005` 或 `SAL-P0-011` 标为完成，它们分别因 AlphaSift Git 依赖、Web Vitest/Smoke、Python 与镜像 SBOM 阻塞处于 BLOCKED。
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

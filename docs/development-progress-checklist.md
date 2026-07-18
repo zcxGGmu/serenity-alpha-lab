@@ -215,12 +215,16 @@ P0 基线
 
 ### SAL-P0-011 建立供应链基线
 
-- [ ] [TODO] 生成 SBOM、许可证、漏洞和动态依赖报告
-- 元数据：优先级 P0 | 负责人 SEC | 估算 1d | 实际 - | 依赖 SAL-P0-003
+- [ ] [BLOCKED] 生成 SBOM、许可证、漏洞和动态依赖报告
+- 元数据：优先级 P0 | 负责人 SEC | 估算 1d | 实际 0.5d | 依赖 SAL-P0-003 | 开始 2026-07-19 | 阻塞 2026-07-19
 - 交付物：Python/Node/镜像 SBOM、第三方许可证、漏洞清单。
 - 验收：
   - 标记 AlphaSift `git+https` 动态安装、OpenBB/AGPL 和数据服务条款风险。
   - Critical/High 有处理人、计划和截止时间。
+- 结果：已完成可离线读取的供应链初筛，确认 DSA 根许可证为 MIT，Web npm audit 为 16 个漏洞（10 high），Node 依赖许可证枚举为 446 个包、14 类许可证、0 个 UNKNOWN；`requirements.txt` 含 42 条依赖声明、1 条 AlphaSift 动态 Git 依赖、39 条范围版本；Docker CLI 与 `docker sbom` 插件存在。
+- 阻塞：Python 已安装依赖 SBOM 仍受 AlphaSift Git clone 阻塞；Docker daemon 未运行，无法构建镜像、记录 digest、生成镜像 SBOM 或镜像漏洞摘要。
+- 解除条件：提供 AlphaSift Git/镜像/wheel 并复核许可证与 hash；启动 Docker daemon 并生成镜像 SBOM；对 npm audit high、Node 非主流许可证和混合 registry 指定处理计划。
+- 阻塞证据：见 [DSA 供应链基线尝试记录](./supply-chain-baseline.md)。
 
 ### SAL-P0-012 建立上游维护文档和 CI
 
@@ -1338,6 +1342,7 @@ P0 基线
 | BLK-001 | - | - | - | - | - | - | CLOSED |
 | BLK-002 | SAL-P0-004 | AlphaSift Git 依赖无法从 GitHub 443 克隆，导致后端/CI 依赖安装失败 | BE | 2026-07-19 | 2026-07-20 | GitHub/镜像/离线 wheel 可用，`-InstallCiTools` 返回 0 | OPEN |
 | BLK-003 | SAL-P0-005 | Web Vitest 中 JP/KR 市场区域期望与相邻用例/当前实现矛盾；Playwright smoke 缺少 `DSA_WEB_SMOKE_PASSWORD` 导致 13 个用例全部跳过 | FE | 2026-07-19 | 2026-07-20 | 明确 JP/KR 契约并使 `npm run test` 返回 0；提供 smoke password 与可运行 backend 后 13 个 smoke 用例真实执行 | OPEN |
+| BLK-004 | SAL-P0-011 | AlphaSift Git 依赖不可达导致 Python 已安装 SBOM 不完整；Docker daemon 未运行导致镜像 digest/SBOM/漏洞摘要无法生成 | SEC | 2026-07-19 | 2026-07-20 | AlphaSift Git/镜像/wheel 可用并完成 Python 依赖 SBOM；Docker daemon 可用并生成镜像 digest 与 `docker sbom` 证据 | OPEN |
 
 规则：
 
@@ -1361,6 +1366,7 @@ P0 基线
 | RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-003` 引入正式锁文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
 | RSK-009 | 当前 Windows PATH 缺少 Python 3.11 且 Docker daemon 未运行 | 高 | 中 | `SAL-P0-004` 无法按上游 CI Python 3.11 运行，或 `SAL-P0-007` 无法构建/运行容器 | 已用 uv 准备 Python 3.11.15，但后端依赖仍受 AlphaSift Git 可达性阻塞；在 `SAL-P0-007` 前启动 Docker Desktop/daemon 并复验 `docker info` | BE | SAL-P0-004 | OPEN |
 | RSK-010 | DSA Web npm audit 存在 10 个 high 漏洞 | 高 | 高 | `npm ci` 后 audit 输出 16 个漏洞，其中 high 为 10 个 | P0 阶段不运行 `npm audit fix` 改写上游 lock；`SAL-P0-011` 生成依赖/漏洞报告并登记责任人与处置计划，后续由 `SAL-P6-005` 门禁阻断未豁免 Critical/High | SEC/FE | SAL-P0-011 | OPEN |
+| RSK-011 | DSA Web lockfile 混用 npmjs 与 npmmirror resolved URL | 中 | 中 | `package-lock.json` 同时包含 `registry.npmjs.org` 与 `registry.npmmirror.com` | `SAL-P0-011` 先原样记录；后续由上游同步/内部缓存代理/受控 lockfile 规范决定是否统一 registry，不在 P0 直接改写 | SEC/FE | SAL-P0-012 | OPEN |
 
 ### 13.2 决策
 
@@ -1370,6 +1376,7 @@ P0 基线
 | DEC-002 | 2026-07-19 | DSA Git 历史接管方式 | 通过 `upstream` remote 导入上游 heads/tags，创建本地不可变基线 tag `upstream/dsa-v3.26.1`；不合并、不切换、不压平复制 DSA 源码 | [upstream-history-import.md](./upstream-history-import.md)；ADR-001 待 SAL-P1-001 正式化 | SAL-P0-002,SAL-P0-012 | G0 |
 | DEC-003 | 2026-07-19 | DSA 基线环境物化方式 | 通过 `.worktrees/dsa-v3.26.1` 隔离物化上游 tag，通过 `.cache/dsa-p0` 存放 Python/npm 缓存；本项目工作树只提交脚本和文档，不混入 DSA 源码 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | SAL-P0-003,SAL-P0-004,SAL-P0-005,SAL-P0-007 | G0 |
 | DEC-004 | 2026-07-19 | Web 基线失败处理方式 | P0 Web 基线先记录上游原样行为，不在隔离 worktree 中修正 JP/KR 测试或执行 `npm audit fix`；后续通过 Gate/ADR 决定是同步上游修复、补丁兼容还是本地扩展 | [web-baseline-test-build.md](./web-baseline-test-build.md) | SAL-P0-005,SAL-P0-011,SAL-P0-012 | G0 |
+| DEC-005 | 2026-07-19 | 供应链基线失败处理方式 | P0 供应链先记录可离线证据，不伪造 Python/镜像 SBOM；AlphaSift、Docker 和 npm high 风险解除前，`SAL-P0-011` 保持 BLOCKED | [supply-chain-baseline.md](./supply-chain-baseline.md) | SAL-P0-011,SAL-P0-012,SAL-P6-005 | G0 |
 
 ## 14. 验收证据登记
 
@@ -1380,6 +1387,7 @@ P0 基线
 | AEV-003 | SAL-P0-003 | 环境矩阵与 bootstrap 校验记录 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | Python 3.11/3.12；Node `>=20.19.0 <27`；Docker `python:3.11-slim-bookworm`；DSA `upstream/dsa-v3.26.1` | BE | 2026-07-19 |
 | AEV-004 | SAL-P0-004 | 后端依赖安装阻塞记录 | [backend-offline-test-baseline.md](./backend-offline-test-baseline.md) | uv Python `3.11.15`; `requirements-ci.txt`; AlphaSift `9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf` | BE | 2026-07-19 |
 | AEV-005 | SAL-P0-005 | Web 依赖安装、lint、test、build、smoke 基线记录 | [web-baseline-test-build.md](./web-baseline-test-build.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Node `v24.12.0`; npm `11.6.2`; Vite `7.3.1` | FE | 2026-07-19 |
+| AEV-006 | SAL-P0-011 | 供应链依赖、许可证、漏洞和镜像 SBOM 阻塞记录 | [supply-chain-baseline.md](./supply-chain-baseline.md) | DSA MIT; Web npm audit 16 vulnerabilities; Node license inventory 446 packages; Docker CLI `29.4.1`; `docker sbom` `0.6.0` | SEC | 2026-07-19 |
 
 允许的证据：
 
@@ -1417,4 +1425,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前可并行执行任务是 `SAL-P0-011` 供应链基线；`SAL-P0-004` 因 AlphaSift Git 依赖不可达阻塞，`SAL-P0-005` 因 Web Vitest 契约矛盾与 smoke 凭证缺失阻塞。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
+当前 P0/P1 可并行探索任务是 `SAL-P0-006` Desktop/CLI/Bot smoke 基线；`SAL-P0-004` 因 AlphaSift Git 依赖不可达阻塞，`SAL-P0-005` 因 Web Vitest 契约矛盾与 smoke 凭证缺失阻塞，`SAL-P0-011` 因 Python/镜像 SBOM 不完整阻塞。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
