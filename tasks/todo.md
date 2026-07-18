@@ -4871,3 +4871,31 @@
 - Verification evidence: workspace-isolated focused `115 passed, 2 warnings`; full `287 passed, 2 warnings`; Vitest `137/137`; frontend build; clean-start Chromium Playwright `2/2`; unified release gate `9 passed / 1 skipped / 0 errors`; passing boundary/safety scans; passing disposable API smoke.
 - Protected state: the same four startup `output/ui/*` entries remain external dirty state and are excluded from both Task 7 commits.
 - Next action: when Docker becomes available, run `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` without `--skip-docker-smoke`; otherwise do not begin Deferred capability without a separate approved design.
+
+# Latest Development Status Refresh (2026-07-18)
+
+- [x] Reconcile current branch, HEAD `43496b7`, protected output state, tracker, migration plan, todo, and lessons.
+- [x] Update tracker and restart prompt so the next session can see Completed, Not Started, Environment Blocked, Deferred, current commits, and protected files immediately.
+- [x] Update migration plan closeout language with the latest observed status and remaining Docker-only blocker.
+- [x] Record this status-refresh review in `tasks/todo.md`, including the exact next command once Docker is available.
+- [x] Verify documentation diff hygiene, Markdown fences, staged-file whitelist, and protected-output exclusion.
+- [x] Commit only owned documentation updates, leaving protected `output/ui/*` unstaged.
+
+## Latest Development Status Refresh Check-In
+
+- Completed baseline: Phase 0-7 and runtime-parity Tasks 1-7 are complete through final status commit `43496b7`.
+- Not Started baseline: no approved runtime-parity implementation, verification, or closeout task remains.
+- Environment Blocked baseline: real Docker image build, no-secret container `/health` smoke, and the no-skip unified release gate remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
+- Deferred baseline: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
+- Protected state: `output/ui/analyses/manifest.json`, `output/ui/reports/deliverable-research-report.md`, `output/ui/runs.json`, and `output/ui/analyses/topic-2bde5fabbc/` remain external dirty state and must stay unread, unstaged, and uncommitted.
+
+## Latest Development Status Refresh Review
+
+- Completed: Phase 0-7 and runtime-parity Tasks 1-7 remain complete through Task 7 final status commit `43496b7`; the 2026-07-18 refresh updates the tracker, migration plan, todo, and restart prompt for next-session continuity.
+- Not Started: no approved runtime-parity implementation, verification, or closeout task remains.
+- Environment Blocked: real Docker image build, no-secret container `/health` smoke, and the no-skip unified release gate remain blocked until `/Users/zq/.orbstack/run/docker.sock` is available.
+- Deferred: history aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing require a separate approved design.
+- Next command when Docker is available: `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py`.
+- Protected state: the four `output/ui/*` paths remain external dirty state and are excluded from this docs-only refresh.
+- Lesson decision: no new reusable lesson is required; the existing closeout/import-isolation lessons already cover this status-refresh pattern.
+- Verification: scoped `git diff --check` passed, Markdown fences are balanced, active tracker has no stale Task 7 Not Started/In Progress text, and the staged-file whitelist is limited to the owned status documents.

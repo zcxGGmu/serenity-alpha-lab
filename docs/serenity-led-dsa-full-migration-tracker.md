@@ -12,7 +12,7 @@
 
 ## Current Status Snapshot
 
-**Updated:** 2026-07-11
+**Updated:** 2026-07-18
 
 ### Direction
 
@@ -27,7 +27,7 @@
 
 | Repository | Role | Current Notes |
 | --- | --- | --- |
-| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-7 are complete. Task 7 verification and documentation reconciliation passed from baseline `ac253c1`, and closeout documentation is committed in `e26fee2`. Real Docker smoke remains environment blocked; protected generated UI dirt under `output/ui/*` remains external and unstaged |
+| `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` | Primary project and target runtime | Runtime-parity Tasks 1-7 are complete through final status commit `43496b7`. The 2026-07-18 status refresh confirmed no approved runtime-parity task remains; real Docker smoke remains environment blocked; protected generated UI dirt under `output/ui/*` remains external and unstaged |
 | `/Users/zq/Desktop/ai-projs/trading/daily_stock_analysis` | Source system to migrate from | Current HEAD `95a4b51`; source reference only, not a Serenity runtime dependency |
 
 ### Completed Migration Work
@@ -52,7 +52,7 @@ Previous DSA-first integration work is useful source research but is no longer t
 | Post-migration runtime parity design boundary | Completed | Approved API-first latest stock-analysis artifact design committed in `948970b`; spec: `docs/superpowers/specs/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity-design.md` |
 | Detailed runtime parity implementation plan | Completed | `docs/superpowers/plans/2026-07-10-serenity-alpha-lab-post-migration-runtime-parity.md` maps exact files, red failures, minimal implementations, focused/full verification, protected-file checks, and commit checkpoints |
 | Canonical backend artifact/API integration for `apps/serenity-web` | Completed | Tasks 1-7 are verified, reconciled, and closed out; Task 7 changed documentation only |
-| Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun the unified gate without `--skip-docker-smoke` when a daemon is available |
+| Real Docker image build and no-secret container `/health` smoke | Environment Blocked | Static Docker rules and `docker compose config` passed, but `/Users/zq/.orbstack/run/docker.sock` was unavailable; rerun `CI=1 PYTHONPATH="$PWD/src" python3 scripts/verify_offline_release.py` without `--skip-docker-smoke` when a daemon is available |
 | Electron/updater, live Bot adapters, LLM providers, notification delivery, broker/order actions, release publishing | Deferred | Do not start without a separate approved design, threat model, default-off controls, and explicit research-only acceptance criteria |
 
 ### Phase Completion Status
@@ -121,7 +121,8 @@ Previous DSA-first integration work is useful source research but is no longer t
 - Task 6 final status refresh: `30e65dd` (`docs: 刷新 runtime parity Task 6 最终状态`).
 - Task 7 entry baseline: `ac253c1` (`docs: 更新 runtime parity 最新开发交接状态`).
 - Task 7 closeout documentation commit: `e26fee2` (`docs: 记录股票分析运行时对等实现交接`).
-- Task 7 final status refresh: the current commit; verify its actual hash with `git log -5 --oneline --decorate`.
+- Task 7 final status refresh: `43496b7` (`docs: 刷新运行时对等最终状态`).
+- Latest development status refresh: 2026-07-18 documentation-only refresh; verify the actual current HEAD with `git log -5 --oneline --decorate` at startup.
 - Phase 7 planning commit: `eddf32c` (`docs: 完成 Serenity Phase 7 研究运行与发布规划`).
 - Phase 7 implementation commit: `f2fd7cd` (`feat: 完成 Serenity Phase 7 研究运行与发布能力迁移`).
 - Phase 7 handoff documentation commit: `8bba5e0` (`docs: 记录 Phase 7 研究运行与发布迁移交接`).
@@ -293,7 +294,7 @@ Planning self-review confirms the plan covers every approved design requirement,
 
 ## Current Development Status
 
-- **Completed:** Phase 0-7 and runtime-parity Tasks 1-7. Task 6 implementation is `901fa15`, handoff is `9c462cd`, final Task 6 status is `30e65dd`, Task 7 started from `ac253c1`, and Task 7 closeout documentation is `e26fee2`. Fresh Task 7 evidence includes focused `115 passed, 2 warnings`, full `287 passed, 2 warnings`, Vitest `137/137`, frontend build, clean-start Chromium Playwright `2/2`, unified gate `9 passed / 1 skipped / 0 errors`, passing boundary scans, and passing disposable-artifact API smoke.
+- **Completed:** Phase 0-7 and runtime-parity Tasks 1-7. Task 6 implementation is `901fa15`, handoff is `9c462cd`, final Task 6 status is `30e65dd`, Task 7 started from `ac253c1`, Task 7 closeout documentation is `e26fee2`, and final status refresh is `43496b7`. Fresh Task 7 evidence includes focused `115 passed, 2 warnings`, full `287 passed, 2 warnings`, Vitest `137/137`, frontend build, clean-start Chromium Playwright `2/2`, unified gate `9 passed / 1 skipped / 0 errors`, passing boundary scans, and passing disposable-artifact API smoke. The 2026-07-18 status refresh confirmed this remains current before the new docs-only refresh commit.
 - **Not Started:** no approved runtime-parity task remains. Follow-on capabilities require a separate approved design.
 - **Environment Blocked:** Real Docker image build, no-secret container `/health` smoke, and the no-skip unified release gate remain blocked while `/Users/zq/.orbstack/run/docker.sock` is unavailable.
 - **Deferred:** History aggregation, `/run-state` redesign, production static hosting/reverse proxy, wildcard CORS, Electron/updater/installer/signing, live Bot/LLM/provider/notification adapters, broker/order actions, trading automation, and release publishing.
@@ -336,12 +337,13 @@ No approved runtime-parity implementation, verification, or closeout task remain
 
 仓库状态：
 - 当前分支：codex/phase-4-report-safety
+- 2026-07-18 状态刷新前 HEAD：43496b7（docs: 刷新运行时对等最终状态）；启动时必须通过 git log -5 --oneline --decorate 核对当前实际 HEAD。
 - Task 7 entry baseline：ac253c1（docs: 更新 runtime parity 最新开发交接状态）
 - Task 6 implementation：901fa15
 - Task 6 handoff：9c462cd
 - Task 6 final status refresh：30e65dd
 - Task 7 closeout documentation：e26fee2（docs: 记录股票分析运行时对等实现交接）
-- Task 7 final status refresh：当前 HEAD；后续启动时通过 git log -5 --oneline --decorate 核对实际 hash。
+- Task 7 final status refresh：43496b7（docs: 刷新运行时对等最终状态）
 - DSA 当前 HEAD：95a4b51
 
 Completed：

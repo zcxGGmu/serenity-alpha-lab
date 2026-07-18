@@ -176,7 +176,7 @@ Additional checks when Web/API work begins:
 
 ## 7. Runtime Parity Closeout
 
-Phase 0-7 and post-migration runtime-parity Tasks 1-7 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and its final status refresh is `30e65dd`. Task 7 completed full verification and documentation reconciliation from baseline `ac253c1` without changing production runtime code; its closeout documentation is committed in `e26fee2`, and the final status refresh is recorded by the current commit.
+Phase 0-7 and post-migration runtime-parity Tasks 1-7 are complete. Task 6 implementation is committed in `901fa15` (`feat: 完成最新研究工件 Web 运行时对等`), its handoff documentation is committed in `9c462cd`, and its final status refresh is `30e65dd`. Task 7 completed full verification and documentation reconciliation from baseline `ac253c1` without changing production runtime code; its closeout documentation is committed in `e26fee2`, and the final status refresh is committed in `43496b7`. The 2026-07-18 status refresh confirmed no approved runtime-parity implementation, verification, or closeout task remains.
 
 Fresh Task 7 evidence:
 
