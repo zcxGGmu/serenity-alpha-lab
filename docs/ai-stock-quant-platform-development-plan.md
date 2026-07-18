@@ -6,6 +6,7 @@
 > 建议上游基线：`ZhuLinsen/daily_stock_analysis v3.26.1`；正式导入前以候选 commit 完成全量回归后锁定<br>
 > 首期市场：A 股，复用上游港股、美股、日股、韩股、台股查询能力，但不承诺同等级量化能力<br>
 > 首期用途：研究、筛选、回测、模拟组合与研究报告，不包含实盘自动下单<br>
+> 当前状态：[开发状态快照](./development-status.md)<br>
 > 执行跟踪：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 1. 执行摘要
