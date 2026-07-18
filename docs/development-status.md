@@ -6,7 +6,7 @@
 > 当前 Phase：P0 上游接管与行为基线<br>
 > 当前 Gate：G0，未通过<br>
 > 任务完成度：3/129<br>
-> 当前可执行任务：`SAL-P0-004` 建立后端离线测试基线<br>
+> 当前可执行任务：`SAL-P0-005` 建立 Web 测试与构建基线（`SAL-P0-004` 阻塞中）<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -30,6 +30,7 @@
 
 ### 当前阻塞 Gate G0 的 P0 任务
 
+- `SAL-P0-004` 后端离线测试基线阻塞：AlphaSift Git 依赖无法从 GitHub 443 克隆，后端/CI 依赖安装未完成，证据见 [DSA 后端离线测试基线尝试记录](./backend-offline-test-baseline.md)。
 - `SAL-P0-004` 至 `SAL-P0-012` 尚未建立后端/Web/Desktop/Docker 基线、API/DB/报告金标、SBOM 与上游维护文档。
 - `SAL-P0-013` Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
 
@@ -41,6 +42,7 @@
 - 本地仓库仍未配置本项目 `origin` 远端；当前无托管 URL，已登记为开放风险，后续确定地址后补绑。
 - DSA Python 依赖尚未正式锁定，仍含范围版本和 AlphaSift Git 依赖；当前仅通过隔离 cache/worktree 降低污染，供应链与锁文件后续任务继续处理。
 - 当前 Windows 主机未安装 Python 3.11，Docker daemon 未运行；`SAL-P0-004` 需先补齐 Python 3.11 或切换到 CI/容器环境，`SAL-P0-007` 需启动 Docker daemon。
+- 已用 uv 准备 Python 3.11.15，但 `SAL-P0-004` 仍阻塞于 AlphaSift Git 依赖可达性；不得跳过该依赖伪造 backend-gate 通过。
 
 ## 当前决策与约束
 
@@ -55,8 +57,8 @@
 
 ## 下一步
 
-1. 领取 `SAL-P0-004`：先补齐 Python 3.11 或选择 CI/容器执行环境，再在 `.worktrees/dsa-v3.26.1` 中原样执行 DSA backend-gate 和离线测试。
-2. 记录测试数量、耗时、失败清单与分类；如果依赖安装失败，先分类为环境/供应链问题并登记阻塞或风险，不要跳过稳定测试。
+1. 并行领取 `SAL-P0-005`：在 `.worktrees/dsa-v3.26.1/apps/dsa-web` 中执行 Web `npm ci`、lint、test、build 和 Smoke 预检，记录构建日志与失败分类。
+2. 同步解除 `SAL-P0-004` 阻塞：恢复 GitHub 访问、配置 AlphaSift 镜像或准备离线 wheel，再重新运行 `-InstallCiTools`。
 3. 后续确定本项目托管 URL 后，补充配置 `origin` remote 并复验 `origin/upstream` 双 remote 约束。
 4. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
 
@@ -83,7 +85,7 @@
 
 随后执行 git status --short --branch 和 git log -2 --oneline，确认当前状态。
 
-当前应从 SAL-P0-004 开始：在 .worktrees/dsa-v3.26.1 中原样执行 DSA backend-gate 和离线测试，记录测试数量、耗时、失败清单、Junit/coverage Artifact 或阻塞分类；不要开始 Quant Core 或大规模重构。
+当前应并行推进 SAL-P0-005：在 .worktrees/dsa-v3.26.1/apps/dsa-web 中执行 Web npm ci、lint、test、build 和 Smoke 预检；同时不要把 SAL-P0-004 标为完成，它因 AlphaSift Git 依赖无法克隆而处于 BLOCKED。
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

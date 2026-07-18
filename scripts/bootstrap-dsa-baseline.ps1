@@ -5,6 +5,7 @@ param(
     [string]$WorktreePath = ".worktrees/dsa-v3.26.1",
     [string]$CacheRoot = ".cache/dsa-p0",
     [string]$PythonExecutable = "python",
+    [int]$InstallRetries = 3,
     [switch]$InstallPython,
     [switch]$InstallCiTools,
     [switch]$InstallWeb,
@@ -28,6 +29,25 @@ function Invoke-Step {
     )
     Write-Host "==> $Title"
     & $Script
+}
+
+function Invoke-Native {
+    param(
+        [string]$FilePath,
+        [string[]]$Arguments,
+        [int]$Retries = 1
+    )
+    for ($attempt = 1; $attempt -le $Retries; $attempt++) {
+        & $FilePath @Arguments
+        if ($LASTEXITCODE -eq 0) {
+            return
+        }
+        if ($attempt -eq $Retries) {
+            throw "$FilePath failed with exit code $LASTEXITCODE after $attempt attempt(s): $($Arguments -join ' ')"
+        }
+        Write-Warning "$FilePath failed with exit code $LASTEXITCODE; retrying attempt $($attempt + 1)/$Retries..."
+        Start-Sleep -Seconds 15
+    }
 }
 
 Require-Command git
@@ -61,7 +81,7 @@ Invoke-Step "materialize baseline worktree" {
         Write-Host "Worktree already present at expected SHA."
     } else {
         New-Item -ItemType Directory -Force -Path (Split-Path $absoluteWorktree -Parent) | Out-Null
-        git worktree add --detach $absoluteWorktree $BaselineTag
+        Invoke-Native "git" @("worktree", "add", "--detach", $absoluteWorktree, $BaselineTag)
     }
 }
 
@@ -82,16 +102,16 @@ if ($InstallPython -or $InstallCiTools) {
         New-Item -ItemType Directory -Force -Path $absoluteCache | Out-Null
         $venvPath = Join-Path $absoluteCache "venv"
         if (-not (Test-Path $venvPath)) {
-            & $PythonExecutable -m venv $venvPath
+            Invoke-Native $PythonExecutable @("-m", "venv", $venvPath)
         }
         $pythonInVenv = Join-Path $venvPath "Scripts/python.exe"
         $env:PIP_CACHE_DIR = Join-Path $absoluteCache "pip"
-        & $pythonInVenv -m pip install --upgrade pip
+        Invoke-Native $pythonInVenv @("-m", "pip", "install", "--upgrade", "pip") -Retries $InstallRetries
         if ($InstallPython) {
-            & $pythonInVenv -m pip install -r (Join-Path $absoluteWorktree "requirements.txt")
+            Invoke-Native $pythonInVenv @("-m", "pip", "install", "-r", (Join-Path $absoluteWorktree "requirements.txt")) -Retries $InstallRetries
         }
         if ($InstallCiTools) {
-            & $pythonInVenv -m pip install -r (Join-Path $absoluteWorktree ".github/requirements-ci.txt")
+            Invoke-Native $pythonInVenv @("-m", "pip", "install", "-r", (Join-Path $absoluteWorktree ".github/requirements-ci.txt")) -Retries $InstallRetries
         }
     }
 }
@@ -102,7 +122,7 @@ if ($InstallWeb) {
         $env:npm_config_cache = Join-Path $absoluteCache "npm-web"
         Push-Location (Join-Path $absoluteWorktree "apps/dsa-web")
         try {
-            npm ci
+            Invoke-Native "npm" @("ci") -Retries $InstallRetries
         } finally {
             Pop-Location
         }
@@ -115,7 +135,7 @@ if ($InstallDesktop) {
         $env:npm_config_cache = Join-Path $absoluteCache "npm-desktop"
         Push-Location (Join-Path $absoluteWorktree "apps/dsa-desktop")
         try {
-            npm ci
+            Invoke-Native "npm" @("ci") -Retries $InstallRetries
         } finally {
             Pop-Location
         }

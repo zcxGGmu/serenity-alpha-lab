@@ -144,12 +144,15 @@ P0 基线
 
 ### SAL-P0-004 建立后端离线测试基线
 
-- [ ] [TODO] 原样执行 DSA backend-gate 和离线测试
-- 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 - | 依赖 SAL-P0-003
+- [ ] [BLOCKED] 原样执行 DSA backend-gate 和离线测试
+- 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 0.2d | 依赖 SAL-P0-003 | 开始 2026-07-19 | 阻塞 2026-07-19
 - 交付物：测试数量、耗时、失败清单、Junit/coverage Artifact。
 - 验收：
   - 所有稳定测试通过；不稳定/环境相关测试被分类而非直接跳过。
   - 记录基线约 226 个测试文件对应的实际测试用例数。
+- 阻塞：uv 管理的 Python 3.11 已就绪，但安装 `.github/requirements-ci.txt` 时，AlphaSift Git 依赖从 `https://github.com/ZhuLinsen/alphasift.git` 克隆失败，两次重试均无法连接 GitHub 443；尚未进入 backend-gate 或离线测试。
+- 解除条件：当前环境可访问 AlphaSift Git 仓库，或提供内部镜像/离线 wheel；依赖安装完成后再运行 `scripts/ci_gate.sh syntax`、`flake8`、`deterministic`、`offline-tests` 并补齐测试证据。
+- 阻塞证据：见 [DSA 后端离线测试基线尝试记录](./backend-offline-test-baseline.md)。
 
 ### SAL-P0-005 建立 Web 测试与构建基线
 
@@ -1327,7 +1330,8 @@ P0 基线
 
 | ID | 关联任务 | 阻塞原因 | 负责人 | 开始日期 | 下次复查 | 解除条件 | 状态 |
 |---|---|---|---|---|---|---|---|
-| BLK-001 | - | - | - | - | - | - | CLOSED/OPEN |
+| BLK-001 | - | - | - | - | - | - | CLOSED |
+| BLK-002 | SAL-P0-004 | AlphaSift Git 依赖无法从 GitHub 443 克隆，导致后端/CI 依赖安装失败 | BE | 2026-07-19 | 2026-07-20 | GitHub/镜像/离线 wheel 可用，`-InstallCiTools` 返回 0 | OPEN |
 
 规则：
 
@@ -1366,6 +1370,7 @@ P0 基线
 | AEV-001 | SAL-P0-001 | 报告/API 查询记录 | [upstream-baseline-selection.md](./upstream-baseline-selection.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; candidate `main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` | TL | 2026-07-19 |
 | AEV-002 | SAL-P0-002 | Git remote/tag/对象完整性记录 | [upstream-history-import.md](./upstream-history-import.md) | `upstream/dsa-v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `upstream/main @ 487e49e565ffd1b96a7cf4d855f99cee3c981eaa` | TL | 2026-07-19 |
 | AEV-003 | SAL-P0-003 | 环境矩阵与 bootstrap 校验记录 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | Python 3.11/3.12；Node `>=20.19.0 <27`；Docker `python:3.11-slim-bookworm`；DSA `upstream/dsa-v3.26.1` | BE | 2026-07-19 |
+| AEV-004 | SAL-P0-004 | 后端依赖安装阻塞记录 | [backend-offline-test-baseline.md](./backend-offline-test-baseline.md) | uv Python `3.11.15`; `requirements-ci.txt`; AlphaSift `9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf` | BE | 2026-07-19 |
 
 允许的证据：
 
@@ -1403,4 +1408,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前可执行任务是 `SAL-P0-004`。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
+当前可并行执行任务是 `SAL-P0-005`；`SAL-P0-004` 因 AlphaSift Git 依赖不可达暂时阻塞。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
