@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-19<br>
-> 最近阶段性任务提交：`3cb69a6 docs(P0): 锁定 DSA 上游基线`<br>
+> 最近阶段性任务：`SAL-P0-002` DSA Git 历史导入 checkpoint（最终提交以 `git log -1 --oneline` 为准）<br>
 > 工作区要求：恢复时必须重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P0 上游接管与行为基线<br>
 > 当前 Gate：G0，未通过<br>
-> 任务完成度：1/129<br>
-> 当前可执行任务：`SAL-P0-002` 导入 DSA Git 历史<br>
+> 任务完成度：2/129<br>
+> 当前可执行任务：`SAL-P0-003` 固化基线运行环境<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -23,20 +23,21 @@
 ### P0 上游接管
 
 - 完成 `SAL-P0-001`：锁定上游基线为 `ZhuLinsen/daily_stock_analysis v3.26.1`，commit `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；证据见 [DSA 上游基线选择记录](./upstream-baseline-selection.md)。
+- 完成 `SAL-P0-002`：配置 `upstream` remote，导入 DSA 上游 heads/tags，创建本地基线标签 `upstream/dsa-v3.26.1` 指向锁定 commit；证据见 [DSA Git 历史导入记录](./upstream-history-import.md)。
 
 ## 未完成
 
 ### 当前阻塞 Gate G0 的 P0 任务
 
-- `SAL-P0-002` 尚未导入 DSA Git 历史、配置 `upstream` remote、创建不可变基线标签。
 - `SAL-P0-003` 至 `SAL-P0-012` 尚未建立环境、后端/Web/Desktop/Docker 基线、API/DB/报告金标、SBOM 与上游维护文档。
 - `SAL-P0-013` Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
 
 ### 全局未完成
 
-- 当前仓库尚未导入或 fork DSA 上游源码；只有规划、清单、协作约定和基线选择文档。
-- P0 至 P6 仍有 128 项工程任务未完成。
+- 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
+- P0 至 P6 仍有 127 项工程任务未完成。
 - 尚未创建运行时代码、数据库、Worker、Quant Core 或部署环境。
+- 本地仓库仍未配置本项目 `origin` 远端；当前无托管 URL，已登记为开放风险，后续确定地址后补绑。
 
 ## 当前决策与约束
 
@@ -46,13 +47,14 @@
 - 不接入实盘交易；LLM 没有交易、Shell 或任意数据库写权限。
 - Gate G0 前不得开始 Quant Core 或大规模重构。
 - DSA 接管基线已锁定为 `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；未经 Gate G0 或 ADR 批准不漂移到未发布 `main`。
+- `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 
 ## 下一步
 
-1. 领取并执行 `SAL-P0-002`：导入 DSA Git 历史，保留上游历史并配置 `upstream` remote。
-2. 创建不可变本地基线标签 `upstream/dsa-v3.26.1`，指向 `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`。
-3. 记录后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
-4. 完成后更新任务清单、状态快照、验收证据、风险/决策登记并提交中文 checkpoint。
+1. 领取 `SAL-P0-003`：固化 DSA 基线运行环境，记录 Python、Node、OS 与系统依赖矩阵。
+2. 后续确定本项目托管 URL 后，补充配置 `origin` remote 并复验 `origin/upstream` 双 remote 约束。
+3. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
+4. Gate G0 前继续避免 Quant Core 或大规模重构，优先建立 DSA 可重复运行基线。
 
 ## 会话恢复步骤
 
@@ -77,7 +79,7 @@
 
 随后执行 git status --short --branch 和 git log -2 --oneline，确认当前状态。
 
-当前应从 SAL-P0-002 开始：导入 ZhuLinsen/daily_stock_analysis 的 Git 历史，配置 upstream remote，并创建不可变本地基线标签 upstream/dsa-v3.26.1，指向 e8a9ca7742e8cb2498c8f491dd76d239b3064e1a。
+当前应从 SAL-P0-003 开始：固化 DSA 基线运行环境，记录并自动化 Python、Node、OS 和系统依赖；先复验 upstream remote 与 upstream/dsa-v3.26.1 tag，再开始环境矩阵。
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
