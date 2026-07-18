@@ -1,0 +1,14 @@
+.cache/
+.worktrees/
+.venv/
+venv/
+node_modules/
+dist/
+build/
+logs/
+reports/
+data/
+longbridge_tokens/
+.env
+.env.*
+!.env.example

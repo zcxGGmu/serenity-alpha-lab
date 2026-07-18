@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 2/13 | G0 | DSA 可重复基线、金标、SBOM |
+| P0 上游接管 | 1 | READY | 3/13 | G0 | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **2/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **3/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -132,12 +132,15 @@ P0 基线
 
 ### SAL-P0-003 固化基线运行环境
 
-- [ ] [TODO] 记录并自动化 Python、Node、OS 和系统依赖
-- 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 - | 依赖 SAL-P0-002
+- [x] [DONE] 记录并自动化 Python、Node、OS 和系统依赖
+- 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 0.5d | 依赖 SAL-P0-002 | 开始 2026-07-19 | 完成 2026-07-19
 - 交付物：环境矩阵、Bootstrap 命令、依赖缓存策略。
 - 验收：
   - Windows、Linux/Docker 至少各有一个受支持环境。
   - 新机器按文档可安装，不依赖开发者全局包。
+- 结果：已建立 [DSA 基线运行环境记录](./dsa-baseline-environment.md)，明确 Windows、Linux/CI、Docker 和 Desktop Profile 的 Python/Node/OS/系统依赖；新增 Windows PowerShell 与 Linux/Git Bash bootstrap 脚本，通过本地 tag 物化隔离 worktree，并使用 `.cache/dsa-p0` 缓存依赖。
+- 说明：本任务只固化环境入口和安装路径，不宣称后端测试、Web 构建或 Docker 运行通过；这些由 `SAL-P0-004`、`SAL-P0-005`、`SAL-P0-007` 分别验收。
+- 验收证据：见 [DSA 基线运行环境记录](./dsa-baseline-environment.md)；已记录上游依赖来源、bootstrap 命令、缓存策略、脚本解析和 worktree 校验。
 
 ### SAL-P0-004 建立后端离线测试基线
 
@@ -1345,6 +1348,8 @@ P0 基线
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
 | RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 先锁定 `v3.26.1`，SAL-P0-002 后建立同步候选登记；未发布 commit 不作为初始基线 | TL | SAL-P0-012 | OPEN |
 | RSK-007 | 本地仓库尚未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 不伪造未知托管地址；在项目仓库 URL 确定后执行 `git remote add origin <serenity-alpha-lab-repository-url>` 并复验 `origin/upstream` | TL | SAL-P0-012 | OPEN |
+| RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-003` 引入正式锁文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
+| RSK-009 | 当前 Windows 主机缺少 Python 3.11 且 Docker daemon 未运行 | 高 | 中 | `SAL-P0-004` 无法按上游 CI Python 3.11 运行，或 `SAL-P0-007` 无法构建/运行容器 | 在 `SAL-P0-004` 前安装 Python 3.11 或切换 CI/容器；在 `SAL-P0-007` 前启动 Docker Desktop/daemon 并复验 `docker info` | BE | SAL-P0-004 | OPEN |
 
 ### 13.2 决策
 
@@ -1352,6 +1357,7 @@ P0 基线
 |---|---|---|---|---|---|---|
 | DEC-001 | 2026-07-19 | DSA 正式基线 | 采用 `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；拒绝未发布 `main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` 作为初始基线 | [upstream-baseline-selection.md](./upstream-baseline-selection.md)；ADR-001 待 SAL-P1-001 正式化 | SAL-P0-001,SAL-P0-002 | G0 |
 | DEC-002 | 2026-07-19 | DSA Git 历史接管方式 | 通过 `upstream` remote 导入上游 heads/tags，创建本地不可变基线 tag `upstream/dsa-v3.26.1`；不合并、不切换、不压平复制 DSA 源码 | [upstream-history-import.md](./upstream-history-import.md)；ADR-001 待 SAL-P1-001 正式化 | SAL-P0-002,SAL-P0-012 | G0 |
+| DEC-003 | 2026-07-19 | DSA 基线环境物化方式 | 通过 `.worktrees/dsa-v3.26.1` 隔离物化上游 tag，通过 `.cache/dsa-p0` 存放 Python/npm 缓存；本项目工作树只提交脚本和文档，不混入 DSA 源码 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | SAL-P0-003,SAL-P0-004,SAL-P0-005,SAL-P0-007 | G0 |
 
 ## 14. 验收证据登记
 
@@ -1359,6 +1365,7 @@ P0 基线
 |---|---|---|---|---|---|---|
 | AEV-001 | SAL-P0-001 | 报告/API 查询记录 | [upstream-baseline-selection.md](./upstream-baseline-selection.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; candidate `main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` | TL | 2026-07-19 |
 | AEV-002 | SAL-P0-002 | Git remote/tag/对象完整性记录 | [upstream-history-import.md](./upstream-history-import.md) | `upstream/dsa-v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `upstream/main @ 487e49e565ffd1b96a7cf4d855f99cee3c981eaa` | TL | 2026-07-19 |
+| AEV-003 | SAL-P0-003 | 环境矩阵与 bootstrap 校验记录 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | Python 3.11/3.12；Node `>=20.19.0 <27`；Docker `python:3.11-slim-bookworm`；DSA `upstream/dsa-v3.26.1` | BE | 2026-07-19 |
 
 允许的证据：
 
@@ -1396,4 +1403,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前可执行任务是 `SAL-P0-003`。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
+当前可执行任务是 `SAL-P0-004`。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
