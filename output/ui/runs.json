@@ -1,6 +1,371 @@
 {
   "runs": [
     {
+      "query": "光芯片",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/topic-2bde5fabbc/index.zh.html",
+      "error": "",
+      "job_id": "job-0cc87db9d642",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T18:56:43Z",
+      "started_at": "2026-07-07T18:56:43Z",
+      "completed_at": "2026-07-07T18:56:43Z",
+      "manifest_href": "/analyses/topic-2bde5fabbc/analysis-manifest.json",
+      "canonical_theme": "光芯片",
+      "candidate_tickers": [
+        "AAOI",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "SIVE",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [],
+      "coverage_label": "77 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "光芯片",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/topic-2bde5fabbc/index.zh.html",
+      "error": "",
+      "job_id": "job-3558d0da301b",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T18:56:42Z",
+      "started_at": "2026-07-07T18:56:42Z",
+      "completed_at": "2026-07-07T18:56:42Z",
+      "manifest_href": "/analyses/topic-2bde5fabbc/analysis-manifest.json",
+      "canonical_theme": "光芯片",
+      "candidate_tickers": [
+        "AAOI",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "SIVE",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [],
+      "coverage_label": "77 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "光芯片",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/topic-2bde5fabbc/index.zh.html",
+      "error": "",
+      "job_id": "job-81afc04f8d6d",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T18:56:36Z",
+      "started_at": "2026-07-07T18:56:36Z",
+      "completed_at": "2026-07-07T18:56:36Z",
+      "manifest_href": "/analyses/topic-2bde5fabbc/analysis-manifest.json",
+      "canonical_theme": "光芯片",
+      "candidate_tickers": [
+        "AAOI",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "SIVE",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [],
+      "coverage_label": "77 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "光芯片",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/topic-2bde5fabbc/index.zh.html",
+      "error": "",
+      "job_id": "job-3a81c36df0c6",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T18:56:35Z",
+      "started_at": "2026-07-07T18:56:35Z",
+      "completed_at": "2026-07-07T18:56:36Z",
+      "manifest_href": "/analyses/topic-2bde5fabbc/analysis-manifest.json",
+      "canonical_theme": "光芯片",
+      "candidate_tickers": [
+        "AAOI",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "SIVE",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [],
+      "coverage_label": "77 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
+      "query": "光芯片",
+      "language": "zh",
+      "status": "completed",
+      "href": "/analyses/topic-2bde5fabbc/index.zh.html",
+      "error": "",
+      "job_id": "job-95c3d58a287f",
+      "retry_of_job_id": "",
+      "attempt": 1,
+      "cancelled_at": "",
+      "queued_at": "2026-07-07T18:48:00Z",
+      "started_at": "2026-07-07T18:48:00Z",
+      "completed_at": "2026-07-07T18:48:00Z",
+      "manifest_href": "/analyses/topic-2bde5fabbc/analysis-manifest.json",
+      "canonical_theme": "光芯片",
+      "candidate_tickers": [
+        "AAOI",
+        "LITE",
+        "COHR",
+        "AXTI",
+        "SIVE",
+        "NVDA"
+      ],
+      "candidate_coverage": [
+        {
+          "ticker": "AAOI",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 5,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "LITE",
+          "evidence_count": 46,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "46 条证据"
+        },
+        {
+          "ticker": "COHR",
+          "evidence_count": 44,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "44 条证据"
+        },
+        {
+          "ticker": "AXTI",
+          "evidence_count": 24,
+          "primary_count": 3,
+          "risk_count": 4,
+          "coverage_label": "24 条证据"
+        },
+        {
+          "ticker": "SIVE",
+          "evidence_count": 53,
+          "primary_count": 3,
+          "risk_count": 6,
+          "coverage_label": "53 条证据"
+        },
+        {
+          "ticker": "NVDA",
+          "evidence_count": 23,
+          "primary_count": 3,
+          "risk_count": 2,
+          "coverage_label": "23 条证据"
+        }
+      ],
+      "evidence_gap_tasks": [],
+      "coverage_label": "77 条证据",
+      "preflight_source": "backend",
+      "quality_score": 68,
+      "quality_status": "needs-evidence"
+    },
+    {
       "query": "HBM",
       "language": "zh",
       "status": "completed",
@@ -4431,141 +4796,6 @@
       "error": "",
       "started_at": "2026-07-06T13:27:17Z",
       "completed_at": "2026-07-06T13:27:18Z",
-      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
-      "canonical_theme": "HBM",
-      "candidate_tickers": [
-        "MU",
-        "SKHYNIX",
-        "SAMSUNG",
-        "MONTAGE",
-        "AAOI",
-        "SNDK",
-        "GIGADEVICE",
-        "SIVE",
-        "LITE",
-        "COHR",
-        "AXTI",
-        "NVDA"
-      ],
-      "quality_score": 68,
-      "quality_status": "needs-evidence"
-    },
-    {
-      "query": "HBM",
-      "language": "zh",
-      "status": "completed",
-      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
-      "error": "",
-      "started_at": "2026-07-06T13:26:53Z",
-      "completed_at": "2026-07-06T13:26:54Z",
-      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
-      "canonical_theme": "HBM",
-      "candidate_tickers": [
-        "MU",
-        "SKHYNIX",
-        "SAMSUNG",
-        "MONTAGE",
-        "AAOI",
-        "SNDK",
-        "GIGADEVICE",
-        "SIVE",
-        "LITE",
-        "COHR",
-        "AXTI",
-        "NVDA"
-      ],
-      "quality_score": 68,
-      "quality_status": "needs-evidence"
-    },
-    {
-      "query": "HBM",
-      "language": "zh",
-      "status": "completed",
-      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
-      "error": "",
-      "started_at": "2026-07-06T13:26:36Z",
-      "completed_at": "2026-07-06T13:26:37Z",
-      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
-      "canonical_theme": "HBM",
-      "candidate_tickers": [
-        "MU",
-        "SKHYNIX",
-        "SAMSUNG",
-        "MONTAGE",
-        "AAOI",
-        "SNDK",
-        "GIGADEVICE",
-        "SIVE",
-        "LITE",
-        "COHR",
-        "AXTI",
-        "NVDA"
-      ],
-      "quality_score": 68,
-      "quality_status": "needs-evidence"
-    },
-    {
-      "query": "HBM",
-      "language": "zh",
-      "status": "completed",
-      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
-      "error": "",
-      "started_at": "2026-07-06T13:20:38Z",
-      "completed_at": "2026-07-06T13:20:38Z",
-      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
-      "canonical_theme": "HBM",
-      "candidate_tickers": [
-        "MU",
-        "SKHYNIX",
-        "SAMSUNG",
-        "MONTAGE",
-        "AAOI",
-        "SNDK",
-        "GIGADEVICE",
-        "SIVE",
-        "LITE",
-        "COHR",
-        "AXTI",
-        "NVDA"
-      ],
-      "quality_score": 68,
-      "quality_status": "needs-evidence"
-    },
-    {
-      "query": "HBM",
-      "language": "zh",
-      "status": "completed",
-      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
-      "error": "",
-      "started_at": "2026-07-06T13:13:52Z",
-      "completed_at": "2026-07-06T13:13:52Z",
-      "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
-      "canonical_theme": "HBM",
-      "candidate_tickers": [
-        "MU",
-        "SKHYNIX",
-        "SAMSUNG",
-        "MONTAGE",
-        "AAOI",
-        "SNDK",
-        "GIGADEVICE",
-        "SIVE",
-        "LITE",
-        "COHR",
-        "AXTI",
-        "NVDA"
-      ],
-      "quality_score": 68,
-      "quality_status": "needs-evidence"
-    },
-    {
-      "query": "HBM",
-      "language": "zh",
-      "status": "completed",
-      "href": "/analyses/hbm-6f259a8f14/index.zh.html",
-      "error": "",
-      "started_at": "2026-07-06T13:06:18Z",
-      "completed_at": "2026-07-06T13:06:18Z",
       "manifest_href": "/analyses/hbm-6f259a8f14/analysis-manifest.json",
       "canonical_theme": "HBM",
       "candidate_tickers": [

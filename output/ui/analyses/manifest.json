@@ -1,5 +1,21 @@
 [
   {
+    "query": "光芯片",
+    "intent": "theme",
+    "canonical_theme": "光芯片",
+    "expanded_query": "光芯片",
+    "candidate_tickers": [
+      "AAOI",
+      "LITE",
+      "COHR",
+      "AXTI",
+      "SIVE",
+      "NVDA"
+    ],
+    "href_en": "analyses/topic-2bde5fabbc/index.html",
+    "href_zh": "analyses/topic-2bde5fabbc/index.zh.html"
+  },
+  {
     "query": "HBM",
     "intent": "industry",
     "canonical_theme": "HBM",

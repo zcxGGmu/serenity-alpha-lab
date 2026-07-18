@@ -1,0 +1,27 @@
+{
+  "query": "光芯片",
+  "language": "zh",
+  "intent": "theme",
+  "canonical_theme": "光芯片",
+  "expanded_query": "光芯片",
+  "candidate_tickers": [
+    "AAOI",
+    "LITE",
+    "COHR",
+    "AXTI",
+    "SIVE",
+    "NVDA"
+  ],
+  "quality": {
+    "score": 68,
+    "status": "needs-evidence"
+  },
+  "reports": {
+    "dashboard_en": "index.html",
+    "dashboard_zh": "index.zh.html",
+    "deliverable": "reports/deliverable-research-report.md",
+    "coverage_matrix": "reports/universe-coverage-matrix.md",
+    "evidence_queue": "reports/evidence-acquisition-queue.md"
+  },
+  "research_only": true
+}
