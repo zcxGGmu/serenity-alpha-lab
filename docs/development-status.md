@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
-> 最后更新：2026-07-19<br>
-> 最近阶段性任务：`SAL-P0-009` 冻结数据库 Schema 与迁移样本<br>
+> 最后更新：2026-07-20<br>
+> 最近阶段性任务：`SAL-P0-010` 冻结报告与信号评价金标<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P0 上游接管与行为基线<br>
 > 当前 Gate：G0，未通过<br>
-> 任务完成度：10/129<br>
-> 当前可执行任务：`SAL-P0-010`、`SAL-P0-012`，状态均为 `READY`；`SAL-P0-013` 仍等待 P0 剩余任务完成<br>
+> 任务完成度：11/129<br>
+> 当前可执行任务：`SAL-P0-012`，状态为 `READY`；`SAL-P0-013` 仍等待 P0 剩余任务完成<br>
 > 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -33,21 +33,21 @@
 - 完成 `SAL-P0-007`：新增可复跑 Docker baseline 脚本，构建镜像并验证 server `/api/health` 与 analyzer import smoke；证据见 [DSA Docker 基线记录](./docker-baseline.md)。
 - 完成 `SAL-P0-008`：新增 API/config contract baseline 脚本并冻结运行时 OpenAPI、配置 Schema、环境变量/配置字段 inventory 与摘要哈希；OpenAPI `3.1.0` 含 105 paths、119 operations、186 component schemas，配置 inventory 含 386 fields；证据见 [DSA API 与配置契约基线记录](./api-config-contract-baseline.md) 和 [API/config baseline summary](./baselines/dsa-v3.26.1/api-config/summary.json)。
 - 完成 `SAL-P0-009`：新增数据库 baseline 脚本并冻结 SQLite Schema、表/索引/外键元数据、稳定 SQL fixture、内容哈希与摘要；基线含 28 张业务表、177 个索引、31 行脱敏合成 fixture 数据，覆盖分析、信号评价、持仓、会话和 LLM usage；`fixture.sql` 已做恢复、外键和内容哈希 round-trip 校验；证据见 [DSA 数据库 Schema 与迁移样本基线记录](./database-schema-baseline.md) 和 [database baseline summary](./baselines/dsa-v3.26.1/database/summary.json)。
+- 完成 `SAL-P0-010`：新增报告与信号评价 baseline 脚本并冻结离线 Stub 结构化报告、单股/聚合/市场复盘 Markdown、DecisionSignal 摘要、Signal Evaluation 明细/汇总和内容哈希；基线含 2 个结构化报告、3 个 Markdown 报告、6 个 Signal Evaluation cases，`direction_accuracy_pct=60.0`、`win_rate_pct=60.0`；证据见 [DSA 报告与信号评价金标基线记录](./report-signal-golden-baseline.md) 和 [report/signal baseline summary](./baselines/dsa-v3.26.1/report-signal/summary.json)。
 - 完成 `SAL-P0-011`：新增供应链 baseline 脚本，生成 Python SBOM/license/audit、Web npm audit/license、Syft image SBOM 和 Grype image vulnerabilities；证据见 [DSA 供应链基线记录](./supply-chain-baseline.md)。
 
 ## 未完成
 
 ### 当前阻塞 Gate G0 的 P0 任务
 
-- `SAL-P0-010` 已由后端基线解锁，当前为 `READY`，但尚未冻结报告与信号评价金标。
 - `SAL-P0-012` 已满足依赖，当前为 `READY`，但尚未建立上游维护文档和 CI required checks；需吸收 `DSA-PATCH-001` 至 `DSA-PATCH-003`、Web smoke fixture、`SAL-P0-011` scanner baseline 和 `SAL-P0-009` database baseline。
 - `SAL-P0-013` 仍为 `TODO`，Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P0 至 P6 仍有 119 项工程任务未完成。
-- 尚未创建运行时代码、Worker、Quant Core 或部署环境；`SAL-P0-009` 只生成 P0 数据库基线和脱敏 fixture。
+- P0 至 P6 仍有 118 项工程任务未完成。
+- 尚未创建运行时代码、Worker、Quant Core 或部署环境；`SAL-P0-009` 与 `SAL-P0-010` 只冻结 P0 数据库、报告和信号评价基线。
 - 本地仓库当前已配置 `origin` 指向 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，`upstream` 指向 `https://github.com/ZhuLinsen/daily_stock_analysis.git`；后续变更需继续复验双 remote 约束。
 - DSA Python 依赖尚未正式锁定，仍含范围版本和 AlphaSift Git 依赖；`SAL-P0-011` 已完成 SBOM/audit baseline，正式锁文件和离线缓存策略后续由 `SAL-P1-003` 处理。
 - Web lockfile 可安装并构建，但 npm audit 暴露 16 个漏洞（10 个 high），且 lockfile 混用 `registry.npmjs.org` 与 `registry.npmmirror.com`；不得在 P0 基线记录中直接运行 `npm audit fix` 改写上游 lockfile。Docker image Grype baseline 暴露 39 critical、84 high，后续由 `SAL-P6-005` 发布安全门禁关闭或豁免。
@@ -65,13 +65,13 @@
 - 阻断基线 gate 的上游缺陷/测试契约漂移通过可登记、可复跑的本地 patch 文件处理；当前登记补丁为 `DSA-PATCH-001` 至 `DSA-PATCH-003`，见 [DSA 上游补丁登记](./upstream-patches.md)。
 - API 与配置契约冻结源为锁定 worktree 的运行时 FastAPI OpenAPI 和配置 registry/dataclass/env inventory；上游静态 `docs/architecture/api_spec.json` 已滞后，不作为 Serenity P0 的权威冻结源。
 - 数据库 Schema 冻结源为锁定 worktree 的 `src.storage.Base.metadata.create_all()` 和 `DatabaseManager` 兼容迁移后的实际 SQLite 形状；提交稳定 SQL/JSON 快照，不提交运行时 SQLite 二进制文件。
+- 报告与 Signal Evaluation 金标冻结源为锁定 worktree 的离线 Stub LLM JSON、固定时钟和合成行情输入；提交稳定 Markdown/JSON 快照，不触发真实 Provider、真实 LLM 或通知发送。
 
 ## 下一步
 
-1. 启动 `SAL-P0-010`：冻结结构化报告、Markdown 和 Signal Evaluation 金标；只用离线 fixture 和 Stub，不触发真实 Provider/LLM。
-2. 推进 `SAL-P0-012`：建立上游维护文档和 CI required checks，纳入 patches、Web smoke fixture、供应链 scanner、API/config 和 database baseline。
-3. 准备 `SAL-P0-013` Gate G0：汇总 P0 测试、构建、许可证、补丁、数据库、报告金标和目标环境证据；通过前不得进入 P1 或 Quant Core。
-4. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
+1. 推进 `SAL-P0-012`：建立上游维护文档和 CI required checks，纳入 patches、Web smoke fixture、供应链 scanner、API/config、database 和 report/signal baseline。
+2. 准备 `SAL-P0-013` Gate G0：汇总 P0 测试、构建、许可证、补丁、数据库、报告金标、供应链和目标环境证据；通过前不得进入 P1 或 Quant Core。
+3. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
 
 ## 固定收尾习惯
 
@@ -105,16 +105,15 @@
 当前状态：
 - Phase：P0 上游接管与行为基线
 - Gate：G0 未通过
-- 已完成：SAL-P0-001 至 SAL-P0-009，以及 SAL-P0-011
-- 最近完成：SAL-P0-009 冻结数据库 Schema 与迁移样本
+- 已完成：SAL-P0-001 至 SAL-P0-011
+- 最近完成：SAL-P0-010 冻结报告与信号评价金标
 - 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
-- 进度：P0 10/13，总计 10/129
+- 进度：P0 11/13，总计 11/129
 
 下一步优先执行：
-1. SAL-P0-010 冻结报告与信号评价金标
-2. SAL-P0-012 建立上游维护文档和 CI required checks
-3. SAL-P0-013 Gate G0 评审
+1. SAL-P0-012 建立上游维护文档和 CI required checks
+2. SAL-P0-013 Gate G0 评审
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

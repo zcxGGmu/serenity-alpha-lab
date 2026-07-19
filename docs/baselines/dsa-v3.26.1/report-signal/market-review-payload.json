@@ -1,0 +1,42 @@
+{
+  "kind": "market_review",
+  "language": "zh",
+  "region": "cn",
+  "sections": [
+    {
+      "key": "overview",
+      "markdown": "> 指数震荡收高，成交额温和放大。\n\n### 一、盘面总览\n权重与成长风格均有修复，但追高意愿仍有限。",
+      "title": "2026-01-05 大盘复盘"
+    },
+    {
+      "key": "fund_flow",
+      "markdown": "- 北向资金小幅净流入。\n- 高股息、AI 算力和消费电子轮动活跃。",
+      "title": "资金方向"
+    },
+    {
+      "key": "watchlist",
+      "markdown": "关注成交额能否维持在万亿附近，以及权重板块是否继续承接。",
+      "title": "明日观察"
+    }
+  ],
+  "sectors": {
+    "bottom": [
+      {
+        "change_pct": -1.12,
+        "name": "煤炭"
+      }
+    ],
+    "top": [
+      {
+        "change_pct": 3.25,
+        "name": "AI算力"
+      },
+      {
+        "change_pct": 2.18,
+        "name": "消费电子"
+      }
+    ]
+  },
+  "title": "2026-01-05 大盘复盘",
+  "version": 1
+}

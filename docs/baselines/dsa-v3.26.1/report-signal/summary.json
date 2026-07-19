@@ -1,0 +1,73 @@
+{
+  "artifact_set": "report-signal-golden-fixtures",
+  "artifacts": {
+    "aggregate-report.md": "29286358099a31a69a9992b4fe1b5fccc392e348b7d9eea53b127b4d9ba7e50d",
+    "content-hashes.json": "19ba57a789ff1fafdbac737706206129d8a2d7f3281a4aac3d264c1af45e1042",
+    "decision-signal-summary.json": "63e8dc93d7a2ee762844bd9c9099ef8888cb6161d54c9c302e3d8679df8bbf64",
+    "inputs.json": "22798d946c647640bc643819664d6faa2b64c3c11b197cf21ab3f8ff5a8430ad",
+    "market-review-payload.json": "9204a045d68192ed5193b8360ffdb639be8ee3939dafc7931ca06eaf94481fd4",
+    "market-review-report.md": "bfc9164b19553db5f58f1dad105ff8aef37234765bab77ef37e40bf19995d5d5",
+    "signal-evaluation-summary.json": "54f1bc63cf3aabadede28d7f09012833386dcc414f8797f77ac5cde301a80940",
+    "signal-evaluations.json": "7f0d5eec142b8cf9b3e415be2c88df60a4e71a4ad71a50058572f1101ee8804c",
+    "single-stock-report.md": "a103811b18bd7caf20e18e491e348995928932d17eede6c3440319caeb4ec86a",
+    "structured-reports.json": "6eb167abbaf546a1f7318bbc62eeab023d32ce58e4ace8896cd1c5f9c86b0fd0",
+    "stub-llm-responses.json": "18deb63a8ca6afb63a8d705402f12f5cb4b2acea33500d8d25db15335ed91c70"
+  },
+  "baseline": {
+    "commit": "e8a9ca7742e8cb2498c8f491dd76d239b3064e1a",
+    "tag": "v3.26.1",
+    "upstream": "ZhuLinsen/daily_stock_analysis"
+  },
+  "counts": {
+    "markdown_report_count": 3,
+    "signal_evaluation_case_count": 6,
+    "structured_report_count": 2,
+    "stub_llm_response_count": 2
+  },
+  "coverage": {
+    "aggregate_report": {
+      "artifact": "aggregate-report.md",
+      "covered": true
+    },
+    "decision_signal_summary": {
+      "artifact": "decision-signal-summary.json",
+      "covered": true
+    },
+    "market_review_report": {
+      "artifact": "market-review-report.md",
+      "covered": true
+    },
+    "signal_evaluation_metrics": {
+      "artifact": "signal-evaluation-summary.json",
+      "covered": true
+    },
+    "single_stock_report": {
+      "artifact": "single-stock-report.md",
+      "covered": true
+    }
+  },
+  "generated_at": "2026-07-19T00:00:00Z",
+  "signal_evaluation_key_metrics": {
+    "ambiguous_rate": 33.33,
+    "avg_days_to_first_hit": 1.0,
+    "avg_simulated_return_pct": -1.0,
+    "avg_stock_return_pct": -0.8,
+    "completed_count": 5,
+    "direction_accuracy_pct": 60.0,
+    "insufficient_count": 1,
+    "neutral_rate_pct": 0.0,
+    "stop_loss_trigger_rate": 33.33,
+    "take_profit_trigger_rate": 66.67,
+    "total_evaluations": 6,
+    "win_rate_pct": 60.0
+  },
+  "validation": {
+    "content_integrity_passed": true,
+    "real_notification_sends_zero": true,
+    "real_provider_calls_zero": true,
+    "required_coverage_passed": true,
+    "schema_validation_passed": true,
+    "secret_scan_passed": true,
+    "uses_stub_llm_only": true
+  }
+}

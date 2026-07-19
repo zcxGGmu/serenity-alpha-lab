@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 10/13 | G0 | DSA 可重复基线、金标、SBOM |
+| P0 上游接管 | 1 | READY | 11/13 | G0 | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **10/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **11/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -221,12 +221,16 @@ P0 基线
 
 ### SAL-P0-010 冻结报告与信号评价金标
 
-- [ ] [READY] 保存结构化报告、Markdown 和 Signal Evaluation 金标
-- 元数据：优先级 P0 | 负责人 AI/QE | 估算 1.5d | 实际 - | 依赖 SAL-P0-004
+- [x] [DONE] 保存结构化报告、Markdown 和 Signal Evaluation 金标
+- 元数据：优先级 P0 | 负责人 AI/QE | 估算 1.5d | 实际 0.5d | 依赖 SAL-P0-004 | 开始 2026-07-19 | 完成 2026-07-20
 - 交付物：固定输入、Stub LLM 输出、报告 fixture、评价结果。
 - 验收：
   - 单股报告、聚合报告、市场复盘至少各一个。
   - DSA 现有 Backtest 关键指标有可比较的金标。
+- 结果：新增 `scripts/run-dsa-report-signal-baseline.sh`，在锁定 DSA worktree 上应用 `DSA-PATCH-001` 至 `DSA-PATCH-003` 后，以离线 Stub LLM、固定时钟和合成行情输入生成结构化报告、单股/聚合/市场复盘 Markdown、DecisionSignal 摘要和 Signal Evaluation 金标；默认模式与 `docs/baselines/dsa-v3.26.1/report-signal/` 做 byte-for-byte diff。
+- 摘要：提交 12 个快照文件；结构化报告 2 个，Markdown 报告 3 个，Signal Evaluation cases 6 个；`total_evaluations=6`、`completed_count=5`、`insufficient_count=1`、`direction_accuracy_pct=60.0`、`win_rate_pct=60.0`。
+- 限制：本任务不触发真实 Provider、真实 LLM、Scheduler、Bot/Webhook 或真实通知发送；不把 Signal Evaluation 解释为正式组合回测。
+- 验收证据：见 [DSA 报告与信号评价金标基线记录](./report-signal-golden-baseline.md)；快照见 [report/signal baseline summary](./baselines/dsa-v3.26.1/report-signal/summary.json)。
 
 ### SAL-P0-011 建立供应链基线
 
@@ -1395,6 +1399,7 @@ P0 基线
 | DEC-006 | 2026-07-19 | 锁定 DSA release 上的最小本地补丁 | 对阻断基线 gate 的上游缺陷/测试契约漂移使用可登记、可复跑的 patch 文件；当前携带 `DSA-PATCH-001`、`DSA-PATCH-002`、`DSA-PATCH-003`，补丁只应用到隔离 worktree，不把 DSA 源码混入本项目工作树 | [upstream-patches.md](./upstream-patches.md) | SAL-P0-004,SAL-P0-005,SAL-P0-012 | G0 |
 | DEC-007 | 2026-07-19 | API 与配置契约冻结源 | 上游静态 `docs/architecture/api_spec.json` 已滞后，P0 以锁定 worktree 中 `create_app().openapi()` 运行时输出作为 OpenAPI 冻结源；配置契约以 `src.core.config_registry.build_schema_response()`、`Config` dataclass、`.env.example` 和代码环境变量引用生成 inventory | [api-config-contract-baseline.md](./api-config-contract-baseline.md); [baselines/dsa-v3.26.1/api-config/summary.json](./baselines/dsa-v3.26.1/api-config/summary.json) | SAL-P0-008,SAL-P0-012,SAL-P0-013 | G0 |
 | DEC-008 | 2026-07-19 | 数据库 Schema 与 fixture 冻结方式 | P0 以锁定 worktree 的 `src.storage.Base.metadata.create_all()` 和 `DatabaseManager` 兼容迁移后的实际 SQLite 形状作为冻结源；提交稳定 SQL/JSON 快照和内容哈希，不提交运行时 SQLite 二进制文件 | [database-schema-baseline.md](./database-schema-baseline.md); [baselines/dsa-v3.26.1/database/summary.json](./baselines/dsa-v3.26.1/database/summary.json) | SAL-P0-009,SAL-P1-012,SAL-P1-013 | G0 |
+| DEC-009 | 2026-07-20 | 报告与 Signal Evaluation 金标冻结方式 | P0 以离线 Stub LLM JSON、固定时钟和合成行情输入冻结 DSA 报告渲染与 Signal Evaluation 行为；提交稳定 Markdown/JSON 快照和内容哈希，不触发真实 Provider、真实 LLM 或通知发送 | [report-signal-golden-baseline.md](./report-signal-golden-baseline.md); [baselines/dsa-v3.26.1/report-signal/summary.json](./baselines/dsa-v3.26.1/report-signal/summary.json) | SAL-P0-010,SAL-P4-001,SAL-P5-017 | G0 |
 
 ## 14. 验收证据登记
 
@@ -1410,6 +1415,7 @@ P0 基线
 | AEV-008 | SAL-P0-007 | Docker build、server health 与 analyzer import smoke 记录 | [docker-baseline.md](./docker-baseline.md) | `serenity-dsa-p0@sha256:7de0eca96fa8622e8b4b7292890f413e1a8fc52417f02c9c9a2829a364918076`; Docker `29.4.0`; Compose `5.1.3` | BE | 2026-07-19 |
 | AEV-009 | SAL-P0-008 | OpenAPI 与配置契约快照、diff gate 记录 | [api-config-contract-baseline.md](./api-config-contract-baseline.md); [baselines/dsa-v3.26.1/api-config/summary.json](./baselines/dsa-v3.26.1/api-config/summary.json) | OpenAPI `3.1.0`; 105 paths / 119 operations / 186 schemas; config schema 179 fields; config inventory 386 fields; `scripts/run-dsa-api-config-baseline.sh` PASS | BE | 2026-07-19 |
 | AEV-010 | SAL-P0-009 | SQLite Schema、表/索引元数据、脱敏 fixture 与内容哈希基线 | [database-schema-baseline.md](./database-schema-baseline.md); [baselines/dsa-v3.26.1/database/summary.json](./baselines/dsa-v3.26.1/database/summary.json) | 28 tables; 177 indexes; 31 fixture rows; `scripts/run-dsa-database-baseline.sh` PASS; SQL restore/FK/content-hash round-trip PASS; `fixture.sql` SHA-256 `382f4719d813f20b233786d90b0b5de66637a40d7ae35de61c69c4b0f57fa931` | BE | 2026-07-19 |
+| AEV-011 | SAL-P0-010 | 报告 Markdown、结构化报告、Signal Evaluation 与内容哈希金标 | [report-signal-golden-baseline.md](./report-signal-golden-baseline.md); [baselines/dsa-v3.26.1/report-signal/summary.json](./baselines/dsa-v3.26.1/report-signal/summary.json) | 2 structured reports; 3 Markdown reports; 6 Signal Evaluation cases; `scripts/run-dsa-report-signal-baseline.sh` PASS; targeted upstream tests `137 passed`; `summary.json` SHA-256 `01e7c0ec1a7070f5e7923414e7ef57f1ef5eb40d9c3bbf26da4ce3529bed0adb` | AI/QE | 2026-07-20 |
 
 允许的证据：
 
@@ -1447,4 +1453,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-009` 以及 `SAL-P0-011`，完成度为 10/13；最近可评审交付为本次 `SAL-P0-009` 数据库 Schema 与迁移样本基线。下一步优先启动 `SAL-P0-010` 报告与信号评价金标冻结；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 P1、Quant Core 或大规模重构。
+当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-011`，完成度为 11/13；最近可评审交付为本次 `SAL-P0-010` 报告与信号评价金标基线。下一步优先推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 P1、Quant Core 或大规模重构。
