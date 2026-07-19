@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 7/13 | G0 | DSA 可重复基线、金标、SBOM |
+| P0 上游接管 | 1 | READY | 8/13 | G0 | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **7/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **8/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -156,17 +156,17 @@ P0 基线
 
 ### SAL-P0-005 建立 Web 测试与构建基线
 
-- [ ] [BLOCKED] 执行 DSA Web lint、test、build 和 Smoke
-- 元数据：优先级 P0 | 负责人 FE | 估算 1d | 实际 0.5d | 依赖 SAL-P0-003 | 开始 2026-07-19 | 阻塞 2026-07-19
+- [x] [DONE] 执行 DSA Web lint、test、build 和 Smoke
+- 元数据：优先级 P0 | 负责人 FE | 估算 1d | 实际 1d | 依赖 SAL-P0-003 | 开始 2026-07-19 | 完成 2026-07-19
 - 交付物：构建日志、bundle 摘要、关键页面截图、已知 warning。
 - 验收：
   - `npm ci`、lint、Vitest、Vite build 通过。
   - Playwright 至少覆盖启动、登录/初始化、分析页和历史页。
-- 结果：`npm ci`、`npm run lint` 和 `npm run build` 已通过；`npm ci` 安装 460 个 packages，audit 摘要为 16 个漏洞（1 low、5 moderate、10 high）；Vite build 生成 `../../static/` 产物，3229 modules transformed。
-- 阻塞：`npm run test` 稳定失败 1 个用例：`AlertRuleForm > shows JP/KR options for market region in Chinese UI mode`。失败用例期望 `日股（jp）`/`韩股（kr）`，但同一测试文件相邻用例和 `ALERT_MARKET_REGION_OPTIONS` 当前实现只允许 `cn`/`hk`/`us`，属于上游测试/行为契约矛盾。
-- Smoke 限制：`npm run test:smoke -- --reporter=line` 返回 0，但 13 个 Playwright 测试全部 skipped；`DSA_WEB_SMOKE_PASSWORD` 未配置时不会启动 backend/Vite webServer，也不会覆盖登录、分析页或历史页。
-- 解除条件：明确 JP/KR 市场选项期望并修正测试或产品契约；提供受控 smoke password 与可运行 backend webui-only 环境；复核 npm audit high 风险并在供应链基线给出处理计划。
-- 阻塞证据：见 [DSA Web 测试与构建基线尝试记录](./web-baseline-test-build.md)。
+- 结果：`npm ci`、`npm run lint`、`npm run build`、`npm run test` 和真实 Playwright smoke 已通过；`npm ci` 安装 461 个 packages，audit 摘要仍为 16 个漏洞（1 low、5 moderate、10 high）；Vite build 生成 `../../static/` 产物，3229 modules transformed。
+- 本地补丁：通过 `DSA-PATCH-002` 修正 Alert market region 测试契约；通过 `DSA-PATCH-003` 对齐 Web smoke E2E 与当前 UI/fixture 契约；两个补丁均由 `scripts/apply-dsa-baseline-patches.sh` 幂等应用。
+- Smoke：新增 `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/env/SQLite 历史报告 fixture；`npm run test:smoke -- --reporter=line` 真实执行 13 个 Playwright tests，最终 `13 passed`，无 skipped。
+- 限制：本任务不修复 npm audit high 漏洞，不运行 `npm audit fix`，不提交 `.worktrees`、`node_modules`、`static`、`.cache`、Playwright `test-results`、截图或 trace。
+- 验收证据：见 [DSA Web 测试与构建基线记录](./web-baseline-test-build.md) 和 [DSA 上游补丁登记](./upstream-patches.md)。
 
 ### SAL-P0-006 建立 Desktop、CLI 与 Bot Smoke 基线
 
@@ -1347,7 +1347,7 @@ P0 基线
 |---|---|---|---|---|---|---|---|
 | BLK-001 | - | - | - | - | - | - | CLOSED |
 | BLK-002 | SAL-P0-004 | 已解除：CI 依赖可用，backend syntax/flake8/deterministic/collect/offline-tests 已正式复跑并记录；顺序依赖失败通过 `DSA-PATCH-001` 修复 | BE | 2026-07-19 | 2026-07-19 | 已运行 `scripts/run-dsa-backend-offline-baseline.sh`，记录测试数量、失败分类和证据 | CLOSED |
-| BLK-003 | SAL-P0-005 | Web Vitest 中 JP/KR 市场区域期望与相邻用例/当前实现矛盾；Playwright smoke 缺少 `DSA_WEB_SMOKE_PASSWORD` 导致 13 个用例全部跳过 | FE | 2026-07-19 | 2026-07-20 | 明确 JP/KR 契约并使 `npm run test` 返回 0；提供 smoke password 与可运行 backend 后 13 个 smoke 用例真实执行 | OPEN |
+| BLK-003 | SAL-P0-005 | 已解除：`DSA-PATCH-002` 对齐 JP/KR market-light 测试契约；`DSA-PATCH-003` 对齐真实 Web smoke E2E；`scripts/seed-dsa-web-smoke-fixture.sh` 提供本地 auth/history fixture | FE | 2026-07-19 | 2026-07-19 | 已运行 `npm run test` 得到 `965 passed, 2 skipped`；真实 `npm run test:smoke -- --reporter=line` 得到 `13 passed`、无 skipped | CLOSED |
 | BLK-004 | SAL-P0-011 | 已解除：Python/Node/镜像 SBOM、许可证和漏洞基线已生成；Critical/High 已登记 owner、计划和截止任务 | SEC | 2026-07-19 | 2026-07-19 | 已运行 `scripts/run-dsa-supply-chain-baseline.sh`，记录 Python audit、Web audit、Syft SBOM 和 Grype 漏洞摘要 | CLOSED |
 
 规则：
@@ -1371,7 +1371,7 @@ P0 基线
 | RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
 | RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-003` 引入正式锁文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
 | RSK-009 | 当前 Windows PATH 缺少 Python 3.11；Docker daemon 需在恢复时复验 | 中 | 中 | 恢复会话时本地工具链不可用 | 已用 Python 3.11.15 建立 `.cache/dsa-p0/venv` 并完成 `SAL-P0-004`；Orbstack Docker daemon 已用于完成 `SAL-P0-007`，后续 Docker/SBOM 任务仍需先复验 `docker info` | BE | SAL-P0-011 | CLOSED |
-| RSK-010 | DSA Web npm audit 存在 10 个 high 漏洞 | 高 | 高 | `npm audit` 输出 16 个漏洞，其中 high 为 10 个 | P0 阶段不运行 `npm audit fix` 改写上游 lock；已在 `SAL-P0-011` 记录 owner/计划，后续由 `SAL-P0-005` 升级补丁或 `SAL-P6-005` 门禁阻断未豁免 Critical/High | SEC/FE | SAL-P6-005 | OPEN |
+| RSK-010 | DSA Web npm audit 存在 10 个 high 漏洞 | 高 | 高 | `npm audit` 输出 16 个漏洞，其中 high 为 10 个 | P0 阶段不运行 `npm audit fix` 改写上游 lock；已在 `SAL-P0-011` 记录 owner/计划，后续由受控上游同步、依赖升级或 `SAL-P6-005` 门禁阻断未豁免 Critical/High | SEC/FE | SAL-P6-005 | OPEN |
 | RSK-011 | DSA Web lockfile 混用 npmjs 与 npmmirror resolved URL | 中 | 中 | `package-lock.json` 同时包含 `registry.npmjs.org` 与 `registry.npmmirror.com` | `SAL-P0-011` 先原样记录；后续由上游同步/内部缓存代理/受控 lockfile 规范决定是否统一 registry，不在 P0 直接改写 | SEC/FE | SAL-P0-012 | OPEN |
 | RSK-012 | DSA Docker image 存在 Critical/High 漏洞 | 高 | 高 | Grype 扫描 `serenity-dsa-p0:sal-p0-007` 输出 39 critical、84 high | 已在 `SAL-P0-011` 记录 SBOM 与 Grype baseline；BE/SEC 在 `SAL-P6-005` 前通过修复 base image、apt upgrade、依赖锁或正式豁免关闭 | BE/SEC | SAL-P6-005 | OPEN |
 
@@ -1382,9 +1382,9 @@ P0 基线
 | DEC-001 | 2026-07-19 | DSA 正式基线 | 采用 `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；拒绝未发布 `main@487e49e565ffd1b96a7cf4d855f99cee3c981eaa` 作为初始基线 | [upstream-baseline-selection.md](./upstream-baseline-selection.md)；ADR-001 待 SAL-P1-001 正式化 | SAL-P0-001,SAL-P0-002 | G0 |
 | DEC-002 | 2026-07-19 | DSA Git 历史接管方式 | 通过 `upstream` remote 导入上游 heads/tags，创建本地不可变基线 tag `upstream/dsa-v3.26.1`；不合并、不切换、不压平复制 DSA 源码 | [upstream-history-import.md](./upstream-history-import.md)；ADR-001 待 SAL-P1-001 正式化 | SAL-P0-002,SAL-P0-012 | G0 |
 | DEC-003 | 2026-07-19 | DSA 基线环境物化方式 | 通过 `.worktrees/dsa-v3.26.1` 隔离物化上游 tag，通过 `.cache/dsa-p0` 存放 Python/npm 缓存；本项目工作树只提交脚本和文档，不混入 DSA 源码 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | SAL-P0-003,SAL-P0-004,SAL-P0-005,SAL-P0-007 | G0 |
-| DEC-004 | 2026-07-19 | Web 基线失败处理方式 | P0 Web 基线先记录上游原样行为，不在隔离 worktree 中修正 JP/KR 测试或执行 `npm audit fix`；后续通过 Gate/ADR 决定是同步上游修复、补丁兼容还是本地扩展 | [web-baseline-test-build.md](./web-baseline-test-build.md) | SAL-P0-005,SAL-P0-011,SAL-P0-012 | G0 |
+| DEC-004 | 2026-07-19 | Web 基线失败处理方式 | 对阻断 Gate 的 Web 测试契约漂移采用登记补丁而非产品范围扩展：`DSA-PATCH-002` 保持 market-light 仅支持 `cn/hk/us`，`DSA-PATCH-003` 对齐当前 Web smoke UI/fixture；仍不运行 `npm audit fix` 改写上游 lockfile | [web-baseline-test-build.md](./web-baseline-test-build.md); [upstream-patches.md](./upstream-patches.md) | SAL-P0-005,SAL-P0-011,SAL-P0-012 | G0 |
 | DEC-005 | 2026-07-19 | 供应链基线处理方式 | P0 供应链生成 SBOM、license 和漏洞基线，但不在 P0 直接改写上游 lockfile/base image；Critical/High 通过 owner、计划、截止任务进入后续门禁 | [supply-chain-baseline.md](./supply-chain-baseline.md) | SAL-P0-011,SAL-P0-012,SAL-P6-005 | G0 |
-| DEC-006 | 2026-07-19 | 锁定 DSA release 上的最小本地补丁 | 对阻断基线 gate 的上游缺陷使用可登记、可复跑、带 Characterization Test 的 patch 文件；补丁只应用到隔离 worktree，不把 DSA 源码混入本项目工作树 | [upstream-patches.md](./upstream-patches.md) | SAL-P0-004,SAL-P0-012 | G0 |
+| DEC-006 | 2026-07-19 | 锁定 DSA release 上的最小本地补丁 | 对阻断基线 gate 的上游缺陷/测试契约漂移使用可登记、可复跑的 patch 文件；当前携带 `DSA-PATCH-001`、`DSA-PATCH-002`、`DSA-PATCH-003`，补丁只应用到隔离 worktree，不把 DSA 源码混入本项目工作树 | [upstream-patches.md](./upstream-patches.md) | SAL-P0-004,SAL-P0-005,SAL-P0-012 | G0 |
 
 ## 14. 验收证据登记
 
@@ -1394,7 +1394,7 @@ P0 基线
 | AEV-002 | SAL-P0-002 | Git remote/tag/对象完整性记录 | [upstream-history-import.md](./upstream-history-import.md) | `upstream/dsa-v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `upstream/main @ 487e49e565ffd1b96a7cf4d855f99cee3c981eaa` | TL | 2026-07-19 |
 | AEV-003 | SAL-P0-003 | 环境矩阵与 bootstrap 校验记录 | [dsa-baseline-environment.md](./dsa-baseline-environment.md) | Python 3.11/3.12；Node `>=20.19.0 <27`；Docker `python:3.11-slim-bookworm`；DSA `upstream/dsa-v3.26.1` | BE | 2026-07-19 |
 | AEV-004 | SAL-P0-004 | 后端离线 gate 通过记录 | [backend-offline-test-baseline.md](./backend-offline-test-baseline.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Python `3.11.15`; pytest `9.1.1`; `DSA-PATCH-001`; `4455 passed, 4 deselected` | BE | 2026-07-19 |
-| AEV-005 | SAL-P0-005 | Web 依赖安装、lint、test、build、smoke 基线记录 | [web-baseline-test-build.md](./web-baseline-test-build.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Node `v24.12.0`; npm `11.6.2`; Vite `7.3.1` | FE | 2026-07-19 |
+| AEV-005 | SAL-P0-005 | Web 依赖安装、lint、test、build、smoke 基线记录 | [web-baseline-test-build.md](./web-baseline-test-build.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Node `v24.12.0`; npm `11.6.2`; Vite `7.3.1`; `DSA-PATCH-002`; `DSA-PATCH-003`; Vitest `965 passed, 2 skipped`; Playwright smoke `13 passed` | FE | 2026-07-19 |
 | AEV-006 | SAL-P0-011 | 供应链 SBOM、许可证和漏洞基线记录 | [supply-chain-baseline.md](./supply-chain-baseline.md) | Python SBOM 146 components; Web npm audit 16 vulnerabilities / 10 high; Web license inventory 529 packages; Syft image SBOM 7865 components; Grype 39 critical / 84 high | SEC | 2026-07-19 |
 | AEV-007 | SAL-P0-006 | Desktop、CLI、本地 API 与 Bot 离线 smoke 记录 | [desktop-cli-bot-smoke-baseline.md](./desktop-cli-bot-smoke-baseline.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Python `3.11.15`; Node `v25.9.0`; npm `11.12.1` | FE/AI | 2026-07-19 |
 | AEV-008 | SAL-P0-007 | Docker build、server health 与 analyzer import smoke 记录 | [docker-baseline.md](./docker-baseline.md) | `serenity-dsa-p0@sha256:7de0eca96fa8622e8b4b7292890f413e1a8fc52417f02c9c9a2829a364918076`; Docker `29.4.0`; Compose `5.1.3` | BE | 2026-07-19 |
@@ -1435,4 +1435,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前 P0 下一步优先解除 `SAL-P0-005` 的 Web Vitest 契约矛盾和 Playwright smoke 凭证阻塞，并启动 `SAL-P0-008` 至 `SAL-P0-010` 的 API、DB、报告金标冻结工作；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks。在 Gate G0 前不应开始 Quant Core 或大规模重构。
+当前 P0 下一步优先启动 `SAL-P0-008` 至 `SAL-P0-010` 的 API、DB、报告金标冻结工作；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 Quant Core 或大规模重构。

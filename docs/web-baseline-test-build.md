@@ -1,15 +1,15 @@
-# DSA Web 测试与构建基线尝试记录
+# DSA Web 测试与构建基线记录
 
 > 任务：`SAL-P0-005` 建立 Web 测试与构建基线<br>
 > 执行日期：2026-07-19<br>
 > 上游基线：`upstream/dsa-v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`<br>
-> 当前状态：`BLOCKED`
+> 当前状态：`DONE`
 
 ## 1. 执行结论
 
-本次已复验 DSA Web 依赖安装、lint、Vitest、Vite build 与 Playwright smoke 入口。`npm ci`、`npm run lint` 和 `npm run build` 可在隔离 worktree 中完成；但 `npm run test` 存在 1 个稳定失败用例，Playwright smoke 因缺少 `DSA_WEB_SMOKE_PASSWORD` 全部跳过，因此 `SAL-P0-005` 不得标记完成。
+`SAL-P0-005` 已解除阻塞。Web 依赖安装、lint、Vitest、Vite build 与真实 Playwright smoke 均已在锁定 DSA worktree 中完成。阻断项通过登记补丁处理：`DSA-PATCH-002` 对齐 Alert market region 测试契约，`DSA-PATCH-003` 对齐 Web smoke E2E 与当前 UI/fixture 契约。
 
-本任务只记录上游 Web 基线行为，不修改 `.worktrees/dsa-v3.26.1` 中的 DSA 源码、不修正测试期望，也不提交 `node_modules`、`static` 或 `test-results` 等生成产物。
+本任务没有运行 `npm audit fix`，没有改写上游 lockfile，也没有把 `.worktrees`、`node_modules`、`static`、Playwright `test-results`、`.cache` 或截图产物纳入提交。
 
 ## 2. 环境与版本
 
@@ -21,71 +21,79 @@
 | npm | `11.6.2`，满足 Web engines `>=10` |
 | Vite | `7.3.1` |
 | Web package | `apps/dsa-web/package-lock.json` |
+| 本地 smoke env | `.cache/dsa-p0/web-smoke/.env`，由 `scripts/seed-dsa-web-smoke-fixture.sh` 生成 |
 
 ## 3. 执行记录
 
 | 命令 | 结果 | 说明 |
 |---|---|---|
-| `scripts/bootstrap-dsa-baseline.ps1 -InstallWeb -InstallRetries 2` | 通过 | `npm ci` 安装 460 个 packages，audit 461 个 packages |
+| `npm ci` | 通过 | 安装 461 个 packages；audit 仍为 16 个漏洞（1 low、5 moderate、10 high） |
+| `scripts/apply-dsa-baseline-patches.sh --check-only` | 通过 | `0001`、`0002`、`0003` 均识别为 already applied |
+| `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` | 通过 | 1 个文件、18 个测试通过 |
 | `npm run lint` | 通过 | `eslint .` 返回 0 |
-| `npm run test` | 失败 | 90 个测试文件中 89 通过、1 失败；967 个测试中 964 通过、1 失败、2 skipped |
-| `npm run build` | 通过 | `tsc -b && vite build` 通过，3229 modules transformed，`vite build` 用时约 19.30s |
-| `npm run test:smoke -- --reporter=line` | 无有效覆盖 | 13 个 Playwright 测试全部 skipped，命令返回 0 但不能作为 smoke 通过证据 |
+| `npm run build` | 通过 | `tsc -b && vite build` 通过，3229 modules transformed |
+| `npm run test` | 通过 | 90 个测试文件通过；965 passed、2 skipped |
+| `scripts/seed-dsa-web-smoke-fixture.sh` | 通过 | 创建/复用本地 auth password 与 `600519` 历史报告 fixture |
+| `npm run test:smoke -- --reporter=line` | 通过 | 13 个 Playwright tests 真实执行并通过，未 skipped |
 
-## 4. Vitest 阻塞详情
+## 4. 本地补丁
 
-失败用例：
+### DSA-PATCH-002：Alert market region 测试契约
 
-```text
-src/components/alerts/__tests__/AlertRuleForm.test.tsx
-AlertRuleForm > shows JP/KR options for market region in Chinese UI mode
-```
+失败用例原先要求中文市场区域选项存在 `日股（jp）` 与 `韩股（kr）`，但当前 Web `MarketRegion` 类型、`ALERT_MARKET_REGION_OPTIONS` 与相邻用例均只支持 `cn`、`hk`、`us`。该问题分类为上游测试契约矛盾，而不是产品选项缺失。
 
-失败原因：中文 UI 的市场区域选项实际只有 `A 股（cn）`、`港股（hk）`、`美股（us）`，但该用例期望存在 `日股（jp）` 与 `韩股（kr）`。
+处理方式：将用例改为断言 market-light 区域仅展示 A 股、港股、美股，并明确 JP/KR 不展示。修复前 targeted Vitest 为 `17 passed / 1 failed`；修复后为 `18 passed`。
 
-同一测试文件中相邻用例又明确断言市场红绿灯规则不应出现 `日股（jp）` 与 `韩股（kr）`，与失败用例期望相互矛盾。当前源码 `src/locales/featureText.ts` 的 `ALERT_MARKET_REGION_OPTIONS` 也只定义了 `cn`、`hk`、`us` 三个区域。
+### DSA-PATCH-003：Web smoke E2E 契约
 
-该问题分类为上游测试/行为契约矛盾，不是本地依赖安装失败。解除前不能声明 Web Vitest 基线通过。
+真实 smoke 首轮暴露三类测试契约问题：
 
-## 5. Playwright Smoke 阻塞详情
+- 登录 helper 未处理首次设置密码的 `passwordConfirm` 输入。
+- 首页侧栏已由旧“历史分析”列表演进为“个股栏”工作区，旧 selector 失效。
+- ReportMarkdown smoke 依赖历史报告，但原 smoke 环境没有 fixture；chat/settings 部分断言使用了过时文案或非唯一 selector。
 
-`npm run test:smoke -- --reporter=line` 启动了 13 个 Playwright 测试，但全部跳过。原因是 Web smoke 规范与 `playwright.config.ts` 都以 `DSA_WEB_SMOKE_PASSWORD` 作为执行条件：
+处理方式：补丁只修改 e2e specs，不改产品实现；新增 `scripts/seed-dsa-web-smoke-fixture.sh` 在 `.cache/dsa-p0/web-smoke` 生成本地 auth/env/SQLite fixture，确保 Playwright 覆盖登录、首页分析入口、问股页、移动导航、设置页、回测页和 Markdown 报告复制路径。
 
-- `e2e/smoke.spec.ts` 缺少该变量时跳过 authenticated smoke tests。
-- `e2e/report-markdown.spec.ts` 缺少该变量时跳过 report markdown smoke tests。
-- `playwright.config.ts` 仅在该变量存在时启动 backend 与 Vite webServer。
-
-因此本次没有覆盖登录、初始化、分析页、历史页或关键页面截图；该命令返回 0 只能证明跳过逻辑生效，不能作为 Gate G0 的 Web smoke 通过证据。
-
-## 6. 构建摘要
+## 5. 构建摘要
 
 `npm run build` 已生成 `../../static/` 产物。主要 bundle 摘要如下：
 
 | 产物 | 原始大小 | gzip |
 |---|---:|---:|
-| `assets/vendor-charts-BxScyN67.js` | 366.87 kB | 108.14 kB |
-| `assets/SettingsPage-CTqhhHs0.js` | 300.74 kB | 98.67 kB |
-| `assets/HomePage-Omgmpllf.js` | 205.46 kB | 62.89 kB |
-| `assets/vendor-react-BzB2o5Ol.js` | 193.20 kB | 60.68 kB |
-| `assets/index-bQzGTcS6.js` | 170.73 kB | 52.49 kB |
-| `assets/index-gMNygBal.css` | 177.69 kB | 27.20 kB |
+| `assets/vendor-charts-BxScyN67.js` | 366.87 kB | 107.88 kB |
+| `assets/SettingsPage-F7BNzGFb.js` | 300.74 kB | 97.27 kB |
+| `assets/HomePage-CLRT5BZX.js` | 205.46 kB | 62.62 kB |
+| `assets/vendor-react-BzB2o5Ol.js` | 193.20 kB | 60.61 kB |
+| `assets/index-CQEA9A3U.js` | 170.73 kB | 52.08 kB |
+| `assets/index-gMNygBal.css` | 177.69 kB | 27.19 kB |
 
 构建产物保留在被忽略的 DSA worktree 输出目录中，不纳入本项目提交。
 
-## 7. 供应链提示
+## 6. 供应链提示
 
-`npm ci` 后的 audit 摘要为 16 个漏洞：1 个 low、5 个 moderate、10 个 high。P0 基线阶段不直接运行 `npm audit fix`，避免修改上游 lockfile；该风险已登记到任务清单，后续由 `SAL-P0-011` 供应链基线和 `SAL-P6-005` 安全门禁继续处理。
+`npm ci` 后的 audit 摘要仍为 16 个漏洞：1 个 low、5 个 moderate、10 个 high。P0 基线阶段不直接运行 `npm audit fix`，避免修改上游 lockfile；该风险已由 `SAL-P0-011` 供应链基线登记，后续由 `SAL-P6-005` 安全门禁关闭或豁免。
 
-## 8. 解除条件
+## 7. 复跑方式
 
-- 明确市场区域 JP/KR 的期望行为：要么修正测试期望，要么补齐产品选项与后端契约，并留下上游兼容说明。
-- 提供可用于本地 smoke 的 `DSA_WEB_SMOKE_PASSWORD`，并确认 backend webui-only 启动依赖已安装或可通过受控命令启动。
-- 重新运行 `npm run test` 与 `npm run test:smoke -- --reporter=line`，记录真实通过数量、失败分类、截图/trace 或跳过豁免。
-- 复核 10 个 high npm audit 项并在供应链登记中给出处理计划或批准的临时接受风险。
+```bash
+scripts/apply-dsa-baseline-patches.sh
+DSA_WEB_SMOKE_PASSWORD=p0-smoke-password scripts/seed-dsa-web-smoke-fixture.sh
 
-## 9. 不做事项
+cd .worktrees/dsa-v3.26.1/apps/dsa-web
+npm run lint
+npm run build
+npm run test
+ENV_FILE=/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab/.cache/dsa-p0/web-smoke/.env \
+DATABASE_PATH=/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab/.cache/dsa-p0/web-smoke/stock_analysis.db \
+ADMIN_AUTH_ENABLED=true \
+DSA_WEB_SMOKE_PASSWORD=p0-smoke-password \
+DSA_WEB_SMOKE_BACKEND_CMD="/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab/.cache/dsa-p0/venv/bin/python main.py --webui-only --host 127.0.0.1 --port 8000" \
+npm run test:smoke -- --reporter=line
+```
 
-- 不把当前 Web 基线标记为 `DONE`。
-- 不用 `npm audit fix` 改写上游 lockfile。
-- 不跳过失败 Vitest 来伪造 Web 测试通过。
-- 不把 13 个 skipped Playwright 用例当作 smoke 覆盖完成。
+## 8. 不做事项
+
+- 不把 npm audit high 风险当作已修复；只记录 baseline。
+- 不用 `npm audit fix` 或 `npm update` 改写上游 lockfile。
+- 不提交本地 smoke password、SQLite DB、Playwright trace、截图或 generated static assets。
+- 不把 `SAL-P0-005` 的完成解释为 Gate G0 完成；G0 仍依赖 `SAL-P0-008` 至 `SAL-P0-013`。
