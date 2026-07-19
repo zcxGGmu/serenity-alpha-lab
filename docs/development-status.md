@@ -7,7 +7,8 @@
 > 当前 Gate：G0，未通过<br>
 > 任务完成度：9/129<br>
 > 当前可执行任务：`SAL-P0-009`、`SAL-P0-010`、`SAL-P0-012`，状态均为 `READY`<br>
-> 最近状态同步 checkpoint：`feat(P0): 冻结 API 与配置契约基线`；恢复时以 `git log -1 --oneline` 为准<br>
+> 最近可评审交付 checkpoint：`f6b466b0 feat(P0): 冻结 API 与配置契约基线`<br>
+> 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -73,7 +74,7 @@
 
 ## 固定收尾习惯
 
-每个阶段性任务完成、阻塞或形成可评审交付后，都要自动更新本状态快照、进度清单、验收证据、风险/决策登记和下次启动提示词，并创建中文 checkpoint commit；不得等待用户额外提醒。
+每个阶段性任务完成、阻塞或形成可评审交付后，都要自动更新本状态快照、进度清单、验收证据、风险/决策登记、`tasks/todo.md` review 和下次启动提示词，并创建中文 checkpoint commit；不得等待用户额外提醒。
 
 ## 会话恢复步骤
 
@@ -105,7 +106,8 @@
 - Gate：G0 未通过
 - 已完成：SAL-P0-001 至 SAL-P0-008，以及 SAL-P0-011
 - 最近完成：SAL-P0-008 冻结 API 与配置契约
-- 最新状态同步 checkpoint：feat(P0): 冻结 API 与配置契约基线；恢复时以 git log -1 --oneline 为准
+- 最近可评审交付 checkpoint：f6b466b0 feat(P0): 冻结 API 与配置契约基线
+- 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 进度：P0 9/13，总计 9/129
 
 下一步优先执行：
@@ -119,7 +121,7 @@
 - Gate G0 前不得开始 P1、Quant Core 或大规模 DSA 迁移。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
-- 每完成阶段性任务，更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review 和下次启动提示词。
+- 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review 和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 - 完成后在 docs/development-status.md 写清楚已完成、未完成、下一步和下次启动提示词。
 - 这是固定习惯：每个阶段性任务结束后自动做，不需要用户提醒。
