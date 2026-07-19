@@ -1,14 +1,14 @@
 # Serenity Alpha Lab Upstream Base
 
 > Phase: P0 上游接管与行为基线<br>
-> Gate: G0，未通过<br>
+> Gate: G0，已通过（GO with accepted risks）<br>
 > Last updated: 2026-07-20<br>
 > Upstream: `ZhuLinsen/daily_stock_analysis`<br>
 > Locked baseline: `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`
 
 ## 1. Baseline Policy
 
-Serenity Alpha Lab uses DSA `v3.26.1` as the immutable P0 upstream baseline. The local tag `upstream/dsa-v3.26.1` must resolve to `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+Serenity Alpha Lab uses DSA `v3.26.1` as the immutable P0 upstream baseline approved by Gate G0. The local tag `upstream/dsa-v3.26.1` must resolve to `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 
 Do not move, delete, or reuse the `upstream/dsa-v3.26.1` tag. Upstream upgrades must use a new `sync/dsa-<version>` branch and a new `upstream/dsa-v<version>` tag, followed by a full baseline refresh and Gate review.
 

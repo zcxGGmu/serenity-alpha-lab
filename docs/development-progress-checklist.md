@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 12/13 | G0 | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
+| P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
+| P1 工程加固 | 2~3 | READY | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **12/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **13/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -258,18 +258,21 @@ P0 基线
 
 ### SAL-P0-013 Gate G0：基线接管评审
 
-- [ ] [READY] 决定是否正式采用 DSA 主干
-- 元数据：优先级 P0 | 负责人 TL/RE/SEC | 估算 0.5d | 实际 - | 依赖 SAL-P0-001..012
+- [x] [DONE] 决定是否正式采用 DSA 主干
+- 元数据：优先级 P0 | 负责人 TL/RE/SEC | 估算 0.5d | 实际 0.5d | 依赖 SAL-P0-001..012 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：Go/No-Go 记录、已知风险、Phase 1 范围。
 - 验收：
   - 测试、构建、许可证、上游同步和目标环境均有证据。
   - No-Go 时记录替代方案；Go 后基线变更必须走 ADR。
+- 结果：Gate G0 评审结论为 `GO with accepted risks`。Serenity Alpha Lab 正式采用 DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 作为 P1 工程加固接管基线；P1 入口为 `SAL-P1-001`，先完成上游与模块化 ADR。
+- 接受风险：`RSK-006`、`RSK-008`、`RSK-010`、`RSK-011`、`RSK-012` 均已定责并保留后续关闭任务；这些风险不阻断 P1 开始，但继续阻断发布或未评审的上游漂移。
+- 验收证据：见 [Gate G0 基线接管评审](./gate-g0-baseline-review.md)；本次轻量验证覆盖 baseline tag/worktree、patch registry、CI workflow YAML、API/config、database、report/signal 摘要断言和状态一致性扫描。
 
 ## 4. Phase 1：工程加固与兼容外壳
 
 ### SAL-P1-001 批准上游与模块化 ADR
 
-- [ ] [TODO] 完成 ADR-001/002 及 Compatibility Facade 决策
+- [ ] [READY] 完成 ADR-001/002 及 Compatibility Facade 决策
 - 元数据：优先级 P0 | 负责人 TL | 估算 1d | 实际 - | 依赖 SAL-P0-013
 - 交付物：上游同步、模块化边界、删除旧路径条件。
 - 验收：ADR 包含选项、取舍、后果、回滚和复审日期。
@@ -1382,12 +1385,12 @@ P0 基线
 | RSK-003 | Agent 引用/幻觉 | 高 | 高 | 无依据数字/错引 | Evidence、Validator、金标 | AI | G5 | OPEN |
 | RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | Policy、fallback、契约探针 | BE | G2 | OPEN |
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
-| RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 先锁定 `v3.26.1`，SAL-P0-002 后建立同步候选登记；未发布 commit 不作为初始基线 | TL | SAL-P0-012 | OPEN |
+| RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | Gate G0 接受该风险；继续锁定 `v3.26.1`，候选 commit 只通过 `SAL-P1-001` ADR 和后续 sync 分支评审吸收 | TL | SAL-P1-001 | OPEN |
 | RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
 | RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-003` 引入正式锁文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
 | RSK-009 | 当前 Windows PATH 缺少 Python 3.11；Docker daemon 需在恢复时复验 | 中 | 中 | 恢复会话时本地工具链不可用 | 已用 Python 3.11.15 建立 `.cache/dsa-p0/venv` 并完成 `SAL-P0-004`；Orbstack Docker daemon 已用于完成 `SAL-P0-007`，后续 Docker/SBOM 任务仍需先复验 `docker info` | BE | SAL-P0-011 | CLOSED |
 | RSK-010 | DSA Web npm audit 存在 10 个 high 漏洞 | 高 | 高 | `npm audit` 输出 16 个漏洞，其中 high 为 10 个 | P0 阶段不运行 `npm audit fix` 改写上游 lock；已在 `SAL-P0-011` 记录 owner/计划，后续由受控上游同步、依赖升级或 `SAL-P6-005` 门禁阻断未豁免 Critical/High | SEC/FE | SAL-P6-005 | OPEN |
-| RSK-011 | DSA Web lockfile 混用 npmjs 与 npmmirror resolved URL | 中 | 中 | `package-lock.json` 同时包含 `registry.npmjs.org` 与 `registry.npmmirror.com` | `SAL-P0-011` 先原样记录；后续由上游同步/内部缓存代理/受控 lockfile 规范决定是否统一 registry，不在 P0 直接改写 | SEC/FE | SAL-P0-012 | OPEN |
+| RSK-011 | DSA Web lockfile 混用 npmjs 与 npmmirror resolved URL | 中 | 中 | `package-lock.json` 同时包含 `registry.npmjs.org` 与 `registry.npmmirror.com` | Gate G0 接受该风险；`SAL-P0-011` 先原样记录，后续由 `SAL-P1-003` 或发布前依赖治理统一 registry 策略，不在 P0 直接改写 | SEC/FE | SAL-P1-003/SAL-P6-005 | OPEN |
 | RSK-012 | DSA Docker image 存在 Critical/High 漏洞 | 高 | 高 | Grype 扫描 `serenity-dsa-p0:sal-p0-007` 输出 39 critical、84 high | 已在 `SAL-P0-011` 记录 SBOM 与 Grype baseline；BE/SEC 在 `SAL-P6-005` 前通过修复 base image、apt upgrade、依赖锁或正式豁免关闭 | BE/SEC | SAL-P6-005 | OPEN |
 
 ### 13.2 决策
@@ -1404,6 +1407,7 @@ P0 基线
 | DEC-008 | 2026-07-19 | 数据库 Schema 与 fixture 冻结方式 | P0 以锁定 worktree 的 `src.storage.Base.metadata.create_all()` 和 `DatabaseManager` 兼容迁移后的实际 SQLite 形状作为冻结源；提交稳定 SQL/JSON 快照和内容哈希，不提交运行时 SQLite 二进制文件 | [database-schema-baseline.md](./database-schema-baseline.md); [baselines/dsa-v3.26.1/database/summary.json](./baselines/dsa-v3.26.1/database/summary.json) | SAL-P0-009,SAL-P1-012,SAL-P1-013 | G0 |
 | DEC-009 | 2026-07-20 | 报告与 Signal Evaluation 金标冻结方式 | P0 以离线 Stub LLM JSON、固定时钟和合成行情输入冻结 DSA 报告渲染与 Signal Evaluation 行为；提交稳定 Markdown/JSON 快照和内容哈希，不触发真实 Provider、真实 LLM 或通知发送 | [report-signal-golden-baseline.md](./report-signal-golden-baseline.md); [baselines/dsa-v3.26.1/report-signal/summary.json](./baselines/dsa-v3.26.1/report-signal/summary.json) | SAL-P0-010,SAL-P4-001,SAL-P5-017 | G0 |
 | DEC-010 | 2026-07-20 | 上游维护与 required checks 策略 | P0 通过根目录 `UPSTREAM_BASE.md` 固化上游基线、偏离分类和同步流程；通过 `.github/workflows/p0-required-baselines.yml` 建立四个 required check 候选，覆盖后端、Web、契约/金标、Docker/供应链基线 | [UPSTREAM_BASE.md](../UPSTREAM_BASE.md); [.github/workflows/p0-required-baselines.yml](../.github/workflows/p0-required-baselines.yml) | SAL-P0-012,SAL-P0-013,SAL-P6-017 | G0 |
+| DEC-011 | 2026-07-20 | Gate G0 基线接管评审 | `GO with accepted risks`：正式采用 DSA `v3.26.1` 作为 P1 工程加固基线；P0 供应链和依赖风险不阻断 P1，但继续阻断发布或未评审上游漂移 | [gate-g0-baseline-review.md](./gate-g0-baseline-review.md) | SAL-P0-013,SAL-P1-001,SAL-P6-005 | SAL-P1-001 |
 
 ## 14. 验收证据登记
 
@@ -1421,6 +1425,7 @@ P0 基线
 | AEV-010 | SAL-P0-009 | SQLite Schema、表/索引元数据、脱敏 fixture 与内容哈希基线 | [database-schema-baseline.md](./database-schema-baseline.md); [baselines/dsa-v3.26.1/database/summary.json](./baselines/dsa-v3.26.1/database/summary.json) | 28 tables; 177 indexes; 31 fixture rows; `scripts/run-dsa-database-baseline.sh` PASS; SQL restore/FK/content-hash round-trip PASS; `fixture.sql` SHA-256 `382f4719d813f20b233786d90b0b5de66637a40d7ae35de61c69c4b0f57fa931` | BE | 2026-07-19 |
 | AEV-011 | SAL-P0-010 | 报告 Markdown、结构化报告、Signal Evaluation 与内容哈希金标 | [report-signal-golden-baseline.md](./report-signal-golden-baseline.md); [baselines/dsa-v3.26.1/report-signal/summary.json](./baselines/dsa-v3.26.1/report-signal/summary.json) | 2 structured reports; 3 Markdown reports; 6 Signal Evaluation cases; `scripts/run-dsa-report-signal-baseline.sh` PASS; targeted upstream tests `137 passed`; `summary.json` SHA-256 `01e7c0ec1a7070f5e7923414e7ef57f1ef5eb40d9c3bbf26da4ce3529bed0adb` | AI/QE | 2026-07-20 |
 | AEV-012 | SAL-P0-012 | 上游维护文档、偏离分类和 CI required checks 记录 | [UPSTREAM_BASE.md](../UPSTREAM_BASE.md); [.github/workflows/p0-required-baselines.yml](../.github/workflows/p0-required-baselines.yml); [upstream-patches.md](./upstream-patches.md) | `DSA-PATCH-001..003` classified `compatible`; no current `divergence`; required checks: backend, web, contract/golden, docker/supply-chain; workflow YAML parse PASS; referenced scripts present; `git diff --check` PASS | TL | 2026-07-20 |
+| AEV-013 | SAL-P0-013 / Gate G0 | Gate G0 Go/No-Go 评审、接受风险和 P1 入口约束 | [gate-g0-baseline-review.md](./gate-g0-baseline-review.md) | Decision `GO with accepted risks`; P0 13/13; baseline `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; accepted risks `RSK-006`, `RSK-008`, `RSK-010`, `RSK-011`, `RSK-012`; lightweight verification PASS | TL/RE/SEC | 2026-07-20 |
 
 允许的证据：
 
@@ -1458,4 +1463,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-012`，完成度为 12/13；最近可评审交付为本次 `SAL-P0-012` 上游维护文档和 CI required checks。下一步优先推进 `SAL-P0-013` Gate G0 评审。在 Gate G0 通过前不应开始 P1、Quant Core 或大规模重构。
+当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-013`，完成度为 13/13；Gate G0 已通过，最近可评审交付为本次 `SAL-P0-013` Gate G0 基线接管评审。下一步优先推进 `SAL-P1-001` 批准上游与模块化 ADR；不要在 ADR 前开始 Quant Core、PIT 数据、正式回测或大规模 DSA 源码迁移。

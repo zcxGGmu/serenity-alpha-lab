@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-20<br>
-> 最近阶段性任务：`SAL-P0-012` 建立上游维护文档和 CI required checks<br>
+> 最近阶段性任务：`SAL-P0-013` Gate G0：基线接管评审<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
-> 当前 Phase：P0 上游接管与行为基线<br>
-> 当前 Gate：G0，未通过<br>
-> 任务完成度：12/129<br>
-> 当前可执行任务：`SAL-P0-013`，状态为 `READY`；Gate G0 仍未评审通过<br>
+> 当前 Phase：P1 工程加固准备<br>
+> 当前 Gate：G0，已通过（`GO with accepted risks`）<br>
+> 任务完成度：13/129<br>
+> 当前可执行任务：`SAL-P1-001`，状态为 `READY`；先完成上游与模块化 ADR<br>
 > 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -20,58 +20,59 @@
 - 完成 129 项原子任务、依赖、验收条件、Gate、风险和证据登记清单。
 - 将 4 人团队排期按 268.5 理想人日修正为 16~18 周，并预留 10 个交易日稳定观察。
 - 新增 `AGENTS.md`，要求后续会话读取状态/清单、阶段性任务完成后自动同步恢复状态，并在阶段 Gate 后主动提交。
-- 已创建规划基线提交 `9088456`。
 
 ### P0 上游接管
 
-- 完成 `SAL-P0-001`：锁定上游基线为 `ZhuLinsen/daily_stock_analysis v3.26.1`，commit `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；证据见 [DSA 上游基线选择记录](./upstream-baseline-selection.md)。
-- 完成 `SAL-P0-002`：配置 `upstream` remote，导入 DSA 上游 heads/tags，创建本地基线标签 `upstream/dsa-v3.26.1` 指向锁定 commit；证据见 [DSA Git 历史导入记录](./upstream-history-import.md)。
-- 完成 `SAL-P0-003`：固化 Windows、Linux/CI、Docker、Desktop 运行环境矩阵，新增隔离 worktree bootstrap 脚本和依赖缓存策略；证据见 [DSA 基线运行环境记录](./dsa-baseline-environment.md)。
-- 完成 `SAL-P0-004`：新增后端离线 gate wrapper、登记 `DSA-PATCH-001` 上游兼容补丁并完成 syntax、flake8、deterministic、collect、offline-tests；离线测试 `4455 passed, 4 deselected`；证据见 [DSA 后端离线测试基线记录](./backend-offline-test-baseline.md) 和 [DSA 上游补丁登记](./upstream-patches.md)。
-- 完成 `SAL-P0-005`：登记 `DSA-PATCH-002` 与 `DSA-PATCH-003`，新增 Web smoke fixture seed 脚本，完成 Web `npm ci`、lint、build、Vitest 与真实 Playwright smoke；Vitest `965 passed, 2 skipped`，Playwright smoke `13 passed`；证据见 [DSA Web 测试与构建基线记录](./web-baseline-test-build.md) 和 [DSA 上游补丁登记](./upstream-patches.md)。
-- 完成 `SAL-P0-006`：在锁定 DSA worktree 中建立 Desktop、CLI、本地 API 与 Bot 命令层离线 smoke 基线；证据见 [DSA Desktop、CLI 与 Bot Smoke 基线记录](./desktop-cli-bot-smoke-baseline.md)。
-- 完成 `SAL-P0-007`：新增可复跑 Docker baseline 脚本，构建镜像并验证 server `/api/health` 与 analyzer import smoke；证据见 [DSA Docker 基线记录](./docker-baseline.md)。
-- 完成 `SAL-P0-008`：新增 API/config contract baseline 脚本并冻结运行时 OpenAPI、配置 Schema、环境变量/配置字段 inventory 与摘要哈希；OpenAPI `3.1.0` 含 105 paths、119 operations、186 component schemas，配置 inventory 含 386 fields；证据见 [DSA API 与配置契约基线记录](./api-config-contract-baseline.md) 和 [API/config baseline summary](./baselines/dsa-v3.26.1/api-config/summary.json)。
-- 完成 `SAL-P0-009`：新增数据库 baseline 脚本并冻结 SQLite Schema、表/索引/外键元数据、稳定 SQL fixture、内容哈希与摘要；基线含 28 张业务表、177 个索引、31 行脱敏合成 fixture 数据，覆盖分析、信号评价、持仓、会话和 LLM usage；`fixture.sql` 已做恢复、外键和内容哈希 round-trip 校验；证据见 [DSA 数据库 Schema 与迁移样本基线记录](./database-schema-baseline.md) 和 [database baseline summary](./baselines/dsa-v3.26.1/database/summary.json)。
-- 完成 `SAL-P0-010`：新增报告与信号评价 baseline 脚本并冻结离线 Stub 结构化报告、单股/聚合/市场复盘 Markdown、DecisionSignal 摘要、Signal Evaluation 明细/汇总和内容哈希；基线含 2 个结构化报告、3 个 Markdown 报告、6 个 Signal Evaluation cases，`direction_accuracy_pct=60.0`、`win_rate_pct=60.0`；证据见 [DSA 报告与信号评价金标基线记录](./report-signal-golden-baseline.md) 和 [report/signal baseline summary](./baselines/dsa-v3.26.1/report-signal/summary.json)。
-- 完成 `SAL-P0-011`：新增供应链 baseline 脚本，生成 Python SBOM/license/audit、Web npm audit/license、Syft image SBOM 和 Grype image vulnerabilities；证据见 [DSA 供应链基线记录](./supply-chain-baseline.md)。
-- 完成 `SAL-P0-012`：新增 `UPSTREAM_BASE.md`，固化上游基线、偏离分类、同步流程和 required check 名称；更新补丁登记分类；新增 `.github/workflows/p0-required-baselines.yml`，覆盖后端、Web、契约/金标、Docker/供应链四个 P0 required check 候选。
+- 完成 `SAL-P0-001` 至 `SAL-P0-003`：锁定 DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`，导入上游历史/tag，并固化 Windows、Linux/CI、Docker、Desktop 运行环境矩阵。
+- 完成 `SAL-P0-004`：后端离线 gate 通过，`4455 passed, 4 deselected, 48 warnings, 416 subtests passed`；登记 `DSA-PATCH-001`。
+- 完成 `SAL-P0-005`：Web `npm ci`、lint、build、Vitest `965 passed, 2 skipped`、Playwright smoke `13 passed`；登记 `DSA-PATCH-002` 与 `DSA-PATCH-003`。
+- 完成 `SAL-P0-006`：Desktop `47/47`、packaging/API `13/13`、CLI local backend `77/77`、Bot status/dispatcher/market `31/31` 离线 smoke。
+- 完成 `SAL-P0-007`：Docker 镜像 `serenity-dsa-p0@sha256:7de0eca96fa8622e8b4b7292890f413e1a8fc52417f02c9c9a2829a364918076`，server `/api/health` 与 analyzer import smoke 通过。
+- 完成 `SAL-P0-008`：冻结运行时 OpenAPI `3.1.0`、105 paths、119 operations、186 component schemas，以及 386 个配置 inventory 字段。
+- 完成 `SAL-P0-009`：冻结 SQLite Schema、表/索引/外键元数据和脱敏 fixture；基线含 28 张业务表、177 个索引、31 行 fixture 数据。
+- 完成 `SAL-P0-010`：冻结报告与信号评价金标；基线含 2 个结构化报告、3 个 Markdown 报告、6 个 Signal Evaluation cases，`direction_accuracy_pct=60.0`、`win_rate_pct=60.0`。
+- 完成 `SAL-P0-011`：生成供应链 baseline；Python SBOM 146 components，Web npm audit 16 vulnerabilities / 10 high，Syft image SBOM 7865 components，Grype 39 critical / 84 high。
+- 完成 `SAL-P0-012`：新增 `UPSTREAM_BASE.md`、补丁分类和 `.github/workflows/p0-required-baselines.yml` 四个 P0 required check 候选。
+- 完成 `SAL-P0-013`：Gate G0 评审结论为 `GO with accepted risks`；证据见 [Gate G0 基线接管评审](./gate-g0-baseline-review.md)。
 
 ## 未完成
 
-### 当前阻塞 Gate G0 的 P0 任务
+### 当前可执行 P1 任务
 
-- `SAL-P0-013` 当前为 `READY`，Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
+- `SAL-P1-001` 当前为 `READY`：批准上游与模块化 ADR，明确 ADR-001/002、Compatibility Facade、上游同步、模块化边界、删除旧路径条件和回滚策略。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P0 至 P6 仍有 117 项工程任务未完成。
-- 尚未创建运行时代码、Worker、Quant Core 或部署环境；`SAL-P0-009` 与 `SAL-P0-010` 只冻结 P0 数据库、报告和信号评价基线。
-- 本地仓库当前已配置 `origin` 指向 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，`upstream` 指向 `https://github.com/ZhuLinsen/daily_stock_analysis.git`；后续变更需继续复验双 remote 约束。
-- DSA Python 依赖尚未正式锁定，仍含范围版本和 AlphaSift Git 依赖；`SAL-P0-011` 已完成 SBOM/audit baseline，`SAL-P0-012` 已把 AlphaSift 和 required checks 纳入维护文档，正式锁文件和离线缓存策略后续由 `SAL-P1-003` 处理。
-- Web lockfile 可安装并构建，但 npm audit 暴露 16 个漏洞（10 个 high），且 lockfile 混用 `registry.npmjs.org` 与 `registry.npmmirror.com`；不得在 P0 基线记录中直接运行 `npm audit fix` 改写上游 lockfile。Docker image Grype baseline 暴露 39 critical、84 high，后续由 `SAL-P6-005` 发布安全门禁关闭或豁免。
+- P1 至 P6 仍有 116 项工程任务未完成。
+- 尚未创建 Serenity 目标运行时代码、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
+- 供应链 Critical/High、Python 动态 Git 依赖、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移。
 
 ## 当前决策与约束
 
+- Gate G0 已通过；DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 是 P1 工程加固基线。
+- `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
+- DSA 源码通过 `.worktrees/dsa-v3.26.1` 隔离物化；依赖缓存放在 `.cache/dsa-p0`，两者均不提交。
+- 当前本地偏离均为 `compatible` 或 `extension`，无 `divergence`；已登记补丁为 `DSA-PATCH-001` 至 `DSA-PATCH-003`。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
 - 不接入实盘交易；LLM 没有交易、Shell 或任意数据库写权限。
-- Gate G0 前不得开始 Quant Core 或大规模重构。
-- DSA 接管基线已锁定为 `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；未经 Gate G0 或 ADR 批准不漂移到未发布 `main`。
-- `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
-- DSA 源码通过 `.worktrees/dsa-v3.26.1` 隔离物化；依赖缓存放在 `.cache/dsa-p0`，两者均不提交。
-- 阻断基线 gate 的上游缺陷/测试契约漂移通过可登记、可复跑的本地 patch 文件处理；当前登记补丁为 `DSA-PATCH-001` 至 `DSA-PATCH-003`，见 [DSA 上游补丁登记](./upstream-patches.md)。
-- API 与配置契约冻结源为锁定 worktree 的运行时 FastAPI OpenAPI 和配置 registry/dataclass/env inventory；上游静态 `docs/architecture/api_spec.json` 已滞后，不作为 Serenity P0 的权威冻结源。
-- 数据库 Schema 冻结源为锁定 worktree 的 `src.storage.Base.metadata.create_all()` 和 `DatabaseManager` 兼容迁移后的实际 SQLite 形状；提交稳定 SQL/JSON 快照，不提交运行时 SQLite 二进制文件。
-- 报告与 Signal Evaluation 金标冻结源为锁定 worktree 的离线 Stub LLM JSON、固定时钟和合成行情输入；提交稳定 Markdown/JSON 快照，不触发真实 Provider、真实 LLM 或通知发送。
-- 上游维护入口为根目录 `UPSTREAM_BASE.md`；当前本地偏离均为 `compatible` 或 `extension`，无 `divergence`；P0 required check 候选为 `p0-backend-offline-baseline`、`p0-web-baseline`、`p0-contract-and-golden-baselines`、`p0-docker-and-supply-chain-baseline`。
+- P1 开始前必须先完成 `SAL-P1-001` ADR，不得直接开始 Quant Core、PIT 数据、正式回测或大规模 DSA 源码迁移。
+
+## 已接受风险
+
+- `RSK-006`：上游 `55946536` 与 `487e49e` 继续作为同步候选；是否吸收由 `SAL-P1-001` ADR 和后续 sync 分支评审决定。
+- `RSK-008`：Python 依赖未正式锁定且含 AlphaSift Git 依赖；由 `SAL-P1-003` 引入正式 lock/extras/离线缓存关闭。
+- `RSK-010`：Web npm audit 仍有 10 个 high；后续由受控升级或 `SAL-P6-005` 发布安全门禁关闭/豁免。
+- `RSK-011`：Web lockfile 混用 npmjs 与 npmmirror resolved URL；后续由 `SAL-P1-003` 或发布前依赖治理统一策略。
+- `RSK-012`：Docker image Grype 仍有 39 critical / 84 high；由 `SAL-P6-005` 前修复或正式豁免。
 
 ## 下一步
 
-1. 执行 `SAL-P0-013` Gate G0：汇总 P0 测试、构建、许可证、补丁、数据库、报告金标、供应链、required checks 和目标环境证据；通过前不得进入 P1 或 Quant Core。
-2. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
+1. 执行 `SAL-P1-001` 批准上游与模块化 ADR。
+2. 在 ADR 中明确是否吸收上游 `55946536` macOS Gatekeeper 文档修复与 `487e49e` DecisionSignal reassess persist 候选。
+3. 保持 P0 required checks 作为基线保护，不在 ADR 前启动源码合并、Quant Core、PIT Dataset 或正式回测实现。
 
 ## 固定收尾习惯
 
@@ -98,31 +99,30 @@
 3. docs/development-status.md
 4. docs/development-progress-checklist.md
 5. docs/ai-stock-quant-platform-development-plan.md
-6. docs/upstream-baseline-selection.md
+6. docs/gate-g0-baseline-review.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
-- Phase：P0 上游接管与行为基线
-- Gate：G0 未通过
-- 已完成：SAL-P0-001 至 SAL-P0-012
-- 最近完成：SAL-P0-012 建立上游维护文档和 CI required checks
+- Phase：P1 工程加固准备
+- Gate：G0 已通过（GO with accepted risks）
+- 已完成：SAL-P0-001 至 SAL-P0-013
+- 最近完成：SAL-P0-013 Gate G0 基线接管评审
 - 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
-- 进度：P0 12/13，总计 12/129
+- 进度：P0 13/13，总计 13/129
 
 下一步优先执行：
-1. SAL-P0-013 Gate G0 评审
+1. SAL-P1-001 批准上游与模块化 ADR
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
-- Gate G0 前不得开始 P1、Quant Core 或大规模 DSA 迁移。
+- 不要移动 `upstream/dsa-v3.26.1` tag。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
+- ADR 前不要开始 Quant Core、PIT Dataset、正式回测或大规模 DSA 源码迁移。
 - 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review 和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
-- 完成后在 docs/development-status.md 写清楚已完成、未完成、下一步和下次启动提示词。
-- 这是固定习惯：每个阶段性任务结束后自动做，不需要用户提醒。
 ```
 
 > 本文件是状态快照，不替代任务清单。发生冲突时，以任务清单中的任务状态、依赖和 Gate 证据为准。
