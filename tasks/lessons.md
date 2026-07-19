@@ -7,6 +7,13 @@
 - 规则：每完成、阻塞或形成可评审交付的阶段性任务，必须在结束前同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、受影响的验收证据/风险/决策登记、`tasks/todo.md` review 和下次启动提示词；可评审交付必须创建中文 checkpoint commit。
 - 执行：后续完成 `SAL-P0-009`、`SAL-P0-010`、`SAL-P0-012` 或 Gate `SAL-P0-013` 时，不等待用户提醒，自动完成上述收尾动作；完成后最终回复必须直接给出可复制的下次启动提示词。
 
+## 2026-07-20: 用户再次强调状态同步必须成为固定习惯
+
+- 纠正来源：Gate G0 checkpoint 完成后，用户再次要求“请更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求下次启动提示词可直接继续开发。
+- 模式：即使刚完成 checkpoint，也不能只在最终回复口头说明状态；必须确保仓库内状态文档本身已经能独立恢复上下文。
+- 规则：每个阶段性任务结束后，最终回复前必须复核并必要时更新 `docs/development-status.md` 的已完成/未完成/下一步/下次启动提示词，复核 `docs/development-progress-checklist.md` 的完成度和当前任务，并把本次 review 写入 `tasks/todo.md`。
+- 执行：若用户再次提醒“更新状态”或“记住这个习惯”，立即更新 `tasks/lessons.md`，并运行 `git status`、状态锚点扫描和 `git diff --check` 后再声称状态同步完成。
+
 ## 2026-07-19: “下一阶段开发”不能长期停留在文档收尾
 
 - 纠正来源：用户指出“为什么还不开始写代码，一直在写这些文档？”
