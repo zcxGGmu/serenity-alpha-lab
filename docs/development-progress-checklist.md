@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 3/13 | G0 | DSA 可重复基线、金标、SBOM |
+| P0 上游接管 | 1 | READY | 4/13 | G0 | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **3/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **4/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -127,7 +127,7 @@ P0 基线
   - 基线 tag 可解析到锁定 SHA；当前 docs 不丢失。
   - 无压平复制或来源不明的大批文件。
 - 结果：已配置 `upstream` remote 指向 `https://github.com/ZhuLinsen/daily_stock_analysis.git`，通过显式 refspec 导入上游 heads/tags，并创建本地基线 tag `upstream/dsa-v3.26.1` 指向 `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`。
-- 说明：本次会话开始时仓库未配置 `origin` 且无本项目托管 URL；未伪造远端，已作为 `RSK-007` 登记，后续确定项目托管地址后补绑 `origin`。
+- 说明：早期会话开始时仓库未配置 `origin` 且无本项目托管 URL；当前已配置 `origin` 指向 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，仍需在后续同步/PR 前复验 `origin/upstream` 双 remote 约束。
 - 验收证据：见 [DSA Git 历史导入记录](./upstream-history-import.md)；已记录 remote、tag、SHA、`git fsck` 与工作树状态验证。
 
 ### SAL-P0-003 固化基线运行环境
@@ -150,8 +150,8 @@ P0 基线
 - 验收：
   - 所有稳定测试通过；不稳定/环境相关测试被分类而非直接跳过。
   - 记录基线约 226 个测试文件对应的实际测试用例数。
-- 阻塞：uv 管理的 Python 3.11 已就绪，但安装 `.github/requirements-ci.txt` 时，AlphaSift Git 依赖从 `https://github.com/ZhuLinsen/alphasift.git` 克隆失败，两次重试均无法连接 GitHub 443；尚未进入 backend-gate 或离线测试。
-- 解除条件：当前环境可访问 AlphaSift Git 仓库，或提供内部镜像/离线 wheel；依赖安装完成后再运行 `scripts/ci_gate.sh syntax`、`flake8`、`deterministic`、`offline-tests` 并补齐测试证据。
+- 阻塞/未完成：早期尝试中 AlphaSift Git 依赖从 `https://github.com/ZhuLinsen/alphasift.git` 克隆失败，尚未进入 backend-gate 或离线测试；后续 `SAL-P0-006` 的 macOS smoke 已能安装 CI 依赖并构建 AlphaSift wheel，但本任务仍需正式复跑 backend-gate/offline-tests 并补齐独立证据。
+- 解除条件：使用当前 `.cache/dsa-p0/venv` 或重新安装依赖后，运行 `scripts/ci_gate.sh syntax`、`flake8`、`deterministic`、`offline-tests` 并记录测试数量、失败分类和证据。
 - 阻塞证据：见 [DSA 后端离线测试基线尝试记录](./backend-offline-test-baseline.md)。
 
 ### SAL-P0-005 建立 Web 测试与构建基线
@@ -170,12 +170,15 @@ P0 基线
 
 ### SAL-P0-006 建立 Desktop、CLI 与 Bot Smoke 基线
 
-- [ ] [TODO] 固定桌面端、CLI 和至少一个 Bot 的主路径
-- 元数据：优先级 P1 | 负责人 FE/AI | 估算 1d | 实际 - | 依赖 SAL-P0-003
+- [x] [DONE] 固定桌面端、CLI 和至少一个 Bot 的主路径
+- 元数据：优先级 P1 | 负责人 FE/AI | 估算 1d | 实际 0.5d | 依赖 SAL-P0-003 | 开始 2026-07-19 | 完成 2026-07-19
 - 交付物：可自动化 Smoke、人工验收记录、平台限制。
 - 验收：
   - Desktop 可启动并连接本地 API。
   - CLI 可执行一次 Stub 分析；Bot 命令使用离线 Stub 返回。
+- 结果：已在锁定 DSA worktree 中完成 Desktop、CLI、本地 API 和 Bot 命令层离线 smoke。Desktop `npm ci` 安装 332 个 packages，`npm test` 47/47 通过；Desktop packaging/installer 测试 6/6 通过；API health 测试 7/7 通过；CLI local backend 测试 77/77 通过；Bot status/dispatcher 测试 25/25 通过；Bot market command 测试 6/6 通过。
+- 限制：本任务未执行真实 GUI 人工验收、真实 Bot 平台 webhook、真实 LLM 调用或真实通知发送；这些不属于 P0 smoke 的离线 Stub 范围。Desktop `npm ci` 暴露 9 个漏洞（1 moderate、8 high），不在 P0 中运行 `npm audit fix` 改写上游 lockfile。
+- 验收证据：见 [DSA Desktop、CLI 与 Bot Smoke 基线记录](./desktop-cli-bot-smoke-baseline.md)。
 
 ### SAL-P0-007 建立 Docker 基线
 
@@ -222,8 +225,8 @@ P0 基线
   - 标记 AlphaSift `git+https` 动态安装、OpenBB/AGPL 和数据服务条款风险。
   - Critical/High 有处理人、计划和截止时间。
 - 结果：已完成可离线读取的供应链初筛，确认 DSA 根许可证为 MIT，Web npm audit 为 16 个漏洞（10 high），Node 依赖许可证枚举为 446 个包、14 类许可证、0 个 UNKNOWN；`requirements.txt` 含 42 条依赖声明、1 条 AlphaSift 动态 Git 依赖、39 条范围版本；Docker CLI 与 `docker sbom` 插件存在。
-- 阻塞：Python 已安装依赖 SBOM 仍受 AlphaSift Git clone 阻塞；Docker daemon 未运行，无法构建镜像、记录 digest、生成镜像 SBOM 或镜像漏洞摘要。
-- 解除条件：提供 AlphaSift Git/镜像/wheel 并复核许可证与 hash；启动 Docker daemon 并生成镜像 SBOM；对 npm audit high、Node 非主流许可证和混合 registry 指定处理计划。
+- 阻塞：Python 已安装依赖 SBOM 可在后续复用本机已成功安装的 CI 环境继续尝试，但尚未生成并登记；Docker daemon 未运行，无法构建镜像、记录 digest、生成镜像 SBOM 或镜像漏洞摘要。
+- 解除条件：基于可复现 Python 环境生成 Python 依赖 SBOM 并复核 AlphaSift 许可证与 hash；启动 Docker daemon 并生成镜像 digest 与 SBOM；对 npm audit high、Node 非主流许可证和混合 registry 指定处理计划。
 - 阻塞证据：见 [DSA 供应链基线尝试记录](./supply-chain-baseline.md)。
 
 ### SAL-P0-012 建立上游维护文档和 CI
@@ -1340,9 +1343,9 @@ P0 基线
 | ID | 关联任务 | 阻塞原因 | 负责人 | 开始日期 | 下次复查 | 解除条件 | 状态 |
 |---|---|---|---|---|---|---|---|
 | BLK-001 | - | - | - | - | - | - | CLOSED |
-| BLK-002 | SAL-P0-004 | AlphaSift Git 依赖无法从 GitHub 443 克隆，导致后端/CI 依赖安装失败 | BE | 2026-07-19 | 2026-07-20 | GitHub/镜像/离线 wheel 可用，`-InstallCiTools` 返回 0 | OPEN |
+| BLK-002 | SAL-P0-004 | 历史 AlphaSift Git 克隆失败已在本机 macOS smoke 中局部解除，但 backend-gate/offline-tests 尚未正式复跑和记录 | BE | 2026-07-19 | 2026-07-20 | 运行 backend-gate/offline-tests，记录测试数量、失败分类和证据 | OPEN |
 | BLK-003 | SAL-P0-005 | Web Vitest 中 JP/KR 市场区域期望与相邻用例/当前实现矛盾；Playwright smoke 缺少 `DSA_WEB_SMOKE_PASSWORD` 导致 13 个用例全部跳过 | FE | 2026-07-19 | 2026-07-20 | 明确 JP/KR 契约并使 `npm run test` 返回 0；提供 smoke password 与可运行 backend 后 13 个 smoke 用例真实执行 | OPEN |
-| BLK-004 | SAL-P0-011 | AlphaSift Git 依赖不可达导致 Python 已安装 SBOM 不完整；Docker daemon 未运行导致镜像 digest/SBOM/漏洞摘要无法生成 | SEC | 2026-07-19 | 2026-07-20 | AlphaSift Git/镜像/wheel 可用并完成 Python 依赖 SBOM；Docker daemon 可用并生成镜像 digest 与 `docker sbom` 证据 | OPEN |
+| BLK-004 | SAL-P0-011 | Python 已安装 SBOM 尚未基于当前可用 CI 环境生成；Docker daemon 未运行导致镜像 digest/SBOM/漏洞摘要无法生成 | SEC | 2026-07-19 | 2026-07-20 | 完成 Python 依赖 SBOM；Docker daemon 可用并生成镜像 digest 与 `docker sbom` 证据 | OPEN |
 
 规则：
 
@@ -1362,9 +1365,9 @@ P0 基线
 | RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | Policy、fallback、契约探针 | BE | G2 | OPEN |
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
 | RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 先锁定 `v3.26.1`，SAL-P0-002 后建立同步候选登记；未发布 commit 不作为初始基线 | TL | SAL-P0-012 | OPEN |
-| RSK-007 | 本地仓库尚未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 不伪造未知托管地址；在项目仓库 URL 确定后执行 `git remote add origin <serenity-alpha-lab-repository-url>` 并复验 `origin/upstream` | TL | SAL-P0-012 | OPEN |
+| RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
 | RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-003` 引入正式锁文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
-| RSK-009 | 当前 Windows PATH 缺少 Python 3.11 且 Docker daemon 未运行 | 高 | 中 | `SAL-P0-004` 无法按上游 CI Python 3.11 运行，或 `SAL-P0-007` 无法构建/运行容器 | 已用 uv 准备 Python 3.11.15，但后端依赖仍受 AlphaSift Git 可达性阻塞；在 `SAL-P0-007` 前启动 Docker Desktop/daemon 并复验 `docker info` | BE | SAL-P0-004 | OPEN |
+| RSK-009 | 当前 Windows PATH 缺少 Python 3.11 且 Docker daemon 未运行 | 高 | 中 | `SAL-P0-004` 无法按上游 CI Python 3.11 运行，或 `SAL-P0-007` 无法构建/运行容器 | 已用 Python 3.11.15 建立 `.cache/dsa-p0/venv` 并在 macOS smoke 中完成 CI 依赖安装；后端 gate 仍需正式复跑；在 `SAL-P0-007` 前启动 Docker Desktop/daemon 并复验 `docker info` | BE | SAL-P0-007 | OPEN |
 | RSK-010 | DSA Web npm audit 存在 10 个 high 漏洞 | 高 | 高 | `npm ci` 后 audit 输出 16 个漏洞，其中 high 为 10 个 | P0 阶段不运行 `npm audit fix` 改写上游 lock；`SAL-P0-011` 生成依赖/漏洞报告并登记责任人与处置计划，后续由 `SAL-P6-005` 门禁阻断未豁免 Critical/High | SEC/FE | SAL-P0-011 | OPEN |
 | RSK-011 | DSA Web lockfile 混用 npmjs 与 npmmirror resolved URL | 中 | 中 | `package-lock.json` 同时包含 `registry.npmjs.org` 与 `registry.npmmirror.com` | `SAL-P0-011` 先原样记录；后续由上游同步/内部缓存代理/受控 lockfile 规范决定是否统一 registry，不在 P0 直接改写 | SEC/FE | SAL-P0-012 | OPEN |
 
@@ -1388,6 +1391,7 @@ P0 基线
 | AEV-004 | SAL-P0-004 | 后端依赖安装阻塞记录 | [backend-offline-test-baseline.md](./backend-offline-test-baseline.md) | uv Python `3.11.15`; `requirements-ci.txt`; AlphaSift `9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf` | BE | 2026-07-19 |
 | AEV-005 | SAL-P0-005 | Web 依赖安装、lint、test、build、smoke 基线记录 | [web-baseline-test-build.md](./web-baseline-test-build.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Node `v24.12.0`; npm `11.6.2`; Vite `7.3.1` | FE | 2026-07-19 |
 | AEV-006 | SAL-P0-011 | 供应链依赖、许可证、漏洞和镜像 SBOM 阻塞记录 | [supply-chain-baseline.md](./supply-chain-baseline.md) | DSA MIT; Web npm audit 16 vulnerabilities; Node license inventory 446 packages; Docker CLI `29.4.1`; `docker sbom` `0.6.0` | SEC | 2026-07-19 |
+| AEV-007 | SAL-P0-006 | Desktop、CLI、本地 API 与 Bot 离线 smoke 记录 | [desktop-cli-bot-smoke-baseline.md](./desktop-cli-bot-smoke-baseline.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Python `3.11.15`; Node `v25.9.0`; npm `11.12.1` | FE/AI | 2026-07-19 |
 
 允许的证据：
 
@@ -1425,4 +1429,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前 P0/P1 可并行探索任务是 `SAL-P0-006` Desktop/CLI/Bot smoke 基线；`SAL-P0-004` 因 AlphaSift Git 依赖不可达阻塞，`SAL-P0-005` 因 Web Vitest 契约矛盾与 smoke 凭证缺失阻塞，`SAL-P0-011` 因 Python/镜像 SBOM 不完整阻塞。在 Gate G0 前不应开始 Quant Core 或大规模重构；先确认 DSA 基线确实能够在目标环境中重复构建、测试、发布和长期同步。
+当前 P0 下一步优先推进 `SAL-P0-007` Docker 基线：启动 Docker daemon，构建并运行 DSA analyzer/server Docker profile，记录镜像 digest、健康检查和阻塞项。也可并行推进 `SAL-P0-004`：复用 `.cache/dsa-p0/venv` 正式复跑 backend-gate/offline-tests 并单独记录证据；`SAL-P0-005` 仍受 Web Vitest 契约矛盾与 smoke 凭证缺失阻塞，`SAL-P0-011` 仍需 Python/镜像 SBOM 证据。在 Gate G0 前不应开始 Quant Core 或大规模重构。
