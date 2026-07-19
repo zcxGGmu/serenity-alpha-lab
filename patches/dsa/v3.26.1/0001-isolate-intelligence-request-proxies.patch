@@ -1,0 +1,48 @@
+diff --git a/src/services/intelligence_service.py b/src/services/intelligence_service.py
+index f12b475..710d994 100644
+--- a/src/services/intelligence_service.py
++++ b/src/services/intelligence_service.py
+@@ -568,7 +568,7 @@ class IntelligenceService:
+             socket.getaddrinfo = guarded_getaddrinfo
+             try:
+                 request_kwargs = dict(kwargs)
+-                request_kwargs.setdefault("proxies", _DISABLE_REQUEST_PROXIES)
++                request_kwargs.setdefault("proxies", dict(_DISABLE_REQUEST_PROXIES))
+                 return requests.get(raw_url, **request_kwargs)
+             finally:
+                 socket.getaddrinfo = original_getaddrinfo
+diff --git a/tests/test_intelligence_service.py b/tests/test_intelligence_service.py
+index cdc20b6..b2313f8 100644
+--- a/tests/test_intelligence_service.py
++++ b/tests/test_intelligence_service.py
+@@ -230,6 +230,30 @@ class IntelligenceServiceTestCase(unittest.TestCase):
+         self.assertNotIn("token=secret", failures[0]["error"])
+         self.assertNotIn("secret", failures[0]["error"])
+
++    def test_request_proxy_defaults_are_isolated_between_fetches(self) -> None:
++        source = self.service.create_source({
++            "name": "market-feed",
++            "url": "https://feeds.example.com/rss.xml",
++            "scope_type": "market",
++        })
++        seen_proxy_kwargs = []
++
++        def fake_get(url, **kwargs):
++            proxies = kwargs.get("proxies")
++            self.assertEqual(proxies, {"http": None, "https": None})
++            proxies["use"] = "false"
++            seen_proxy_kwargs.append(proxies)
++            return self._mock_response()
++
++        with patch("src.services.intelligence_service.requests.get", side_effect=fake_get):
++            first = self.service.fetch_source(source["id"])
++            second = self.service.fetch_source(source["id"])
++
++        self.assertEqual(first["fetched_count"], 2)
++        self.assertEqual(second["fetched_count"], 2)
++        self.assertEqual(len(seen_proxy_kwargs), 2)
++        self.assertIsNot(seen_proxy_kwargs[0], seen_proxy_kwargs[1])
++
+     def test_fetch_enabled_sources_paginates_all_enabled_sources(self) -> None:
+         for index in range(150):
+             self.service.create_source({
