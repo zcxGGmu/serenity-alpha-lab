@@ -1,32 +1,31 @@
-# SAL-P0-004 Backend Offline Gate Plan
+# SAL-P0-011 Supply Chain Baseline Plan
 
 > Started: 2026-07-19
 > Scope: Continue P0 only. Gate G0 is not passed, so this task must not start P1, Quant Core, or broad DSA refactoring.
 
 ## Checklist
 
-- [x] Review project lessons, current P0 status, and SAL-P0-004 acceptance criteria.
-- [x] Confirm locked DSA worktree and reusable Python 3.11 CI environment.
-- [x] Run backend syntax gate via `scripts/ci_gate.sh syntax`.
-- [x] Run flake8 critical gate via `scripts/ci_gate.sh flake8`.
-- [x] Run deterministic local checks via `scripts/ci_gate.sh deterministic`.
-- [x] Run offline pytest suite via `scripts/ci_gate.sh offline-tests`.
-- [x] Record test counts, duration, pass/fail classification, and artifacts.
-- [x] Update P0 checklist/status/evidence truthfully.
-- [x] Verify Git status and prepare a Chinese checkpoint commit if reviewable.
+- [x] Review project lessons, current P0 status, and SAL-P0-011 acceptance criteria.
+- [x] Confirm existing backend/Docker baseline artifacts and local scanner availability.
+- [x] Add a reproducible supply-chain baseline script for Python, Node, Docker image inventory, and scanner checks.
+- [x] Generate Python installed dependency SBOM from the isolated `.cache/dsa-p0/venv` without contaminating that venv.
+- [x] Generate Docker image package inventory from `serenity-dsa-p0:sal-p0-007`.
+- [x] Attempt image SBOM/vulnerability generation with available local tools and classify any scanner gap truthfully.
+- [x] Update supply-chain evidence, P0 checklist/status, blocker/risk rows, and recovery notes.
+- [x] Verify script syntax, generated artifacts, Git status, and prepare a Chinese checkpoint commit if reviewable.
 
 ## Guardrails
 
-- Do not modify DSA upstream source unless a backend gate failure exposes a concrete script/config defect and the root cause is verified.
-- Do not mark `SAL-P0-004` as `DONE` unless syntax, flake8, deterministic, and offline pytest gates all pass or failures are correctly classified as upstream/environment blockers.
-- Do not mark `SAL-P0-005`, `SAL-P0-011`, or Gate G0 complete.
-- Do not stage generated DSA source mirrors, pytest caches, `.cache`, `.worktrees`, `.pyc`, or test artifacts.
+- Do not run `npm audit fix`, `npm update`, or rewrite upstream lockfiles.
+- Do not install SBOM/scanner tooling into the DSA CI venv used as the target Python environment.
+- Do not stage generated `.cache`, `.worktrees`, source mirrors, `node_modules`, `.pyc`, or scanner databases.
+- Do not mark `SAL-P0-011` as `DONE` unless Python SBOM, Node/license/vulnerability evidence, image SBOM, and vulnerability summary are all produced or explicitly accepted by the checklist as classified blockers.
+- Do not mark Gate G0 complete.
 
 ## Review
 
-- Added registered local upstream patch `DSA-PATCH-001` after reproducing the backend offline failure as mutable proxy-default pollution in `IntelligenceService`.
-- Added `scripts/apply-dsa-baseline-patches.sh` and wired `scripts/run-dsa-backend-offline-baseline.sh` to apply patches before running gate phases.
-- Verified red/green: new regression failed before the fix, then passed after the one-line `dict(_DISABLE_REQUEST_PROXIES)` fix.
-- Full backend gate passed: syntax 0s, flake8 4s, deterministic 3s, collect 8s, offline-tests 145s.
-- Final offline pytest count: `4455 passed, 4 deselected, 48 warnings, 416 subtests passed in 142.10s`.
-- `SAL-P0-004` is DONE; Gate G0 remains open because `SAL-P0-005`, `SAL-P0-011`, and downstream P0 baselines are still incomplete.
+- Added `scripts/run-dsa-supply-chain-baseline.sh` to generate Python SBOM/license/audit, Web npm audit/license, Docker image inventory, Syft SBOM, and Grype vulnerability artifacts.
+- Installed supply-chain scanners outside the DSA target venv: Homebrew `syft`, `grype`, `trivy`; separate `.cache/dsa-p0/supply-chain-tools-venv` with `pip-audit 2.9.0`.
+- Generated artifacts under `.cache/dsa-p0/supply-chain-artifacts/` without staging cache output.
+- Final summary: Python 146 packages, 1 pip-audit vulnerability, 1 skipped AlphaSift audit, Web npm 16 vulnerabilities / 10 high, image Grype 933 matches / 39 critical / 84 high.
+- `SAL-P0-011` is DONE as a P0 baseline with owner/plan/deadline rows for all Critical/High findings; Gate G0 remains open because `SAL-P0-005`, `SAL-P0-008` to `SAL-P0-010`, and `SAL-P0-012` are not complete.
