@@ -1,32 +1,27 @@
-# SAL-P0-005 Web Baseline Recovery Plan
+# P0 Status Snapshot Sync Plan
 
 > Started: 2026-07-19
-> Scope: Continue P0 only. Gate G0 is not passed, so this task must not start P1, Quant Core, or broad DSA refactoring.
+> Scope: Sync latest development status after `SAL-P0-005` and record the recurring closeout habit requested by the user.
 
 ## Checklist
 
-- [x] Review project lessons, current P0 status, and SAL-P0-005 acceptance criteria.
-- [x] Reinstall Web dependencies in the locked DSA worktree without changing the lockfile.
-- [x] Reproduce the AlertRuleForm Vitest failure and collect the actual assertion output.
-- [x] Register a minimal DSA baseline patch for the JP/KR market-region test contract.
-- [x] Apply the registered patch through `scripts/apply-dsa-baseline-patches.sh`.
-- [x] Re-run targeted AlertRuleForm tests, full Web Vitest, lint, and build.
-- [x] Attempt real Playwright smoke with controlled local auth settings; classify any remaining blocker truthfully.
-- [x] Update Web evidence, P0 checklist/status, blocker/risk rows, and recovery notes.
-- [x] Verify Git status and create a Chinese checkpoint commit if reviewable.
+- [x] Review `AGENTS.md`, project lessons, development status, progress checklist, and latest Git checkpoint.
+- [x] Confirm completed and incomplete P0 tasks against the authoritative checklist.
+- [x] Update `docs/development-progress-checklist.md` so unlocked P0 tasks are marked `READY` instead of ambiguous `TODO`.
+- [x] Update `docs/development-status.md` with the current workspace path, exact latest checkpoint, explicit next tasks, and restart prompt.
+- [x] Update `tasks/lessons.md` to preserve the habit: after each stage task, sync status/checklist/evidence/recovery prompt and commit.
+- [x] Verify doc diff and Git status; create a Chinese checkpoint commit if the result is reviewable.
 
 ## Guardrails
 
-- Do not run `npm audit fix`, `npm update`, or rewrite upstream lockfiles.
-- Do not commit `.worktrees`, `node_modules`, `static`, Playwright artifacts, screenshots, `.cache`, or pycache.
-- Do not mark `SAL-P0-005` as `DONE` unless Vitest, lint, build, and a non-skipped Playwright smoke are all proven.
 - Do not mark Gate G0 complete.
-- Keep DSA source changes as registered patch files under `patches/dsa/v3.26.1/`.
+- Do not start P1, Quant Core, or broad DSA migration.
+- Do not stage `.worktrees`, `.cache`, `node_modules`, generated `static`, Playwright artifacts, pycache, or unrelated untracked directories.
+- This task is status synchronization only; implementation resumes with `SAL-P0-008` through `SAL-P0-010`.
 
 ## Review
 
-- Registered `DSA-PATCH-002` for the AlertRuleForm JP/KR market-light contract mismatch.
-- Registered `DSA-PATCH-003` for Web smoke E2E contract drift: first-time auth setup, current Home stock workspace, ReportMarkdown fixture path, chat selector, and settings language assertions.
-- Added `scripts/seed-dsa-web-smoke-fixture.sh` to create a local auth/env/SQLite fixture for non-skipped Playwright smoke.
-- Fresh verification completed: patch check passed for `0001`/`0002`/`0003`; `npm run lint` passed; `npm run build` passed; `npm run test` returned `90 passed` files / `965 passed, 2 skipped`; `npm run test:smoke -- --reporter=line` returned `13 passed`.
-- Final diff/status review is scoped to SAL-P0-005 files only; checkpoint commit will include the registered patch files, smoke fixture script, and synchronized evidence/status docs.
+- `docs/development-progress-checklist.md` now marks `SAL-P0-008`, `SAL-P0-009`, `SAL-P0-010`, and `SAL-P0-012` as `READY`; `SAL-P0-013` remains `TODO`.
+- `docs/development-status.md` now names the current macOS workspace path, current P0/G0 state, completed vs incomplete tasks, and a direct restart prompt.
+- `tasks/lessons.md` records the fixed habit: after every stage task, sync status/checklist/evidence/recovery prompt and create a Chinese checkpoint commit when reviewable.
+- Verification: `git diff --check` passed; targeted `rg` checks confirmed READY/TODO status, recovery prompt fields, and the new lesson.

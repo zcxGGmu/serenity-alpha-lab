@@ -1,13 +1,13 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-19<br>
-> 最近阶段性任务：`SAL-P0-005` Web 测试与构建基线（最终提交以 `git log -1 --oneline` 为准）<br>
-> 工作区要求：恢复时必须重新执行 `git status`，以实际工作区为准<br>
+> 最近阶段性任务：`SAL-P0-005` Web 测试与构建基线，最近代码 checkpoint 为 `e2a1729a test(P0): 解除 Web 基线阻塞`<br>
+> 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P0 上游接管与行为基线<br>
 > 当前 Gate：G0，未通过<br>
 > 任务完成度：8/129<br>
-> 当前可执行任务：`SAL-P0-008` 至 `SAL-P0-010` API/DB/报告金标冻结、`SAL-P0-012` 上游维护文档和 CI<br>
-> 最近开发 checkpoint：`test(P0): 解除 Web 基线阻塞`；最终以 `git log -1 --oneline` 为准<br>
+> 当前可执行任务：`SAL-P0-008`、`SAL-P0-009`、`SAL-P0-010`、`SAL-P0-012`，状态均为 `READY`<br>
+> 最近状态同步 checkpoint：`docs(P0): 同步开发状态与恢复提示`；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -36,9 +36,9 @@
 
 ### 当前阻塞 Gate G0 的 P0 任务
 
-- `SAL-P0-008` 至 `SAL-P0-010` 已由后端基线解锁，但尚未冻结 API/配置契约、数据库 Schema/迁移样本、报告与信号评价金标。
-- `SAL-P0-012` 尚未建立上游维护文档和 CI required checks；需吸收 `DSA-PATCH-001` 至 `DSA-PATCH-003`、Web smoke fixture 和 `SAL-P0-011` scanner baseline。
-- `SAL-P0-013` Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
+- `SAL-P0-008`、`SAL-P0-009`、`SAL-P0-010` 已由后端基线解锁，当前为 `READY`，但尚未冻结 API/配置契约、数据库 Schema/迁移样本、报告与信号评价金标。
+- `SAL-P0-012` 已满足依赖，当前为 `READY`，但尚未建立上游维护文档和 CI required checks；需吸收 `DSA-PATCH-001` 至 `DSA-PATCH-003`、Web smoke fixture 和 `SAL-P0-011` scanner baseline。
+- `SAL-P0-013` 仍为 `TODO`，Gate G0 尚未评审，不能进入 P1 或开始 Quant Core/大规模重构。
 
 ### 全局未完成
 
@@ -76,34 +76,48 @@
 ## 会话恢复步骤
 
 1. 阅读根目录 `AGENTS.md`。
-2. 阅读本文件、[开发方案](./ai-stock-quant-platform-development-plan.md) 和任务清单。
-3. 执行 `git status --short --branch` 与 `git log -2 --oneline`，确认工作区和基线。
-4. 处理当前 `DOING/BLOCKED/READY` 任务；没有明确状态时以本文件的“当前可执行任务”为准。
-5. 每完成一个可评审交付，更新状态、验收证据、风险/决策和相关文档。
-6. 每完成一个 Phase Gate，必须完成校验并提交中文 checkpoint；阶段内形成可运行交付时也应单独提交。
+2. 阅读 `tasks/lessons.md`，先吸收本项目已记录的纠正规则。
+3. 阅读本文件、[开发方案](./ai-stock-quant-platform-development-plan.md) 和任务清单。
+4. 执行 `git status --short --branch` 与 `git log -3 --oneline`，确认工作区和基线。
+5. 处理当前 `DOING/BLOCKED/READY` 任务；没有明确状态时以本文件的“当前可执行任务”为准。
+6. 每完成一个可评审交付，更新状态、验收证据、风险/决策和相关文档。
+7. 每完成一个 Phase Gate，必须完成校验并提交中文 checkpoint；阶段内形成可运行交付时也应单独提交。
 
 ## 下次启动提示词
 
 ```text
-请继续开发 K:\ai-projs\serenity-alpha-lab。
+请继续开发 /Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab。
 
 先阅读：
 1. AGENTS.md
-2. docs/development-status.md
-3. docs/development-progress-checklist.md
-4. docs/ai-stock-quant-platform-development-plan.md
-5. docs/upstream-baseline-selection.md
+2. tasks/lessons.md
+3. docs/development-status.md
+4. docs/development-progress-checklist.md
+5. docs/ai-stock-quant-platform-development-plan.md
+6. docs/upstream-baseline-selection.md
 
-随后执行 git status --short --branch 和 git log -2 --oneline，确认当前状态。
+随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
-当前应优先启动 SAL-P0-008 至 SAL-P0-010 的 API/DB/报告金标冻结；随后推进 SAL-P0-012 上游维护文档和 CI required checks，并准备 SAL-P0-013 Gate G0 评审。
+当前状态：
+- Phase：P0 上游接管与行为基线
+- Gate：G0 未通过
+- 已完成：SAL-P0-001 至 SAL-P0-007，以及 SAL-P0-011
+- 最近完成：SAL-P0-005 Web 测试与构建基线，代码 checkpoint 为 e2a1729a test(P0): 解除 Web 基线阻塞
+- 进度：P0 8/13，总计 8/129
 
-最近阶段性任务为 SAL-P0-005 Web 测试与构建基线；最新 checkpoint 以 `git log -2 --oneline` 的实际结果为准。
+下一步优先执行：
+1. SAL-P0-008 冻结 API 与配置契约
+2. SAL-P0-009 冻结数据库 Schema 与迁移样本
+3. SAL-P0-010 冻结报告与信号评价金标
+4. SAL-P0-012 建立上游维护文档和 CI required checks
+5. SAL-P0-013 Gate G0 评审
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
+- Gate G0 前不得开始 P1、Quant Core 或大规模 DSA 迁移。
 - 保留用户已有改动，不执行破坏性 Git 操作。
-- 每完成阶段性任务，更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险和决策。
+- 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
+- 每完成阶段性任务，更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review 和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 - 完成后在 docs/development-status.md 写清楚已完成、未完成、下一步和下次启动提示词。
 - 这是固定习惯：每个阶段性任务结束后自动做，不需要用户提醒。

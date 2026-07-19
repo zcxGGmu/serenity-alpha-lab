@@ -195,7 +195,7 @@ P0 基线
 
 ### SAL-P0-008 冻结 API 与配置契约
 
-- [ ] [TODO] 保存 OpenAPI、环境变量和配置 Schema 基线
+- [ ] [READY] 保存 OpenAPI、环境变量和配置 Schema 基线
 - 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 - | 依赖 SAL-P0-004
 - 交付物：OpenAPI snapshot、配置字段表、默认值/敏感级别。
 - 验收：
@@ -204,7 +204,7 @@ P0 基线
 
 ### SAL-P0-009 冻结数据库 Schema 与迁移样本
 
-- [ ] [TODO] 生成 DSA SQLite Schema 基线和脱敏历史库 fixture
+- [ ] [READY] 生成 DSA SQLite Schema 基线和脱敏历史库 fixture
 - 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P0-004
 - 交付物：Schema dump、表/索引清单、小型历史库、内容哈希。
 - 验收：
@@ -213,7 +213,7 @@ P0 基线
 
 ### SAL-P0-010 冻结报告与信号评价金标
 
-- [ ] [TODO] 保存结构化报告、Markdown 和 Signal Evaluation 金标
+- [ ] [READY] 保存结构化报告、Markdown 和 Signal Evaluation 金标
 - 元数据：优先级 P0 | 负责人 AI/QE | 估算 1.5d | 实际 - | 依赖 SAL-P0-004
 - 交付物：固定输入、Stub LLM 输出、报告 fixture、评价结果。
 - 验收：
@@ -234,7 +234,7 @@ P0 基线
 
 ### SAL-P0-012 建立上游维护文档和 CI
 
-- [ ] [TODO] 创建 `UPSTREAM_BASE.md`、补丁登记和基线 CI
+- [ ] [READY] 创建 `UPSTREAM_BASE.md`、补丁登记和基线 CI
 - 元数据：优先级 P0 | 负责人 TL | 估算 1d | 实际 - | 依赖 SAL-P0-002,SAL-P0-004,SAL-P0-005,SAL-P0-011
 - 交付物：上游基线文档、patch 分类、CI required checks。
 - 验收：
@@ -1435,4 +1435,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前 P0 下一步优先启动 `SAL-P0-008` 至 `SAL-P0-010` 的 API、DB、报告金标冻结工作；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 Quant Core 或大规模重构。
+当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-007` 以及 `SAL-P0-011`，完成度为 8/13。下一步优先启动 `SAL-P0-008` 至 `SAL-P0-010` 的 API、DB、报告金标冻结工作；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 Quant Core 或大规模重构。
