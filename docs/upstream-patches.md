@@ -4,11 +4,15 @@
 
 ## 当前补丁
 
-| Patch ID | 状态 | 上游基线 | 补丁文件 | 原因 | 验证 |
-|---|---|---|---|---|---|
-| DSA-PATCH-001 | APPLIED | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0001-isolate-intelligence-request-proxies.patch` | `IntelligenceService` 把模块级可变代理字典传给 `requests.get`，前序请求可污染后续离线测试，导致 `SAL-P0-004` full gate 顺序依赖失败 | `scripts/run-dsa-backend-offline-baseline.sh` 全 phase exit 0；`4455 passed, 4 deselected, 48 warnings, 416 subtests passed` |
-| DSA-PATCH-002 | APPLIED | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0002-align-alert-market-region-test-contract.patch` | `AlertRuleForm` 的一个 Vitest 用例要求 market-light 区域出现 `jp/kr`，但 Web `MarketRegion` 类型、alert labels 和相邻用例均只支持 `cn/hk/us`，导致 `SAL-P0-005` Web baseline 稳定失败 | 修复前 targeted Vitest `17 passed / 1 failed`；补丁后 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` 为 `18 passed` |
-| DSA-PATCH-003 | APPLIED | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0003-align-web-smoke-e2e-contract.patch` | Playwright smoke 真实执行后暴露 e2e 契约漂移：首次登录未填 `passwordConfirm`、首页侧栏已演进为“个股栏”、ReportMarkdown smoke 缺少历史报告 fixture、chat/settings 断言使用旧文案或非唯一 selector | `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/history fixture；`npm run test:smoke -- --reporter=line` 真实执行 `13 passed` |
+分类口径见根目录 [UPSTREAM_BASE.md](../UPSTREAM_BASE.md)：`compatible` 表示保持上游运行语义并修复基线阻断项，`extension` 表示 Serenity-only 脚本/证据/CI，`divergence` 表示改变上游运行或产品语义并需要 ADR/Gate 批准。
+
+| Patch ID | 状态 | 分类 | 上游基线 | 补丁文件 | 原因 | 验证 |
+|---|---|---|---|---|---|---|
+| DSA-PATCH-001 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0001-isolate-intelligence-request-proxies.patch` | `IntelligenceService` 把模块级可变代理字典传给 `requests.get`，前序请求可污染后续离线测试，导致 `SAL-P0-004` full gate 顺序依赖失败 | `scripts/run-dsa-backend-offline-baseline.sh` 全 phase exit 0；`4455 passed, 4 deselected, 48 warnings, 416 subtests passed` |
+| DSA-PATCH-002 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0002-align-alert-market-region-test-contract.patch` | `AlertRuleForm` 的一个 Vitest 用例要求 market-light 区域出现 `jp/kr`，但 Web `MarketRegion` 类型、alert labels 和相邻用例均只支持 `cn/hk/us`，导致 `SAL-P0-005` Web baseline 稳定失败 | 修复前 targeted Vitest `17 passed / 1 failed`；补丁后 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` 为 `18 passed` |
+| DSA-PATCH-003 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0003-align-web-smoke-e2e-contract.patch` | Playwright smoke 真实执行后暴露 e2e 契约漂移：首次登录未填 `passwordConfirm`、首页侧栏已演进为“个股栏”、ReportMarkdown smoke 缺少历史报告 fixture、chat/settings 断言使用旧文案或非唯一 selector | `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/history fixture；`npm run test:smoke -- --reporter=line` 真实执行 `13 passed` |
+
+当前 P0 没有登记为 `divergence` 的补丁。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
 
 ## DSA-PATCH-001：隔离 Intelligence 请求代理参数
 
