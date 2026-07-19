@@ -7,6 +7,7 @@
 > 当前 Gate：G0，未通过<br>
 > 任务完成度：3/129<br>
 > 当前可执行任务：`SAL-P0-006` 建立 Desktop、CLI 与 Bot Smoke 基线（`SAL-P0-004`、`SAL-P0-005`、`SAL-P0-011` 阻塞中）<br>
+> 最近开发 checkpoint：`bfe54630 docs(P0): 记录供应链基线阻塞证据`；本状态同步提交以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -25,6 +26,12 @@
 - 完成 `SAL-P0-001`：锁定上游基线为 `ZhuLinsen/daily_stock_analysis v3.26.1`，commit `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`；证据见 [DSA 上游基线选择记录](./upstream-baseline-selection.md)。
 - 完成 `SAL-P0-002`：配置 `upstream` remote，导入 DSA 上游 heads/tags，创建本地基线标签 `upstream/dsa-v3.26.1` 指向锁定 commit；证据见 [DSA Git 历史导入记录](./upstream-history-import.md)。
 - 完成 `SAL-P0-003`：固化 Windows、Linux/CI、Docker、Desktop 运行环境矩阵，新增隔离 worktree bootstrap 脚本和依赖缓存策略；证据见 [DSA 基线运行环境记录](./dsa-baseline-environment.md)。
+
+### 已提交但未完成的基线尝试
+
+- `SAL-P0-004` 已提交阻塞证据 `31bb444d`：PowerShell bootstrap 失败处理已修正，但后端依赖安装受 AlphaSift Git 克隆失败阻塞。
+- `SAL-P0-005` 已提交阻塞证据 `871a20ab`：Web `npm ci`、lint、build 可运行；Vitest 与真实 Playwright smoke 仍未通过。
+- `SAL-P0-011` 已提交阻塞证据 `bfe54630`：供应链初筛已记录；Python SBOM 与镜像 SBOM 仍未完成。
 
 ## 未完成
 
@@ -66,6 +73,10 @@
 5. 后续确定本项目托管 URL 后，补充配置 `origin` remote 并复验 `origin/upstream` 双 remote 约束。
 6. 继续保留后续同步候选：`55946536` macOS Gatekeeper 文档修复、`487e49e` DecisionSignal reassess persist。
 
+## 固定收尾习惯
+
+每个阶段性任务完成、阻塞或形成可评审交付后，都要自动更新本状态快照、进度清单、验收证据、风险/决策登记和下次启动提示词，并创建中文 checkpoint commit；不得等待用户额外提醒。
+
 ## 会话恢复步骤
 
 1. 阅读根目录 `AGENTS.md`。
@@ -91,12 +102,15 @@
 
 当前应并行推进 SAL-P0-006：确认 Desktop、CLI 与 Bot smoke 基线入口；同时不要把 `SAL-P0-004`、`SAL-P0-005` 或 `SAL-P0-011` 标为完成，它们分别因 AlphaSift Git 依赖、Web Vitest/Smoke、Python 与镜像 SBOM 阻塞处于 BLOCKED。
 
+最近开发 checkpoint 为 `bfe54630 docs(P0): 记录供应链基线阻塞证据`；本状态同步提交可能在其后，以 `git log -2 --oneline` 的实际结果为准。
+
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 每完成阶段性任务，更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险和决策。
 - 每形成可评审交付时主动提交详细中文 commit。
 - 完成后在 docs/development-status.md 写清楚已完成、未完成、下一步和下次启动提示词。
+- 这是固定习惯：每个阶段性任务结束后自动做，不需要用户提醒。
 ```
 
 > 本文件是状态快照，不替代任务清单。发生冲突时，以任务清单中的任务状态、依赖和 Gate 证据为准。
