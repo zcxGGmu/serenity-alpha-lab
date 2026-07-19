@@ -72,14 +72,14 @@
 
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
-| P0 上游接管 | 1 | READY | 8/13 | G0 | DSA 可重复基线、金标、SBOM |
+| P0 上游接管 | 1 | READY | 9/13 | G0 | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | TODO | 0/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **READY** | **8/129** |  |  |
+| **合计** | **16~18 周** | **READY** | **9/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -195,12 +195,16 @@ P0 基线
 
 ### SAL-P0-008 冻结 API 与配置契约
 
-- [ ] [READY] 保存 OpenAPI、环境变量和配置 Schema 基线
-- 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 - | 依赖 SAL-P0-004
+- [x] [DONE] 保存 OpenAPI、环境变量和配置 Schema 基线
+- 元数据：优先级 P0 | 负责人 BE | 估算 1d | 实际 0.5d | 依赖 SAL-P0-004 | 开始 2026-07-19 | 完成 2026-07-19
 - 交付物：OpenAPI snapshot、配置字段表、默认值/敏感级别。
 - 验收：
   - CI 可检测非预期 API 破坏。
   - 密钥字段、运行时可变字段和废弃字段已标记。
+- 结果：新增 `scripts/run-dsa-api-config-baseline.sh`，在锁定 DSA worktree 上应用 `DSA-PATCH-001` 至 `DSA-PATCH-003` 后生成并校验运行时 OpenAPI、Web 设置配置 Schema、环境变量/配置字段 inventory 和摘要哈希；快照提交在 `docs/baselines/dsa-v3.26.1/api-config/`。
+- 摘要：OpenAPI `3.1.0` 含 105 paths、119 operations、186 component schemas、1 security scheme；配置 Schema `2026-06-29-claude-code-cli-backend` 含 8 categories、179 registered fields；环境变量/config inventory 含 386 fields，其中 secret 81、server-masked 5、runtime mutable 187、runtime hidden 10、deprecated 4、dynamic pattern 9。
+- 限制：上游 `docs/architecture/api_spec.json` 已滞后于当前运行时 FastAPI 生成结果，本项目 P0 以 `create_app().openapi()` 运行时输出作为冻结源；本任务不变更 API/配置行为，不启动真实 Provider、Scheduler、LLM 或 Bot。
+- 验收证据：见 [DSA API 与配置契约基线记录](./api-config-contract-baseline.md)；契约快照见 [API/config baseline](./baselines/dsa-v3.26.1/api-config/summary.json)。
 
 ### SAL-P0-009 冻结数据库 Schema 与迁移样本
 
@@ -1385,6 +1389,7 @@ P0 基线
 | DEC-004 | 2026-07-19 | Web 基线失败处理方式 | 对阻断 Gate 的 Web 测试契约漂移采用登记补丁而非产品范围扩展：`DSA-PATCH-002` 保持 market-light 仅支持 `cn/hk/us`，`DSA-PATCH-003` 对齐当前 Web smoke UI/fixture；仍不运行 `npm audit fix` 改写上游 lockfile | [web-baseline-test-build.md](./web-baseline-test-build.md); [upstream-patches.md](./upstream-patches.md) | SAL-P0-005,SAL-P0-011,SAL-P0-012 | G0 |
 | DEC-005 | 2026-07-19 | 供应链基线处理方式 | P0 供应链生成 SBOM、license 和漏洞基线，但不在 P0 直接改写上游 lockfile/base image；Critical/High 通过 owner、计划、截止任务进入后续门禁 | [supply-chain-baseline.md](./supply-chain-baseline.md) | SAL-P0-011,SAL-P0-012,SAL-P6-005 | G0 |
 | DEC-006 | 2026-07-19 | 锁定 DSA release 上的最小本地补丁 | 对阻断基线 gate 的上游缺陷/测试契约漂移使用可登记、可复跑的 patch 文件；当前携带 `DSA-PATCH-001`、`DSA-PATCH-002`、`DSA-PATCH-003`，补丁只应用到隔离 worktree，不把 DSA 源码混入本项目工作树 | [upstream-patches.md](./upstream-patches.md) | SAL-P0-004,SAL-P0-005,SAL-P0-012 | G0 |
+| DEC-007 | 2026-07-19 | API 与配置契约冻结源 | 上游静态 `docs/architecture/api_spec.json` 已滞后，P0 以锁定 worktree 中 `create_app().openapi()` 运行时输出作为 OpenAPI 冻结源；配置契约以 `src.core.config_registry.build_schema_response()`、`Config` dataclass、`.env.example` 和代码环境变量引用生成 inventory | [api-config-contract-baseline.md](./api-config-contract-baseline.md); [baselines/dsa-v3.26.1/api-config/summary.json](./baselines/dsa-v3.26.1/api-config/summary.json) | SAL-P0-008,SAL-P0-012,SAL-P0-013 | G0 |
 
 ## 14. 验收证据登记
 
@@ -1398,6 +1403,7 @@ P0 基线
 | AEV-006 | SAL-P0-011 | 供应链 SBOM、许可证和漏洞基线记录 | [supply-chain-baseline.md](./supply-chain-baseline.md) | Python SBOM 146 components; Web npm audit 16 vulnerabilities / 10 high; Web license inventory 529 packages; Syft image SBOM 7865 components; Grype 39 critical / 84 high | SEC | 2026-07-19 |
 | AEV-007 | SAL-P0-006 | Desktop、CLI、本地 API 与 Bot 离线 smoke 记录 | [desktop-cli-bot-smoke-baseline.md](./desktop-cli-bot-smoke-baseline.md) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Python `3.11.15`; Node `v25.9.0`; npm `11.12.1` | FE/AI | 2026-07-19 |
 | AEV-008 | SAL-P0-007 | Docker build、server health 与 analyzer import smoke 记录 | [docker-baseline.md](./docker-baseline.md) | `serenity-dsa-p0@sha256:7de0eca96fa8622e8b4b7292890f413e1a8fc52417f02c9c9a2829a364918076`; Docker `29.4.0`; Compose `5.1.3` | BE | 2026-07-19 |
+| AEV-009 | SAL-P0-008 | OpenAPI 与配置契约快照、diff gate 记录 | [api-config-contract-baseline.md](./api-config-contract-baseline.md); [baselines/dsa-v3.26.1/api-config/summary.json](./baselines/dsa-v3.26.1/api-config/summary.json) | OpenAPI `3.1.0`; 105 paths / 119 operations / 186 schemas; config schema 179 fields; config inventory 386 fields; `scripts/run-dsa-api-config-baseline.sh` PASS | BE | 2026-07-19 |
 
 允许的证据：
 
@@ -1435,4 +1441,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-007` 以及 `SAL-P0-011`，完成度为 8/13。下一步优先启动 `SAL-P0-008` 至 `SAL-P0-010` 的 API、DB、报告金标冻结工作；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 Quant Core 或大规模重构。
+当前 P0 已完成 `SAL-P0-001` 至 `SAL-P0-008` 以及 `SAL-P0-011`，完成度为 9/13。下一步优先启动 `SAL-P0-009` 数据库 Schema 与迁移样本冻结、`SAL-P0-010` 报告与信号评价金标冻结；随后推进 `SAL-P0-012` 上游维护文档和 CI required checks，并在 `SAL-P0-013` 做 Gate G0 评审。在 Gate G0 前不应开始 Quant Core 或大规模重构。
