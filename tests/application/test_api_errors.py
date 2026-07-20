@@ -93,6 +93,48 @@ def test_internal_errors_and_freeform_details_are_redacted() -> None:
     assert "Traceback" not in json.dumps(body)
 
 
+def test_provider_errors_map_to_redacted_provider_problem_with_trace() -> None:
+    from serenity_alpha_lab.application.api_errors import ApiErrorCode, problem_from_exception
+    from serenity_alpha_lab.domain.providers import ProviderError, ProviderErrorCategory
+
+    error = ProviderError(
+        category=ProviderErrorCategory.AUTH,
+        provider_id="fixture",
+        operation="daily_bars",
+        message=(
+            "failed at /Users/zq/private/provider.py "
+            "access_token=provider-access-token "
+            "refresh_token=provider-refresh-token "
+            "client_secret=provider-client-secret "
+            '{"access_token":"json-provider-access-token", '
+            "'refresh_token': 'dict-provider-refresh-token', "
+            '"client_secret": "json-provider-client-secret"}'
+        ),
+    )
+
+    problem = problem_from_exception(
+        error,
+        trace_context=TraceContext(trace_id="trace-provider-001"),
+        instance="/api/v1/market-data",
+    )
+
+    assert problem.status == 502
+    assert problem.code == ApiErrorCode.PROVIDER_ERROR
+    assert problem.trace_id == "trace-provider-001"
+    assert problem.instance == "/api/v1/market-data"
+    assert "/Users/zq" not in problem.detail
+    assert "provider-access-token" not in problem.detail
+    assert "provider-refresh-token" not in problem.detail
+    assert "provider-client-secret" not in problem.detail
+    assert "json-provider-access-token" not in problem.detail
+    assert "dict-provider-refresh-token" not in problem.detail
+    assert "json-provider-client-secret" not in problem.detail
+    assert "[REDACTED_PATH]" in problem.detail
+    assert "access_token=[REDACTED]" in problem.detail
+    assert "refresh_token=[REDACTED]" in problem.detail
+    assert "client_secret=[REDACTED]" in problem.detail
+
+
 def test_problem_details_middleware_returns_problem_json_and_trace_header() -> None:
     from serenity_alpha_lab.application.api_errors import ApiErrorCode, ProblemDetailsMiddleware
 

@@ -32,6 +32,7 @@
 | `TaskAlreadyExists` | 409 | `conflict` | 幂等或资源状态冲突。 |
 | `ResearchOrchestratorError`（请求字段/模式错误） | 422 | `validation_error` | Research DTO 请求校验不满足。 |
 | `ResearchOrchestratorError`（DSA/facade 运行失败） | 502 | `provider_error` | DSA/Agent/Provider 兼容外壳失败。 |
+| `ProviderError` | 502 | `provider_error` | P2 Provider 领域六类错误在 API 边界收口为稳定公共错误码，内部 category 保留给 retry/fallback policy。 |
 | `TaskBackendCapabilityError` / unknown `Exception` | 500 | `internal_error` | 服务能力或未知内部错误，不暴露内部细节。 |
 
 ## 脱敏口径
@@ -41,6 +42,7 @@ Problem details 不暴露以下信息：
 - Python stack trace 与 `File "...", line ...` 调用栈。
 - `/Users`、`/home`、`/tmp`、`/var`、Windows 用户目录等绝对路径。
 - `api_key`、`token`、`secret`、`password`、`Authorization: Bearer ...` 和 `sk-*` 风格 key。
+- Provider 常见 `access_token`、`refresh_token` 和 `client_secret`。
 - `prompt`、`messages`、`body`、`content`、`private_body` 等私有正文。
 
 普通应用错误会保留已脱敏的可理解 `detail`；未知内部异常固定返回 `An unexpected error occurred.`。
@@ -68,3 +70,4 @@ Problem details 不暴露以下信息：
 - `SAL-P1-012` Alembic 接入后可复用该协议对迁移失败、schema drift 和启动前检查输出稳定错误。
 - `SAL-P1-016` API 兼容检查可把 problem response 示例纳入 contract snapshot，但不在本任务刷新 OpenAPI baseline。
 - P2 持久任务 API 必须使用这些稳定错误码区分 validation、not-found、conflict 和 internal/provider 失败。
+- `SAL-P2-001` 已复用本协议将 `ProviderError` 映射为 502 `provider_error`；六类 Provider category 不扩展公共 `ApiErrorCode`，以保持 P1 客户端兼容。

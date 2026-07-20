@@ -110,6 +110,32 @@ def test_domain_stays_free_of_frameworks_and_infrastructure() -> None:
     )
 
 
+def test_provider_domain_contract_does_not_import_application_or_integrations() -> None:
+    target = PACKAGE_ROOT / "domain" / "providers.py"
+    failures: list[str] = []
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "math",
+        "serenity_alpha_lab.domain.artifacts",
+        "serenity_alpha_lab.domain.instruments",
+        "types",
+        "typing",
+    }
+
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_quant_does_not_depend_on_agent_or_notifications() -> None:
     assert_no_forbidden_imports(
         "quant",

@@ -1,3 +1,44 @@
+# P2 Provider Domain Contract Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P2-001` by defining a pure-domain, synchronous Provider contract with capabilities, immutable `DataBatch`/`Provenance`, stable failure categories, offline Contract Tests, and reuse of the P1 Problem Details boundary. Do not implement the DSA Adapter, make real Provider/LLM calls, start Dataset/PIT/Quant/formal backtest work, or migrate DSA runtime source.
+
+## Checklist
+
+- [x] Re-read the required recovery documents, confirm Git state, and run the 103-test baseline.
+- [x] Inspect P1 domain/application conventions, Gate G1 constraints, ADR-002, and the approved Provider protocol design.
+- [x] Write the detailed implementation plan at `docs/superpowers/plans/2026-07-20-provider-domain-contract.md`.
+- [x] Add Red tests for Provider capabilities, immutable provenance/batches, freshness, SHA/time validation, six error classes, and Protocol conformance.
+- [x] Implement `domain/providers.py` and stable domain exports with no framework/vendor imports.
+- [x] Add Red/Green coverage for mapping `ProviderError` through the existing sanitized `ProviderProblem` contract.
+- [x] Run target, related, and full verification plus compile/lock/diff/tag checks.
+- [x] Add `docs/provider-domain-contract.md` acceptance evidence.
+- [x] Update the progress checklist, development status, decision/risk/evidence registers, this review, and the next-session prompt.
+- [x] Request specification and code-quality reviews; resolve all material findings.
+- [x] Stage only `SAL-P2-001` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- The domain contract must remain synchronous and stdlib-only except reuse of the pure-domain SHA-256 value validation; it must not import `application`, `integrations`, Pandas, Arrow, Provider SDKs, FastAPI, SQLAlchemy, or repositories.
+- `RuntimeProfile` enforcement and `TraceContext` propagation belong to later application/integration callers; provenance carries only scalar correlation IDs and already-sanitized request metadata.
+- Reuse `InstrumentId`, `ProviderProblem`, `ArtifactStore` boundaries, `Run/Stage/Event`, Alembic preflight, and Compatibility Facade semantics without implementing their later P2 consumers early.
+- Keep `RSK-004` open and Gate G2 not passed. Do not mark `SAL-P2-002` or any Dataset/persistent task work complete.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated untracked files.
+
+## Review: SAL-P2-001
+
+- Red evidence: `tests/domain/test_provider_contract.py` initially failed during collection with one `ModuleNotFoundError`; the API mapping test initially failed with `500 != 502` while its other 12 tests passed.
+- Green implementation: added `src/serenity_alpha_lab/domain/providers.py` and public exports for Capability, ProviderCapabilities, ProviderWarning, Provenance, generic immutable DataBatch, six ProviderErrorCategory values, ProviderError retry policy, and synchronous runtime-checkable MarketDataProvider; added the existing Problem Details mapping and credential/path redaction coverage.
+- Boundary review: Provider domain imports only stdlib plus existing pure-domain `ArtifactUri`, `InstrumentId`, and `Market`; architecture tests reject application/integration/vendor imports. Profile, TraceContext, ArtifactStore, Run/Stage/Event, Alembic, and Compatibility Facade remain explicit caller/follow-on boundaries.
+- Review fixes: independent review found bytearray/custom-object immutability bypasses, non-finite retry delays, mutable scalar subclass acceptance, quoted Provider secret leakage, mutable contract-object references, and weak Provenance mapping schema. Local review added mutable mapping-key rejection. The implementation now uses an explicit immutable-value policy, freezes mapping keys and values, validates finite/non-negative retry delays, redacts quoted token/client-secret payloads, and enforces exact Provider value-object types.
+- Verification: Provider contract `23 passed`; related `109 passed`; full pytest `128 passed`; py_compile, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and immutable `upstream/dsa-v3.26.1` tag check passed. Local Ruff is not claimed as a pass: downloaded Ruff was blocked by the existing `W503` selector config, and a temporary config probe exposed broader existing lint debt outside `SAL-P2-001`.
+- Final independent review: earlier Critical/Important findings are closed; no remaining Critical, Important, or Minor issues were reported.
+- Scope retained: no DSA Adapter, real Provider/LLM calls, Dataset/PIT, fallback policy, PersistentTaskBackend, Quant Core, formal backtest, or broad DSA source migration. `RSK-004` and Gate G2 remain open/not passed.
+- Checkpoint scope: stage only this task's code, tests, evidence, status/ledger files and this plan; exclude `.cache`, `.venv`, `.worktrees`, pycache and unrelated files.
+
+---
+
 # P2 Status Snapshot Sync Plan
 
 > Started: 2026-07-20

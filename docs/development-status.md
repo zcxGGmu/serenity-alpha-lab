@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
-> 最后更新：2026-07-20<br>
-> 最近阶段性任务：`SAL-P1-016` Gate G1 工程地基评审<br>
+> 最后更新：2026-07-21<br>
+> 最近阶段性任务：`SAL-P2-001` Provider 领域契约<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：29/129<br>
-> 当前可执行任务：`SAL-P2-001`，状态为 `READY`；后续实现必须遵守 ADR-001/002 与 Gate G1 P2 入口约束<br>
+> 任务完成度：30/129<br>
+> 当前可执行任务：`SAL-P2-002`，状态为 `READY`；实现 DSA Provider Compatibility Adapter 时必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade<br>
 > 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -55,17 +55,21 @@
 - 完成 `SAL-P1-015`：新增 [run-p1-desktop-compatibility-performance.sh](../scripts/run-p1-desktop-compatibility-performance.sh)，重跑 DSA Desktop/API/CLI/Bot/契约金标离线矩阵并记录 Desktop 后端启动与离线单股报告性能；证据见 [Desktop 兼容和性能基线记录](./desktop-compatibility-performance-baseline.md)。
 - 完成 `SAL-P1-016`：Gate G1 评审结论为 `GO with accepted risks`，P1 工程加固完成 `16/16`，允许进入 P2；证据见 [Gate G1 工程地基评审](./gate-g1-engineering-foundation-review.md)。
 
+### P2 数据与持久任务
+
+- 完成 `SAL-P2-001`：新增纯领域 [providers.py](../src/serenity_alpha_lab/domain/providers.py)，定义 Provider capabilities、不可变 `DataBatch`/`Provenance`、warning、同步 `MarketDataProvider` Protocol 和六类错误；Provider 错误复用 P1 `ProviderProblem`/trace/脱敏边界，证据见 [Provider 领域契约记录](./provider-domain-contract.md)。
+
 ## 未完成
 
 ### 当前可执行 P2 任务
 
-- `SAL-P2-001` 当前为 `READY`：定义 Provider 领域契约，实现 Capability、DataBatch、Provenance 和统一错误分类。
+- `SAL-P2-002` 当前为 `READY`：实现 DSA Provider Compatibility Adapter，将现有 `DataFetcherManager`/Pandas 输出收口到已冻结的 Provider 领域契约。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 100 项工程任务未完成。
-- 已创建 Serenity 目标包骨架，但尚未实现 Serenity 目标运行时代码、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
+- P2 至 P6 仍有 99 项工程任务未完成。
+- 已创建 Serenity 目标包骨架和 Provider 领域契约，但尚未实现 DSA Provider Adapter、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -86,6 +90,7 @@
 - 配置 Profile facade 已建立：CI profile 默认禁止真实网络/模型/Provider 调用并拒绝真实 key；standalone/service profile 只允许无副作用预览，不通过 profile API 改写部署 `.env`。
 - Desktop 兼容和性能基线已建立：`scripts/run-p1-desktop-compatibility-performance.sh` 离线复跑 Desktop/API/CLI/Bot、API/config、database、report/signal，并记录启动和单股报告性能；运行产物只落 `.cache/dsa-p0`。
 - Gate G1 已批准进入 P2：Provider、Dataset、Persistent TaskBackend 和 Worker 必须复用 P1 `RuntimeProfile`、`ProblemDetail`、`TraceContext`、`ArtifactStore`、`Run/Stage/Event`、Alembic preflight 和 Compatibility Facade。
+- Provider 领域契约已冻结：Adapter 通过同步 `MarketDataProvider` 返回带 schema、来源、已脱敏请求、时间、SHA-256、field lineage、freshness 和 warning 的不可变 `DataBatch`；`retryable/rate_limited/auth/schema_drift/data_invalid/permanent` 供内部策略使用，对外继续映射为稳定 `provider_error`。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -101,8 +106,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-001` Provider 领域契约。
-2. P2 实现必须保留 CI 离线边界，不触发真实 Provider/LLM 调用；数据版本任务必须记录 `available_at <= decision_time`。
+1. 优先执行 `SAL-P2-002` DSA Provider Compatibility Adapter，使用 Characterization/Contract Test 收口 `DataFetcherManager`/Pandas，不复制大规模 DSA runtime source。
+2. Adapter 必须复用 `InstrumentId`、`RuntimeProfile`、`TraceContext`、`ProviderProblem`、`ArtifactStore`、`Run/Stage/Event` 和 Compatibility Facade；CI 保持无真实 Provider/LLM 调用。
 3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
@@ -122,6 +127,7 @@
 - 2026-07-20：完成 `SAL-P1-015`，新增 Desktop 兼容和性能基线脚本，离线矩阵 PASS，Desktop 后端 health 启动 `5,822ms`、单股报告生成均值 `0.030ms`；当前已完成 P1 `15/16`，Gate G1 仍未通过；`SAL-P1-016` 是唯一推荐下一步。
 - 2026-07-20：完成 `SAL-P1-016`，Gate G1 结论为 `GO with accepted risks`，P1 完成 `16/16`，总进度 `29/129`；项目已进入 P2，`SAL-P2-001` 是唯一推荐下一步。
 - 2026-07-20：按用户要求复核最新开发状态；确认当前 Phase 为 P2，Gate G2 未通过，G0/G1 已通过，`SAL-P0-001..013` 与 `SAL-P1-001..016` 已完成，`SAL-P2-001` 为当前 `READY` 任务；本次同步同时更新 `tasks/lessons.md` 以固化阶段性任务完成后的状态同步习惯。
+- 2026-07-21：完成 `SAL-P2-001`，冻结同步 Provider Protocol、Capability、不可变 DataBatch/Provenance、warning 和六类错误；Provider contract `23 passed`、相关套件 `109 passed`、全量 pytest `128 passed`，P2 进度 `1/20`、总进度 `30/129`，`SAL-P2-002` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -156,15 +162,15 @@
 当前状态：
 - Phase：P2 数据与持久任务
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016
-- 最近完成：SAL-P1-016 Gate G1 工程地基评审
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001
+- 最近完成：SAL-P2-001 Provider 领域契约
 - 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 16/16，P2 0/20，总计 29/129
+- 进度：P0 13/13，P1 16/16，P2 1/20，总计 30/129
 
 下一步优先执行：
-1. SAL-P2-001 定义 Provider 领域契约
-2. P2 Provider/Dataset/持久任务实现必须复用 Gate G1 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade
+1. SAL-P2-002 实现 DSA Provider Compatibility Adapter，将 DataFetcherManager/Pandas 收口到已冻结的 Provider 领域契约
+2. Adapter 和后续 Provider/Dataset/持久任务实现必须复用 Gate G1 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade
 3. 在对应任务前不要启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移
 
 严格遵守 AGENTS.md：

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any, Callable, Mapping
 
@@ -20,6 +20,7 @@ from serenity_alpha_lab.application.tracing import (
     redact_sensitive_data,
     use_trace_context,
 )
+from serenity_alpha_lab.domain.providers import ProviderError
 
 
 PROBLEM_JSON_CONTENT_TYPE = "application/problem+json"
@@ -217,6 +218,8 @@ def problem_from_exception(
         if _is_research_validation_error(str(exc)):
             return ValidationProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
         return ProviderProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
+    if isinstance(exc, ProviderError):
+        return ProviderProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
     if isinstance(exc, ValueError):
         return ValidationProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
     if isinstance(exc, TaskBackendCapabilityError):
@@ -232,7 +235,7 @@ def redact_problem_detail(detail: Any) -> str:
     text = _POSIX_PATH_RE.sub("[REDACTED_PATH]", text)
     text = _WINDOWS_PATH_RE.sub("[REDACTED_PATH]", text)
     text = _BEARER_RE.sub(r"\1[REDACTED]", text)
-    text = _SECRET_ASSIGNMENT_RE.sub(r"\1=[REDACTED]", text)
+    text = _SECRET_ASSIGNMENT_RE.sub(_redact_secret_assignment, text)
     text = _API_KEY_VALUE_RE.sub("[REDACTED]", text)
     text = _PRIVATE_PAYLOAD_RE.sub(r"\1=[REDACTED]", text)
     return text
@@ -283,10 +286,20 @@ _WINDOWS_PATH_RE = re.compile(r"\b[A-Za-z]:\\(?:Users|Temp|Windows|Program Files
 _PYTHON_FILE_TRACE_RE = re.compile(r"File \"[^\"]+\", line \d+")
 _API_KEY_VALUE_RE = re.compile(r"\b(?:sk|pk|rk)-[A-Za-z0-9_-]{8,}\b")
 _BEARER_RE = re.compile(r"(?i)\b(authorization\s*[:=]\s*bearer\s+)[^\s,;]+")
-_SECRET_ASSIGNMENT_RE = re.compile(r"(?i)\b(api[-_]?key|token|secret|password)\s*[:=]\s*[^\s,;]+")
+_SECRET_ASSIGNMENT_RE = re.compile(
+    r"(?i)(?P<prefix>['\"]?\b"
+    r"(?:api[-_]?key|(?:access|refresh)[-_]?token|client[-_]?secret|token|secret|password)"
+    r"\b['\"]?\s*[:=]\s*)"
+    r"(?P<quote>['\"]?)(?P<secret>.*?)(?P=quote)(?=[\s,;}]|$)"
+)
 _PRIVATE_PAYLOAD_RE = re.compile(
     r"(?i)\b(prompt|body|content|messages|private[-_]?body)\s*[:=]\s*.+?(?=\s+\w[\w-]*\s*[:=]|$)"
 )
+
+
+def _redact_secret_assignment(match: re.Match[str]) -> str:
+    quote = match.group("quote") or ""
+    return f"{match.group('prefix')}{quote}[REDACTED]{quote}"
 
 
 __all__ = [
