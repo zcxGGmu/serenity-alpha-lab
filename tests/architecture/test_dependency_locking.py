@@ -32,6 +32,7 @@ def test_dependency_surfaces_are_split_into_expected_extras() -> None:
     assert set(optional) == {"core", "providers", "desktop", "quant", "dev"}
 
     assert "python-dotenv>=1.0.0" in optional["core"]
+    assert "pydantic-settings>=2.0.0" in optional["core"]
     assert "sqlalchemy>=2.0.0" in optional["core"]
     assert "fastapi>=0.109.0" in optional["core"]
     assert "uvicorn[standard]>=0.27.0" in optional["core"]

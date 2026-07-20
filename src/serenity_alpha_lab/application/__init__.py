@@ -1,5 +1,17 @@
 """Application use-case orchestration boundary."""
 
+from serenity_alpha_lab.application.config_profiles import (
+    ConfigProfileError,
+    ConfigValueSource,
+    ProfilePolicy,
+    RuntimeConfigUpdatePreview,
+    RuntimeProfile,
+    RuntimeSettings,
+    load_runtime_settings,
+    preview_runtime_config_update,
+    profile_policy,
+    redacted_config_diagnostics,
+)
 from serenity_alpha_lab.application.task_backend import (
     InMemoryTaskBackend,
     TaskAlreadyExists,
@@ -25,6 +37,16 @@ from serenity_alpha_lab.application.tracing import (
 )
 
 __all__ = [
+    "ConfigProfileError",
+    "ConfigValueSource",
+    "ProfilePolicy",
+    "RuntimeConfigUpdatePreview",
+    "RuntimeProfile",
+    "RuntimeSettings",
+    "load_runtime_settings",
+    "preview_runtime_config_update",
+    "profile_policy",
+    "redacted_config_diagnostics",
     "InMemoryTaskBackend",
     "TaskAlreadyExists",
     "TaskBackend",

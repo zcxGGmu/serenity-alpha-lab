@@ -1,3 +1,35 @@
+# P1 Config Profile Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-014` as a P1 engineering-hardening checkpoint. Define desktop/standalone/ci runtime profiles, secret boundaries, redacted diagnostics, and config source tracking without rewriting deployment `.env`, starting Provider/LLM calls, changing DSA runtime config endpoints, or adding deployment automation.
+
+## Checklist
+
+- [x] Review P1 profile requirements, DSA config baseline, dependency surface, and ADR-002 facade boundary.
+- [x] Add Red tests for runtime profile policies, CI key/network rejection, redacted diagnostics, source tracking, and no `.env` rewrite from service profile preview.
+- [x] Add direct `pydantic-settings` dependency to the root core install surface and refresh lock/export if needed.
+- [x] Implement application-layer `ConfigProfileFacade`, Pydantic settings model, profile policy, diagnostics, and update preview.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-014` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-014` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-014` is configuration/profile foundation only: no DSA `.env` rewrite integration, no Web/API route changes, no deployment profile rewrite, no Provider/LLM calls, no Alembic, no PIT Dataset, no Quant Core, and no formal backtest.
+- CI profile must default to offline/stub behavior and reject real model/provider secrets.
+- Diagnostics must not expose complete API keys, provider tokens, prompts, body content, credentials, or deployment secret values.
+
+## Review: SAL-P1-014
+
+- Added Red tests in `tests/application/test_config_profiles.py`; initial target run failed on missing `serenity_alpha_lab.application.config_profiles`, then Green passed with target `9 passed`.
+- Added `src/serenity_alpha_lab/application/config_profiles.py`, defining `RuntimeSettings`, `RuntimeProfile`, `ProfilePolicy`, `ConfigValueSource`, `ConfigProfileError`, source-tracked loading, redacted diagnostics, CI boundary enforcement, and side-effect-free update preview.
+- Added direct root `core` dependency `pydantic-settings>=2.0.0`; refreshed minimal `uv.lock` project metadata and regenerated `requirements.txt` through the existing lock/export guard.
+- Added `docs/config-profile-facade.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-014` done, record `DEC-021` / `AEV-023`, move P1 progress to `10/16`, total progress to `23/129`, and promote `SAL-P1-012` to `READY`.
+- Verification completed: target Config Profile tests `9 passed`, application/architecture `29 passed`, P1 related application/architecture/domain/repositories/integrations `79 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `79 passed`, py_compile for changed application/test files, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 Trace and Structured Logging Plan
 
 > Started: 2026-07-20

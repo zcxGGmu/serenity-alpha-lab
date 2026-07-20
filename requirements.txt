@@ -261,8 +261,11 @@ pydantic==2.13.4
     #   fastapi
     #   litellm
     #   openai
+    #   pydantic-settings
 pydantic-core==2.46.4
     # via pydantic
+pydantic-settings==2.14.2
+    # via serenity-alpha-lab
 pygments==2.20.0
     # via rich
 pyluach==2.3.0
@@ -280,6 +283,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
     # via
     #   litellm
+    #   pydantic-settings
     #   serenity-alpha-lab
     #   uvicorn
 python-multipart==0.0.32
@@ -407,6 +411,7 @@ typing-inspection==0.4.2
     # via
     #   fastapi
     #   pydantic
+    #   pydantic-settings
 tzdata==2026.3
     # via
     #   exchange-calendars

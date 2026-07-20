@@ -73,13 +73,13 @@
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | DOING | 9/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
+| P1 工程加固 | 2~3 | DOING | 10/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **22/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **23/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -397,7 +397,7 @@ P0 基线
 
 ### SAL-P1-012 接入 Alembic
 
-- [ ] [TODO] 让 Alembic 成为唯一 Schema 迁移入口
+- [ ] [READY] 让 Alembic 成为唯一 Schema 迁移入口
 - 元数据：优先级 P0 | 负责人 BE | 估算 2d | 实际 - | 依赖 SAL-P0-009
 - 交付物：baseline revision、迁移命令、启动前检查。
 - 验收：
@@ -415,12 +415,15 @@ P0 基线
 
 ### SAL-P1-014 整理配置与运行 Profile
 
-- [ ] [READY] 定义 desktop/standalone/ci 配置及密钥边界
-- 元数据：优先级 P1 | 负责人 BE/SEC | 估算 2d | 实际 - | 依赖 SAL-P1-002
+- [x] [DONE] 定义 desktop/standalone/ci 配置及密钥边界
+- 元数据：优先级 P1 | 负责人 BE/SEC | 估算 2d | 实际 0.5d | 依赖 SAL-P1-002 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：Pydantic Settings、Profile、脱敏诊断、配置来源。
 - 验收：
   - 服务 Profile 的 API 不重写部署 `.env`。
   - CI 默认 Stub 且禁止真实模型/Provider 调用。
+- 结果：新增 `src/serenity_alpha_lab/application/config_profiles.py`，定义 `RuntimeSettings`、`RuntimeProfile`、`ProfilePolicy`、`ConfigValueSource`、脱敏诊断、CI 边界校验和无副作用配置更新预览；`pydantic-settings>=2.0.0` 纳入 root `core` extra，并同步 `uv.lock` 与 `requirements.txt`。
+- 范围限制：本任务不改写 DSA `.env`、不新增 Web/API 路由、不启动部署 automation、Provider/LLM 调用、Alembic、PIT Dataset、Quant Core 或正式回测。
+- 验收证据：见 [配置 Profile 与密钥边界记录](./config-profile-facade.md)；`tests/application/test_config_profiles.py`；Red 测试先因缺少模块失败，Green 后目标测试得到 `9 passed`。
 
 ### SAL-P1-015 验证 Desktop 兼容和性能基线
 
@@ -1445,6 +1448,7 @@ P0 基线
 | DEC-018 | 2026-07-20 | Artifact 内容寻址与本地发布口径 | 采用纯 domain Artifact manifest + `ArtifactStore` Protocol；本地实现以 SHA-256 blob 和 JSON manifest 分离存储，manifest 最后原子发布，失败写入不得产生可查询记录 | [artifact-store-domain-model.md](./artifact-store-domain-model.md); [artifacts.py](../src/serenity_alpha_lab/domain/artifacts.py); [local_artifact_store.py](../src/serenity_alpha_lab/repositories/local_artifact_store.py) | SAL-P1-007,SAL-P2-007,SAL-P4-004,SAL-P5-001 | G1 |
 | DEC-019 | 2026-07-20 | TaskBackend 兼容外壳口径 | 采用应用层 `TaskBackend` Protocol + `InMemoryTaskBackend`；DSA `AnalysisTaskQueue` 只通过注入式 facade 和 handler registry 包裹，不在 Serenity application/API 直接暴露 `ThreadPoolExecutor` 假设 | [task-backend-facade.md](./task-backend-facade.md); [task_backend.py](../src/serenity_alpha_lab/application/task_backend.py); [task_backend.py](../src/serenity_alpha_lab/integrations/dsa/task_backend.py) | SAL-P1-008,SAL-P2-018,SAL-P1-016 | G1 |
 | DEC-020 | 2026-07-20 | 结构化日志与 Trace 上下文口径 | 采用 stdlib-only `TraceContext` + ContextVar + JSON formatter + ASGI middleware；日志输出默认包含 trace/run/stage/user 字段并递归脱敏 secret、token、prompt、messages 和 body/content | [structured-trace-logging.md](./structured-trace-logging.md); [tracing.py](../src/serenity_alpha_lab/application/tracing.py) | SAL-P1-011,SAL-P6-001,SAL-P6-006 | G1 |
+| DEC-021 | 2026-07-20 | 配置 Profile 与密钥边界口径 | 采用应用层 `RuntimeSettings` + `RuntimeProfile` + `ProfilePolicy`；CI profile 默认禁用网络、模型和 Provider 调用并拒绝真实 key，standalone/service profile 只允许无副作用预览，不通过 profile API 改写部署 `.env` | [config-profile-facade.md](./config-profile-facade.md); [config_profiles.py](../src/serenity_alpha_lab/application/config_profiles.py) | SAL-P1-014,SAL-P1-010,SAL-P1-012,SAL-P2-001 | G1 |
 
 ## 14. 验收证据登记
 
@@ -1472,6 +1476,7 @@ P0 基线
 | AEV-020 | SAL-P1-007 | Artifact 纯领域模型、本地内容寻址存储和原子发布测试 | [artifact-store-domain-model.md](./artifact-store-domain-model.md); [artifacts.py](../src/serenity_alpha_lab/domain/artifacts.py); [local_artifact_store.py](../src/serenity_alpha_lab/repositories/local_artifact_store.py); [test_artifacts.py](../tests/domain/test_artifacts.py); [test_local_artifact_store.py](../tests/repositories/test_local_artifact_store.py) | content-addressed URI/manifest; failed manifest publish leaves no record/temp/blob files; hash/size/schema/run/retention queryable; target Green `6 passed`; architecture/domain/repositories `58 passed` | BE | 2026-07-20 |
 | AEV-021 | SAL-P1-008 | TaskBackend Protocol、InMemory 实现、DSA 兼容 Facade 和线程池边界测试 | [task-backend-facade.md](./task-backend-facade.md); [task_backend.py](../src/serenity_alpha_lab/application/task_backend.py); [task_backend.py](../src/serenity_alpha_lab/integrations/dsa/task_backend.py); [test_task_backend_contract.py](../tests/application/test_task_backend_contract.py); [test_dsa_task_backend_facade.py](../tests/integrations/test_dsa_task_backend_facade.py) | submit/get/cancel/subscribe contract; DSA injected queue facade; no application/facade ThreadPoolExecutor import; target Green `12 passed`; full pytest `66 passed` | BE | 2026-07-20 |
 | AEV-022 | SAL-P1-011 | Trace context、结构化 JSON 日志、脱敏和 ASGI middleware 测试 | [structured-trace-logging.md](./structured-trace-logging.md); [tracing.py](../src/serenity_alpha_lab/application/tracing.py); [test_trace_context.py](../tests/application/test_trace_context.py) | trace/run/stage/user propagation; JSON formatter; secret/prompt/body redaction; ASGI x-trace-id response propagation; target Green `4 passed`; full pytest `70 passed` | BE | 2026-07-20 |
+| AEV-023 | SAL-P1-014 | 配置 Profile、CI 密钥边界、脱敏诊断和无副作用更新预览测试 | [config-profile-facade.md](./config-profile-facade.md); [config_profiles.py](../src/serenity_alpha_lab/application/config_profiles.py); [test_config_profiles.py](../tests/application/test_config_profiles.py) | desktop/standalone/ci policy; CI rejects real key/network; diagnostics redacts secrets and tracks env source; service profile preview does not rewrite `.env`; target Green `9 passed`; full pytest `79 passed` | BE/SEC | 2026-07-20 |
 
 允许的证据：
 
@@ -1509,4 +1514,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-011`，完成度为 22/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-014` 配置 Profile、`SAL-P1-009` ResearchOrchestrator 或 `SAL-P1-010` API 错误协议；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-011`、`SAL-P1-014`，完成度为 23/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-009` ResearchOrchestrator、`SAL-P1-010` API 错误协议或 `SAL-P1-012` Alembic；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
