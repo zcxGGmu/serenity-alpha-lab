@@ -1,5 +1,20 @@
 """Application use-case orchestration boundary."""
 
+from serenity_alpha_lab.application.api_errors import (
+    ApiErrorCode,
+    ApiProblemError,
+    ConflictProblem,
+    InternalProblem,
+    NotFoundProblem,
+    ProblemDetail,
+    ProblemDetailsMiddleware,
+    ProviderProblem,
+    ValidationProblem,
+    problem_from_exception,
+    problem_response_body,
+    problem_type_uri,
+    redact_problem_detail,
+)
 from serenity_alpha_lab.application.config_profiles import (
     ConfigProfileError,
     ConfigValueSource,
@@ -46,12 +61,21 @@ from serenity_alpha_lab.application.tracing import (
 )
 
 __all__ = [
+    "ApiErrorCode",
+    "ApiProblemError",
+    "ConflictProblem",
     "ConfigProfileError",
     "ConfigValueSource",
+    "InternalProblem",
+    "NotFoundProblem",
+    "ProblemDetail",
+    "ProblemDetailsMiddleware",
+    "ProviderProblem",
     "ProfilePolicy",
     "RuntimeConfigUpdatePreview",
     "RuntimeProfile",
     "RuntimeSettings",
+    "ValidationProblem",
     "ProgressCallback",
     "ResearchChatRequest",
     "ResearchMode",
@@ -59,6 +83,9 @@ __all__ = [
     "ResearchOrchestratorError",
     "ResearchRequest",
     "ResearchResult",
+    "problem_from_exception",
+    "problem_response_body",
+    "problem_type_uri",
     "load_runtime_settings",
     "preview_runtime_config_update",
     "profile_policy",
@@ -80,6 +107,7 @@ __all__ = [
     "TraceContextMiddleware",
     "current_trace_context",
     "generate_trace_id",
+    "redact_problem_detail",
     "redact_sensitive_data",
     "use_trace_context",
 ]

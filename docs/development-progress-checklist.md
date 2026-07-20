@@ -73,13 +73,13 @@
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | DOING | 11/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
+| P1 工程加固 | 2~3 | DOING | 12/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **24/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **25/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -379,12 +379,15 @@ P0 基线
 
 ### SAL-P1-010 统一 API 错误协议
 
-- [ ] [READY] 引入 `application/problem+json` 和稳定错误码
-- 元数据：优先级 P1 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P1-004
+- [x] [DONE] 引入 `application/problem+json` 和稳定错误码
+- 元数据：优先级 P1 | 负责人 BE | 估算 1.5d | 实际 0.5d | 依赖 SAL-P1-004 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：异常映射、中间件、OpenAPI 示例、前端解析。
 - 验收：
   - validation/not-found/conflict/provider/internal 可区分。
   - 响应不泄露堆栈、路径或密钥。
+- 结果：新增 `src/serenity_alpha_lab/application/api_errors.py`，定义 `ApiErrorCode`、`ProblemDetail`、`ApiProblemError` 常用子类、`problem_from_exception()`、`problem_response_body()`、自由文本脱敏和框架无关 `ProblemDetailsMiddleware`；应用层导出稳定 problem symbols。
+- 范围限制：本任务不改写 DSA API route、不刷新 OpenAPI baseline、不实现前端解析、不启动 Provider/LLM、Alembic、PIT Dataset、Quant Core 或正式回测。
+- 验收证据：见 [API 错误协议记录](./api-error-protocol.md)；`tests/application/test_api_errors.py`；`tests/architecture/test_architecture_boundaries.py`；Red 测试先因缺少模块失败，Green 后目标测试得到 `5 passed`；相关 application/architecture 套件 `41 passed`，全量 pytest `95 passed`。
 
 ### SAL-P1-011 统一结构化日志与 Trace
 
@@ -1453,6 +1456,7 @@ P0 基线
 | DEC-020 | 2026-07-20 | 结构化日志与 Trace 上下文口径 | 采用 stdlib-only `TraceContext` + ContextVar + JSON formatter + ASGI middleware；日志输出默认包含 trace/run/stage/user 字段并递归脱敏 secret、token、prompt、messages 和 body/content | [structured-trace-logging.md](./structured-trace-logging.md); [tracing.py](../src/serenity_alpha_lab/application/tracing.py) | SAL-P1-011,SAL-P6-001,SAL-P6-006 | G1 |
 | DEC-021 | 2026-07-20 | 配置 Profile 与密钥边界口径 | 采用应用层 `RuntimeSettings` + `RuntimeProfile` + `ProfilePolicy`；CI profile 默认禁用网络、模型和 Provider 调用并拒绝真实 key，standalone/service profile 只允许无副作用预览，不通过 profile API 改写部署 `.env` | [config-profile-facade.md](./config-profile-facade.md); [config_profiles.py](../src/serenity_alpha_lab/application/config_profiles.py) | SAL-P1-014,SAL-P1-010,SAL-P1-012,SAL-P2-001 | G1 |
 | DEC-022 | 2026-07-20 | ResearchOrchestrator 兼容外壳口径 | 采用应用层 `ResearchOrchestrator` Protocol + DTO；DSA `AgentOrchestrator` / `AgentExecutor` 只通过注入式 facade 包裹，保留 `AgentResult` 字段语义，不在 application 层导入具体 DSA Agent runtime | [research-orchestrator-facade.md](./research-orchestrator-facade.md); [research_orchestrator.py](../src/serenity_alpha_lab/application/research_orchestrator.py); [research_orchestrator.py](../src/serenity_alpha_lab/integrations/dsa/research_orchestrator.py) | SAL-P1-009,SAL-P5-001,SAL-P5-011 | G1 |
+| DEC-023 | 2026-07-20 | API Problem Details 错误协议口径 | 采用应用层 `ProblemDetail` + 稳定 `ApiErrorCode` + 框架无关 ASGI middleware；validation/not-found/conflict/provider/internal 分层映射，未知内部异常不暴露 stack trace、绝对路径、secret、prompt 或 body/content | [api-error-protocol.md](./api-error-protocol.md); [api_errors.py](../src/serenity_alpha_lab/application/api_errors.py) | SAL-P1-010,SAL-P1-016,SAL-P2-001,SAL-P2-018 | G1 |
 
 ## 14. 验收证据登记
 
@@ -1482,6 +1486,7 @@ P0 基线
 | AEV-022 | SAL-P1-011 | Trace context、结构化 JSON 日志、脱敏和 ASGI middleware 测试 | [structured-trace-logging.md](./structured-trace-logging.md); [tracing.py](../src/serenity_alpha_lab/application/tracing.py); [test_trace_context.py](../tests/application/test_trace_context.py) | trace/run/stage/user propagation; JSON formatter; secret/prompt/body redaction; ASGI x-trace-id response propagation; target Green `4 passed`; full pytest `70 passed` | BE | 2026-07-20 |
 | AEV-023 | SAL-P1-014 | 配置 Profile、CI 密钥边界、脱敏诊断和无副作用更新预览测试 | [config-profile-facade.md](./config-profile-facade.md); [config_profiles.py](../src/serenity_alpha_lab/application/config_profiles.py); [test_config_profiles.py](../tests/application/test_config_profiles.py) | desktop/standalone/ci policy; CI rejects real key/network; diagnostics redacts secrets and tracks env source; service profile preview does not rewrite `.env`; target Green `9 passed`; full pytest `79 passed` | BE/SEC | 2026-07-20 |
 | AEV-024 | SAL-P1-009 | ResearchOrchestrator Protocol、DSA 兼容 Facade 和架构边界测试 | [research-orchestrator-facade.md](./research-orchestrator-facade.md); [research_orchestrator.py](../src/serenity_alpha_lab/application/research_orchestrator.py); [research_orchestrator.py](../src/serenity_alpha_lab/integrations/dsa/research_orchestrator.py); [test_research_orchestrator_contract.py](../tests/application/test_research_orchestrator_contract.py); [test_dsa_research_orchestrator_facade.py](../tests/integrations/test_dsa_research_orchestrator_facade.py) | stable run/chat DTOs; DSA injected orchestrator facade; no application/facade concrete DSA Agent import; target Green `16 passed`; related suite `43 passed`; full pytest `90 passed`; py_compile/lock/diff/tag checks PASS | AI/BE | 2026-07-20 |
+| AEV-025 | SAL-P1-010 | API Problem Details、异常映射、脱敏和 ASGI middleware 测试 | [api-error-protocol.md](./api-error-protocol.md); [api_errors.py](../src/serenity_alpha_lab/application/api_errors.py); [test_api_errors.py](../tests/application/test_api_errors.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | stable `application/problem+json` body; validation/not-found/conflict/provider/internal mapping; trace_id header/body propagation; stack/path/secret/prompt/body redaction; target Green `5 passed`; related suite `41 passed`; full pytest `95 passed`; py_compile/lock/diff/tag checks PASS | BE/SEC | 2026-07-20 |
 
 允许的证据：
 
@@ -1519,4 +1524,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-011`、`SAL-P1-014`，完成度为 24/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-010` API 错误协议、`SAL-P1-012` Alembic 或 `SAL-P1-013` SQLite 升级验证；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-014`，完成度为 25/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-012` Alembic，随后执行 `SAL-P1-013` SQLite 升级验证、`SAL-P1-015` Desktop 兼容和性能基线，以及 `SAL-P1-016` Gate G1；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。

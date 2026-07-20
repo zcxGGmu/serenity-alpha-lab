@@ -1,3 +1,36 @@
+# P1 API Error Protocol Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-010` as a P1 engineering-hardening checkpoint. Define a stable `application/problem+json` error protocol, sanitized problem details, error code mapping, and framework-neutral ASGI middleware without changing existing DSA API routes, OpenAPI snapshots, Provider/LLM behavior, Alembic, PIT Dataset, Quant Core, or formal backtesting.
+
+## Checklist
+
+- [x] Review P1 error requirements, existing TaskBackend/Config/Research errors, Trace context, and ADR-002 API boundary rules.
+- [x] Add Red tests for RFC 7807-style serialization, stable error codes, trace_id propagation, validation/not-found/conflict/provider/internal mapping, and secret/path redaction.
+- [x] Add Red ASGI middleware tests for `application/problem+json` responses without FastAPI imports.
+- [x] Implement application-layer API error DTOs, error classes, exception mapper, redactor, response helpers, and middleware.
+- [x] Export public API error symbols from `serenity_alpha_lab.application`.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-010` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-010` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-010` is protocol/middleware foundation only: no DSA API route rewrite, no OpenAPI baseline refresh, no Web client change, no Provider/LLM calls, no Alembic migration, no PIT Dataset, no Quant Core, and no formal backtest.
+- Problem details must not expose Python stack traces, absolute file paths, API keys, tokens, prompts, request bodies, or private content.
+- Keep middleware framework-neutral and avoid FastAPI/Starlette imports.
+
+## Review: SAL-P1-010
+
+- Added Red tests in `tests/application/test_api_errors.py` and an architecture boundary check in `tests/architecture/test_architecture_boundaries.py`; initial target run failed on missing `serenity_alpha_lab.application.api_errors` with `5 failed`.
+- Added `src/serenity_alpha_lab/application/api_errors.py`, defining `ApiErrorCode`, `ProblemDetail`, `ApiProblemError` subclasses, `problem_from_exception()`, `problem_response_body()`, `redact_problem_detail()`, and framework-neutral `ProblemDetailsMiddleware`.
+- Mapped existing app errors explicitly: `TaskNotFound` -> `not_found`, `TaskAlreadyExists` -> `conflict`, `ConfigProfileError` / `ValueError` -> `validation_error`, request-validation `ResearchOrchestratorError` -> `validation_error`, DSA/facade `ResearchOrchestratorError` -> `provider_error`, `TaskBackendCapabilityError` / unknown exceptions -> `internal_error`.
+- Added `docs/api-error-protocol.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-010` done, record `DEC-023` / `AEV-025`, move P1 progress to `12/16`, and total progress to `25/129`.
+- Verification completed: target API error tests `5 passed`, application/architecture `41 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `95 passed`, py_compile for changed application/test files, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 ResearchOrchestrator Plan
 
 > Started: 2026-07-20

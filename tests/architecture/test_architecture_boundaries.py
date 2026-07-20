@@ -156,3 +156,17 @@ def test_research_orchestrator_contracts_do_not_import_concrete_dsa_agent_runtim
                 failures.append(f"{path.relative_to(ROOT)} imports {module}")
 
     assert failures == []
+
+
+def test_api_error_protocol_stays_framework_neutral() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "application" / "api_errors.py"
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if root in {"fastapi", "starlette"}:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
