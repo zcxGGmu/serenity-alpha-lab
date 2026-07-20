@@ -1,3 +1,38 @@
+# P1 ResearchOrchestrator Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-009` as a P1 engineering-hardening checkpoint. Define a stable application-layer ResearchOrchestrator protocol and an injected DSA compatibility facade for `AgentOrchestrator.run/chat` without copying DSA runtime source, changing API routes, starting Provider/LLM calls, adding persistence, or replacing report generation.
+
+## Checklist
+
+- [x] Review DSA `AgentOrchestrator`/`AgentResult` signatures, existing Agent API call sites, ADR-002 facade scope, and P1 guardrails.
+- [x] Add Red application contract tests for Research request/result DTOs, protocol shape, validation, and immutable context handling.
+- [x] Add Red integration facade tests for mapping DSA-like `run()` and `chat()` results through an injected orchestrator object.
+- [x] Add architecture tests proving the application contract and DSA facade do not import concrete DSA `src.agent` modules.
+- [x] Implement application-layer ResearchOrchestrator DTOs, Protocol, progress callback type, errors, and result mapping contract.
+- [x] Implement DSA `AgentOrchestrator` compatibility facade using constructor injection and shallow context normalization.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-009` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-009` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-009` is facade/protocol foundation only: no API route migration, no Deep Research rewrite, no Agent checkpoint persistence, no Evidence Agent, no Provider/LLM calls, no Quant Core, no PIT Dataset, and no formal backtest.
+- DSA compatibility code must receive an orchestrator-like object by injection; no top-level `src.agent.orchestrator` or broad DSA runtime import.
+- Existing DSA result semantics must remain intact: `success/content/dashboard/tool_calls_log/total_steps/total_tokens/provider/model/error` are mapped without reinterpretation.
+
+## Review: SAL-P1-009
+
+- Added Red tests in `tests/application/test_research_orchestrator_contract.py` and `tests/integrations/test_dsa_research_orchestrator_facade.py`; initial target run failed on missing `serenity_alpha_lab.application.research_orchestrator`, then Green passed with target `16 passed`.
+- Added architecture coverage in `tests/architecture/test_architecture_boundaries.py` to reject concrete DSA Agent runtime imports from the application contract and DSA facade.
+- Added `src/serenity_alpha_lab/application/research_orchestrator.py`, defining `ResearchRequest`, `ResearchChatRequest`, `ResearchResult`, `ResearchOrchestrator`, `ResearchMode`, `ProgressCallback`, and `ResearchOrchestratorError`.
+- Added `src/serenity_alpha_lab/integrations/dsa/research_orchestrator.py`, defining `DsaResearchOrchestratorFacade` around an injected DSA-like orchestrator; it maps `run()` / `chat()` results without reinterpreting legacy `AgentResult` fields and normalizes explicit chat skills into `skills` / `strategies`.
+- Added `docs/research-orchestrator-facade.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-009` done, record `DEC-022` / `AEV-024`, move P1 progress to `11/16`, and total progress to `24/129`.
+- Verification completed: target ResearchOrchestrator tests `16 passed`, application/integrations/architecture `43 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `90 passed`, py_compile for changed application/integration/test files, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 Config Profile Plan
 
 > Started: 2026-07-20

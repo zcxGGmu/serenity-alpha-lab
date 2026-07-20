@@ -12,6 +12,15 @@ from serenity_alpha_lab.application.config_profiles import (
     profile_policy,
     redacted_config_diagnostics,
 )
+from serenity_alpha_lab.application.research_orchestrator import (
+    ProgressCallback,
+    ResearchChatRequest,
+    ResearchMode,
+    ResearchOrchestrator,
+    ResearchOrchestratorError,
+    ResearchRequest,
+    ResearchResult,
+)
 from serenity_alpha_lab.application.task_backend import (
     InMemoryTaskBackend,
     TaskAlreadyExists,
@@ -43,6 +52,13 @@ __all__ = [
     "RuntimeConfigUpdatePreview",
     "RuntimeProfile",
     "RuntimeSettings",
+    "ProgressCallback",
+    "ResearchChatRequest",
+    "ResearchMode",
+    "ResearchOrchestrator",
+    "ResearchOrchestratorError",
+    "ResearchRequest",
+    "ResearchResult",
     "load_runtime_settings",
     "preview_runtime_config_update",
     "profile_policy",

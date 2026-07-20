@@ -132,3 +132,27 @@ def test_application_and_dsa_task_facade_do_not_import_thread_pool_executor() ->
                 failures.append(f"{path.relative_to(ROOT)} imports ThreadPoolExecutor")
 
     assert failures == []
+
+
+def test_research_orchestrator_contracts_do_not_import_concrete_dsa_agent_runtime() -> None:
+    failures: list[str] = []
+    forbidden_prefixes = (
+        "src.agent",
+        "src.core.pipeline",
+        "api.v1.endpoints.agent",
+        "bot.commands",
+    )
+    target_files = [
+        PACKAGE_ROOT / "application" / "research_orchestrator.py",
+        PACKAGE_ROOT / "integrations" / "dsa" / "research_orchestrator.py",
+    ]
+
+    for path in target_files:
+        if not path.exists():
+            failures.append(f"{path.relative_to(ROOT)} does not exist")
+            continue
+        for module in imported_modules(path):
+            if module.startswith(forbidden_prefixes):
+                failures.append(f"{path.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
