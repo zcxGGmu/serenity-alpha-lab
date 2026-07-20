@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-20<br>
-> 最近阶段性任务：`SAL-P1-012` 接入 Alembic<br>
+> 最近阶段性任务：`SAL-P1-013` 验证历史 SQLite 升级<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P1 工程加固<br>
 > 当前 Gate：G1，未通过；G0 已通过（`GO with accepted risks`）<br>
-> 任务完成度：26/129<br>
-> 当前可执行任务：`SAL-P1-013`，状态为 `READY`；`SAL-P1-015` 在 `SAL-P1-013` 完成后可执行，`SAL-P1-016` 在 `SAL-P1-001..015` 完成后可执行；后续实现必须遵守 ADR-001/002<br>
+> 任务完成度：27/129<br>
+> 当前可执行任务：`SAL-P1-015`，状态为 `READY`；`SAL-P1-016` 在 `SAL-P1-001..015` 完成后可执行；后续实现必须遵守 ADR-001/002<br>
 > 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -50,18 +50,19 @@
 - 完成 `SAL-P1-010`：新增应用层 [api_errors.py](../src/serenity_alpha_lab/application/api_errors.py)，定义 `ApiErrorCode`、`ProblemDetail`、常用 problem error、异常映射、自由文本脱敏和框架无关 `ProblemDetailsMiddleware`；证据见 [API 错误协议记录](./api-error-protocol.md)。
 - 完成 `SAL-P1-011`：新增应用层 [tracing.py](../src/serenity_alpha_lab/application/tracing.py)，定义 `TraceContext`、ContextVar 传播、结构化 JSON formatter、logging filter、递归脱敏和框架无关 ASGI middleware；证据见 [结构化日志与 Trace 记录](./structured-trace-logging.md)。
 - 完成 `SAL-P1-012`：新增根 [alembic.ini](../alembic.ini)、[migrations](../migrations) baseline revision 和 [storage_migrations.py](../src/serenity_alpha_lab/repositories/storage_migrations.py)，让 Serenity root 通过 Alembic 创建 DSA `v3.26.1` baseline schema，并提供启动前 revision preflight；证据见 [Alembic 存储迁移接入记录](./storage-migration-alembic.md)。
+- 完成 `SAL-P1-013`：新增 [sqlite_upgrade.py](../src/serenity_alpha_lab/repositories/sqlite_upgrade.py)，从 P0 脱敏 fixture 演练 backup、Alembic stamp、业务表行数/内容哈希校验和失败恢复；证据见 [SQLite 历史库升级验证记录](./sqlite-upgrade-verification.md)。
 - 完成 `SAL-P1-014`：新增应用层 [config_profiles.py](../src/serenity_alpha_lab/application/config_profiles.py)，定义 `RuntimeSettings`、desktop/standalone/ci profile policy、CI 真实 key/网络拒绝、脱敏诊断、配置来源追踪和无副作用更新预览；证据见 [配置 Profile 与密钥边界记录](./config-profile-facade.md)。
 
 ## 未完成
 
 ### 当前可执行 P1 任务
 
-- `SAL-P1-013` 当前为 `READY`：从脱敏 DSA fixture 执行 SQLite expand/backfill/verify 升级演练。
+- `SAL-P1-015` 当前为 `READY`：在新 lock、协议和迁移基础上重跑 DSA Desktop 兼容与性能基线。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P1 至 P6 仍有 103 项工程任务未完成。
+- P1 至 P6 仍有 102 项工程任务未完成。
 - 已创建 Serenity 目标包骨架，但尚未实现 Serenity 目标运行时代码、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
@@ -79,6 +80,7 @@
 - API Problem Details 错误协议已建立；后续 API/Worker 失败响应应使用稳定 `ApiErrorCode` 与 `application/problem+json`，不得泄露 stack trace、绝对路径、secret、prompt 或 request body/content。
 - Trace context、结构化 JSON 日志和脱敏基础已建立；后续 API、Worker、Provider、Agent 和报告链路应复用 `TraceContext` 并避免记录 secret、token、完整 prompt 或私有正文。
 - Alembic baseline 已建立：Serenity root 的新增 Schema 创建入口为 `migrations`，baseline revision `20260720_dsa_v3261_baseline` 对应 DSA `v3.26.1` P0 SQLite snapshot；应用启动前应检查 revision，不得静默 `create_all`。
+- SQLite 历史升级演练已建立：已有 DSA SQLite 库通过 backup -> Alembic stamp -> row/content hash verify 接入 baseline head，失败时恢复备份；正式生产规模迁移和 runbook 留给后续发布任务。
 - 配置 Profile facade 已建立：CI profile 默认禁止真实网络/模型/Provider 调用并拒绝真实 key；standalone/service profile 只允许无副作用预览，不通过 profile API 改写部署 `.env`。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
@@ -95,9 +97,9 @@
 
 ## 下一步
 
-1. 优先推进 `SAL-P1-013` SQLite 升级验证。
-2. `SAL-P1-013` 完成后执行 `SAL-P1-015` Desktop 兼容和性能基线。
-3. 完成 `SAL-P1-001..015` 后执行 `SAL-P1-016` Gate G1 评审；保持 P0 required checks 作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
+1. 优先推进 `SAL-P1-015` Desktop 兼容和性能基线。
+2. `SAL-P1-015` 完成后执行 `SAL-P1-016` Gate G1 评审。
+3. Gate G1 通过后进入 P2；保持 P0 required checks 作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
 
@@ -112,6 +114,7 @@
 - 2026-07-20：完成 `SAL-P1-009`，新增 ResearchOrchestrator Protocol、run/chat DTO 和 DSA 注入式兼容 facade；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-011`、`SAL-P1-014`，Gate G1 仍未通过；`SAL-P1-010`、`SAL-P1-012` 是推荐下一步。
 - 2026-07-20：完成 `SAL-P1-010`，新增 API Problem Details 协议、稳定错误码、异常映射、脱敏和框架无关 ASGI middleware；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-014`，Gate G1 仍未通过；`SAL-P1-012` 是推荐下一步。
 - 2026-07-20：完成 `SAL-P1-012`，新增 Alembic baseline revision、空库升级命令和启动前 revision preflight；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-012`、`SAL-P1-014`，Gate G1 仍未通过；`SAL-P1-013` 是推荐下一步。
+- 2026-07-20：完成 `SAL-P1-013`，新增 SQLite fixture upgrade rehearsal、业务表内容校验、幂等重跑和失败恢复；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-012`、`SAL-P1-013`、`SAL-P1-014`，Gate G1 仍未通过；`SAL-P1-015` 是推荐下一步。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -146,16 +149,16 @@
 当前状态：
 - Phase：P1 工程加固
 - Gate：G1 未通过；G0 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001，SAL-P1-002，SAL-P1-003，SAL-P1-004，SAL-P1-005，SAL-P1-006，SAL-P1-007，SAL-P1-008，SAL-P1-009，SAL-P1-010，SAL-P1-011，SAL-P1-012，SAL-P1-014
-- 最近完成：SAL-P1-012 接入 Alembic
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001，SAL-P1-002，SAL-P1-003，SAL-P1-004，SAL-P1-005，SAL-P1-006，SAL-P1-007，SAL-P1-008，SAL-P1-009，SAL-P1-010，SAL-P1-011，SAL-P1-012，SAL-P1-013，SAL-P1-014
+- 最近完成：SAL-P1-013 验证历史 SQLite 升级
 - 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 13/16，总计 26/129
+- 进度：P0 13/13，P1 14/16，总计 27/129
 
 下一步优先执行：
-1. SAL-P1-013 验证历史 SQLite 升级
-2. SAL-P1-015 验证 Desktop 兼容和性能基线（需等 SAL-P1-013 完成）
-3. SAL-P1-016 Gate G1 工程地基评审（需等 SAL-P1-001..015 完成）
+1. SAL-P1-015 验证 Desktop 兼容和性能基线
+2. SAL-P1-016 Gate G1 工程地基评审（需等 SAL-P1-001..015 完成）
+3. Gate G1 通过后进入 P2 数据与任务阶段
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

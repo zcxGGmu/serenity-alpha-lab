@@ -62,6 +62,11 @@ def upgrade_database(database_url: str, revision: str = "head") -> MigrationStat
     return current_migration_status(database_url)
 
 
+def stamp_database(database_url: str, revision: str = HEAD_REVISION) -> MigrationStatus:
+    command.stamp(alembic_config(database_url), revision)
+    return current_migration_status(database_url)
+
+
 def current_migration_status(database_url: str) -> MigrationStatus:
     config = alembic_config(database_url)
     script = ScriptDirectory.from_config(config)
@@ -111,5 +116,6 @@ __all__ = [
     "baseline_schema_sql_path",
     "baseline_schema_sql_sha256",
     "current_migration_status",
+    "stamp_database",
     "upgrade_database",
 ]

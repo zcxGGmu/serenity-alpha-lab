@@ -73,13 +73,13 @@
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | DOING | 13/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
+| P1 工程加固 | 2~3 | DOING | 14/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **26/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **27/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -415,12 +415,15 @@ P0 基线
 
 ### SAL-P1-013 验证历史 SQLite 升级
 
-- [ ] [READY] 从脱敏 DSA fixture 执行 expand/backfill/verify
-- 元数据：优先级 P0 | 负责人 BE | 估算 2d | 实际 - | 依赖 SAL-P1-012
+- [x] [DONE] 从脱敏 DSA fixture 执行 expand/backfill/verify
+- 元数据：优先级 P0 | 负责人 BE | 估算 2d | 实际 0.5d | 依赖 SAL-P1-012 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：迁移脚本、校验报告、失败恢复测试。
 - 验收：
   - 表/行数/关键聚合与迁移前一致。
   - 中途失败后可恢复备份并重新执行。
+- 结果：新增 `src/serenity_alpha_lab/repositories/sqlite_upgrade.py`，可从 P0 `fixture.sql` 恢复脱敏历史库，备份后通过 Alembic `stamp` 升级到 baseline head，验证业务表 row_counts/content_hashes 不变，并在失败时恢复备份。
+- 范围限制：本任务不新增业务 schema，不迁移 DSA runtime `storage.py`，不切换 Repository/API 读写路径，不启动 Provider/LLM、PIT Dataset、Quant Core 或正式回测。
+- 验收证据：见 [SQLite 历史库升级验证记录](./sqlite-upgrade-verification.md)；`tests/repositories/test_sqlite_upgrade.py`；Red 测试先因缺少 module 失败，Green 后目标测试得到 `4 passed`；相关 repositories/architecture 套件 `26 passed`，全量 pytest `103 passed`。
 
 ### SAL-P1-014 整理配置与运行 Profile
 
@@ -436,7 +439,7 @@ P0 基线
 
 ### SAL-P1-015 验证 Desktop 兼容和性能基线
 
-- [ ] [TODO] 在新 lock/协议/迁移下重跑 DSA 主路径
+- [ ] [READY] 在新 lock/协议/迁移下重跑 DSA 主路径
 - 元数据：优先级 P0 | 负责人 FE/BE | 估算 1d | 实际 - | 依赖 SAL-P1-003,SAL-P1-008,SAL-P1-013,SAL-P1-014
 - 交付物：对比测试、启动时间/内存、兼容问题。
 - 验收：
@@ -1461,6 +1464,7 @@ P0 基线
 | DEC-022 | 2026-07-20 | ResearchOrchestrator 兼容外壳口径 | 采用应用层 `ResearchOrchestrator` Protocol + DTO；DSA `AgentOrchestrator` / `AgentExecutor` 只通过注入式 facade 包裹，保留 `AgentResult` 字段语义，不在 application 层导入具体 DSA Agent runtime | [research-orchestrator-facade.md](./research-orchestrator-facade.md); [research_orchestrator.py](../src/serenity_alpha_lab/application/research_orchestrator.py); [research_orchestrator.py](../src/serenity_alpha_lab/integrations/dsa/research_orchestrator.py) | SAL-P1-009,SAL-P5-001,SAL-P5-011 | G1 |
 | DEC-023 | 2026-07-20 | API Problem Details 错误协议口径 | 采用应用层 `ProblemDetail` + 稳定 `ApiErrorCode` + 框架无关 ASGI middleware；validation/not-found/conflict/provider/internal 分层映射，未知内部异常不暴露 stack trace、绝对路径、secret、prompt 或 body/content | [api-error-protocol.md](./api-error-protocol.md); [api_errors.py](../src/serenity_alpha_lab/application/api_errors.py) | SAL-P1-010,SAL-P1-016,SAL-P2-001,SAL-P2-018 | G1 |
 | DEC-024 | 2026-07-20 | Alembic Schema 入口与 DSA baseline revision | Alembic 成为 Serenity root 唯一新增 Schema 创建入口；首个 revision `20260720_dsa_v3261_baseline` 由 P0 DSA SQLite snapshot 生成，启动前使用 `assert_database_at_head()` 检查而不是静默 `create_all` | [storage-migration-alembic.md](./storage-migration-alembic.md); [alembic.ini](../alembic.ini); [storage_migrations.py](../src/serenity_alpha_lab/repositories/storage_migrations.py) | SAL-P1-012,SAL-P1-013,SAL-P1-015,SAL-P1-016 | G1 |
+| DEC-025 | 2026-07-20 | 历史 SQLite 升级验证口径 | 对已有 DSA SQLite 历史库采用 backup -> Alembic stamp -> business row/content hash verify；当前 baseline 不重跑 DDL，`alembic_version` 以外业务内容必须保持不变，失败时恢复备份 | [sqlite-upgrade-verification.md](./sqlite-upgrade-verification.md); [sqlite_upgrade.py](../src/serenity_alpha_lab/repositories/sqlite_upgrade.py) | SAL-P1-013,SAL-P1-015,SAL-P1-016 | G1 |
 
 ## 14. 验收证据登记
 
@@ -1492,6 +1496,7 @@ P0 基线
 | AEV-024 | SAL-P1-009 | ResearchOrchestrator Protocol、DSA 兼容 Facade 和架构边界测试 | [research-orchestrator-facade.md](./research-orchestrator-facade.md); [research_orchestrator.py](../src/serenity_alpha_lab/application/research_orchestrator.py); [research_orchestrator.py](../src/serenity_alpha_lab/integrations/dsa/research_orchestrator.py); [test_research_orchestrator_contract.py](../tests/application/test_research_orchestrator_contract.py); [test_dsa_research_orchestrator_facade.py](../tests/integrations/test_dsa_research_orchestrator_facade.py) | stable run/chat DTOs; DSA injected orchestrator facade; no application/facade concrete DSA Agent import; target Green `16 passed`; related suite `43 passed`; full pytest `90 passed`; py_compile/lock/diff/tag checks PASS | AI/BE | 2026-07-20 |
 | AEV-025 | SAL-P1-010 | API Problem Details、异常映射、脱敏和 ASGI middleware 测试 | [api-error-protocol.md](./api-error-protocol.md); [api_errors.py](../src/serenity_alpha_lab/application/api_errors.py); [test_api_errors.py](../tests/application/test_api_errors.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | stable `application/problem+json` body; validation/not-found/conflict/provider/internal mapping; trace_id header/body propagation; stack/path/secret/prompt/body redaction; target Green `5 passed`; related suite `41 passed`; full pytest `95 passed`; py_compile/lock/diff/tag checks PASS | BE/SEC | 2026-07-20 |
 | AEV-026 | SAL-P1-012 | Alembic baseline revision、空库升级和启动前 preflight 测试 | [storage-migration-alembic.md](./storage-migration-alembic.md); [alembic.ini](../alembic.ini); [20260720_dsa_v3261_baseline.py](../migrations/versions/20260720_dsa_v3261_baseline.py); [storage_migrations.py](../src/serenity_alpha_lab/repositories/storage_migrations.py); [test_storage_migrations.py](../tests/repositories/test_storage_migrations.py) | DSA baseline revision metadata; empty SQLite creates 28 tables / 177 indexes; `schema_migrations` and `alembic_version` set; startup preflight rejects missing revision; target Green `4 passed`; related suite `22 passed`; full pytest `99 passed`; py_compile/lock/diff/tag checks PASS | BE | 2026-07-20 |
+| AEV-027 | SAL-P1-013 | SQLite fixture upgrade、内容校验和失败恢复测试 | [sqlite-upgrade-verification.md](./sqlite-upgrade-verification.md); [sqlite_upgrade.py](../src/serenity_alpha_lab/repositories/sqlite_upgrade.py); [test_sqlite_upgrade.py](../tests/repositories/test_sqlite_upgrade.py) | P0 fixture restore; Alembic stamp to `20260720_dsa_v3261_baseline`; business row_counts/content_hashes preserved; idempotent rerun; injected failure restores backup; target Green `4 passed`; related suite `26 passed`; full pytest `103 passed`; py_compile/lock/diff/tag checks PASS | BE | 2026-07-20 |
 
 允许的证据：
 
@@ -1529,4 +1534,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-012`、`SAL-P1-014`，完成度为 26/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-013` SQLite 升级验证，随后执行 `SAL-P1-015` Desktop 兼容和性能基线，以及 `SAL-P1-016` Gate G1；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-012`、`SAL-P1-013`、`SAL-P1-014`，完成度为 27/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-015` Desktop 兼容和性能基线，随后执行 `SAL-P1-016` Gate G1；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。

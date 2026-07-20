@@ -1,3 +1,34 @@
+# P1 SQLite Upgrade Verification Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-013` as a P1 engineering-hardening checkpoint. Rehearse upgrading the committed sanitized DSA SQLite fixture to the Alembic baseline by backup, stamp, verify, and recovery; do not introduce new schema changes, migrate DSA runtime `storage.py`, start Provider/LLM calls, PIT Dataset, Quant Core, or formal backtesting.
+
+## Checklist
+
+- [x] Review P0 fixture SQL/content hashes and `SAL-P1-012` Alembic baseline behavior for existing DSA databases.
+- [x] Add Red tests for fixture restore, Alembic stamp/verify, row-count/content-hash preservation, idempotent rerun, and failure recovery from backup.
+- [x] Implement SQLite upgrade rehearsal helpers and report DTOs without importing DSA `storage.py` or calling `create_all`.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-013` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-013` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-013` is historical SQLite upgrade verification only: no new business schema, no DSA runtime source migration, no Repository read/write path switch, no Desktop performance run, no Provider/LLM calls, no PIT Dataset, no Quant Core, and no formal backtest.
+- Existing business tables must preserve row counts and content hashes; Alembic may add/update only its version tracking table.
+- Any failure after backup must restore the original SQLite file before returning control.
+
+## Review: SAL-P1-013
+
+- Added Red tests in `tests/repositories/test_sqlite_upgrade.py`; initial target run failed on missing `serenity_alpha_lab.repositories.sqlite_upgrade` with `4 failed`.
+- Added `src/serenity_alpha_lab/repositories/sqlite_upgrade.py`, defining `SQLiteInspection`, `SQLiteUpgradeReport`, fixture restore, business table inspection, Alembic stamp upgrade, idempotency behavior, validation, and backup restore on failure.
+- Extended `storage_migrations.py` with `stamp_database()` so existing DSA SQLite databases can be marked at the Alembic baseline without rerunning DDL.
+- Added `docs/sqlite-upgrade-verification.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-013` done, record `DEC-025` / `AEV-027`, move P1 progress to `14/16`, total progress to `27/129`, and promote `SAL-P1-015` to `READY`.
+- Verification completed: target SQLite upgrade tests `4 passed`, repositories/architecture `26 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `103 passed`, py_compile for changed repository/test files, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 Alembic Migration Plan
 
 > Started: 2026-07-20
