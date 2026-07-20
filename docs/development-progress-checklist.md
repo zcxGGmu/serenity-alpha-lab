@@ -73,13 +73,13 @@
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | DOING | 15/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
+| P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
+| P2 数据与任务 | 3~6 | DOING | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **28/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **29/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -452,18 +452,21 @@ P0 基线
 
 ### SAL-P1-016 Gate G1：工程地基评审
 
-- [ ] [READY] 批准进入数据与持久任务开发
-- 元数据：优先级 P0 | 负责人 TL/SEC | 估算 0.5d | 实际 - | 依赖 SAL-P1-001..015
+- [x] [DONE] 批准进入数据与持久任务开发
+- 元数据：优先级 P0 | 负责人 TL/SEC | 估算 0.5d | 实际 0.5d | 依赖 SAL-P1-001..015 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：Gate 记录、遗留风险、P2 冻结契约。
 - 验收：
   - Lock、架构测试、Run/Artifact/TaskBackend、Alembic 和兼容回归均通过。
   - 未解决阻断项有明确 No-Go 或范围调整。
+- 结果：Gate G1 评审结论为 `GO with accepted risks`。P1 工程加固完成度为 `16/16`，允许进入 P2 数据版本、Provider 收口与持久任务开发；供应链、Web audit、Docker image 漏洞继续作为发布前风险，不阻断 P2。
+- P2 入口约束：`SAL-P2-001` 起必须复用 P1 `RuntimeProfile`、`ProblemDetail`、`TraceContext`、`ArtifactStore`、`Run/Stage/Event`、Alembic preflight 和 Compatibility Facade；CI 默认继续无真实 key、无真实 Provider/LLM 调用。
+- 验收证据：见 [Gate G1 工程地基评审](./gate-g1-engineering-foundation-review.md)；`pytest` root/architecture/domain/application/repositories/integrations `103 passed`；dependency lock、baseline tag、patch check、Desktop 兼容 runner 和 `git diff --check` 均 PASS。
 
 ## 5. Phase 2：数据版本、Provider 收口与持久任务
 
 ### SAL-P2-001 定义 Provider 领域契约
 
-- [ ] [TODO] 实现 Capability、DataBatch、Provenance 和统一错误分类
+- [ ] [READY] 实现 Capability、DataBatch、Provenance 和统一错误分类
 - 元数据：优先级 P0 | 负责人 BE/QE | 估算 2d | 实际 - | 依赖 SAL-P1-016
 - 交付物：MarketDataProvider Protocol、Schema、错误码、Contract Test。
 - 验收：
@@ -1470,6 +1473,7 @@ P0 基线
 | DEC-024 | 2026-07-20 | Alembic Schema 入口与 DSA baseline revision | Alembic 成为 Serenity root 唯一新增 Schema 创建入口；首个 revision `20260720_dsa_v3261_baseline` 由 P0 DSA SQLite snapshot 生成，启动前使用 `assert_database_at_head()` 检查而不是静默 `create_all` | [storage-migration-alembic.md](./storage-migration-alembic.md); [alembic.ini](../alembic.ini); [storage_migrations.py](../src/serenity_alpha_lab/repositories/storage_migrations.py) | SAL-P1-012,SAL-P1-013,SAL-P1-015,SAL-P1-016 | G1 |
 | DEC-025 | 2026-07-20 | 历史 SQLite 升级验证口径 | 对已有 DSA SQLite 历史库采用 backup -> Alembic stamp -> business row/content hash verify；当前 baseline 不重跑 DDL，`alembic_version` 以外业务内容必须保持不变，失败时恢复备份 | [sqlite-upgrade-verification.md](./sqlite-upgrade-verification.md); [sqlite_upgrade.py](../src/serenity_alpha_lab/repositories/sqlite_upgrade.py) | SAL-P1-013,SAL-P1-015,SAL-P1-016 | G1 |
 | DEC-026 | 2026-07-20 | Desktop 兼容与性能基线口径 | `SAL-P1-015` 采用离线 P0 Desktop/API/CLI/Bot/契约金标矩阵和本地性能脚本作为 G1 兼容证据；启动阈值 `60s`、report/signal 阈值 `60s`、离线单股报告生成阈值 `5s`，所有运行产物只落 `.cache/dsa-p0` | [desktop-compatibility-performance-baseline.md](./desktop-compatibility-performance-baseline.md); [run-p1-desktop-compatibility-performance.sh](../scripts/run-p1-desktop-compatibility-performance.sh) | SAL-P1-015,SAL-P1-016 | G1 |
+| DEC-027 | 2026-07-20 | Gate G1 工程地基评审 | `GO with accepted risks`：P1 工程加固完成，允许进入 P2；P2 必须沿用 P1 的 lock、domain/application/repository/facade、Artifact、Trace、ProblemDetails、Profile 和 Alembic 边界，供应链/Web/Docker 风险继续阻断发布但不阻断 P2 | [gate-g1-engineering-foundation-review.md](./gate-g1-engineering-foundation-review.md) | SAL-P1-016,SAL-P2-001,SAL-P2-018,SAL-P6-005 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1503,6 +1507,7 @@ P0 基线
 | AEV-026 | SAL-P1-012 | Alembic baseline revision、空库升级和启动前 preflight 测试 | [storage-migration-alembic.md](./storage-migration-alembic.md); [alembic.ini](../alembic.ini); [20260720_dsa_v3261_baseline.py](../migrations/versions/20260720_dsa_v3261_baseline.py); [storage_migrations.py](../src/serenity_alpha_lab/repositories/storage_migrations.py); [test_storage_migrations.py](../tests/repositories/test_storage_migrations.py) | DSA baseline revision metadata; empty SQLite creates 28 tables / 177 indexes; `schema_migrations` and `alembic_version` set; startup preflight rejects missing revision; target Green `4 passed`; related suite `22 passed`; full pytest `99 passed`; py_compile/lock/diff/tag checks PASS | BE | 2026-07-20 |
 | AEV-027 | SAL-P1-013 | SQLite fixture upgrade、内容校验和失败恢复测试 | [sqlite-upgrade-verification.md](./sqlite-upgrade-verification.md); [sqlite_upgrade.py](../src/serenity_alpha_lab/repositories/sqlite_upgrade.py); [test_sqlite_upgrade.py](../tests/repositories/test_sqlite_upgrade.py) | P0 fixture restore; Alembic stamp to `20260720_dsa_v3261_baseline`; business row_counts/content_hashes preserved; idempotent rerun; injected failure restores backup; target Green `4 passed`; related suite `26 passed`; full pytest `103 passed`; py_compile/lock/diff/tag checks PASS | BE | 2026-07-20 |
 | AEV-028 | SAL-P1-015 | Desktop 兼容和性能基线脚本、离线 smoke 与性能摘要 | [desktop-compatibility-performance-baseline.md](./desktop-compatibility-performance-baseline.md); [run-p1-desktop-compatibility-performance.sh](../scripts/run-p1-desktop-compatibility-performance.sh) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Desktop `npm test` `47 passed`; Desktop/API/CLI/Bot pytest `121 passed, 7 warnings`; API/config/database/report-signal snapshots matched; Desktop backend health startup `5,822ms`; single-stock report avg `0.030ms`; real Provider/LLM calls zero; generated artifacts under `.cache/dsa-p0` | FE/BE | 2026-07-20 |
+| AEV-029 | SAL-P1-016 / Gate G1 | Gate G1 Go/No-Go 评审、P2 入口约束和本地验证记录 | [gate-g1-engineering-foundation-review.md](./gate-g1-engineering-foundation-review.md) | Decision `GO with accepted risks`; P1 `16/16`; total `29/129`; baseline/worktree tag check PASS; registered patch check PASS; root and architecture/domain/application/repositories/integrations pytest `103 passed`; dependency lock PASS; Desktop compatibility runner PASS; `git diff --check` PASS | TL/SEC | 2026-07-20 |
 
 允许的证据：
 
@@ -1540,4 +1545,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-012`、`SAL-P1-013`、`SAL-P1-014`、`SAL-P1-015`，完成度为 28/129；Gate G0 已通过，Gate G1 未通过。下一步优先执行 `SAL-P1-016` Gate G1 工程地基评审；后续实现必须遵守 ADR-001/002，不得在 Gate G1 通过前进入 P2，也不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001` 至 `SAL-P1-016`，完成度为 29/129；Gate G0 与 Gate G1 已通过，当前进入 P2，Gate G2 未通过。下一步优先执行 `SAL-P2-001` Provider 领域契约；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

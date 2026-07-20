@@ -1,3 +1,33 @@
+# P1 Gate G1 Engineering Foundation Review Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-016` as the P1 Gate checkpoint. Review all P1 engineering-hardening evidence, decide Gate G1 Go/No-Go, record accepted risks and P2 entry constraints, update project status, and create a Chinese checkpoint commit before notifying the user that the project has reached P2.
+
+## Checklist
+
+- [x] Confirm clean post-`SAL-P1-015` checkpoint state and current branch/log.
+- [x] Review Gate G1 criteria, P1 task evidence, decisions, risks, and current status documents.
+- [x] Run G1 verification: baseline tag/worktree, registered patch check, root/P1 test suites, dependency lock, Desktop compatibility runner, and whitespace diff.
+- [x] Add `docs/gate-g1-engineering-foundation-review.md` with Gate conclusion, evidence matrix, accepted risks, verification, and P2 entry constraints.
+- [x] Update `docs/development-progress-checklist.md` to mark `SAL-P1-016` done, set P1 `16/16`, total `29/129`, and promote `SAL-P2-001` to `READY`.
+- [x] Update `docs/development-status.md` to move current Phase to P2 and refresh the next-start prompt.
+- [x] Stage only relevant `SAL-P1-016` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-016` is a Gate review only: no new runtime feature, no DSA source migration, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM calls, and no cache/worktree/generated artifact commits.
+- Gate G1 may approve entering P2, but P2 tasks must continue through explicit task IDs and retain CI/offline boundaries.
+- Any accepted risk must be documented with a downstream closure path and must not be reframed as release-ready.
+
+## Review: SAL-P1-016
+
+- Added `docs/gate-g1-engineering-foundation-review.md`, concluding `GO with accepted risks` and documenting P1 `16/16`, total `29/129`, P2 entry approval, accepted release blockers, and `SAL-P2-001` as the next entry.
+- Updated `docs/development-progress-checklist.md` with `DEC-027`, `AEV-029`, P1 `DONE`, P2 `DOING`, and `SAL-P2-001` `READY`.
+- Updated `docs/development-status.md` so future sessions resume from P2 / Gate G2 with `SAL-P2-001`, not from G1.
+- Verification completed: `bootstrap-dsa-baseline.sh --validate-only`, `apply-dsa-baseline-patches.sh --check-only`, root and P1 pytest `103 passed`, dependency lock check, Desktop compatibility runner, `git diff --check`, and baseline tag check all passed.
+
+---
+
 # P1 Desktop Compatibility Performance Plan
 
 > Started: 2026-07-20
@@ -26,7 +56,7 @@
 - Added `docs/desktop-compatibility-performance-baseline.md`, documenting the validation matrix, performance thresholds, no-real-call boundaries, generated artifact policy, and G1 handoff.
 - Latest runner evidence passed: Desktop `npm test` `47 passed`, Desktop/API/CLI/Bot pytest `121 passed, 7 warnings`, API/config snapshots matched, database snapshots matched, report/signal snapshots matched, Desktop backend health startup `5,822ms`, single-stock report generation average `0.030ms`, and real Provider/LLM calls zero.
 - Updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-015` done, record `DEC-026` / `AEV-028`, move P1 progress to `15/16`, total progress to `28/129`, and promote `SAL-P1-016` to `READY`.
-- Final verification to record before commit: `bash -n scripts/run-p1-desktop-compatibility-performance.sh`, full `.cache/dsa-p0/venv/bin/python -m pytest -q`, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1`.
+- Final verification recorded before checkpoint commit: `bash -n scripts/run-p1-desktop-compatibility-performance.sh`, full `.cache/dsa-p0/venv/bin/python -m pytest -q`, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1`.
 
 ---
 
