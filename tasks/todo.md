@@ -1,3 +1,38 @@
+# P1 TaskBackend Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-008` as a P1 engineering-hardening checkpoint. Define a stable TaskBackend protocol, in-memory implementation, and DSA compatibility facade without moving upstream, importing broad DSA runtime source, starting persistent task queues, or introducing Celery/Redis/PostgreSQL behavior.
+
+## Checklist
+
+- [x] Review current P1 state, ADR-002 facade scope, DSA `AnalysisTaskQueue` signatures, and thread-pool boundary risk.
+- [x] Add Red contract tests for `TaskBackend.submit/get/request_cancel/subscribe`.
+- [x] Add Red compatibility facade tests for wrapping an injected DSA-like queue without importing DSA runtime.
+- [x] Add architecture test ensuring Serenity application/DSA facade modules do not import `ThreadPoolExecutor` directly.
+- [x] Implement application-layer TaskBackend DTOs, Protocol, errors, and InMemory implementation.
+- [x] Implement DSA `AnalysisTaskQueue` compatibility facade using handler registry and injected queue object.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-008` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-008` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-008` may define a facade around DSA queue shape but must not copy/migrate DSA runtime source into Serenity.
+- No `ThreadPoolExecutor`, Celery, Redis, PostgreSQL persistence, Worker runtime, PIT Dataset, Quant Core, formal backtest, or API endpoint implementation in this task.
+- DSA compatibility code must receive queue/handlers by injection; no top-level `src.services.task_queue` import.
+
+## Review: SAL-P1-008
+
+- Added Red tests in `tests/application/test_task_backend_contract.py` and `tests/integrations/test_dsa_task_backend_facade.py`; initial target run failed on missing `serenity_alpha_lab.application.task_backend`, then Green passed with target `12 passed`.
+- Added architecture coverage in `tests/architecture/test_architecture_boundaries.py` to reject direct `ThreadPoolExecutor` imports from `application` and `integrations/dsa` modules.
+- Added `src/serenity_alpha_lab/application/task_backend.py`, defining `TaskBackend`, `TaskCommand`, `TaskRef`, `TaskSnapshot`, `TaskEvent`, status/error types, `InMemoryTaskBackend`, and DSA legacy status mapping without importing DSA runtime or thread pools.
+- Added `src/serenity_alpha_lab/integrations/dsa/task_backend.py`, defining `DsaAnalysisTaskQueueBackend` around an injected queue and handler registry; it maps `submit_background_task()`, `get_task()`, optional cancel methods, and flow events into the stable TaskBackend contract.
+- Added `docs/task-backend-facade.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-008` done, record `DEC-019` / `AEV-021`, move P1 progress to `8/16`, and total progress to `21/129`.
+- Verification completed: target TaskBackend tests `12 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `66 passed`, py_compile for application/integration/test paths, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 Artifact Store Plan
 
 > Started: 2026-07-20
@@ -27,7 +62,7 @@
 - Added `src/serenity_alpha_lab/domain/artifacts.py`, defining pure domain `ArtifactUri`, `ArtifactManifest`, `ArtifactRetentionTier`, `ArtifactStore`, and artifact error types without importing repositories, frameworks, providers, or DSA runtime code.
 - Added `src/serenity_alpha_lab/repositories/local_artifact_store.py`, implementing local SHA-256 blob storage, JSON manifests, idempotent record reuse, manifest-last atomic publish, temp cleanup, and hash/size validation on reads.
 - Added `docs/artifact-store-domain-model.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-007` done, record `DEC-018` / `AEV-020`, move P1 progress to `7/16`, and total progress to `20/129`.
-- Verification completed: target Artifact tests `6 passed`, related architecture/domain/repositories tests `58 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `58 passed`, py_compile for domain/repository/test paths, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed. Final stage and checkpoint commit remain before moving to `SAL-P1-008`.
+- Verification completed: target Artifact tests `6 passed`, related architecture/domain/repositories tests `58 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `58 passed`, py_compile for domain/repository/test paths, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed; checkpoint commit `5525f6da feat(P1): 实现 Artifact 模型与本地存储` created.
 
 ---
 

@@ -50,6 +50,15 @@ def imported_modules(path: Path) -> set[str]:
     return modules
 
 
+def imported_names(path: Path) -> set[tuple[str, str]]:
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    names: set[tuple[str, str]] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module:
+            names.update((node.module, alias.name) for alias in node.names)
+    return names
+
+
 def assert_no_forbidden_imports(
     package: str,
     *,
@@ -113,3 +122,13 @@ def test_integrations_do_not_reach_into_repositories() -> None:
         "integrations",
         forbidden_prefixes=INTEGRATION_FORBIDDEN_INTERNAL_PREFIXES,
     )
+
+
+def test_application_and_dsa_task_facade_do_not_import_thread_pool_executor() -> None:
+    failures: list[str] = []
+    for package in ("application", "integrations/dsa"):
+        for path in iter_python_files(package):
+            if ("concurrent.futures", "ThreadPoolExecutor") in imported_names(path):
+                failures.append(f"{path.relative_to(ROOT)} imports ThreadPoolExecutor")
+
+    assert failures == []
