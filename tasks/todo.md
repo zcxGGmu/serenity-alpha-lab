@@ -1,3 +1,37 @@
+# P1 Alembic Migration Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-012` as a P1 engineering-hardening checkpoint. Introduce Alembic as the single schema migration entry for the Serenity root, add a DSA v3.26.1 SQLite baseline revision tied to the P0 database snapshot, and provide startup preflight helpers without rewriting DSA runtime `storage.py`, running Provider/LLM calls, starting PIT Dataset, Quant Core, formal backtesting, or large DSA source migration.
+
+## Checklist
+
+- [x] Review P0 database baseline, ADR-002 `StorageMigrationFacade` scope, and current Python dependency surface.
+- [x] Add Red tests for baseline revision metadata, empty SQLite upgrade, startup preflight, and no DSA `storage.py` / `create_all` dependency in migration code.
+- [x] Add Alembic to the explicit root core install surface and refresh lock/export if needed.
+- [x] Create Alembic config/env/script template, DSA v3.26.1 baseline revision, and committed schema SQL baseline under `migrations/`.
+- [x] Implement storage migration facade helpers for upgrade, status, and startup head assertion.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-012` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-012` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-012` is migration foundation only: no DSA source movement, no DSA API route rewrite, no Repository behavior migration, no `SAL-P1-013` historical upgrade rehearsal, no Provider/LLM calls, no PIT Dataset, no Quant Core, and no formal backtest.
+- Alembic must be the only new schema creation entry; startup helpers should check revision state rather than silently calling `Base.metadata.create_all()` or DSA `DatabaseManager`.
+- Baseline revision must explicitly reference DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` and P0 schema version `2026-06-05-create-all-baseline`.
+
+## Review: SAL-P1-012
+
+- Added Red tests in `tests/repositories/test_storage_migrations.py`; initial target run failed on missing `serenity_alpha_lab.repositories.storage_migrations`, `migrations/env.py`, and baseline revision with `4 failed`.
+- Added root Alembic files: `alembic.ini`, `migrations/env.py`, `migrations/script.py.mako`, `migrations/baselines/dsa_v3_26_1_schema.sql`, and `migrations/versions/20260720_dsa_v3261_baseline.py`.
+- Added `src/serenity_alpha_lab/repositories/storage_migrations.py`, defining `MigrationStatus`, `StorageMigrationRequired`, `upgrade_database()`, `current_migration_status()`, `assert_database_at_head()`, and baseline SQL verification helpers.
+- Added explicit `alembic>=1.13.0` to root `core` extra and regenerated `uv.lock` / `requirements.txt` through the existing drift guard export path.
+- Added `docs/storage-migration-alembic.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-012` done, record `DEC-024` / `AEV-026`, move P1 progress to `13/16`, total progress to `26/129`, and promote `SAL-P1-013` to `READY`.
+- Verification completed: target storage migration tests `4 passed`, repositories/architecture `22 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `99 passed`, py_compile for changed repository/migration/test files, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 API Error Protocol Plan
 
 > Started: 2026-07-20

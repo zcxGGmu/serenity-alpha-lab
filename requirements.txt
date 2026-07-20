@@ -13,6 +13,8 @@ akracer==0.0.14 ; sys_platform == 'linux'
     # via akshare
 akshare==1.18.64
     # via serenity-alpha-lab
+alembic==1.18.5
+    # via serenity-alpha-lab
 annotated-doc==0.0.4
     # via fastapi
 annotated-types==0.7.0
@@ -186,12 +188,16 @@ lxml==6.1.1
     #   tushare
 lxml-html-clean==0.4.5
     # via serenity-alpha-lab
+mako==1.3.12
+    # via alembic
 markdown-it-py==4.2.0
     # via rich
 markdown2==2.5.5
     # via serenity-alpha-lab
 markupsafe==3.0.3
-    # via jinja2
+    # via
+    #   jinja2
+    #   mako
 mdurl==0.1.2
     # via markdown-it-py
 mini-racer==0.14.1 ; sys_platform != 'linux'
@@ -357,7 +363,9 @@ socksio==1.0.0
 soupsieve==2.9
     # via beautifulsoup4
 sqlalchemy==2.0.51
-    # via serenity-alpha-lab
+    # via
+    #   alembic
+    #   serenity-alpha-lab
 starlette==1.3.1
     # via fastapi
 tabulate==0.10.0
@@ -395,6 +403,7 @@ typing-extensions==4.16.0
     # via
     #   aiohttp
     #   aiosignal
+    #   alembic
     #   anyio
     #   beautifulsoup4
     #   fastapi
