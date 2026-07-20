@@ -1,3 +1,36 @@
+# P1 Artifact Store Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-007` as a P1 engineering-hardening checkpoint. Define pure artifact domain contracts and a local content-addressed store without starting Evidence Agent, Dataset Catalog, PIT Dataset, Quant Core, formal backtesting, database migration, or broad DSA source movement.
+
+## Checklist
+
+- [x] Review current P1 state, ADR-001/002 guardrails, existing Run domain model, and architecture boundaries.
+- [x] Add Red tests for Artifact URI/Manifest metadata and local store atomic publish behavior.
+- [x] Run target Red tests and confirm they fail for missing Artifact modules.
+- [x] Implement pure domain Artifact model and `ArtifactStore` Protocol.
+- [x] Implement local filesystem ArtifactStore with content-addressed blobs, JSON manifests, temp-file cleanup, and hash verification.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-007` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-007` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-007` is Artifact domain/storage only: no Provider migration, Dataset Catalog, PIT data, Quant Core, formal backtest, database migration, Evidence Agent, API endpoint, or large DSA runtime source migration.
+- Domain code must stay pure and must not import framework, repository, service, vendor, or DSA runtime modules.
+- Local storage must publish manifests last; failed writes must not create queryable published records and must clean temporary files.
+
+## Review: SAL-P1-007
+
+- Added Red tests in `tests/domain/test_artifacts.py` and `tests/repositories/test_local_artifact_store.py`; initial target run failed on missing `serenity_alpha_lab.domain.artifacts`, then Green passed with `6 passed`.
+- Added `src/serenity_alpha_lab/domain/artifacts.py`, defining pure domain `ArtifactUri`, `ArtifactManifest`, `ArtifactRetentionTier`, `ArtifactStore`, and artifact error types without importing repositories, frameworks, providers, or DSA runtime code.
+- Added `src/serenity_alpha_lab/repositories/local_artifact_store.py`, implementing local SHA-256 blob storage, JSON manifests, idempotent record reuse, manifest-last atomic publish, temp cleanup, and hash/size validation on reads.
+- Added `docs/artifact-store-domain-model.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-007` done, record `DEC-018` / `AEV-020`, move P1 progress to `7/16`, and total progress to `20/129`.
+- Verification completed: target Artifact tests `6 passed`, related architecture/domain/repositories tests `58 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `58 passed`, py_compile for domain/repository/test paths, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed. Final stage and checkpoint commit remain before moving to `SAL-P1-008`.
+
+---
+
 # P1 InstrumentId Domain Plan
 
 > Started: 2026-07-20
