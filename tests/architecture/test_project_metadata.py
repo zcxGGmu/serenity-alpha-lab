@@ -35,8 +35,9 @@ def test_pyproject_declares_standard_project_metadata() -> None:
     assert scripts["serenity-dsa-tests"] == "serenity_alpha_lab.integrations.dsa.entrypoints:run_tests"
 
 
-def test_pyproject_migrates_current_dsa_runtime_dependencies() -> None:
-    dependencies = set(load_pyproject()["project"]["dependencies"])
+def test_pyproject_migrates_current_dsa_runtime_dependencies_into_install_surfaces() -> None:
+    optional = load_pyproject()["project"]["optional-dependencies"]
+    dependencies = set().union(optional["core"], optional["providers"], optional["desktop"])
 
     assert "python-dotenv>=1.0.0" in dependencies
     assert "sqlalchemy>=2.0.0" in dependencies
@@ -44,10 +45,7 @@ def test_pyproject_migrates_current_dsa_runtime_dependencies() -> None:
     assert "fastapi>=0.109.0" in dependencies
     assert "uvicorn[standard]>=0.27.0" in dependencies
     assert "litellm>=1.80.10,!=1.82.7,!=1.82.8,<2.0.0" in dependencies
-    assert (
-        "alphasift @ git+https://github.com/ZhuLinsen/alphasift.git"
-        "@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf"
-    ) in dependencies
+    assert all("git+" not in dependency for dependency in dependencies)
 
 
 def test_package_and_dsa_entrypoints_are_importable() -> None:

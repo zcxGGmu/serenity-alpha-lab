@@ -1,3 +1,40 @@
+# P1 Dependency Lock and Run Domain Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-003` and `SAL-P1-006` as separate but adjacent P1 engineering-hardening checkpoints. Preserve ADR-001/002 guardrails: do not move `upstream/dsa-v3.26.1`, do not import broad DSA runtime source, and do not start Quant Core, PIT Dataset, formal backtesting, or unapproved DSA migration.
+
+## Checklist
+
+- [x] Review recovery docs, lessons, status, progress checklist, development plan, Gate G0 review, ADR-001/002, Git status, and recent commits.
+- [x] Write Red tests for dependency extras, lock/requirements drift guard, and absence of production dynamic Git dependencies.
+- [x] Split Python dependencies into `core`, `providers`, `desktop`, `quant`, and `dev` install surfaces; generate `uv.lock` and exported requirements files.
+- [x] Run dependency Red/Green validation, `uv lock --check`, requirements drift guard, architecture tests, and metadata checks.
+- [x] Write Red tests for Run/Stage/Event state transitions, retry attempts, monotonic append-only event IDs, and idempotency keys.
+- [x] Implement pure domain Run/Stage/Event model without framework, data provider, DSA, Quant Core, PIT Dataset, or backtest behavior.
+- [x] Run domain tests, architecture boundary tests, py_compile, and `git diff --check`.
+- [x] Update progress checklist, status snapshot, risk/decision/evidence registers, and this review section.
+- [x] Stage only relevant files and create Chinese checkpoint commit(s) after verification passes.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA source isolated under `.worktrees/dsa-v3.26.1`.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or generated build products beyond approved dependency lock/requirements outputs.
+- `SAL-P1-003` may create lock and exported requirements, but must not perform broad dependency upgrades unrelated to reproducing the P1 dependency graph.
+- `SAL-P1-006` is pure domain state modeling only: no ArtifactStore, TaskBackend, persistence, Trace middleware, Quant Core, PIT Dataset, or formal backtest implementation.
+
+## Review: SAL-P1-003 / SAL-P1-006
+
+- Added `tests/architecture/test_dependency_locking.py` as the Red/Green contract for extras, lock presence, generated requirements, drift guard, and dynamic Git exclusion; initial Red failed on old default dependencies, AlphaSift Git dependency, missing `uv.lock`, missing `requirements.txt`, and missing guard script.
+- Split root Python install surfaces in `pyproject.toml` into `core`, `providers`, `desktop`, `quant`, and `dev`; generated `uv.lock` and lock-derived `requirements.txt` for `core+providers+desktop` only.
+- Added `scripts/verify-python-dependency-lock.sh`, which runs `uv lock --check`, re-exports the production requirements surface with a stable header, and diffs against committed `requirements.txt`.
+- Removed Serenity root production dependency on dynamic AlphaSift Git install; DSA isolated worktree is unchanged, and reviewed AlphaSift wheel/package intake remains deferred to the later AlphaSift adapter task.
+- Added `tests/domain/test_run_lifecycle.py` as the Red/Green contract for append-only monotonic events, terminal rollback rejection, retry new attempts, and idempotency conflict handling; initial Red failed on the missing `run_lifecycle` module.
+- Added `src/serenity_alpha_lab/domain/run_lifecycle.py` and exported domain symbols from `domain/__init__.py`; no persistence, ArtifactStore, TaskBackend, Trace middleware, Quant Core, PIT Dataset, or formal backtest behavior was introduced.
+- Added `docs/python-dependency-lock.md` and `docs/run-stage-event-domain-model.md`; updated `docs/python-project-metadata.md`, `docs/development-progress-checklist.md`, and `docs/development-status.md` to reflect `SAL-P1-003`/`SAL-P1-006` completion, P1 `5/16`, total `18/129`, and `RSK-008` closure.
+- Verification completed: `scripts/verify-python-dependency-lock.sh`, `pytest tests/architecture tests/domain -q`, full `pytest -q`, `py_compile`, editable install `pip install -e . --no-deps`, DSA dry-run entrypoint smoke, and `git diff --check` passed.
+
+---
+
 # P1 Python Metadata and Architecture Skeleton Plan
 
 > Started: 2026-07-20

@@ -3,7 +3,7 @@
 > Task: `SAL-P1-002` Standardize Python project metadata<br>
 > Date: 2026-07-20<br>
 > Baseline: DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`<br>
-> Scope: Root packaging metadata only; dependency extras and lock generation remain deferred to `SAL-P1-003`.
+> Scope: Root packaging metadata only; dependency extras and lock generation are covered by `SAL-P1-003`.
 
 ## Summary
 
@@ -15,7 +15,7 @@ The metadata intentionally does not copy DSA runtime modules into the working tr
 
 | Source | Treatment |
 |---|---|
-| `.worktrees/dsa-v3.26.1/requirements.txt` | Runtime dependency declarations moved into `[project].dependencies` with comments removed and PEP 508 markers/direct URL normalized. |
+| `.worktrees/dsa-v3.26.1/requirements.txt` | Runtime dependency declarations moved into `core` / `providers` / `desktop` optional dependency surfaces with comments removed and PEP 508 markers normalized. |
 | `.worktrees/dsa-v3.26.1/pyproject.toml` | Black, isort, and Bandit tool settings carried forward and adapted to exclude Serenity cache/worktree directories. |
 | `.worktrees/dsa-v3.26.1/setup.cfg` | Pytest discovery, markers, and line-length conventions carried into root tool configuration. |
 | DSA `main.py`, `server.py`, `src/services/alert_worker.py`, and `tests/` | Referenced by compatibility entry-point wrappers only; files remain in the isolated worktree. |
@@ -25,8 +25,8 @@ The metadata intentionally does not copy DSA runtime modules into the working tr
 - Project name is `serenity-alpha-lab`; DSA source remains an upstream baseline, not the root package name.
 - Python support is declared as `>=3.11,<3.13`, matching the P0 validated Python 3.11 environment and DSA 3.12 target range.
 - Build backend is `setuptools.build_meta` because the existing P0 virtualenv already includes modern setuptools with editable-install support.
-- The AlphaSift dynamic Git dependency is preserved verbatim as a PEP 508 direct reference for traceability; removing runtime Git installation belongs to `SAL-P1-003`.
-- No `core/providers/desktop/quant/dev` extras or lock file are introduced in this task; that split belongs to `SAL-P1-003`.
+- `SAL-P1-003` removed the AlphaSift dynamic Git dependency from Serenity production dependency declarations. DSA's isolated upstream worktree remains unchanged; reviewed AlphaSift wheel/package intake is deferred to the later AlphaSift adapter task.
+- `core/providers/desktop/quant/dev` extras, `uv.lock`, and exported `requirements.txt` are now tracked by `SAL-P1-003`; see [Python 依赖 Extras 与锁文件记录](./python-dependency-lock.md).
 
 ## Entry Points
 
