@@ -73,13 +73,13 @@
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | DOING | 5/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
+| P1 工程加固 | 2~3 | DOING | 6/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **18/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **19/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -318,12 +318,16 @@ P0 基线
 
 ### SAL-P1-005 实现统一 InstrumentId
 
-- [ ] [READY] 定义证券 ID、市场、资产类型和 Provider Symbol Mapping
-- 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 - | 依赖 SAL-P1-004
+- [x] [DONE] 定义证券 ID、市场、资产类型和 Provider Symbol Mapping
+- 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 0.5d | 依赖 SAL-P1-004 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：值对象、解析/格式化、旧代码兼容适配器、测试。
 - 验收：
   - A/港/美/日/韩/台典型代码往返无歧义。
   - 裸 6 位代码只在明确市场上下文中接受。
+- 结果：新增 `src/serenity_alpha_lab/domain/instruments.py`，定义纯领域 `InstrumentId`、`Market`、`Exchange`、`AssetType`、`ProviderSymbolMapping` 和明确错误类型；canonical 格式为 `<symbol>.<exchange>`，覆盖 A 股、港股、美股、日股、韩股和台股典型代码。
+- 兼容映射：`InstrumentId.from_legacy()` 支持 DSA/Yahoo 常见格式，包括 `SH600519`、`600519.SH`、`HK00700`、`0700.HK`、`AAPL` with `market=us`、`7203.T`、`005930.KS`、`035720.KQ`、`2330.TW` 和 `6505.TWO`；`to_provider_symbol("yahoo")` 与 `to_dsa_symbol()` 提供 Provider/旧代码输出。
+- 范围限制：本任务未迁移 DSA `normalize_stock_code` 调用点，未实现 Provider、Dataset、PIT 数据、Quant Core、正式回测或大规模 DSA runtime source 迁移。
+- 验收证据：见 [InstrumentId 统一证券 ID 领域模型记录](./instrument-id-domain-model.md)；`tests/domain/test_instrument_id.py`；Red 测试先因缺少模块失败，Green 后 `tests/domain/test_instrument_id.py` 得到 `37 passed`，`tests/architecture tests/domain` 得到 `52 passed`。
 
 ### SAL-P1-006 实现 Run/Stage/Event 领域模型
 
@@ -1428,6 +1432,7 @@ P0 基线
 | DEC-014 | 2026-07-20 | P1 Python 元数据与目标包骨架落地方式 | 采用根 `pyproject.toml` + `serenity_alpha_lab` 自有包骨架；DSA runtime source 继续隔离在 `.worktrees/dsa-v3.26.1`，通过 dry-run 可验证的 console wrappers 暴露 CLI/API/Worker/测试入口；extras/lock 和动态 Git 依赖关闭延期至 `SAL-P1-003` | [python-project-metadata.md](./python-project-metadata.md); [pyproject.toml](../pyproject.toml) | SAL-P1-002,SAL-P1-003,SAL-P1-004 | G1 |
 | DEC-015 | 2026-07-20 | Python 依赖锁与安装面 | `uv.lock` 是 root Python 权威锁；`requirements.txt` 只导出 `core+providers+desktop`，不含 `quant/dev`，不含 `pyqlib`，不含动态 Git；AlphaSift 生产 intake 延后到审查后 wheel/package 决策 | [python-dependency-lock.md](./python-dependency-lock.md); [pyproject.toml](../pyproject.toml); [uv.lock](../uv.lock); [requirements.txt](../requirements.txt) | SAL-P1-003,SAL-P3-001,SAL-P6-005 | G1 |
 | DEC-016 | 2026-07-20 | Run/Stage/Event 领域生命周期 | 采用纯 domain 聚合表达运行状态、阶段、追加事件、retry attempt 和 idempotency conflict；持久化、TaskBackend、Trace 和 Artifact 在后续任务基于该契约实现 | [run-stage-event-domain-model.md](./run-stage-event-domain-model.md); [run_lifecycle.py](../src/serenity_alpha_lab/domain/run_lifecycle.py) | SAL-P1-006,SAL-P1-007,SAL-P1-008,SAL-P1-011 | G1 |
+| DEC-017 | 2026-07-20 | 统一证券 ID 和旧 symbol 兼容口径 | 采用纯 domain `InstrumentId` 作为跨市场证券身份，canonical 格式为 `<symbol>.<exchange>`；旧 DSA/Yahoo symbol 通过显式 `from_legacy()`、`ProviderSymbolMapping` 和 `to_dsa_symbol()` 适配；裸 6 位代码无市场上下文时拒绝，避免跨市场主键碰撞 | [instrument-id-domain-model.md](./instrument-id-domain-model.md); [instruments.py](../src/serenity_alpha_lab/domain/instruments.py) | SAL-P1-005,SAL-P2-001,SAL-P2-003,SAL-P2-005 | G1 |
 
 ## 14. 验收证据登记
 
@@ -1451,6 +1456,7 @@ P0 基线
 | AEV-016 | SAL-P1-004 | 目标包骨架和架构边界测试 | [src/serenity_alpha_lab](../src/serenity_alpha_lab); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | package skeleton created; architecture tests enforce domain/framework, quant/agent-notification, integration/repository boundaries; `pytest tests/architecture -q` PASS `7 passed`; `py_compile` PASS; no Quant Core/PIT/formal backtest implementation | TL/BE | 2026-07-20 |
 | AEV-017 | SAL-P1-003 | Python extras、lock、requirements 导出和 drift guard | [python-dependency-lock.md](./python-dependency-lock.md); [uv.lock](../uv.lock); [requirements.txt](../requirements.txt); [verify-python-dependency-lock.sh](../scripts/verify-python-dependency-lock.sh); [test_dependency_locking.py](../tests/architecture/test_dependency_locking.py) | `uv lock` resolved 296 packages; `scripts/verify-python-dependency-lock.sh` PASS; production requirements excludes `pyqlib` and dynamic Git; architecture tests `11 passed`; full pytest `15 passed` | BE/SEC | 2026-07-20 |
 | AEV-018 | SAL-P1-006 | Run/Stage/Event 纯领域模型和状态转换测试 | [run-stage-event-domain-model.md](./run-stage-event-domain-model.md); [run_lifecycle.py](../src/serenity_alpha_lab/domain/run_lifecycle.py); [test_run_lifecycle.py](../tests/domain/test_run_lifecycle.py) | append-only monotonic events, terminal rollback rejection, retry new attempt, idempotency conflict; domain tests `4 passed`; py_compile PASS | BE | 2026-07-20 |
+| AEV-019 | SAL-P1-005 | InstrumentId 纯领域模型、旧 symbol 兼容映射和跨市场往返测试 | [instrument-id-domain-model.md](./instrument-id-domain-model.md); [instruments.py](../src/serenity_alpha_lab/domain/instruments.py); [test_instrument_id.py](../tests/domain/test_instrument_id.py) | A/HK/US/JP/KR/TW canonical round-trip; DSA/Yahoo legacy mapping; bare 6-digit ambiguity guard; target Red failed on missing module; Green `37 passed`; architecture/domain `52 passed` | QE/BE | 2026-07-20 |
 
 允许的证据：
 
@@ -1488,4 +1494,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-006`，完成度为 18/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-005` 统一 InstrumentId，或基于 Run 模型推进 `SAL-P1-007` Artifact 模型、`SAL-P1-008` TaskBackend、`SAL-P1-011` Trace；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`，完成度为 19/129；Gate G0 已通过，Gate G1 未通过。下一步优先基于 Run/InstrumentId 模型推进 `SAL-P1-007` Artifact 模型、`SAL-P1-008` TaskBackend、`SAL-P1-011` Trace，或执行 `SAL-P1-014` 配置 Profile；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。

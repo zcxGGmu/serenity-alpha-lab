@@ -1,3 +1,37 @@
+# P1 InstrumentId Domain Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-005` as a P1 engineering-hardening checkpoint. Define a pure domain `InstrumentId` value object, market/exchange/asset-type vocabulary, and provider/legacy symbol mapping without starting Provider migration, PIT Dataset, Quant Core, formal backtesting, or broad DSA source movement.
+
+## Checklist
+
+- [x] Review recovery docs, lessons, status, progress checklist, development plan, Gate G0 review, ADR-001/002, Git status, recent commits, and DSA symbol normalization references.
+- [x] Write Red tests for A/HK/US/JP/KR/TW `InstrumentId` parsing, formatting, provider symbol mapping, and ambiguous bare-code rejection.
+- [x] Implement pure domain `InstrumentId`, `Market`, `Exchange`, `AssetType`, errors, and provider/legacy mapping helpers.
+- [x] Export public domain symbols and keep architecture boundaries clean.
+- [x] Add `SAL-P1-005` evidence documentation.
+- [x] Run targeted domain tests, architecture tests, full pytest, py_compile, dependency lock drift guard, upstream tag check, and `git diff --check`.
+- [x] Update progress checklist, status snapshot, decision/evidence registers, and this review section.
+- [x] Stage only relevant files and create a Chinese checkpoint commit after verification passes.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA source isolated under `.worktrees/dsa-v3.26.1`.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or generated build products.
+- `SAL-P1-005` is pure domain/compatibility modeling only: no Provider implementation, Dataset Catalog, PIT data, Quant Core, formal backtest, database migration, or large DSA runtime source migration.
+- Bare six-digit codes must remain ambiguous unless explicit market context is supplied.
+
+## Review: SAL-P1-005
+
+- Added `tests/domain/test_instrument_id.py` as the Red/Green contract for canonical A/HK/US/JP/KR/TW round-trips, legacy DSA/Yahoo symbol intake, provider symbol mapping, DSA compatibility symbols, and ambiguous bare-code rejection. Initial Red failed on missing `serenity_alpha_lab.domain.instruments`.
+- Added `src/serenity_alpha_lab/domain/instruments.py`, defining pure domain `InstrumentId`, `Market`, `Exchange`, `AssetType`, `ProviderSymbolMapping`, `AmbiguousInstrumentSymbol`, `InvalidInstrumentSymbol`, and `UnsupportedProvider` without importing DSA runtime, data providers, frameworks, or persistence.
+- Exported InstrumentId symbols from `src/serenity_alpha_lab/domain/__init__.py`; architecture tests continue to enforce domain/framework and infrastructure boundaries.
+- Added `docs/instrument-id-domain-model.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-005` done, record `DEC-017` / `AEV-019`, move P1 progress to `6/16`, and total progress to `19/129`.
+- Verification completed: target Red/Green test, `.cache/dsa-p0/venv/bin/python -m pytest tests/domain/test_instrument_id.py -q` (`37 passed`), `.cache/dsa-p0/venv/bin/python -m pytest tests/architecture tests/domain -q` (`52 passed`), full `.cache/dsa-p0/venv/bin/python -m pytest -q` (`52 passed`), py_compile, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+- Local review found no blocking correctness issue; scope remains pure domain modeling only, with Provider migration, Dataset master data, PIT semantics, Quant Core, and formal backtesting deferred to their explicit tasks.
+
+---
+
 # P1 Dependency Lock and Run Domain Plan
 
 > Started: 2026-07-20
@@ -30,7 +64,7 @@
 - Removed Serenity root production dependency on dynamic AlphaSift Git install; DSA isolated worktree is unchanged, and reviewed AlphaSift wheel/package intake remains deferred to the later AlphaSift adapter task.
 - Added `tests/domain/test_run_lifecycle.py` as the Red/Green contract for append-only monotonic events, terminal rollback rejection, retry new attempts, and idempotency conflict handling; initial Red failed on the missing `run_lifecycle` module.
 - Added `src/serenity_alpha_lab/domain/run_lifecycle.py` and exported domain symbols from `domain/__init__.py`; no persistence, ArtifactStore, TaskBackend, Trace middleware, Quant Core, PIT Dataset, or formal backtest behavior was introduced.
-- Added `docs/python-dependency-lock.md` and `docs/run-stage-event-domain-model.md`; updated `docs/python-project-metadata.md`, `docs/development-progress-checklist.md`, and `docs/development-status.md` to reflect `SAL-P1-003`/`SAL-P1-006` completion, P1 `5/16`, total `18/129`, and `RSK-008` closure.
+- Added `docs/python-dependency-lock.md` and `docs/run-stage-event-domain-model.md`; updated `docs/python-project-metadata.md`, `docs/development-progress-checklist.md`, and `docs/development-status.md` to reflect then-current `SAL-P1-003`/`SAL-P1-006` completion, P1 progress, total progress, and `RSK-008` closure.
 - Verification completed: `scripts/verify-python-dependency-lock.sh`, `pytest tests/architecture tests/domain -q`, full `pytest -q`, `py_compile`, editable install `pip install -e . --no-deps`, DSA dry-run entrypoint smoke, and `git diff --check` passed.
 
 ---
