@@ -13,6 +13,16 @@ from serenity_alpha_lab.application.task_backend import (
     TaskSnapshot,
     TaskStatus,
 )
+from serenity_alpha_lab.application.tracing import (
+    StructuredLogFormatter,
+    TraceContext,
+    TraceContextFilter,
+    TraceContextMiddleware,
+    current_trace_context,
+    generate_trace_id,
+    redact_sensitive_data,
+    use_trace_context,
+)
 
 __all__ = [
     "InMemoryTaskBackend",
@@ -26,4 +36,12 @@ __all__ = [
     "TaskRef",
     "TaskSnapshot",
     "TaskStatus",
+    "StructuredLogFormatter",
+    "TraceContext",
+    "TraceContextFilter",
+    "TraceContextMiddleware",
+    "current_trace_context",
+    "generate_trace_id",
+    "redact_sensitive_data",
+    "use_trace_context",
 ]

@@ -1,3 +1,36 @@
+# P1 Trace and Structured Logging Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-011` as a P1 engineering-hardening checkpoint. Define trace context propagation, structured JSON log schema, redaction, and lightweight ASGI middleware without adding OpenTelemetry exporters, metrics backend, Provider/Qlib/LLM instrumentation, or API endpoint rewrites.
+
+## Checklist
+
+- [x] Review observability requirements, Run/Stage model, TaskBackend context, and logging redaction constraints.
+- [x] Add Red tests for trace context propagation and reset behavior.
+- [x] Add Red tests for structured JSON logging with trace/run/stage/user/module fields and secret/prompt redaction.
+- [x] Add Red tests for ASGI-compatible trace middleware header propagation.
+- [x] Implement stdlib-only trace context, redactor, logging filter, JSON formatter, and ASGI middleware.
+- [x] Run target and broader pytest/compile/lock/diff verification.
+- [x] Add `SAL-P1-011` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-011` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-011` is observability foundation only: no OpenTelemetry exporter, Prometheus/Grafana, Provider/Qlib/LLM instrumentation, Agent orchestration changes, API route rewrites, PIT Dataset, Quant Core, or formal backtest.
+- Do not log secrets, tokens, full prompts, private body text, or request payloads by default.
+- Middleware must be framework-neutral and avoid FastAPI/Starlette imports.
+
+## Review: SAL-P1-011
+
+- Added Red tests in `tests/application/test_trace_context.py`; initial target run failed on missing `serenity_alpha_lab.application.tracing`, then Green passed with target `4 passed`.
+- Added `src/serenity_alpha_lab/application/tracing.py`, defining `TraceContext`, `use_trace_context()`, `current_trace_context()`, `TraceContextFilter`, `StructuredLogFormatter`, `TraceContextMiddleware`, `generate_trace_id()` and `redact_sensitive_data()`.
+- Structured JSON logs include timestamp, level, logger, module, message, trace_id, run_id, stage_id and user_id; `extra` fields are recursively redacted for secrets, tokens, authorization, api keys, prompts, messages, bodies and content.
+- Added `docs/structured-trace-logging.md`; updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-011` done, record `DEC-020` / `AEV-022`, move P1 progress to `9/16`, and total progress to `22/129`.
+- Verification completed: target Trace tests `4 passed`, full `.cache/dsa-p0/venv/bin/python -m pytest -q` `70 passed`, py_compile for application/test paths, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+
+---
+
 # P1 TaskBackend Plan
 
 > Started: 2026-07-20

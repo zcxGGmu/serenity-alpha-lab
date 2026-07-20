@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-20<br>
-> 最近阶段性任务：`SAL-P1-008` 抽取 TaskBackend<br>
+> 最近阶段性任务：`SAL-P1-011` 统一结构化日志与 Trace<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P1 工程加固<br>
 > 当前 Gate：G1，未通过；G0 已通过（`GO with accepted risks`）<br>
-> 任务完成度：21/129<br>
-> 当前可执行任务：`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-011`、`SAL-P1-014`，状态均为 `READY`；后续实现必须遵守 ADR-001/002<br>
+> 任务完成度：22/129<br>
+> 当前可执行任务：`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-014`，状态均为 `READY`；后续实现必须遵守 ADR-001/002<br>
 > 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -46,6 +46,7 @@
 - 完成 `SAL-P1-006`：新增纯领域 [run_lifecycle.py](../src/serenity_alpha_lab/domain/run_lifecycle.py)，定义 `Run`、`Stage`、`RunEvent`、状态枚举、追加事件、retry attempt、终态拒绝回退和 idempotency conflict；证据见 [Run / Stage / Event 领域模型记录](./run-stage-event-domain-model.md)。
 - 完成 `SAL-P1-007`：新增纯领域 [artifacts.py](../src/serenity_alpha_lab/domain/artifacts.py) 和本地 [local_artifact_store.py](../src/serenity_alpha_lab/repositories/local_artifact_store.py)，定义内容寻址 URI、Artifact Manifest、`ArtifactStore` Protocol、保留等级、manifest-last 原子发布和哈希完整性校验；证据见 [Artifact 模型与本地存储记录](./artifact-store-domain-model.md)。
 - 完成 `SAL-P1-008`：新增应用层 [task_backend.py](../src/serenity_alpha_lab/application/task_backend.py) 和 DSA 兼容 [task_backend.py](../src/serenity_alpha_lab/integrations/dsa/task_backend.py)，定义 `TaskBackend` Protocol、`InMemoryTaskBackend`、任务命令/快照/事件、状态映射和注入式 DSA `AnalysisTaskQueue` facade；证据见 [TaskBackend 协议与 DSA 兼容 Facade 记录](./task-backend-facade.md)。
+- 完成 `SAL-P1-011`：新增应用层 [tracing.py](../src/serenity_alpha_lab/application/tracing.py)，定义 `TraceContext`、ContextVar 传播、结构化 JSON formatter、logging filter、递归脱敏和框架无关 ASGI middleware；证据见 [结构化日志与 Trace 记录](./structured-trace-logging.md)。
 
 ## 未完成
 
@@ -53,13 +54,12 @@
 
 - `SAL-P1-009` 当前为 `READY`：抽取 `ResearchOrchestrator`，为 DSA AgentOrchestrator 建立稳定协议和兼容包装。
 - `SAL-P1-010` 当前为 `READY`：统一 API 错误协议，引入 `application/problem+json` 和稳定错误码。
-- `SAL-P1-011` 当前为 `READY`：统一结构化日志与 Trace，传播 `trace_id/run_id/stage_id`。
 - `SAL-P1-014` 当前为 `READY`：整理配置与运行 Profile，定义 desktop/standalone/ci 配置及密钥边界。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P1 至 P6 仍有 108 项工程任务未完成。
+- P1 至 P6 仍有 107 项工程任务未完成。
 - 已创建 Serenity 目标包骨架，但尚未实现 Serenity 目标运行时代码、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
@@ -73,6 +73,7 @@
 - 当前本地偏离均为 `compatible` 或 `extension`，无 `divergence`；已登记补丁为 `DSA-PATCH-001` 至 `DSA-PATCH-003`。
 - Artifact 本地存储已采用 SHA-256 blob + JSON manifest 分离存储，manifest 最后发布；后续 Evidence、Dataset 和任务输出必须复用或显式适配该契约。
 - TaskBackend 已建立应用层协议和 DSA 兼容 facade；后续 API、Worker 或持久队列不得直接依赖 DSA `ThreadPoolExecutor` 假设。
+- Trace context、结构化 JSON 日志和脱敏基础已建立；后续 API、Worker、Provider、Agent 和报告链路应复用 `TraceContext` 并避免记录 secret、token、完整 prompt 或私有正文。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -88,7 +89,7 @@
 
 ## 下一步
 
-1. 优先推进 `SAL-P1-011` Trace 或 `SAL-P1-014` 配置 Profile，为 G1 工程地基补齐运行上下文与环境边界。
+1. 优先推进 `SAL-P1-014` 配置 Profile，为 G1 工程地基补齐 desktop/standalone/ci 环境边界和密钥边界。
 2. 可并行推进 `SAL-P1-009` ResearchOrchestrator 或 `SAL-P1-010` API 错误协议。
 3. 保持 P0 required checks 作为基线保护；任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -100,6 +101,7 @@
 - 2026-07-20：完成 `SAL-P1-005`，新增统一 `InstrumentId`、市场/交易所/资产类型和 Provider Symbol Mapping；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`，Gate G1 仍未通过；`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-011`、`SAL-P1-014` 是推荐下一步。
 - 2026-07-20：完成 `SAL-P1-007`，新增 Artifact 纯领域模型和本地内容寻址存储；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`，Gate G1 仍未通过；`SAL-P1-008`、`SAL-P1-011`、`SAL-P1-014` 是推荐下一步。
 - 2026-07-20：完成 `SAL-P1-008`，新增 TaskBackend Protocol、InMemory 实现和注入式 DSA 兼容 facade；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`，Gate G1 仍未通过；`SAL-P1-011`、`SAL-P1-014`、`SAL-P1-009`、`SAL-P1-010` 是推荐下一步。
+- 2026-07-20：完成 `SAL-P1-011`，新增结构化 JSON 日志、Trace context、脱敏和 ASGI middleware；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-011`，Gate G1 仍未通过；`SAL-P1-014`、`SAL-P1-009`、`SAL-P1-010` 是推荐下一步。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -134,17 +136,17 @@
 当前状态：
 - Phase：P1 工程加固
 - Gate：G1 未通过；G0 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001，SAL-P1-002，SAL-P1-003，SAL-P1-004，SAL-P1-005，SAL-P1-006，SAL-P1-007，SAL-P1-008
-- 最近完成：SAL-P1-008 抽取 TaskBackend
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001，SAL-P1-002，SAL-P1-003，SAL-P1-004，SAL-P1-005，SAL-P1-006，SAL-P1-007，SAL-P1-008，SAL-P1-011
+- 最近完成：SAL-P1-011 统一结构化日志与 Trace
 - 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 8/16，总计 21/129
+- 进度：P0 13/13，P1 9/16，总计 22/129
 
 下一步优先执行：
-1. SAL-P1-011 统一结构化日志与 Trace
-2. SAL-P1-014 整理配置与运行 Profile
-3. SAL-P1-009 抽取 ResearchOrchestrator
-4. SAL-P1-010 统一 API 错误协议
+1. SAL-P1-014 整理配置与运行 Profile
+2. SAL-P1-009 抽取 ResearchOrchestrator
+3. SAL-P1-010 统一 API 错误协议
+4. SAL-P1-012 接入 Alembic
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
