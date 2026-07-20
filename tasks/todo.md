@@ -1,3 +1,24 @@
+# P2 Status Snapshot Sync Plan
+
+> Started: 2026-07-20
+> Scope: Respond to the user's status-sync request after Gate G1 by making the repository recovery state explicit, recording the repeated habit in lessons, and providing a copyable next-session prompt without starting `SAL-P2-001` yet.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, and `docs/development-progress-checklist.md`.
+- [x] Confirm `git status --short --branch` and latest checkpoints show Gate G1 commit `428205b9`.
+- [x] Add a new lesson that status synchronization must happen automatically at user-defined stop/prompt nodes.
+- [x] Add a status-sync review line to `docs/development-status.md` confirming P2 / Gate G2 / `SAL-P2-001`.
+- [x] Re-scan status anchors and run `git diff --check` before reporting completion.
+
+## Review: P2 Status Snapshot Sync
+
+- Confirmed docs already show Phase `P2 数据与持久任务`, Gate `G2 未通过`, G0/G1 passed, total progress `29/129`, and `SAL-P2-001` `READY`.
+- Added a persistent lesson so future phase/task completions automatically update status, progress, todo review, evidence, and the next-start prompt before final response.
+- This sync does not start `SAL-P2-001`, does not modify code, and does not touch DSA worktree/cache/runtime artifacts.
+
+---
+
 # P1 Gate G1 Engineering Foundation Review Plan
 
 > Started: 2026-07-20
