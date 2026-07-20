@@ -1,3 +1,35 @@
+# P1 Desktop Compatibility Performance Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-015` as a P1 engineering-hardening checkpoint. Re-run the locked DSA Desktop/CLI/Bot and contract/golden characterization paths under the current P1 lock/facade/migration state, add a repeatable performance evidence script, and record startup/single-stock stub-analysis timings without changing DSA runtime behavior, moving upstream tags, starting real Provider/LLM calls, PIT Dataset, Quant Core, or formal backtesting.
+
+## Checklist
+
+- [x] Review P0 Desktop/CLI/Bot smoke evidence, P0 required baseline jobs, and P1 guardrails.
+- [x] Add a repeatable `SAL-P1-015` compatibility/performance runner that keeps generated timing artifacts under `.cache/dsa-p0`.
+- [x] Run Desktop npm tests, Desktop packaging/API health, CLI local backend, Bot command smoke, API/config, database, and report/signal baselines.
+- [x] Capture startup/import and single-stock report-generation timing against conservative P1 thresholds.
+- [x] Run Serenity root pytest/compile/lock/diff/tag verification.
+- [x] Add `SAL-P1-015` evidence documentation.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section.
+- [x] Stage only relevant `SAL-P1-015` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P1-015` is compatibility/performance evidence only: no DSA source migration, no Desktop package signing/build artifact commit, no Web lockfile rewrite, no Docker image rebuild unless explicitly needed for G1, no Provider/LLM calls, no PIT Dataset, no Quant Core, and no formal backtest.
+- P0 characterization is measured through deterministic/offline paths: Desktop headless tests, packaging/API health, CLI/Bot mocks, API/config snapshots, database fixture, and report/signal golden snapshots.
+- Performance thresholds for this first P1 run are conservative baselines rather than optimization claims: Desktop/backend health startup budget `<= 60s`, report/signal golden run `<= 60s`, and single-stock Markdown generation `<= 5s`.
+
+## Review: SAL-P1-015
+
+- Added `scripts/run-p1-desktop-compatibility-performance.sh` as the repeatable compatibility/performance runner. It bootstraps the locked DSA baseline, applies registered patches, runs Desktop/API/CLI/Bot and contract/golden baselines, measures Desktop backend health startup, and writes generated logs/summary only under `.cache/dsa-p0/p1-desktop-compatibility-performance/`.
+- Added `docs/desktop-compatibility-performance-baseline.md`, documenting the validation matrix, performance thresholds, no-real-call boundaries, generated artifact policy, and G1 handoff.
+- Latest runner evidence passed: Desktop `npm test` `47 passed`, Desktop/API/CLI/Bot pytest `121 passed, 7 warnings`, API/config snapshots matched, database snapshots matched, report/signal snapshots matched, Desktop backend health startup `5,822ms`, single-stock report generation average `0.030ms`, and real Provider/LLM calls zero.
+- Updated `docs/development-progress-checklist.md` and `docs/development-status.md` to mark `SAL-P1-015` done, record `DEC-026` / `AEV-028`, move P1 progress to `15/16`, total progress to `28/129`, and promote `SAL-P1-016` to `READY`.
+- Final verification to record before commit: `bash -n scripts/run-p1-desktop-compatibility-performance.sh`, full `.cache/dsa-p0/venv/bin/python -m pytest -q`, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1`.
+
+---
+
 # P1 SQLite Upgrade Verification Plan
 
 > Started: 2026-07-20
