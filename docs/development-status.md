@@ -1,12 +1,12 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-20<br>
-> 最近阶段性任务：`SAL-P1-001` 批准上游与模块化 ADR<br>
+> 最近阶段性任务：`SAL-P1-002` 标准化 Python 项目元数据；`SAL-P1-004` 建立目标包骨架和架构测试<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P1 工程加固<br>
 > 当前 Gate：G1，未通过；G0 已通过（`GO with accepted risks`）<br>
-> 任务完成度：14/129<br>
-> 当前可执行任务：`SAL-P1-002` 与 `SAL-P1-004`，状态均为 `READY`；后续实现必须遵守 ADR-001/002<br>
+> 任务完成度：16/129<br>
+> 当前可执行任务：`SAL-P1-003`、`SAL-P1-005`、`SAL-P1-006`、`SAL-P1-009`、`SAL-P1-010`、`SAL-P1-014`，状态均为 `READY`；后续实现必须遵守 ADR-001/002<br>
 > 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -39,19 +39,25 @@
 
 - 完成 `SAL-P1-001`：批准 [ADR-001](./adr/ADR-001-upstream-takeover-sync-and-patch-policy.md) 与 [ADR-002](./adr/ADR-002-progressive-modularization-and-compatibility-facade.md)，明确不可变上游 tag、受控 sync 分支、补丁分类、候选 commit 处理、Compatibility Facade、模块边界、服务拆分条件、旧路径删除条件、回滚和复审日期。
 - 上游候选处理已定：`55946536` macOS Gatekeeper 文档修复不 cherry-pick 到当前 P1 基线；`487e49e5` DecisionSignal reassessment persistence 延期至 `sync/dsa-487e49e5` 分支评审。
+- 完成 `SAL-P1-002`：新增根 [pyproject.toml](../pyproject.toml)，标准化 PEP 621 项目元数据、Python `>=3.11,<3.13`、构建后端、DSA runtime 依赖声明、console entry points 和工具配置；依赖差异审查见 [Python 项目元数据审查](./python-project-metadata.md)。
+- 完成 `SAL-P1-004`：新增 `src/serenity_alpha_lab/` 目标包骨架和 `tests/architecture/` 架构测试，建立 domain/application/quant/datasets/evidence/integrations/repositories/services 边界；未启动 Quant Core、PIT Dataset、正式回测或 DSA runtime source 迁移。
 
 ## 未完成
 
 ### 当前可执行 P1 任务
 
-- `SAL-P1-002` 当前为 `READY`：标准化 Python 项目元数据，把依赖声明迁入标准 `pyproject.toml`，保持 DSA CLI/API/Worker/测试入口可安装运行。
-- `SAL-P1-004` 当前为 `READY`：建立目标包骨架和架构测试，创建 domain/application/quant/datasets/evidence/integrations 边界并验证依赖方向。
+- `SAL-P1-003` 当前为 `READY`：建立依赖 Extras 与锁文件，划分 core/providers/desktop/quant/dev 并生成 `uv.lock`。
+- `SAL-P1-005` 当前为 `READY`：实现统一 `InstrumentId`，定义证券 ID、市场、资产类型和 Provider Symbol Mapping。
+- `SAL-P1-006` 当前为 `READY`：实现 Run/Stage/Event 领域模型、状态转换和幂等规则。
+- `SAL-P1-009` 当前为 `READY`：抽取 `ResearchOrchestrator`，为 DSA AgentOrchestrator 建立稳定协议和兼容包装。
+- `SAL-P1-010` 当前为 `READY`：统一 API 错误协议，引入 `application/problem+json` 和稳定错误码。
+- `SAL-P1-014` 当前为 `READY`：整理配置与运行 Profile，定义 desktop/standalone/ci 配置及密钥边界。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P1 至 P6 仍有 115 项工程任务未完成。
-- 尚未创建 Serenity 目标运行时代码、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
+- P1 至 P6 仍有 113 项工程任务未完成。
+- 已创建 Serenity 目标包骨架，但尚未实现 Serenity 目标运行时代码、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Python 动态 Git 依赖、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移。
 
 ## 当前决策与约束
@@ -77,13 +83,14 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P1-002` 标准化 Python 项目元数据。
-2. 可并行执行 `SAL-P1-004` 建立目标包骨架和架构测试。
+1. 优先执行 `SAL-P1-003` 建立依赖 Extras 与锁文件，关闭当前 pyproject 仍保留的动态 Git/未锁定风险。
+2. 可并行执行 `SAL-P1-006` 实现 Run/Stage/Event 领域模型，为 Artifact、TaskBackend 和 Trace 铺底。
 3. 保持 P0 required checks 作为基线保护；任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
 
-- 2026-07-20：完成 `SAL-P1-001`，批准上游与模块化 ADR。当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`，Gate G0 已通过，Gate G1 未通过；`SAL-P1-002` 与 `SAL-P1-004` 是下一步 `READY` 任务。
+- 2026-07-20：完成 `SAL-P1-001`，批准上游与模块化 ADR；后续实现继续受 ADR-001/002 约束。
+- 2026-07-20：完成 `SAL-P1-002` 与 `SAL-P1-004`，新增 Python 项目元数据、DSA entry-point wrappers、目标包骨架和架构边界测试。当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-004`，Gate G1 仍未通过；`SAL-P1-003` 与 `SAL-P1-006` 是推荐下一步。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -118,15 +125,15 @@
 当前状态：
 - Phase：P1 工程加固
 - Gate：G1 未通过；G0 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001
-- 最近完成：SAL-P1-001 批准上游与模块化 ADR
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001，SAL-P1-002，SAL-P1-004
+- 最近完成：SAL-P1-002 标准化 Python 项目元数据；SAL-P1-004 建立目标包骨架和架构测试
 - 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 1/16，总计 14/129
+- 进度：P0 13/13，P1 3/16，总计 16/129
 
 下一步优先执行：
-1. SAL-P1-002 标准化 Python 项目元数据
-2. SAL-P1-004 建立目标包骨架和架构测试
+1. SAL-P1-003 建立依赖 Extras 与锁文件
+2. SAL-P1-006 实现 Run/Stage/Event 领域模型
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

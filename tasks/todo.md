@@ -1,3 +1,40 @@
+# P1 Python Metadata and Architecture Skeleton Plan
+
+> Started: 2026-07-20
+> Scope: Complete `SAL-P1-002` and `SAL-P1-004` as one small engineering-hardening checkpoint. Preserve ADR-001/002 guardrails: do not move `upstream/dsa-v3.26.1`, do not copy broad DSA runtime source into the working tree, and do not start Quant Core, PIT Dataset, formal backtesting, or unapproved DSA migration.
+
+## Checklist
+
+- [x] Review session recovery docs, ADR-001/002, P1 task definitions, current Git state, and existing tracked project files.
+- [x] Write Red tests for root `pyproject.toml`, installable entry points, package importability, and ADR-002 architecture boundaries.
+- [x] Run targeted Red tests and record the expected failures.
+- [x] Add root `pyproject.toml` with standard PEP 621 project metadata, Python version, build backend, DSA-derived dependencies, console entry points, and tool configuration.
+- [x] Create minimal `src/serenity_alpha_lab` package skeleton for `domain`, `application`, `quant`, `datasets`, `evidence`, `integrations`, `repositories`, and `services` without implementing Quant Core or PIT Dataset behavior.
+- [x] Add DSA compatibility entry-point wrappers that resolve the isolated DSA worktree and support dry-run validation without copying DSA runtime source.
+- [x] Add dependency-difference review notes documenting what moved from DSA requirements/tool config and what remains deferred to `SAL-P1-003`.
+- [x] Run targeted Green tests, editable install smoke with `--no-deps`, architecture checks, metadata parse checks, and `git diff --check`.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, and this review section with evidence and next-step state.
+- [x] Stage only relevant P1 files and create a Chinese checkpoint commit if verification passes.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA source isolated under `.worktrees/dsa-v3.26.1`.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or generated build products.
+- Keep `SAL-P1-003` scope separate: no `uv.lock`, no finalized extras split, no dependency upgrade/remediation beyond pyproject metadata normalization.
+- Keep `SAL-P1-004` as skeleton and architecture tests only: no factor math, dataset catalog, formal backtest, Qlib integration, or provider migration.
+
+## Review: SAL-P1-002 / SAL-P1-004
+
+- Added root `pyproject.toml` with PEP 621 metadata, Python `>=3.11,<3.13`, `setuptools.build_meta`, DSA-derived runtime dependencies, DSA dry-run console scripts, and pytest/format/lint tool configuration.
+- Added `docs/python-project-metadata.md` to document the migration from DSA `requirements.txt`, `pyproject.toml`, and `setup.cfg`, plus explicit `SAL-P1-003` deferrals for extras, lock generation, and AlphaSift dynamic Git closure.
+- Added `src/serenity_alpha_lab/` package skeleton for `domain`, `application`, `quant`, `datasets`, `evidence`, `integrations`, `repositories`, and `services`; no Quant Core, PIT Dataset, formal backtest, provider migration, or broad DSA runtime source import was introduced.
+- Added DSA compatibility wrappers under `src/serenity_alpha_lab/integrations/dsa/entrypoints.py`, resolving `.worktrees/dsa-v3.26.1` and supporting `SERENITY_DSA_DRY_RUN=1` for CLI/API/Worker/test entry-point validation.
+- Added Red/Green architecture tests under `tests/architecture/`: initial Red failed on missing `pyproject.toml`, package skeleton, and entrypoint modules; final Green passed with `7 passed`.
+- Verification completed: `pytest tests/architecture -q`, full `pytest -q`, editable install `pip install -e . --no-deps`, installed console-script dry-runs, `py_compile`, metadata parse, forbidden-token scan, and `git diff --check` passed. `ruff` was not run because it is not installed in `.cache/dsa-p0/venv`.
+- Updated `docs/development-progress-checklist.md` and `docs/development-status.md`: `SAL-P1-002` and `SAL-P1-004` are `DONE`, P1 progress is 3/16, total progress is 16/129, and recommended next tasks are `SAL-P1-003` and `SAL-P1-006`.
+
+---
+
 # P1 ADR Approval Plan
 
 > Started: 2026-07-20

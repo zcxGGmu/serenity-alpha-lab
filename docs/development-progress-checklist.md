@@ -73,13 +73,13 @@
 | Phase | 目标周 | 状态 | 完成/总数 | Gate | 关键输出 |
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
-| P1 工程加固 | 2~3 | DOING | 1/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
+| P1 工程加固 | 2~3 | DOING | 3/16 | G1 | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | TODO | 0/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **14/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **16/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -282,16 +282,19 @@ P0 基线
 
 ### SAL-P1-002 标准化 Python 项目元数据
 
-- [ ] [READY] 把依赖声明迁入标准 `pyproject.toml`
-- 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P1-001
+- [x] [DONE] 把依赖声明迁入标准 `pyproject.toml`
+- 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 0.5d | 依赖 SAL-P1-001 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：project metadata、Python 版本、entry points、build backend。
 - 验收：
   - DSA CLI/API/Worker/测试入口可安装运行。
   - 原有 requirements 与新声明差异有审查记录。
+- 结果：新增根 `pyproject.toml`，以 PEP 621 声明 `serenity-alpha-lab` 项目元数据、Python `>=3.11,<3.13`、`setuptools.build_meta` 构建后端、DSA `v3.26.1` runtime 依赖、pytest/black/isort/ruff/bandit 工具配置，以及 `serenity-alpha-lab`、`serenity-dsa-cli`、`serenity-dsa-api`、`serenity-dsa-worker`、`serenity-dsa-tests` console scripts。
+- 依赖审查：新增 [Python 项目元数据审查](./python-project-metadata.md)，记录从 DSA `requirements.txt`、`pyproject.toml`、`setup.cfg` 迁移的内容、差异和 `SAL-P1-003` 延后项；AlphaSift 动态 Git 依赖按 P0 风险原样保留，锁文件/extras/离线缓存仍由 `SAL-P1-003` 关闭。
+- 验收证据：`tests/architecture/test_project_metadata.py`；`.cache/dsa-p0/venv/bin/python -m pytest tests/architecture -q` 得到 `7 passed`；`.cache/dsa-p0/venv/bin/python -m pip install -e . --no-deps` 成功；`SERENITY_DSA_DRY_RUN=1` 下四个 DSA entry points 均返回 exit 0。
 
 ### SAL-P1-003 建立依赖 Extras 与锁文件
 
-- [ ] [TODO] 划分 core/providers/desktop/quant/dev 并生成 `uv.lock`
+- [ ] [READY] 划分 core/providers/desktop/quant/dev 并生成 `uv.lock`
 - 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P1-002
 - 交付物：extras、lock、由 lock 导出的兼容 requirements。
 - 验收：
@@ -300,16 +303,19 @@ P0 基线
 
 ### SAL-P1-004 建立目标包骨架和架构测试
 
-- [ ] [READY] 创建 domain/application/quant/datasets/evidence/integrations 边界
-- 元数据：优先级 P0 | 负责人 TL/BE | 估算 1.5d | 实际 - | 依赖 SAL-P1-001
+- [x] [DONE] 创建 domain/application/quant/datasets/evidence/integrations 边界
+- 元数据：优先级 P0 | 负责人 TL/BE | 估算 1.5d | 实际 0.5d | 依赖 SAL-P1-001 | 开始 2026-07-20 | 完成 2026-07-20
 - 交付物：包骨架、依赖规则、架构测试。
 - 验收：
   - domain 不导入 FastAPI、SQLAlchemy、Pandas、Qlib、LiteLLM。
   - 禁止 quant -> agent/notification、provider -> repository。
+- 结果：新增 `src/serenity_alpha_lab/` 目标包骨架，包含 `domain`、`application`、`quant`（`factors`/`screening`/`backtest`/`portfolio`/`risk`）、`datasets`、`evidence`、`integrations`（`dsa`/`data`）、`repositories` 和 `services`；只建立边界和 DSA entry-point compatibility wrapper，未实现 Quant Core、PIT Dataset、正式回测或大规模 DSA runtime source 迁移。
+- 架构测试：新增 `tests/architecture/test_architecture_boundaries.py`，通过 AST 检查 `domain` 不导入 FastAPI/SQLAlchemy/Pandas/Qlib/LiteLLM/AKShare 等框架或集成模块，`quant` 不依赖 agent/notification，`integrations` 不直接依赖 repositories。
+- 验收证据：`.cache/dsa-p0/venv/bin/python -m pytest tests/architecture -q` 得到 `7 passed`；`.cache/dsa-p0/venv/bin/python -m py_compile $(find src/serenity_alpha_lab tests/architecture -name '*.py' | sort)` 通过；`git diff --check` 通过。
 
 ### SAL-P1-005 实现统一 InstrumentId
 
-- [ ] [TODO] 定义证券 ID、市场、资产类型和 Provider Symbol Mapping
+- [ ] [READY] 定义证券 ID、市场、资产类型和 Provider Symbol Mapping
 - 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 - | 依赖 SAL-P1-004
 - 交付物：值对象、解析/格式化、旧代码兼容适配器、测试。
 - 验收：
@@ -318,7 +324,7 @@ P0 基线
 
 ### SAL-P1-006 实现 Run/Stage/Event 领域模型
 
-- [ ] [TODO] 定义运行、阶段、事件、状态转换和幂等规则
+- [ ] [READY] 定义运行、阶段、事件、状态转换和幂等规则
 - 元数据：优先级 P0 | 负责人 BE | 估算 2d | 实际 - | 依赖 SAL-P1-004
 - 交付物：领域模型、状态机、错误码、性质测试。
 - 验收：
@@ -345,7 +351,7 @@ P0 基线
 
 ### SAL-P1-009 抽取 ResearchOrchestrator
 
-- [ ] [TODO] 为 DSA AgentOrchestrator 建立稳定协议和兼容包装
+- [ ] [READY] 为 DSA AgentOrchestrator 建立稳定协议和兼容包装
 - 元数据：优先级 P1 | 负责人 AI | 估算 1.5d | 实际 - | 依赖 SAL-P1-004
 - 交付物：输入/输出协议、现有实现 Adapter、Characterization。
 - 验收：
@@ -354,7 +360,7 @@ P0 基线
 
 ### SAL-P1-010 统一 API 错误协议
 
-- [ ] [TODO] 引入 `application/problem+json` 和稳定错误码
+- [ ] [READY] 引入 `application/problem+json` 和稳定错误码
 - 元数据：优先级 P1 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P1-004
 - 交付物：异常映射、中间件、OpenAPI 示例、前端解析。
 - 验收：
@@ -390,7 +396,7 @@ P0 基线
 
 ### SAL-P1-014 整理配置与运行 Profile
 
-- [ ] [TODO] 定义 desktop/standalone/ci 配置及密钥边界
+- [ ] [READY] 定义 desktop/standalone/ci 配置及密钥边界
 - 元数据：优先级 P1 | 负责人 BE/SEC | 估算 2d | 实际 - | 依赖 SAL-P1-002
 - 交付物：Pydantic Settings、Profile、脱敏诊断、配置来源。
 - 验收：
@@ -1390,7 +1396,7 @@ P0 基线
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
 | RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 已由 ADR-001 关闭初始候选漂移风险：`55946536` 仅作为后续同步/Runbook 文档候选，不改当前基线；`487e49e5` 延期至 `sync/dsa-487e49e5` 分支评审；未来上游快速分叉继续由 `RSK-001` 管理 | TL | SAL-P1-001 | CLOSED |
 | RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
-| RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-003` 引入正式锁文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
+| RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 或 `[project].dependencies` 解析出不同版本或 AlphaSift Git 依赖不可达 | `SAL-P0-003` 先隔离缓存和记录 pin；`SAL-P0-011` 生成供应链报告；`SAL-P1-002` 已把依赖声明迁入标准 `pyproject.toml` 并保留动态 Git 风险记录；`SAL-P1-003` 引入正式 extras、lock 文件和离线缓存策略 | BE/SEC | SAL-P1-003 | OPEN |
 | RSK-009 | 当前 Windows PATH 缺少 Python 3.11；Docker daemon 需在恢复时复验 | 中 | 中 | 恢复会话时本地工具链不可用 | 已用 Python 3.11.15 建立 `.cache/dsa-p0/venv` 并完成 `SAL-P0-004`；Orbstack Docker daemon 已用于完成 `SAL-P0-007`，后续 Docker/SBOM 任务仍需先复验 `docker info` | BE | SAL-P0-011 | CLOSED |
 | RSK-010 | DSA Web npm audit 存在 10 个 high 漏洞 | 高 | 高 | `npm audit` 输出 16 个漏洞，其中 high 为 10 个 | P0 阶段不运行 `npm audit fix` 改写上游 lock；已在 `SAL-P0-011` 记录 owner/计划，后续由受控上游同步、依赖升级或 `SAL-P6-005` 门禁阻断未豁免 Critical/High | SEC/FE | SAL-P6-005 | OPEN |
 | RSK-011 | DSA Web lockfile 混用 npmjs 与 npmmirror resolved URL | 中 | 中 | `package-lock.json` 同时包含 `registry.npmjs.org` 与 `registry.npmmirror.com` | Gate G0 接受该风险；`SAL-P0-011` 先原样记录，后续由 `SAL-P1-003` 或发布前依赖治理统一 registry 策略，不在 P0 直接改写 | SEC/FE | SAL-P1-003/SAL-P6-005 | OPEN |
@@ -1413,6 +1419,7 @@ P0 基线
 | DEC-011 | 2026-07-20 | Gate G0 基线接管评审 | `GO with accepted risks`：正式采用 DSA `v3.26.1` 作为 P1 工程加固基线；P0 供应链和依赖风险不阻断 P1，但继续阻断发布或未评审上游漂移 | [gate-g0-baseline-review.md](./gate-g0-baseline-review.md) | SAL-P0-013,SAL-P1-001,SAL-P6-005 | SAL-P1-001 |
 | DEC-012 | 2026-07-20 | 上游接管、同步和补丁策略 | 批准 ADR-001：当前基线继续锁定 DSA `v3.26.1`；所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关 P0 baseline 刷新和 Gate/ADR 记录；`55946536` 不 cherry-pick，`487e49e5` 延期评审 | [ADR-001](./adr/ADR-001-upstream-takeover-sync-and-patch-policy.md) | SAL-P1-001,SAL-P1-002,SAL-P6-017 | G1 或 2026-08-03 |
 | DEC-013 | 2026-07-20 | 渐进式模块化和 Compatibility Facade | 批准 ADR-002：P1 先在单仓内建立 domain/application/ports/facade 边界，不拆微服务；旧 DSA 路径只能经显式 Facade 迁移；删除旧路径必须满足 characterization、contract、迁移和观察窗口条件 | [ADR-002](./adr/ADR-002-progressive-modularization-and-compatibility-facade.md) | SAL-P1-001,SAL-P1-004,SAL-P1-008,SAL-P1-009,SAL-P1-016 | G1 或 2026-08-03 |
+| DEC-014 | 2026-07-20 | P1 Python 元数据与目标包骨架落地方式 | 采用根 `pyproject.toml` + `serenity_alpha_lab` 自有包骨架；DSA runtime source 继续隔离在 `.worktrees/dsa-v3.26.1`，通过 dry-run 可验证的 console wrappers 暴露 CLI/API/Worker/测试入口；extras/lock 和动态 Git 依赖关闭延期至 `SAL-P1-003` | [python-project-metadata.md](./python-project-metadata.md); [pyproject.toml](../pyproject.toml) | SAL-P1-002,SAL-P1-003,SAL-P1-004 | G1 |
 
 ## 14. 验收证据登记
 
@@ -1432,6 +1439,8 @@ P0 基线
 | AEV-012 | SAL-P0-012 | 上游维护文档、偏离分类和 CI required checks 记录 | [UPSTREAM_BASE.md](../UPSTREAM_BASE.md); [.github/workflows/p0-required-baselines.yml](../.github/workflows/p0-required-baselines.yml); [upstream-patches.md](./upstream-patches.md) | `DSA-PATCH-001..003` classified `compatible`; no current `divergence`; required checks: backend, web, contract/golden, docker/supply-chain; workflow YAML parse PASS; referenced scripts present; `git diff --check` PASS | TL | 2026-07-20 |
 | AEV-013 | SAL-P0-013 / Gate G0 | Gate G0 Go/No-Go 评审、接受风险和 P1 入口约束 | [gate-g0-baseline-review.md](./gate-g0-baseline-review.md) | Decision `GO with accepted risks`; P0 13/13; baseline `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; accepted risks `RSK-006`, `RSK-008`, `RSK-010`, `RSK-011`, `RSK-012`; lightweight verification PASS | TL/RE/SEC | 2026-07-20 |
 | AEV-014 | SAL-P1-001 | ADR-001/ADR-002 批准记录和候选上游 commit 处理 | [ADR-001](./adr/ADR-001-upstream-takeover-sync-and-patch-policy.md); [ADR-002](./adr/ADR-002-progressive-modularization-and-compatibility-facade.md) | DSA baseline remains `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `55946536` doc-only candidate deferred; `487e49e5` DecisionSignal persistence candidate deferred to sync branch; no runtime source import in SAL-P1-001 | TL | 2026-07-20 |
+| AEV-015 | SAL-P1-002 | Python 项目元数据、依赖声明迁移和安装入口验证 | [pyproject.toml](../pyproject.toml); [python-project-metadata.md](./python-project-metadata.md); [test_project_metadata.py](../tests/architecture/test_project_metadata.py) | PEP 621 metadata; Python `>=3.11,<3.13`; 42 runtime dependencies migrated from DSA baseline; `pip install -e . --no-deps` PASS; DSA CLI/API/Worker/test dry-run scripts exit 0 | BE | 2026-07-20 |
+| AEV-016 | SAL-P1-004 | 目标包骨架和架构边界测试 | [src/serenity_alpha_lab](../src/serenity_alpha_lab); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | package skeleton created; architecture tests enforce domain/framework, quant/agent-notification, integration/repository boundaries; `pytest tests/architecture -q` PASS `7 passed`; `py_compile` PASS; no Quant Core/PIT/formal backtest implementation | TL/BE | 2026-07-20 |
 
 允许的证据：
 
@@ -1469,4 +1478,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`，完成度为 14/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-002` 标准化 Python 项目元数据，或并行推进 `SAL-P1-004` 目标包骨架和架构测试；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-004`，完成度为 16/129；Gate G0 已通过，Gate G1 未通过。下一步优先推进 `SAL-P1-003` 依赖 extras 与锁文件，或推进 `SAL-P1-006` Run/Stage/Event 领域模型；后续实现必须遵守 ADR-001/002，不得在对应任务前启动 Quant Core、PIT Dataset、正式回测或未经批准的大规模 DSA 源码迁移。
