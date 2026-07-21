@@ -1,5 +1,24 @@
 """Dataset-versioning boundary."""
 
+from serenity_alpha_lab.datasets.corporate_actions import (
+    ADJUSTED_DAILY_BARS_CONTENT_TYPE,
+    ADJUSTED_DAILY_BARS_FIELD_SCHEMA,
+    ADJUSTED_DAILY_BARS_PARTITION_KEYS,
+    ADJUSTED_DAILY_BARS_SCHEMA_NAME,
+    ADJUSTED_DAILY_BARS_SCHEMA_VERSION,
+    CORPORATE_ACTIONS_CONTENT_TYPE,
+    CORPORATE_ACTIONS_FIELD_SCHEMA,
+    CORPORATE_ACTIONS_PARTITION_KEYS,
+    CORPORATE_ACTIONS_SCHEMA_NAME,
+    CORPORATE_ACTIONS_SCHEMA_VERSION,
+    AdjustedDailyBar,
+    AdjustedDailyBarsDataset,
+    AdjustmentMode,
+    CorporateAction,
+    CorporateActionType,
+    CorporateActionsDataset,
+    CorporateActionsDatasetError,
+)
 from serenity_alpha_lab.datasets.instrument_master import (
     INSTRUMENT_MASTER_CONTENT_TYPE,
     INSTRUMENT_MASTER_SCHEMA_NAME,
@@ -33,9 +52,26 @@ from serenity_alpha_lab.datasets.trading_calendar import (
 )
 
 __all__ = [
+    "ADJUSTED_DAILY_BARS_CONTENT_TYPE",
+    "ADJUSTED_DAILY_BARS_FIELD_SCHEMA",
+    "ADJUSTED_DAILY_BARS_PARTITION_KEYS",
+    "ADJUSTED_DAILY_BARS_SCHEMA_NAME",
+    "ADJUSTED_DAILY_BARS_SCHEMA_VERSION",
+    "CORPORATE_ACTIONS_CONTENT_TYPE",
+    "CORPORATE_ACTIONS_FIELD_SCHEMA",
+    "CORPORATE_ACTIONS_PARTITION_KEYS",
+    "CORPORATE_ACTIONS_SCHEMA_NAME",
+    "CORPORATE_ACTIONS_SCHEMA_VERSION",
     "INSTRUMENT_MASTER_CONTENT_TYPE",
     "INSTRUMENT_MASTER_SCHEMA_NAME",
     "INSTRUMENT_MASTER_SCHEMA_VERSION",
+    "AdjustedDailyBar",
+    "AdjustedDailyBarsDataset",
+    "AdjustmentMode",
+    "CorporateAction",
+    "CorporateActionType",
+    "CorporateActionsDataset",
+    "CorporateActionsDatasetError",
     "IndustryClassification",
     "InstrumentListingStatus",
     "InstrumentMasterDataset",

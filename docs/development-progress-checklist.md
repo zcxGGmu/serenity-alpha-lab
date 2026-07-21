@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 7/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
+| P2 数据与任务 | 3~6 | DOING | 8/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **36/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **37/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -553,16 +553,20 @@ P0 基线
 
 ### SAL-P2-008 实现公司行动与复权
 
-- [ ] [READY] 支持分红、送转、配股和前/后复权因子
-- 元数据：优先级 P0 | 负责人 QE | 估算 3d | 实际 - | 依赖 SAL-P2-007
+- [x] [DONE] 支持分红、送转、配股和前/后复权因子
+- 元数据：优先级 P0 | 负责人 QE | 估算 3d | 实际 0.5d | 依赖 SAL-P2-007 | 开始 2026-07-22 | 完成 2026-07-22
 - 交付物：CorporateAction/Adjustment Dataset、算法、金标。
 - 验收：
   - 复权序列满足固定样本和性质测试。
   - 原始价格不被覆盖；复权口径显式可选。
+- 结果：新增 `src/serenity_alpha_lab/datasets/corporate_actions.py`，定义 `CorporateAction`、`CorporateActionsDataset`、`AdjustmentMode`、`AdjustedDailyBar` 和 `AdjustedDailyBarsDataset`；公司行动支持现金分红、送转/拆股、配股，复权日线以 `instrument_id + trade_date + provider_id + adjustment` 为主键，按 raw bar provider 过滤同源公司行动，输出前复权/后复权价格、raw OHLC、复权因子、Bronze lineage、trace/run/stage 和 deterministic JSON Artifact。
+- 复权口径：同一除权日按证券聚合公司行动，使用前一交易日 raw close 计算理论除权价和事件系数；`forward` 因子连乘后续事件系数，`backward` 因子连乘当日及历史事件系数倒数。raw 日线不被覆盖，复权口径必须显式选择。
+- 范围限制：未实现 PIT 基本面、fallback policy、Dataset Catalog/latest alias、Arrow Schema Registry、PersistentTaskBackend、Worker runtime、Quant Core、正式回测、Evidence Agent、Portfolio Ledger 公司行动入账、真实 Provider/LLM 调用或 DSA runtime source 迁移。
+- 验收证据：见 [Corporate Actions and Adjustments Dataset 记录](./corporate-actions-adjustments-dataset.md)；`tests/datasets/test_corporate_actions_adjustments.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为缺少 `corporate_actions` module，Green 后目标测试 `3 passed`、相关套件 `68 passed`，全量验证记录见 AEV-037。
 
 ### SAL-P2-009 实现 PIT 基本面 Dataset
 
-- [ ] [TODO] 区分 period/announced/available/ingested/revision
+- [ ] [READY] 区分 period/announced/available/ingested/revision
 - 元数据：优先级 P0 | 负责人 QE/BE | 估算 3d | 实际 - | 依赖 SAL-P2-004,SAL-P2-005
 - 交付物：FundamentalRecord Schema、版本查询、可信度等级。
 - 验收：
@@ -1505,6 +1509,7 @@ P0 基线
 | DEC-032 | 2026-07-21 | 证券主数据 Dataset 口径 | 采用 `datasets.instrument_master` 表达历史有效期 instrument master；证券身份复用 canonical `InstrumentId`，Provider 外部代码复用 `ProviderSymbolMapping` 并增加有效期和 Bronze lineage；Dataset 发布为 deterministic JSON Artifact，当前不建立 Catalog/latest alias、不实现 PIT/fallback policy 或真实 Provider 调用 | [instrument-master-dataset.md](./instrument-master-dataset.md); [instrument_master.py](../src/serenity_alpha_lab/datasets/instrument_master.py); [test_instrument_master.py](../tests/datasets/test_instrument_master.py) | SAL-P2-005,SAL-P2-006,SAL-P2-007,SAL-P2-009,SAL-P2-011 | G2 |
 | DEC-033 | 2026-07-21 | 交易日历 Dataset 口径 | 采用 `datasets.trading_calendar` 表达 `market + trade_date` 日历；市场时区使用冻结映射，A 股节假日、半日交易和异常休市均由显式 session record 表达，Dataset 发布为 deterministic JSON Artifact，当前不建立 Dataset Catalog/latest alias、不实现 raw daily bars、PIT/fallback policy 或真实 Provider 调用 | [trading-calendar-dataset.md](./trading-calendar-dataset.md); [trading_calendar.py](../src/serenity_alpha_lab/datasets/trading_calendar.py); [test_trading_calendar.py](../tests/datasets/test_trading_calendar.py) | SAL-P2-006,SAL-P2-007,SAL-P2-011,SAL-P2-015 | G2 |
 | DEC-034 | 2026-07-21 | 原始日线 Dataset 口径 | 采用 `datasets.raw_daily_bars` 表达未复权 OHLCV/amount 日线；主键为 `InstrumentId.canonical + trade_date + provider_id`，记录 Provider source timestamp、raw-response SHA-256、field lineage 和 Bronze source artifact，并用 Instrument Master as-of 与 Trading Calendar trading-day 做离线校验；Dataset 发布为 deterministic JSON Artifact，当前不建立 Dataset Catalog/latest alias、不实现 adjusted bars、公司行动、PIT/fallback policy 或真实 Provider 调用 | [raw-daily-bars-dataset.md](./raw-daily-bars-dataset.md); [raw_daily_bars.py](../src/serenity_alpha_lab/datasets/raw_daily_bars.py); [test_raw_daily_bars.py](../tests/datasets/test_raw_daily_bars.py) | SAL-P2-007,SAL-P2-008,SAL-P2-011,SAL-P2-015 | G2 |
+| DEC-035 | 2026-07-22 | 公司行动与复权 Dataset 口径 | 采用 `datasets.corporate_actions` 表达公司行动和复权日线；公司行动按 `InstrumentId.canonical + ex_date + action_type + provider_id` 唯一，复权日线按 `InstrumentId.canonical + trade_date + provider_id + adjustment` 唯一；现金分红、送转/拆股和配股按前一交易日 raw close 计算理论除权价，`forward` 连乘后续事件系数，`backward` 连乘历史事件系数倒数；raw 日线不被覆盖，当前不建立 Catalog/latest alias、不实现 PIT/fallback policy、Portfolio Ledger 入账或真实 Provider 调用 | [corporate-actions-adjustments-dataset.md](./corporate-actions-adjustments-dataset.md); [corporate_actions.py](../src/serenity_alpha_lab/datasets/corporate_actions.py); [test_corporate_actions_adjustments.py](../tests/datasets/test_corporate_actions_adjustments.py) | SAL-P2-008,SAL-P2-009,SAL-P2-011,SAL-P4-012 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1546,6 +1551,7 @@ P0 基线
 | AEV-034 | SAL-P2-005 | 证券主数据 Dataset、历史 as-of 查询、Provider 映射有效期和 Artifact 发布测试记录 | [instrument-master-dataset.md](./instrument-master-dataset.md); [instrument_master.py](../src/serenity_alpha_lab/datasets/instrument_master.py); [test_instrument_master.py](../tests/datasets/test_instrument_master.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Instrument master target `3 passed`; related suite `15 passed` and `81 passed`; full pytest `166 passed`; Red captured missing `instrument_master` module; deterministic JSON Artifact, Bronze lineage, as-of active/delisted lookup, provider mapping windows, overlap/duplicate validation and ProblemDetails validation mapping covered; py_compile/lock/tag checks PASS; no trading calendar/raw daily/PIT/fallback policy and no real Provider/LLM calls | BE/QE | 2026-07-21 |
 | AEV-035 | SAL-P2-006 | 交易日历 Dataset、市场时区、开闭市 session、UTC 转换和 Artifact 发布测试记录 | [trading-calendar-dataset.md](./trading-calendar-dataset.md); [trading_calendar.py](../src/serenity_alpha_lab/datasets/trading_calendar.py); [test_trading_calendar.py](../tests/datasets/test_trading_calendar.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Trading calendar target `3 passed`; related suite `56 passed`; Red captured missing `trading_calendar` module; deterministic JSON Artifact、Bronze lineage、A 股节假日/半日/异常休市显式记录、UTC/Asia-Shanghai 开市边界、查询缓存和 ProblemDetails validation mapping covered; py_compile/lock/tag checks PASS; no raw daily/PIT/fallback policy and no real Provider/LLM calls | BE/QE | 2026-07-21 |
 | AEV-036 | SAL-P2-007 | 原始日线 Dataset、Provider batch 转换、主数据/交易日校验和 Artifact 发布测试记录 | [raw-daily-bars-dataset.md](./raw-daily-bars-dataset.md); [raw_daily_bars.py](../src/serenity_alpha_lab/datasets/raw_daily_bars.py); [test_raw_daily_bars.py](../tests/datasets/test_raw_daily_bars.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Raw daily bars target `3 passed`; related suite `59 passed`; full pytest `172 passed`; Red captured missing `raw_daily_bars` module; deterministic JSON Artifact、Bronze lineage、Provider source timestamp、raw-response SHA-256、field lineage、Instrument Master as-of 校验、Trading Calendar trading-day 校验、OHLC/amount validation、query helpers、incremental merge 和 ProblemDetails validation mapping covered; py_compile/lock/tag checks PASS; no adjusted bars/corporate actions/PIT/fallback policy and no real Provider/LLM calls | BE/QE | 2026-07-21 |
+| AEV-037 | SAL-P2-008 | 公司行动 Dataset、前/后复权因子、复权日线 Artifact 和性质/固定样本测试记录 | [corporate-actions-adjustments-dataset.md](./corporate-actions-adjustments-dataset.md); [corporate_actions.py](../src/serenity_alpha_lab/datasets/corporate_actions.py); [test_corporate_actions_adjustments.py](../tests/datasets/test_corporate_actions_adjustments.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Corporate actions target `3 passed`; related suite `68 passed`; full pytest `175 passed`; Red captured missing `corporate_actions` module; deterministic JSON Artifact、现金分红/送转/配股固定样本、前复权/后复权因子、provider-scoped action filtering、raw price immutability、Bronze lineage、query helpers、incremental merge 和 ProblemDetails validation mapping covered; py_compile/lock/diff/tag checks PASS; no PIT/fallback policy、Portfolio Ledger 入账、Quant Core 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
 
 允许的证据：
 
@@ -1583,4 +1589,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-007`，完成度为 36/129；最近可评审交付为本次 `SAL-P2-007` 原始日线 Dataset checkpoint；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-008` 公司行动与复权；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 PIT/fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-008`，完成度为 37/129；最近可评审交付为本次 `SAL-P2-008` 公司行动与复权 Dataset checkpoint；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-009` PIT 基本面 Dataset；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
-> 最后更新：2026-07-21<br>
-> 最近阶段性任务：`SAL-P2-007` 原始日线 Dataset<br>
+> 最后更新：2026-07-22<br>
+> 最近阶段性任务：`SAL-P2-008` 公司行动与复权 Dataset<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：36/129<br>
-> 当前可执行任务：`SAL-P2-008`，状态为 `READY`；公司行动与复权必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、Instrument Master Dataset、Trading Calendar Dataset、Bronze lineage 和 Raw Daily Bars Dataset，且不得提前实现 PIT/fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 实现原始日线 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
-> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 实现原始日线 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 任务完成度：37/129<br>
+> 当前可执行任务：`SAL-P2-009`，状态为 `READY`；PIT 基本面 Dataset 必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze lineage、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset 和 Corporate Actions/Adjusted Bars Dataset，且不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
+> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 实现公司行动与复权 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 实现公司行动与复权 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -64,18 +64,19 @@
 - 完成 `SAL-P2-005`：新增 [instrument_master.py](../src/serenity_alpha_lab/datasets/instrument_master.py)，构建历史有效期 instrument master，复用 canonical `InstrumentId`、`ProviderSymbolMapping`、Bronze lineage 和 `ArtifactStore` deterministic JSON 发布；证据见 [Instrument Master Dataset 记录](./instrument-master-dataset.md)。
 - 完成 `SAL-P2-006`：新增 [trading_calendar.py](../src/serenity_alpha_lab/datasets/trading_calendar.py)，构建 `market + trade_date` 交易日历 Dataset，冻结市场时区、交易 session、午休、半日/异常休市语义、UTC 转换、查询缓存和 `ArtifactStore` deterministic JSON 发布；证据见 [Trading Calendar Dataset 记录](./trading-calendar-dataset.md)。
 - 完成 `SAL-P2-007`：新增 [raw_daily_bars.py](../src/serenity_alpha_lab/datasets/raw_daily_bars.py)，构建未复权 OHLCV/amount 原始日线 Dataset，复用 Provider `DataBatch`/`Provenance`、Instrument Master as-of、Trading Calendar trading-day、Bronze lineage 和 `ArtifactStore` deterministic JSON 发布；证据见 [Raw Daily Bars Dataset 记录](./raw-daily-bars-dataset.md)。
+- 完成 `SAL-P2-008`：新增 [corporate_actions.py](../src/serenity_alpha_lab/datasets/corporate_actions.py)，构建公司行动 Dataset、前/后复权因子和复权日线 Dataset，支持现金分红、送转/拆股、配股、provider-scoped action filtering、raw price immutability、Bronze lineage 和 `ArtifactStore` deterministic JSON 发布；证据见 [Corporate Actions and Adjustments Dataset 记录](./corporate-actions-adjustments-dataset.md)。
 
 ## 未完成
 
 ### 当前可执行 P2 任务
 
-- `SAL-P2-008` 当前为 `READY`：实现公司行动与复权，支持分红、送转、配股和前/后复权因子。
+- `SAL-P2-009` 当前为 `READY`：实现 PIT 基本面 Dataset，区分 period、announced、available、ingested 和 revision。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 93 项工程任务未完成。
-- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset 和原始日线 Dataset，但尚未实现公司行动与复权、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
+- P2 至 P6 仍有 92 项工程任务未完成。
+- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset 和公司行动/复权 Dataset，但尚未实现 PIT Dataset、Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -102,7 +103,8 @@
 - Bronze 原始数据层已完成：`BronzeRawStore` 复用 P1 `ArtifactStore` 内容寻址和 manifest-last 语义，原始响应落盘前递归脱敏并压缩，记录 provider/operation/request time/source hash/sanitized hash/field lineage/trace/run/stage；本层不发布 Dataset 或执行 fallback policy。
 - 证券主数据 Dataset 已完成：`InstrumentMasterDataset` 复用 canonical `InstrumentId` 与 `ProviderSymbolMapping`，记录证券/交易所/资产类型/上市退市/状态/行业和 Provider 映射有效期，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现交易日历、PIT、fallback policy 或真实 Provider 调用。
 - 交易日历 Dataset 已完成：`TradingCalendarDataset` 复用 P1 `Market`，以 `market + trade_date` 表达市场时区、交易/闭市/半日/异常休市/停牌 session、午休窗口、UTC 转换、前后交易日和 timestamp 开市状态查询，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 raw daily bars、PIT、fallback policy 或真实 Provider 调用。
-- 原始日线 Dataset 已完成：`RawDailyBarsDataset` 复用 canonical `InstrumentId`、Provider `DataBatch`/`Provenance`、Instrument Master as-of、Trading Calendar trading-day 和 Bronze source artifact，以 `instrument_id + trade_date + provider_id` 表达未复权 OHLCV/amount 日线，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 adjusted bars、公司行动、PIT、fallback policy 或真实 Provider 调用。
+- 原始日线 Dataset 已完成：`RawDailyBarsDataset` 复用 canonical `InstrumentId`、Provider `DataBatch`/`Provenance`、Instrument Master as-of、Trading Calendar trading-day 和 Bronze source artifact，以 `instrument_id + trade_date + provider_id` 表达未复权 OHLCV/amount 日线，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 PIT、fallback policy 或真实 Provider 调用。
+- 公司行动与复权 Dataset 已完成：`CorporateActionsDataset` 按 `instrument_id + ex_date + action_type + provider_id` 表达现金分红、送转/拆股和配股，`AdjustedDailyBarsDataset` 按 `instrument_id + trade_date + provider_id + adjustment` 表达 `forward` / `backward` 复权价格和因子；复权从 raw bars 派生并按 raw bar provider 过滤同源公司行动，不覆盖原始价格，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 PIT、fallback policy、Portfolio Ledger 入账或真实 Provider 调用。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -118,8 +120,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-008` 公司行动与复权，支持分红、送转、配股和前/后复权因子。
-2. 不得提前实现 PIT/fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent。
+1. 优先执行 `SAL-P2-009` PIT 基本面 Dataset，区分 period、announced、available、ingested 和 revision。
+2. 不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent。
 3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
@@ -148,6 +150,7 @@
 - 2026-07-21：完成 `SAL-P2-005`，新增证券主数据 Dataset、历史 as-of 查询、Provider 映射有效期和 deterministic Artifact 发布；Instrument master target `3 passed`、相关套件 `15 passed` 和 `81 passed`、全量 pytest `166 passed`，P2 进度 `5/20`、总进度 `34/129`，`SAL-P2-006` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-21：完成 `SAL-P2-006`，新增交易日历 Dataset、市场时区冻结、交易/闭市/半日/异常休市 session、午休窗口、UTC/Asia-Shanghai 转换金标、查询缓存和 deterministic Artifact 发布；Trading calendar target `3 passed`、相关套件 `56 passed`、全量 pytest `169 passed`，P2 进度 `6/20`、总进度 `35/129`，`SAL-P2-007` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-21：完成 `SAL-P2-007`，新增原始日线 Dataset、未复权 OHLCV/amount、Provider batch 转换、Instrument Master as-of 校验、Trading Calendar trading-day 校验、Bronze lineage、查询索引、增量合并和 deterministic Artifact 发布；Raw daily bars target `3 passed`、相关套件 `59 passed`、全量 pytest `172 passed`，P2 进度 `7/20`、总进度 `36/129`，`SAL-P2-008` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-22：完成 `SAL-P2-008`，新增公司行动 Dataset、现金分红/送转/配股固定样本、前复权/后复权因子、复权日线 Artifact、provider-scoped action filtering、raw price immutability 和 ProblemDetails validation mapping；Corporate actions target `3 passed`、相关套件 `68 passed`、全量 pytest `175 passed`，P2 进度 `8/20`、总进度 `37/129`，`SAL-P2-009` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -182,16 +185,16 @@
 当前状态：
 - Phase：P2 数据与持久任务
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-007
-- 最近完成：SAL-P2-007 原始日线 Dataset
-- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 实现原始日线 Dataset）；启动后以 git log -1 --oneline 确认
-- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 实现原始日线 Dataset）；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 16/16，P2 7/20，总计 36/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-008
+- 最近完成：SAL-P2-008 公司行动与复权 Dataset
+- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 实现公司行动与复权 Dataset）；启动后以 git log -1 --oneline 确认
+- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 实现公司行动与复权 Dataset）；启动后以 git log -1 --oneline 确认
+- 进度：P0 13/13，P1 16/16，P2 8/20，总计 37/129
 
 下一步优先执行：
-1. SAL-P2-008 实现公司行动与复权，支持分红、送转、配股和前/后复权因子
-2. 不要提前实现 PIT/fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent
-3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset 和 Raw Daily Bars Dataset
+1. SAL-P2-009 实现 PIT 基本面 Dataset，区分 period、announced、available、ingested 和 revision
+2. 不要提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent
+3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset 和 Corporate Actions/Adjusted Bars Dataset
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
