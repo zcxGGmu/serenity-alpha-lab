@@ -22,6 +22,21 @@ DOMAIN_FORBIDDEN_INTERNAL_PREFIXES = (
     "serenity_alpha_lab.services",
 )
 
+DATASETS_FORBIDDEN_IMPORT_ROOTS = {
+    "akshare",
+    "fastapi",
+    "litellm",
+    "pandas",
+    "qlib",
+    "sqlalchemy",
+}
+
+DATASETS_FORBIDDEN_INTERNAL_PREFIXES = (
+    "serenity_alpha_lab.integrations",
+    "serenity_alpha_lab.repositories",
+    "serenity_alpha_lab.services",
+)
+
 QUANT_FORBIDDEN_INTERNAL_PREFIXES = (
     "serenity_alpha_lab.agents",
     "serenity_alpha_lab.notifications",
@@ -134,6 +149,14 @@ def test_provider_domain_contract_does_not_import_application_or_integrations() 
                 failures.append(f"{target.relative_to(ROOT)} imports {module}")
 
     assert failures == []
+
+
+def test_datasets_stay_free_of_provider_runtime_and_infrastructure() -> None:
+    assert_no_forbidden_imports(
+        "datasets",
+        forbidden_roots=DATASETS_FORBIDDEN_IMPORT_ROOTS,
+        forbidden_prefixes=DATASETS_FORBIDDEN_INTERNAL_PREFIXES,
+    )
 
 
 def test_quant_does_not_depend_on_agent_or_notifications() -> None:

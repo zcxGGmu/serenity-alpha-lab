@@ -1,3 +1,41 @@
+# P2 Instrument Master Dataset Plan
+
+> Started: 2026-07-21
+> Scope: Complete `SAL-P2-005` by adding a historical instrument master Dataset with validity-windowed securities and provider mappings. Reuse P1/P2 InstrumentId, Provider Symbol Mapping, ArtifactStore, Bronze lineage, Trace/Run/Stage scalar attribution, and ProblemDetails-compatible validation errors. Do not start trading calendar, raw daily bars, PIT/fallback policy, Dataset Catalog/latest alias, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing InstrumentId, Provider contract, ArtifactStore, Bronze raw store, Trace, ProblemDetails, and architecture boundary tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-21-instrument-master-dataset.md`.
+- [x] Add Red tests for instrument schema, historical as-of lookup, provider mapping validity windows, uniqueness/overlap validation, Bronze lineage, and ArtifactStore publishing.
+- [x] Implement `InstrumentMasterDataset` with deterministic JSON artifact publishing and offline query helpers.
+- [x] Export dataset symbols and add/adjust architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-005`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-005` files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P2-005
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_instrument_master.py -q` failed with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.instrument_master'`.
+- Green implementation: added `InstrumentMasterDataset`, `InstrumentMasterRecord`, `IndustryClassification`, `ProviderSymbolValidity`, listing status enum, as-of record/provider-mapping lookup, overlap/duplicate validation and deterministic JSON ArtifactStore publishing.
+- Reuse coverage: canonical `InstrumentId`, `ProviderSymbolMapping`, Bronze `source_bronze_artifact_id`, `ArtifactStore`, trace/run/stage scalar attribution and existing ProblemDetails `ValueError -> validation_error` mapping are covered by tests.
+- Verification: target instrument master `3 passed`; dataset/architecture suite `15 passed`; related domain/provider/artifact/repository/API/trace suite `81 passed`; full pytest `166 passed`; py_compile, dependency lock and immutable tag checks passed.
+- Review note: attempted `code-reviewer` subagent dispatch after tool discovery, but the client rejected both item/message payload attempts as duplicate inputs. Local review checked diff scope, imports, validity-window semantics and guardrails; no DSA runtime import, real Provider/LLM call, PIT/fallback policy, Quant Core, formal backtest or Evidence Agent work was introduced.
+- Scope retained: no trading calendar, raw daily bars, PIT fundamental Dataset, Dataset Catalog/latest alias, Arrow Schema Registry, quality gate, fallback policy, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Instrument master may publish deterministic Dataset artifact bytes, but must not create Dataset Catalog/latest alias, Arrow Schema Registry, Silver/PIT tables, trading calendar, daily bars, fallback policy, or quality gate behavior.
+- Provider mappings must be scoped by validity windows and must point back to canonical `InstrumentId`.
+- Every record must carry Bronze source artifact lineage for auditability.
+- Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+---
+
 # P2 Bronze Raw Data Layer Plan
 
 > Started: 2026-07-21
