@@ -1,3 +1,41 @@
+# P2 Trading Calendar Dataset Plan
+
+> Started: 2026-07-21
+> Scope: Complete `SAL-P2-006` by adding a deterministic Trading Calendar Dataset with market time zones, trading dates, open/close sessions, lunch breaks, half-day/ad-hoc closure semantics, query caches, Bronze lineage and ArtifactStore publishing. Reuse P1/P2 Market/InstrumentId identity boundaries, Provider calendar contract shape, Trace/Run/Stage scalar attribution, ProblemDetails-compatible validation errors, ArtifactStore, Bronze lineage and the Instrument Master market model. Do not start raw daily bars, PIT/fallback policy, Dataset Catalog/latest alias, Arrow Schema Registry, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, network probes, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing InstrumentId/Market, Provider calendar contract, ArtifactStore, Bronze raw store, Instrument Master Dataset, and architecture boundary tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-21-trading-calendar.md`.
+- [x] Add Red tests for market time zones, sessions, A-share holiday/half-day/ad-hoc closure policy, UTC/Asia-Shanghai boundaries, cached queries, Bronze lineage, ArtifactStore publishing, and validation errors.
+- [x] Implement `TradingCalendarDataset` with immutable records, in-memory indexes, timezone/session query APIs and deterministic JSON ArtifactStore publishing.
+- [x] Export dataset symbols and preserve architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-006`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-006` files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P2-006
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_trading_calendar.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.trading_calendar'`.
+- Green implementation: added `MarketSession`, `TradingSessionStatus`, `TradingCalendarDataset`, frozen market timezone mapping, explicit A-share holiday/half-day/ad-hoc closure semantics, UTC conversion helpers, in-memory query indexes, trading-day/previous/next/open-at query APIs and deterministic JSON `ArtifactStore` publishing.
+- Reuse coverage: P1 `Market`, P1 `ArtifactStore`, Bronze `source_bronze_artifact_id`, trace/run/stage scalar attribution and existing ProblemDetails `ValueError -> validation_error` mapping are covered by tests; no DSA runtime source or real Provider path was imported.
+- Verification: target trading calendar `3 passed`; related dataset/provider/bronze/API/trace/architecture suite `56 passed`; full pytest `169 passed`; py_compile, dependency lock, `git diff --check` and immutable tag check passed.
+- Review note: attempted to use subagent tooling for independent exploration/review, but the client repeatedly rejected `spawn_agent` payload variants as duplicate `message/items` or empty override fields. Local senior review checked diff scope, import boundaries, timezone/session invariants, explicit-closure policy and guardrails.
+- Scope retained: no raw daily Dataset, PIT fundamental Dataset, Dataset Catalog/latest alias, Arrow Schema Registry, quality gate, fallback policy, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Calendar records may publish deterministic Dataset artifact bytes, but must not create Dataset Catalog/latest alias, Arrow Schema Registry, raw daily bars, PIT/fallback policy, quality gates, Worker runtime, or Quant Core behavior.
+- Use explicit `Market + trade_date` calendar records; do not infer holidays from current date, live Provider responses, or mutable network state.
+- A-share holiday, half-day and ad-hoc closure policy is explicit-record based: closed records carry no open/close times, half-day records carry shortened sessions, and exceptional closures use a distinct status/note.
+- Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+---
+
 # P2 Instrument Master Dataset Plan
 
 > Started: 2026-07-21
