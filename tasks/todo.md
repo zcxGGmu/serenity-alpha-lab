@@ -1,3 +1,26 @@
+# P2 Status Sync After DSA Provider Adapter
+
+> Started: 2026-07-21
+> Scope: Refresh latest development status after `SAL-P2-002` checkpoint `68e8fea9`, make completed vs unfinished work explicit, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P2-003` implementation in this sync.
+
+## Checklist
+
+- [x] Confirm current git status and latest checkpoints.
+- [x] Update `docs/development-status.md` with explicit `68e8fea9` delivery checkpoint, current READY tasks, unfinished scope, and next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step anchor with the actual `SAL-P2-002` checkpoint.
+- [x] Record the repeated habit in `tasks/lessons.md`.
+- [x] Re-scan state anchors and run `git diff --check`.
+- [x] Stage only status-sync docs and create the required Chinese status checkpoint commit.
+
+## Review: P2 Status Sync After DSA Provider Adapter
+
+- Confirmed current branch is `codex/p0-baseline-status`, ahead of origin by 31 before this docs sync, with latest functional checkpoint `68e8fea9 feat(P2): 实现 DSA Provider 兼容适配器`.
+- Confirmed completed scope is `SAL-P0-001..013`, `SAL-P1-001..016`, and `SAL-P2-001..002`; P2 progress remains `2/20`, total progress remains `31/129`, and Gate G2 remains not passed.
+- Confirmed current READY tasks are `SAL-P2-003` and `SAL-P2-004`; `SAL-P2-003` is the preferred next implementation task, while `SAL-P2-004` can be prepared without starting Dataset/PIT/fallback policy or real Provider calls.
+- Preserved scope boundaries: no code changes, no DSA source migration, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM call, no tag movement, and no generated/cache artifacts.
+
+---
+
 # P2 DSA Provider Compatibility Adapter Plan
 
 > Started: 2026-07-21

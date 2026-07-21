@@ -28,6 +28,13 @@
 - 规则：阶段性任务完成后，状态同步必须明确记录最近可评审交付 commit、当前完成度、当前 READY/DOING/BLOCKED 任务、仍未完成范围和下次启动提示词；用户再次提醒该习惯时必须追加到本文件。
 - 执行：以后完成任一 `SAL-*` 后，先提交可评审交付，再根据需要追加状态同步 commit；最终回复必须提供可复制的下一次启动提示词，并说明最近交付 commit 与最新状态同步 commit。
 
+## 2026-07-21: 状态同步提示词必须可直接复用
+
+- 纠正来源：`SAL-P2-002` checkpoint `68e8fea9` 完成后，用户再次要求“标注清楚哪些完成了哪些未完成”并“给我一个提示词，直接发给我”，同时要求把该习惯固化。
+- 模式：如果状态文档只描述抽象的“本文件所在提交”，或最终回复没有给出完整可复制 prompt，下次启动仍需要人工拼接当前 Phase、Gate、完成范围、下一步和禁区。
+- 规则：每个阶段性任务完成后，必须把最近可评审交付 commit、最新状态同步 commit、完成/未完成范围、当前 READY 任务和严格禁区同时写入 `docs/development-status.md` 的正文与下次启动提示词；最终回复必须直接附上可复制提示词。
+- 执行：后续任一 `SAL-*` 或 Gate 收尾时，先更新 `tasks/lessons.md`（若用户再次提醒习惯）、`docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md` review，再运行状态锚点扫描和 `git diff --check`，最后提交中文 status-sync 或 checkpoint commit。
+
 ## 2026-07-19: “下一阶段开发”不能长期停留在文档收尾
 
 - 纠正来源：用户指出“为什么还不开始写代码，一直在写这些文档？”

@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：31/129<br>
 > 当前可执行任务：`SAL-P2-003`、`SAL-P2-004`，状态均为 `READY`；证券代码兼容迁移和 Bronze 原始数据层必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade<br>
-> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 实现 DSA Provider 兼容适配器`）；恢复时以 `git log -1 --oneline` 为准<br>
-> 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
+> 最近可评审交付 checkpoint：`68e8fea9 feat(P2): 实现 DSA Provider 兼容适配器`<br>
+> 最新状态同步 checkpoint：本文件所在提交（`docs(P2): 同步 DSA Provider Adapter 后开发状态`）；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -133,6 +133,7 @@
 - 2026-07-21：完成 `SAL-P2-001`，冻结同步 Provider Protocol、Capability、不可变 DataBatch/Provenance、warning 和六类错误；Provider contract `23 passed`、相关套件 `109 passed`、全量 pytest `128 passed`，P2 进度 `1/20`、总进度 `30/129`，`SAL-P2-002` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-21：按用户要求再次同步最新状态；确认最近可评审交付为 `f7bc8ba8 feat(P2): 定义 Provider 领域契约`，当前工作从 `SAL-P2-002` 继续，仍不得提前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或大规模 DSA 源码迁移。
 - 2026-07-21：完成 `SAL-P2-002`，新增 DSA Provider Compatibility Adapter 和 feature-flag stock-history facade；Adapter target `8 passed`、相关套件 `22 passed`、全量 pytest `137 passed`，P2 进度 `2/20`、总进度 `31/129`，`SAL-P2-003` 与 `SAL-P2-004` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-21：按用户要求同步 `SAL-P2-002` checkpoint 后最新状态；确认最近可评审交付为 `68e8fea9 feat(P2): 实现 DSA Provider 兼容适配器`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..002`，未完成范围为 P2 至 P6 剩余 98 项；下一步从 `SAL-P2-003` / `SAL-P2-004` 继续。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -169,8 +170,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-002
 - 最近完成：SAL-P2-002 DSA Provider Compatibility Adapter
-- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 实现 DSA Provider 兼容适配器）；启动后以 git log -1 --oneline 确认
-- 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
+- 最近可评审交付 checkpoint：68e8fea9 feat(P2): 实现 DSA Provider 兼容适配器
+- 最新状态同步 checkpoint：本提示词所在提交（docs(P2): 同步 DSA Provider Adapter 后开发状态）；启动后以 git log -1 --oneline 确认
 - 进度：P0 13/13，P1 16/16，P2 2/20，总计 31/129
 
 下一步优先执行：
