@@ -1,3 +1,25 @@
+# P2 Status Sync After Provider Contract
+
+> Started: 2026-07-21
+> Scope: Refresh recovery docs after `SAL-P2-001` checkpoint `f7bc8ba8`, make completed vs unfinished work explicit, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P2-002` implementation in this sync.
+
+## Checklist
+
+- [x] Confirm current git status and latest checkpoints.
+- [x] Update `docs/development-status.md` with explicit `f7bc8ba8` delivery checkpoint and `SAL-P2-002` READY continuation.
+- [x] Update `docs/development-progress-checklist.md` next-step anchor.
+- [x] Record the repeated habit in `tasks/lessons.md`.
+- [x] Re-scan state anchors and run `git diff --check`.
+
+## Review: P2 Status Sync After Provider Contract
+
+- Confirmed current Phase remains P2, Gate G2 remains not passed, G0/G1 remain passed, progress remains P0 `13/13`, P1 `16/16`, P2 `1/20`, total `30/129`.
+- Confirmed completed scope is `SAL-P0-001..013`, `SAL-P1-001..016`, and `SAL-P2-001`; `SAL-P2-002` is READY and not started.
+- Updated recovery wording so the latest functional delivery checkpoint is explicit: `f7bc8ba8 feat(P2): 定义 Provider 领域契约`.
+- Preserved scope boundaries: no DSA Adapter, Dataset/PIT, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, or broad DSA source migration.
+
+---
+
 # P2 Provider Domain Contract Plan
 
 > Started: 2026-07-20

@@ -1550,4 +1550,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016` 和 `SAL-P2-001`，完成度为 30/129；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步执行 `SAL-P2-002` DSA Provider Compatibility Adapter；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016` 和 `SAL-P2-001`，完成度为 30/129；最近可评审交付为 `f7bc8ba8 feat(P2): 定义 Provider 领域契约`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步执行 `SAL-P2-002` DSA Provider Compatibility Adapter；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

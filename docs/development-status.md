@@ -7,7 +7,7 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：30/129<br>
 > 当前可执行任务：`SAL-P2-002`，状态为 `READY`；实现 DSA Provider Compatibility Adapter 时必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade<br>
-> 最近可评审交付 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
+> 最近可评审交付 checkpoint：`f7bc8ba8 feat(P2): 定义 Provider 领域契约`<br>
 > 最新状态同步 checkpoint：本文件所在提交；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -128,6 +128,7 @@
 - 2026-07-20：完成 `SAL-P1-016`，Gate G1 结论为 `GO with accepted risks`，P1 完成 `16/16`，总进度 `29/129`；项目已进入 P2，`SAL-P2-001` 是唯一推荐下一步。
 - 2026-07-20：按用户要求复核最新开发状态；确认当前 Phase 为 P2，Gate G2 未通过，G0/G1 已通过，`SAL-P0-001..013` 与 `SAL-P1-001..016` 已完成，`SAL-P2-001` 为当前 `READY` 任务；本次同步同时更新 `tasks/lessons.md` 以固化阶段性任务完成后的状态同步习惯。
 - 2026-07-21：完成 `SAL-P2-001`，冻结同步 Provider Protocol、Capability、不可变 DataBatch/Provenance、warning 和六类错误；Provider contract `23 passed`、相关套件 `109 passed`、全量 pytest `128 passed`，P2 进度 `1/20`、总进度 `30/129`，`SAL-P2-002` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-21：按用户要求再次同步最新状态；确认最近可评审交付为 `f7bc8ba8 feat(P2): 定义 Provider 领域契约`，当前工作从 `SAL-P2-002` 继续，仍不得提前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或大规模 DSA 源码迁移。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -164,7 +165,7 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001
 - 最近完成：SAL-P2-001 Provider 领域契约
-- 最近可评审交付 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
+- 最近可评审交付 checkpoint：f7bc8ba8 feat(P2): 定义 Provider 领域契约
 - 最新状态同步 checkpoint：本提示词所在提交；启动后以 git log -1 --oneline 确认
 - 进度：P0 13/13，P1 16/16，P2 1/20，总计 30/129
 
