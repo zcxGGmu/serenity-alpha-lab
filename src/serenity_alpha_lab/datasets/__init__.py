@@ -11,6 +11,16 @@ from serenity_alpha_lab.datasets.instrument_master import (
     InstrumentMasterRecord,
     ProviderSymbolValidity,
 )
+from serenity_alpha_lab.datasets.raw_daily_bars import (
+    RAW_DAILY_BARS_CONTENT_TYPE,
+    RAW_DAILY_BARS_FIELD_SCHEMA,
+    RAW_DAILY_BARS_PARTITION_KEYS,
+    RAW_DAILY_BARS_SCHEMA_NAME,
+    RAW_DAILY_BARS_SCHEMA_VERSION,
+    RawDailyBar,
+    RawDailyBarsDataset,
+    RawDailyBarsDatasetError,
+)
 from serenity_alpha_lab.datasets.trading_calendar import (
     TRADING_CALENDAR_CONTENT_TYPE,
     TRADING_CALENDAR_SCHEMA_NAME,
@@ -32,6 +42,14 @@ __all__ = [
     "InstrumentMasterDatasetError",
     "InstrumentMasterRecord",
     "ProviderSymbolValidity",
+    "RAW_DAILY_BARS_CONTENT_TYPE",
+    "RAW_DAILY_BARS_FIELD_SCHEMA",
+    "RAW_DAILY_BARS_PARTITION_KEYS",
+    "RAW_DAILY_BARS_SCHEMA_NAME",
+    "RAW_DAILY_BARS_SCHEMA_VERSION",
+    "RawDailyBar",
+    "RawDailyBarsDataset",
+    "RawDailyBarsDatasetError",
     "TRADING_CALENDAR_CONTENT_TYPE",
     "TRADING_CALENDAR_SCHEMA_NAME",
     "TRADING_CALENDAR_SCHEMA_VERSION",

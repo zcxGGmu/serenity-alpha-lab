@@ -1,3 +1,41 @@
+# P2 Raw Daily Bars Dataset Plan
+
+> Started: 2026-07-21
+> Scope: Complete `SAL-P2-007` by adding a deterministic raw daily bars Dataset for unadjusted OHLCV/amount records. Reuse P2 Provider `DataBatch`/`Provenance`, Instrument Master Dataset, Trading Calendar Dataset, Bronze lineage, ArtifactStore, Trace/Run/Stage scalar attribution, and ProblemDetails-compatible validation errors. Do not start corporate actions/adjusted bars, PIT/fallback policy, Dataset Catalog/latest alias, Arrow Schema Registry, quality gates, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, network probes, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing Instrument Master Dataset, Trading Calendar Dataset, Provider daily-bar contract, Bronze raw store, ArtifactStore, ProblemDetails and architecture boundary tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-21-raw-daily-bars-dataset.md`.
+- [x] Add Red tests for raw daily bar schema, Provider batch conversion, key uniqueness, OHLC/volume/amount validation, instrument/calendar checks, source timestamp, Bronze lineage, query helpers, ArtifactStore publishing, and validation error mapping.
+- [x] Implement `RawDailyBarsDataset` with immutable unadjusted bar records, offline indexes, Provider batch conversion and deterministic JSON ArtifactStore publishing.
+- [x] Export dataset symbols and preserve architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-007`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-007` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Raw daily bars may publish deterministic Dataset artifact bytes, but must not create Dataset Catalog/latest alias, Arrow Schema Registry, adjusted bars, corporate actions, PIT/fallback policy, quality gates, Worker runtime, or Quant Core behavior.
+- Consume injected/offline Provider `DataBatch` values only; do not instantiate or call a real Provider.
+- Raw bars remain unadjusted; do not add split/dividend/corporate-action or adjusted price behavior.
+- Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-007
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_raw_daily_bars.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.raw_daily_bars'`.
+- Green implementation: added `RawDailyBar`, `RawDailyBarsDataset`, Arrow-compatible field schema constants, Provider `DataBatch` conversion, Instrument Master as-of validation, Trading Calendar trading-day validation, immutable offline indexes, deterministic JSON ArtifactStore publishing and primary-key replacement via `merge_incremental()`.
+- Reuse coverage: P1/P2 `InstrumentId`, `Market`, Provider `DataBatch`/`Provenance`, `ArtifactStore`, Bronze `source_bronze_artifact_id`, Instrument Master Dataset, Trading Calendar Dataset, trace/run/stage scalar attribution and existing ProblemDetails `ValueError -> validation_error` mapping are covered by tests.
+- Verification: target raw daily bars `3 passed`; related dataset/provider/bronze/API/trace/architecture suite `59 passed`; full pytest `172 passed`; py_compile, dependency lock, `git diff --check` and immutable tag check passed.
+- Review note: attempted independent `code-reviewer` subagent dispatch multiple times, but the client rejected payload variants as duplicate `message/items` or empty override fields. Local review checked diff scope, imports, OHLC/amount/calendar/master validations, deterministic artifact payload, and guardrails; no Critical or Important issue found.
+- Scope retained: no adjusted bars, corporate actions, PIT fundamental Dataset, Dataset Catalog/latest alias, Arrow Schema Registry, quality gate, fallback policy, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+---
+
 # P2 Trading Calendar Dataset Plan
 
 > Started: 2026-07-21
