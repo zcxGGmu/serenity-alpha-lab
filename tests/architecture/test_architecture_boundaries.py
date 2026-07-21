@@ -219,6 +219,18 @@ def test_dsa_symbol_compatibility_stays_integration_only_and_dsa_runtime_free() 
     assert failures == []
 
 
+def test_repositories_do_not_import_concrete_dsa_provider_runtime() -> None:
+    failures: list[str] = []
+    forbidden_modules = ("data_provider", "src")
+    forbidden_prefixes = tuple(f"{prefix}." for prefix in forbidden_modules)
+    for path in iter_python_files("repositories"):
+        for module in imported_modules(path):
+            if module in forbidden_modules or module.startswith(forbidden_prefixes):
+                failures.append(f"{path.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_api_error_protocol_stays_framework_neutral() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "application" / "api_errors.py"

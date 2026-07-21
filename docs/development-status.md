@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-21<br>
-> 最近阶段性任务：`SAL-P2-003` 证券代码兼容迁移<br>
+> 最近阶段性任务：`SAL-P2-004` Bronze 原始数据层<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：32/129<br>
-> 当前可执行任务：`SAL-P2-004`，状态为 `READY`；Bronze 原始数据层必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade，且不得提前实现 Dataset/PIT/fallback policy 或真实 Provider 调用<br>
-> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 完成证券代码兼容迁移`）；恢复时以 `git log -1 --oneline` 为准<br>
-> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 完成证券代码兼容迁移`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 任务完成度：33/129<br>
+> 当前可执行任务：`SAL-P2-005`，状态为 `READY`；证券主数据 Dataset 必须复用已冻结的 InstrumentId、Provider Symbol Mapping、Bronze Artifact、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade，且不得提前实现 PIT/fallback policy 或真实 Provider 调用<br>
+> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 建立 Bronze 原始数据层`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 建立 Bronze 原始数据层`）；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -60,18 +60,19 @@
 - 完成 `SAL-P2-001`：新增纯领域 [providers.py](../src/serenity_alpha_lab/domain/providers.py)，定义 Provider capabilities、不可变 `DataBatch`/`Provenance`、warning、同步 `MarketDataProvider` Protocol 和六类错误；Provider 错误复用 P1 `ProviderProblem`/trace/脱敏边界，证据见 [Provider 领域契约记录](./provider-domain-contract.md)。
 - 完成 `SAL-P2-002`：新增 [provider_adapter.py](../src/serenity_alpha_lab/integrations/dsa/provider_adapter.py)，通过注入式 DSA-like manager 将 `DataFetcherManager.get_daily_data()` / Pandas daily-bar 输出映射为不可变 `DataBatch`，并新增 `DsaStockHistoryCompatibilityFacade` feature flag 在 legacy 与 Provider contract 路径之间切换；证据见 [DSA Provider Compatibility Adapter 记录](./dsa-provider-compatibility-adapter.md)。
 - 完成 `SAL-P2-003`：新增 [symbol_compatibility.py](../src/serenity_alpha_lab/integrations/dsa/symbol_compatibility.py)，用 `DsaStockCodeCompatibilityMapper` 和不可变 `DsaStockCodeMapping` 包裹 DSA `normalize_stock_code` 兼容语义，覆盖 P0 转换样例、Provider Symbol Mapping、有效期和歧义错误；证据见 [DSA Symbol Compatibility Migration 记录](./dsa-symbol-compatibility-migration.md)。
+- 完成 `SAL-P2-004`：新增 [bronze_raw_store.py](../src/serenity_alpha_lab/repositories/bronze_raw_store.py)，通过既有 `ArtifactStore` 发布 deterministic JSON + gzip Bronze envelope，保存脱敏后的 Provider 原始响应、请求元数据、source/sanitized hash、trace/run/stage 和 archive retention；证据见 [Bronze 原始数据层记录](./bronze-raw-data-layer.md)。
 
 ## 未完成
 
 ### 当前可执行 P2 任务
 
-- `SAL-P2-004` 当前为 `READY`：建立 Bronze 原始数据层，保存可审计原始响应和请求元数据。
+- `SAL-P2-005` 当前为 `READY`：实现证券主数据 Dataset，构建历史有效期的 instrument master。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 97 项工程任务未完成。
-- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter 和证券代码兼容迁移层，但尚未实现 Bronze、Dataset、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
+- P2 至 P6 仍有 96 项工程任务未完成。
+- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层和 Bronze 原始数据层，但尚未实现证券主数据 Dataset、Worker、Quant Core、PIT Dataset、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -95,6 +96,7 @@
 - Provider 领域契约已冻结：Adapter 通过同步 `MarketDataProvider` 返回带 schema、来源、已脱敏请求、时间、SHA-256、field lineage、freshness 和 warning 的不可变 `DataBatch`；`retryable/rate_limited/auth/schema_drift/data_invalid/permanent` 供内部策略使用，对外继续映射为稳定 `provider_error`。
 - DSA Provider Adapter 已通过窄兼容层收口：真实 DSA `DataFetcherManager` 只在 profile guard 允许时 lazy 构造；CI/测试使用注入式 manager；旧单股历史调用必须继续通过显式 Compatibility Facade 和 `use_provider_contract` feature flag 迁移，不得直接扩散具体 Fetcher 依赖。
 - DSA 证券代码兼容迁移已完成：`DsaStockCodeCompatibilityMapper` 在 DSA integration 边界包裹 `normalize_stock_code` 兼容语义；新领域路径携带 canonical `InstrumentId`，Provider 调用显式生成 `dsa` / `yahoo` symbol mapping，裸 6 位只在 legacy facade 带 CN 上下文时兼容。
+- Bronze 原始数据层已完成：`BronzeRawStore` 复用 P1 `ArtifactStore` 内容寻址和 manifest-last 语义，原始响应落盘前递归脱敏并压缩，记录 provider/operation/request time/source hash/sanitized hash/field lineage/trace/run/stage；本层不发布 Dataset 或执行 fallback policy。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -110,8 +112,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-004` Bronze 原始数据层，保存可审计原始响应和请求元数据。
-2. 不得提前实现 Dataset/PIT/fallback policy 或真实 Provider 调用；`SAL-P2-005` 证券主数据 Dataset 仍需等待 `SAL-P2-004` 完成。
+1. 优先执行 `SAL-P2-005` 证券主数据 Dataset，构建历史有效期的 instrument master。
+2. 不得提前实现 PIT/fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent。
 3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
@@ -136,6 +138,7 @@
 - 2026-07-21：完成 `SAL-P2-002`，新增 DSA Provider Compatibility Adapter 和 feature-flag stock-history facade；Adapter target `8 passed`、相关套件 `22 passed`、全量 pytest `137 passed`，P2 进度 `2/20`、总进度 `31/129`，`SAL-P2-003` 与 `SAL-P2-004` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-21：按用户要求同步 `SAL-P2-002` checkpoint 后最新状态；确认最近可评审交付为 `68e8fea9 feat(P2): 实现 DSA Provider 兼容适配器`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..002`，未完成范围为 P2 至 P6 剩余 98 项；下一步从 `SAL-P2-003` / `SAL-P2-004` 继续。
 - 2026-07-21：完成 `SAL-P2-003`，新增 DSA 证券代码兼容 mapper 和不可变 mapping；Symbol target `25 passed`、相关套件 `72 passed`、全量 pytest `155 passed`，P2 进度 `3/20`、总进度 `32/129`，`SAL-P2-004` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-21：完成 `SAL-P2-004`，新增 Bronze 原始响应层、deterministic gzip Artifact、落盘前密钥/Cookie/PII 脱敏和 provider/request/time 追踪 helper；Bronze target `6 passed`、相关套件 `56 passed`、全量 pytest `162 passed`，P2 进度 `4/20`、总进度 `33/129`，`SAL-P2-005` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -170,16 +173,16 @@
 当前状态：
 - Phase：P2 数据与持久任务
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-003
-- 最近完成：SAL-P2-003 证券代码兼容迁移
-- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 完成证券代码兼容迁移）；启动后以 git log -1 --oneline 确认
-- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 完成证券代码兼容迁移）；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 16/16，P2 3/20，总计 32/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-004
+- 最近完成：SAL-P2-004 Bronze 原始数据层
+- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 建立 Bronze 原始数据层）；启动后以 git log -1 --oneline 确认
+- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 建立 Bronze 原始数据层）；启动后以 git log -1 --oneline 确认
+- 进度：P0 13/13，P1 16/16，P2 4/20，总计 33/129
 
 下一步优先执行：
-1. SAL-P2-004 建立 Bronze 原始数据层，保存可审计原始响应和请求元数据
-2. 不要提前实现 Dataset/PIT/fallback policy 或真实 Provider 调用
-3. 后续 Provider/Dataset/持久任务实现必须复用 Gate G1 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic 和 Compatibility Facade
+1. SAL-P2-005 实现证券主数据 Dataset，构建历史有效期的 instrument master
+2. 不要提前实现 PIT/fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent
+3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping 和 Bronze Artifact
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

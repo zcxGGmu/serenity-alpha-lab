@@ -1,5 +1,13 @@
 """Repository boundary skeleton."""
 
+from serenity_alpha_lab.repositories.bronze_raw_store import (
+    BRONZE_RAW_CONTENT_TYPE,
+    BRONZE_RAW_SCHEMA_NAME,
+    BRONZE_RAW_SCHEMA_VERSION,
+    BronzeRawArtifact,
+    BronzeRawStore,
+    BronzeRawStoreError,
+)
 from serenity_alpha_lab.repositories.local_artifact_store import LocalArtifactStore
 from serenity_alpha_lab.repositories.storage_migrations import (
     MigrationStatus,
@@ -21,6 +29,12 @@ from serenity_alpha_lab.repositories.sqlite_upgrade import (
 )
 
 __all__ = [
+    "BRONZE_RAW_CONTENT_TYPE",
+    "BRONZE_RAW_SCHEMA_NAME",
+    "BRONZE_RAW_SCHEMA_VERSION",
+    "BronzeRawArtifact",
+    "BronzeRawStore",
+    "BronzeRawStoreError",
     "LocalArtifactStore",
     "MigrationStatus",
     "StorageMigrationError",

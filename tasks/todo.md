@@ -1,3 +1,41 @@
+# P2 Bronze Raw Data Layer Plan
+
+> Started: 2026-07-21
+> Scope: Complete `SAL-P2-004` by adding a Bronze raw data layer that stores sanitized, compressed, content-addressed provider raw responses with auditable request metadata. Reuse P1/P2 ArtifactStore, Provider Provenance, TraceContext, ProblemDetails redaction boundaries, Run/Stage metadata, and compatibility constraints. Do not start Dataset/PIT/fallback policy, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing ArtifactStore, Provider Provenance/DataBatch, Trace redaction, and architecture boundary tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-21-bronze-raw-data-layer.md`.
+- [x] Add Red tests for Bronze artifact schema, gzip compression, hash metadata, provider/request/time traceability, Run/Stage attribution, and secret/Cookie/PII redaction before disk.
+- [x] Implement `BronzeRawStore` over the existing `ArtifactStore` contract with deterministic JSON + gzip payloads and local query helpers.
+- [x] Export repository symbols and add architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-004`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-004` files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P2-004
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/repositories/test_bronze_raw_store.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.repositories.bronze_raw_store'`.
+- Green implementation: added `BronzeRawStore`, immutable `BronzeRawArtifact`, deterministic JSON envelope + `gzip` compression, `ArtifactStore` publishing, `get_envelope()`, local `find_raw_artifacts()` scanning, and repository exports.
+- Audit coverage: envelope records provider/operation, sanitized request parameters, requested/fetched/source timestamps, source raw hash, sanitized raw payload hash, field lineage, trace/run/stage IDs and archive retention.
+- Security coverage: request and raw-response payloads are recursively sanitized before bytes reach `ArtifactStore`; tests assert API key, token, Authorization, Cookie/Set-Cookie, email, phone/mobile and identity-card values are absent from manifest/blob/decompressed bytes.
+- Verification: Bronze target `6 passed`; related repositories/provider/trace/architecture suite `56 passed`; full pytest `162 passed`; py_compile, dependency lock, immutable tag check and `git diff --check` passed.
+- Scope retained: no Dataset Catalog, Silver/PIT, quality gate, fallback policy, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Bronze may store sanitized raw provider payloads and request metadata only through the existing ArtifactStore boundary; it must not write Dataset Catalog, Silver/PIT tables, quality gates, or fallback policy.
+- Store compressed payloads deterministically and preserve both source raw-response hash from Provider Provenance and sanitized payload hash for audits.
+- Redact API keys, tokens, Authorization, Cookie/Set-Cookie, prompts/bodies, e-mail, phone/mobile and common identity fields before bytes are handed to ArtifactStore.
+- Require Run attribution through `produced_by_run_id` or `Provenance.run_id`; carry stage and trace IDs when available.
+- Keep tests offline with synthetic raw responses; make zero real Provider/LLM/network calls.
+
+---
+
 # P2 Symbol Compatibility Migration Plan
 
 > Started: 2026-07-21
