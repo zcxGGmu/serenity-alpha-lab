@@ -184,6 +184,21 @@ def test_research_orchestrator_contracts_do_not_import_concrete_dsa_agent_runtim
     assert failures == []
 
 
+def test_dsa_provider_adapter_keeps_concrete_dsa_imports_lazy() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "integrations" / "dsa" / "provider_adapter.py"
+    forbidden_modules = ("data_provider", "src")
+    forbidden_prefixes = tuple(f"{prefix}." for prefix in forbidden_modules)
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            if module in forbidden_modules or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_api_error_protocol_stays_framework_neutral() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "application" / "api_errors.py"

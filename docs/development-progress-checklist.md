@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 1/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
+| P2 数据与任务 | 3~6 | DOING | 2/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **30/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **31/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -478,16 +478,19 @@ P0 基线
 
 ### SAL-P2-002 实现 DSA Provider Compatibility Adapter
 
-- [ ] [READY] 将现有 DataFetcherManager/Pandas 收口到领域契约
-- 元数据：优先级 P0 | 负责人 BE | 估算 2.5d | 实际 - | 依赖 SAL-P2-001
+- [x] [DONE] 将现有 DataFetcherManager/Pandas 收口到领域契约
+- 元数据：优先级 P0 | 负责人 BE | 估算 2.5d | 实际 0.5d | 依赖 SAL-P2-001 | 开始 2026-07-21 | 完成 2026-07-21
 - 交付物：Adapter、旧接口 Facade、字段映射和测试。
 - 验收：
   - API/业务层不直接调用具体 Fetcher。
   - 旧单股分析可由 Feature Flag 在新旧路径切换。
+- 结果：新增 `src/serenity_alpha_lab/integrations/dsa/provider_adapter.py`，通过注入式 DSA-like manager 将 `DataFetcherManager.get_daily_data()` / Pandas 行情输出映射为 `MarketDataProvider` 的不可变 `DataBatch`；Provenance 携带 DSA source、已脱敏请求参数、UTC 时间、SHA-256、field lineage、freshness 和 TraceContext。新增 `DsaStockHistoryCompatibilityFacade`，用 `use_provider_contract` feature flag 在旧历史行情响应和 Provider contract 路径之间切换。
+- 范围限制：未修改 DSA runtime source，未执行真实 Provider/LLM 调用，未实现 Bronze/Dataset/PIT、fallback policy、PersistentTaskBackend、Quant Core、正式回测或 Evidence Agent；真实 DSA manager 只通过 profile 允许的 lazy factory 构造，CI 使用注入式 stub。
+- 验收证据：见 [DSA Provider Compatibility Adapter 记录](./dsa-provider-compatibility-adapter.md)；`tests/integrations/test_dsa_provider_adapter.py`、`tests/application/test_api_errors.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为缺少 `provider_adapter` module，Green 后 Adapter 目标测试 `8 passed`、相关套件 `22 passed`、全量 pytest `137 passed`。
 
 ### SAL-P2-003 完成证券代码兼容迁移
 
-- [ ] [TODO] 用 InstrumentId 和 Symbol Mapping 包裹 `normalize_stock_code`
+- [ ] [READY] 用 InstrumentId 和 Symbol Mapping 包裹 `normalize_stock_code`
 - 元数据：优先级 P0 | 负责人 BE/QE | 估算 2d | 实际 - | 依赖 SAL-P1-005,SAL-P2-002
 - 交付物：映射表、有效期、Provider 格式转换、歧义错误。
 - 验收：
@@ -496,7 +499,7 @@ P0 基线
 
 ### SAL-P2-004 建立 Bronze 原始数据层
 
-- [ ] [TODO] 保存可审计原始响应和请求元数据
+- [ ] [READY] 保存可审计原始响应和请求元数据
 - 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 - | 依赖 SAL-P1-007,SAL-P2-001
 - 交付物：Bronze Artifact Schema、压缩、哈希、保留策略。
 - 验收：
@@ -1478,6 +1481,7 @@ P0 基线
 | DEC-026 | 2026-07-20 | Desktop 兼容与性能基线口径 | `SAL-P1-015` 采用离线 P0 Desktop/API/CLI/Bot/契约金标矩阵和本地性能脚本作为 G1 兼容证据；启动阈值 `60s`、report/signal 阈值 `60s`、离线单股报告生成阈值 `5s`，所有运行产物只落 `.cache/dsa-p0` | [desktop-compatibility-performance-baseline.md](./desktop-compatibility-performance-baseline.md); [run-p1-desktop-compatibility-performance.sh](../scripts/run-p1-desktop-compatibility-performance.sh) | SAL-P1-015,SAL-P1-016 | G1 |
 | DEC-027 | 2026-07-20 | Gate G1 工程地基评审 | `GO with accepted risks`：P1 工程加固完成，允许进入 P2；P2 必须沿用 P1 的 lock、domain/application/repository/facade、Artifact、Trace、ProblemDetails、Profile 和 Alembic 边界，供应链/Web/Docker 风险继续阻断发布但不阻断 P2 | [gate-g1-engineering-foundation-review.md](./gate-g1-engineering-foundation-review.md) | SAL-P1-016,SAL-P2-001,SAL-P2-018,SAL-P6-005 | G2 |
 | DEC-028 | 2026-07-21 | Provider 领域契约口径 | 采用同步、stdlib-only 的 `MarketDataProvider` Protocol；能力由 `ProviderCapabilities` 声明，结果统一为携带 schema/Provenance/freshness/warnings 的泛型不可变 `DataBatch`；六类 Provider 错误供后续 retry/fallback policy 使用，应用边界统一映射为既有 `provider_error` | [provider-domain-contract.md](./provider-domain-contract.md); [providers.py](../src/serenity_alpha_lab/domain/providers.py); [api_errors.py](../src/serenity_alpha_lab/application/api_errors.py) | SAL-P2-001,SAL-P2-002,SAL-P2-004,SAL-P2-015 | G2 |
+| DEC-029 | 2026-07-21 | DSA Provider 兼容适配口径 | 采用窄 adapter 包裹 DSA `DataFetcherManager.get_daily_data()` 和 Pandas daily-bar 输出，真实 DSA manager 只允许通过 profile guard 后 lazy 构造；默认测试路径使用注入式 manager，旧单股历史查询通过显式 feature flag facade 在 legacy 与 Provider contract 路径切换 | [dsa-provider-compatibility-adapter.md](./dsa-provider-compatibility-adapter.md); [provider_adapter.py](../src/serenity_alpha_lab/integrations/dsa/provider_adapter.py); [test_dsa_provider_adapter.py](../tests/integrations/test_dsa_provider_adapter.py) | SAL-P2-002,SAL-P2-003,SAL-P2-004,SAL-P2-015 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1513,6 +1517,7 @@ P0 基线
 | AEV-028 | SAL-P1-015 | Desktop 兼容和性能基线脚本、离线 smoke 与性能摘要 | [desktop-compatibility-performance-baseline.md](./desktop-compatibility-performance-baseline.md); [run-p1-desktop-compatibility-performance.sh](../scripts/run-p1-desktop-compatibility-performance.sh) | DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; Desktop `npm test` `47 passed`; Desktop/API/CLI/Bot pytest `121 passed, 7 warnings`; API/config/database/report-signal snapshots matched; Desktop backend health startup `5,822ms`; single-stock report avg `0.030ms`; real Provider/LLM calls zero; generated artifacts under `.cache/dsa-p0` | FE/BE | 2026-07-20 |
 | AEV-029 | SAL-P1-016 / Gate G1 | Gate G1 Go/No-Go 评审、P2 入口约束和本地验证记录 | [gate-g1-engineering-foundation-review.md](./gate-g1-engineering-foundation-review.md) | Decision `GO with accepted risks`; P1 `16/16`; total `29/129`; baseline/worktree tag check PASS; registered patch check PASS; root and architecture/domain/application/repositories/integrations pytest `103 passed`; dependency lock PASS; Desktop compatibility runner PASS; `git diff --check` PASS | TL/SEC | 2026-07-20 |
 | AEV-030 | SAL-P2-001 | Provider 领域契约、Provenance/Batch 不变量、错误分类和离线 Contract Test 记录 | [provider-domain-contract.md](./provider-domain-contract.md); [providers.py](../src/serenity_alpha_lab/domain/providers.py); [test_provider_contract.py](../tests/domain/test_provider_contract.py); [test_api_errors.py](../tests/application/test_api_errors.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Provider contract `23 passed`; related suite `109 passed`; full pytest `128 passed`; Red captured domain collection error, Provider mapping `500 != 502`, bytearray immutability, non-finite retry-delay, mutable scalar subclass, mutable mapping-key, quoted secret, contract-object, and lineage/schema failures; py_compile/lock/diff/tag checks PASS; no real Provider/LLM calls; Ruff not claimed due existing lint/config debt | BE/QE | 2026-07-21 |
+| AEV-031 | SAL-P2-002 | DSA Provider Adapter、Compatibility Facade、架构边界和离线测试记录 | [dsa-provider-compatibility-adapter.md](./dsa-provider-compatibility-adapter.md); [provider_adapter.py](../src/serenity_alpha_lab/integrations/dsa/provider_adapter.py); [test_dsa_provider_adapter.py](../tests/integrations/test_dsa_provider_adapter.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Adapter target `8 passed`; related suite `22 passed`; full pytest `137 passed`; Red captured missing adapter module; py_compile/lock/diff/tag checks PASS; no DSA runtime source migration and no real Provider/LLM calls | BE/QE | 2026-07-21 |
 
 允许的证据：
 
@@ -1550,4 +1555,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016` 和 `SAL-P2-001`，完成度为 30/129；最近可评审交付为 `f7bc8ba8 feat(P2): 定义 Provider 领域契约`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步执行 `SAL-P2-002` DSA Provider Compatibility Adapter；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 和 `SAL-P2-002`，完成度为 31/129；最近可评审交付为 `SAL-P2-002` DSA Provider Compatibility Adapter checkpoint；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-003` 证券代码兼容迁移，并可并行准备 `SAL-P2-004` Bronze 原始数据层；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

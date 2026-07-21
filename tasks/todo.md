@@ -1,3 +1,40 @@
+# P2 DSA Provider Compatibility Adapter Plan
+
+> Started: 2026-07-21
+> Scope: Complete `SAL-P2-002` by wrapping DSA `DataFetcherManager`/Pandas daily-bar output behind the frozen Provider domain contract. Reuse P1 Profile, ProblemDetails, TraceContext, Artifact/Run boundaries and Compatibility Facade patterns where they apply. Do not start Dataset/PIT, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, or broad DSA source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, current git state, and P2 Provider contract.
+- [x] Inspect DSA `DataFetcherManager` daily-data return shape, source handling, diagnostics behavior, and existing DSA market-routing tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-21-dsa-provider-compatibility-adapter.md`.
+- [x] Add Red tests for the DSA Provider adapter, ProviderError mapping, CI profile guard, trace/provenance propagation, and feature-flag facade switching.
+- [x] Implement `DsaProviderCompatibilityAdapter` and stock-history compatibility facade with injected manager support and lazy real-DSA import.
+- [x] Add architecture guard and evidence documentation.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Attempt independent code review; tool rejected message/items payload variants, so complete and record local senior review fallback.
+- [x] Stage only `SAL-P2-002` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- The adapter may lazily import DSA from the isolated worktree, but tests must use injected fakes and make zero real Provider/LLM/network calls.
+- Preserve the frozen Provider domain contract from `SAL-P2-001`; do not modify it unless a failing adapter contract exposes a real defect.
+- `CI` profile must block constructing a default real DSA manager; injected stub managers remain allowed for offline tests.
+- `SAL-P2-002` is not Dataset/Bronze/PIT/fallback-policy/PersistentTaskBackend work. Keep `RSK-004` open and Gate G2 not passed.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-002
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/integrations/test_dsa_provider_adapter.py -q` initially failed with `ModuleNotFoundError: No module named 'serenity_alpha_lab.integrations.dsa.provider_adapter'`.
+- Green implementation: added `DsaProviderCompatibilityAdapter`, lazy `create_default_dsa_data_fetcher_manager()`, schema/row normalization, Provider provenance hashing/lineage/TraceContext propagation, ProviderError classification, and `DsaStockHistoryCompatibilityFacade` feature flag switching.
+- Boundary review: no DSA runtime source was copied or modified; real `data_provider.base` is referenced only by `importlib.import_module()` inside the lazy factory; AST imports are limited to stdlib, P1 application facades, domain contracts and DSA entrypoint resolver.
+- Verification: target adapter tests `8 passed`; related adapter/API/architecture suite `22 passed`; full pytest `137 passed`; py_compile, `scripts/verify-python-dependency-lock.sh`, `git diff --check`, and `git rev-parse upstream/dsa-v3.26.1` (`e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`) passed.
+- Review note: attempted to dispatch an independent `code-reviewer` agent multiple times, but the tool rejected both message-plus-items and items-only payload variants as duplicate inputs. Local review found no Critical or Important issues; the only `data_provider` hit is the intended lazy import string, and the only secret token hit is the redaction test fixture.
+- Scope retained: no Dataset/Bronze/PIT, fallback policy, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+- Checkpoint scope: stage only adapter code, adapter exports, tests, evidence docs, progress/status docs and this review; exclude `.worktrees`, `.cache`, `.venv`, pycache and unrelated files.
+
 # P2 Status Sync After Provider Contract
 
 > Started: 2026-07-21
