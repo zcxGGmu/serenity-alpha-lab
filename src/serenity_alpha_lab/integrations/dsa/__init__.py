@@ -8,6 +8,11 @@ from serenity_alpha_lab.integrations.dsa.provider_adapter import (
     DsaStockHistoryCompatibilityFacade,
     create_default_dsa_data_fetcher_manager,
 )
+from serenity_alpha_lab.integrations.dsa.symbol_compatibility import (
+    DsaStockCodeCompatibilityMapper,
+    DsaStockCodeMapping,
+    normalize_stock_code_compatible,
+)
 from serenity_alpha_lab.integrations.dsa.research_orchestrator import (
     DsaResearchOrchestratorFacade,
     research_result_from_legacy_agent_result,
@@ -21,7 +26,10 @@ __all__ = [
     "DsaAnalysisTaskQueueBackend",
     "DsaProviderCompatibilityAdapter",
     "DsaResearchOrchestratorFacade",
+    "DsaStockCodeCompatibilityMapper",
+    "DsaStockCodeMapping",
     "DsaStockHistoryCompatibilityFacade",
     "create_default_dsa_data_fetcher_manager",
+    "normalize_stock_code_compatible",
     "research_result_from_legacy_agent_result",
 ]

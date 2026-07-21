@@ -1,3 +1,41 @@
+# P2 Symbol Compatibility Migration Plan
+
+> Started: 2026-07-21
+> Scope: Complete `SAL-P2-003` by wrapping DSA `normalize_stock_code` compatibility semantics with `InstrumentId` and explicit Provider Symbol Mapping. Reuse the P1 `InstrumentId` domain model and P2 DSA Provider Adapter facade. Do not start Bronze/Dataset/PIT, fallback policy, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, current git state, P1 InstrumentId, and P2 Provider Adapter.
+- [x] Inspect DSA `normalize_stock_code` implementation, P0 conversion tests, and current Serenity adapter call path.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-21-symbol-compatibility-migration.md`.
+- [x] Add Red tests for P0-compatible stock-code conversions, ambiguity errors, validity windows, provider mappings, and adapter wrapper usage.
+- [x] Implement DSA symbol compatibility mapper and immutable mapping record.
+- [x] Wire `DsaProviderCompatibilityAdapter` and `DsaStockHistoryCompatibilityFacade` through the mapper.
+- [x] Add architecture guard and evidence documentation.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-003` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Keep legacy payload `stock_code` behavior compatible, but store/carry canonical `instrument_id` for new provider paths and provenance.
+- Bare 6-digit symbols may be accepted only through explicit legacy market context; strict domain conversion must keep raising ambiguity errors.
+- Do not persist naked symbols as cross-market primary keys; use `InstrumentId.canonical`.
+- `SAL-P2-003` is not Bronze/Dataset/PIT/fallback-policy/PersistentTaskBackend work. Gate G2 remains not passed.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-003
+
+- Red evidence: `.cache/dsa-p0/venv/bin/python -m pytest ...` could not run because the documented P0 venv is absent locally; fallback `uv run --extra core --extra dev python -m pytest tests/integrations/test_dsa_symbol_compatibility.py tests/integrations/test_dsa_provider_adapter.py -q` failed with `ModuleNotFoundError: No module named 'serenity_alpha_lab.integrations.dsa.symbol_compatibility'`.
+- Green implementation: added `DsaStockCodeCompatibilityMapper`, immutable `DsaStockCodeMapping`, and local `normalize_stock_code_compatible()` mirror for P0 DSA conversion cases; wired `DsaProviderCompatibilityAdapter` and `DsaStockHistoryCompatibilityFacade` through the mapper.
+- Compatibility coverage: A-share SH/SZ/SS/BJ prefix/suffix, HK prefix/suffix zero-padding, JP/KR/TW Yahoo suffixes, US ticker, bare 6-digit ambiguity, explicit exchange conflicts, provider symbol mappings, and validity windows.
+- Verification so far: target symbol/adapter suite `25 passed`; related symbol/adapter/domain/architecture suite `72 passed`; full pytest `155 passed`; py_compile and `scripts/verify-python-dependency-lock.sh` passed.
+- Review note: attempted independent `code-reviewer` dispatch multiple times, but the client rejected payload variants as duplicate message/items inputs. Local diff review found no eager DSA runtime import; the only `data_provider` hit remains the intended lazy import in `provider_adapter.py`.
+- Scope retained: no Bronze/Dataset/PIT, fallback policy, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+---
+
 # P2 Status Sync After DSA Provider Adapter
 
 > Started: 2026-07-21

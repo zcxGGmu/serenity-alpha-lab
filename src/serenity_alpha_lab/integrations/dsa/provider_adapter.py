@@ -30,6 +30,10 @@ from serenity_alpha_lab.domain.providers import (
     Provenance,
 )
 from serenity_alpha_lab.integrations.dsa.entrypoints import resolve_dsa_root
+from serenity_alpha_lab.integrations.dsa.symbol_compatibility import (
+    DsaStockCodeCompatibilityMapper,
+    DsaStockCodeMapping,
+)
 
 
 DSA_PROVIDER_ID = "dsa_compatibility"
@@ -65,12 +69,14 @@ class DsaProviderCompatibilityAdapter:
         settings: RuntimeSettings | None = None,
         clock: Clock | None = None,
         freshness_ttl: timedelta = timedelta(days=1),
+        stock_code_mapper: DsaStockCodeCompatibilityMapper | None = None,
     ) -> None:
         self._manager = manager
         self._manager_factory = manager_factory or create_default_dsa_data_fetcher_manager
         self._settings = settings or RuntimeSettings()
         self._clock = clock or (lambda: datetime.now(UTC))
         self._freshness_ttl = freshness_ttl
+        self._stock_code_mapper = stock_code_mapper or DsaStockCodeCompatibilityMapper()
 
     @classmethod
     def from_runtime_settings(
@@ -134,20 +140,18 @@ class DsaProviderCompatibilityAdapter:
         sources: list[str] = []
         warnings: list[ProviderWarning] = []
         manager = self._manager_instance()
+        symbol_mappings = tuple(_map_instruments(self._stock_code_mapper, normalized_instruments))
 
-        for instrument in normalized_instruments:
-            if type(instrument) is not InstrumentId:
-                raise TypeError("get_daily_bars requires InstrumentId values")
-            dsa_symbol = instrument.to_dsa_symbol()
+        for mapping in symbol_mappings:
             frame, source = self._call_manager_daily_data(
                 manager,
-                dsa_symbol=dsa_symbol,
+                dsa_symbol=mapping.dsa_symbol,
                 start=start,
                 end=end,
             )
             rows, row_warnings = _normalize_daily_bar_rows(
                 frame,
-                instrument=instrument,
+                instrument=mapping.instrument_id,
                 source=source,
                 provider_id=self.provider_id,
             )
@@ -170,8 +174,9 @@ class DsaProviderCompatibilityAdapter:
             provider_version=None,
             operation=ProviderCapability.DAILY_BARS,
             request_parameters={
-                "instrument_ids": [instrument.canonical for instrument in normalized_instruments],
-                "dsa_symbols": [instrument.to_dsa_symbol() for instrument in normalized_instruments],
+                "instrument_ids": [mapping.instrument_id.canonical for mapping in symbol_mappings],
+                "legacy_stock_codes": [mapping.legacy_stock_code for mapping in symbol_mappings],
+                "dsa_symbols": [mapping.dsa_symbol for mapping in symbol_mappings],
                 "start": start.isoformat(),
                 "end": end.isoformat(),
                 "days": 30,
@@ -249,10 +254,12 @@ class DsaStockHistoryCompatibilityFacade:
         manager: Any,
         provider: DsaProviderCompatibilityAdapter,
         clock: DateClock | None = None,
+        stock_code_mapper: DsaStockCodeCompatibilityMapper | None = None,
     ) -> None:
         self._manager = manager
         self._provider = provider
         self._clock = clock or date.today
+        self._stock_code_mapper = stock_code_mapper or DsaStockCodeCompatibilityMapper()
 
     def get_history_data(
         self,
@@ -272,8 +279,8 @@ class DsaStockHistoryCompatibilityFacade:
     def _get_history_data_via_provider(self, stock_code: str, *, period: str, days: int) -> dict[str, object]:
         end = self._clock()
         start = end - timedelta(days=days * 2)
-        instrument = _instrument_from_legacy_stock_code(stock_code)
-        batch = self._provider.get_daily_bars([instrument], start, end)
+        mapping = self._stock_code_mapper.from_legacy(stock_code, market=_legacy_market_context(stock_code))
+        batch = self._provider.get_daily_bars([mapping.instrument_id], start, end)
         return self._history_payload(stock_code, period, _legacy_rows_from_batch(batch))
 
     def _history_payload(self, stock_code: str, period: str, rows: list[dict[str, object]]) -> dict[str, object]:
@@ -526,10 +533,21 @@ def _dedupe_warnings(warnings: Sequence[ProviderWarning]) -> tuple[ProviderWarni
     return tuple(deduped.values())
 
 
-def _instrument_from_legacy_stock_code(stock_code: str) -> InstrumentId:
+def _map_instruments(
+    mapper: DsaStockCodeCompatibilityMapper,
+    instruments: Sequence[InstrumentId],
+) -> tuple[DsaStockCodeMapping, ...]:
+    mappings: list[DsaStockCodeMapping] = []
+    for instrument in instruments:
+        if type(instrument) is not InstrumentId:
+            raise TypeError("get_daily_bars requires InstrumentId values")
+        mappings.append(mapper.from_instrument(instrument))
+    return tuple(mappings)
+
+
+def _legacy_market_context(stock_code: str) -> Market | None:
     text = str(stock_code or "").strip()
-    market = Market.CN if text.isdigit() and len(text) == 6 else None
-    return InstrumentId.from_legacy(text, market=market)
+    return Market.CN if text.isdigit() and len(text) == 6 else None
 
 
 def _legacy_rows_from_frame(frame: Any) -> list[dict[str, object]]:

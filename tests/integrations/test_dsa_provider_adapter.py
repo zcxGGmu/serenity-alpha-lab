@@ -27,6 +27,10 @@ from serenity_alpha_lab.integrations.dsa.provider_adapter import (
     DsaProviderCompatibilityAdapter,
     DsaStockHistoryCompatibilityFacade,
 )
+from serenity_alpha_lab.integrations.dsa.symbol_compatibility import (
+    DsaStockCodeCompatibilityMapper,
+    normalize_stock_code_compatible,
+)
 
 
 NOW = datetime(2026, 7, 21, 10, 30, tzinfo=UTC)
@@ -93,11 +97,16 @@ def _daily_rows() -> list[dict[str, Any]]:
     ]
 
 
-def _adapter(manager: FakeDsaManager) -> DsaProviderCompatibilityAdapter:
+def _adapter(
+    manager: FakeDsaManager,
+    *,
+    stock_code_mapper: DsaStockCodeCompatibilityMapper | None = None,
+) -> DsaProviderCompatibilityAdapter:
     return DsaProviderCompatibilityAdapter(
         manager=manager,
         settings=RuntimeSettings(profile=RuntimeProfile.DESKTOP, allow_provider_calls=True),
         clock=lambda: NOW,
+        stock_code_mapper=stock_code_mapper,
     )
 
 
@@ -123,7 +132,16 @@ def test_adapter_declares_daily_bar_capability_and_matches_provider_protocol() -
 
 def test_daily_bars_map_dsa_dataframe_to_contract_batch_with_trace_and_lineage() -> None:
     manager = FakeDsaManager()
-    adapter = _adapter(manager)
+    normalizer_calls: list[str] = []
+
+    def spy_normalizer(stock_code: str) -> str:
+        normalizer_calls.append(stock_code)
+        return normalize_stock_code_compatible(stock_code)
+
+    adapter = _adapter(
+        manager,
+        stock_code_mapper=DsaStockCodeCompatibilityMapper(normalize_stock_code=spy_normalizer),
+    )
     instrument = InstrumentId.parse("600519.XSHG")
 
     with use_trace_context(TraceContext(trace_id="trace-001", run_id="run-001", stage_id="stage-provider")):
@@ -138,6 +156,7 @@ def test_daily_bars_map_dsa_dataframe_to_contract_batch_with_trace_and_lineage()
             "days": 30,
         }
     ]
+    assert normalizer_calls == ["SH600519"]
     assert batch.schema_name == DSA_DAILY_BAR_SCHEMA_NAME
     assert batch.schema_version == DSA_DAILY_BAR_SCHEMA_VERSION
     assert batch.fresh_until == NOW + timedelta(days=1)
@@ -152,6 +171,7 @@ def test_daily_bars_map_dsa_dataframe_to_contract_batch_with_trace_and_lineage()
     assert len(batch.provenance.raw_response_sha256) == 64
     assert batch.provenance.request_parameters == {
         "instrument_ids": ("600519.XSHG",),
+        "legacy_stock_codes": ("600519",),
         "dsa_symbols": ("SH600519",),
         "start": "2026-07-01",
         "end": "2026-07-20",

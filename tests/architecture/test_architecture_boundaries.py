@@ -199,6 +199,26 @@ def test_dsa_provider_adapter_keeps_concrete_dsa_imports_lazy() -> None:
     assert failures == []
 
 
+def test_dsa_symbol_compatibility_stays_integration_only_and_dsa_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "integrations" / "dsa" / "symbol_compatibility.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "serenity_alpha_lab.domain.instruments",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_api_error_protocol_stays_framework_neutral() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "application" / "api_errors.py"
