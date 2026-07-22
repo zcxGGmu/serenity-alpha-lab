@@ -1,3 +1,42 @@
+# P2 Dataset Catalog And Manifest Plan
+
+> Started: 2026-07-22
+> Scope: Complete `SAL-P2-011` by adding Dataset Catalog and Manifest support for immutable dataset versions, file hashes, lineage, previous-version links, and mutable `latest` aliases. Reuse P1 `ArtifactStore`, P2 Dataset artifact manifests, Arrow Schema Registry, Trace/Run/Stage scalar attribution, and ProblemDetails-compatible validation boundaries. Do not start data quality rules, fallback policy, real Provider calls, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing P2 Dataset publish patterns, `ArtifactManifest`, `LocalArtifactStore`, Arrow Schema Registry, and architecture boundary tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-22-dataset-catalog-manifest.md`.
+- [x] Add Red tests for immutable version manifests, file hashes, schema hash binding, lineage, previous version linkage, latest alias resolution, formal-run latest rejection, and atomic alias behavior.
+- [x] Implement `catalog.py` with immutable manifest DTOs, version references, local repository persistence, alias resolution, and idempotent immutable publish checks.
+- [x] Export catalog symbols and preserve architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-011`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-011` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Catalog may register immutable Dataset version metadata and update mutable `latest` aliases only; it must not implement quality rules, quarantine/blocking behavior, fallback policy, Provider fixture probing, Worker runtime, Quant Core, formal backtest or Evidence behavior.
+- Published dataset versions are immutable; same version ID can only be observed idempotently if the manifest content is byte-equivalent.
+- Formal runs and experiments must resolve concrete `dataset_version` IDs; `latest` is allowed for discovery/research display only.
+- Tests stay offline with synthetic artifacts and make zero real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-011
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_dataset_catalog.py -q` failed during collection with `ImportError: cannot import name 'catalog' from 'serenity_alpha_lab.datasets'`.
+- Green implementation: added `DatasetFileManifest`, `DatasetVersionManifest`, `DatasetVersionRef`, `DatasetReferencePurpose`, `DatasetVersionRefKind` and `LocalDatasetCatalog`; package exports now expose the catalog API through `serenity_alpha_lab.datasets`.
+- Catalog coverage: tests cover immutable version manifest publishing, Artifact URI/SHA-256/file row-count capture, schema hash binding to `ArrowSchemaRegistry`, previous/input lineage, deterministic JSON persistence, idempotent republish and mutation rejection.
+- Alias coverage: `latest` is persisted separately after the version manifest; research display can resolve latest, formal experiment resolution rejects latest and requires concrete dataset version; alias publish failure leaves the old latest pointer intact.
+- Verification: target catalog `5 passed`; related dataset/artifact/architecture suite `45 passed`; full pytest `190 passed`; compileall, dependency lock, `git diff --check` and immutable tag check passed.
+- Review note: subagent dispatch was attempted but blocked by client payload validation (`message/items` conflict). Local review checked import boundaries, deterministic manifest bytes, alias failure semantics, immutable version handling and strict scope.
+- Scope retained: no data quality rule engine, warning/quarantine/blocking behavior, failed-Dataset latest blocking, fallback policy, Provider fixture/probe, real Provider/LLM call, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+---
+
 # P2 Arrow Schema Registry Plan
 
 > Started: 2026-07-22
@@ -24,6 +63,7 @@
 - Minor/patch schema versions may add backward-compatible nullable fields; deleting fields, changing types, or changing existing field meaning requires a new major version.
 - Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
 
 ## Review: SAL-P2-010
 
@@ -66,6 +106,7 @@
 - Dataset records may publish deterministic Artifact bytes, but must not create Dataset Catalog/latest alias, Arrow Schema Registry, quality gate, fallback policy, Worker runtime, Quant Core, formal backtest or Evidence behavior.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
 
+
 ## Review: SAL-P2-009
 
 - Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_fundamentals_dataset.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.fundamentals'`.
@@ -103,6 +144,7 @@
 - Support cash dividends, bonus/share splits, rights offerings and forward/backward adjustment factors; do not implement portfolio ledger corporate-action accounting.
 - Do not create PIT fundamental Dataset, fallback policy, Catalog/latest alias, quality gates, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, or network probes.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
 
 ## Review: SAL-P2-008
 
@@ -142,6 +184,7 @@
 - Raw bars remain unadjusted; do not add split/dividend/corporate-action or adjusted price behavior.
 - Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
 
 ## Review: SAL-P2-007
 
@@ -190,6 +233,7 @@
 - Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
 
+
 ---
 
 # P2 Instrument Master Dataset Plan
@@ -227,6 +271,7 @@
 - Every record must carry Bronze source artifact lineage for auditability.
 - Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
 
 ---
 
@@ -295,6 +340,7 @@
 - `SAL-P2-003` is not Bronze/Dataset/PIT/fallback-policy/PersistentTaskBackend work. Gate G2 remains not passed.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
 
+
 ## Review: SAL-P2-003
 
 - Red evidence: `.cache/dsa-p0/venv/bin/python -m pytest ...` could not run because the documented P0 venv is absent locally; fallback `uv run --extra core --extra dev python -m pytest tests/integrations/test_dsa_symbol_compatibility.py tests/integrations/test_dsa_provider_adapter.py -q` failed with `ModuleNotFoundError: No module named 'serenity_alpha_lab.integrations.dsa.symbol_compatibility'`.
@@ -355,6 +401,7 @@
 - `CI` profile must block constructing a default real DSA manager; injected stub managers remain allowed for offline tests.
 - `SAL-P2-002` is not Dataset/Bronze/PIT/fallback-policy/PersistentTaskBackend work. Keep `RSK-004` open and Gate G2 not passed.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
 
 ## Review: SAL-P2-002
 

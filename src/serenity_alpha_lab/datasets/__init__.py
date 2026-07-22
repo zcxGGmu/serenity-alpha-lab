@@ -19,6 +19,15 @@ from serenity_alpha_lab.datasets.corporate_actions import (
     CorporateActionsDataset,
     CorporateActionsDatasetError,
 )
+from serenity_alpha_lab.datasets.catalog import (
+    DatasetCatalogError,
+    DatasetFileManifest,
+    DatasetReferencePurpose,
+    DatasetVersionManifest,
+    DatasetVersionRef,
+    DatasetVersionRefKind,
+    LocalDatasetCatalog,
+)
 from serenity_alpha_lab.datasets.fundamentals import (
     FUNDAMENTALS_CONTENT_TYPE,
     FUNDAMENTALS_FIELD_SCHEMA,
@@ -104,8 +113,14 @@ __all__ = [
     "CorporateActionType",
     "CorporateActionsDataset",
     "CorporateActionsDatasetError",
+    "DatasetCatalogError",
+    "DatasetFileManifest",
+    "DatasetReferencePurpose",
     "DatasetSchemaDeclaration",
     "DatasetSchemaField",
+    "DatasetVersionManifest",
+    "DatasetVersionRef",
+    "DatasetVersionRefKind",
     "FundamentalPeriodType",
     "FundamentalQueryPurpose",
     "FundamentalRecord",
@@ -116,6 +131,7 @@ __all__ = [
     "InstrumentMasterDataset",
     "InstrumentMasterDatasetError",
     "InstrumentMasterRecord",
+    "LocalDatasetCatalog",
     "ProviderSymbolValidity",
     "RAW_DAILY_BARS_CONTENT_TYPE",
     "RAW_DAILY_BARS_FIELD_SCHEMA",
