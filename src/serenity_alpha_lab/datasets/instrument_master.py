@@ -6,6 +6,7 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import date, datetime
 from enum import StrEnum
+from types import MappingProxyType
 
 from serenity_alpha_lab.domain.artifacts import (
     ArtifactManifest,
@@ -24,6 +25,34 @@ from serenity_alpha_lab.domain.instruments import (
 INSTRUMENT_MASTER_SCHEMA_NAME = "dataset.instrument_master"
 INSTRUMENT_MASTER_SCHEMA_VERSION = "1.0.0"
 INSTRUMENT_MASTER_CONTENT_TYPE = "application/vnd.serenity.dataset.instrument-master+json"
+INSTRUMENT_MASTER_PARTITION_KEYS = ("market",)
+INSTRUMENT_MASTER_FIELD_SCHEMA = MappingProxyType(
+    {
+        "instrument_id": "utf8",
+        "market": "utf8",
+        "exchange": "utf8",
+        "symbol": "utf8",
+        "asset_type": "utf8",
+        "name": "utf8",
+        "currency": "utf8",
+        "listing_status": "utf8",
+        "listed_on": "date32[day]",
+        "delisted_on": "date32[day]",
+        "is_st": "bool",
+        "board": "utf8",
+        "industries": (
+            "list<struct<system:utf8,version:utf8,level1:utf8,level2:utf8,level3:utf8,"
+            "valid_from:date32[day],valid_to:date32[day]>>"
+        ),
+        "provider_mappings": (
+            "list<struct<provider:utf8,symbol:utf8,instrument_id:utf8,valid_from:date32[day],"
+            "valid_to:date32[day],source_bronze_artifact_id:utf8>>"
+        ),
+        "valid_from": "date32[day]",
+        "valid_to": "date32[day]",
+        "source_bronze_artifact_id": "utf8",
+    }
+)
 
 
 class InstrumentMasterDatasetError(ValueError):
@@ -325,6 +354,8 @@ class InstrumentMasterDataset:
             "run_id": self.run_id,
             "stage_id": self.stage_id,
             "record_count": len(self.records),
+            "partition_keys": list(INSTRUMENT_MASTER_PARTITION_KEYS),
+            "field_schema": dict(INSTRUMENT_MASTER_FIELD_SCHEMA),
             "source_bronze_artifact_ids": sorted(self.source_bronze_artifact_ids),
             "records": [record.to_record() for record in self.records],
         }
@@ -443,6 +474,8 @@ def _optional_string(value: object | None) -> str | None:
 
 __all__ = [
     "INSTRUMENT_MASTER_CONTENT_TYPE",
+    "INSTRUMENT_MASTER_FIELD_SCHEMA",
+    "INSTRUMENT_MASTER_PARTITION_KEYS",
     "INSTRUMENT_MASTER_SCHEMA_NAME",
     "INSTRUMENT_MASTER_SCHEMA_VERSION",
     "IndustryClassification",

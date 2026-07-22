@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-22<br>
-> 最近阶段性任务：`SAL-P2-009` PIT 基本面 Dataset<br>
+> 最近阶段性任务：`SAL-P2-010` Arrow Schema Registry<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：38/129<br>
-> 当前可执行任务：`SAL-P2-010`，状态为 `READY`；Arrow Schema Registry 必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze lineage、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset 和 PIT Fundamental Dataset，且不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 实现 PIT 基本面 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
-> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 实现 PIT 基本面 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 任务完成度：39/129<br>
+> 当前可执行任务：`SAL-P2-011`，状态为 `READY`；Dataset Catalog 与 Manifest 必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze lineage、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset 和 Arrow Schema Registry，且不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
+> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 建立 Arrow Schema Registry`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 建立 Arrow Schema Registry`）；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -66,18 +66,19 @@
 - 完成 `SAL-P2-007`：新增 [raw_daily_bars.py](../src/serenity_alpha_lab/datasets/raw_daily_bars.py)，构建未复权 OHLCV/amount 原始日线 Dataset，复用 Provider `DataBatch`/`Provenance`、Instrument Master as-of、Trading Calendar trading-day、Bronze lineage 和 `ArtifactStore` deterministic JSON 发布；证据见 [Raw Daily Bars Dataset 记录](./raw-daily-bars-dataset.md)。
 - 完成 `SAL-P2-008`：新增 [corporate_actions.py](../src/serenity_alpha_lab/datasets/corporate_actions.py)，构建公司行动 Dataset、前/后复权因子和复权日线 Dataset，支持现金分红、送转/拆股、配股、provider-scoped action filtering、raw price immutability、Bronze lineage 和 `ArtifactStore` deterministic JSON 发布；证据见 [Corporate Actions and Adjustments Dataset 记录](./corporate-actions-adjustments-dataset.md)。
 - 完成 `SAL-P2-009`：新增 [fundamentals.py](../src/serenity_alpha_lab/datasets/fundamentals.py)，构建 PIT 基本面 Dataset，显式区分 period、announced、available、ingested 和 revision，支持 `available_at <= decision_time` 查询、latest revision 选择、unknown temporal confidence research-only/formal-backtest 拒绝、Bronze lineage 和 `ArtifactStore` deterministic JSON 发布；证据见 [PIT Fundamental Dataset 记录](./fundamentals-pit-dataset.md)。
+- 完成 `SAL-P2-010`：新增 [schema_registry.py](../src/serenity_alpha_lab/datasets/schema_registry.py)，建立 Arrow Schema Registry，默认注册证券主数据、原始日线、公司行动、复权日线和 PIT 基本面 Dataset Schema，支持 lazy PyArrow conversion、schema metadata、canonical hash 和 semantic-version compatibility；证据见 [Arrow Schema Registry 记录](./arrow-schema-registry.md)。
 
 ## 未完成
 
 ### 当前可执行 P2 任务
 
-- `SAL-P2-010` 当前为 `READY`：建立 Arrow Schema Registry，为主数据、日线、公司行动和财务建立版本化 Schema。
+- `SAL-P2-011` 当前为 `READY`：实现 Dataset Catalog 与 Manifest，管理不可变版本、血缘、文件哈希和 latest alias。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 91 项工程任务未完成。
-- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset 和 PIT 基本面 Dataset，但尚未实现 Arrow Schema Registry、Dataset Catalog、Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P2 至 P6 仍有 90 项工程任务未完成。
+- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset、PIT 基本面 Dataset 和 Arrow Schema Registry，但尚未实现 Dataset Catalog、Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -106,7 +107,8 @@
 - 交易日历 Dataset 已完成：`TradingCalendarDataset` 复用 P1 `Market`，以 `market + trade_date` 表达市场时区、交易/闭市/半日/异常休市/停牌 session、午休窗口、UTC 转换、前后交易日和 timestamp 开市状态查询，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 raw daily bars、PIT、fallback policy 或真实 Provider 调用。
 - 原始日线 Dataset 已完成：`RawDailyBarsDataset` 复用 canonical `InstrumentId`、Provider `DataBatch`/`Provenance`、Instrument Master as-of、Trading Calendar trading-day 和 Bronze source artifact，以 `instrument_id + trade_date + provider_id` 表达未复权 OHLCV/amount 日线，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 PIT、fallback policy 或真实 Provider 调用。
 - 公司行动与复权 Dataset 已完成：`CorporateActionsDataset` 按 `instrument_id + ex_date + action_type + provider_id` 表达现金分红、送转/拆股和配股，`AdjustedDailyBarsDataset` 按 `instrument_id + trade_date + provider_id + adjustment` 表达 `forward` / `backward` 复权价格和因子；复权从 raw bars 派生并按 raw bar provider 过滤同源公司行动，不覆盖原始价格，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias，不实现 PIT、fallback policy、Portfolio Ledger 入账或真实 Provider 调用。
-- PIT 基本面 Dataset 已完成：`FundamentalsDataset` 按 `instrument_id + period_end + item + revision + provider_id` 表达时点正确的基本面记录，显式区分 `announced_at`、`available_at`、`ingested_at` 和 revision；PIT 查询硬过滤 `available_at <= decision_time`，无公告时间的 legacy/DSA-style 记录标记 `temporal_confidence=unknown` 且拒绝 formal backtest 查询，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias、Arrow Schema Registry、fallback policy 或真实 Provider 调用。
+- PIT 基本面 Dataset 已完成：`FundamentalsDataset` 按 `instrument_id + period_end + item + revision + provider_id` 表达时点正确的基本面记录，显式区分 `announced_at`、`available_at`、`ingested_at` 和 revision；PIT 查询硬过滤 `available_at <= decision_time`，无公告时间的 legacy/DSA-style 记录标记 `temporal_confidence=unknown` 且拒绝 formal backtest 查询，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias、fallback policy 或真实 Provider 调用。
+- Arrow Schema Registry 已完成：`ArrowSchemaRegistry` 默认注册证券主数据、原始日线、公司行动、复权日线和 PIT 基本面 Dataset Schema；Schema 声明包含字段、主键、分区键、content type 和 canonical hash，minor/patch 只允许新增 nullable 字段，删除/改义/改类型/改主键等 breaking 变更必须新 major；PyArrow 仍为 lazy optional dependency，由 `quant` extra 提供。本层不建立 Dataset Catalog/latest alias、质量门禁、fallback policy 或真实 Provider 调用。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -122,7 +124,7 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-010` Arrow Schema Registry，为主数据、日线、公司行动和财务建立版本化 Schema。
+1. 优先执行 `SAL-P2-011` Dataset Catalog 与 Manifest，管理不可变版本、血缘、文件哈希和 latest alias。
 2. 不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent。
 3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -154,6 +156,7 @@
 - 2026-07-21：完成 `SAL-P2-007`，新增原始日线 Dataset、未复权 OHLCV/amount、Provider batch 转换、Instrument Master as-of 校验、Trading Calendar trading-day 校验、Bronze lineage、查询索引、增量合并和 deterministic Artifact 发布；Raw daily bars target `3 passed`、相关套件 `59 passed`、全量 pytest `172 passed`，P2 进度 `7/20`、总进度 `36/129`，`SAL-P2-008` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-008`，新增公司行动 Dataset、现金分红/送转/配股固定样本、前复权/后复权因子、复权日线 Artifact、provider-scoped action filtering、raw price immutability 和 ProblemDetails validation mapping；Corporate actions target `3 passed`、相关套件 `68 passed`、全量 pytest `175 passed`，P2 进度 `8/20`、总进度 `37/129`，`SAL-P2-009` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-009`，新增 PIT 基本面 Dataset、period/announced/available/ingested/revision 固定样本、`available_at <= decision_time` 查询、latest revision 选择、unknown temporal confidence research-only/formal-backtest rejection、Bronze lineage、incremental merge 和 ProblemDetails validation mapping；Fundamentals target `4 passed`、相关套件 `51 passed`、全量 pytest `179 passed`，P2 进度 `9/20`、总进度 `38/129`，`SAL-P2-010` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-22：完成 `SAL-P2-010`，新增 Arrow Schema Registry、五类 P2 Dataset 默认注册、lazy PyArrow conversion、schema metadata、semantic-version compatibility、duplicate version guard 和 Arrow/Pandas/Polars round-trip 测试；Schema registry target `6 passed`、instrument master related `9 passed`、P2 related suite `62 passed`、full pytest `185 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `10/20`、总进度 `39/129`，`SAL-P2-011` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -188,16 +191,16 @@
 当前状态：
 - Phase：P2 数据与持久任务
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-009
-- 最近完成：SAL-P2-009 PIT 基本面 Dataset
-- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 实现 PIT 基本面 Dataset）；启动后以 git log -1 --oneline 确认
-- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 实现 PIT 基本面 Dataset）；启动后以 git log -1 --oneline 确认
-- 进度：P0 13/13，P1 16/16，P2 9/20，总计 38/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-010
+- 最近完成：SAL-P2-010 Arrow Schema Registry
+- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 建立 Arrow Schema Registry）；启动后以 git log -1 --oneline 确认
+- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 建立 Arrow Schema Registry）；启动后以 git log -1 --oneline 确认
+- 进度：P0 13/13，P1 16/16，P2 10/20，总计 39/129
 
 下一步优先执行：
-1. SAL-P2-010 建立 Arrow Schema Registry，为主数据、日线、公司行动、财务建立版本化 Schema
+1. SAL-P2-011 实现 Dataset Catalog 与 Manifest，管理不可变版本、血缘、文件哈希和 latest alias
 2. 不要提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent
-3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset 和 PIT Fundamental Dataset
+3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset 和 Arrow Schema Registry
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

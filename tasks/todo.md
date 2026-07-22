@@ -1,3 +1,43 @@
+# P2 Arrow Schema Registry Plan
+
+> Started: 2026-07-22
+> Scope: Complete `SAL-P2-010` by adding an offline, versioned Arrow Schema Registry for instrument master, raw daily bars, corporate actions, adjusted daily bars, and fundamentals. Reuse existing P2 Dataset schema constants, Artifact schema metadata, P1/P2 validation and ProblemDetails boundaries, and lazy optional PyArrow from the `quant` extra. Do not start fallback policy, real Provider calls, Dataset Catalog/latest alias, quality gates, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing P2 Dataset schema constants, deterministic JSON artifact payloads, and optional PyArrow dependency boundary.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-22-arrow-schema-registry.md`.
+- [x] Add Red tests for default registry coverage, PyArrow schema conversion, semantic-version compatibility, duplicate registration, required-field validation, Pandas/Polars/Arrow round-trip stability, and optional PyArrow import behavior.
+- [x] Implement `schema_registry.py` with immutable schema declarations, lazy PyArrow conversion, default P2 registrations, canonical hashing, and compatibility reports.
+- [x] Add instrument master field schema/partition metadata and export registry symbols.
+- [x] Add acceptance evidence documentation for `SAL-P2-010`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [ ] Stage only `SAL-P2-010` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Registry may define Arrow schemas and compatibility checks only; it must not publish Dataset Catalog/latest aliases or enforce quality gates.
+- PyArrow must remain lazily imported so root `core+dev` tests still import `serenity_alpha_lab.datasets` without the `quant` extra.
+- Minor/patch schema versions may add backward-compatible nullable fields; deleting fields, changing types, or changing existing field meaning requires a new major version.
+- Tests stay offline with synthetic records and make zero real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-010
+
+- Red evidence: `uv run --extra core --extra quant --extra dev python -m pytest tests/datasets/test_arrow_schema_registry.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.schema_registry'`.
+- Green implementation: added `DatasetSchemaField`, `DatasetSchemaDeclaration`, `SchemaCompatibilityReport`, `SchemaCompatibilityStatus` and `ArrowSchemaRegistry`; default registry now covers instrument master, raw daily bars, corporate actions, adjusted daily bars and PIT fundamentals.
+- Compatibility coverage: tests cover duplicate version rejection, semver ordering, nullable-field minor additions, required-field additions, type changes, removed fields, primary-key validation and breaking-change major version rules.
+- Arrow coverage: tests cover lazy PyArrow conversion, schema metadata, canonical schema hash, Arrow validation, Arrow -> Pandas -> Arrow and Arrow -> Polars -> Arrow round-trip; Polars nullability loss is explicitly handled with `strict_nullability=False`.
+- Reuse coverage: instrument master now exports `INSTRUMENT_MASTER_FIELD_SCHEMA` and `INSTRUMENT_MASTER_PARTITION_KEYS` and publishes deterministic JSON payloads with `field_schema` / `partition_keys`, matching later P2 Dataset patterns.
+- Verification: schema registry target `6 passed`; instrument master related `9 passed`; P2 related suite `62 passed`; full pytest `185 passed`; compileall, dependency lock, `git diff --check` and immutable tag check passed.
+- Review note: attempted code-reviewer subagent dispatch multiple times after tool discovery, but the client rejected payload variants as duplicate `message/items` or empty override fields. Local review checked schema ordering, optional PyArrow imports, semver compatibility logic, package exports, circular import risk, scope guardrails and deterministic payload changes.
+- Scope retained: no fallback policy, real Provider call, Dataset Catalog/latest alias implementation, quality gate, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+---
+
 # P2 PIT Fundamental Dataset Plan
 
 > Started: 2026-07-22

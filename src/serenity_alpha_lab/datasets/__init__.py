@@ -34,6 +34,8 @@ from serenity_alpha_lab.datasets.fundamentals import (
 )
 from serenity_alpha_lab.datasets.instrument_master import (
     INSTRUMENT_MASTER_CONTENT_TYPE,
+    INSTRUMENT_MASTER_FIELD_SCHEMA,
+    INSTRUMENT_MASTER_PARTITION_KEYS,
     INSTRUMENT_MASTER_SCHEMA_NAME,
     INSTRUMENT_MASTER_SCHEMA_VERSION,
     IndustryClassification,
@@ -52,6 +54,15 @@ from serenity_alpha_lab.datasets.raw_daily_bars import (
     RawDailyBar,
     RawDailyBarsDataset,
     RawDailyBarsDatasetError,
+)
+from serenity_alpha_lab.datasets.schema_registry import (
+    ArrowSchemaRegistry,
+    DatasetSchemaDeclaration,
+    DatasetSchemaField,
+    SchemaCompatibilityReport,
+    SchemaCompatibilityStatus,
+    SchemaRegistryError,
+    default_dataset_schema_registry,
 )
 from serenity_alpha_lab.datasets.trading_calendar import (
     TRADING_CALENDAR_CONTENT_TYPE,
@@ -81,15 +92,20 @@ __all__ = [
     "FUNDAMENTALS_SCHEMA_NAME",
     "FUNDAMENTALS_SCHEMA_VERSION",
     "INSTRUMENT_MASTER_CONTENT_TYPE",
+    "INSTRUMENT_MASTER_FIELD_SCHEMA",
+    "INSTRUMENT_MASTER_PARTITION_KEYS",
     "INSTRUMENT_MASTER_SCHEMA_NAME",
     "INSTRUMENT_MASTER_SCHEMA_VERSION",
     "AdjustedDailyBar",
     "AdjustedDailyBarsDataset",
     "AdjustmentMode",
+    "ArrowSchemaRegistry",
     "CorporateAction",
     "CorporateActionType",
     "CorporateActionsDataset",
     "CorporateActionsDatasetError",
+    "DatasetSchemaDeclaration",
+    "DatasetSchemaField",
     "FundamentalPeriodType",
     "FundamentalQueryPurpose",
     "FundamentalRecord",
@@ -109,6 +125,9 @@ __all__ = [
     "RawDailyBar",
     "RawDailyBarsDataset",
     "RawDailyBarsDatasetError",
+    "SchemaCompatibilityReport",
+    "SchemaCompatibilityStatus",
+    "SchemaRegistryError",
     "TRADING_CALENDAR_CONTENT_TYPE",
     "TRADING_CALENDAR_SCHEMA_NAME",
     "TRADING_CALENDAR_SCHEMA_VERSION",
@@ -117,5 +136,6 @@ __all__ = [
     "TradingCalendarDatasetError",
     "TradingSessionStatus",
     "TemporalConfidence",
+    "default_dataset_schema_registry",
     "market_timezone",
 ]
