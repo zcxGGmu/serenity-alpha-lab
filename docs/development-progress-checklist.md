@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 8/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
+| P2 数据与任务 | 3~6 | DOING | 9/20 | G2 | PIT Dataset、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **37/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **38/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -566,16 +566,19 @@ P0 基线
 
 ### SAL-P2-009 实现 PIT 基本面 Dataset
 
-- [ ] [READY] 区分 period/announced/available/ingested/revision
-- 元数据：优先级 P0 | 负责人 QE/BE | 估算 3d | 实际 - | 依赖 SAL-P2-004,SAL-P2-005
+- [x] [DONE] 区分 period/announced/available/ingested/revision
+- 元数据：优先级 P0 | 负责人 QE/BE | 估算 3d | 实际 0.5d | 依赖 SAL-P2-004,SAL-P2-005 | 开始 2026-07-22 | 完成 2026-07-22
 - 交付物：FundamentalRecord Schema、版本查询、可信度等级。
 - 验收：
   - 回测查询拒绝 available_at 晚于 decision_time 的记录。
   - 无公告时间的历史 DSA 数据标记 unknown，禁止正式回测。
+- 结果：新增 `src/serenity_alpha_lab/datasets/fundamentals.py`，定义 `FundamentalRecord`、`FundamentalsDataset`、`FundamentalPeriodType`、`TemporalConfidence` 和 `FundamentalQueryPurpose`；Dataset 以 `instrument_id + period_end + item + revision + provider_id` 为主键，显式记录 `announced_at`、`available_at`、`ingested_at` 和 revision，支持 `available_at <= decision_time` 的 latest/history/query，unknown temporal confidence 只允许 research display 并拒绝 formal backtest。
+- 范围限制：未实现 fallback policy、Dataset Catalog/latest alias、Arrow Schema Registry、质量门禁、PersistentTaskBackend、Worker runtime、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用、DSA `fundamental_snapshot` 正式迁移或 DSA runtime source 迁移。
+- 验收证据：见 [PIT Fundamental Dataset 记录](./fundamentals-pit-dataset.md)；`tests/datasets/test_fundamentals_dataset.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为缺少 `fundamentals` module，Green 后目标测试 `4 passed`、相关套件 `51 passed`，全量验证记录见 AEV-038。
 
 ### SAL-P2-010 建立 Arrow Schema Registry
 
-- [ ] [TODO] 为主数据、日线、公司行动、财务建立版本化 Schema
+- [ ] [READY] 为主数据、日线、公司行动、财务建立版本化 Schema
 - 元数据：优先级 P0 | 负责人 BE/QE | 估算 1.5d | 实际 - | 依赖 SAL-P2-005..009
 - 交付物：Schema Registry、兼容规则、序列化测试。
 - 验收：
@@ -1510,6 +1513,7 @@ P0 基线
 | DEC-033 | 2026-07-21 | 交易日历 Dataset 口径 | 采用 `datasets.trading_calendar` 表达 `market + trade_date` 日历；市场时区使用冻结映射，A 股节假日、半日交易和异常休市均由显式 session record 表达，Dataset 发布为 deterministic JSON Artifact，当前不建立 Dataset Catalog/latest alias、不实现 raw daily bars、PIT/fallback policy 或真实 Provider 调用 | [trading-calendar-dataset.md](./trading-calendar-dataset.md); [trading_calendar.py](../src/serenity_alpha_lab/datasets/trading_calendar.py); [test_trading_calendar.py](../tests/datasets/test_trading_calendar.py) | SAL-P2-006,SAL-P2-007,SAL-P2-011,SAL-P2-015 | G2 |
 | DEC-034 | 2026-07-21 | 原始日线 Dataset 口径 | 采用 `datasets.raw_daily_bars` 表达未复权 OHLCV/amount 日线；主键为 `InstrumentId.canonical + trade_date + provider_id`，记录 Provider source timestamp、raw-response SHA-256、field lineage 和 Bronze source artifact，并用 Instrument Master as-of 与 Trading Calendar trading-day 做离线校验；Dataset 发布为 deterministic JSON Artifact，当前不建立 Dataset Catalog/latest alias、不实现 adjusted bars、公司行动、PIT/fallback policy 或真实 Provider 调用 | [raw-daily-bars-dataset.md](./raw-daily-bars-dataset.md); [raw_daily_bars.py](../src/serenity_alpha_lab/datasets/raw_daily_bars.py); [test_raw_daily_bars.py](../tests/datasets/test_raw_daily_bars.py) | SAL-P2-007,SAL-P2-008,SAL-P2-011,SAL-P2-015 | G2 |
 | DEC-035 | 2026-07-22 | 公司行动与复权 Dataset 口径 | 采用 `datasets.corporate_actions` 表达公司行动和复权日线；公司行动按 `InstrumentId.canonical + ex_date + action_type + provider_id` 唯一，复权日线按 `InstrumentId.canonical + trade_date + provider_id + adjustment` 唯一；现金分红、送转/拆股和配股按前一交易日 raw close 计算理论除权价，`forward` 连乘后续事件系数，`backward` 连乘历史事件系数倒数；raw 日线不被覆盖，当前不建立 Catalog/latest alias、不实现 PIT/fallback policy、Portfolio Ledger 入账或真实 Provider 调用 | [corporate-actions-adjustments-dataset.md](./corporate-actions-adjustments-dataset.md); [corporate_actions.py](../src/serenity_alpha_lab/datasets/corporate_actions.py); [test_corporate_actions_adjustments.py](../tests/datasets/test_corporate_actions_adjustments.py) | SAL-P2-008,SAL-P2-009,SAL-P2-011,SAL-P4-012 | G2 |
+| DEC-036 | 2026-07-22 | PIT 基本面 Dataset 口径 | 采用 `datasets.fundamentals` 表达时点正确的基本面记录；主键为 `InstrumentId.canonical + period_end + item + revision + provider_id`，每条记录显式区分 `announced_at`、`available_at`、`ingested_at` 和 revision；PIT 查询硬过滤 `available_at <= decision_time`，latest 查询按 period、available time 和 revision 选择最新可用记录；无公告时间的 legacy/DSA-style 记录标记 `temporal_confidence=unknown`，只能用于 research display，formal backtest 查询拒绝 | [fundamentals-pit-dataset.md](./fundamentals-pit-dataset.md); [fundamentals.py](../src/serenity_alpha_lab/datasets/fundamentals.py); [test_fundamentals_dataset.py](../tests/datasets/test_fundamentals_dataset.py) | SAL-P2-009,SAL-P2-010,SAL-P2-011,SAL-P3-007,SAL-P4-015 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1552,6 +1556,7 @@ P0 基线
 | AEV-035 | SAL-P2-006 | 交易日历 Dataset、市场时区、开闭市 session、UTC 转换和 Artifact 发布测试记录 | [trading-calendar-dataset.md](./trading-calendar-dataset.md); [trading_calendar.py](../src/serenity_alpha_lab/datasets/trading_calendar.py); [test_trading_calendar.py](../tests/datasets/test_trading_calendar.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Trading calendar target `3 passed`; related suite `56 passed`; Red captured missing `trading_calendar` module; deterministic JSON Artifact、Bronze lineage、A 股节假日/半日/异常休市显式记录、UTC/Asia-Shanghai 开市边界、查询缓存和 ProblemDetails validation mapping covered; py_compile/lock/tag checks PASS; no raw daily/PIT/fallback policy and no real Provider/LLM calls | BE/QE | 2026-07-21 |
 | AEV-036 | SAL-P2-007 | 原始日线 Dataset、Provider batch 转换、主数据/交易日校验和 Artifact 发布测试记录 | [raw-daily-bars-dataset.md](./raw-daily-bars-dataset.md); [raw_daily_bars.py](../src/serenity_alpha_lab/datasets/raw_daily_bars.py); [test_raw_daily_bars.py](../tests/datasets/test_raw_daily_bars.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Raw daily bars target `3 passed`; related suite `59 passed`; full pytest `172 passed`; Red captured missing `raw_daily_bars` module; deterministic JSON Artifact、Bronze lineage、Provider source timestamp、raw-response SHA-256、field lineage、Instrument Master as-of 校验、Trading Calendar trading-day 校验、OHLC/amount validation、query helpers、incremental merge 和 ProblemDetails validation mapping covered; py_compile/lock/tag checks PASS; no adjusted bars/corporate actions/PIT/fallback policy and no real Provider/LLM calls | BE/QE | 2026-07-21 |
 | AEV-037 | SAL-P2-008 | 公司行动 Dataset、前/后复权因子、复权日线 Artifact 和性质/固定样本测试记录 | [corporate-actions-adjustments-dataset.md](./corporate-actions-adjustments-dataset.md); [corporate_actions.py](../src/serenity_alpha_lab/datasets/corporate_actions.py); [test_corporate_actions_adjustments.py](../tests/datasets/test_corporate_actions_adjustments.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Corporate actions target `3 passed`; related suite `68 passed`; full pytest `175 passed`; Red captured missing `corporate_actions` module; deterministic JSON Artifact、现金分红/送转/配股固定样本、前复权/后复权因子、provider-scoped action filtering、raw price immutability、Bronze lineage、query helpers、incremental merge 和 ProblemDetails validation mapping covered; py_compile/lock/diff/tag checks PASS; no PIT/fallback policy、Portfolio Ledger 入账、Quant Core 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
+| AEV-038 | SAL-P2-009 | PIT 基本面 Dataset、时点查询、修订选择和 temporal confidence gate 测试记录 | [fundamentals-pit-dataset.md](./fundamentals-pit-dataset.md); [fundamentals.py](../src/serenity_alpha_lab/datasets/fundamentals.py); [test_fundamentals_dataset.py](../tests/datasets/test_fundamentals_dataset.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Fundamentals target `4 passed`; related suite `51 passed`; full pytest `179 passed`; Red captured missing `fundamentals` module; deterministic JSON Artifact、Bronze lineage、Provider fundamentals DataBatch 转换、`available_at <= decision_time`、revision latest-as-of、unknown temporal confidence research-only/formal-backtest rejection、incremental merge 和 ProblemDetails validation mapping covered; py_compile PASS; no fallback policy、Dataset Catalog/latest alias、Arrow Schema Registry、Quant Core 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
 
 允许的证据：
 
@@ -1589,4 +1594,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-008`，完成度为 37/129；最近可评审交付为本次 `SAL-P2-008` 公司行动与复权 Dataset checkpoint；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-009` PIT 基本面 Dataset；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-009`，完成度为 38/129；最近可评审交付为本次 `SAL-P2-009` PIT 基本面 Dataset checkpoint；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-010` Arrow Schema Registry；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

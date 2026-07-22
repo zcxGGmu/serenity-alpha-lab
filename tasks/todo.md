@@ -1,3 +1,42 @@
+# P2 PIT Fundamental Dataset Plan
+
+> Started: 2026-07-22
+> Scope: Complete `SAL-P2-009` by adding an offline point-in-time fundamental Dataset. Reuse P2 Provider `DataBatch`/`Provenance`, Instrument Master Dataset, Bronze lineage, ArtifactStore, Trace/Run/Stage scalar attribution, and ProblemDetails-compatible validation errors. Distinguish period, announced, available, ingested and revision timing. Do not start fallback policy, Dataset Catalog/latest alias, Arrow Schema Registry, quality gates, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, network probes, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing P2 Dataset patterns and SAL-P2-009 acceptance scope.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-22-pit-fundamental-dataset.md`.
+- [x] Add Red tests for PIT schema, period/announced/available/ingested/revision timing, latest-as-of query, temporal confidence gate, Provider batch conversion, Bronze lineage, ArtifactStore publishing, invalid timing, and validation error mapping.
+- [x] Implement `FundamentalRecord` and `FundamentalsDataset` with deterministic JSON Artifact publishing, query indexes, revision selection, incremental merge and formal-backtest temporal-confidence guard.
+- [x] Export dataset symbols and preserve architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-009`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-009` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Use synthetic offline Provider `DataBatch` records only; do not instantiate or call a real Provider.
+- PIT queries must filter `available_at <= decision_time`; latest revisions with later `available_at` must not leak into earlier decisions.
+- Historical DSA-style records without trustworthy announcement time must be marked `temporal_confidence=unknown`, allowed only for research display and rejected for formal backtest queries.
+- Dataset records may publish deterministic Artifact bytes, but must not create Dataset Catalog/latest alias, Arrow Schema Registry, quality gate, fallback policy, Worker runtime, Quant Core, formal backtest or Evidence behavior.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-009
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_fundamentals_dataset.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.fundamentals'`.
+- Green implementation: added `FundamentalRecord`, `FundamentalsDataset`, `FundamentalPeriodType`, `TemporalConfidence` and `FundamentalQueryPurpose` with deterministic JSON Artifact publishing, Provider `DataBatch` conversion, query indexes and incremental primary-key replacement.
+- PIT coverage: tests cover `period_end` / `announced_at` / `available_at` / `ingested_at` / `revision`, `available_at <= decision_time`, latest revision selection, future-revision exclusion, history query, Bronze lineage and source hash propagation.
+- Temporal confidence coverage: legacy DSA-style records without trustworthy announcement time are marked `unknown`, allowed for research display, and rejected for formal backtest queries.
+- Verification: target fundamentals `4 passed`; related dataset/provider/architecture suite `51 passed`; full pytest `179 passed`; compileall, dependency lock, `git diff --check` and immutable tag check passed.
+- Review note: attempted read-only explorer subagent dispatch after tool discovery, but the client rejected payload variants as duplicate `message/items` or empty override fields. Local review checked diff scope, import boundaries, PIT timing invariants, formal-backtest gate, deterministic artifact payload and guardrails.
+- Scope retained: no fallback policy, Dataset Catalog/latest alias, Arrow Schema Registry, quality gate, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA `fundamental_snapshot` formal migration, real Provider/LLM call, network probe, broad DSA migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+
+---
+
 # P2 Corporate Actions and Adjustments Plan
 
 > Started: 2026-07-22
