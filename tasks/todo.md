@@ -14,7 +14,7 @@
 - [x] Add acceptance evidence documentation for `SAL-P2-010`.
 - [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
 - [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
-- [ ] Stage only `SAL-P2-010` files and create the required Chinese checkpoint commit.
+- [x] Stage only `SAL-P2-010` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -35,6 +35,7 @@
 - Verification: schema registry target `6 passed`; instrument master related `9 passed`; P2 related suite `62 passed`; full pytest `185 passed`; compileall, dependency lock, `git diff --check` and immutable tag check passed.
 - Review note: attempted code-reviewer subagent dispatch multiple times after tool discovery, but the client rejected payload variants as duplicate `message/items` or empty override fields. Local review checked schema ordering, optional PyArrow imports, semver compatibility logic, package exports, circular import risk, scope guardrails and deterministic payload changes.
 - Scope retained: no fallback policy, real Provider call, Dataset Catalog/latest alias implementation, quality gate, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration, or `upstream/dsa-v3.26.1` tag movement. Gate G2 remains not passed.
+- Status sync: after user reminder, refreshed `docs/development-status.md`, `docs/development-progress-checklist.md`, this checklist, and `tasks/lessons.md` to make the completed/unfinished split, explicit `3e2056fe` delivery checkpoint, `SAL-P2-011` next task, and automatic status-sync habit recoverable in the next session.
 
 ---
 

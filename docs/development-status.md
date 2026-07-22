@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：39/129<br>
 > 当前可执行任务：`SAL-P2-011`，状态为 `READY`；Dataset Catalog 与 Manifest 必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze lineage、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset 和 Arrow Schema Registry，且不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 建立 Arrow Schema Registry`）；恢复时以 `git log -1 --oneline` 为准<br>
-> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 建立 Arrow Schema Registry`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 最近可评审交付 checkpoint：`3e2056fe feat(P2): 建立 Arrow Schema Registry`<br>
+> 最新状态同步 checkpoint：`docs: 同步 SAL-P2-010 开发状态与恢复提示`（状态同步专用提交；恢复时执行 `git log -1 --oneline` 读取实际 hash）<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -157,6 +157,7 @@
 - 2026-07-22：完成 `SAL-P2-008`，新增公司行动 Dataset、现金分红/送转/配股固定样本、前复权/后复权因子、复权日线 Artifact、provider-scoped action filtering、raw price immutability 和 ProblemDetails validation mapping；Corporate actions target `3 passed`、相关套件 `68 passed`、全量 pytest `175 passed`，P2 进度 `8/20`、总进度 `37/129`，`SAL-P2-009` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-009`，新增 PIT 基本面 Dataset、period/announced/available/ingested/revision 固定样本、`available_at <= decision_time` 查询、latest revision 选择、unknown temporal confidence research-only/formal-backtest rejection、Bronze lineage、incremental merge 和 ProblemDetails validation mapping；Fundamentals target `4 passed`、相关套件 `51 passed`、全量 pytest `179 passed`，P2 进度 `9/20`、总进度 `38/129`，`SAL-P2-010` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-010`，新增 Arrow Schema Registry、五类 P2 Dataset 默认注册、lazy PyArrow conversion、schema metadata、semantic-version compatibility、duplicate version guard 和 Arrow/Pandas/Polars round-trip 测试；Schema registry target `6 passed`、instrument master related `9 passed`、P2 related suite `62 passed`、full pytest `185 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `10/20`、总进度 `39/129`，`SAL-P2-011` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-22：按用户要求复核 `SAL-P2-010` 后状态；明确最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，下一步仍为 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
 ## 固定收尾习惯
@@ -193,8 +194,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-010
 - 最近完成：SAL-P2-010 Arrow Schema Registry
-- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 建立 Arrow Schema Registry）；启动后以 git log -1 --oneline 确认
-- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 建立 Arrow Schema Registry）；启动后以 git log -1 --oneline 确认
+- 最近可评审交付 checkpoint：3e2056fe feat(P2): 建立 Arrow Schema Registry
+- 最新状态同步 checkpoint：docs: 同步 SAL-P2-010 开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 10/20，总计 39/129
 
 下一步优先执行：
