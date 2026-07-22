@@ -613,7 +613,7 @@ P0 基线
   - 规则版本写入 Manifest；异常 fixture 全部命中预期等级。
 - 结果：新增 `src/serenity_alpha_lab/datasets/quality.py`，定义 `QualityDatasetSnapshot`、`DataQualityIssue`、`DataQualityReport`、`DataQualityEngine`、`DataQualitySeverity` 和 `DataQualityStatus`；内置唯一主键、Schema/类型、OHLC、非负成交量/成交额、空值漂移、交易日连续性、日收益异常、成交量突变和复权因子跳变规则。质量报告可通过 `ArtifactStore` 发布 deterministic JSON，并通过 `manifest_metadata()` 将 `quality_status`、`quality_rule_set_version`、issue counts 和 report artifact 写入 Dataset Manifest metadata。
 - 范围限制：未实现 `SAL-P2-013` 的 failed Dataset latest 阻断、quarantine 发布事务或临时 Artifact 清理；未实现 fallback policy、Provider fixture、真实 Provider/LLM 调用、PersistentTaskBackend、Worker runtime、Quant Core、正式回测、Evidence Agent 或 DSA runtime source 迁移。
-- 验收证据：见 [Data Quality Rule Engine 记录](./data-quality-rule-engine.md)；`tests/datasets/test_data_quality.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为无法导入 `serenity_alpha_lab.datasets.quality`，Green 后目标测试 `4 passed`、相关 dataset/artifact/API/architecture suite `61 passed`、全量 pytest `194 passed`，全量验证记录见 AEV-041。
+- 验收证据：见 [Data Quality Rule Engine 记录](./data-quality-rule-engine.md)；`tests/datasets/test_data_quality.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为无法导入 `serenity_alpha_lab.datasets.quality`，Green 后目标测试 `4 passed`、相关 dataset/artifact/API/architecture suite `61 passed`、全量 pytest `194 passed`，checkpoint `3a846c6a`，全量验证记录见 AEV-041。
 
 ### SAL-P2-013 实现隔离区与原子发布
 
@@ -1612,4 +1612,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-012`，完成度为 41/129；最近可评审交付为 `SAL-P2-012` 数据质量规则引擎；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-013` 隔离区与原子发布；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-012`，完成度为 41/129；最近可评审交付为 `3a846c6a feat(P2): 实现数据质量规则引擎`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-013` 隔离区与原子发布；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

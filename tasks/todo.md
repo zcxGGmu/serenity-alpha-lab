@@ -30,7 +30,7 @@
 - Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_data_quality.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.quality'`; a later location hardening assertion also failed before `NullRatioDriftRule` was fixed.
 - Green implementation: added `QualityDatasetSnapshot`, `DataQualityIssue`, `DataQualityReport`, `DataQualityEngine`, `DataQualitySeverity`, `DataQualityStatus` and built-in rules for unique primary keys, schema/type checks, OHLC, non-negative fields, null-ratio drift, trading continuity, return outliers, volume spikes and adjustment-factor jumps.
 - Report coverage: every tested issue carries dataset/version/partition/field/primary-key/sample context; reports publish deterministic `ArtifactStore` JSON and expose Dataset Manifest metadata for rule set version, quality status, issue counts and report artifact hash.
-- Verification: target data-quality test `4 passed`; related dataset/artifact/API/architecture suite `61 passed`; full pytest `194 passed`; compileall, dependency lock, `git diff --check` and immutable tag checks passed.
+- Verification: target data-quality test `4 passed`; related dataset/artifact/API/architecture suite `61 passed`; full pytest `194 passed`; compileall, dependency lock, `git diff --check` and immutable tag checks passed. Checkpoint: `3a846c6a feat(P2): 实现数据质量规则引擎`.
 - Scope retained: no `SAL-P2-013` latest blocking/quarantine transaction, fallback policy, Provider fixture/probe, real Provider/LLM/network call, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration or tag movement.
 
 ---

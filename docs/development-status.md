@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
-> 最后更新：2026-07-22<br>
+> 最后更新：2026-07-23<br>
 > 最近阶段性任务：`SAL-P2-012` 数据质量规则引擎<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：41/129<br>
 > 当前可执行任务：`SAL-P2-013`，状态为 `READY`；隔离区与原子发布必须复用 Dataset Catalog/Manifest、Data Quality Report metadata、Artifact manifest-last 语义和 P1 ProblemDetails/Trace，不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：`feat(P2): 实现数据质量规则引擎`（启动后以 `git log --oneline --grep '实现数据质量规则引擎' -1` 确认实际 hash）<br>
-> 最新状态同步 checkpoint：同最近可评审交付 checkpoint（本次状态同步包含在 `feat(P2): 实现数据质量规则引擎` 中；启动后以 `git log --oneline --grep '实现数据质量规则引擎' -1` 确认实际 hash）<br>
+> 最近可评审交付 checkpoint：`3a846c6a feat(P2): 实现数据质量规则引擎`<br>
+> 最新状态同步 checkpoint：`docs: 同步 SAL-P2-012 最新开发状态与恢复提示`（状态同步专用提交；恢复时执行 `git log -1 --oneline` 读取实际 hash）<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -162,7 +162,8 @@
 - 2026-07-22：完成 `SAL-P2-009`，新增 PIT 基本面 Dataset、period/announced/available/ingested/revision 固定样本、`available_at <= decision_time` 查询、latest revision 选择、unknown temporal confidence research-only/formal-backtest rejection、Bronze lineage、incremental merge 和 ProblemDetails validation mapping；Fundamentals target `4 passed`、相关套件 `51 passed`、全量 pytest `179 passed`，P2 进度 `9/20`、总进度 `38/129`，`SAL-P2-010` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-010`，新增 Arrow Schema Registry、五类 P2 Dataset 默认注册、lazy PyArrow conversion、schema metadata、semantic-version compatibility、duplicate version guard 和 Arrow/Pandas/Polars round-trip 测试；Schema registry target `6 passed`、instrument master related `9 passed`、P2 related suite `62 passed`、full pytest `185 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `10/20`、总进度 `39/129`，`SAL-P2-011` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-011`，新增 Dataset Catalog、不可变版本 Manifest、Artifact 文件哈希、schema hash binding、previous/input lineage、latest alias 和正式实验 latest 拒绝；Dataset catalog target `5 passed`、相关套件 `45 passed`、full pytest `190 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `11/20`、总进度 `40/129`，`SAL-P2-012` 成为当前 `READY` 任务，Gate G2 仍未通过。
-- 2026-07-22：完成 `SAL-P2-012`，新增 Data Quality Rule Engine、warning/quarantine/blocking quality report、issue 精确定位、deterministic report Artifact 和 manifest metadata helper；Data quality target `4 passed`、相关套件 `61 passed`、full pytest `194 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `12/20`、总进度 `41/129`，`SAL-P2-013` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-22：完成 `SAL-P2-012`，checkpoint `3a846c6a feat(P2): 实现数据质量规则引擎`；新增 Data Quality Rule Engine、warning/quarantine/blocking quality report、issue 精确定位、deterministic report Artifact 和 manifest metadata helper；Data quality target `4 passed`、相关套件 `61 passed`、full pytest `194 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `12/20`、总进度 `41/129`，`SAL-P2-013` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-23：按用户要求同步最新开发状态；确认最近可评审交付为 `3a846c6a feat(P2): 实现数据质量规则引擎`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..012`，未完成范围为 `SAL-P2-013..020` 与 P3 至 P6；下一步只执行 `SAL-P2-013` 隔离区与原子发布，不提前进入 fallback policy、真实 Provider、Quant Core、正式回测或 Evidence Agent。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -200,8 +201,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-012
 - 最近完成：SAL-P2-012 数据质量规则引擎
-- 最近可评审交付 checkpoint：feat(P2): 实现数据质量规则引擎；启动后以 git log --oneline --grep '实现数据质量规则引擎' -1 确认实际 hash
-- 最新状态同步 checkpoint：同最近可评审交付 checkpoint；状态同步包含在 feat(P2): 实现数据质量规则引擎 中，启动后以 git log --oneline --grep '实现数据质量规则引擎' -1 确认实际 hash
+- 最近可评审交付 checkpoint：3a846c6a feat(P2): 实现数据质量规则引擎
+- 最新状态同步 checkpoint：docs: 同步 SAL-P2-012 最新开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 12/20，总计 41/129
 
 下一步优先执行：
