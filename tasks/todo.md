@@ -1,3 +1,40 @@
+# P2 Data Quality Rule Engine Plan
+
+> Started: 2026-07-22
+> Scope: Complete `SAL-P2-012` by adding an offline data quality rule engine for Dataset snapshots. Reuse Dataset Catalog/Manifest metadata, Arrow Schema Registry declarations, ArtifactStore publishing, ProblemDetails-compatible `ValueError` mapping, trace/run/stage scalar attribution, and existing P2 Dataset record shapes. Do not implement SAL-P2-013 quarantine/latest blocking transactions, fallback policy, Provider fixtures, real Provider calls, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing P2 Dataset publish patterns, Arrow Schema Registry, Dataset Catalog, ArtifactStore and architecture boundary tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-22-data-quality-rule-engine.md`.
+- [x] Add Red tests for warning/quarantine/blocking rules, issue location, manifest metadata, report artifact publishing and ProblemDetails mapping.
+- [x] Implement `quality.py` with rule protocol, built-in rules, report DTOs, deterministic report publishing and manifest metadata helper.
+- [x] Export quality symbols and preserve architecture coverage without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-012`.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review and the next-session prompt.
+- [x] Stage only `SAL-P2-012` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- The quality engine may classify reports as `passed`, `warning`, `quarantine` or `blocking`, and may provide manifest metadata; it must not block latest alias updates or implement atomic publish/quarantine cleanup. That remains `SAL-P2-013`.
+- Tests use synthetic offline rows and local artifacts only; no real Provider/LLM/network calls.
+- Rules must locate every issue by dataset, optional dataset version, partition, primary key, field and sample payload.
+- Rule set version and quality status must be available for Dataset Manifest metadata without changing the immutable Catalog transaction semantics.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P2-012
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_data_quality.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.quality'`; a later location hardening assertion also failed before `NullRatioDriftRule` was fixed.
+- Green implementation: added `QualityDatasetSnapshot`, `DataQualityIssue`, `DataQualityReport`, `DataQualityEngine`, `DataQualitySeverity`, `DataQualityStatus` and built-in rules for unique primary keys, schema/type checks, OHLC, non-negative fields, null-ratio drift, trading continuity, return outliers, volume spikes and adjustment-factor jumps.
+- Report coverage: every tested issue carries dataset/version/partition/field/primary-key/sample context; reports publish deterministic `ArtifactStore` JSON and expose Dataset Manifest metadata for rule set version, quality status, issue counts and report artifact hash.
+- Verification: target data-quality test `4 passed`; related dataset/artifact/API/architecture suite `61 passed`; full pytest `194 passed`; compileall, dependency lock, `git diff --check` and immutable tag checks passed.
+- Scope retained: no `SAL-P2-013` latest blocking/quarantine transaction, fallback policy, Provider fixture/probe, real Provider/LLM/network call, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration or tag movement.
+
+---
+
 # P2 Dataset Catalog And Manifest Plan
 
 > Started: 2026-07-22
