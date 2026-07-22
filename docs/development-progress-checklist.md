@@ -1607,4 +1607,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-011`，完成度为 40/129；最近可评审交付为 `feat(P2): 实现 Dataset Catalog 与 Manifest`（提交后以 `git log -1 --oneline` 读取实际 hash）；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-012` 数据质量规则引擎；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-011`，完成度为 40/129；最近可评审交付为 `8a77e4cf feat(P2): 实现 Dataset Catalog 与 Manifest`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-012` 数据质量规则引擎；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

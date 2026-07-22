@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：40/129<br>
 > 当前可执行任务：`SAL-P2-012`，状态为 `READY`；数据质量规则引擎必须复用已冻结的 Dataset Catalog/Manifest、Arrow Schema Registry、Artifact、ProblemDetails、Trace、InstrumentId、Instrument Master、Trading Calendar、Raw Daily Bars、Corporate Actions/Adjusted Bars 和 PIT Fundamental Dataset，且不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：`feat(P2): 实现 Dataset Catalog 与 Manifest`（提交后以 `git log -1 --oneline` 读取实际 hash）<br>
-> 最新状态同步 checkpoint：待本次 SAL-P2-011 checkpoint 后同步实际 hash<br>
+> 最近可评审交付 checkpoint：`8a77e4cf feat(P2): 实现 Dataset Catalog 与 Manifest`<br>
+> 最新状态同步 checkpoint：`docs: 同步 SAL-P2-011 开发状态与恢复提示`（状态同步专用提交；恢复时执行 `git log -1 --oneline` 读取实际 hash）<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -197,8 +197,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-011
 - 最近完成：SAL-P2-011 Dataset Catalog 与 Manifest
-- 最近可评审交付 checkpoint：feat(P2): 实现 Dataset Catalog 与 Manifest；启动后以 git log -1 --oneline 确认实际 hash
-- 最新状态同步 checkpoint：待本次 SAL-P2-011 checkpoint 后同步实际 hash
+- 最近可评审交付 checkpoint：8a77e4cf feat(P2): 实现 Dataset Catalog 与 Manifest
+- 最新状态同步 checkpoint：docs: 同步 SAL-P2-011 开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 11/20，总计 40/129
 
 下一步优先执行：
