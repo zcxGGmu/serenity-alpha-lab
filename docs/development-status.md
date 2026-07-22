@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：37/129<br>
 > 当前可执行任务：`SAL-P2-009`，状态为 `READY`；PIT 基本面 Dataset 必须复用已冻结的 Provider、Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze lineage、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset 和 Corporate Actions/Adjusted Bars Dataset，且不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：本文件所在提交（`feat(P2): 实现公司行动与复权 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
-> 最新状态同步 checkpoint：本文件所在提交（`feat(P2): 实现公司行动与复权 Dataset`）；恢复时以 `git log -1 --oneline` 为准<br>
+> 最近可评审交付 checkpoint：`81e65230 feat(P2): 实现公司行动与复权 Dataset`<br>
+> 最新状态同步 checkpoint：本文件所在提交（`docs: 同步 SAL-P2-008 开发状态与恢复提示`）；恢复时以 `git log -1 --oneline` 为准<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -187,8 +187,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-008
 - 最近完成：SAL-P2-008 公司行动与复权 Dataset
-- 最近可评审交付 checkpoint：本提示词所在提交（feat(P2): 实现公司行动与复权 Dataset）；启动后以 git log -1 --oneline 确认
-- 最新状态同步 checkpoint：本提示词所在提交（feat(P2): 实现公司行动与复权 Dataset）；启动后以 git log -1 --oneline 确认
+- 最近可评审交付 checkpoint：81e65230 feat(P2): 实现公司行动与复权 Dataset
+- 最新状态同步 checkpoint：本提示词所在提交（docs: 同步 SAL-P2-008 开发状态与恢复提示）；启动后以 git log -1 --oneline 确认
 - 进度：P0 13/13，P1 16/16，P2 8/20，总计 37/129
 
 下一步优先执行：
