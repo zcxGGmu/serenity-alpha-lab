@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-23<br>
-> 最近阶段性任务：`SAL-P2-019` 可恢复任务事件流<br>
+> 最近阶段性任务：`SAL-P2-020` Gate G2 数据与任务评审<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
-> 当前 Phase：P2 数据与持久任务<br>
-> 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：48/129<br>
-> 当前可执行任务：`SAL-P2-020`，状态为 `READY`；Gate G2 数据与任务评审必须基于 P2 Dataset、Provider、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流证据，不得提前启动 Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：`15c3d555 feat(P2): 实现可恢复任务事件流`；上一实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 固化 SAL-P2-019 状态与恢复提示`；上一状态同步为 `d4990b1e docs: 固化 SAL-P2-018 状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 当前 Phase：P3 AlphaSift、因子与股票筛选<br>
+> 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
+> 任务完成度：49/129<br>
+> 当前可执行任务：`SAL-P3-001`，状态为 `READY`；先审查并锁定 AlphaSift 源码 commit、Apache-2.0 归因、依赖清单、漏洞和维护风险，不得提前启动 Quant Core、正式回测或 Evidence Agent<br>
+> 最近可评审交付 checkpoint：本次提交将生成 `docs(P2): 完成 Gate G2 数据与任务评审`；上一实现 checkpoint 为 `15c3d555 feat(P2): 实现可恢复任务事件流`<br>
+> 最新状态同步 checkpoint：本文件所在提交；上一状态同步为 `18f4d302 docs: 固化 SAL-P2-019 状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -76,23 +76,24 @@
 - 完成 `SAL-P2-017`：新增 [database.py](../src/serenity_alpha_lab/repositories/database.py)，建立 PostgreSQL standalone Profile、SQLAlchemy 连接池、SQLite PRAGMA、readiness/Alembic preflight 和 Repository Contract probe；`core` extra 增加 `psycopg[binary]` 并刷新锁文件，证据见 [PostgreSQL Standalone Profile 记录](./postgresql-standalone-profile.md)。
 - 完成 `SAL-P2-018`：新增 [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py)，实现数据库权威 `PersistentTaskBackend`、追加 task events、注入式 `CeleryTaskQueueRouter`、队列路由、取消请求、Worker lease/heartbeat/complete/fail 和 expired lease requeue primitives；证据见 [PersistentTaskBackend 记录](./persistent-task-backend.md)。
 - 完成 `SAL-P2-019`：新增 [task_event_stream.py](../src/serenity_alpha_lab/services/task_event_stream.py)，实现可恢复 task/run 事件流、SSE `Last-Event-ID` replay、RunEvent 持久化、queued orphan redispatch、stalled lease requeue 和临时 Artifact cleanup；证据见 [可恢复任务事件流记录](./recoverable-task-event-stream.md)。
+- 完成 `SAL-P2-020`：Gate G2 评审结论为 `GO with accepted risks`，新增 [Gate G2 数据与任务评审](./gate-g2-data-task-review.md) 和 [Gate G2 integration test](../tests/gates/test_gate_g2_data_task_review.py)，验证 versioned A-share Dataset publication、Provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径；P2 完成 `20/20`，允许进入 P3。
 
 ## 未完成
 
-### 当前可执行 P2 任务
+### 当前可执行 P3 任务
 
-- `SAL-P2-020` 当前为 `READY`：执行 Gate G2 数据与任务评审，必须基于 P2 Dataset、Provider、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact 和增量同步证据；不得提前进入 Quant Core、正式回测或 Evidence Agent。
+- `SAL-P3-001` 当前为 `READY`：审查并锁定 AlphaSift，固定源码 commit、Apache-2.0 归因和依赖清单，评估漏洞、维护风险、已知限制和替换条件。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 81 项工程任务未完成。
-- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset、PIT 基本面 Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine、Dataset 隔离区/原子发布、Provider 契约 Fixture、Provider Policy/fallback trace、增量同步调度层、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，但尚未完成 Gate G2、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P3 至 P6 仍有 80 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；但尚未完成 AlphaSift 审查/Adapter、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
 
-- Gate G0 与 Gate G1 已通过；Gate G2 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
+- Gate G0、Gate G1 与 Gate G2 已通过（均为 `GO with accepted risks`）；Gate G3 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
 - ADR-002 已批准渐进式模块化策略：旧 DSA 路径只能经显式 Compatibility Facade 迁移，P1 不拆微服务。
@@ -141,9 +142,9 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-020` Gate G2 数据与任务评审，基于 P2 Dataset、Provider、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact 和增量同步证据判断能否进入 P3。
+1. 优先执行 `SAL-P3-001` 审查并锁定 AlphaSift，固定源码 commit、Apache-2.0 归因、依赖清单、漏洞和维护风险。
 2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
-3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
+3. 保持 P0/P1/P2 required checks 和 Gate G2 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
 
@@ -186,6 +187,7 @@
 - 2026-07-23：完成 `SAL-P2-017`，新增 PostgreSQL standalone Profile、连接池、readiness 和 Repository Contract probe；target database profile/repository/storage tests `10 passed, 3 skipped`、相关 repositories/config/API/architecture suite `50 passed, 3 skipped`、full pytest `220 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P2 进度 `17/20`、总进度 `46/129`，`SAL-P2-018` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：完成 `SAL-P2-018`，新增 PersistentTaskBackend、Celery/Redis 注入式队列路由、数据库权威 task events、取消请求、Worker lease/heartbeat/complete/fail 和 expired lease requeue primitives；target persistent backend tests `5 passed`、相关 TaskBackend/Repository/API/Architecture suite `35 passed, 3 skipped`、full pytest `225 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P2 进度 `18/20`、总进度 `47/129`，`SAL-P2-019` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：完成 `SAL-P2-019`，新增可恢复任务事件流、RunEvent 持久化、SSE `Last-Event-ID` replay、queued orphan redispatch、stalled lease requeue 和临时 Artifact cleanup；target task event stream tests `8 passed`、相关 TaskBackend/Repository/API/Architecture suite `40 passed, 3 skipped`、full pytest `233 passed, 3 skipped`，compileall PASS，P2 进度 `19/20`、总进度 `48/129`，`SAL-P2-020` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-23：完成 `SAL-P2-020` Gate G2 数据与任务评审，结论为 `GO with accepted risks`；新增 Gate G2 review、Gate integration test 和 AEV-049，验证离线 Provider fixture -> Provider Policy -> versioned A-share Dataset publication、Provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径；Gate target `3 passed`、相关 P2 suite `80 passed, 3 skipped`、full pytest `236 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，P2 完成 `20/20`、总进度 `49/129`，项目进入 P3，`SAL-P3-001` 成为当前 `READY` 任务。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -215,29 +217,31 @@
 4. docs/development-progress-checklist.md
 5. docs/ai-stock-quant-platform-development-plan.md
 6. docs/gate-g0-baseline-review.md
+7. docs/gate-g2-data-task-review.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
-- Phase：P2 数据与持久任务
-- Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-019
-- 最近完成：SAL-P2-019 可恢复任务事件流
-- 最近可评审交付 checkpoint：15c3d555 feat(P2): 实现可恢复任务事件流；上一实现 checkpoint 为 94fd6dac feat(P2): 实现 PersistentTaskBackend
-- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 固化 SAL-P2-019 状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 d4990b1e docs: 固化 SAL-P2-018 状态与恢复提示
-- 进度：P0 13/13，P1 16/16，P2 19/20，总计 48/129
+- Phase：P3 AlphaSift、因子与股票筛选
+- Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020
+- 最近完成：SAL-P2-020 Gate G2 数据与任务评审
+- 最近可评审交付 checkpoint：本文件所在提交，标题为 docs(P2): 完成 Gate G2 数据与任务评审；启动后以 git log -1 --oneline 确认实际 hash
+- 上一实现 checkpoint：15c3d555 feat(P2): 实现可恢复任务事件流
+- 最新状态同步 checkpoint：本文件所在提交；上一状态同步为 18f4d302 docs: 固化 SAL-P2-019 状态与恢复提示
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 0/17，总计 49/129
 
 下一步优先执行：
-1. SAL-P2-020 执行 Gate G2 数据与任务评审，确认 Dataset、Provider 和持久任务能否进入 P3
+1. SAL-P3-001 审查并锁定 AlphaSift，固定源码 commit、Apache-2.0 归因、依赖清单、漏洞和维护风险
 2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine、Dataset Publication、Provider Contract Fixtures、Provider Policy/fallback trace、Data Sync Scheduler、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流
+3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact 和 Run/Stage/Event
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
 - 不要移动 `upstream/dsa-v3.26.1` tag。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
-- 后续实现必须遵守 ADR-001/002 与 Gate G1；不要在对应任务前开始 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+- 后续实现必须遵守 ADR-001/002 与 Gate G2；不要在对应任务前开始 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
 - 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review 和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 ```

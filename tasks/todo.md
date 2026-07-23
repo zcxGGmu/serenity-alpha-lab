@@ -1,3 +1,40 @@
+# Gate G2 Data and Task Review Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-020` by executing Gate G2 review for Dataset, Provider and persistent task foundations. Reuse P2 Dataset, Provider, PostgreSQL standalone Profile, PersistentTaskBackend, recoverable task event stream, ProblemDetails, Trace, Artifact and Data Sync evidence. Do not start Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, full Worker runtime loops, frontend pages, Compose deployment, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, current Git status and recent commits.
+- [x] Inspect `SAL-P2-020` acceptance scope, Gate G1 constraints, P2 evidence records, Provider fallback, Dataset publication, Data Sync and task recovery boundaries.
+- [x] Add a Gate G2 offline integration test proving versioned A-share Dataset publication, Provider conflict blocking, persistent task restart recovery, SSE replay and DSA single-stock compatibility path without real Provider calls.
+- [x] Run target Gate G2 test, related P2 suite, full pytest, compile, lock, diff and immutable tag verification.
+- [x] Create `docs/gate-g2-data-task-review.md` with Gate decision, evidence matrix, accepted risks, P3 entry constraints and verification outputs.
+- [x] Update progress checklist, development status, risk/decision/evidence registers, this review and the next-session prompt.
+- [x] Stage only `SAL-P2-020` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Gate G2 may approve entry into P3 screening/factor work only; it must not approve Quant Core, formal portfolio backtesting, Evidence Agent, live Provider/LLM calls, release deployment or full Worker execution loops.
+- Dataset evidence must use immutable Dataset Version Manifest, Artifact hashes, schema hash, quality metadata, concrete trace/run/stage and explicit latest alias scope.
+- Provider evidence must stay offline and contract-backed; stale/missing/error/quarantine/conflict paths must block success rather than silently averaging or advancing checkpoints.
+- Task recovery evidence must keep database events authoritative; Celery/Redis routing remains injected/diagnostic and duplicate queue delivery must be neutralized by lease acquisition.
+- DSA compatibility evidence must use injected offline manager/profile guard and must not instantiate the real DSA Provider manager.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P2-020
+
+- Gate decision: `GO with accepted risks`; P2 data and persistent task foundations are complete `20/20`, and P3 starts at `SAL-P3-001`.
+- Added `tests/gates/test_gate_g2_data_task_review.py`, covering offline AKShare fixture -> Provider Policy -> versioned A-share Dataset publication, cross-provider conflict quarantine, PersistentTaskBackend restart/SSE replay and DSA single-stock compatibility via injected offline manager.
+- Added `docs/gate-g2-data-task-review.md` with Gate decision, evidence matrix, accepted risks and P3 entry constraints.
+- Updated `docs/development-progress-checklist.md` with `SAL-P2-020` DONE, P2 `20/20`, total `49/129`, `SAL-P3-001` READY, `DEC-047`, `AEV-049`, and risk due-date updates for `RSK-002` / `RSK-004`.
+- Updated `docs/development-status.md` to Phase P3, Gate G3 pending, completed range through `SAL-P2-020`, next READY task `SAL-P3-001`, and a copyable next-start prompt.
+- Verification so far: Gate target `3 passed`; related P2 suite `80 passed, 3 skipped`; full pytest `236 passed, 3 skipped`; compileall PASS; dependency lock PASS; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, full Worker loop, Compose deployment, DSA runtime source migration or tag movement.
+
+---
+
 # P2 Recoverable Task Event Stream Plan
 
 > Started: 2026-07-23

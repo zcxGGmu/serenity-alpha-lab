@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 19/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
-| P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
+| P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
+| P3 筛选与因子 | 6~9 | DOING | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **48/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **49/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -708,19 +708,23 @@ P0 基线
 
 ### SAL-P2-020 Gate G2：数据与任务评审
 
-- [ ] [READY] 批准 Dataset、Provider 和持久任务进入筛选开发
-- 元数据：优先级 P0 | 负责人 TL/QE/SEC | 估算 0.5d | 实际 - | 依赖 SAL-P2-001..019
+- [x] [DONE] 批准 Dataset、Provider 和持久任务进入筛选开发
+- 元数据：优先级 P0 | 负责人 TL/QE/SEC | 估算 0.5d | 实际 0.5d | 依赖 SAL-P2-001..019 | 开始 2026-07-23 | 完成 2026-07-23
 - 交付物：Gate 记录、Dataset 样本、故障恢复证据。
 - 验收：
   - 可发布一个版本化 A 股 Dataset，记录可追溯。
   - Provider 异常阻断有效，API/Worker 重启测试通过。
   - DSA 单股分析兼容路径通过。
+- 结果：Gate G2 评审结论为 `GO with accepted risks`。P2 数据与持久任务完成 `20/20`，允许进入 P3 AlphaSift、因子与股票筛选；下一步入口为 `SAL-P3-001`。
+- Gate 证据：新增 [Gate G2 数据与任务评审](./gate-g2-data-task-review.md) 和 `tests/gates/test_gate_g2_data_task_review.py`，覆盖离线 Provider fixture -> Provider Policy -> versioned A-share Dataset publication、Provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径。
+- 范围限制：本 Gate 不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用、完整 Worker execution loop、Compose 发布服务或 DSA runtime source 迁移；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+- 验收证据：Gate target `3 passed`、相关 P2 suite `80 passed, 3 skipped`、full pytest `236 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，完整记录见 AEV-049。
 
 ## 6. Phase 3：AlphaSift、因子与股票筛选
 
 ### SAL-P3-001 审查并锁定 AlphaSift
 
-- [ ] [TODO] 固定源码 commit、Apache-2.0 归因和依赖清单
+- [ ] [READY] 固定源码 commit、Apache-2.0 归因和依赖清单
 - 元数据：优先级 P0 | 负责人 TL/SEC | 估算 1d | 实际 - | 依赖 SAL-P2-020
 - 交付物：版本决策、许可证/NOTICE、漏洞和维护风险。
 - 验收：
@@ -1502,9 +1506,9 @@ P0 基线
 | ID | 风险 | 概率 | 影响 | 触发信号 | 缓解 | 负责人 | 到期 | 状态 |
 |---|---|---|---|---|---|---|---|---|
 | RSK-001 | DSA 上游快速分叉 | 高 | 高 | 同步冲突持续增加 | Facade、最小补丁、同步演练 | TL | G6 | OPEN |
-| RSK-002 | PIT 数据时间不可信 | 中 | 极高 | 财报缺 announced/available | 可信等级、硬门禁、商业源 | QE | G2 | OPEN |
+| RSK-002 | PIT 数据时间不可信 | 中 | 极高 | 财报缺 announced/available | `SAL-P2-009` 已实现 period/announced/available/ingested/revision 与 `available_at <= decision_time` hard gate，unknown temporal confidence 只能 research display；Gate G2 接受该风险进入 P3，但正式回测前仍需可信 PIT Dataset version 和真实数据源审查 | QE | G4 | OPEN |
 | RSK-003 | Agent 引用/幻觉 | 高 | 高 | 无依据数字/错引 | Evidence、Validator、金标 | AI | G5 | OPEN |
-| RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | `SAL-P2-001` 锁定错误分类、Provenance 和离线 Contract Test；`SAL-P2-014` 冻结 Provider fixture；`SAL-P2-015` 已实现离线 Policy/fallback trace 和 cross-source quarantine；`SAL-P2-016` 已冻结 checkpoint、lookback、lock、失败不推进和补数调度语义，真实探针/SLA 仍留后续 Worker 与发布门禁 | BE | G2 | OPEN |
+| RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | `SAL-P2-001` 锁定错误分类、Provenance 和离线 Contract Test；`SAL-P2-014` 冻结 Provider fixture；`SAL-P2-015` 已实现离线 Policy/fallback trace 和 cross-source quarantine；`SAL-P2-016` 已冻结 checkpoint、lookback、lock、失败不推进和补数调度语义；Gate G2 接受离线契约进入 P3，真实探针/SLA 仍留后续 Worker 与发布门禁 | BE | P6 | OPEN |
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
 | RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 已由 ADR-001 关闭初始候选漂移风险：`55946536` 仅作为后续同步/Runbook 文档候选，不改当前基线；`487e49e5` 延期至 `sync/dsa-487e49e5` 分支评审；未来上游快速分叉继续由 `RSK-001` 管理 | TL | SAL-P1-001 | CLOSED |
 | RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
@@ -1564,6 +1568,7 @@ P0 基线
 | DEC-044 | 2026-07-23 | PostgreSQL standalone Profile 与 Repository Contract 口径 | 采用 `repositories.database` 作为 Runtime Profile 到 SQLAlchemy 的窄适配层；standalone profile 必须显式提供 database URL，PostgreSQL 使用 `psycopg`、连接池、statement timeout 和 redacted diagnostics，SQLite 使用 foreign key、busy timeout 与 WAL；Repository Contract probe 统一 UTC datetime、Decimal、JSON、duplicate key 和 rollback 语义，live PostgreSQL 由 `SERENITY_TEST_POSTGRES_URL` 启用同一套 contract suite | [postgresql-standalone-profile.md](./postgresql-standalone-profile.md); [database.py](../src/serenity_alpha_lab/repositories/database.py); [test_database_profile.py](../tests/repositories/test_database_profile.py); [test_repository_contract.py](../tests/repositories/test_repository_contract.py) | SAL-P2-017,SAL-P2-018,SAL-P2-020 | G2 |
 | DEC-045 | 2026-07-23 | PersistentTaskBackend 权威状态与队列路由口径 | 采用 `repositories.persistent_task_backend` 作为持久任务基础设施实现：数据库 `serenity_task_backend_runs` / `serenity_task_backend_events` 是任务快照、状态恢复和审计事件的权威来源；Celery/Redis 通过注入式 `CeleryTaskQueueRouter` 只投递 `task_id/run_id/task_type` 小型引用；Worker 通过 lease/heartbeat/complete/fail/requeue primitives 更新数据库状态，queue message id 仅作诊断 | [persistent-task-backend.md](./persistent-task-backend.md); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_persistent_task_backend.py](../tests/repositories/test_persistent_task_backend.py) | SAL-P2-018,SAL-P2-019,SAL-P4-018,SAL-P5-007,SAL-P6-012 | G2 |
 | DEC-046 | 2026-07-23 | 可恢复任务事件流与 Reconciler 口径 | 采用 `services.task_event_stream` 作为 SSE/恢复适配层：task event replay 复用 `TaskBackend.subscribe(after_event_id)`，run event replay 由 `PersistentTaskBackend` 的 `serenity_run_events` 按 `run_id + sequence` 持久化；`Last-Event-ID` 非负整数校验失败映射为 `ValidationProblem`；Reconciler 只 redispatch queued orphan 和 requeue stalled lease，不执行 handler、不调用 Provider/LLM、不把 queue 状态作为权威；临时清理只删除显式 tmp roots | [recoverable-task-event-stream.md](./recoverable-task-event-stream.md); [task_event_stream.py](../src/serenity_alpha_lab/services/task_event_stream.py); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_task_event_stream.py](../tests/services/test_task_event_stream.py) | SAL-P2-019,SAL-P2-020,SAL-P4-018,SAL-P6-012 | G2 |
+| DEC-047 | 2026-07-23 | Gate G2 数据与任务评审 | `GO with accepted risks`：P2 Dataset、Provider fallback、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流达到 P3 入口；Gate 只批准 AlphaSift/Screen/Factor 开发，不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或完整 Worker loop | [gate-g2-data-task-review.md](./gate-g2-data-task-review.md); [test_gate_g2_data_task_review.py](../tests/gates/test_gate_g2_data_task_review.py) | SAL-P2-020,SAL-P3-001,SAL-P6-005 | G3 |
 
 ## 14. 验收证据登记
 
@@ -1617,6 +1622,7 @@ P0 基线
 | AEV-046 | SAL-P2-017 | PostgreSQL standalone Profile、连接池、readiness 和 Repository Contract 测试记录 | [postgresql-standalone-profile.md](./postgresql-standalone-profile.md); [database.py](../src/serenity_alpha_lab/repositories/database.py); [test_database_profile.py](../tests/repositories/test_database_profile.py); [test_repository_contract.py](../tests/repositories/test_repository_contract.py); [test_storage_migrations.py](../tests/repositories/test_storage_migrations.py) | Target database profile/repository tests `10 passed, 3 skipped`; related repositories/config/API/architecture suite `50 passed, 3 skipped`; full pytest `220 passed, 3 skipped`; Red captured missing `repositories.database` module; standalone PostgreSQL URL resolution、redacted diagnostics、pool/statement timeout、SQLite PRAGMA/readiness、Alembic preflight、UTC time、Decimal、JSON、duplicate key 和 rollback covered; `compileall`/lock/diff/tag checks PASS; `psycopg` import smoke `3.3.4`; live PostgreSQL contract uses `SERENITY_TEST_POSTGRES_URL`; no Worker、PersistentTaskBackend、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE | 2026-07-23 |
 | AEV-047 | SAL-P2-018 | PersistentTaskBackend、队列路由、lease/heartbeat/requeue 和事件持久化测试记录 | [persistent-task-backend.md](./persistent-task-backend.md); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_persistent_task_backend.py](../tests/repositories/test_persistent_task_backend.py); [test_task_backend_contract.py](../tests/application/test_task_backend_contract.py); [test_dsa_task_backend_facade.py](../tests/integrations/test_dsa_task_backend_facade.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Persistent backend target `5 passed`; related TaskBackend/Repository/API/Architecture suite `35 passed, 3 skipped`; full pytest `225 passed, 3 skipped`; Red captured missing `repositories.persistent_task_backend` module; backend restart persistence、idempotency replay、explicit task conflict、Celery-like queue routing、cancel request event、Worker lease claim、heartbeat、completion、expired lease requeue 和 monotonic event replay covered; compileall/lock/diff/tag checks PASS; implementation checkpoint `94fd6dac`; no full Worker loop、API/SSE、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE | 2026-07-23 |
 | AEV-048 | SAL-P2-019 | 可恢复任务事件流、RunEvent 持久化、SSE replay、Reconciler 和临时清理测试记录 | [recoverable-task-event-stream.md](./recoverable-task-event-stream.md); [task_event_stream.py](../src/serenity_alpha_lab/services/task_event_stream.py); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_task_event_stream.py](../tests/services/test_task_event_stream.py) | Task event stream target `8 passed`; related TaskBackend/Repository/API/Architecture suite `40 passed, 3 skipped`; full pytest `233 passed, 3 skipped`; Red captured missing `services.task_event_stream` module; SSE `Last-Event-ID` replay、invalid cursor ProblemDetails validation、RunEvent restart persistence、queued orphan redispatch、stalled lease requeue、duplicate delivery lease guard 和 temporary artifact tmp-only cleanup covered; compileall PASS; no full Worker loop、API endpoint、frontend page、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE/FE | 2026-07-23 |
+| AEV-049 | SAL-P2-020 / Gate G2 | Gate G2 数据与任务评审、离线端到端样本、Provider 阻断和任务恢复验证记录 | [gate-g2-data-task-review.md](./gate-g2-data-task-review.md); [test_gate_g2_data_task_review.py](../tests/gates/test_gate_g2_data_task_review.py); [dataset-catalog-manifest.md](./dataset-catalog-manifest.md); [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [persistent-task-backend.md](./persistent-task-backend.md); [recoverable-task-event-stream.md](./recoverable-task-event-stream.md) | Gate target `3 passed`; related P2 suite `80 passed, 3 skipped`; full pytest `236 passed, 3 skipped`; compileall PASS; lock PASS; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; offline AKShare fixture -> Provider Policy -> versioned A-share Dataset publication、cross-provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径 covered; no Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 full Worker loop | TL/QE/SEC | 2026-07-23 |
 
 允许的证据：
 
@@ -1654,4 +1660,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-019`，完成度为 48/129；最近阶段性任务为 `SAL-P2-019` 可恢复任务事件流；最近实现 checkpoint 为 `15c3d555 feat(P2): 实现可恢复任务事件流`，上一实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-020` Gate G2 数据与任务评审；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`，完成度为 49/129；最近阶段性任务为 `SAL-P2-020` Gate G2 数据与任务评审；最近实现 checkpoint 将在本次提交生成，上一实现 checkpoint 为 `15c3d555 feat(P2): 实现可恢复任务事件流`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`）。下一步优先执行 `SAL-P3-001` 审查并锁定 AlphaSift；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
