@@ -1,3 +1,40 @@
+# SAL-P3-004 CandidateBatch Contract Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P3-004` by defining immutable `Candidate` / `CandidateBatch` contracts with standardized candidates, L1/L2/L3 score records, reason codes, source lineage, rank, strategy version, discovery time and source snapshot time. Do not implement FactorDefinition, Factor Engine, Screen Lab, Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, full Worker loop, or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, current Git status and recent commits.
+- [x] Inspect `SAL-P3-004` acceptance scope, `ScreeningProvider` raw result contract, Dataset Version rules, InstrumentId patterns, API ProblemDetails mapping and architecture boundaries.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-candidate-batch-contract.md`.
+- [x] Add Red contract tests for CandidateBatch fields, immutability, deterministic serialization, score layer independence, invalid dataset versions, duplicate ranks and ScreeningResult metadata bridge.
+- [x] Implement `application.candidate_batch` DTOs, validation, `to_record()` and `candidate_batch_from_screening_result()`.
+- [x] Export CandidateBatch contract symbols from `application.__init__`.
+- [x] Add `docs/candidate-batch-contract.md` with schema, validation, non-goals and evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [ ] Stage only `SAL-P3-004` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- CandidateBatch is a standard contract only; no FactorDefinition, Factor DSL, factor computation DAG, ScreenDefinition pipeline, Screen Lab UI, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, full Worker loop or broad DSA runtime migration.
+- CandidateBatch must consume concrete `dsv_*` Dataset Version ids and preserve `ScreeningProvider` trace/run/stage/provider metadata.
+- LLM overlay must be represented as an independent L3 score and must not overwrite deterministic L1/L2 values.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-004
+
+- Added `src/serenity_alpha_lab/application/candidate_batch.py` with `CandidateBatch`, `Candidate`, `CandidateLayerScore`, `CandidateReason`, `CandidateSource`, score/source enums, concrete Dataset Version validation, rank/timestamp/source checks, immutable nested records and JSON-friendly `to_record()`.
+- Added `candidate_batch_from_screening_result()` to carry `ScreeningResult` provider/strategy/dataset/count/timing/trace metadata without parsing raw provider candidates.
+- Exported CandidateBatch symbols from `application.__init__` and added `tests/application/test_candidate_batch_contract.py`.
+- Added `docs/candidate-batch-contract.md`, `DEC-051` and `AEV-053`; updated P3 progress to `4/17`, total progress to `53/129`, and moved `SAL-P3-005` to `READY`.
+- Red evidence: target contract test failed with missing `serenity_alpha_lab.application.candidate_batch`.
+- Verification: target `3 passed`; related CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `25 passed`; full pytest `255 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no FactorDefinition, Factor Engine, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-003 ScreeningProvider Plan
 
 > Started: 2026-07-23
