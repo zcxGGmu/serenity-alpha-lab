@@ -7,8 +7,8 @@
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：50/129<br>
 > 当前可执行任务：`SAL-P3-002`，状态为 `READY`；构建离线 AlphaSift Wheel，固定源码 commit、source archive hash、wheel hash、SBOM 和许可证清单，不得提前实现 ScreeningProvider Adapter 或启动 Quant Core/正式回测/Evidence Agent<br>
-> 最近可评审交付 checkpoint：本文件所在提交，标题为 `docs(P3): 完成 AlphaSift 源码审查与锁定`；上一 checkpoint 为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`<br>
-> 最新状态同步 checkpoint：本文件所在提交；上一状态同步为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 最近可评审交付 checkpoint：`4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`；上一 checkpoint 为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-001 最新状态与恢复提示`；上一状态同步/交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -193,6 +193,7 @@
 - 2026-07-23：完成 `SAL-P2-019`，新增可恢复任务事件流、RunEvent 持久化、SSE `Last-Event-ID` replay、queued orphan redispatch、stalled lease requeue 和临时 Artifact cleanup；target task event stream tests `8 passed`、相关 TaskBackend/Repository/API/Architecture suite `40 passed, 3 skipped`、full pytest `233 passed, 3 skipped`，compileall PASS，P2 进度 `19/20`、总进度 `48/129`，`SAL-P2-020` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：完成 `SAL-P2-020` Gate G2 数据与任务评审，结论为 `GO with accepted risks`；新增 Gate G2 review、Gate integration test 和 AEV-049，验证离线 Provider fixture -> Provider Policy -> versioned A-share Dataset publication、Provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径；Gate target `3 passed`、相关 P2 suite `80 passed, 3 skipped`、full pytest `236 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，P2 完成 `20/20`、总进度 `49/129`，项目进入 P3，`SAL-P3-001` 成为当前 `READY` 任务。
 - 2026-07-23：完成 `SAL-P3-001` AlphaSift 源码审查与锁定；锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`、source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、Apache-2.0 attribution、依赖清单、current-resolution SCA、已知限制、升级/替换/停止使用条件；Red doc test `2 failed`、target/dependency suite `6 passed`、full pytest `238 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，P3 进度 `1/17`、总进度 `50/129`，`SAL-P3-002` 成为当前 `READY` 任务。
+- 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -231,9 +232,9 @@
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001
 - 最近完成：SAL-P3-001 AlphaSift 源码审查与锁定
-- 最近可评审交付 checkpoint：本文件所在提交，标题为 docs(P3): 完成 AlphaSift 源码审查与锁定；启动后以 git log -1 --oneline 确认实际 hash
+- 最近可评审交付 checkpoint：4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定
 - 上一 checkpoint：c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审
-- 最新状态同步 checkpoint：本文件所在提交；上一状态同步为 c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审
+- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-001 最新状态与恢复提示；上一状态同步/交付为 4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 1/17，总计 50/129
 
 下一步优先执行：

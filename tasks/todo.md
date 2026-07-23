@@ -1,3 +1,27 @@
+# SAL-P3-001 Status Refresh Plan
+
+> Started: 2026-07-23
+> Scope: Refresh recovery docs after `SAL-P3-001` checkpoint `4e6d5ee4`, make completed vs unfinished work explicit, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P3-002` implementation in this sync.
+
+## Checklist
+
+- [x] Confirm current Git status and latest checkpoints.
+- [x] Update `tasks/lessons.md` to record the repeated requirement to automatically sync status and provide a copyable next-start prompt after each phase task.
+- [x] Update `docs/development-status.md` with explicit `4e6d5ee4` delivery checkpoint, current READY task, unfinished scope, strict guardrails, and next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step anchor with the actual `SAL-P3-001` checkpoint.
+- [x] Update this review with completed/unfinished boundaries and verification plan.
+- [x] Run status-anchor scans and `git diff --check`, then create the required Chinese status checkpoint commit.
+
+## Review: SAL-P3-001 Status Refresh
+
+- Confirmed latest implementation checkpoint: `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`.
+- Current recoverable state: Phase P3, Gate G3 not passed, completed `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001`; total progress `50/129`, P3 progress `1/17`.
+- Current READY task: `SAL-P3-002` offline AlphaSift Wheel intake; no ScreeningProvider Adapter, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, or DSA runtime source migration in this status sync.
+- Updated `tasks/lessons.md` with the repeated habit reminder: after every stage task, automatically sync recovery docs, evidence, `tasks/todo.md` review, and a copyable next-start prompt before final handoff.
+- Verification: status-anchor scan found no active stale prior-task or old-progress markers; `git diff --check` PASS.
+
+---
+
 # SAL-P3-001 AlphaSift Source Review Plan
 
 > Started: 2026-07-23
@@ -32,7 +56,7 @@
 - Updated `docs/development-progress-checklist.md`: `SAL-P3-001` DONE, P3 `1/17`, total `50/129`, `SAL-P3-002` READY, `DEC-048`, `AEV-050`, and `RSK-005` mitigation detail.
 - Updated `docs/development-status.md`: current task is `SAL-P3-002`, Gate G3 remains pending, completed range includes `SAL-P3-001`, and the next-start prompt points to offline Wheel intake.
 - Verification: target AlphaSift review + dependency locking tests `6 passed`; full pytest `238 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
-- Checkpoint: 本文件所在提交，标题为 `docs(P3): 完成 AlphaSift 源码审查与锁定`。
+- Checkpoint: `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`。
 - Scope retained: no AlphaSift Wheel build, no dependency install surface change, no ScreeningProvider/Adapter, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM call and no DSA runtime source migration.
 
 ---

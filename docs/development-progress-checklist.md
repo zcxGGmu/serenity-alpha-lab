@@ -1666,4 +1666,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001`，完成度为 50/129；最近阶段性任务为 `SAL-P3-001` AlphaSift 源码审查与锁定；最近实现 checkpoint 为本文件所在提交，标题为 `docs(P3): 完成 AlphaSift 源码审查与锁定`，上一 checkpoint 为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-002` 构建离线 AlphaSift Wheel；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001`，完成度为 50/129；最近阶段性任务为 `SAL-P3-001` AlphaSift 源码审查与锁定；最近实现 checkpoint 为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，上一 checkpoint 为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-002` 构建离线 AlphaSift Wheel；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
