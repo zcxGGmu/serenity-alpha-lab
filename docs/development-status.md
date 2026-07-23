@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：42/129<br>
 > 当前可执行任务：`SAL-P2-014`，状态为 `READY`；Provider 契约 Fixture 必须全离线复用 Provider 领域契约、DSA Provider Adapter、Arrow Schema Registry、Profile/ProblemDetails/Trace 和 Dataset 发布边界，不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：`feat(P2): 实现 Dataset 隔离区与原子发布`（本轮提交后以 `git log -1 --oneline` 确认实际 hash）<br>
-> 最新状态同步 checkpoint：本轮 `SAL-P2-013` 状态同步待提交；提交后以 `git log -1 --oneline` 确认实际 hash<br>
+> 最近可评审交付 checkpoint：`8edd723a feat(P2): 实现 Dataset 隔离区与原子发布`<br>
+> 最新状态同步 checkpoint：`docs: 同步 SAL-P2-013 最新开发状态与恢复提示`（状态同步专用提交；恢复时执行 `git log -1 --oneline` 读取实际 hash）<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -203,8 +203,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-013
 - 最近完成：SAL-P2-013 隔离区与原子发布
-- 最近可评审交付 checkpoint：feat(P2): 实现 Dataset 隔离区与原子发布；启动后以 git log -1 --oneline 确认实际 hash
-- 最新状态同步 checkpoint：本轮 SAL-P2-013 状态同步待提交；启动后以 git log -1 --oneline 确认实际 hash
+- 最近可评审交付 checkpoint：8edd723a feat(P2): 实现 Dataset 隔离区与原子发布
+- 最新状态同步 checkpoint：docs: 同步 SAL-P2-013 最新开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 13/20，总计 42/129
 
 下一步优先执行：

@@ -14,7 +14,7 @@
 - [x] Add acceptance evidence documentation for `SAL-P2-013`.
 - [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
 - [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
-- [ ] Stage only `SAL-P2-013` files and create the required Chinese checkpoint commit.
+- [x] Stage only `SAL-P2-013` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -30,7 +30,7 @@
 - Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_dataset_publication.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.publication'`.
 - Green implementation: added `QualityGatedDatasetPublisher`, `DatasetPublicationRequest`, `DatasetPublicationResult`, `DatasetPublicationStatus`, explicit `LocalDatasetCatalog.promote_to_latest()`, quarantine record persistence and bounded temp-root cleanup.
 - Publication coverage: `passed` quality promotes `latest`; `warning`, `quarantine` and `blocking` write held/quarantine/blocking records and keep old latest; latest-promotion failure propagates and cleans explicit catalog/artifact tmp roots.
-- Verification: target publication test `5 passed`; related dataset/artifact/API/architecture suite `66 passed`; full pytest `199 passed`; compileall, dependency lock, `git diff --check` and immutable tag checks passed.
+- Verification: target publication test `5 passed`; related dataset/artifact/API/architecture suite `66 passed`; full pytest `199 passed`; compileall, dependency lock, `git diff --check` and immutable tag checks passed. Checkpoint: `8edd723a feat(P2): 实现 Dataset 隔离区与原子发布`.
 - Scope retained: no fallback policy, Provider fixture/probe, real Provider/LLM/network call, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration or tag movement.
 
 ---
