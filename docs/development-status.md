@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：45/129<br>
 > 当前可执行任务：`SAL-P2-017`，状态为 `READY`；PostgreSQL standalone Profile 必须基于已冻结 Alembic baseline、Runtime Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Dataset Catalog/Manifest 与增量同步边界实现，不得提前启动 Worker lease、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：本次提交将生成，标题为 `feat(P2): 实现增量同步与交易日调度`；上一实现 checkpoint 为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`<br>
-> 最新状态同步 checkpoint：本次实现 checkpoint 后追加，标题为 `docs: 同步 SAL-P2-016 最新状态与恢复提示`；上一状态同步为 `f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 最近可评审交付 checkpoint：`cfadc415 feat(P2): 实现增量同步与交易日调度`；上一实现 checkpoint 为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P2-016 最新状态与恢复提示`；上一状态同步为 `f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -214,7 +214,7 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-016
 - 最近完成：SAL-P2-016 增量同步与交易日调度
-- 最近可评审交付 checkpoint：feat(P2): 实现增量同步与交易日调度；本次交付提交后以 git log -1 --oneline 确认实际 hash；上一实现 checkpoint 为 378ba734 feat(P2): 实现 Provider Policy 与 fallback trace
+- 最近可评审交付 checkpoint：cfadc415 feat(P2): 实现增量同步与交易日调度；上一实现 checkpoint 为 378ba734 feat(P2): 实现 Provider Policy 与 fallback trace
 - 最新状态同步 checkpoint：docs: 同步 SAL-P2-016 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 16/20，总计 45/129
 

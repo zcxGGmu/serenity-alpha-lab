@@ -27,6 +27,7 @@
 ## Review: SAL-P2-016
 
 - Red evidence: `uv run --extra core --extra dev python -m pytest tests/services/test_data_sync.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.services.data_sync'`.
+- Checkpoint: `cfadc415 feat(P2): 实现增量同步与交易日调度`.
 - Green implementation: added `DataSyncScope`, `DataSyncCheckpoint`, `DataSyncLock`, `LocalDataSyncStateStore`, `DataSyncScheduler`, `DataSyncPlan`, `DataBackfillCommand`, `DataSyncTradeDateResult` and `DataSyncRun` under `services.data_sync`, plus public service exports.
 - Scheduling coverage: incremental plans use `TradingCalendarDataset`, checkpoint `last_completed_trade_date`, `lookback_window`, non-trading-day skip records and optional `LocalDatasetCatalog` latest lineage; backfill defaults to missing-only and supports explicit completed-date replay.
 - Checkpoint and lock coverage: local state persists deterministic JSON checkpoint, validates completed/last-completed consistency, uses file `O_EXCL` scope locks, releases locks on complete/fail via `finally`, and treats duplicate successful trade dates idempotently.
