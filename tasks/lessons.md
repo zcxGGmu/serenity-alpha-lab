@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-23: SAL-P2-015 后状态同步必须写入实际实现 checkpoint
+
+- 纠正来源：`SAL-P2-015` 实现 checkpoint `378ba734` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求把“每个阶段性任务完成后自动去做”固化为习惯。
+- 模式：即使实现 commit 已经包含大部分状态同步，如果恢复文档里仍写“本文件所在提交”或“最近实现 checkpoint 将在本次提交生成”，下次启动时仍需要人工查询实际实现 hash，进度恢复不够直接。
+- 规则：阶段性任务完成后的状态同步必须把最近可评审交付的实际 hash 写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 和下次启动提示词；最新状态同步 commit 自身可以写标题并要求启动后用 `git log -1 --oneline` 确认实际 hash。
+- 执行：后续完成 `SAL-P2-016` 或任一 `SAL-*` 后，不等待用户提醒；先写清已完成/未完成/下一步/禁区/实际实现 checkpoint，再更新 `tasks/todo.md` review 和本文件（若用户再次纠正习惯），最后运行状态扫描与 `git diff --check` 并提交中文 checkpoint/status-sync commit。
+
 ## 2026-07-23: SAL-P2-014 后状态复核必须再次固化恢复提示
 
 - 纠正来源：`SAL-P2-014` 实现 checkpoint `5016ced6` 与状态同步 `8c70cde5` 后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并强调“每个阶段性任务完成后自动去做”。

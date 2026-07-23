@@ -1,3 +1,26 @@
+# P2 SAL-P2-015 Status Sync Plan
+
+> Started: 2026-07-23
+> Scope: Refresh recoverable development status after `SAL-P2-015` checkpoint `378ba734`. Make completed/unfinished boundaries explicit, update the next-start prompt, and record the user's repeated habit reminder in project lessons.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, current Git status and recent commits.
+- [x] Replace ambiguous checkpoint placeholders with actual `SAL-P2-015` implementation hash `378ba734`.
+- [x] Confirm completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..015`; unfinished work resumes at `SAL-P2-016`.
+- [x] Update `tasks/lessons.md` so future phase-task completion automatically performs status snapshot, progress checklist, evidence, review and next-start prompt synchronization.
+- [x] Run status-anchor scans and whitespace diff verification.
+- [x] Stage only status-sync documentation files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P2-015 Status Sync
+
+- Updated `docs/development-status.md` and `docs/development-progress-checklist.md` to use actual implementation checkpoint `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`.
+- Preserved current executable task as `SAL-P2-016` and kept Gate G2 as not passed.
+- Recorded the user's habit reminder in `tasks/lessons.md`, including the rule that implementation checkpoint hashes must be explicit after each phase task.
+- Next-start prompt now points to `SAL-P2-016` and repeats the profile, Provider Policy/fallback trace, Dataset, ADR/Gate and no-early-Quant/Evidence constraints.
+
+---
+
 # P2 Provider Policy Fallback Trace Plan
 
 > Started: 2026-07-23
