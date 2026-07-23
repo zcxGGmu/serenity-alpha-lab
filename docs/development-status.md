@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-23<br>
-> 最近阶段性任务：`SAL-P2-015` Provider Policy 与 fallback trace<br>
+> 最近阶段性任务：`SAL-P2-016` 增量同步与交易日调度<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：44/129<br>
-> 当前可执行任务：`SAL-P2-016`，状态为 `READY`；增量同步与交易日调度必须基于已冻结 Provider Policy/fallback trace、Provider fixture、Trading Calendar、Dataset Catalog/Manifest、Quality/Publication、Profile/ProblemDetails/Trace 和 Run/Stage/Event 边界实现，不得提前启动 Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：`378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`；上一实现 checkpoint 为 `5016ced6 feat(P2): 建立 Provider 契约 Fixture`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P2-015 最新状态与恢复提示`；上一状态同步为 `a8f05d5e docs: 复核 SAL-P2-014 状态并固化恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 任务完成度：45/129<br>
+> 当前可执行任务：`SAL-P2-017`，状态为 `READY`；PostgreSQL standalone Profile 必须基于已冻结 Alembic baseline、Runtime Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Dataset Catalog/Manifest 与增量同步边界实现，不得提前启动 Worker lease、Quant Core、正式回测或 Evidence Agent<br>
+> 最近可评审交付 checkpoint：本次提交将生成，标题为 `feat(P2): 实现增量同步与交易日调度`；上一实现 checkpoint 为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`<br>
+> 最新状态同步 checkpoint：本次实现 checkpoint 后追加，标题为 `docs: 同步 SAL-P2-016 最新状态与恢复提示`；上一状态同步为 `f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -72,18 +72,19 @@
 - 完成 `SAL-P2-013`：新增 [publication.py](../src/serenity_alpha_lab/datasets/publication.py)，实现质量门禁发布、passed-only latest promotion、warning/quarantine/blocking 隔离记录、旧 latest 保持和显式 tmp 清理；证据见 [Dataset 隔离区与原子发布记录](./dataset-atomic-publication.md)。
 - 完成 `SAL-P2-014`：新增 [provider_contract_fixtures.py](../src/serenity_alpha_lab/integrations/data/provider_contract_fixtures.py) 和 [Provider fixture 快照](./baselines/provider-contract-fixtures/index.json)，建立 AKShare、efinance、Tushare、BaoStock、YFinance 的全离线脱敏响应、Schema、timeout/empty/schema_drift 案例、`DataBatch` 转换和 deterministic snapshot writer；证据见 [Provider 契约 Fixture 记录](./provider-contract-fixtures.md)。
 - 完成 `SAL-P2-015`：新增 [provider_policy.py](../src/serenity_alpha_lab/integrations/data/provider_policy.py)，实现 YAML-compatible Provider Policy、fallback trace、质量状态拒绝、Provider error exhaustion 和跨源 close 冲突 quarantine；证据见 [Provider Policy 与 Fallback Trace 记录](./provider-policy-fallback-trace.md)。
+- 完成 `SAL-P2-016`：新增 [data_sync.py](../src/serenity_alpha_lab/services/data_sync.py)，实现增量同步计划、交易日调度、checkpoint、lookback window、scope lock、失败重试语义和历史补数命令；证据见 [增量同步与交易日调度记录](./data-sync-scheduler.md)。
 
 ## 未完成
 
 ### 当前可执行 P2 任务
 
-- `SAL-P2-016` 当前为 `READY`：实现增量同步与交易日调度，支持 checkpoint、回看窗口、锁和补数；必须复用 `SAL-P2-015` Provider Policy/fallback trace 与 `SAL-P2-006` Trading Calendar / `SAL-P2-011` Dataset Catalog，不得提前进入 Quant Core、正式回测或 Evidence Agent。
+- `SAL-P2-017` 当前为 `READY`：建立 PostgreSQL standalone Profile，实现数据库配置、连接池和 Repository Contract；必须复用 `SAL-P1-012` Alembic baseline 与 `SAL-P1-014` Runtime Profile，不得提前进入 Worker lease、Quant Core、正式回测或 Evidence Agent。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 85 项工程任务未完成。
-- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset、PIT 基本面 Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine、Dataset 隔离区/原子发布、Provider 契约 Fixture 和 Provider Policy/fallback trace，但尚未实现增量同步、Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P2 至 P6 仍有 84 项工程任务未完成。
+- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset、PIT 基本面 Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine、Dataset 隔离区/原子发布、Provider 契约 Fixture、Provider Policy/fallback trace 和增量同步调度层，但尚未实现 PostgreSQL standalone Profile、PersistentTaskBackend/Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -119,6 +120,7 @@
 - Dataset 隔离区与原子发布已完成：`QualityGatedDatasetPublisher` 复用 Dataset Catalog、Data Quality Report 和 ArtifactStore，先写质量报告 Artifact 与不可变 Dataset Manifest，只有 `passed` 显式提升为 `latest`；`warning/quarantine/blocking` 写入 held/quarantine/blocking 记录并保留旧 latest，失败路径清理显式 tmp 根。本层不实现 fallback policy、Provider fixture、真实 Provider/LLM 调用、Worker runtime、Quant Core、正式回测或 Evidence Agent。
 - Provider 契约 Fixture 已完成：`ProviderContractFixtureCatalog` 在 `integrations.data` 边界维护 AKShare、efinance、Tushare、BaoStock、YFinance 的离线脱敏样本；成功样本可生成不可变 `DataBatch` 与 Provider provenance，异常样本映射 `retryable/data_invalid/schema_drift`，快照绑定 `dataset.bars_1d_raw@1.0.0` Arrow schema hash；本层不实现 fallback policy、不导入 Provider SDK、不调用真实 Provider。
 - Provider Policy 与 fallback trace 已完成：`ProviderPolicyEngine` 在 `integrations.data` 边界只消费离线 `DataBatch` / `ProviderError` outcomes；按 policy priority、market/capability、freshness、required fields 和 `DataQualityStatus` 选择来源，成功但 stale、缺字段、quality quarantine/blocking 或跨源 close 差异超阈值均不会静默成功；fallback trace 记录 attempts、冲突、raw-response hash、trace/run/stage 和最终状态。本层不调用 Provider SDK、不写 Dataset、不启动 Worker/Quant/Evidence。
+- 增量同步与交易日调度已完成：`DataSyncScheduler` 使用 `TradingCalendarDataset` 和 checkpoint 生成交易日计划，支持 lookback window、非交易日 skip、Catalog latest previous lineage、默认缺口补数和显式完整重放；`LocalDataSyncStateStore` 以原子 JSON checkpoint 与文件独占 lock 防止并发；`DataSyncRun` 复用 `Run/Stage/Event`，只有 Provider Policy `selected` 且有具体 Dataset version 才推进 checkpoint，`exhausted/quarantined` 只记录失败等待重试。本层不调用真实 Provider/LLM、不发布真实 Dataset、不启动 Worker/PersistentTaskBackend/Quant/Evidence。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -134,8 +136,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-016` 增量同步与交易日调度，基于已冻结 Provider Policy/fallback trace、Provider fixture、Trading Calendar、Dataset Catalog/Manifest、Quality/Publication 和 ProblemDetails/Trace 边界实现。
-2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P2-017` PostgreSQL standalone Profile，基于已冻结 Alembic baseline、Runtime Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Dataset Catalog/Manifest 和增量同步边界实现数据库配置、连接池和 Repository Contract。
+2. 不得提前启动 Worker lease、Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
 ## 本次状态复核
@@ -174,6 +176,7 @@
 - 2026-07-23：按用户要求再次复核最新开发状态并固化恢复提示；确认已完成范围仍为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..014`，未完成范围从 `SAL-P2-015` 开始，当前 READY 任务为 `SAL-P2-015`，最近实现 checkpoint 为 `5016ced6 feat(P2): 建立 Provider 契约 Fixture`，上一状态同步 checkpoint 为 `8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示`。
 - 2026-07-23：完成 `SAL-P2-015`，新增 Provider Policy 与 fallback trace；Provider policy target `6 passed`、相关 Provider/Quality/Publication/API/Architecture suite `59 passed`、full pytest `209 passed`，P2 进度 `15/20`、总进度 `44/129`，`SAL-P2-016` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：按用户要求同步 `SAL-P2-015` checkpoint 后最新状态；确认最近可评审交付为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..015`，未完成范围从 `SAL-P2-016` 开始，当前 READY 任务为 `SAL-P2-016`，并已在 `tasks/lessons.md` 固化“阶段性任务完成后自动状态同步”的习惯。
+- 2026-07-23：完成 `SAL-P2-016`，新增增量同步与交易日调度层；Data sync target `5 passed`、相关 Trading Calendar/Catalog/Provider Policy/Run lifecycle/Architecture suite `35 passed`、full pytest `214 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `16/20`、总进度 `45/129`，`SAL-P2-017` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -209,16 +212,16 @@
 当前状态：
 - Phase：P2 数据与持久任务
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-015
-- 最近完成：SAL-P2-015 Provider Policy 与 fallback trace
-- 最近可评审交付 checkpoint：378ba734 feat(P2): 实现 Provider Policy 与 fallback trace；上一实现 checkpoint 为 5016ced6 feat(P2): 建立 Provider 契约 Fixture
-- 最新状态同步 checkpoint：docs: 同步 SAL-P2-015 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 a8f05d5e docs: 复核 SAL-P2-014 状态并固化恢复提示
-- 进度：P0 13/13，P1 16/16，P2 15/20，总计 44/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-016
+- 最近完成：SAL-P2-016 增量同步与交易日调度
+- 最近可评审交付 checkpoint：feat(P2): 实现增量同步与交易日调度；本次交付提交后以 git log -1 --oneline 确认实际 hash；上一实现 checkpoint 为 378ba734 feat(P2): 实现 Provider Policy 与 fallback trace
+- 最新状态同步 checkpoint：docs: 同步 SAL-P2-016 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示
+- 进度：P0 13/13，P1 16/16，P2 16/20，总计 45/129
 
 下一步优先执行：
-1. SAL-P2-016 实现增量同步与交易日调度，支持 checkpoint、回看窗口、锁和补数
-2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine、Dataset Publication、Provider Contract Fixtures 和 Provider Policy/fallback trace
+1. SAL-P2-017 建立 PostgreSQL standalone Profile，实现数据库配置、连接池和 Repository Contract
+2. 不要提前启动 Worker lease、Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine、Dataset Publication、Provider Contract Fixtures、Provider Policy/fallback trace 和 Data Sync Scheduler
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

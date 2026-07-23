@@ -1,3 +1,41 @@
+# P2 Data Sync Scheduler Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-016` by implementing incremental data sync planning and trading-day scheduling with checkpoint, lookback window, lock protection, failure retry semantics, and backfill commands. Reuse Trading Calendar, Dataset Catalog/Manifest, Provider Policy/fallback trace, Run/Stage/Event, Trace scalar IDs, and existing Dataset boundaries. Do not start Quant Core, formal backtesting, Evidence Agent, PersistentTaskBackend, real Provider/LLM calls, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, current Git status and recent commits.
+- [x] Inspect `SAL-P2-016` acceptance scope, Trading Calendar, Dataset Catalog, Raw Daily Bars incremental merge, Provider Policy fallback trace, Run lifecycle, and architecture guardrails.
+- [x] Add Red tests for incremental scheduling, non-trading-day skip, checkpoint lookback, lock contention, failed Provider retry without checkpoint advance, idempotent completed-date recording, and historical backfill command planning.
+- [x] Implement `services.data_sync` with checkpoint/lock store, `DataSyncScheduler`, `DataSyncRun`, and `DataBackfillCommand` without importing Provider SDKs or mutating Dataset modules.
+- [x] Export service symbols and preserve architecture boundaries without touching DSA runtime source, Worker runtime, Quant Core, Evidence Agent, or real Provider/LLM paths.
+- [x] Add acceptance evidence documentation for `SAL-P2-016`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-016` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Data sync scheduling consumes existing offline Dataset/Provider artifacts and injected Provider Policy outcomes only; it must not instantiate Provider SDKs, call DSA `DataFetcherManager`, probe networks, or publish real Provider data.
+- Incremental runs must use concrete trading dates from `TradingCalendarDataset`, concrete `DatasetVersionManifest` lineage from Catalog, and explicit checkpoint state; `latest` remains discovery-only outside formal runs.
+- Failed, quarantined, or exhausted Provider Policy outcomes must not advance checkpoint or create a success illusion; retries and backfills must remain idempotent.
+- Tests use synthetic offline fixtures and local deterministic state only; no real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-016
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/services/test_data_sync.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.services.data_sync'`.
+- Green implementation: added `DataSyncScope`, `DataSyncCheckpoint`, `DataSyncLock`, `LocalDataSyncStateStore`, `DataSyncScheduler`, `DataSyncPlan`, `DataBackfillCommand`, `DataSyncTradeDateResult` and `DataSyncRun` under `services.data_sync`, plus public service exports.
+- Scheduling coverage: incremental plans use `TradingCalendarDataset`, checkpoint `last_completed_trade_date`, `lookback_window`, non-trading-day skip records and optional `LocalDatasetCatalog` latest lineage; backfill defaults to missing-only and supports explicit completed-date replay.
+- Checkpoint and lock coverage: local state persists deterministic JSON checkpoint, validates completed/last-completed consistency, uses file `O_EXCL` scope locks, releases locks on complete/fail via `finally`, and treats duplicate successful trade dates idempotently.
+- Provider Policy coverage: only `ProviderPolicyStatus.SELECTED` with a concrete Dataset version advances checkpoint; `EXHAUSTED` / `QUARANTINED` record failure and preserve retry eligibility without success illusion.
+- Verification: target data sync test `5 passed`; related Trading Calendar/Catalog/Provider Policy/Run lifecycle/Architecture suite `35 passed`; full pytest `214 passed`; `compileall` PASS; dependency lock PASS; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no Provider SDK import, DSA `DataFetcherManager`, real Provider/LLM/network call, Bronze/Dataset publish, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, scheduled probe, DSA runtime source migration or tag movement.
+
+---
+
 # P2 SAL-P2-015 Status Sync Plan
 
 > Started: 2026-07-23
