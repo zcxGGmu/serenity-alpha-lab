@@ -132,6 +132,6 @@ git diff --check
 git rev-parse upstream/dsa-v3.26.1
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 Stage only `SAL-P3-003` files and commit in Chinese with the required body sections.

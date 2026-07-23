@@ -16,7 +16,7 @@
 - [x] Add `docs/screening-provider-contract.md` with evidence, non-goals and verification.
 - [x] Update progress checklist, development status, this review and next-session prompt.
 - [x] Run target, related, full, compile, lock, diff and immutable tag verification.
-- [ ] Stage only `SAL-P3-003` files and create the required Chinese checkpoint commit.
+- [x] Stage only `SAL-P3-003` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -35,6 +35,7 @@
 - Red evidence: application contract test failed with missing `serenity_alpha_lab.application.screening_provider`; adapter test failed with missing `serenity_alpha_lab.integrations.alphasift`.
 - Verification: contract target `3 passed`; adapter target `5 passed`; related application/integration/architecture suite `22 passed`; full pytest `252 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Scope retained: no CandidateBatch schema, Factor Engine, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, full Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+- Checkpoint: `1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`.
 
 ---
 

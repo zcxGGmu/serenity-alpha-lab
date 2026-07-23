@@ -7,8 +7,8 @@
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：52/129<br>
 > 当前可执行任务：`SAL-P3-004`，状态为 `READY`；定义 CandidateBatch 契约，标准化候选、层级分数、原因和来源，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：本次实现提交生成，标题为 `feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`；上一 checkpoint 为 `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`；上一状态同步 checkpoint 为 `08df3861 docs: 复核 SAL-P3-002 最新开发状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
+> 最近可评审交付 checkpoint：`1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`；上一 checkpoint 为 `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-003 最新状态与恢复提示`；上一状态同步 checkpoint 为 `08df3861 docs: 复核 SAL-P3-002 最新开发状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -240,8 +240,8 @@
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-003
 - 最近完成：SAL-P3-003 ScreeningProvider
-- 最近可评审交付 checkpoint：本文件所在提交，标题为 feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter；上一 checkpoint 为 50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake；启动后以 git log -1 --oneline 确认实际 hash
-- 最新状态同步 checkpoint：本文件所在提交，标题为 feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter；上一状态同步 checkpoint 为 08df3861 docs: 复核 SAL-P3-002 最新开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
+- 最近可评审交付 checkpoint：1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter
+- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-003 最新状态与恢复提示；上一状态同步 checkpoint 为 08df3861 docs: 复核 SAL-P3-002 最新开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 3/17，总计 52/129
 
 下一步优先执行：
