@@ -1,3 +1,43 @@
+# SAL-P3-003 ScreeningProvider Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P3-003` by defining a platform `ScreeningProvider` contract, AlphaSift Adapter and Fake implementation. Keep AlphaSift internals out of platform Application/Domain. Do not implement `CandidateBatch`, Factor Engine, Screen Lab, Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, current Git status and recent commits.
+- [x] Inspect P3 task scope, AlphaSift `dsa_adapter`, existing Provider/Facade patterns, ProblemDetails, TraceContext, Dataset Catalog `DatasetVersionRef`, and architecture boundaries.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-screening-provider.md`.
+- [x] Add Red application contract tests for `ScreeningProvider`, concrete Dataset Version enforcement, immutable DTOs, unified errors and Fake implementation.
+- [x] Implement `application.screening_provider` and exports.
+- [x] Add Red integration tests for `AlphaSiftScreeningAdapter` status/strategies/screen mapping, profile guard, trace propagation, error and timeout semantics.
+- [x] Implement `integrations.alphasift` adapter and ProblemDetails mapping.
+- [x] Add architecture boundary tests proving application/domain do not import AlphaSift internals.
+- [x] Add `docs/screening-provider-contract.md` with evidence, non-goals and verification.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [ ] Stage only `SAL-P3-003` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- AlphaSift may only be accessed through the Serenity `ScreeningProvider` port; Application/Domain must not import `alphasift` or AlphaSift dataclasses.
+- Screening requests must reference concrete `dsv_*` Dataset Version ids; `latest` aliases remain discovery/display only and cannot drive screening execution.
+- LLM overlay remains disabled by default and is recorded separately when requested; it must not overwrite deterministic screening scores.
+- Tests must use injected fake clients only; no real Provider/LLM/network calls, no full Worker loop, no Quant Core, no formal backtest and no Evidence Agent.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-003
+
+- Added `src/serenity_alpha_lab/application/screening_provider.py` with `ScreeningProvider` Protocol, immutable status/strategy/request/result DTOs, concrete `dsv_*` Dataset Version enforcement, unified `ScreeningProviderError` categories and deterministic `FakeScreeningProvider`.
+- Added `src/serenity_alpha_lab/integrations/alphasift/provider_adapter.py` and package exports; AlphaSift is only lazily imported through `alphasift.dsa_adapter` when no injected client is supplied and profile guard allows it.
+- Added ProblemDetails mapping for `ScreeningProviderError`, plus architecture tests that prevent Application/Domain from importing AlphaSift and keep the AlphaSift adapter import lazy.
+- Added `docs/screening-provider-contract.md`, `DEC-050` and `AEV-052`; updated P3 progress to `3/17`, total progress to `52/129`, and moved `SAL-P3-004` to `READY`.
+- Red evidence: application contract test failed with missing `serenity_alpha_lab.application.screening_provider`; adapter test failed with missing `serenity_alpha_lab.integrations.alphasift`.
+- Verification: contract target `3 passed`; adapter target `5 passed`; related application/integration/architecture suite `22 passed`; full pytest `252 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no CandidateBatch schema, Factor Engine, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, full Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-002 AlphaSift Wheel Intake Plan
 
 > Started: 2026-07-23

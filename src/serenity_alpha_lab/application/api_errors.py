@@ -8,6 +8,7 @@ from typing import Any, Callable, Mapping
 
 from serenity_alpha_lab.application.config_profiles import ConfigProfileError
 from serenity_alpha_lab.application.research_orchestrator import ResearchOrchestratorError
+from serenity_alpha_lab.application.screening_provider import ScreeningProviderError
 from serenity_alpha_lab.application.task_backend import (
     TaskAlreadyExists,
     TaskBackendCapabilityError,
@@ -217,6 +218,8 @@ def problem_from_exception(
     if isinstance(exc, ResearchOrchestratorError):
         if _is_research_validation_error(str(exc)):
             return ValidationProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
+        return ProviderProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
+    if isinstance(exc, ScreeningProviderError):
         return ProviderProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)
     if isinstance(exc, ProviderError):
         return ProviderProblem(str(exc)).to_problem_detail(trace_context=trace_context, instance=instance)

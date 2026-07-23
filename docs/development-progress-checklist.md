@@ -75,11 +75,11 @@
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
-| P3 筛选与因子 | 6~9 | DOING | 2/17 | G3 | AlphaSift、Factor、Screen Lab |
+| P3 筛选与因子 | 6~9 | DOING | 3/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **51/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **52/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -751,16 +751,20 @@ P0 基线
 
 ### SAL-P3-003 定义 ScreeningProvider
 
-- [ ] [READY] 隔离 AlphaSift 与平台 Application/Domain
-- 元数据：优先级 P0 | 负责人 BE/QE | 估算 1.5d | 实际 - | 依赖 SAL-P3-002
+- [x] [DONE] 隔离 AlphaSift 与平台 Application/Domain
+- 元数据：优先级 P0 | 负责人 BE/QE | 估算 1.5d | 实际 0.5d | 依赖 SAL-P3-002 | 开始 2026-07-23 | 完成 2026-07-23
 - 交付物：Protocol、AlphaSift Adapter、Fake 实现。
 - 验收：
   - 上层不导入 AlphaSift 内部类。
   - status/strategies/screen 的错误和超时语义统一。
+- 结果：新增 [ScreeningProvider 契约与 AlphaSift Adapter 记录](./screening-provider-contract.md)、应用层 [screening_provider.py](../src/serenity_alpha_lab/application/screening_provider.py)、集成层 [provider_adapter.py](../src/serenity_alpha_lab/integrations/alphasift/provider_adapter.py)、Fake 实现和 ProblemDetails 映射；`ScreeningRequest` 强制引用具体 `dsv_*` Dataset Version id 并拒绝 `latest`，AlphaSift 仅在 `integrations.alphasift` 中通过注入式 client 或 profile guard 后懒加载。
+- 错误与边界：统一 `timeout`、`unavailable`、`invalid_request`、`schema_drift`、`data_invalid` 和 `permanent`；CI profile 禁止未注入 client 的真实 AlphaSift provider 调用，LLM overlay 默认关闭且受 model-call policy 保护。
+- 范围限制：未定义 `CandidateBatch` 标准 Schema、候选原因码、L1/L2/L3 分数、Factor Engine、Screen Lab、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用、Worker execution loop 或 DSA runtime source migration。
+- 验收证据：新增 `tests/application/test_screening_provider_contract.py`、`tests/integrations/test_alphasift_screening_adapter.py` 和架构边界断言；Red 为缺少 contract/integration module 时分别失败，Green 后目标/相关套件 `22 passed`，完整验证记录见 AEV-052。
 
 ### SAL-P3-004 定义 CandidateBatch 契约
 
-- [ ] [TODO] 标准化候选、层级分数、原因和来源
+- [ ] [READY] 标准化候选、层级分数、原因和来源
 - 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 - | 依赖 SAL-P3-003
 - 交付物：Candidate/CandidateBatch Schema、版本、Contract Test。
 - 验收：
@@ -1580,6 +1584,7 @@ P0 基线
 | DEC-047 | 2026-07-23 | Gate G2 数据与任务评审 | `GO with accepted risks`：P2 Dataset、Provider fallback、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流达到 P3 入口；Gate 只批准 AlphaSift/Screen/Factor 开发，不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或完整 Worker loop | [gate-g2-data-task-review.md](./gate-g2-data-task-review.md); [test_gate_g2_data_task_review.py](../tests/gates/test_gate_g2_data_task_review.py) | SAL-P2-020,SAL-P3-001,SAL-P6-005 | G3 |
 | DEC-048 | 2026-07-23 | AlphaSift 源码审查与锁定 | 锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf` 作为 P3 AlphaSift intake 来源；不采用较旧 `v0.2.0` tag 作为源码锁，因为 tag 指向 `f2c2ca22ae3fcb18b0273b8494a9e055d82c01e0` 且落后锁定 commit 67 个提交；AlphaSift 只批准进入离线 Wheel intake，不批准直接 Adapter、Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用 | [alphasift-source-review.md](./alphasift-source-review.md); [test_alphasift_source_review.py](../tests/architecture/test_alphasift_source_review.py) | SAL-P3-001,SAL-P3-002,SAL-P6-005 | G3 |
 | DEC-049 | 2026-07-23 | AlphaSift 离线 Wheel intake 口径 | 采用 `scripts/build-alphasift-wheel-intake.sh` 从锁定 codeload archive 构建内部 Wheel，source archive SHA-256 和 wheel SHA-256 双绑定；使用 `SOURCE_DATE_EPOCH=1783081838` 固定构建时间并提交 manifest、SBOM、license inventory 和 checksum，不把 Wheel 二进制提交到 Git；生产安装只能从内部 wheelhouse 通过 `--no-index --find-links` 使用，不允许恢复动态 `git+https` 安装 | [alphasift-wheel-intake.md](./alphasift-wheel-intake.md); [intake-manifest.json](./baselines/alphasift-wheel-intake/intake-manifest.json); [build-alphasift-wheel-intake.sh](../scripts/build-alphasift-wheel-intake.sh); [test_alphasift_wheel_intake.py](../tests/architecture/test_alphasift_wheel_intake.py) | SAL-P3-002,SAL-P3-003,SAL-P6-005 | G3 |
+| DEC-050 | 2026-07-23 | ScreeningProvider 与 AlphaSift Adapter 边界 | 采用 `application.screening_provider` 作为平台筛选 Provider port，定义 status/strategies/screen DTO、Fake 实现、具体 Dataset Version guard 和统一错误语义；AlphaSift 真实包只允许在 `integrations.alphasift` 内通过注入式 client 或 profile guard 后懒加载，Application/Domain 不导入 AlphaSift 内部类；本任务只输出 raw candidates，`CandidateBatch` 标准化推迟到 `SAL-P3-004` | [screening-provider-contract.md](./screening-provider-contract.md); [screening_provider.py](../src/serenity_alpha_lab/application/screening_provider.py); [provider_adapter.py](../src/serenity_alpha_lab/integrations/alphasift/provider_adapter.py); [test_screening_provider_contract.py](../tests/application/test_screening_provider_contract.py); [test_alphasift_screening_adapter.py](../tests/integrations/test_alphasift_screening_adapter.py) | SAL-P3-003,SAL-P3-004,SAL-P6-005 | G3 |
 
 ## 14. 验收证据登记
 
@@ -1636,6 +1641,7 @@ P0 基线
 | AEV-049 | SAL-P2-020 / Gate G2 | Gate G2 数据与任务评审、离线端到端样本、Provider 阻断和任务恢复验证记录 | [gate-g2-data-task-review.md](./gate-g2-data-task-review.md); [test_gate_g2_data_task_review.py](../tests/gates/test_gate_g2_data_task_review.py); [dataset-catalog-manifest.md](./dataset-catalog-manifest.md); [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [persistent-task-backend.md](./persistent-task-backend.md); [recoverable-task-event-stream.md](./recoverable-task-event-stream.md) | Gate target `3 passed`; related P2 suite `80 passed, 3 skipped`; full pytest `236 passed, 3 skipped`; compileall PASS; lock PASS; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; offline AKShare fixture -> Provider Policy -> versioned A-share Dataset publication、cross-provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径 covered; no Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 full Worker loop | TL/QE/SEC | 2026-07-23 |
 | AEV-050 | SAL-P3-001 | AlphaSift 源码审查、许可证归因、依赖面和停止条件验证记录 | [alphasift-source-review.md](./alphasift-source-review.md); [test_alphasift_source_review.py](../tests/architecture/test_alphasift_source_review.py); [python-dependency-lock.md](./python-dependency-lock.md); [gate-g2-data-task-review.md](./gate-g2-data-task-review.md) | Locked source `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`; source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`; Apache-2.0 LICENSE present; Red doc test `2 failed` before review doc, Green target/dependency suite `6 passed`; full pytest `238 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `uvx --python 3.11 --from pip-audit pip-audit` current-resolution scan found `0 known vulnerabilities` across `86` dependencies; no Wheel build、Adapter、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 dependency install surface change | TL/SEC | 2026-07-23 |
 | AEV-051 | SAL-P3-002 | AlphaSift 离线 Wheel、SBOM、许可证清单和内部制品引用验证记录 | [alphasift-wheel-intake.md](./alphasift-wheel-intake.md); [intake-manifest.json](./baselines/alphasift-wheel-intake/intake-manifest.json); [sbom-cyclonedx.json](./baselines/alphasift-wheel-intake/sbom-cyclonedx.json); [license-inventory.csv](./baselines/alphasift-wheel-intake/license-inventory.csv); [test_alphasift_wheel_intake.py](../tests/architecture/test_alphasift_wheel_intake.py); [build-alphasift-wheel-intake.sh](../scripts/build-alphasift-wheel-intake.sh) | Locked source `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`; source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`; reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`; internal artifact URI recorded; CycloneDX SBOM and license inventory generated; intake script regenerated source/wheel evidence and offline no-deps install PASS; Red intake test `4 failed` before script/evidence; target `4 passed`; related architecture suite `10 passed`; full pytest `242 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; no pyproject/uv.lock/requirements AlphaSift install surface change; no Wheel binary committed; no ScreeningProvider/Adapter、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE/SEC | 2026-07-23 |
+| AEV-052 | SAL-P3-003 | ScreeningProvider Protocol、AlphaSift Adapter、Fake 实现和架构边界测试记录 | [screening-provider-contract.md](./screening-provider-contract.md); [screening_provider.py](../src/serenity_alpha_lab/application/screening_provider.py); [provider_adapter.py](../src/serenity_alpha_lab/integrations/alphasift/provider_adapter.py); [test_screening_provider_contract.py](../tests/application/test_screening_provider_contract.py); [test_alphasift_screening_adapter.py](../tests/integrations/test_alphasift_screening_adapter.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Red contract test failed with missing `application.screening_provider`; Red adapter test failed with missing `integrations.alphasift`; Green contract `3 passed`; adapter `5 passed`; related application/integration/architecture suite `22 passed`; full pytest `252 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; concrete Dataset Version guard rejects `latest`; CI profile blocks uninjected real AlphaSift provider calls and LLM overlay; no CandidateBatch、Factor Engine、Screen Lab、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | BE/QE | 2026-07-23 |
 
 允许的证据：
 
@@ -1673,4 +1679,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-002`，完成度为 51/129；最近阶段性任务为 `SAL-P3-002` AlphaSift 离线 Wheel intake；最近实现 checkpoint 为 `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`，上一状态同步 checkpoint 为 `c53daa65 docs: 同步 SAL-P3-002 最新状态与恢复提示`，上一可评审交付 checkpoint 为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-003` 定义 ScreeningProvider；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-003`，完成度为 52/129；最近阶段性任务为 `SAL-P3-003` ScreeningProvider；最近实现 checkpoint 将在本次提交生成，标题为 `feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`；上一状态同步 checkpoint 为 `08df3861 docs: 复核 SAL-P3-002 最新开发状态与恢复提示`，上一可评审交付 checkpoint 为 `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-004` 定义 CandidateBatch 契约；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。

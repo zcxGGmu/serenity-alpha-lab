@@ -207,6 +207,37 @@ def test_research_orchestrator_contracts_do_not_import_concrete_dsa_agent_runtim
     assert failures == []
 
 
+def test_screening_provider_contracts_do_not_import_alphasift_runtime() -> None:
+    failures: list[str] = []
+    target_files = [
+        PACKAGE_ROOT / "application" / "screening_provider.py",
+        PACKAGE_ROOT / "domain" / "__init__.py",
+    ]
+
+    for path in target_files:
+        if not path.exists():
+            failures.append(f"{path.relative_to(ROOT)} does not exist")
+            continue
+        for module in imported_modules(path):
+            if module == "alphasift" or module.startswith("alphasift."):
+                failures.append(f"{path.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
+def test_alphasift_adapter_keeps_alphasift_import_lazy_and_integration_scoped() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "integrations" / "alphasift" / "provider_adapter.py"
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            if module == "alphasift" or module.startswith("alphasift."):
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_dsa_provider_adapter_keeps_concrete_dsa_imports_lazy() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "integrations" / "dsa" / "provider_adapter.py"
