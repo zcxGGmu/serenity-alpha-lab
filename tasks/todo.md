@@ -1,3 +1,42 @@
+# SAL-P3-002 AlphaSift Wheel Intake Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P3-002` by building a reproducible offline AlphaSift Wheel from locked source commit `9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`, fixing source archive hash, wheel hash, SBOM, license inventory and internal artifact reference. Do not implement ScreeningProvider Adapter, start Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, current Git status and recent commits.
+- [x] Inspect P3 task scope, existing dependency lock policy, Docker AlphaSift cache handling, supply-chain baseline patterns, and artifact evidence layout.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-alphasift-wheel-intake.md`.
+- [x] Add Red architecture tests for the intake script, manifest, SBOM, license inventory, checksum and review document.
+- [x] Implement `scripts/build-alphasift-wheel-intake.sh` to download the codeload source archive, verify SHA-256, build with pinned `SOURCE_DATE_EPOCH`, generate committed evidence and run an offline no-deps install check.
+- [x] Run the intake script and commit evidence under `docs/baselines/alphasift-wheel-intake/`.
+- [x] Add `docs/alphasift-wheel-intake.md` with build commands, hashes, internal artifact URI, SBOM/license evidence, offline install proof and non-goals.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Stage only `SAL-P3-002` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and do not touch dirty files under `.worktrees/dsa-v3.26.1`.
+- Do not add AlphaSift to root `pyproject.toml`, `uv.lock` or generated production `requirements.txt` in this task.
+- Do not submit `.cache`, `.worktrees`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, source archives or Wheel binaries.
+- Do not start `SAL-P3-003` ScreeningProvider Adapter, CandidateBatch, Factor Engine, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, Worker loops or DSA runtime source migration.
+- Preserve Gate G2 boundaries: later Screening/Factor work must use concrete Dataset Versions and reuse Provider Policy/fallback trace, Dataset Catalog/Manifest, Quality Gate, Data Sync, PostgreSQL standalone Profile, PersistentTaskBackend, recoverable events, ProblemDetails, Trace, Artifact and Run/Stage/Event.
+
+## Review: SAL-P3-002
+
+- Added reproducible intake script `scripts/build-alphasift-wheel-intake.sh`; it verifies the locked codeload source archive hash, builds with `SOURCE_DATE_EPOCH=1783081838`, writes manifest/SBOM/license/checksum evidence, and verifies offline no-deps installation from the local wheelhouse.
+- Generated committed evidence under `docs/baselines/alphasift-wheel-intake/`: `intake-manifest.json`, `sbom-cyclonedx.json`, `license-inventory.csv`, `license-summary.md`, and `alphasift-wheel.sha256`.
+- Added `docs/alphasift-wheel-intake.md` with source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`, reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`, internal artifact URI, offline install command and non-goals.
+- Added `tests/architecture/test_alphasift_wheel_intake.py`; Red failed with `4 failed` before the script/evidence/doc existed, and Green passed with `4 passed`.
+- Verification completed: intake script regeneration PASS with source SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a` and wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`; related architecture suite `10 passed`; full pytest `242 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: attempted read-only code-review/spec-review subagent dispatch after tool discovery, but the client rejected payload variants as duplicate `message/items` or empty optional fields. Local review checked diff scope, manifest/SBOM/license consistency, non-goals, dependency install surface, untracked files and tag immutability.
+- Updated progress checklist with `SAL-P3-002` DONE, P3 `2/17`, total `51/129`, `SAL-P3-003` READY, `DEC-049`, `AEV-051`, and `RSK-005` mitigation detail.
+- Scope retained: no root `pyproject.toml` / `uv.lock` / production `requirements.txt` AlphaSift install surface change, no Wheel binary committed, no ScreeningProvider/Adapter, no CandidateBatch, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM call, no DSA runtime source migration and no tag movement.
+
+---
+
 # SAL-P3-001 Status Refresh Plan
 
 > Started: 2026-07-23

@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-23<br>
-> 最近阶段性任务：`SAL-P3-001` AlphaSift 源码审查与锁定<br>
+> 最近阶段性任务：`SAL-P3-002` AlphaSift 离线 Wheel intake<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P3 AlphaSift、因子与股票筛选<br>
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：50/129<br>
-> 当前可执行任务：`SAL-P3-002`，状态为 `READY`；构建离线 AlphaSift Wheel，固定源码 commit、source archive hash、wheel hash、SBOM 和许可证清单，不得提前实现 ScreeningProvider Adapter 或启动 Quant Core/正式回测/Evidence Agent<br>
-> 最近可评审交付 checkpoint：`4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`；上一 checkpoint 为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-001 最新状态与恢复提示`；上一状态同步/交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 任务完成度：51/129<br>
+> 当前可执行任务：`SAL-P3-003`，状态为 `READY`；定义 ScreeningProvider，隔离 AlphaSift 与平台 Application/Domain，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
+> 最近可评审交付 checkpoint：本次提交生成，标题为 `feat(P3): 构建 AlphaSift 离线 Wheel intake`；上一 checkpoint 为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`<br>
+> 最新状态同步 checkpoint：本文件所在提交；本次提交后需用 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -81,18 +81,19 @@
 ### P3 AlphaSift、因子与股票筛选
 
 - 完成 `SAL-P3-001`：新增 [AlphaSift 源码审查与锁定记录](./alphasift-source-review.md) 和 [AlphaSift source review test](../tests/architecture/test_alphasift_source_review.py)，锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`、source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、Apache-2.0 attribution、runtime dependency list、current-resolution SCA、维护风险、已知限制、升级/替换/停止使用条件；P3 进度 `1/17`。
+- 完成 `SAL-P3-002`：新增 [AlphaSift 离线 Wheel Intake 记录](./alphasift-wheel-intake.md)、[intake manifest](./baselines/alphasift-wheel-intake/intake-manifest.json)、CycloneDX [SBOM](./baselines/alphasift-wheel-intake/sbom-cyclonedx.json)、[许可证清单](./baselines/alphasift-wheel-intake/license-inventory.csv)、[AlphaSift Wheel intake test](../tests/architecture/test_alphasift_wheel_intake.py) 和 [build-alphasift-wheel-intake.sh](../scripts/build-alphasift-wheel-intake.sh)，固定 source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`、internal artifact URI、SBOM、许可证清单和 offline no-deps install evidence；P3 进度 `2/17`。
 
 ## 未完成
 
 ### 当前可执行 P3 任务
 
-- `SAL-P3-002` 当前为 `READY`：构建离线 AlphaSift Wheel，移除生产运行时 `git+https` 安装，生成签名/哈希 Wheel、内部制品引用、SBOM 和许可证清单。
+- `SAL-P3-003` 当前为 `READY`：定义 ScreeningProvider，隔离 AlphaSift 与平台 Application/Domain，交付 Protocol、AlphaSift Adapter 和 Fake 实现。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
 - P3 至 P6 仍有 79 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查与锁定，但尚未完成离线 Wheel intake、ScreeningProvider/Adapter、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake 和内部制品引用，但尚未完成 ScreeningProvider/Adapter、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -139,14 +140,14 @@
 
 ## 已接受风险
 
-- `RSK-008` 已关闭：Serenity root Python 依赖由 `uv.lock` 锁定，`requirements.txt` 由 lock 导出并校验漂移，生产/桌面安装面不包含动态 Git 依赖；AlphaSift 已由 `SAL-P3-001` 锁定源码 commit 与停止条件，wheel/package intake 留给 `SAL-P3-002`。
+- `RSK-008` 已关闭：Serenity root Python 依赖由 `uv.lock` 锁定，`requirements.txt` 由 lock 导出并校验漂移，生产/桌面安装面不包含动态 Git 依赖；AlphaSift 已由 `SAL-P3-001` 锁定源码 commit 与停止条件，并由 `SAL-P3-002` 完成离线 Wheel intake、SBOM、许可证清单和内部制品引用。
 - `RSK-010`：Web npm audit 仍有 10 个 high；后续由受控升级或 `SAL-P6-005` 发布安全门禁关闭/豁免。
 - `RSK-011`：Web lockfile 混用 npmjs 与 npmmirror resolved URL；`SAL-P1-003` 仅治理 Python root lock，后续由受控前端依赖升级或发布前依赖治理统一策略。
 - `RSK-012`：Docker image Grype 仍有 39 critical / 84 high；由 `SAL-P6-005` 前修复或正式豁免。
 
 ## 下一步
 
-1. 优先执行 `SAL-P3-002` 构建离线 AlphaSift Wheel，固定 wheel hash、SBOM、许可证清单和内部制品引用。
+1. 优先执行 `SAL-P3-003` 定义 ScreeningProvider，隔离 AlphaSift 与平台 Application/Domain。
 2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. 保持 P0/P1/P2 required checks 和 Gate G2 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -193,6 +194,7 @@
 - 2026-07-23：完成 `SAL-P2-019`，新增可恢复任务事件流、RunEvent 持久化、SSE `Last-Event-ID` replay、queued orphan redispatch、stalled lease requeue 和临时 Artifact cleanup；target task event stream tests `8 passed`、相关 TaskBackend/Repository/API/Architecture suite `40 passed, 3 skipped`、full pytest `233 passed, 3 skipped`，compileall PASS，P2 进度 `19/20`、总进度 `48/129`，`SAL-P2-020` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：完成 `SAL-P2-020` Gate G2 数据与任务评审，结论为 `GO with accepted risks`；新增 Gate G2 review、Gate integration test 和 AEV-049，验证离线 Provider fixture -> Provider Policy -> versioned A-share Dataset publication、Provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径；Gate target `3 passed`、相关 P2 suite `80 passed, 3 skipped`、full pytest `236 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，P2 完成 `20/20`、总进度 `49/129`，项目进入 P3，`SAL-P3-001` 成为当前 `READY` 任务。
 - 2026-07-23：完成 `SAL-P3-001` AlphaSift 源码审查与锁定；锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`、source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、Apache-2.0 attribution、依赖清单、current-resolution SCA、已知限制、升级/替换/停止使用条件；Red doc test `2 failed`、target/dependency suite `6 passed`、full pytest `238 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，P3 进度 `1/17`、总进度 `50/129`，`SAL-P3-002` 成为当前 `READY` 任务。
+- 2026-07-23：完成 `SAL-P3-002` AlphaSift 离线 Wheel intake；source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`、internal artifact URI、CycloneDX SBOM、license inventory 和 offline no-deps install check 已记录；Red intake test `4 failed`、Green target `4 passed`、related architecture suite `10 passed`、full pytest `242 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `2/17`、总进度 `51/129`，`SAL-P3-003` 成为当前 `READY` 任务。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -230,16 +232,16 @@
 当前状态：
 - Phase：P3 AlphaSift、因子与股票筛选
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001
-- 最近完成：SAL-P3-001 AlphaSift 源码审查与锁定
-- 最近可评审交付 checkpoint：4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定
-- 上一 checkpoint：c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审
-- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-001 最新状态与恢复提示；上一状态同步/交付为 4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定；启动后以 git log -1 --oneline 确认实际 hash
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 1/17，总计 50/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-002
+- 最近完成：SAL-P3-002 AlphaSift 离线 Wheel intake
+- 最近可评审交付 checkpoint：本次提交生成，标题为 feat(P3): 构建 AlphaSift 离线 Wheel intake
+- 上一 checkpoint：4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定
+- 最新状态同步 checkpoint：本文件所在提交；启动后以 git log -1 --oneline 确认实际 hash
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 2/17，总计 51/129
 
 下一步优先执行：
-1. SAL-P3-002 构建离线 AlphaSift Wheel，固定源码 commit、source archive hash、wheel hash、SBOM、许可证清单和内部制品引用
-2. 不要提前实现 ScreeningProvider Adapter、启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+1. SAL-P3-003 定义 ScreeningProvider，隔离 AlphaSift 与平台 Application/Domain，交付 Protocol、AlphaSift Adapter 和 Fake 实现
+2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact 和 Run/Stage/Event
 
 严格遵守 AGENTS.md：
