@@ -75,11 +75,11 @@
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
-| P3 筛选与因子 | 6~9 | DOING | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
+| P3 筛选与因子 | 6~9 | DOING | 1/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **49/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **50/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -724,16 +724,20 @@ P0 基线
 
 ### SAL-P3-001 审查并锁定 AlphaSift
 
-- [ ] [READY] 固定源码 commit、Apache-2.0 归因和依赖清单
-- 元数据：优先级 P0 | 负责人 TL/SEC | 估算 1d | 实际 - | 依赖 SAL-P2-020
+- [x] [DONE] 固定源码 commit、Apache-2.0 归因和依赖清单
+- 元数据：优先级 P0 | 负责人 TL/SEC | 估算 1d | 实际 0.5d | 依赖 SAL-P2-020 | 开始 2026-07-23 | 完成 2026-07-23
 - 交付物：版本决策、许可证/NOTICE、漏洞和维护风险。
 - 验收：
   - 已知限制与平台非目标一致。
   - 有升级、替换和停止使用条件。
+- 结果：新增 [AlphaSift 源码审查与锁定记录](./alphasift-source-review.md)，锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`，记录 source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、Apache-2.0 attribution、runtime dependency list、current-resolution SCA、维护风险、已知限制、升级/替换/停止使用条件。
+- 版本决策：不锁 `v0.2.0` tag，因为该 tag 指向旧 commit `f2c2ca22ae3fcb18b0273b8494a9e055d82c01e0`；锁定 commit 相对 tag ahead `67` commits，且与 DSA `v3.26.1` 已记录 AlphaSift pin 一致。后续 `SAL-P3-002` 必须把 commit hash、source archive hash、wheel hash、SBOM 和许可证清单写入制品证据，不能只依赖 `version=0.2.0`。
+- 范围限制：本任务未构建或提交 AlphaSift Wheel，未把 AlphaSift 加入 root `pyproject.toml` / `uv.lock` / production `requirements.txt`，未实现 ScreeningProvider/Adapter，未启动 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或 DSA runtime source migration。
+- 验收证据：新增 `tests/architecture/test_alphasift_source_review.py`；Red 为缺少 `docs/alphasift-source-review.md` 时 `2 failed`，Green 后目标测试 `2 passed`；`uvx --python 3.11 --from pip-audit pip-audit` 对当前解析依赖面返回 `0 known vulnerabilities` / `86` dependencies；完整验证记录见 AEV-050。
 
 ### SAL-P3-002 构建离线 AlphaSift Wheel
 
-- [ ] [TODO] 移除生产运行时 `git+https` 安装
+- [ ] [READY] 移除生产运行时 `git+https` 安装
 - 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P3-001,SAL-P1-003
 - 交付物：签名/哈希 Wheel、内部制品引用、SBOM。
 - 验收：
@@ -1509,7 +1513,7 @@ P0 基线
 | RSK-002 | PIT 数据时间不可信 | 中 | 极高 | 财报缺 announced/available | `SAL-P2-009` 已实现 period/announced/available/ingested/revision 与 `available_at <= decision_time` hard gate，unknown temporal confidence 只能 research display；Gate G2 接受该风险进入 P3，但正式回测前仍需可信 PIT Dataset version 和真实数据源审查 | QE | G4 | OPEN |
 | RSK-003 | Agent 引用/幻觉 | 高 | 高 | 无依据数字/错引 | Evidence、Validator、金标 | AI | G5 | OPEN |
 | RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | `SAL-P2-001` 锁定错误分类、Provenance 和离线 Contract Test；`SAL-P2-014` 冻结 Provider fixture；`SAL-P2-015` 已实现离线 Policy/fallback trace 和 cross-source quarantine；`SAL-P2-016` 已冻结 checkpoint、lookback、lock、失败不推进和补数调度语义；Gate G2 接受离线契约进入 P3，真实探针/SLA 仍留后续 Worker 与发布门禁 | BE | P6 | OPEN |
-| RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
+| RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | `SAL-P3-001` 已确认 AlphaSift 源码为 Apache-2.0 并记录 LICENSE/NOTICE 处理、依赖清单、current-resolution SCA 和停止使用条件；数据服务条款、依赖许可证 inventory、Wheel SBOM 和发布归因仍需 `SAL-P3-002` / `SAL-P6-005` 完成 | SEC | G6 | OPEN |
 | RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 已由 ADR-001 关闭初始候选漂移风险：`55946536` 仅作为后续同步/Runbook 文档候选，不改当前基线；`487e49e5` 延期至 `sync/dsa-487e49e5` 分支评审；未来上游快速分叉继续由 `RSK-001` 管理 | TL | SAL-P1-001 | CLOSED |
 | RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
 | RSK-008 | DSA Python 依赖未锁定且包含动态 Git 安装 | 高 | 高 | 新机器或 CI 上 `pip install -r requirements.txt` 或 `[project].dependencies` 解析出不同版本或 AlphaSift Git 依赖不可达 | 已由 `SAL-P1-003` 对 Serenity root 依赖关闭：`uv.lock` 是权威锁，`requirements.txt` 由 lock 导出并由脚本校验漂移，生产/桌面安装面不包含 `git+https` 或 AlphaSift Git URL；DSA 隔离 worktree 保持原样，AlphaSift 审查后 wheel/package intake 由后续 Adapter 任务处理 | BE/SEC | SAL-P1-003 | CLOSED |
@@ -1569,6 +1573,7 @@ P0 基线
 | DEC-045 | 2026-07-23 | PersistentTaskBackend 权威状态与队列路由口径 | 采用 `repositories.persistent_task_backend` 作为持久任务基础设施实现：数据库 `serenity_task_backend_runs` / `serenity_task_backend_events` 是任务快照、状态恢复和审计事件的权威来源；Celery/Redis 通过注入式 `CeleryTaskQueueRouter` 只投递 `task_id/run_id/task_type` 小型引用；Worker 通过 lease/heartbeat/complete/fail/requeue primitives 更新数据库状态，queue message id 仅作诊断 | [persistent-task-backend.md](./persistent-task-backend.md); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_persistent_task_backend.py](../tests/repositories/test_persistent_task_backend.py) | SAL-P2-018,SAL-P2-019,SAL-P4-018,SAL-P5-007,SAL-P6-012 | G2 |
 | DEC-046 | 2026-07-23 | 可恢复任务事件流与 Reconciler 口径 | 采用 `services.task_event_stream` 作为 SSE/恢复适配层：task event replay 复用 `TaskBackend.subscribe(after_event_id)`，run event replay 由 `PersistentTaskBackend` 的 `serenity_run_events` 按 `run_id + sequence` 持久化；`Last-Event-ID` 非负整数校验失败映射为 `ValidationProblem`；Reconciler 只 redispatch queued orphan 和 requeue stalled lease，不执行 handler、不调用 Provider/LLM、不把 queue 状态作为权威；临时清理只删除显式 tmp roots | [recoverable-task-event-stream.md](./recoverable-task-event-stream.md); [task_event_stream.py](../src/serenity_alpha_lab/services/task_event_stream.py); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_task_event_stream.py](../tests/services/test_task_event_stream.py) | SAL-P2-019,SAL-P2-020,SAL-P4-018,SAL-P6-012 | G2 |
 | DEC-047 | 2026-07-23 | Gate G2 数据与任务评审 | `GO with accepted risks`：P2 Dataset、Provider fallback、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流达到 P3 入口；Gate 只批准 AlphaSift/Screen/Factor 开发，不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或完整 Worker loop | [gate-g2-data-task-review.md](./gate-g2-data-task-review.md); [test_gate_g2_data_task_review.py](../tests/gates/test_gate_g2_data_task_review.py) | SAL-P2-020,SAL-P3-001,SAL-P6-005 | G3 |
+| DEC-048 | 2026-07-23 | AlphaSift 源码审查与锁定 | 锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf` 作为 P3 AlphaSift intake 来源；不采用较旧 `v0.2.0` tag 作为源码锁，因为 tag 指向 `f2c2ca22ae3fcb18b0273b8494a9e055d82c01e0` 且落后锁定 commit 67 个提交；AlphaSift 只批准进入离线 Wheel intake，不批准直接 Adapter、Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用 | [alphasift-source-review.md](./alphasift-source-review.md); [test_alphasift_source_review.py](../tests/architecture/test_alphasift_source_review.py) | SAL-P3-001,SAL-P3-002,SAL-P6-005 | G3 |
 
 ## 14. 验收证据登记
 
@@ -1623,6 +1628,7 @@ P0 基线
 | AEV-047 | SAL-P2-018 | PersistentTaskBackend、队列路由、lease/heartbeat/requeue 和事件持久化测试记录 | [persistent-task-backend.md](./persistent-task-backend.md); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_persistent_task_backend.py](../tests/repositories/test_persistent_task_backend.py); [test_task_backend_contract.py](../tests/application/test_task_backend_contract.py); [test_dsa_task_backend_facade.py](../tests/integrations/test_dsa_task_backend_facade.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Persistent backend target `5 passed`; related TaskBackend/Repository/API/Architecture suite `35 passed, 3 skipped`; full pytest `225 passed, 3 skipped`; Red captured missing `repositories.persistent_task_backend` module; backend restart persistence、idempotency replay、explicit task conflict、Celery-like queue routing、cancel request event、Worker lease claim、heartbeat、completion、expired lease requeue 和 monotonic event replay covered; compileall/lock/diff/tag checks PASS; implementation checkpoint `94fd6dac`; no full Worker loop、API/SSE、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE | 2026-07-23 |
 | AEV-048 | SAL-P2-019 | 可恢复任务事件流、RunEvent 持久化、SSE replay、Reconciler 和临时清理测试记录 | [recoverable-task-event-stream.md](./recoverable-task-event-stream.md); [task_event_stream.py](../src/serenity_alpha_lab/services/task_event_stream.py); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_task_event_stream.py](../tests/services/test_task_event_stream.py) | Task event stream target `8 passed`; related TaskBackend/Repository/API/Architecture suite `40 passed, 3 skipped`; full pytest `233 passed, 3 skipped`; Red captured missing `services.task_event_stream` module; SSE `Last-Event-ID` replay、invalid cursor ProblemDetails validation、RunEvent restart persistence、queued orphan redispatch、stalled lease requeue、duplicate delivery lease guard 和 temporary artifact tmp-only cleanup covered; compileall PASS; no full Worker loop、API endpoint、frontend page、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE/FE | 2026-07-23 |
 | AEV-049 | SAL-P2-020 / Gate G2 | Gate G2 数据与任务评审、离线端到端样本、Provider 阻断和任务恢复验证记录 | [gate-g2-data-task-review.md](./gate-g2-data-task-review.md); [test_gate_g2_data_task_review.py](../tests/gates/test_gate_g2_data_task_review.py); [dataset-catalog-manifest.md](./dataset-catalog-manifest.md); [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [persistent-task-backend.md](./persistent-task-backend.md); [recoverable-task-event-stream.md](./recoverable-task-event-stream.md) | Gate target `3 passed`; related P2 suite `80 passed, 3 skipped`; full pytest `236 passed, 3 skipped`; compileall PASS; lock PASS; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; offline AKShare fixture -> Provider Policy -> versioned A-share Dataset publication、cross-provider conflict quarantine、PersistentTaskBackend restart/SSE replay 和 DSA 单股兼容路径 covered; no Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 full Worker loop | TL/QE/SEC | 2026-07-23 |
+| AEV-050 | SAL-P3-001 | AlphaSift 源码审查、许可证归因、依赖面和停止条件验证记录 | [alphasift-source-review.md](./alphasift-source-review.md); [test_alphasift_source_review.py](../tests/architecture/test_alphasift_source_review.py); [python-dependency-lock.md](./python-dependency-lock.md); [gate-g2-data-task-review.md](./gate-g2-data-task-review.md) | Locked source `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`; source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`; Apache-2.0 LICENSE present; Red doc test `2 failed` before review doc, Green target/dependency suite `6 passed`; full pytest `238 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `uvx --python 3.11 --from pip-audit pip-audit` current-resolution scan found `0 known vulnerabilities` across `86` dependencies; no Wheel build、Adapter、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 dependency install surface change | TL/SEC | 2026-07-23 |
 
 允许的证据：
 
@@ -1660,4 +1666,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`，完成度为 49/129；最近阶段性任务为 `SAL-P2-020` Gate G2 数据与任务评审；最近实现 checkpoint 将在本次提交生成，上一实现 checkpoint 为 `15c3d555 feat(P2): 实现可恢复任务事件流`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`）。下一步优先执行 `SAL-P3-001` 审查并锁定 AlphaSift；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001`，完成度为 50/129；最近阶段性任务为 `SAL-P3-001` AlphaSift 源码审查与锁定；最近实现 checkpoint 为本文件所在提交，标题为 `docs(P3): 完成 AlphaSift 源码审查与锁定`，上一 checkpoint 为 `c24db1a7 docs(P2): 完成 Gate G2 数据与任务评审`；Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-002` 构建离线 AlphaSift Wheel；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。

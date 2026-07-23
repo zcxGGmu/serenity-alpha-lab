@@ -1,3 +1,42 @@
+# SAL-P3-001 AlphaSift Source Review Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P3-001` by reviewing and locking AlphaSift source provenance, Apache-2.0 attribution, dependency surface, vulnerability/maintenance risk, known limitations, and replacement/stop-use conditions. Do not build the AlphaSift wheel, write the ScreeningProvider adapter, start Quant Core, start formal backtesting, start Evidence Agent, call real Provider/LLM services, or migrate DSA runtime source.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, current Git status and recent commits.
+- [x] Inspect P3 entry scope, Gate G2 constraints, AlphaSift/DSA existing integration docs, supply-chain baseline, Python dependency lock record, and current DSA AlphaSift pin.
+- [x] Query AlphaSift upstream metadata, default branch, latest commit, tag state, repository license, dependencies, tests, open issues/PRs, contributors, and source archive hash.
+- [x] Run current-resolution dependency SCA for the AlphaSift declared runtime dependencies using Python 3.11.
+- [x] Write Red doc test requiring locked commit, source archive SHA-256, Apache-2.0 attribution, dependency list, SCA result, known limitations, replacement conditions, stop-use conditions, and P3 non-goals.
+- [x] Create `docs/alphasift-source-review.md` with version decision, license/NOTICE treatment, vulnerability and maintenance review, platform boundary, upgrade/replacement/stop-use rules, and next task handoff to `SAL-P3-002`.
+- [x] Update `docs/development-progress-checklist.md` for `SAL-P3-001`, P3 progress, total progress, `SAL-P3-002` READY, decision/evidence registers, and any risk updates.
+- [x] Update `docs/development-status.md` and this review with completed/unfinished scope, verification evidence, checkpoint wording, and next-session prompt.
+- [x] Run target doc test, dependency locking test, full pytest, compileall, dependency lock guard, diff/tag checks, and Git status review.
+- [x] Stage only `SAL-P3-001` files and create a Chinese checkpoint commit.
+
+## Guardrails
+
+- AlphaSift is accepted only as an L1 snapshot/candidate discovery plugin until later contract work proves otherwise.
+- `SAL-P3-001` must not build or commit an AlphaSift wheel; that belongs to `SAL-P3-002`.
+- Do not add AlphaSift to root `pyproject.toml`, `uv.lock`, or generated production `requirements.txt` in this task.
+- Do not bypass Gate G2 Provider Policy/fallback trace, Dataset Catalog/Manifest, Quality Gate, Runtime Profile, ProblemDetails, Trace, Artifact, or Run/Stage/Event boundaries.
+- Do not run real Provider calls, real LLM calls, Quant Core, formal backtesting, Evidence Agent, full Worker execution loops, Compose deployment, or broad DSA runtime source migration.
+- Keep `upstream/dsa-v3.26.1` immutable and avoid submitting `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, temp source archives, or unrelated files.
+
+## Review: SAL-P3-001
+
+- Added `docs/alphasift-source-review.md`, locking `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf` with source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`, Apache-2.0 attribution, dependency list, current-resolution SCA limits, known limitations, upgrade/replacement rules and stop-use conditions.
+- Added `tests/architecture/test_alphasift_source_review.py` to assert the review keeps the source commit, archive hash, license, dependency surface, SCA result, non-goals and stop conditions explicit. Red failed with missing review doc (`2 failed`); Green target passed (`2 passed`).
+- Updated `docs/development-progress-checklist.md`: `SAL-P3-001` DONE, P3 `1/17`, total `50/129`, `SAL-P3-002` READY, `DEC-048`, `AEV-050`, and `RSK-005` mitigation detail.
+- Updated `docs/development-status.md`: current task is `SAL-P3-002`, Gate G3 remains pending, completed range includes `SAL-P3-001`, and the next-start prompt points to offline Wheel intake.
+- Verification: target AlphaSift review + dependency locking tests `6 passed`; full pytest `238 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Checkpoint: 本文件所在提交，标题为 `docs(P3): 完成 AlphaSift 源码审查与锁定`。
+- Scope retained: no AlphaSift Wheel build, no dependency install surface change, no ScreeningProvider/Adapter, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM call and no DSA runtime source migration.
+
+---
+
 # Gate G2 Data and Task Review Plan
 
 > Started: 2026-07-23
