@@ -1,3 +1,41 @@
+# P2 Provider Policy Fallback Trace Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-015` by adding an offline Provider Policy and fallback trace layer. Select sources by capability, market, freshness, required fields, data-quality status, and cross-provider conflict threshold. Reuse Provider domain contracts, Provider contract fixtures, Trace scalar attribution, Data Quality status semantics, Dataset publication quarantine vocabulary, and ProblemDetails-compatible validation boundaries. Do not call real Providers/LLMs, do not implement Worker runtime, PersistentTaskBackend, Quant Core, formal backtest, Evidence Agent, scheduled probes, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect `SAL-P2-015` acceptance scope, Provider fixtures, Provider domain contracts, quality/publication semantics, API error mapping, and architecture guardrails.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-provider-policy-fallback-trace.md`.
+- [x] Add Red tests for first fresh complete source selection, stale/missing-field fallback, Provider error trace, exhausted fallback, and cross-provider close-conflict quarantine.
+- [x] Implement `integrations.data.provider_policy` with YAML-compatible policy DTOs, selection engine, fallback attempt trace, conflict records, and deterministic diagnostics.
+- [x] Export policy symbols and preserve architecture boundaries without touching DSA runtime source or Provider SDKs.
+- [x] Add acceptance evidence documentation for `SAL-P2-015`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-015` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Provider Policy consumes already-normalized offline `DataBatch` / `ProviderError` outcomes only; it must not instantiate Provider SDKs, call DSA `DataFetcherManager`, probe networks, publish Datasets, or mutate Provider fixture snapshots.
+- Successful Provider data can still be rejected for stale freshness, missing required fields, quarantine/blocking quality status, schema mismatch, or cross-source conflict.
+- Cross-provider conflicts over threshold enter quarantine and must not be hidden by averaging or silent overwrite.
+- Tests use synthetic offline fixture cases and local deterministic records only; no real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-015
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/integrations/test_provider_policy.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.integrations.data.provider_policy'`.
+- Green implementation: added `ProviderPolicy`, `ProviderPolicySource`, `ProviderSelectionRequest`, `ProviderPolicyEngine`, `ProviderFallbackAttempt`, `ProviderConflictRecord`, `ProviderFallbackTrace` and `ProviderSelectionResult` under `integrations.data`.
+- Selection coverage: first fresh complete source wins by policy priority; stale `DataBatch`, dataset mismatch, missing required fields and `DataQualityStatus.BLOCKING` trigger rejection/fallback; Provider errors are recorded as `provider_<category>` and exhausted attempts return no selected batch.
+- Conflict coverage: cross-provider `close` differences over configured bps threshold return `quarantined`, record provider values and primary key, and do not average or silently overwrite.
+- Verification: target Provider Policy test `6 passed`; related Provider/Quality/Publication/API/Architecture suite `59 passed`; full pytest `209 passed`; `compileall` PASS; dependency lock PASS; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no Provider SDK import, DSA `DataFetcherManager`, real Provider/LLM/network call, Bronze/Dataset write, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, scheduled probe, DSA runtime source migration or tag movement.
+
+---
+
 # P2 Provider Contract Fixtures Plan
 
 > Started: 2026-07-23

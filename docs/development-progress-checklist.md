@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 14/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
+| P2 数据与任务 | 3~6 | DOING | 15/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **43/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **44/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -643,16 +643,21 @@ P0 基线
 
 ### SAL-P2-015 实现 Provider Policy 与 fallback trace
 
-- [ ] [READY] 按能力、新鲜度和质量选择来源并记录冲突
-- 元数据：优先级 P0 | 负责人 BE/QE | 估算 2.5d | 实际 - | 依赖 SAL-P2-001,SAL-P2-014
+- [x] [DONE] 按能力、新鲜度和质量选择来源并记录冲突
+- 元数据：优先级 P0 | 负责人 BE/QE | 估算 2.5d | 实际 0.5d | 依赖 SAL-P2-001,SAL-P2-014 | 开始 2026-07-23 | 完成 2026-07-23
 - 交付物：YAML Policy、fallback、cross-check、Run Diagnostics。
 - 验收：
   - 成功但陈旧/缺字段的数据会触发 fallback。
   - 跨源差异超阈值进入 quarantine，不静默平均。
+- 结果：新增 `src/serenity_alpha_lab/integrations/data/provider_policy.py`，定义 YAML-compatible `ProviderPolicy`、`ProviderPolicySource`、`ProviderSelectionRequest`、`ProviderPolicyEngine`、`ProviderFallbackAttempt`、`ProviderConflictRecord`、`ProviderFallbackTrace` 和 `ProviderSelectionResult`；策略层只消费离线 `DataBatch` / `ProviderError` outcomes，按 priority、capability、market、freshness、required fields 和 `DataQualityStatus` 选择 Provider，并输出 deterministic diagnostics。
+- Fallback：成功 `DataBatch` 若 stale、缺少必需字段或质量状态为 `quarantine/blocking`，会记录 rejected attempt 并继续下一来源；`ProviderError` 记录为 `provider_<category>`，所有 attempts 保留 raw-response hash、freshness、quality status 和 trace/run/stage 标量。
+- 冲突处理：配置 `cross_check_provider` 与 `max_close_diff_bps` 后，同一证券/日期 `close` 跨源差异超阈值返回 `quarantined`，`selected_batch=None`，并记录 provider values、主键、bps 差异和 `quarantine` resolution；不做平均值或静默覆盖。
+- 范围限制：未启动真实 Provider/LLM 调用、Provider SDK import、DSA `DataFetcherManager`、Bronze 写入、Dataset 发布、PersistentTaskBackend、Worker runtime、Quant Core、正式回测、Evidence Agent、定时探针或 DSA runtime source 迁移。
+- 验收证据：见 [Provider Policy 与 Fallback Trace 记录](./provider-policy-fallback-trace.md)；`tests/integrations/test_provider_policy.py`、`tests/integrations/test_provider_contract_fixtures.py`、`tests/domain/test_provider_contract.py`、`tests/datasets/test_data_quality.py`、`tests/datasets/test_dataset_publication.py`、`tests/application/test_api_errors.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为无法导入 `serenity_alpha_lab.integrations.data.provider_policy`，Green 后目标测试 `6 passed`、相关套件 `59 passed`、全量 pytest `209 passed`，全量验证记录见 AEV-044。
 
 ### SAL-P2-016 实现增量同步与交易日调度
 
-- [ ] [TODO] 支持 checkpoint、回看窗口、锁和补数
+- [ ] [READY] 支持 checkpoint、回看窗口、锁和补数
 - 元数据：优先级 P0 | 负责人 BE/QE | 估算 2.5d | 实际 - | 依赖 SAL-P2-006,SAL-P2-011,SAL-P2-015
 - 交付物：DataSyncRun、Scheduler、补数命令、幂等测试。
 - 验收：
@@ -1484,7 +1489,7 @@ P0 基线
 | RSK-001 | DSA 上游快速分叉 | 高 | 高 | 同步冲突持续增加 | Facade、最小补丁、同步演练 | TL | G6 | OPEN |
 | RSK-002 | PIT 数据时间不可信 | 中 | 极高 | 财报缺 announced/available | 可信等级、硬门禁、商业源 | QE | G2 | OPEN |
 | RSK-003 | Agent 引用/幻觉 | 高 | 高 | 无依据数字/错引 | Evidence、Validator、金标 | AI | G5 | OPEN |
-| RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | `SAL-P2-001` 锁定错误分类、Provenance 和离线 Contract Test；`SAL-P2-015` 继续负责 Policy、fallback 和契约探针 | BE | G2 | OPEN |
+| RSK-004 | 免费 Provider 不稳定 | 高 | 高 | 限流/Schema 漂移 | `SAL-P2-001` 锁定错误分类、Provenance 和离线 Contract Test；`SAL-P2-014` 冻结 Provider fixture；`SAL-P2-015` 已实现离线 Policy/fallback trace 和 cross-source quarantine，真实探针/SLA 仍留后续调度与发布门禁 | BE | G2 | OPEN |
 | RSK-005 | 许可证/服务条款冲突 | 中 | 高 | 待审依赖进入发行物 | SBOM、Profile 门禁、法律审查 | SEC | G6 | OPEN |
 | RSK-006 | 锁定 release 后遗漏 main 上高价值修复 | 中 | 中 | 上游 main 出现文档修复或 DecisionSignal 契约增强 | 已由 ADR-001 关闭初始候选漂移风险：`55946536` 仅作为后续同步/Runbook 文档候选，不改当前基线；`487e49e5` 延期至 `sync/dsa-487e49e5` 分支评审；未来上游快速分叉继续由 `RSK-001` 管理 | TL | SAL-P1-001 | CLOSED |
 | RSK-007 | 本地仓库曾未绑定本项目 `origin` 远端 | 中 | 中 | 需要推送 checkpoint、创建 PR 或同步团队远端时发现无 `origin` | 已配置 `origin` 为 `git@github.com:zcxGGmu/serenity-alpha-lab.git`，并保留 `upstream` 为官方 DSA；后续同步/PR 前复验双 remote | TL | SAL-P0-012 | CLOSED |
@@ -1539,6 +1544,7 @@ P0 基线
 | DEC-039 | 2026-07-22 | 数据质量规则引擎口径 | 采用 `datasets.quality` 对 schema-bound Dataset snapshots 做离线质量评估；报告状态为 `passed` / `warning` / `quarantine` / `blocking`，每个 issue 定位到 dataset/version/partition/field/primary key/sample；质量报告发布为 deterministic Artifact，并通过 manifest metadata 记录 rule set version、quality status、issue counts 和 report artifact。本任务只产出报告和 metadata，不执行 latest 阻断或 quarantine 发布事务 | [data-quality-rule-engine.md](./data-quality-rule-engine.md); [quality.py](../src/serenity_alpha_lab/datasets/quality.py); [test_data_quality.py](../tests/datasets/test_data_quality.py) | SAL-P2-012,SAL-P2-013,SAL-P2-015,SAL-P2-020 | G2 |
 | DEC-040 | 2026-07-23 | Dataset 隔离区与原子发布口径 | 采用 `datasets.publication` 作为 Dataset Catalog 与 Data Quality Report 之间的质量门禁层；发布先写质量报告 Artifact 和不可变 Dataset Manifest，只有 `passed` 可显式提升为 `latest`，`warning/quarantine/blocking` 仅写入 held/quarantine/blocking 记录并保留旧 latest；失败路径清理显式 tmp 根并抛出异常 | [dataset-atomic-publication.md](./dataset-atomic-publication.md); [publication.py](../src/serenity_alpha_lab/datasets/publication.py); [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py); [test_dataset_publication.py](../tests/datasets/test_dataset_publication.py) | SAL-P2-013,SAL-P2-014,SAL-P2-015,SAL-P2-020 | G2 |
 | DEC-041 | 2026-07-23 | Provider 契约 Fixture 口径 | 采用 `integrations.data.provider_contract_fixtures` 维护全离线 Provider 响应 corpus；fixture 只表达脱敏响应、Provider-facing schema、预期错误分类、normalized records、raw-response SHA-256 和 Arrow raw daily bars schema hash，不实现 Provider fallback 选择、真实 SDK 调用或探针；`.gitignore` 保留运行时 `data/` 忽略，但精确放开 `src/serenity_alpha_lab/integrations/data/*.py` 源码包 | [provider-contract-fixtures.md](./provider-contract-fixtures.md); [provider_contract_fixtures.py](../src/serenity_alpha_lab/integrations/data/provider_contract_fixtures.py); [test_provider_contract_fixtures.py](../tests/integrations/test_provider_contract_fixtures.py); [baselines/provider-contract-fixtures/index.json](./baselines/provider-contract-fixtures/index.json) | SAL-P2-014,SAL-P2-015 | G2 |
+| DEC-042 | 2026-07-23 | Provider Policy 与 fallback trace 口径 | 采用 `integrations.data.provider_policy` 在离线 Provider outcome 边界执行选择：Policy 使用 YAML-compatible mapping 表达 source priority、market/capability、source quality 和 cross-check 阈值；选择只消费 `DataBatch` / `ProviderError`，成功但 stale、缺字段、quality quarantine/blocking 或跨源 close 差异超阈值均不会静默成功，fallback trace 记录 attempts、冲突、raw-response hash、trace/run/stage 和最终状态 | [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [provider_policy.py](../src/serenity_alpha_lab/integrations/data/provider_policy.py); [test_provider_policy.py](../tests/integrations/test_provider_policy.py) | SAL-P2-015,SAL-P2-016,SAL-P2-020 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1587,6 +1593,7 @@ P0 基线
 | AEV-041 | SAL-P2-012 | 数据质量规则引擎、warning/quarantine/blocking 报告和 manifest metadata 测试记录 | [data-quality-rule-engine.md](./data-quality-rule-engine.md); [quality.py](../src/serenity_alpha_lab/datasets/quality.py); [test_data_quality.py](../tests/datasets/test_data_quality.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Data quality target `4 passed`; related dataset/artifact/API/architecture suite `61 passed`; full pytest `194 passed`; Red captured missing `quality` module; unique primary key、Schema/type、OHLC、non-negative volume/amount、null-ratio drift、continuity gap、return outlier、volume spike、adjustment factor jump、deterministic report Artifact、manifest metadata 和 ProblemDetails validation mapping covered; compileall/lock/diff/tag checks PASS; no latest blocking/quarantine transaction、fallback policy、Provider fixture、Quant Core、formal backtest、Evidence Agent 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
 | AEV-042 | SAL-P2-013 | Dataset 隔离区、质量门禁 latest 发布和临时清理测试记录 | [dataset-atomic-publication.md](./dataset-atomic-publication.md); [publication.py](../src/serenity_alpha_lab/datasets/publication.py); [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py); [test_dataset_publication.py](../tests/datasets/test_dataset_publication.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Dataset publication target `5 passed`; related dataset/artifact/API/architecture suite `66 passed`; full pytest `199 passed`; checkpoint `8edd723a`; Red captured missing `publication` module; passed-only latest promotion、warning held、quarantine/blocking old-latest retention、deterministic quarantine records、quality report metadata、latest promotion failure old-latest retention 和 explicit tmp cleanup covered; compileall/lock/diff/tag checks PASS; no fallback policy、Provider fixture、real Provider/LLM、Quant Core、formal backtest、Evidence Agent 或 DSA runtime source migration | BE/QE | 2026-07-23 |
 | AEV-043 | SAL-P2-014 | Provider 契约 Fixture、脱敏响应快照、Schema 绑定和异常样本测试记录 | [provider-contract-fixtures.md](./provider-contract-fixtures.md); [provider_contract_fixtures.py](../src/serenity_alpha_lab/integrations/data/provider_contract_fixtures.py); [test_provider_contract_fixtures.py](../tests/integrations/test_provider_contract_fixtures.py); [baselines/provider-contract-fixtures/index.json](./baselines/provider-contract-fixtures/index.json) | Provider fixture target `4 passed`; related Provider/Schema/API/Architecture suite `58 passed`; full pytest `203 passed`; checkpoint `5016ced6`; Red captured missing `provider_contract_fixtures` module; AKShare/efinance/Tushare/BaoStock/YFinance offline corpus、CN/US/HK success paths、timeout/empty/schema_drift categories、immutable DataBatch conversion、deterministic sanitized JSON snapshots、SDK import avoidance 和 `.gitignore` source tracking fix covered; compileall/lock/diff/tag checks PASS; no fallback policy、real Provider/LLM、Quant Core、formal backtest、Evidence Agent 或 DSA runtime source migration | BE/QE | 2026-07-23 |
+| AEV-044 | SAL-P2-015 | Provider Policy、fallback trace、质量状态和跨源冲突 quarantine 测试记录 | [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [provider_policy.py](../src/serenity_alpha_lab/integrations/data/provider_policy.py); [test_provider_policy.py](../tests/integrations/test_provider_policy.py); [provider-contract-fixtures.md](./provider-contract-fixtures.md) | Provider policy target `6 passed`; related Provider/Quality/Publication/API/Architecture suite `59 passed`; full pytest `209 passed`; Red captured missing `provider_policy` module; fresh complete source selection、dataset mismatch rejection、stale/missing-fields fallback、Provider error exhaustion、quality blocking fallback、cross-provider close conflict quarantine 和 no averaging covered; compileall/lock/diff/tag checks PASS; no real Provider/LLM、Worker、Quant Core、formal backtest、Evidence Agent 或 DSA runtime source migration | BE/QE | 2026-07-23 |
 
 允许的证据：
 
@@ -1624,4 +1631,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-014`，完成度为 43/129；最近阶段性任务为 `SAL-P2-014` Provider 契约 Fixture；最近实现 checkpoint 为 `5016ced6 feat(P2): 建立 Provider 契约 Fixture`，上一状态同步 checkpoint 为 `8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-015` Provider Policy 与 fallback trace；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动真实 Provider 调用、Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且 fallback policy 必须只在 `SAL-P2-015` 范围内基于已冻结 fixture 和 Provider 契约实现。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-015`，完成度为 44/129；最近阶段性任务为 `SAL-P2-015` Provider Policy 与 fallback trace；最近实现 checkpoint 将在本次提交生成，上一状态同步 checkpoint 为 `a8f05d5e docs: 复核 SAL-P2-014 状态并固化恢复提示`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-016` 增量同步与交易日调度；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
