@@ -23,6 +23,14 @@ from serenity_alpha_lab.repositories.database import (
     resolve_database_profile,
 )
 from serenity_alpha_lab.repositories.local_artifact_store import LocalArtifactStore
+from serenity_alpha_lab.repositories.persistent_task_backend import (
+    CeleryTaskQueueRouter,
+    NoopTaskQueueRouter,
+    PersistentTaskBackend,
+    TaskLease,
+    TaskQueueRoute,
+    TaskQueueRouter,
+)
 from serenity_alpha_lab.repositories.storage_migrations import (
     MigrationStatus,
     StorageMigrationError,
@@ -49,12 +57,15 @@ __all__ = [
     "BronzeRawArtifact",
     "BronzeRawStore",
     "BronzeRawStoreError",
+    "CeleryTaskQueueRouter",
     "DatabaseDialect",
     "DatabaseProfileError",
     "DatabaseProfileSettings",
     "DatabaseReadiness",
     "LocalArtifactStore",
     "MigrationStatus",
+    "NoopTaskQueueRouter",
+    "PersistentTaskBackend",
     "RepositoryConflict",
     "RepositoryContractProbeRecord",
     "RepositoryContractProbeRepository",
@@ -62,6 +73,9 @@ __all__ = [
     "RepositoryError",
     "StorageMigrationError",
     "StorageMigrationRequired",
+    "TaskLease",
+    "TaskQueueRoute",
+    "TaskQueueRouter",
     "SQLiteInspection",
     "SQLiteUpgradeError",
     "SQLiteUpgradeReport",

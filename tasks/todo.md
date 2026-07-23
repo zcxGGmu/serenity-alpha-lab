@@ -1,3 +1,32 @@
+# P2 PersistentTaskBackend Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-018` by implementing a database-authoritative `PersistentTaskBackend` with Celery/Redis queue routing boundaries, append-only task events, worker lease/heartbeat primitives, cancellation request recording, and expired-lease requeue. Reuse `TaskBackend` Protocol, Run/Event semantics, SQLAlchemy database profile, Alembic preflight assumptions, ProblemDetails-compatible errors, Trace/Artifact boundaries, Dataset/Provider scheduling constraints, and Data Sync Scheduler handoff. Do not start Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, full Worker execution loops, API endpoints, SSE recovery, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, current Git status and recent commits.
+- [x] Inspect `SAL-P2-018` acceptance scope, TaskBackend Protocol, DSA facade, Run/Stage/Event domain model, database profile, repository contract patterns and architecture guardrails.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-persistent-task-backend.md`.
+- [x] Add Red tests for persisted submit/get/subscribe after backend restart, idempotency replay, explicit task-id conflict, queue routing, cancellation request, lease heartbeat, completion and expired-lease requeue.
+- [x] Implement `repositories.persistent_task_backend` with SQLAlchemy tables, `PersistentTaskBackend`, injected `CeleryTaskQueueRouter`, route DTOs, append-only events and lease helpers.
+- [x] Export repository symbols and preserve architecture boundaries without importing Celery/Redis into application/domain/datasets or touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-018`.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [ ] Update progress checklist, development status, this review and the next-session prompt.
+- [ ] Stage only `SAL-P2-018` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Database task/run rows and append-only task events are authoritative; Celery/Redis delivery metadata is diagnostic and must not become the source of truth.
+- Queue payloads carry task/run IDs, task type and small routing metadata only; DataFrame, prompt text, Provider raw responses and large outputs remain Artifact-backed or out of scope.
+- Worker helpers may claim leases, heartbeat, complete, fail and requeue expired leases; they must not execute Quant Core, formal backtest, Evidence Agent, Provider SDKs, LLM calls or DSA runtime tasks in this checkpoint.
+- Tests use local SQLite and injected fake Celery-like routers only; optional live PostgreSQL contract remains guarded by `SERENITY_TEST_POSTGRES_URL`.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+---
+
 # P2 PostgreSQL Standalone Profile Plan
 
 > Started: 2026-07-23
