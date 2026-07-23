@@ -34,6 +34,13 @@
 - Review note: attempted read-only code-review/spec-review subagent dispatch after tool discovery, but the client rejected payload variants as duplicate `message/items` or empty optional fields. Local review checked diff scope, manifest/SBOM/license consistency, non-goals, dependency install surface, untracked files and tag immutability.
 - Updated progress checklist with `SAL-P3-002` DONE, P3 `2/17`, total `51/129`, `SAL-P3-003` READY, `DEC-049`, `AEV-051`, and `RSK-005` mitigation detail.
 - Scope retained: no root `pyproject.toml` / `uv.lock` / production `requirements.txt` AlphaSift install surface change, no Wheel binary committed, no ScreeningProvider/Adapter, no CandidateBatch, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM call, no DSA runtime source migration and no tag movement.
+- Checkpoint: `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`.
+
+## Review: SAL-P3-002 Status Sync
+
+- Replaced recovery placeholders with actual implementation checkpoint `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`.
+- Current next task remains `SAL-P3-003` only; Gate G3 remains未通过, progress remains P3 `2/17`, total `51/129`.
+- Status-sync checkpoint will be the commit containing this review, titled `docs: 同步 SAL-P3-002 最新状态与恢复提示`; next startup should confirm the actual hash with `git log -1 --oneline`.
 
 ---
 
