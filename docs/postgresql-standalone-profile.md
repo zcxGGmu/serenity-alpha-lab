@@ -3,6 +3,7 @@
 > 任务：`SAL-P2-017` 建立 PostgreSQL standalone Profile<br>
 > 日期：2026-07-23<br>
 > 代码：`src/serenity_alpha_lab/repositories/database.py`<br>
+> checkpoint：`195765f3 feat(P2): 建立 PostgreSQL standalone Profile`<br>
 > 测试：`tests/repositories/test_database_profile.py`、`tests/repositories/test_repository_contract.py`
 
 ## 范围

@@ -26,6 +26,7 @@
 
 ## Review: SAL-P2-017
 
+- Checkpoint: `195765f3 feat(P2): 建立 PostgreSQL standalone Profile`.
 - Red evidence: `uv run --extra core --extra dev python -m pytest tests/repositories/test_database_profile.py tests/repositories/test_repository_contract.py -q` failed because `serenity_alpha_lab.repositories.database` did not exist.
 - Green implementation: added `DatabaseProfileSettings`, `DatabaseDialect`, `resolve_database_profile()`, `create_database_engine()`, `check_database_ready()`, `RepositoryContractProbeRecord` and `RepositoryContractProbeRepository` under `repositories.database`, plus repository package exports.
 - Profile coverage: standalone requires explicit `SERENITY_DATABASE_URL`; PostgreSQL uses `psycopg`, `pool_pre_ping`, pool size/overflow/timeout, `statement_timeout=30000`, redacted diagnostics and `application_name`; SQLite enables foreign keys, busy timeout, WAL for file DBs and `StaticPool` for memory DBs.
