@@ -8,7 +8,7 @@
 > 任务完成度：45/129<br>
 > 当前可执行任务：`SAL-P2-017`，状态为 `READY`；PostgreSQL standalone Profile 必须基于已冻结 Alembic baseline、Runtime Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Dataset Catalog/Manifest 与增量同步边界实现，不得提前启动 Worker lease、Quant Core、正式回测或 Evidence Agent<br>
 > 最近可评审交付 checkpoint：`cfadc415 feat(P2): 实现增量同步与交易日调度`；上一实现 checkpoint 为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P2-016 最新状态与恢复提示`；上一状态同步为 `f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 复核 SAL-P2-016 状态并固化恢复提示`；上一状态同步为 `70f82cee docs: 同步 SAL-P2-016 最新状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -177,6 +177,7 @@
 - 2026-07-23：完成 `SAL-P2-015`，新增 Provider Policy 与 fallback trace；Provider policy target `6 passed`、相关 Provider/Quality/Publication/API/Architecture suite `59 passed`、full pytest `209 passed`，P2 进度 `15/20`、总进度 `44/129`，`SAL-P2-016` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：按用户要求同步 `SAL-P2-015` checkpoint 后最新状态；确认最近可评审交付为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..015`，未完成范围从 `SAL-P2-016` 开始，当前 READY 任务为 `SAL-P2-016`，并已在 `tasks/lessons.md` 固化“阶段性任务完成后自动状态同步”的习惯。
 - 2026-07-23：完成 `SAL-P2-016`，新增增量同步与交易日调度层；Data sync target `5 passed`、相关 Trading Calendar/Catalog/Provider Policy/Run lifecycle/Architecture suite `35 passed`、full pytest `214 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `16/20`、总进度 `45/129`，`SAL-P2-017` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-23：按用户要求再次复核 `SAL-P2-016` 后最新开发状态；确认最近可评审交付为 `cfadc415 feat(P2): 实现增量同步与交易日调度`，上一状态同步 checkpoint 为 `70f82cee docs: 同步 SAL-P2-016 最新状态与恢复提示`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..016`，未完成范围从 `SAL-P2-017` 开始，当前 READY 任务为 `SAL-P2-017`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -215,7 +216,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-016
 - 最近完成：SAL-P2-016 增量同步与交易日调度
 - 最近可评审交付 checkpoint：cfadc415 feat(P2): 实现增量同步与交易日调度；上一实现 checkpoint 为 378ba734 feat(P2): 实现 Provider Policy 与 fallback trace
-- 最新状态同步 checkpoint：docs: 同步 SAL-P2-016 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 f7e27a9e docs: 同步 SAL-P2-015 最新状态与恢复提示
+- 最新状态同步 checkpoint：docs: 复核 SAL-P2-016 状态并固化恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 70f82cee docs: 同步 SAL-P2-016 最新状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 16/20，总计 45/129
 
 下一步优先执行：

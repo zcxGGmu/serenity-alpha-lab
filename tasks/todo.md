@@ -1,3 +1,25 @@
+# P2 SAL-P2-016 Status Refresh Plan
+
+> Started: 2026-07-23
+> Scope: Reconfirm recoverable development status after `SAL-P2-016` checkpoints `cfadc415` and `70f82cee`, update lessons for the repeated habit reminder, and keep the next-start prompt ready for `SAL-P2-017`.
+
+## Checklist
+
+- [x] Re-read current Git status, recent commits, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, and `tasks/todo.md`.
+- [x] Confirm completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..016`; unfinished work resumes at `SAL-P2-017`.
+- [x] Update `tasks/lessons.md` to record the repeated requirement to automatically sync status and provide a copyable next-start prompt after each phase task.
+- [x] Refresh `docs/development-status.md`, `docs/development-progress-checklist.md`, and this review with the latest checkpoint anchors and constraints.
+- [x] Run status-anchor scans and `git diff --check`, then create the required Chinese status checkpoint commit.
+
+## Review: SAL-P2-016 Status Refresh
+
+- Confirmed latest implementation checkpoint: `cfadc415 feat(P2): 实现增量同步与交易日调度`.
+- Confirmed previous status-sync checkpoint: `70f82cee docs: 同步 SAL-P2-016 最新状态与恢复提示`.
+- Current recoverable state remains P2 Data/Persistent Tasks, Gate G2 not passed, completed `45/129`, P2 `16/20`, next READY task `SAL-P2-017 PostgreSQL standalone Profile`.
+- Scope constraints remain unchanged: no Worker lease, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls, tag movement, destructive Git operation, or generated artifact submission.
+
+---
+
 # P2 Data Sync Scheduler Plan
 
 > Started: 2026-07-23

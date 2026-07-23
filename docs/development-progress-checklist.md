@@ -1636,4 +1636,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-016`，完成度为 45/129；最近阶段性任务为 `SAL-P2-016` 增量同步与交易日调度；最近实现 checkpoint 为 `cfadc415 feat(P2): 实现增量同步与交易日调度`，上一实现 checkpoint 为 `378ba734 feat(P2): 实现 Provider Policy 与 fallback trace`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-017` PostgreSQL standalone Profile；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-016`，完成度为 45/129；最近阶段性任务为 `SAL-P2-016` 增量同步与交易日调度；最近实现 checkpoint 为 `cfadc415 feat(P2): 实现增量同步与交易日调度`，最新状态同步 checkpoint 为 `70f82cee docs: 同步 SAL-P2-016 最新状态与恢复提示`，本次复核提交标题为 `docs: 复核 SAL-P2-016 状态并固化恢复提示`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-017` PostgreSQL standalone Profile；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
