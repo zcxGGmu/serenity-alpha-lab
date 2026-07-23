@@ -14,7 +14,7 @@
 - [x] Add `docs/candidate-batch-contract.md` with schema, validation, non-goals and evidence.
 - [x] Update progress checklist, development status, this review and next-session prompt.
 - [x] Run target, related, full, compile, lock, diff and immutable tag verification.
-- [ ] Stage only `SAL-P3-004` files and create the required Chinese checkpoint commit.
+- [x] Stage only `SAL-P3-004` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -32,6 +32,7 @@
 - Red evidence: target contract test failed with missing `serenity_alpha_lab.application.candidate_batch`.
 - Verification: target `3 passed`; related CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `25 passed`; full pytest `255 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Scope retained: no FactorDefinition, Factor Engine, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+- Checkpoint: `07b5d526 feat(P3): 定义 CandidateBatch 候选契约`.
 
 ---
 

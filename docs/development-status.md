@@ -7,7 +7,7 @@
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：53/129<br>
 > 当前可执行任务：`SAL-P3-005`，状态为 `READY`；实现 FactorDefinition 版本模型，建立 draft/published/retired 和不可变发布，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：本次 `feat(P3): 定义 CandidateBatch 候选契约` 提交生成；上一 checkpoint 为 `1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`<br>
+> 最近可评审交付 checkpoint：`07b5d526 feat(P3): 定义 CandidateBatch 候选契约`；上一 checkpoint 为 `1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`<br>
 > 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-004 最新状态与恢复提示`；上一状态同步 checkpoint 为 `2e508412 docs: 同步 SAL-P3-003 最新状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -200,7 +200,7 @@
 - 2026-07-23：完成 `SAL-P3-001` AlphaSift 源码审查与锁定；锁定 `ZhuLinsen/alphasift@9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`、source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、Apache-2.0 attribution、依赖清单、current-resolution SCA、已知限制、升级/替换/停止使用条件；Red doc test `2 failed`、target/dependency suite `6 passed`、full pytest `238 passed, 3 skipped`、compileall/lock/diff/tag checks PASS，P3 进度 `1/17`、总进度 `50/129`，`SAL-P3-002` 成为当前 `READY` 任务。
 - 2026-07-23：完成 `SAL-P3-002` AlphaSift 离线 Wheel intake；source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`、internal artifact URI、CycloneDX SBOM、license inventory 和 offline no-deps install check 已记录；Red intake test `4 failed`、Green target `4 passed`、related architecture suite `10 passed`、full pytest `242 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `2/17`、总进度 `51/129`，`SAL-P3-003` 成为当前 `READY` 任务。
 - 2026-07-23：完成 `SAL-P3-003` ScreeningProvider；新增平台 `ScreeningProvider` Protocol、DTO、Fake、`AlphaSiftScreeningAdapter`、ProblemDetails 映射和架构边界测试；Red contract test `1 error`、Red adapter test `1 error`、Green target/related suite `22 passed`、full pytest `252 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `3/17`、总进度 `52/129`，`SAL-P3-004` 成为当前 `READY` 任务。
-- 2026-07-23：完成 `SAL-P3-004` CandidateBatch；新增平台标准候选批次契约、canonical `InstrumentId`、具体 Dataset Version guard、source snapshot/discovered time、rank、L1/L2/L3 score records、reason/source lineage、LLM overlay independence、冻结 nested records、JSON-friendly `to_record()` 和 `ScreeningResult` metadata bridge；Red contract test `1 error`、Green target `3 passed`、related suite `25 passed`，full pytest `255 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `4/17`、总进度 `53/129`，`SAL-P3-005` 成为当前 `READY` 任务。
+- 2026-07-23：完成 `SAL-P3-004` CandidateBatch；新增平台标准候选批次契约、canonical `InstrumentId`、具体 Dataset Version guard、source snapshot/discovered time、rank、L1/L2/L3 score records、reason/source lineage、LLM overlay independence、冻结 nested records、JSON-friendly `to_record()` 和 `ScreeningResult` metadata bridge；Red contract test `1 error`、Green target `3 passed`、related suite `25 passed`，full pytest `255 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `4/17`、总进度 `53/129`，`SAL-P3-005` 成为当前 `READY` 任务；实现 checkpoint 为 `07b5d526 feat(P3): 定义 CandidateBatch 候选契约`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -244,7 +244,7 @@
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-004
 - 最近完成：SAL-P3-004 CandidateBatch
-- 最近可评审交付 checkpoint：本次 feat(P3): 定义 CandidateBatch 候选契约 提交生成；上一 checkpoint 为 1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter
+- 最近可评审交付 checkpoint：07b5d526 feat(P3): 定义 CandidateBatch 候选契约；上一 checkpoint 为 1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter
 - 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-004 最新状态与恢复提示；上一状态同步 checkpoint 为 2e508412 docs: 同步 SAL-P3-003 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 4/17，总计 53/129
 
