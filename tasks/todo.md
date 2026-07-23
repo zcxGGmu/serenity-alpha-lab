@@ -13,8 +13,8 @@
 - [x] Export repository symbols and preserve architecture boundaries without importing Celery/Redis into application/domain/datasets or touching DSA runtime source.
 - [x] Add acceptance evidence documentation for `SAL-P2-018`.
 - [x] Run target, related, full, compile, lock, diff and immutable tag verification.
-- [ ] Update progress checklist, development status, this review and the next-session prompt.
-- [ ] Stage only `SAL-P2-018` files and create the required Chinese checkpoint commit.
+- [x] Update progress checklist, development status, this review and the next-session prompt.
+- [x] Stage only `SAL-P2-018` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -24,6 +24,16 @@
 - Worker helpers may claim leases, heartbeat, complete, fail and requeue expired leases; they must not execute Quant Core, formal backtest, Evidence Agent, Provider SDKs, LLM calls or DSA runtime tasks in this checkpoint.
 - Tests use local SQLite and injected fake Celery-like routers only; optional live PostgreSQL contract remains guarded by `SERENITY_TEST_POSTGRES_URL`.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P2-018
+
+- Checkpoint: `94fd6dac feat(P2): 实现 PersistentTaskBackend`.
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/repositories/test_persistent_task_backend.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.repositories.persistent_task_backend'`.
+- Green implementation: added `PersistentTaskBackend`, `TaskQueueRoute`, `TaskLease`, `TaskQueueRouter`, `CeleryTaskQueueRouter` and `NoopTaskQueueRouter` under `repositories.persistent_task_backend`, plus repository package exports.
+- Persistence coverage: database tables `serenity_task_backend_runs` and `serenity_task_backend_events` are authoritative; backend restart preserves `TaskSnapshot`, `subscribe(after_event_id)` replays monotonic task events, and idempotency key replay avoids duplicate dispatch.
+- Queue/worker coverage: injected Celery-like router sends only `task_id/run_id/task_type`; tests cover route mapping, cancel-request event, lease claim, heartbeat, completion and expired lease requeue.
+- Verification: target persistent backend tests `5 passed`; related TaskBackend/Repository/API/Architecture suite `35 passed, 3 skipped`; full pytest `225 passed, 3 skipped`; `compileall` PASS; dependency lock PASS; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no full Worker execution loop, API endpoint, SSE `Last-Event-ID`, orphan Reconciler, Compose service, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, DSA runtime source migration or tag movement.
 
 ---
 

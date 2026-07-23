@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 17/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
+| P2 数据与任务 | 3~6 | DOING | 18/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **46/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **47/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -682,16 +682,20 @@ P0 基线
 
 ### SAL-P2-018 实现 PersistentTaskBackend
 
-- [ ] [READY] 接入 Celery/Redis，数据库 Run/Event 为权威状态
-- 元数据：优先级 P0 | 负责人 BE | 估算 3d | 实际 - | 依赖 SAL-P1-008,SAL-P2-017
+- [x] [DONE] 接入 Celery/Redis，数据库 Run/Event 为权威状态
+- 元数据：优先级 P0 | 负责人 BE | 估算 3d | 实际 0.5d | 依赖 SAL-P1-008,SAL-P2-017 | 开始 2026-07-23 | 完成 2026-07-23
 - 交付物：队列路由、Worker、lease/heartbeat、重试和取消。
 - 验收：
   - API 重启不丢任务。
   - Worker 异常后任务可安全重投或从 checkpoint 恢复。
+- 结果：新增 `src/serenity_alpha_lab/repositories/persistent_task_backend.py`，定义 `PersistentTaskBackend`、`TaskQueueRoute`、`TaskLease`、`TaskQueueRouter`、`CeleryTaskQueueRouter` 和 `NoopTaskQueueRouter`；数据库表 `serenity_task_backend_runs` / `serenity_task_backend_events` 是任务快照与事件权威来源，Celery/Redis 只通过注入式 router 接收 `task_id/run_id/task_type` 小型任务引用。
+- 恢复语义：支持 idempotency key replay、显式 task id conflict、后端重启后查询、事件 `after_event_id` 补发、取消请求记录、Worker lease claim、heartbeat、complete/fail、expired lease requeue 和 queue routing metadata；不把 queue 状态作为权威。
+- 范围限制：未实现完整 Worker execution loop、API endpoint、SSE `Last-Event-ID`、孤儿 Reconciler、Compose service、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或 DSA runtime source migration。
+- 验收证据：见 [PersistentTaskBackend 记录](./persistent-task-backend.md)；`tests/repositories/test_persistent_task_backend.py`、`tests/application/test_task_backend_contract.py`、`tests/integrations/test_dsa_task_backend_facade.py`、`tests/repositories/test_database_profile.py`、`tests/repositories/test_repository_contract.py`、`tests/application/test_api_errors.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为无法导入 `serenity_alpha_lab.repositories.persistent_task_backend`，Green 后目标测试 `5 passed`、相关 suite `35 passed, 3 skipped`、full pytest `225 passed, 3 skipped`，全量验证记录见 AEV-047。
 
 ### SAL-P2-019 实现可恢复任务事件流
 
-- [ ] [TODO] 持久化 RunEvent、SSE `Last-Event-ID` 和孤儿 Reconciler
+- [ ] [READY] 持久化 RunEvent、SSE `Last-Event-ID` 和孤儿 Reconciler
 - 元数据：优先级 P0 | 负责人 BE/FE | 估算 2.5d | 实际 - | 依赖 SAL-P2-018
 - 交付物：事件 API、前端恢复、stalled 检测、临时制品清理。
 - 验收：
@@ -1554,6 +1558,7 @@ P0 基线
 | DEC-042 | 2026-07-23 | Provider Policy 与 fallback trace 口径 | 采用 `integrations.data.provider_policy` 在离线 Provider outcome 边界执行选择：Policy 使用 YAML-compatible mapping 表达 source priority、market/capability、source quality 和 cross-check 阈值；选择只消费 `DataBatch` / `ProviderError`，成功但 stale、缺字段、quality quarantine/blocking 或跨源 close 差异超阈值均不会静默成功，fallback trace 记录 attempts、冲突、raw-response hash、trace/run/stage 和最终状态 | [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [provider_policy.py](../src/serenity_alpha_lab/integrations/data/provider_policy.py); [test_provider_policy.py](../tests/integrations/test_provider_policy.py) | SAL-P2-015,SAL-P2-016,SAL-P2-020 | G2 |
 | DEC-043 | 2026-07-23 | 增量同步与交易日调度口径 | 采用 `services.data_sync` 作为 Dataset/Provider 之间的离线调度编排层：同步 scope 绑定 dataset、market 和 alias scope；checkpoint 记录 completed/failed trade dates、latest successful dataset version、Provider Policy status 和 fallback trace；incremental plan 只使用 Trading Calendar 交易日并支持 lookback window；backfill command 默认只补缺口；scope lock 通过本地文件独占创建防并发。本层只消费注入的 Provider Policy outcome，不调用真实 Provider、不发布真实 Dataset、不启动 Worker/PersistentTaskBackend | [data-sync-scheduler.md](./data-sync-scheduler.md); [data_sync.py](../src/serenity_alpha_lab/services/data_sync.py); [test_data_sync.py](../tests/services/test_data_sync.py) | SAL-P2-016,SAL-P2-018,SAL-P2-020 | G2 |
 | DEC-044 | 2026-07-23 | PostgreSQL standalone Profile 与 Repository Contract 口径 | 采用 `repositories.database` 作为 Runtime Profile 到 SQLAlchemy 的窄适配层；standalone profile 必须显式提供 database URL，PostgreSQL 使用 `psycopg`、连接池、statement timeout 和 redacted diagnostics，SQLite 使用 foreign key、busy timeout 与 WAL；Repository Contract probe 统一 UTC datetime、Decimal、JSON、duplicate key 和 rollback 语义，live PostgreSQL 由 `SERENITY_TEST_POSTGRES_URL` 启用同一套 contract suite | [postgresql-standalone-profile.md](./postgresql-standalone-profile.md); [database.py](../src/serenity_alpha_lab/repositories/database.py); [test_database_profile.py](../tests/repositories/test_database_profile.py); [test_repository_contract.py](../tests/repositories/test_repository_contract.py) | SAL-P2-017,SAL-P2-018,SAL-P2-020 | G2 |
+| DEC-045 | 2026-07-23 | PersistentTaskBackend 权威状态与队列路由口径 | 采用 `repositories.persistent_task_backend` 作为持久任务基础设施实现：数据库 `serenity_task_backend_runs` / `serenity_task_backend_events` 是任务快照、状态恢复和审计事件的权威来源；Celery/Redis 通过注入式 `CeleryTaskQueueRouter` 只投递 `task_id/run_id/task_type` 小型引用；Worker 通过 lease/heartbeat/complete/fail/requeue primitives 更新数据库状态，queue message id 仅作诊断 | [persistent-task-backend.md](./persistent-task-backend.md); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_persistent_task_backend.py](../tests/repositories/test_persistent_task_backend.py) | SAL-P2-018,SAL-P2-019,SAL-P4-018,SAL-P5-007,SAL-P6-012 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1605,6 +1610,7 @@ P0 基线
 | AEV-044 | SAL-P2-015 | Provider Policy、fallback trace、质量状态和跨源冲突 quarantine 测试记录 | [provider-policy-fallback-trace.md](./provider-policy-fallback-trace.md); [provider_policy.py](../src/serenity_alpha_lab/integrations/data/provider_policy.py); [test_provider_policy.py](../tests/integrations/test_provider_policy.py); [provider-contract-fixtures.md](./provider-contract-fixtures.md) | Provider policy target `6 passed`; related Provider/Quality/Publication/API/Architecture suite `59 passed`; full pytest `209 passed`; Red captured missing `provider_policy` module; fresh complete source selection、dataset mismatch rejection、stale/missing-fields fallback、Provider error exhaustion、quality blocking fallback、cross-provider close conflict quarantine 和 no averaging covered; compileall/lock/diff/tag checks PASS; no real Provider/LLM、Worker、Quant Core、formal backtest、Evidence Agent 或 DSA runtime source migration | BE/QE | 2026-07-23 |
 | AEV-045 | SAL-P2-016 | 增量同步、交易日调度、checkpoint、lock 和补数测试记录 | [data-sync-scheduler.md](./data-sync-scheduler.md); [data_sync.py](../src/serenity_alpha_lab/services/data_sync.py); [test_data_sync.py](../tests/services/test_data_sync.py); [test_trading_calendar.py](../tests/datasets/test_trading_calendar.py); [test_dataset_catalog.py](../tests/datasets/test_dataset_catalog.py); [test_provider_policy.py](../tests/integrations/test_provider_policy.py); [test_run_lifecycle.py](../tests/domain/test_run_lifecycle.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Data sync target `5 passed`; related Trading Calendar/Catalog/Provider Policy/Run lifecycle/Architecture suite `35 passed`; full pytest `214 passed`; Red captured missing `services.data_sync` module; checkpoint lookback、non-trading as-of skip、Catalog latest lineage、scope lock contention、idempotent success recording、failed Provider retry without checkpoint advance、successful retry clearing failure 和 backfill missing-only/include-completed covered; compileall/lock/diff/tag checks PASS; no real Provider/LLM、Worker、PersistentTaskBackend、Quant Core、formal backtest、Evidence Agent 或 DSA runtime source migration | BE/QE | 2026-07-23 |
 | AEV-046 | SAL-P2-017 | PostgreSQL standalone Profile、连接池、readiness 和 Repository Contract 测试记录 | [postgresql-standalone-profile.md](./postgresql-standalone-profile.md); [database.py](../src/serenity_alpha_lab/repositories/database.py); [test_database_profile.py](../tests/repositories/test_database_profile.py); [test_repository_contract.py](../tests/repositories/test_repository_contract.py); [test_storage_migrations.py](../tests/repositories/test_storage_migrations.py) | Target database profile/repository tests `10 passed, 3 skipped`; related repositories/config/API/architecture suite `50 passed, 3 skipped`; full pytest `220 passed, 3 skipped`; Red captured missing `repositories.database` module; standalone PostgreSQL URL resolution、redacted diagnostics、pool/statement timeout、SQLite PRAGMA/readiness、Alembic preflight、UTC time、Decimal、JSON、duplicate key 和 rollback covered; `compileall`/lock/diff/tag checks PASS; `psycopg` import smoke `3.3.4`; live PostgreSQL contract uses `SERENITY_TEST_POSTGRES_URL`; no Worker、PersistentTaskBackend、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE | 2026-07-23 |
+| AEV-047 | SAL-P2-018 | PersistentTaskBackend、队列路由、lease/heartbeat/requeue 和事件持久化测试记录 | [persistent-task-backend.md](./persistent-task-backend.md); [persistent_task_backend.py](../src/serenity_alpha_lab/repositories/persistent_task_backend.py); [test_persistent_task_backend.py](../tests/repositories/test_persistent_task_backend.py); [test_task_backend_contract.py](../tests/application/test_task_backend_contract.py); [test_dsa_task_backend_facade.py](../tests/integrations/test_dsa_task_backend_facade.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Persistent backend target `5 passed`; related TaskBackend/Repository/API/Architecture suite `35 passed, 3 skipped`; full pytest `225 passed, 3 skipped`; Red captured missing `repositories.persistent_task_backend` module; backend restart persistence、idempotency replay、explicit task conflict、Celery-like queue routing、cancel request event、Worker lease claim、heartbeat、completion、expired lease requeue 和 monotonic event replay covered; compileall/lock/diff/tag checks PASS; implementation checkpoint `94fd6dac`; no full Worker loop、API/SSE、Quant Core、formal backtest、Evidence Agent、real Provider/LLM 或 DSA runtime source migration | BE | 2026-07-23 |
 
 允许的证据：
 
@@ -1642,4 +1648,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-017`，完成度为 46/129；最近阶段性任务为 `SAL-P2-017` PostgreSQL standalone Profile；最近实现 checkpoint 为 `195765f3 feat(P2): 建立 PostgreSQL standalone Profile`，上一实现 checkpoint 为 `cfadc415 feat(P2): 实现增量同步与交易日调度`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-018` PersistentTaskBackend；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-018`，完成度为 47/129；最近阶段性任务为 `SAL-P2-018` PersistentTaskBackend；最近实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`，上一实现 checkpoint 为 `195765f3 feat(P2): 建立 PostgreSQL standalone Profile`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-019` 可恢复任务事件流；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。

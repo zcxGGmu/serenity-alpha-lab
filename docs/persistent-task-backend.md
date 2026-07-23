@@ -2,6 +2,7 @@
 
 > 任务：`SAL-P2-018` 实现 PersistentTaskBackend<br>
 > 日期：2026-07-23<br>
+> 实现 checkpoint：`94fd6dac feat(P2): 实现 PersistentTaskBackend`<br>
 > 代码：`src/serenity_alpha_lab/repositories/persistent_task_backend.py`<br>
 > 测试：`tests/repositories/test_persistent_task_backend.py`<br>
 > 范围：数据库权威任务状态、追加事件、Celery/Redis 队列路由边界、Worker lease/heartbeat/requeue primitives；不启动完整 Worker execution loop、API/SSE、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或 DSA runtime source migration。
