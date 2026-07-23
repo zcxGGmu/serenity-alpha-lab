@@ -1624,4 +1624,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-014`，完成度为 43/129；最近阶段性任务为 `SAL-P2-014` Provider 契约 Fixture；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-015` Provider Policy 与 fallback trace；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动真实 Provider 调用、Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且 fallback policy 必须只在 `SAL-P2-015` 范围内基于已冻结 fixture 和 Provider 契约实现。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-014`，完成度为 43/129；最近阶段性任务为 `SAL-P2-014` Provider 契约 Fixture；最近实现 checkpoint 为 `5016ced6 feat(P2): 建立 Provider 契约 Fixture`，上一状态同步 checkpoint 为 `8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-015` Provider Policy 与 fallback trace；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动真实 Provider 调用、Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且 fallback policy 必须只在 `SAL-P2-015` 范围内基于已冻结 fixture 和 Provider 契约实现。

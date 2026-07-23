@@ -33,6 +33,13 @@
 - Verification: target fixture test `4 passed`; related Provider/Schema/API/Architecture suite `58 passed`; full pytest `203 passed`; compileall, dependency lock, `git diff --check`, snapshot secret scan and immutable tag checks passed. Checkpoint: `5016ced6 feat(P2): 建立 Provider 契约 Fixture`.
 - Scope retained: no fallback policy beyond expected error-category fixture labels, no real Provider/LLM/network calls, no PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration or tag movement.
 
+## Review: SAL-P2-014 Status Refresh
+
+- User requested another latest-status refresh and a reusable next-start prompt after `SAL-P2-014`.
+- Confirmed current state from Git: latest implementation checkpoint `5016ced6 feat(P2): 建立 Provider 契约 Fixture`; previous status-sync checkpoint `8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示`.
+- Confirmed ledgers remain: P0 `13/13`, P1 `16/16`, P2 `14/20`, total `43/129`; Gate G2 is not passed.
+- Updated recovery anchors in `docs/development-status.md`, `docs/development-progress-checklist.md`, and `tasks/lessons.md`; next executable task remains `SAL-P2-015 Provider Policy 与 fallback trace`.
+
 ---
 
 # P2 Dataset Atomic Publication Plan

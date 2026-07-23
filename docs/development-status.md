@@ -8,7 +8,7 @@
 > 任务完成度：43/129<br>
 > 当前可执行任务：`SAL-P2-015`，状态为 `READY`；Provider Policy 与 fallback trace 必须基于已冻结 Provider fixture、Provider 领域契约、DSA Adapter、Bronze、Arrow Schema Registry、Dataset Catalog/Quality/Publication 和 Profile/ProblemDetails/Trace 边界实现，不得提前启动真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
 > 最近可评审交付 checkpoint：`5016ced6 feat(P2): 建立 Provider 契约 Fixture`<br>
-> 最新状态同步 checkpoint：`docs: 同步 SAL-P2-014 最新开发状态与恢复提示`（状态同步专用提交；恢复时执行 `git log -1 --oneline` 读取实际 hash）<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 复核 SAL-P2-014 状态并固化恢复提示`；上一状态同步为 `8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -169,6 +169,7 @@
 - 2026-07-22：完成 `SAL-P2-012`，checkpoint `3a846c6a feat(P2): 实现数据质量规则引擎`；新增 Data Quality Rule Engine、warning/quarantine/blocking quality report、issue 精确定位、deterministic report Artifact 和 manifest metadata helper；Data quality target `4 passed`、相关套件 `61 passed`、full pytest `194 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `12/20`、总进度 `41/129`，`SAL-P2-013` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：完成 `SAL-P2-013`，新增 Dataset 隔离区与原子发布；Dataset publication target `5 passed`、相关套件 `66 passed`、full pytest `199 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `13/20`、总进度 `42/129`，`SAL-P2-014` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-23：完成 `SAL-P2-014`，新增 Provider 契约 Fixture；Provider fixture target `4 passed`、相关 Provider/Schema/API/Architecture suite `58 passed`、full pytest `203 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `14/20`、总进度 `43/129`，`SAL-P2-015` 成为当前 `READY` 任务，Gate G2 仍未通过。
+- 2026-07-23：按用户要求再次复核最新开发状态并固化恢复提示；确认已完成范围仍为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..014`，未完成范围从 `SAL-P2-015` 开始，当前 READY 任务为 `SAL-P2-015`，最近实现 checkpoint 为 `5016ced6 feat(P2): 建立 Provider 契约 Fixture`，上一状态同步 checkpoint 为 `8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示`。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -207,7 +208,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-014
 - 最近完成：SAL-P2-014 Provider 契约 Fixture
 - 最近可评审交付 checkpoint：5016ced6 feat(P2): 建立 Provider 契约 Fixture
-- 最新状态同步 checkpoint：docs: 同步 SAL-P2-014 最新开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
+- 最新状态同步 checkpoint：docs: 复核 SAL-P2-014 状态并固化恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 8c70cde5 docs: 同步 SAL-P2-014 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 14/20，总计 43/129
 
 下一步优先执行：
