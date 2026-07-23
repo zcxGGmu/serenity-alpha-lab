@@ -14,6 +14,13 @@ from serenity_alpha_lab.services.data_sync import (
     DataSyncTradeDateResult,
     LocalDataSyncStateStore,
 )
+from serenity_alpha_lab.services.task_event_stream import (
+    ServerSentEvent,
+    TaskEventReconciler,
+    TaskEventReconcilerSummary,
+    TaskEventStreamService,
+    parse_last_event_id,
+)
 
 __all__ = [
     "DataBackfillCommand",
@@ -28,4 +35,9 @@ __all__ = [
     "DataSyncStateStoreError",
     "DataSyncTradeDateResult",
     "LocalDataSyncStateStore",
+    "ServerSentEvent",
+    "TaskEventReconciler",
+    "TaskEventReconcilerSummary",
+    "TaskEventStreamService",
+    "parse_last_event_id",
 ]

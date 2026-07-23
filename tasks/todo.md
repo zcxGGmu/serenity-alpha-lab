@@ -1,3 +1,43 @@
+# P2 Recoverable Task Event Stream Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-019` by implementing recoverable task/run event streams with persisted `RunEvent`, SSE `Last-Event-ID` replay, queued orphan redispatch, stalled lease reconciliation, and temporary artifact cleanup. Reuse `PersistentTaskBackend` database-authoritative events, `TaskBackend.subscribe(after_event_id)`, PostgreSQL standalone Profile, ProblemDetails, TraceContext, Artifact temporary boundaries and Data Sync checkpoint semantics. Do not start Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, full Worker execution loops, frontend pages, broad API endpoint migration or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, current Git status and recent commits.
+- [x] Inspect `SAL-P2-019` acceptance scope, PersistentTaskBackend, TaskBackend Protocol, RunEvent domain model, ProblemDetails, TraceContext, ArtifactStore and architecture guardrails.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-recoverable-task-event-stream.md`.
+- [x] Add Red tests for SSE `Last-Event-ID` replay, invalid cursor validation, persisted RunEvent replay after restart, queued orphan redispatch, stalled lease requeue and temporary artifact cleanup.
+- [x] Extend `repositories.persistent_task_backend` with persisted run events and queued-orphan redispatch without making queue state authoritative.
+- [x] Implement `services.task_event_stream` with SSE frame DTOs, trace-safe event mapping, Last-Event-ID parsing and orphan/stalled reconciler.
+- [x] Export service/repository symbols and preserve architecture boundaries without touching DSA runtime source, Provider SDKs, Quant Core or Evidence Agent.
+- [x] Add acceptance evidence documentation for `SAL-P2-019`.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Update progress checklist, development status, this review and the next-session prompt.
+- [ ] Stage only `SAL-P2-019` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Database events remain authoritative; Celery/Redis delivery metadata is diagnostic and duplicate queue deliveries must be neutralized by DB lease acquisition.
+- SSE recovery must replay from persisted events using monotonic event IDs; invalid `Last-Event-ID` maps to ProblemDetails-compatible validation failure.
+- Reconciler may requeue stalled leases and redispatch old queued tasks, but must not mark stalled work as failed or execute handlers.
+- Temporary cleanup may remove only configured artifact temp files older than cutoff; never delete blobs/manifests or Evidence artifacts.
+- Tests use local SQLite and injected fake routers only; no real Provider/LLM/network calls, Quant Core, formal backtest or Evidence Agent.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P2-019
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/services/test_task_event_stream.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.services.task_event_stream'`.
+- Green implementation: added `services.task_event_stream` with `ServerSentEvent`, `TaskEventStreamService`, `TaskEventReconciler`, `TaskEventReconcilerSummary` and `parse_last_event_id()`, plus service exports.
+- Persistence coverage: extended `PersistentTaskBackend` with `serenity_run_events`, `record_run_event()`, `subscribe_run_events()` and `redispatch_queued_orphans()`; task replay still uses `TaskBackend.subscribe(after_event_id)`.
+- Recovery coverage: tests cover SSE `Last-Event-ID` replay, invalid cursor `ValidationProblem`, RunEvent persistence after backend restart, queued orphan redispatch, stalled lease requeue, duplicate-delivery lease guard and tmp-only artifact cleanup.
+- Verification: target task event stream tests `8 passed`; related TaskBackend/Repository/API/Architecture suite `40 passed, 3 skipped`; full pytest `233 passed, 3 skipped`; `compileall` PASS; dependency lock PASS; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no full Worker execution loop, formal API endpoint, frontend EventSource page, Compose service, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, DSA runtime source migration or tag movement.
+
+---
+
 # P2 PersistentTaskBackend Plan
 
 > Started: 2026-07-23

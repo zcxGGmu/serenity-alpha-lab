@@ -38,6 +38,7 @@ from serenity_alpha_lab.application.task_backend import (
     TaskSnapshot,
     TaskStatus,
 )
+from serenity_alpha_lab.domain.run_lifecycle import EventKind, RunEvent
 
 
 ClockFn = Callable[[], datetime]
@@ -174,6 +175,18 @@ _TASK_EVENTS_TABLE = Table(
     PrimaryKeyConstraint("task_id", "sequence", name="pk_serenity_task_backend_events"),
 )
 
+_RUN_EVENTS_TABLE = Table(
+    "serenity_run_events",
+    _TASK_METADATA,
+    Column("run_id", String(128), nullable=False),
+    Column("sequence", Integer(), nullable=False),
+    Column("kind", String(160), nullable=False),
+    Column("occurred_at_utc", String(40), nullable=False),
+    Column("message", String(1024), nullable=False),
+    Column("stage_id", String(128), nullable=True),
+    PrimaryKeyConstraint("run_id", "sequence", name="pk_serenity_run_events"),
+)
+
 
 class PersistentTaskBackend:
     """SQLAlchemy-backed TaskBackend with database-authoritative task state."""
@@ -198,7 +211,10 @@ class PersistentTaskBackend:
         self._clock = clock or (lambda: datetime.now(UTC))
 
     def create_schema(self) -> None:
-        _TASK_METADATA.create_all(self._engine, tables=[_TASK_RUNS_TABLE, _TASK_EVENTS_TABLE])
+        _TASK_METADATA.create_all(
+            self._engine,
+            tables=[_TASK_RUNS_TABLE, _TASK_EVENTS_TABLE, _RUN_EVENTS_TABLE],
+        )
 
     def submit(self, command: TaskCommand) -> TaskRef:
         task_id = command.task_id or uuid.uuid4().hex
@@ -325,6 +341,45 @@ class PersistentTaskBackend:
                 .all()
             )
         return tuple(_event_from_row(row) for row in rows)
+
+    def record_run_event(self, event: RunEvent) -> RunEvent:
+        values = _run_event_to_record(event)
+        with self._engine.begin() as connection:
+            existing = self._run_event_row(connection, event.run_id, event.sequence)
+            if existing is not None:
+                persisted = _run_event_from_row(existing)
+                if persisted == event:
+                    return persisted
+                raise TaskBackendCapabilityError(
+                    f"Run event sequence conflict: {event.run_id}:{event.sequence}"
+                )
+            try:
+                connection.execute(insert(_RUN_EVENTS_TABLE).values(**values))
+            except IntegrityError as exc:
+                raise TaskBackendCapabilityError(
+                    f"Run event sequence conflict: {event.run_id}:{event.sequence}"
+                ) from exc
+        return event
+
+    def subscribe_run_events(self, run_id: str, after_event_id: str | None = None) -> tuple[RunEvent, ...]:
+        after = int(after_event_id) if after_event_id is not None else 0
+        normalized_run_id = _required_string("run_id", run_id)
+        with self._engine.connect() as connection:
+            rows = (
+                connection.execute(
+                    select(_RUN_EVENTS_TABLE)
+                    .where(
+                        and_(
+                            _RUN_EVENTS_TABLE.c.run_id == normalized_run_id,
+                            _RUN_EVENTS_TABLE.c.sequence > after,
+                        )
+                    )
+                    .order_by(_RUN_EVENTS_TABLE.c.sequence)
+                )
+                .mappings()
+                .all()
+            )
+        return tuple(_run_event_from_row(row) for row in rows)
 
     def acquire_next(
         self,
@@ -531,6 +586,86 @@ class PersistentTaskBackend:
                 requeued += 1
         return requeued
 
+    def redispatch_queued_orphans(
+        self,
+        *,
+        now: datetime,
+        orphan_age_seconds: int,
+        worker_id: str = "reconciler",
+    ) -> int:
+        if orphan_age_seconds < 0:
+            raise TaskBackendError("orphan_age_seconds must be non-negative")
+        occurred_at = _require_aware_datetime("now", now)
+        cutoff = _datetime_to_record(occurred_at - timedelta(seconds=orphan_age_seconds))
+        reconciler = _required_string("worker_id", worker_id)
+        with self._engine.connect() as connection:
+            rows = (
+                connection.execute(
+                    select(_TASK_RUNS_TABLE)
+                    .where(
+                        and_(
+                            _TASK_RUNS_TABLE.c.status == TaskStatus.QUEUED.value,
+                            _TASK_RUNS_TABLE.c.submitted_at_utc <= cutoff,
+                        )
+                    )
+                    .order_by(_TASK_RUNS_TABLE.c.submitted_at_utc, _TASK_RUNS_TABLE.c.task_id)
+                )
+                .mappings()
+                .all()
+            )
+
+        redispatched = 0
+        for row in rows:
+            task_id = str(row["task_id"])
+            command = _command_from_row(row)
+            try:
+                queue_message_id = self._queue_router.enqueue(
+                    command,
+                    task_id=task_id,
+                    queue_name=str(row["queue_name"]),
+                    routing_key=str(row["routing_key"]),
+                )
+            except Exception as exc:  # pragma: no cover - defensive path depends on caller router.
+                with self._engine.begin() as connection:
+                    current = self._row_by_task_id(connection, task_id)
+                    if current is not None and TaskStatus(str(current["status"])) is TaskStatus.QUEUED:
+                        self._append_event(
+                            connection,
+                            task_id=task_id,
+                            run_id=str(row["run_id"]),
+                            kind="task.redispatch_failed",
+                            occurred_at=occurred_at,
+                            status=TaskStatus.QUEUED,
+                            message="redispatch failed",
+                            payload={"worker_id": reconciler, "error": exc.__class__.__name__},
+                        )
+                continue
+
+            with self._engine.begin() as connection:
+                current = self._row_by_task_id(connection, task_id)
+                if current is None or TaskStatus(str(current["status"])) is not TaskStatus.QUEUED:
+                    continue
+                values: dict[str, Any] = {"heartbeat_at_utc": _datetime_to_record(occurred_at)}
+                if queue_message_id:
+                    values["queue_message_id"] = queue_message_id
+                connection.execute(
+                    update(_TASK_RUNS_TABLE)
+                    .where(_TASK_RUNS_TABLE.c.task_id == task_id)
+                    .values(**values)
+                )
+                self._append_event(
+                    connection,
+                    task_id=task_id,
+                    run_id=str(row["run_id"]),
+                    kind="task.redispatched",
+                    occurred_at=occurred_at,
+                    status=TaskStatus.QUEUED,
+                    message="redispatched",
+                    payload={"worker_id": reconciler, "queue_message_id": queue_message_id},
+                )
+                redispatched += 1
+        return redispatched
+
     def _route_for(self, task_type: str) -> TaskQueueRoute:
         return self._routes.get(task_type) or self._default_route
 
@@ -629,6 +764,20 @@ class PersistentTaskBackend:
                 message=message,
             )
 
+    def _run_event_row(self, connection: Connection, run_id: str, sequence: int) -> Mapping[str, Any] | None:
+        return (
+            connection.execute(
+                select(_RUN_EVENTS_TABLE).where(
+                    and_(
+                        _RUN_EVENTS_TABLE.c.run_id == _required_string("run_id", run_id),
+                        _RUN_EVENTS_TABLE.c.sequence == int(sequence),
+                    )
+                )
+            )
+            .mappings()
+            .one_or_none()
+        )
+
 
 def _ref_from_row(row: Mapping[str, Any]) -> TaskRef:
     return TaskRef(task_id=str(row["task_id"]), run_id=str(row["run_id"]), status=TaskStatus(str(row["status"])))
@@ -676,6 +825,39 @@ def _event_from_row(row: Mapping[str, Any]) -> TaskEvent:
         status=TaskStatus(str(row["status"])),
         message=row["message"],
         payload=_json_mapping(row["payload_json"]),
+    )
+
+
+def _run_event_to_record(event: RunEvent) -> dict[str, Any]:
+    return {
+        "run_id": _required_string("run_id", event.run_id),
+        "sequence": int(event.sequence),
+        "kind": event.kind.value,
+        "occurred_at_utc": _datetime_to_record(event.occurred_at),
+        "message": event.message,
+        "stage_id": event.stage_id,
+    }
+
+
+def _run_event_from_row(row: Mapping[str, Any]) -> RunEvent:
+    return RunEvent(
+        run_id=str(row["run_id"]),
+        sequence=int(row["sequence"]),
+        kind=EventKind(str(row["kind"])),
+        occurred_at=_datetime_from_record(row["occurred_at_utc"]),
+        message=str(row["message"]),
+        stage_id=row["stage_id"],
+    )
+
+
+def _command_from_row(row: Mapping[str, Any]) -> TaskCommand:
+    return TaskCommand(
+        run_id=str(row["run_id"]),
+        task_type=str(row["task_type"]),
+        payload=_json_mapping(row["payload_json"]),
+        idempotency_key=row["idempotency_key"],
+        task_id=str(row["task_id"]),
+        metadata=_json_mapping(row["metadata_json"]),
     )
 
 
