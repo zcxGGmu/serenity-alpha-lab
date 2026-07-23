@@ -63,8 +63,12 @@
 | Red：fixture module | `uv run --extra core --extra dev python -m pytest tests/integrations/test_provider_contract_fixtures.py -q` 先以 `ModuleNotFoundError: No module named 'serenity_alpha_lab.integrations.data.provider_contract_fixtures'` 失败。 |
 | Green：target | `uv run --extra core --extra dev python -m pytest tests/integrations/test_provider_contract_fixtures.py -q`，`4 passed`。 |
 | Green：related | `uv run --extra core --extra dev python -m pytest tests/integrations/test_provider_contract_fixtures.py tests/integrations/test_dsa_provider_adapter.py tests/domain/test_provider_contract.py tests/datasets/test_arrow_schema_registry.py tests/application/test_api_errors.py tests/architecture/test_architecture_boundaries.py -q`，`58 passed`。 |
+| Green：full pytest | `uv run --extra core --extra dev python -m pytest -q`，`203 passed`。 |
+| 语法 | `uv run --extra core --extra dev python -m compileall -q src/serenity_alpha_lab tests`，PASS。 |
+| 依赖/基线保护 | `scripts/verify-python-dependency-lock.sh`、`git diff --check`、`git rev-parse upstream/dsa-v3.26.1` 均通过；基线 tag 仍为 `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`。 |
+| 脱敏扫描 | `rg -n "secret|token=|api_key|cookie|/Users/|C:\\\\" docs/baselines/provider-contract-fixtures` 无命中。 |
 
-完整 `pytest`、`compileall`、lock、diff 和 immutable tag 验证在 checkpoint 前执行，并记录到任务清单和进度清单。
+实现 checkpoint：`5016ced6 feat(P2): 建立 Provider 契约 Fixture`。
 
 ## 6. 后续衔接
 

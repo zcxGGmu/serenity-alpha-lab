@@ -8,13 +8,13 @@
 - [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
 - [x] Inspect existing Provider contract, DSA adapter, Arrow Schema Registry, docs, and tests.
 - [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-provider-contract-fixtures.md`.
-- [ ] Add Red tests for offline Provider fixture coverage, success batch conversion, timeout/empty/schema-drift errors, deterministic sanitized snapshots, and SDK import avoidance.
-- [ ] Implement `integrations.data.provider_contract_fixtures` with frozen DTOs, default corpus, Provider `DataBatch` conversion, ProviderError mapping, schema validation, and snapshot writer.
-- [ ] Export fixture symbols and preserve architecture boundaries without touching DSA runtime source.
-- [ ] Add acceptance evidence documentation for `SAL-P2-014`.
-- [ ] Run target, related, full, compile, lock, diff, and immutable tag verification.
-- [ ] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
-- [ ] Stage only `SAL-P2-014` files and create the required Chinese checkpoint commit.
+- [x] Add Red tests for offline Provider fixture coverage, success batch conversion, timeout/empty/schema-drift errors, deterministic sanitized snapshots, and SDK import avoidance.
+- [x] Implement `integrations.data.provider_contract_fixtures` with frozen DTOs, default corpus, Provider `DataBatch` conversion, ProviderError mapping, schema validation, and snapshot writer.
+- [x] Export fixture symbols and preserve architecture boundaries without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-014`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [x] Stage only `SAL-P2-014` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -23,6 +23,15 @@
 - Fixtures may expose sanitized raw responses, expected schema metadata, normalized records, and expected error categories; they must not contain secrets, tokens, cookies, absolute local paths, prompts, or personal data.
 - Tests use synthetic offline rows and local deterministic JSON only; no real Provider/LLM/network calls.
 - Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-014
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/integrations/test_provider_contract_fixtures.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.integrations.data.provider_contract_fixtures'`.
+- Green implementation: added `ProviderContractFixtureCatalog`, `ProviderContractFixtureCase`, `ProviderFixtureSchema`, `ProviderFixtureStatus`, `default_provider_contract_fixture_catalog()` and `write_provider_fixture_snapshots()` under `integrations.data`.
+- Fixture coverage: AKShare、efinance、Tushare、BaoStock 和 YFinance all have offline success samples; YFinance covers US and HK basic paths; timeout, empty and schema-drift cases map to `retryable`, `data_invalid` and `schema_drift`.
+- Snapshot coverage: generated deterministic sanitized JSON files under `docs/baselines/provider-contract-fixtures/`, with raw-response SHA-256, Provider-facing schema and `dataset.bars_1d_raw@1.0.0` Arrow schema hash.
+- Verification: target fixture test `4 passed`; related Provider/Schema/API/Architecture suite `58 passed`; full pytest `203 passed`; compileall, dependency lock, `git diff --check`, snapshot secret scan and immutable tag checks passed. Checkpoint: `5016ced6 feat(P2): 建立 Provider 契约 Fixture`.
+- Scope retained: no fallback policy beyond expected error-category fixture labels, no real Provider/LLM/network calls, no PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration or tag movement.
 
 ---
 
