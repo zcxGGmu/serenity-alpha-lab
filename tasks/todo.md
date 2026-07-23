@@ -1,3 +1,40 @@
+# P2 Dataset Atomic Publication Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-013` by adding quality-gated Dataset publication, quarantine/held state records, atomic latest promotion, and temporary file cleanup. Reuse Dataset Catalog/Manifest, Data Quality Report metadata, ArtifactStore manifest-last semantics, Trace/Run/Stage scalar attribution, and ProblemDetails-compatible `ValueError` mapping. Do not implement fallback policy, Provider fixtures, real Provider calls, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing Dataset Catalog, ArtifactStore, Data Quality Rule Engine, docs, and tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-dataset-atomic-publication.md`.
+- [x] Add Red tests for quality-gated latest promotion, warning/quarantine/blocking latest retention, quarantine records, failed-publish cleanup, and old latest retention.
+- [x] Implement `datasets.publication` and narrow Catalog helpers for promote/latest and quarantine record persistence.
+- [x] Export publication symbols and preserve architecture boundaries without touching DSA runtime source.
+- [x] Add acceptance evidence documentation for `SAL-P2-013`.
+- [x] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [x] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [ ] Stage only `SAL-P2-013` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Only `DataQualityStatus.PASSED` may promote a Dataset version to `latest`; `warning`, `quarantine`, `blocking`, and failed publication attempts must leave the old latest pointer unchanged.
+- Publication may persist immutable Dataset Manifest metadata and quarantine/held records only; it must not choose Provider fallback, average across Provider conflicts, or call real Providers.
+- Tests use synthetic offline rows and local artifacts only; no real Provider/LLM/network calls.
+- Temporary cleanup is limited to explicit temp roots (`ArtifactStore.tmp_root` and `LocalDatasetCatalog.tmp_root`) and must not delete immutable blobs, manifests, aliases, or unrelated directories.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+## Review: SAL-P2-013
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/datasets/test_dataset_publication.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.datasets.publication'`.
+- Green implementation: added `QualityGatedDatasetPublisher`, `DatasetPublicationRequest`, `DatasetPublicationResult`, `DatasetPublicationStatus`, explicit `LocalDatasetCatalog.promote_to_latest()`, quarantine record persistence and bounded temp-root cleanup.
+- Publication coverage: `passed` quality promotes `latest`; `warning`, `quarantine` and `blocking` write held/quarantine/blocking records and keep old latest; latest-promotion failure propagates and cleans explicit catalog/artifact tmp roots.
+- Verification: target publication test `5 passed`; related dataset/artifact/API/architecture suite `66 passed`; full pytest `199 passed`; compileall, dependency lock, `git diff --check` and immutable tag checks passed.
+- Scope retained: no fallback policy, Provider fixture/probe, real Provider/LLM/network call, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, DSA runtime source migration or tag movement.
+
+---
+
 # P2 Data Quality Rule Engine Plan
 
 > Started: 2026-07-22

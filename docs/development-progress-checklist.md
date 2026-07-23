@@ -74,12 +74,12 @@
 |---|---:|---|---:|---|---|
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
-| P2 数据与任务 | 3~6 | DOING | 12/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
+| P2 数据与任务 | 3~6 | DOING | 13/20 | G2 | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | TODO | 0/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **41/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **42/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -617,16 +617,20 @@ P0 基线
 
 ### SAL-P2-013 实现隔离区与原子发布
 
-- [ ] [READY] 阻止失败 Dataset 更新 latest 并清理临时 Artifact
-- 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 - | 依赖 SAL-P2-011,SAL-P2-012
+- [x] [DONE] 阻止失败 Dataset 更新 latest 并清理临时 Artifact
+- 元数据：优先级 P0 | 负责人 BE | 估算 1.5d | 实际 0.5d | 依赖 SAL-P2-011,SAL-P2-012 | 开始 2026-07-23 | 完成 2026-07-23
 - 交付物：quarantine 状态、发布事务、垃圾回收。
 - 验收：
   - blocking 失败后旧 latest 保持不变。
   - 数据库/文件任一失败不留下成功假象。
+- 结果：新增 `src/serenity_alpha_lab/datasets/publication.py`，定义 `DatasetPublicationRequest`、`DatasetPublicationResult`、`DatasetPublicationStatus` 和 `QualityGatedDatasetPublisher`；发布路径先写质量报告 Artifact，再用 `LocalDatasetCatalog.publish_version(update_latest=False)` 写不可变 Dataset Manifest，只有 `quality_status=passed` 才调用显式 `promote_to_latest()` 更新 latest。
+- 隔离记录：`warning` / `quarantine` / `blocking` 分别映射为 `held` / `quarantined` / `blocked`，旧 latest 保持不变，并通过 `LocalDatasetCatalog.record_quarantine()` 写入 deterministic quarantine record；失败路径清理显式 Catalog/Artifact `tmp` 目录并继续抛出异常，不返回成功假象。
+- 范围限制：未实现 fallback policy、Provider fixture、真实 Provider/LLM 调用、PersistentTaskBackend、Worker runtime、Quant Core、正式回测、Evidence Agent 或 DSA runtime source 迁移。
+- 验收证据：见 [Dataset 隔离区与原子发布记录](./dataset-atomic-publication.md)；`tests/datasets/test_dataset_publication.py`、`tests/datasets/test_dataset_catalog.py`、`tests/datasets/test_data_quality.py`、`tests/architecture/test_architecture_boundaries.py`；Red 为无法导入 `serenity_alpha_lab.datasets.publication`，Green 后目标测试 `5 passed`、相关 dataset/artifact/API/architecture suite `66 passed`、全量 pytest `199 passed`，全量验证记录见 AEV-042。
 
 ### SAL-P2-014 建立 Provider 契约 Fixture
 
-- [ ] [TODO] 覆盖 AKShare、efinance、Tushare、BaoStock 和 YFinance 核心接口
+- [ ] [READY] 覆盖 AKShare、efinance、Tushare、BaoStock 和 YFinance 核心接口
 - 元数据：优先级 P0 | 负责人 BE/QE | 估算 3d | 实际 - | 依赖 SAL-P2-002,SAL-P2-010
 - 交付物：脱敏响应、Schema、超时/空数据/字段漂移案例。
 - 验收：
@@ -1529,6 +1533,7 @@ P0 基线
 | DEC-037 | 2026-07-22 | Arrow Schema Registry 口径 | 采用 `datasets.schema_registry` 统一管理 P2 Dataset Arrow Schema；Schema 声明包含字段、主键、分区键、content type 和 canonical hash，默认注册证券主数据、原始日线、公司行动、复权日线和 PIT 基本面；PyArrow 采用 lazy optional import，仍由 `quant` extra 提供；minor/patch 只允许新增 nullable 字段，删除/改义/改类型/改主键等 breaking 变更必须新 major | [arrow-schema-registry.md](./arrow-schema-registry.md); [schema_registry.py](../src/serenity_alpha_lab/datasets/schema_registry.py); [test_arrow_schema_registry.py](../tests/datasets/test_arrow_schema_registry.py) | SAL-P2-010,SAL-P2-011,SAL-P2-014 | G2 |
 | DEC-038 | 2026-07-22 | Dataset Catalog 与 Manifest 口径 | 采用 `datasets.catalog` 管理不可变 Dataset Version Manifest；版本 Manifest 绑定 P1 Artifact hash、P2 Arrow schema hash、文件 row count、previous/input lineage、run/stage/trace 和 metadata；`latest` 只是单独持久化的可变 alias，正式实验解析必须引用具体 `dataset_version`，不得使用 latest | [dataset-catalog-manifest.md](./dataset-catalog-manifest.md); [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py); [test_dataset_catalog.py](../tests/datasets/test_dataset_catalog.py) | SAL-P2-011,SAL-P2-012,SAL-P2-013,SAL-P4-006 | G2 |
 | DEC-039 | 2026-07-22 | 数据质量规则引擎口径 | 采用 `datasets.quality` 对 schema-bound Dataset snapshots 做离线质量评估；报告状态为 `passed` / `warning` / `quarantine` / `blocking`，每个 issue 定位到 dataset/version/partition/field/primary key/sample；质量报告发布为 deterministic Artifact，并通过 manifest metadata 记录 rule set version、quality status、issue counts 和 report artifact。本任务只产出报告和 metadata，不执行 latest 阻断或 quarantine 发布事务 | [data-quality-rule-engine.md](./data-quality-rule-engine.md); [quality.py](../src/serenity_alpha_lab/datasets/quality.py); [test_data_quality.py](../tests/datasets/test_data_quality.py) | SAL-P2-012,SAL-P2-013,SAL-P2-015,SAL-P2-020 | G2 |
+| DEC-040 | 2026-07-23 | Dataset 隔离区与原子发布口径 | 采用 `datasets.publication` 作为 Dataset Catalog 与 Data Quality Report 之间的质量门禁层；发布先写质量报告 Artifact 和不可变 Dataset Manifest，只有 `passed` 可显式提升为 `latest`，`warning/quarantine/blocking` 仅写入 held/quarantine/blocking 记录并保留旧 latest；失败路径清理显式 tmp 根并抛出异常 | [dataset-atomic-publication.md](./dataset-atomic-publication.md); [publication.py](../src/serenity_alpha_lab/datasets/publication.py); [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py); [test_dataset_publication.py](../tests/datasets/test_dataset_publication.py) | SAL-P2-013,SAL-P2-014,SAL-P2-015,SAL-P2-020 | G2 |
 
 ## 14. 验收证据登记
 
@@ -1575,6 +1580,7 @@ P0 基线
 | AEV-039 | SAL-P2-010 | Arrow Schema Registry、兼容规则、PyArrow 转换和 round-trip 测试记录 | [arrow-schema-registry.md](./arrow-schema-registry.md); [schema_registry.py](../src/serenity_alpha_lab/datasets/schema_registry.py); [test_arrow_schema_registry.py](../tests/datasets/test_arrow_schema_registry.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Schema registry target `6 passed`; instrument master related `9 passed`; P2 related suite `62 passed`; full pytest `185 passed`; Red captured missing `schema_registry` module; default registry 覆盖主数据/日线/公司行动/复权日线/财务，lazy PyArrow conversion、schema metadata、minor compatible nullable-field add、breaking major rule、duplicate version rejection、Arrow/Pandas/Polars round-trip 和 optional dependency boundary covered; compileall/lock/diff/tag checks PASS; no fallback policy、Dataset Catalog/latest alias、Quant Core、formal backtest、Evidence Agent 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
 | AEV-040 | SAL-P2-011 | Dataset Catalog、不可变 Manifest、血缘、文件哈希和 latest alias 测试记录 | [dataset-catalog-manifest.md](./dataset-catalog-manifest.md); [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py); [test_dataset_catalog.py](../tests/datasets/test_dataset_catalog.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Dataset catalog target `5 passed`; related dataset/artifact/architecture suite `45 passed`; full pytest `190 passed`; Red captured missing `catalog` export/module; immutable version manifest、Artifact hash/file list、schema hash binding、previous/input lineage、idempotent immutable publish、latest alias、formal-experiment latest rejection 和 alias failure old-latest retention covered; compileall/lock/diff/tag checks PASS; no quality engine、fallback policy、Provider fixture、Quant Core、formal backtest、Evidence Agent 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
 | AEV-041 | SAL-P2-012 | 数据质量规则引擎、warning/quarantine/blocking 报告和 manifest metadata 测试记录 | [data-quality-rule-engine.md](./data-quality-rule-engine.md); [quality.py](../src/serenity_alpha_lab/datasets/quality.py); [test_data_quality.py](../tests/datasets/test_data_quality.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Data quality target `4 passed`; related dataset/artifact/API/architecture suite `61 passed`; full pytest `194 passed`; Red captured missing `quality` module; unique primary key、Schema/type、OHLC、non-negative volume/amount、null-ratio drift、continuity gap、return outlier、volume spike、adjustment factor jump、deterministic report Artifact、manifest metadata 和 ProblemDetails validation mapping covered; compileall/lock/diff/tag checks PASS; no latest blocking/quarantine transaction、fallback policy、Provider fixture、Quant Core、formal backtest、Evidence Agent 或真实 Provider/LLM 调用 | BE/QE | 2026-07-22 |
+| AEV-042 | SAL-P2-013 | Dataset 隔离区、质量门禁 latest 发布和临时清理测试记录 | [dataset-atomic-publication.md](./dataset-atomic-publication.md); [publication.py](../src/serenity_alpha_lab/datasets/publication.py); [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py); [test_dataset_publication.py](../tests/datasets/test_dataset_publication.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Dataset publication target `5 passed`; related dataset/artifact/API/architecture suite `66 passed`; full pytest `199 passed`; Red captured missing `publication` module; passed-only latest promotion、warning held、quarantine/blocking old-latest retention、deterministic quarantine records、quality report metadata、latest promotion failure old-latest retention 和 explicit tmp cleanup covered; compileall/lock/diff/tag checks PASS; no fallback policy、Provider fixture、real Provider/LLM、Quant Core、formal backtest、Evidence Agent 或 DSA runtime source migration | BE/QE | 2026-07-23 |
 
 允许的证据：
 
@@ -1612,4 +1618,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-012`，完成度为 41/129；最近可评审交付为 `3a846c6a feat(P2): 实现数据质量规则引擎`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-013` 隔离区与原子发布；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-013`，完成度为 42/129；最近阶段性任务为 `SAL-P2-013` 隔离区与原子发布；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-014` Provider 契约 Fixture；后续实现必须遵守 ADR-001/002 和 Gate G1 入口约束，不得在对应任务前启动 fallback policy、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。

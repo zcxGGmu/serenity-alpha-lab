@@ -282,6 +282,10 @@ class LocalDatasetCatalog:
         return self.root / "aliases"
 
     @property
+    def quarantine_root(self) -> Path:
+        return self.root / "quarantine"
+
+    @property
     def tmp_root(self) -> Path:
         return self.root / "tmp"
 
@@ -393,6 +397,59 @@ class LocalDatasetCatalog:
             return self.resolve_latest(reference.dataset_name or "", reference.alias_scope or "global")
         return self.get_version(reference.version_id or "")
 
+    def promote_to_latest(self, version_id: str, alias_scope: str = "global") -> DatasetVersionManifest:
+        manifest = self.get_version(version_id)
+        self._publish_latest_alias(manifest, alias_scope=alias_scope)
+        return manifest
+
+    def record_quarantine(self, record: Mapping[str, object]) -> Mapping[str, object]:
+        normalized = self._normalize_quarantine_record(record)
+        path = self.quarantine_path_for(
+            str(normalized["dataset_name"]),
+            str(normalized["alias_scope"]),
+            str(normalized["version_id"]),
+        )
+        payload = _canonical_json_bytes(normalized)
+        if path.exists():
+            existing = json.loads(path.read_text(encoding="utf-8"))
+            if _canonical_json_bytes(existing) != payload:
+                raise DatasetCatalogError(
+                    f"Dataset quarantine record {normalized['version_id']} already exists with different content"
+                )
+            return MappingProxyType(existing)
+        _write_json_atomic(path, normalized, tmp_root=self.tmp_root)
+        return MappingProxyType(normalized)
+
+    def list_quarantine_records(
+        self,
+        dataset_name: str | None = None,
+        alias_scope: str | None = None,
+    ) -> tuple[Mapping[str, object], ...]:
+        if not self.quarantine_root.exists():
+            return ()
+        dataset_filter = _optional_string(dataset_name)
+        scope_filter = _optional_string(alias_scope)
+        records: list[Mapping[str, object]] = []
+        for path in sorted(self.quarantine_root.glob("*/*/*.json")):
+            if not path.is_file():
+                continue
+            record = json.loads(path.read_text(encoding="utf-8"))
+            if dataset_filter is not None and record.get("dataset_name") != dataset_filter:
+                continue
+            if scope_filter is not None and record.get("alias_scope") != scope_filter:
+                continue
+            records.append(MappingProxyType(record))
+        return tuple(
+            sorted(
+                records,
+                key=lambda item: (
+                    str(item.get("created_at", "")),
+                    str(item.get("dataset_name", "")),
+                    str(item.get("version_id", "")),
+                ),
+            )
+        )
+
     def version_path_for(self, version_id: str) -> Path:
         return self.version_root / f"{_validate_version_id(version_id)}.json"
 
@@ -403,6 +460,31 @@ class LocalDatasetCatalog:
             / _safe_path_part(_required_string("alias_scope", alias_scope))
             / "latest.json"
         )
+
+    def quarantine_path_for(self, dataset_name: str, alias_scope: str, version_id: str) -> Path:
+        return (
+            self.quarantine_root
+            / _safe_path_part(_required_string("dataset_name", dataset_name))
+            / _safe_path_part(_required_string("alias_scope", alias_scope))
+            / f"{_validate_version_id(version_id)}.json"
+        )
+
+    def _normalize_quarantine_record(self, record: Mapping[str, object]) -> dict[str, object]:
+        dataset_name = _required_string("dataset_name", record.get("dataset_name"))
+        alias_scope = _required_string("alias_scope", record.get("alias_scope"))
+        version_id = _validate_version_id(record.get("version_id"))
+        self.get_version(version_id)
+        normalized = dict(record)
+        normalized["dataset_name"] = dataset_name
+        normalized["alias_scope"] = alias_scope
+        normalized["version_id"] = version_id
+        normalized["quality_status"] = _required_string("quality_status", normalized.get("quality_status"))
+        normalized["publication_status"] = _required_string(
+            "publication_status",
+            normalized.get("publication_status"),
+        )
+        normalized["created_at"] = _required_string("created_at", normalized.get("created_at"))
+        return normalized
 
     def _publish_manifest_record(self, manifest: DatasetVersionManifest) -> None:
         path = self.version_path_for(manifest.version_id)

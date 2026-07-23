@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-23<br>
-> 最近阶段性任务：`SAL-P2-012` 数据质量规则引擎<br>
+> 最近阶段性任务：`SAL-P2-013` 隔离区与原子发布<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P2 数据与持久任务<br>
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：41/129<br>
-> 当前可执行任务：`SAL-P2-013`，状态为 `READY`；隔离区与原子发布必须复用 Dataset Catalog/Manifest、Data Quality Report metadata、Artifact manifest-last 语义和 P1 ProblemDetails/Trace，不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：`3a846c6a feat(P2): 实现数据质量规则引擎`<br>
-> 最新状态同步 checkpoint：`docs: 同步 SAL-P2-012 最新开发状态与恢复提示`（状态同步专用提交；恢复时执行 `git log -1 --oneline` 读取实际 hash）<br>
+> 任务完成度：42/129<br>
+> 当前可执行任务：`SAL-P2-014`，状态为 `READY`；Provider 契约 Fixture 必须全离线复用 Provider 领域契约、DSA Provider Adapter、Arrow Schema Registry、Profile/ProblemDetails/Trace 和 Dataset 发布边界，不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent<br>
+> 最近可评审交付 checkpoint：`feat(P2): 实现 Dataset 隔离区与原子发布`（本轮提交后以 `git log -1 --oneline` 确认实际 hash）<br>
+> 最新状态同步 checkpoint：本轮 `SAL-P2-013` 状态同步待提交；提交后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -69,18 +69,19 @@
 - 完成 `SAL-P2-010`：新增 [schema_registry.py](../src/serenity_alpha_lab/datasets/schema_registry.py)，建立 Arrow Schema Registry，默认注册证券主数据、原始日线、公司行动、复权日线和 PIT 基本面 Dataset Schema，支持 lazy PyArrow conversion、schema metadata、canonical hash 和 semantic-version compatibility；证据见 [Arrow Schema Registry 记录](./arrow-schema-registry.md)。
 - 完成 `SAL-P2-011`：新增 [catalog.py](../src/serenity_alpha_lab/datasets/catalog.py)，实现 Dataset Catalog 与 Manifest，管理不可变版本、Artifact 文件哈希、schema hash、previous/input lineage 和 latest alias；正式实验解析拒绝 latest，必须使用具体 dataset version；证据见 [Dataset Catalog 与 Manifest 记录](./dataset-catalog-manifest.md)。
 - 完成 `SAL-P2-012`：新增 [quality.py](../src/serenity_alpha_lab/datasets/quality.py)，实现数据质量规则引擎、warning/quarantine/blocking 报告、issue 精确定位、deterministic quality report Artifact 和 Dataset Manifest metadata helper；证据见 [Data Quality Rule Engine 记录](./data-quality-rule-engine.md)。
+- 完成 `SAL-P2-013`：新增 [publication.py](../src/serenity_alpha_lab/datasets/publication.py)，实现质量门禁发布、passed-only latest promotion、warning/quarantine/blocking 隔离记录、旧 latest 保持和显式 tmp 清理；证据见 [Dataset 隔离区与原子发布记录](./dataset-atomic-publication.md)。
 
 ## 未完成
 
 ### 当前可执行 P2 任务
 
-- `SAL-P2-013` 当前为 `READY`：实现隔离区与原子发布，阻止 failed/blocking Dataset 更新 latest，并清理临时 Artifact。
+- `SAL-P2-014` 当前为 `READY`：建立 Provider 契约 Fixture，覆盖 AKShare、efinance、Tushare、BaoStock 和 YFinance 核心接口的离线脱敏响应、Schema、超时/空数据/字段漂移案例。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P2 至 P6 仍有 88 项工程任务未完成。
-- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset、PIT 基本面 Dataset、Arrow Schema Registry、Dataset Catalog/Manifest 和 Data Quality Rule Engine，但尚未实现隔离区/原子发布、Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P2 至 P6 仍有 87 项工程任务未完成。
+- 已创建 Serenity 目标包骨架、Provider 领域契约、DSA Provider Adapter、证券代码兼容迁移层、Bronze 原始数据层、证券主数据 Dataset、交易日历 Dataset、原始日线 Dataset、公司行动/复权 Dataset、PIT 基本面 Dataset、Arrow Schema Registry、Dataset Catalog/Manifest、Data Quality Rule Engine 和 Dataset 隔离区/原子发布，但尚未实现 Provider 契约 Fixture、Worker、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -112,7 +113,8 @@
 - PIT 基本面 Dataset 已完成：`FundamentalsDataset` 按 `instrument_id + period_end + item + revision + provider_id` 表达时点正确的基本面记录，显式区分 `announced_at`、`available_at`、`ingested_at` 和 revision；PIT 查询硬过滤 `available_at <= decision_time`，无公告时间的 legacy/DSA-style 记录标记 `temporal_confidence=unknown` 且拒绝 formal backtest 查询，并通过 `ArtifactStore` 发布 deterministic JSON；本层不建立 Catalog/latest alias、fallback policy 或真实 Provider 调用。
 - Arrow Schema Registry 已完成：`ArrowSchemaRegistry` 默认注册证券主数据、原始日线、公司行动、复权日线和 PIT 基本面 Dataset Schema；Schema 声明包含字段、主键、分区键、content type 和 canonical hash，minor/patch 只允许新增 nullable 字段，删除/改义/改类型/改主键等 breaking 变更必须新 major；PyArrow 仍为 lazy optional dependency，由 `quant` extra 提供。本层不建立质量门禁、fallback policy 或真实 Provider 调用。
 - Dataset Catalog 与 Manifest 已完成：`LocalDatasetCatalog` 管理不可变 Dataset Version Manifest、Artifact 文件哈希、schema hash、previous/input lineage、run/stage/trace 和 metadata；`latest` 是单独持久化的可变 alias，只允许 discovery/research display，正式实验解析必须使用具体 dataset version。本层不实现质量规则、quarantine/blocking、fallback policy、真实 Provider 调用、Worker runtime、Quant Core、正式回测或 Evidence Agent。
-- Data Quality Rule Engine 已完成：`DataQualityEngine` 对 schema-bound Dataset snapshots 执行离线规则，内置唯一主键、Schema/类型、OHLC、非负字段、空值漂移、交易日连续性、收益/成交量异常和复权因子跳变规则；`DataQualityReport` 输出 `passed` / `warning` / `quarantine` / `blocking`、issue counts、rule set version、trace/run/stage、deterministic Artifact 和 manifest metadata。本层不执行 latest 阻断、quarantine 发布事务、fallback policy、Provider fixture、真实 Provider/LLM 调用、Worker runtime、Quant Core、正式回测或 Evidence Agent。
+- Data Quality Rule Engine 已完成：`DataQualityEngine` 对 schema-bound Dataset snapshots 执行离线规则，内置唯一主键、Schema/类型、OHLC、非负字段、空值漂移、交易日连续性、收益/成交量异常和复权因子跳变规则；`DataQualityReport` 输出 `passed` / `warning` / `quarantine` / `blocking`、issue counts、rule set version、trace/run/stage、deterministic Artifact 和 manifest metadata。
+- Dataset 隔离区与原子发布已完成：`QualityGatedDatasetPublisher` 复用 Dataset Catalog、Data Quality Report 和 ArtifactStore，先写质量报告 Artifact 与不可变 Dataset Manifest，只有 `passed` 显式提升为 `latest`；`warning/quarantine/blocking` 写入 held/quarantine/blocking 记录并保留旧 latest，失败路径清理显式 tmp 根。本层不实现 fallback policy、Provider fixture、真实 Provider/LLM 调用、Worker runtime、Quant Core、正式回测或 Evidence Agent。
 - DSA 是产品主干，不是量化内核；真实组合回测、PIT 数据和硬风控必须独立实现。
 - AlphaSift 只负责候选发现/快照筛选；Qlib 只能通过独立 Quant Worker Adapter 接入。
 - 任何历史回测必须使用不可变 Dataset Version 与 `available_at <= decision_time` 的数据。
@@ -128,7 +130,7 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P2-013` 隔离区与原子发布，阻止 blocking/failed Dataset 更新 latest，并清理临时 Artifact。
+1. 优先执行 `SAL-P2-014` Provider 契约 Fixture，保持 CI 全离线并覆盖核心 Provider 响应、Schema、超时/空数据/字段漂移案例。
 2. 不得提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent。
 3. 保持 P0/P1 required checks 和 Gate G1 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -163,7 +165,7 @@
 - 2026-07-22：完成 `SAL-P2-010`，新增 Arrow Schema Registry、五类 P2 Dataset 默认注册、lazy PyArrow conversion、schema metadata、semantic-version compatibility、duplicate version guard 和 Arrow/Pandas/Polars round-trip 测试；Schema registry target `6 passed`、instrument master related `9 passed`、P2 related suite `62 passed`、full pytest `185 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `10/20`、总进度 `39/129`，`SAL-P2-011` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-011`，新增 Dataset Catalog、不可变版本 Manifest、Artifact 文件哈希、schema hash binding、previous/input lineage、latest alias 和正式实验 latest 拒绝；Dataset catalog target `5 passed`、相关套件 `45 passed`、full pytest `190 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `11/20`、总进度 `40/129`，`SAL-P2-012` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：完成 `SAL-P2-012`，checkpoint `3a846c6a feat(P2): 实现数据质量规则引擎`；新增 Data Quality Rule Engine、warning/quarantine/blocking quality report、issue 精确定位、deterministic report Artifact 和 manifest metadata helper；Data quality target `4 passed`、相关套件 `61 passed`、full pytest `194 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `12/20`、总进度 `41/129`，`SAL-P2-013` 成为当前 `READY` 任务，Gate G2 仍未通过。
-- 2026-07-23：按用户要求同步最新开发状态；确认最近可评审交付为 `3a846c6a feat(P2): 实现数据质量规则引擎`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..012`，未完成范围为 `SAL-P2-013..020` 与 P3 至 P6；下一步只执行 `SAL-P2-013` 隔离区与原子发布，不提前进入 fallback policy、真实 Provider、Quant Core、正式回测或 Evidence Agent。
+- 2026-07-23：完成 `SAL-P2-013`，新增 Dataset 隔离区与原子发布；Dataset publication target `5 passed`、相关套件 `66 passed`、full pytest `199 passed`，compileall/lock/diff/tag checks PASS，P2 进度 `13/20`、总进度 `42/129`，`SAL-P2-014` 成为当前 `READY` 任务，Gate G2 仍未通过。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
 
@@ -199,14 +201,14 @@
 当前状态：
 - Phase：P2 数据与持久任务
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-012
-- 最近完成：SAL-P2-012 数据质量规则引擎
-- 最近可评审交付 checkpoint：3a846c6a feat(P2): 实现数据质量规则引擎
-- 最新状态同步 checkpoint：docs: 同步 SAL-P2-012 最新开发状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
-- 进度：P0 13/13，P1 16/16，P2 12/20，总计 41/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-013
+- 最近完成：SAL-P2-013 隔离区与原子发布
+- 最近可评审交付 checkpoint：feat(P2): 实现 Dataset 隔离区与原子发布；启动后以 git log -1 --oneline 确认实际 hash
+- 最新状态同步 checkpoint：本轮 SAL-P2-013 状态同步待提交；启动后以 git log -1 --oneline 确认实际 hash
+- 进度：P0 13/13，P1 16/16，P2 13/20，总计 42/129
 
 下一步优先执行：
-1. SAL-P2-013 实现隔离区与原子发布，阻止 blocking/failed Dataset 更新 latest，并清理临时 Artifact
+1. SAL-P2-014 建立 Provider 契约 Fixture，覆盖 AKShare、efinance、Tushare、BaoStock 和 YFinance 核心接口的离线脱敏响应、Schema、超时/空数据/字段漂移案例
 2. 不要提前实现 fallback policy、真实 Provider 调用、Quant Core、正式回测或 Evidence Agent
 3. 后续 Dataset/Provider/持久任务实现必须复用 Gate G1/P2 已冻结的 Profile、ProblemDetails、Trace、Artifact、Run/Stage/Event、Alembic、Compatibility Facade、InstrumentId、Provider Symbol Mapping、Bronze Artifact、Instrument Master Dataset、Trading Calendar Dataset、Raw Daily Bars Dataset、Corporate Actions/Adjusted Bars Dataset、PIT Fundamental Dataset、Arrow Schema Registry、Dataset Catalog/Manifest 和 Data Quality Rule Engine
 

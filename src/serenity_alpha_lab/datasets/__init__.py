@@ -59,6 +59,14 @@ from serenity_alpha_lab.datasets.quality import (
     UniquePrimaryKeyRule,
     VolumeSpikeRule,
 )
+from serenity_alpha_lab.datasets.publication import (
+    DatasetPublicationError,
+    DatasetPublicationRequest,
+    DatasetPublicationResult,
+    DatasetPublicationStatus,
+    QualityGatedDatasetPublisher,
+    cleanup_temporary_paths,
+)
 from serenity_alpha_lab.datasets.instrument_master import (
     INSTRUMENT_MASTER_CONTENT_TYPE,
     INSTRUMENT_MASTER_FIELD_SCHEMA,
@@ -146,6 +154,10 @@ __all__ = [
     "DatasetVersionManifest",
     "DatasetVersionRef",
     "DatasetVersionRefKind",
+    "DatasetPublicationError",
+    "DatasetPublicationRequest",
+    "DatasetPublicationResult",
+    "DatasetPublicationStatus",
     "FundamentalPeriodType",
     "FundamentalQueryPurpose",
     "FundamentalRecord",
@@ -186,6 +198,8 @@ __all__ = [
     "UniquePrimaryKeyRule",
     "VolumeSpikeRule",
     "TemporalConfidence",
+    "QualityGatedDatasetPublisher",
+    "cleanup_temporary_paths",
     "default_dataset_schema_registry",
     "market_timezone",
 ]
