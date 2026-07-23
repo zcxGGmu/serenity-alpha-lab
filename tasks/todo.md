@@ -1,3 +1,31 @@
+# P2 Provider Contract Fixtures Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-014` by adding an offline Provider contract fixture corpus for AKShare, efinance, Tushare, BaoStock, and YFinance. Cover sanitized responses, schema bindings, timeout, empty-data, and field-drift cases. Reuse Provider domain contracts, DSA Provider Adapter semantics, Arrow Schema Registry, Trace/Run/Stage scalar attribution, ProblemDetails-compatible provider errors, and Dataset publication boundaries. Do not implement fallback policy, real Provider calls, PersistentTaskBackend, Worker runtime, Quant Core, formal backtest, Evidence Agent, or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read recovery docs, lessons, development plan, progress checklist, Gate G0 review, and current Git state.
+- [x] Inspect existing Provider contract, DSA adapter, Arrow Schema Registry, docs, and tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-provider-contract-fixtures.md`.
+- [ ] Add Red tests for offline Provider fixture coverage, success batch conversion, timeout/empty/schema-drift errors, deterministic sanitized snapshots, and SDK import avoidance.
+- [ ] Implement `integrations.data.provider_contract_fixtures` with frozen DTOs, default corpus, Provider `DataBatch` conversion, ProviderError mapping, schema validation, and snapshot writer.
+- [ ] Export fixture symbols and preserve architecture boundaries without touching DSA runtime source.
+- [ ] Add acceptance evidence documentation for `SAL-P2-014`.
+- [ ] Run target, related, full, compile, lock, diff, and immutable tag verification.
+- [ ] Update progress checklist, development status, decision/evidence registers, this review, and the next-session prompt.
+- [ ] Stage only `SAL-P2-014` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- Provider fixtures are offline contract samples only; they must not choose fallbacks, probe live endpoints, instantiate Provider SDKs, or call DSA `DataFetcherManager`.
+- Fixtures may expose sanitized raw responses, expected schema metadata, normalized records, and expected error categories; they must not contain secrets, tokens, cookies, absolute local paths, prompts, or personal data.
+- Tests use synthetic offline rows and local deterministic JSON only; no real Provider/LLM/network calls.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache, or unrelated files.
+
+---
+
 # P2 Dataset Atomic Publication Plan
 
 > Started: 2026-07-23
