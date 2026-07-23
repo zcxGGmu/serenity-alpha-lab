@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-23<br>
-> 最近阶段性任务：`SAL-P3-004` CandidateBatch<br>
+> 最近阶段性任务：`SAL-P3-005` FactorDefinition 版本模型<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P3 AlphaSift、因子与股票筛选<br>
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：53/129<br>
-> 当前可执行任务：`SAL-P3-005`，状态为 `READY`；实现 FactorDefinition 版本模型，建立 draft/published/retired 和不可变发布，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：`07b5d526 feat(P3): 定义 CandidateBatch 候选契约`；上一 checkpoint 为 `1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-004 最新状态与恢复提示`；上一状态同步 checkpoint 为 `2e508412 docs: 同步 SAL-P3-003 最新状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
+> 任务完成度：54/129<br>
+> 当前可执行任务：`SAL-P3-006`，状态为 `READY`；实现因子 DSL 与算子白名单，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
+> 最近可评审交付 checkpoint：本次实现提交，标题为 `feat(P3): 实现 FactorDefinition 版本模型`；上一 checkpoint 为 `07b5d526 feat(P3): 定义 CandidateBatch 候选契约`；提交后以 `git log -1 --oneline` 确认实际 hash<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `feat(P3): 实现 FactorDefinition 版本模型`；上一状态同步 checkpoint 为 `1fda1f5b docs: 同步 SAL-P3-004 最新状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -84,18 +84,19 @@
 - 完成 `SAL-P3-002`：新增 [AlphaSift 离线 Wheel Intake 记录](./alphasift-wheel-intake.md)、[intake manifest](./baselines/alphasift-wheel-intake/intake-manifest.json)、CycloneDX [SBOM](./baselines/alphasift-wheel-intake/sbom-cyclonedx.json)、[许可证清单](./baselines/alphasift-wheel-intake/license-inventory.csv)、[AlphaSift Wheel intake test](../tests/architecture/test_alphasift_wheel_intake.py) 和 [build-alphasift-wheel-intake.sh](../scripts/build-alphasift-wheel-intake.sh)，固定 source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`、internal artifact URI、SBOM、许可证清单和 offline no-deps install evidence；P3 进度 `2/17`。
 - 完成 `SAL-P3-003`：新增 [ScreeningProvider 契约与 AlphaSift Adapter 记录](./screening-provider-contract.md)、应用层 [screening_provider.py](../src/serenity_alpha_lab/application/screening_provider.py)、AlphaSift 集成 [provider_adapter.py](../src/serenity_alpha_lab/integrations/alphasift/provider_adapter.py)、Fake provider、ProblemDetails 映射和架构边界测试；`ScreeningRequest` 强制具体 `dsv_*` Dataset Version 并拒绝 `latest`，CI profile 禁止未注入 client 的真实 AlphaSift 调用，LLM overlay 默认关闭并受 model-call policy 保护；P3 进度 `3/17`。
 - 完成 `SAL-P3-004`：新增 [CandidateBatch 候选契约记录](./candidate-batch-contract.md)、应用层 [candidate_batch.py](../src/serenity_alpha_lab/application/candidate_batch.py) 和 CandidateBatch contract test，冻结 `screening.candidate_batch@1.0.0`、标准候选、L1/L2/L3 层级分数、原因码、来源血缘、rank、`to_record()` 序列化和 `ScreeningResult` metadata bridge；P3 进度 `4/17`。
+- 完成 `SAL-P3-005`：新增 [FactorDefinition 版本模型记录](./factor-definition-version-model.md)、Quant 层 [definitions.py](../src/serenity_alpha_lab/quant/factors/definitions.py) 和 FactorDefinition contract test，冻结 `quant.factor_definition@1.0.0`、公式/输入/窗口/缺失/后处理/实现哈希、draft/published/retired 生命周期、不可变发布、独立 retirement record 和 audit events；P3 进度 `5/17`。
 
 ## 未完成
 
 ### 当前可执行 P3 任务
 
-- `SAL-P3-005` 当前为 `READY`：实现 FactorDefinition 版本模型，建立 draft/published/retired 和不可变发布。
+- `SAL-P3-006` 当前为 `READY`：实现因子 DSL 与算子白名单，支持 delay/rolling/rank/算术/条件等基础表达式。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P3 至 P6 仍有 78 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake、内部制品引用、ScreeningProvider/Adapter 和 CandidateBatch，但尚未完成 FactorDefinition、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P3 至 P6 仍有 75 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake、内部制品引用、ScreeningProvider/Adapter、CandidateBatch 和 FactorDefinition 版本模型，但尚未完成 Factor DSL、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -151,7 +152,7 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P3-005` 实现 FactorDefinition 版本模型，建立 draft/published/retired 和不可变发布。
+1. 优先执行 `SAL-P3-006` 实现因子 DSL 与算子白名单，支持 delay/rolling/rank/算术/条件等基础表达式。
 2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. 保持 P0/P1/P2 required checks 和 Gate G2 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -201,6 +202,7 @@
 - 2026-07-23：完成 `SAL-P3-002` AlphaSift 离线 Wheel intake；source archive SHA-256 `4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a`、reproducible wheel SHA-256 `b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2`、internal artifact URI、CycloneDX SBOM、license inventory 和 offline no-deps install check 已记录；Red intake test `4 failed`、Green target `4 passed`、related architecture suite `10 passed`、full pytest `242 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `2/17`、总进度 `51/129`，`SAL-P3-003` 成为当前 `READY` 任务。
 - 2026-07-23：完成 `SAL-P3-003` ScreeningProvider；新增平台 `ScreeningProvider` Protocol、DTO、Fake、`AlphaSiftScreeningAdapter`、ProblemDetails 映射和架构边界测试；Red contract test `1 error`、Red adapter test `1 error`、Green target/related suite `22 passed`、full pytest `252 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `3/17`、总进度 `52/129`，`SAL-P3-004` 成为当前 `READY` 任务。
 - 2026-07-23：完成 `SAL-P3-004` CandidateBatch；新增平台标准候选批次契约、canonical `InstrumentId`、具体 Dataset Version guard、source snapshot/discovered time、rank、L1/L2/L3 score records、reason/source lineage、LLM overlay independence、冻结 nested records、JSON-friendly `to_record()` 和 `ScreeningResult` metadata bridge；Red contract test `1 error`、Green target `3 passed`、related suite `25 passed`，full pytest `255 passed, 3 skipped`，compileall/lock/diff/tag checks PASS，P3 进度 `4/17`、总进度 `53/129`，`SAL-P3-005` 成为当前 `READY` 任务；实现 checkpoint 为 `07b5d526 feat(P3): 定义 CandidateBatch 候选契约`。
+- 2026-07-23：完成 `SAL-P3-005` FactorDefinition 版本模型；新增 `quant.factor_definition@1.0.0`、FactorDefinition/Formula/Input/Window/Missing/PostProcessing DTO、draft/published/retired 生命周期、本地定义仓库、不可变 published manifest、独立 retirement record 和 audit events；Red contract test `1 error`、Green target `3 passed`、related suite `28 passed`，P3 进度 `5/17`、总进度 `54/129`，`SAL-P3-006` 成为当前 `READY` 任务；实现 checkpoint 将由本次提交生成，标题为 `feat(P3): 实现 FactorDefinition 版本模型`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -236,22 +238,23 @@
 9. docs/alphasift-wheel-intake.md
 10. docs/screening-provider-contract.md
 11. docs/candidate-batch-contract.md
+12. docs/factor-definition-version-model.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P3 AlphaSift、因子与股票筛选
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-004
-- 最近完成：SAL-P3-004 CandidateBatch
-- 最近可评审交付 checkpoint：07b5d526 feat(P3): 定义 CandidateBatch 候选契约；上一 checkpoint 为 1a622a1a feat(P3): 定义 ScreeningProvider 契约与 AlphaSift adapter
-- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-004 最新状态与恢复提示；上一状态同步 checkpoint 为 2e508412 docs: 同步 SAL-P3-003 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 4/17，总计 53/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-005
+- 最近完成：SAL-P3-005 FactorDefinition 版本模型
+- 最近可评审交付 checkpoint：本次实现提交，标题为 feat(P3): 实现 FactorDefinition 版本模型；上一 checkpoint 为 07b5d526 feat(P3): 定义 CandidateBatch 候选契约；启动后以 git log -1 --oneline 确认实际 hash
+- 最新状态同步 checkpoint：本文件所在提交，标题为 feat(P3): 实现 FactorDefinition 版本模型；上一状态同步 checkpoint 为 1fda1f5b docs: 同步 SAL-P3-004 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 5/17，总计 54/129
 
 下一步优先执行：
-1. SAL-P3-005 实现 FactorDefinition 版本模型，建立 draft/published/retired 和不可变发布
+1. SAL-P3-006 实现因子 DSL 与算子白名单，支持 delay/rolling/rank/算术/条件等基础表达式
 2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider 和 SAL-P3-004 CandidateBatch
+3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider、SAL-P3-004 CandidateBatch 和 SAL-P3-005 FactorDefinition
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

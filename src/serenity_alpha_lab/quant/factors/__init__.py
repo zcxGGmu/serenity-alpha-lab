@@ -1,1 +1,41 @@
-"""Factor-engine package placeholder for future P1/P3 tasks."""
+"""Factor definition and future factor-engine boundary."""
+
+from serenity_alpha_lab.quant.factors.definitions import (
+    FACTOR_DEFINITION_CONTRACT_VERSION,
+    FACTOR_DEFINITION_SCHEMA_NAME,
+    FACTOR_DEFINITION_SCHEMA_VERSION,
+    FactorDefinition,
+    FactorDefinitionAuditEvent,
+    FactorDefinitionError,
+    FactorDefinitionRetirement,
+    FactorDefinitionStatus,
+    FactorDirection,
+    FactorFormula,
+    FactorInput,
+    FactorInputKind,
+    FactorWindow,
+    LocalFactorDefinitionRepository,
+    MissingValuePolicy,
+    MissingValueStrategy,
+    PostProcessingStep,
+)
+
+__all__ = [
+    "FACTOR_DEFINITION_CONTRACT_VERSION",
+    "FACTOR_DEFINITION_SCHEMA_NAME",
+    "FACTOR_DEFINITION_SCHEMA_VERSION",
+    "FactorDefinition",
+    "FactorDefinitionAuditEvent",
+    "FactorDefinitionError",
+    "FactorDefinitionRetirement",
+    "FactorDefinitionStatus",
+    "FactorDirection",
+    "FactorFormula",
+    "FactorInput",
+    "FactorInputKind",
+    "FactorWindow",
+    "LocalFactorDefinitionRepository",
+    "MissingValuePolicy",
+    "MissingValueStrategy",
+    "PostProcessingStep",
+]

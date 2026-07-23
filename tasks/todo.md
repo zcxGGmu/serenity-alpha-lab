@@ -1,3 +1,41 @@
+# SAL-P3-005 FactorDefinition Version Model Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P3-005` by defining versioned FactorDefinition contracts and a local repository that supports mutable drafts, immutable published versions, retirement records and append-only audit evidence. Do not implement Factor DSL execution, factor calculation DAG/cache, base factors, Factor Evaluation, ScreenDefinition, Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, `docs/candidate-batch-contract.md`, current Git status and recent commits.
+- [x] Inspect CandidateBatch, ScreeningProvider, Dataset Catalog and package boundary patterns for immutable dataclasses, concrete Dataset Version validation, JSON-friendly `to_record()` and local manifest repositories.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-factor-definition-version-model.md`.
+- [x] Add Red contract tests for complete FactorDefinition specs, concrete Dataset Version references, immutable nested records, draft/published/retired lifecycle, repository conflict prevention and audit events.
+- [x] Implement `quant.factors.definitions` with FactorDefinition DTOs, lifecycle helpers, immutable publication and local repository.
+- [x] Export FactorDefinition symbols from `quant.factors`.
+- [x] Add `docs/factor-definition-version-model.md` with schema, lifecycle, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Stage only `SAL-P3-005` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- FactorDefinition references must use concrete `dsv_*` Dataset Version ids; `latest` remains forbidden for formal factor definitions.
+- Drafts may be overwritten before publication; published version manifests are immutable and same `definition_id + semantic_version` cannot point to changed content.
+- Retirement must be represented as a separate lifecycle/audit record, not by editing the published manifest in place.
+- This task only models definitions and version lifecycle; no DSL parsing/execution, factor values, DAG/cache, Qlib, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop or DSA runtime source migration.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-005
+
+- Added `src/serenity_alpha_lab/quant/factors/definitions.py` with immutable `FactorDefinition`, `FactorFormula`, `FactorInput`, `FactorWindow`, `MissingValuePolicy`, `PostProcessingStep`, lifecycle/status enums, retirement records, audit events and `LocalFactorDefinitionRepository`.
+- Published versions derive `fdv_*` from canonical spec hash; same `definition_id + semantic_version` cannot be republished to different content, and retirement is stored separately so `get_version()` remains the immutable published record.
+- Exported FactorDefinition symbols from `quant.factors` and added `tests/quant/test_factor_definition_contract.py`.
+- Added `docs/factor-definition-version-model.md`, `DEC-052` and `AEV-054`; updated P3 progress to `5/17`, total progress to `54/129`, and moved `SAL-P3-006` to `READY`.
+- Red evidence: target contract test failed with missing `serenity_alpha_lab.quant.factors.definitions`.
+- Verification: target `3 passed`; related FactorDefinition/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `28 passed`; full pytest `258 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no Factor DSL parser/compiler, Factor Engine, DAG/cache, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-004 CandidateBatch Contract Plan
 
 > Started: 2026-07-23
