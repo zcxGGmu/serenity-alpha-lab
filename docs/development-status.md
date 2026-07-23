@@ -8,7 +8,7 @@
 > 任务完成度：51/129<br>
 > 当前可执行任务：`SAL-P3-003`，状态为 `READY`；定义 ScreeningProvider，隔离 AlphaSift 与平台 Application/Domain，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
 > 最近可评审交付 checkpoint：`50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`；上一 checkpoint 为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-002 最新状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 复核 SAL-P3-002 最新开发状态与恢复提示`；上一状态同步 checkpoint 为 `c53daa65 docs: 同步 SAL-P3-002 最新状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -226,6 +226,8 @@
 5. docs/ai-stock-quant-platform-development-plan.md
 6. docs/gate-g0-baseline-review.md
 7. docs/gate-g2-data-task-review.md
+8. docs/alphasift-source-review.md
+9. docs/alphasift-wheel-intake.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
@@ -236,7 +238,7 @@
 - 最近完成：SAL-P3-002 AlphaSift 离线 Wheel intake
 - 最近可评审交付 checkpoint：50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake
 - 上一 checkpoint：4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定
-- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-002 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
+- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 复核 SAL-P3-002 最新开发状态与恢复提示；上一状态同步 checkpoint 为 c53daa65 docs: 同步 SAL-P3-002 最新状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 2/17，总计 51/129
 
 下一步优先执行：

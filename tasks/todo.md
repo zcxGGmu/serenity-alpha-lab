@@ -3,6 +3,15 @@
 > Started: 2026-07-23
 > Scope: Complete `SAL-P3-002` by building a reproducible offline AlphaSift Wheel from locked source commit `9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf`, fixing source archive hash, wheel hash, SBOM, license inventory and internal artifact reference. Do not implement ScreeningProvider Adapter, start Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, or DSA runtime source migration.
 
+## Review: SAL-P3-002 User-Requested Status Refresh
+
+- Refreshed `docs/development-status.md` next-start prompt to include `docs/alphasift-source-review.md` and `docs/alphasift-wheel-intake.md` as required recovery evidence.
+- Recorded the repeated status-sync habit reminder in `tasks/lessons.md`.
+- Current completed range remains `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..002`; current READY task remains `SAL-P3-003`; Gate G3 remains not passed; progress remains P3 `2/17`, total `51/129`.
+- Latest implementation checkpoint remains `50012b44 feat(P3): 构建 AlphaSift 离线 Wheel intake`; previous status-sync checkpoint is `c53daa65 docs: 同步 SAL-P3-002 最新状态与恢复提示`; this refresh will create a new docs checkpoint.
+
+---
+
 ## Checklist
 
 - [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, current Git status and recent commits.
