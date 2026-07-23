@@ -254,6 +254,10 @@ propcache==0.5.2
     #   yarl
 protobuf==6.33.6
     # via yfinance
+psycopg==3.3.4
+    # via serenity-alpha-lab
+psycopg-binary==3.3.4 ; implementation_name != 'pypy'
+    # via psycopg
 py==1.11.0
     # via retry
 py-mini-racer==0.6.0 ; sys_platform == 'linux'
@@ -409,6 +413,7 @@ typing-extensions==4.16.0
     #   fastapi
     #   huggingface-hub
     #   openai
+    #   psycopg
     #   pydantic
     #   pydantic-core
     #   referencing
@@ -425,6 +430,7 @@ tzdata==2026.3
     # via
     #   exchange-calendars
     #   pandas
+    #   psycopg
 urllib3==2.7.0
     # via
     #   akshare

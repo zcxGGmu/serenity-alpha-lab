@@ -1,3 +1,40 @@
+# P2 PostgreSQL Standalone Profile Plan
+
+> Started: 2026-07-23
+> Scope: Complete `SAL-P2-017` by establishing the PostgreSQL standalone Profile foundations: database configuration, connection pool, readiness checks and a shared Repository Contract suite. Reuse `SAL-P1-012` Alembic helpers and `SAL-P1-014` Runtime Profile; do not start Worker lease, PersistentTaskBackend execution, Quant Core, formal backtest, Evidence Agent, real Provider/LLM calls or broad DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, current Git status and recent commits.
+- [x] Inspect `SAL-P2-017` acceptance scope, Runtime Profile, Alembic storage migration helpers, existing Repository boundaries, TaskBackend contract and architecture guardrails.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-23-postgresql-standalone-profile.md`.
+- [x] Add Red tests for standalone PostgreSQL URL resolution, SQLite defaults, engine/pool safety settings, health checks and same Repository Contract semantics.
+- [x] Implement `repositories.database` with settings DTOs, engine factory, readiness diagnostics and SQLAlchemy Repository Contract probe.
+- [x] Export repository symbols and preserve architecture boundaries without touching DSA runtime source, Provider SDKs, Worker runtime, Quant Core or Evidence Agent.
+- [x] Add acceptance evidence documentation for `SAL-P2-017`.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Update progress checklist, development status, this review and the next-session prompt.
+- [x] Stage only `SAL-P2-017` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Keep `upstream/dsa-v3.26.1` immutable and DSA runtime source isolated under `.worktrees/dsa-v3.26.1`.
+- The database profile layer may create SQLAlchemy engines, run lightweight readiness checks and provide Repository Contract probes only; it must not implement Celery/Redis Worker lease, task execution, Scheduler dispatch, Quant Core, formal backtest or Evidence Agent behavior.
+- Tests use local SQLite and optional `SERENITY_TEST_POSTGRES_URL`; no real Provider/LLM/network data calls are allowed.
+- Repository Contract semantics must normalize UTC time, `Decimal`, JSON and rollback behavior across SQLite/PostgreSQL rather than relying on dialect quirks.
+- Do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P2-017
+
+- Red evidence: `uv run --extra core --extra dev python -m pytest tests/repositories/test_database_profile.py tests/repositories/test_repository_contract.py -q` failed because `serenity_alpha_lab.repositories.database` did not exist.
+- Green implementation: added `DatabaseProfileSettings`, `DatabaseDialect`, `resolve_database_profile()`, `create_database_engine()`, `check_database_ready()`, `RepositoryContractProbeRecord` and `RepositoryContractProbeRepository` under `repositories.database`, plus repository package exports.
+- Profile coverage: standalone requires explicit `SERENITY_DATABASE_URL`; PostgreSQL uses `psycopg`, `pool_pre_ping`, pool size/overflow/timeout, `statement_timeout=30000`, redacted diagnostics and `application_name`; SQLite enables foreign keys, busy timeout, WAL for file DBs and `StaticPool` for memory DBs.
+- Repository Contract coverage: SQLite and optional live PostgreSQL (`SERENITY_TEST_POSTGRES_URL`) share one suite covering UTC datetime, `Decimal`, date, JSON normalization, duplicate-key conflict wrapping and rollback semantics.
+- Verification: target profile/repository/storage tests `10 passed, 3 skipped`; related repositories/config/API/architecture suite `50 passed, 3 skipped`; full pytest `220 passed, 3 skipped`; `compileall` PASS; dependency lock PASS; `git diff --check` PASS; `psycopg` import smoke `3.3.4`; immutable `upstream/dsa-v3.26.1` tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Scope retained: no Compose service, PersistentTaskBackend execution, Worker lease/heartbeat, Celery/Redis, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, DSA runtime source migration or tag movement.
+
+---
+
 # P2 SAL-P2-016 Status Refresh Plan
 
 > Started: 2026-07-23
