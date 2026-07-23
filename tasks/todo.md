@@ -15,7 +15,7 @@
 - [x] Add acceptance evidence documentation for `SAL-P2-019`.
 - [x] Run target, related, full, compile, lock, diff and immutable tag verification.
 - [x] Update progress checklist, development status, this review and the next-session prompt.
-- [ ] Stage only `SAL-P2-019` files and create the required Chinese checkpoint commit.
+- [x] Stage only `SAL-P2-019` files and create the required Chinese checkpoint commit. Checkpoint: `15c3d555 feat(P2): 实现可恢复任务事件流`.
 
 ## Guardrails
 

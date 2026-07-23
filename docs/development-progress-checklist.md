@@ -1654,4 +1654,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-019`，完成度为 48/129；最近阶段性任务为 `SAL-P2-019` 可恢复任务事件流；最近实现 checkpoint 将在本次实现提交生成，上一实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-020` Gate G2 数据与任务评审；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-019`，完成度为 48/129；最近阶段性任务为 `SAL-P2-019` 可恢复任务事件流；最近实现 checkpoint 为 `15c3d555 feat(P2): 实现可恢复任务事件流`，上一实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`；Gate G0 与 Gate G1 已通过，Gate G2 未通过。下一步优先执行 `SAL-P2-020` Gate G2 数据与任务评审；后续实现必须遵守 ADR-001/002 和 Gate G1/P2 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。

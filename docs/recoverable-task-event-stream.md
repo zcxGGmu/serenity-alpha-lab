@@ -2,7 +2,7 @@
 
 > 任务：`SAL-P2-019` 实现可恢复任务事件流<br>
 > 日期：2026-07-23<br>
-> 实现 checkpoint：本次实现提交生成后由状态同步提交回填实际 hash<br>
+> 实现 checkpoint：`15c3d555 feat(P2): 实现可恢复任务事件流`<br>
 > 代码：`src/serenity_alpha_lab/services/task_event_stream.py`；`src/serenity_alpha_lab/repositories/persistent_task_backend.py`<br>
 > 测试：`tests/services/test_task_event_stream.py`<br>
 > 范围：持久化/暴露 `RunEvent`、SSE `Last-Event-ID` 补发、queued orphan redispatch、stalled lease requeue 和临时 Artifact 清理；不启动完整 Worker execution loop、正式 API/前端页面、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用或 DSA runtime source migration。

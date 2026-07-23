@@ -7,8 +7,8 @@
 > 当前 Gate：G2，未通过；G0、G1 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：48/129<br>
 > 当前可执行任务：`SAL-P2-020`，状态为 `READY`；Gate G2 数据与任务评审必须基于 P2 Dataset、Provider、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流证据，不得提前启动 Quant Core、正式回测或 Evidence Agent<br>
-> 最近可评审交付 checkpoint：本次实现提交生成后由状态同步提交回填实际 hash，标题为 `feat(P2): 实现可恢复任务事件流`；上一实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`<br>
-> 最新状态同步 checkpoint：本次状态同步提交生成；上一状态同步为 `d4990b1e docs: 固化 SAL-P2-018 状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
+> 最近可评审交付 checkpoint：`15c3d555 feat(P2): 实现可恢复任务事件流`；上一实现 checkpoint 为 `94fd6dac feat(P2): 实现 PersistentTaskBackend`<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 固化 SAL-P2-019 状态与恢复提示`；上一状态同步为 `d4990b1e docs: 固化 SAL-P2-018 状态与恢复提示`，恢复时执行 `git log -1 --oneline` 读取实际最新 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -223,8 +223,8 @@
 - Gate：G2 未通过；G0、G1 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-019
 - 最近完成：SAL-P2-019 可恢复任务事件流
-- 最近可评审交付 checkpoint：本次实现提交生成，标题为 feat(P2): 实现可恢复任务事件流；上一实现 checkpoint 为 94fd6dac feat(P2): 实现 PersistentTaskBackend
-- 最新状态同步 checkpoint：本次状态同步提交生成；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 d4990b1e docs: 固化 SAL-P2-018 状态与恢复提示
+- 最近可评审交付 checkpoint：15c3d555 feat(P2): 实现可恢复任务事件流；上一实现 checkpoint 为 94fd6dac feat(P2): 实现 PersistentTaskBackend
+- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 固化 SAL-P2-019 状态与恢复提示；启动后以 git log -1 --oneline 确认实际 hash；上一状态同步为 d4990b1e docs: 固化 SAL-P2-018 状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 19/20，总计 48/129
 
 下一步优先执行：
