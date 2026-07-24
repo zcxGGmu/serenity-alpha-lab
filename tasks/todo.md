@@ -1,3 +1,42 @@
+# SAL-P3-008 Cross-Sectional Post-Processing Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-008` by adding a deterministic cross-sectional factor post-processing contract and processor for winsorization, standardization, industry / market-cap neutralization and missing-value handling. The processor consumes explicit per-date universe snapshots and concrete Dataset Version references. Do not implement Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, `docs/candidate-batch-contract.md`, `docs/factor-definition-version-model.md`, `docs/factor-dsl-operator-whitelist.md`, `docs/base-factor-definitions.md`, current Git status and recent commits.
+- [x] Add Red contract tests for post-processing parameter schema, concrete Dataset Version references, same-date grouping, missing handling, winsorization, z-score stability, industry / log-market-cap neutralization, constant columns, small samples, missing industry and outliers.
+- [x] Implement `quant.factors.post_processing` with immutable specs, input/output DTOs, deterministic processor and JSON-friendly records.
+- [x] Export post-processing symbols from `quant.factors`.
+- [x] Add `docs/factor-cross-sectional-post-processing.md` with schema, execution order, non-goals, edge-case behavior and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review or record client/tool fallback, then stage only `SAL-P3-008` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Each post-processing run must reference concrete `dsv_*` Dataset Version ids; `latest` remains forbidden.
+- Processing must group by `trade_date` and only use rows provided for that date's current universe snapshot.
+- Missing industry and market-cap exposure handling must be explicit and auditable, not silent.
+- Constant columns, one-name groups and small samples must return deterministic neutral output plus warnings rather than NaN/inf.
+- This task does not compute raw factor values, publish factor-value datasets, evaluate factors, build DAG/cache, create ScreenDefinition/ScreenSnapshot/Screen Lab/API, start Quant Core/formal backtest/Evidence Agent, invoke real Provider/LLM paths, implement Worker loops or migrate DSA runtime source.
+
+
+## Review: SAL-P3-008
+
+- Added `src/serenity_alpha_lab/quant/factors/post_processing.py` with `CrossSectionPostProcessingSpec`, missing/winsorization/neutralization/standardization specs, input/output DTOs, warning records and `process_cross_sectional_factor_values()`.
+- Processor groups strictly by `trade_date`, consumes only explicit rows for that date, and requires concrete `dsv_*` Dataset Version references in the spec.
+- Supports missing `drop`/`fill_median`/`fill_constant`/`zero`, MAD and quantile winsorization, industry bucket neutralization, `log_market_cap` OLS residualization and z-score standardization.
+- Edge cases are explicit: constant columns and small samples return 0.0 with warnings, missing industry enters `__missing_industry__`, missing market cap is configured as drop/fill, rank-deficient OLS returns residuals with warning, and outliers are clipped before standardization.
+- Added `tests/quant/test_factor_post_processing.py`; Red failed with missing `serenity_alpha_lab.quant.factors.post_processing`, Green target `4 passed`.
+- Added `docs/factor-cross-sectional-post-processing.md`, `DEC-055` and `AEV-057`; updated P3 progress to `8/17`, total progress to `57/129`, and moved `SAL-P3-009` to `READY`.
+- Final verification: target `4 passed`; factor related suite `25 passed`; related P3/Architecture suite `50 passed`; full pytest `280 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: independent subagent dispatch was unavailable from the current client path after earlier payload validation issues; local senior review covered diff scope, dsv guardrails, per-date grouping, OLS edge cases, warning semantics, exports, docs/status consistency and no-go boundaries. No Critical or Important issue found.
+- Scope retained: no raw factor execution, factor values Dataset publication, Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-007 Latest Status Refresh Plan
 
 > Started: 2026-07-24

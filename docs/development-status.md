@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-24<br>
-> 最近阶段性任务：`SAL-P3-007` 交付首批 15 个基础因子<br>
+> 最近阶段性任务：`SAL-P3-008` 横截面因子后处理<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P3 AlphaSift、因子与股票筛选<br>
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：56/129<br>
-> 当前可执行任务：`SAL-P3-008`，状态为 `READY`；实现横截面后处理，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：`27b87c2e feat(P3): 交付首批基础因子`；上一 checkpoint 为 `a63822d0 feat(P3): 实现因子 DSL 与算子白名单`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 复核 SAL-P3-007 最新开发状态`；上一状态同步 checkpoint 为 `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
+> 任务完成度：57/129<br>
+> 当前可执行任务：`SAL-P3-009`，状态为 `READY`；实现 Factor Evaluation，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
+> 最近可评审交付 checkpoint：本次实现提交，标题为 `feat(P3): 实现横截面因子后处理`；上一 checkpoint 为 `27b87c2e feat(P3): 交付首批基础因子`<br>
+> 最新状态同步 checkpoint：本次实现提交后补写实际 hash；上一状态同步 checkpoint 为 `9d114be7 docs: 复核 SAL-P3-007 最新开发状态`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -87,18 +87,19 @@
 - 完成 `SAL-P3-005`：新增 [FactorDefinition 版本模型记录](./factor-definition-version-model.md)、Quant 层 [definitions.py](../src/serenity_alpha_lab/quant/factors/definitions.py) 和 FactorDefinition contract test，冻结 `quant.factor_definition@1.0.0`、公式/输入/窗口/缺失/后处理/实现哈希、draft/published/retired 生命周期、不可变发布、独立 retirement record 和 audit events；P3 进度 `5/17`。
 - 完成 `SAL-P3-006`：新增 [Factor DSL 与算子白名单记录](./factor-dsl-operator-whitelist.md)、Quant 层 [dsl.py](../src/serenity_alpha_lab/quant/factors/dsl.py) 和 Factor DSL contract test，冻结 `serenity_factor_dsl@1.0.0`、白名单 parser/AST/validator/compiler、`FactorExpressionPlan`、`FactorExpressionNode`、`compile_factor_expression()` 和 `compile_factor_definition()`；支持 delay/rolling/rank/算术/条件等基础表达式并拒绝任意 Python/module path；P3 进度 `6/17`。
 - 完成 `SAL-P3-007`：新增 [基础因子定义记录](./base-factor-definitions.md)、Quant 层 [base_factors.py](../src/serenity_alpha_lab/quant/factors/base_factors.py) 和 Base factor contract test，冻结 `base_factor_catalog@1.0.0`、15 个 `FactorDefinition` draft、默认具体 `dsv_*` Dataset Version 引用、分类计数、适用市场、数据需求和手工 DSL plan reference；P3 进度 `7/17`。
+- 完成 `SAL-P3-008`：新增 [横截面因子后处理记录](./factor-cross-sectional-post-processing.md)、Quant 层 [post_processing.py](../src/serenity_alpha_lab/quant/factors/post_processing.py) 和 Factor post-processing contract test，冻结 `quant.factor_cross_section_post_processing@1.0.0`、具体 `dsv_*` Dataset Version guard、按交易日分组的显式股票池处理、缺失策略、winsorize、行业/市值中性化、z-score 标准化和 edge-case warnings；P3 进度 `8/17`。
 
 ## 未完成
 
 ### 当前可执行 P3 任务
 
-- `SAL-P3-008` 当前为 `READY`：实现横截面后处理，支持 winsorize、标准化、行业/市值中性化和缺失策略。
+- `SAL-P3-009` 当前为 `READY`：实现 Factor Evaluation，计算覆盖率、IC/ICIR、分组收益、单调性、换手和暴露。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P3 至 P6 仍有 73 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake、内部制品引用、ScreeningProvider/Adapter、CandidateBatch、FactorDefinition 版本模型、Factor DSL/算子白名单和首批基础因子，但尚未完成横截面后处理、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P3 至 P6 仍有 72 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake、内部制品引用、ScreeningProvider/Adapter、CandidateBatch、FactorDefinition 版本模型、Factor DSL/算子白名单、首批基础因子和横截面后处理，但尚未完成 Factor Evaluation、Factor Engine、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -154,7 +155,7 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P3-008` 横截面后处理，支持 winsorize、标准化、行业/市值中性化和缺失策略。
+1. 优先执行 `SAL-P3-009` Factor Evaluation，计算覆盖率、IC/ICIR、分组收益、单调性、换手和暴露。
 2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. 保持 P0/P1/P2 required checks 和 Gate G2 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -210,6 +211,7 @@
 - 2026-07-24：按用户要求再次复核 `SAL-P3-006` 后最新开发状态；确认最近可评审交付为 `a63822d0 feat(P3): 实现因子 DSL 与算子白名单`，上一状态同步 checkpoint 为 `6ee91eed docs: 同步 SAL-P3-006 checkpoint hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..006`，未完成范围从 `SAL-P3-007` 开始，当前 READY 任务为 `SAL-P3-007`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-24：完成 `SAL-P3-007` 首批基础因子；新增 `base_factor_catalog@1.0.0`、15 个 `FactorDefinition` draft、具体 `dsv_*` Dataset Version 引用、分类计数、适用市场、数据需求和 hand-authored DSL plan reference；Red contract test `1 error`、Green target `4 passed`、related suite `46 passed`，full pytest `276 passed, 3 skipped`，P3 进度 `7/17`、总进度 `56/129`，`SAL-P3-008` 成为当前 `READY` 任务；实现 checkpoint 为 `27b87c2e feat(P3): 交付首批基础因子`。
 - 2026-07-24：按用户要求复核 `SAL-P3-007` 后最新开发状态；确认最近可评审交付为 `27b87c2e feat(P3): 交付首批基础因子`，上一状态同步 checkpoint 为 `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..007`，未完成范围从 `SAL-P3-008` 开始，当前 READY 任务为 `SAL-P3-008`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
+- 2026-07-24：完成 `SAL-P3-008` 横截面因子后处理；新增 `quant.factor_cross_section_post_processing@1.0.0`、显式 Dataset Version guard、per-date universe grouping、缺失处理、winsorize、行业/`log_market_cap` neutralization、z-score 标准化和 edge-case warning；Red contract test `1 error`、Green target `4 passed`、factor related suite `25 passed`、相关 P3/Architecture suite `50 passed`、full pytest `280 passed, 3 skipped`，P3 进度 `8/17`、总进度 `57/129`，`SAL-P3-009` 成为当前 `READY` 任务；实现 checkpoint 将由本次提交生成，标题为 `feat(P3): 实现横截面因子后处理`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -248,22 +250,23 @@
 12. docs/factor-definition-version-model.md
 13. docs/factor-dsl-operator-whitelist.md
 14. docs/base-factor-definitions.md
+15. docs/factor-cross-sectional-post-processing.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P3 AlphaSift、因子与股票筛选
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-007
-- 最近完成：SAL-P3-007 交付首批 15 个基础因子
-- 最近可评审交付 checkpoint：27b87c2e feat(P3): 交付首批基础因子；上一 checkpoint 为 a63822d0 feat(P3): 实现因子 DSL 与算子白名单
-- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 复核 SAL-P3-007 最新开发状态；上一状态同步 checkpoint 为 e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 7/17，总计 56/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-008
+- 最近完成：SAL-P3-008 横截面因子后处理
+- 最近可评审交付 checkpoint：本次实现提交，标题为 feat(P3): 实现横截面因子后处理；上一 checkpoint 为 27b87c2e feat(P3): 交付首批基础因子
+- 最新状态同步 checkpoint：本次实现提交后补写实际 hash；上一状态同步 checkpoint 为 9d114be7 docs: 复核 SAL-P3-007 最新开发状态
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 8/17，总计 57/129
 
 下一步优先执行：
-1. SAL-P3-008 横截面后处理，支持 winsorize、标准化、行业/市值中性化和缺失策略
+1. SAL-P3-009 Factor Evaluation，计算覆盖率、IC/ICIR、分组收益、单调性、换手和暴露
 2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider、SAL-P3-004 CandidateBatch、SAL-P3-005 FactorDefinition、SAL-P3-006 Factor DSL 和 SAL-P3-007 基础因子 catalog
+3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider、SAL-P3-004 CandidateBatch、SAL-P3-005 FactorDefinition、SAL-P3-006 Factor DSL 和 SAL-P3-007 基础因子 catalog、SAL-P3-008 横截面后处理
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

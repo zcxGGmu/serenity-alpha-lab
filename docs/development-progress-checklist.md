@@ -75,11 +75,11 @@
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
-| P3 筛选与因子 | 6~9 | DOING | 7/17 | G3 | AlphaSift、Factor、Screen Lab |
+| P3 筛选与因子 | 6~9 | DOING | 8/17 | G3 | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **56/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **57/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -817,16 +817,20 @@ P0 基线
 
 ### SAL-P3-008 实现横截面后处理
 
-- [ ] [READY] 支持 winsorize、标准化、行业/市值中性化和缺失策略
-- 元数据：优先级 P0 | 负责人 QE | 估算 2.5d | 实际 - | 依赖 SAL-P3-007
+- [x] [DONE] 支持 winsorize、标准化、行业/市值中性化和缺失策略
+- 元数据：优先级 P0 | 负责人 QE | 估算 2.5d | 实际 0.5d | 依赖 SAL-P3-007 | 开始 2026-07-24 | 完成 2026-07-24
 - 交付物：处理器、参数 Schema、数值稳定性测试。
 - 验收：
   - 同一交易日只使用当时股票池。
   - 常量列、小样本、缺行业和极值有明确行为。
+- 结果：新增 [横截面因子后处理记录](./factor-cross-sectional-post-processing.md)、Quant 层 [post_processing.py](../src/serenity_alpha_lab/quant/factors/post_processing.py) 和 [Factor post-processing contract test](../tests/quant/test_factor_post_processing.py)，冻结 `quant.factor_cross_section_post_processing@1.0.0` 参数 Schema、显式 `dsv_*` Dataset Version guard、per-`trade_date` universe grouping、缺失处理、MAD/quantile winsorize、行业/`log_market_cap` OLS neutralization、z-score 标准化和 JSON-friendly result records。
+- 边界行为：常量列和单证券小样本返回 0.0 并记录 warning；缺行业进入 `__missing_industry__` bucket；缺市值按配置填充或丢弃；矩阵秩不足返回 least-squares residual 并记录 `neutralize_rank_deficient`；处理器只使用传入同一交易日股票池，不读取 latest alias、真实 Provider、LLM 或历史窗口。
+- 范围限制：未执行原始因子公式、未发布 factor values Dataset、未实现 Factor Evaluation、DAG/cache、Historical Universe、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用、Worker execution loop 或 DSA runtime source migration。
+- 验收证据：新增 `tests/quant/test_factor_post_processing.py`；Red 为缺少 `serenity_alpha_lab.quant.factors.post_processing` 时 `1 error`，Green 后目标测试 `4 passed`，factor related suite `25 passed`，相关 P3/Architecture suite `50 passed`，full pytest `280 passed, 3 skipped`；完整验证记录见 AEV-057。
 
 ### SAL-P3-009 实现 Factor Evaluation
 
-- [ ] [TODO] 计算覆盖率、IC/ICIR、分组收益、单调性、换手和暴露
+- [ ] [READY] 计算覆盖率、IC/ICIR、分组收益、单调性、换手和暴露
 - 元数据：优先级 P0 | 负责人 QE | 估算 3d | 实际 - | 依赖 SAL-P3-008
 - 交付物：FactorEvaluationRun、指标、Artifact、API。
 - 验收：
@@ -1606,6 +1610,7 @@ P0 基线
 | DEC-052 | 2026-07-23 | FactorDefinition 版本模型口径 | 采用 `quant.factors.definitions` 承载因子定义版本模型，冻结 `quant.factor_definition@1.0.0`、公式、输入、窗口、缺失策略、后处理、实现哈希和 spec hash；FactorInput 必须引用具体 `dsv_*` Dataset Version；draft 可覆盖保存，published manifest 不可变，retired 通过独立 retirement record 和 audit event 表达，不修改 published record | [factor-definition-version-model.md](./factor-definition-version-model.md); [definitions.py](../src/serenity_alpha_lab/quant/factors/definitions.py); [test_factor_definition_contract.py](../tests/quant/test_factor_definition_contract.py) | SAL-P3-005,SAL-P3-006,SAL-P3-014 | G3 |
 | DEC-053 | 2026-07-24 | Factor DSL 与算子白名单口径 | 采用 `quant.factors.dsl` 承载首期因子表达式 DSL 编译契约，使用 Python AST 作为语法前端但只输出平台 AST/plan，不执行 Python；支持 delay、rolling、rank、算术、comparison、boolean 和 where 条件表达式；表达式只允许引用已声明 `FactorInput.input_id`，window/period 必须匹配 `FactorWindow.length`，除法统一编译为 `guarded_divide`，拒绝任意 Python/module path、属性、索引、comprehension、lambda、未知 call、类型错误、未来引用和字面量除零 | [factor-dsl-operator-whitelist.md](./factor-dsl-operator-whitelist.md); [dsl.py](../src/serenity_alpha_lab/quant/factors/dsl.py); [test_factor_dsl_contract.py](../tests/quant/test_factor_dsl_contract.py) | SAL-P3-006,SAL-P3-007,SAL-P3-010 | G3 |
 | DEC-054 | 2026-07-24 | 基础因子 catalog 口径 | 采用 `quant.factors.base_factors` 冻结首批 `base_factor_catalog@1.0.0`，交付 15 个 `FactorDefinition` draft，覆盖 quality、valuation、growth、momentum、volatility 和 liquidity；每个定义声明方向、窗口、数据需求、适用市场、具体 `dsv_*` Dataset Version 和 hand-authored DSL plan reference；本任务只编译校验定义，不执行因子值、不发布缓存、不启动 Factor Evaluation 或 Quant Core | [base-factor-definitions.md](./base-factor-definitions.md); [base_factors.py](../src/serenity_alpha_lab/quant/factors/base_factors.py); [test_base_factor_definitions.py](../tests/quant/test_base_factor_definitions.py) | SAL-P3-007,SAL-P3-008,SAL-P3-010 | G3 |
+| DEC-055 | 2026-07-24 | 横截面因子后处理口径 | 采用 `quant.factors.post_processing` 冻结横截面后处理参数 Schema 与确定性处理器；所有 run 输入必须引用具体 `dsv_*` Dataset Version；处理器按 `trade_date` 分组，仅使用当日显式股票池快照；支持缺失策略、MAD/quantile winsorize、行业 bucket、`log_market_cap` OLS residual 和 z-score；常量列、小样本、缺行业、缺市值、极值和秩不足均输出明确 warning | [factor-cross-sectional-post-processing.md](./factor-cross-sectional-post-processing.md); [post_processing.py](../src/serenity_alpha_lab/quant/factors/post_processing.py); [test_factor_post_processing.py](../tests/quant/test_factor_post_processing.py) | SAL-P3-008,SAL-P3-009,SAL-P3-012 | G3 |
 
 ## 14. 验收证据登记
 
@@ -1667,6 +1672,7 @@ P0 基线
 | AEV-054 | SAL-P3-005 | FactorDefinition 版本模型、不可变发布、retirement record 和 audit 测试记录 | [factor-definition-version-model.md](./factor-definition-version-model.md); [definitions.py](../src/serenity_alpha_lab/quant/factors/definitions.py); [test_factor_definition_contract.py](../tests/quant/test_factor_definition_contract.py); [candidate-batch-contract.md](./candidate-batch-contract.md); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Red contract test failed with missing `quant.factors.definitions`; Green target `3 passed`; related FactorDefinition/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `28 passed`; full pytest `258 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; contract covers concrete Dataset Version rejection、formula/input/window/missing/post-process/implementation hash completeness、draft overwrite、published semantic-version conflict guard、published manifest immutability、separate retired lifecycle record、audit events 和 JSON-friendly frozen records; no Factor DSL、Factor Engine、DAG/cache、Screen Lab、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | QE/BE | 2026-07-23 |
 | AEV-055 | SAL-P3-006 | Factor DSL parser/AST/validator/compiler、算子白名单和安全失败测试记录 | [factor-dsl-operator-whitelist.md](./factor-dsl-operator-whitelist.md); [dsl.py](../src/serenity_alpha_lab/quant/factors/dsl.py); [test_factor_dsl_contract.py](../tests/quant/test_factor_dsl_contract.py); [factor-definition-version-model.md](./factor-definition-version-model.md); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py) | Red contract test failed with missing `quant.factors.dsl`; Green target `14 passed`; related FactorDSL/FactorDefinition/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `42 passed`; full pytest `272 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; contract covers whitelisted input ids、delay/rolling/rank/arithmetic/comparison/boolean/where、guarded_divide、FactorDefinition bridge、Dataset Version continuity、FactorWindow period/window guard、explicit non-numeric data_type rejection、unknown input、type errors、future reference、literal divide-by-zero 和 arbitrary Python/module path rejection; no base factors、factor execution、post-processing execution、Factor Evaluation、DAG/cache、Screen Lab、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | QE/BE | 2026-07-24 |
 | AEV-056 | SAL-P3-007 | 基础因子 catalog、15 个 FactorDefinition draft、DSL 编译金标和口径文档测试记录 | [base-factor-definitions.md](./base-factor-definitions.md); [base_factors.py](../src/serenity_alpha_lab/quant/factors/base_factors.py); [test_base_factor_definitions.py](../tests/quant/test_base_factor_definitions.py); [factor-dsl-operator-whitelist.md](./factor-dsl-operator-whitelist.md); [factor-definition-version-model.md](./factor-definition-version-model.md) | Red contract test failed with missing `BASE_FACTOR_CATALOG_VERSION` / `quant.factors.base_factors`; Green target `4 passed`; related BaseFactor/FactorDSL/FactorDefinition/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `46 passed`; full pytest `276 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; catalog covers quality/valuation/growth/momentum/volatility/liquidity, concrete `dsv_*` inputs, direction/window/market/data requirements and hand-authored reference plan matching; no factor execution、post-processing execution、Factor Evaluation、DAG/cache、Historical Universe、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | QE/RE | 2026-07-24 |
+| AEV-057 | SAL-P3-008 | 横截面因子后处理参数 Schema、缺失处理、winsorize、中性化和标准化测试记录 | [factor-cross-sectional-post-processing.md](./factor-cross-sectional-post-processing.md); [post_processing.py](../src/serenity_alpha_lab/quant/factors/post_processing.py); [test_factor_post_processing.py](../tests/quant/test_factor_post_processing.py); [base-factor-definitions.md](./base-factor-definitions.md); [factor-dsl-operator-whitelist.md](./factor-dsl-operator-whitelist.md); [factor-definition-version-model.md](./factor-definition-version-model.md) | Red contract test failed with missing `serenity_alpha_lab.quant.factors.post_processing`; Green target `4 passed`; factor related suite `25 passed`; related P3/Architecture suite `50 passed`; full pytest `280 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; contract covers concrete Dataset Version rejection、same-date grouping、missing drop/fill、MAD outlier clipping、z-score constant/small-sample stability、industry missing bucket、market-cap fill、OLS neutralization residual exposure checks and JSON-friendly records; no Factor Evaluation、DAG/cache、Historical Universe、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | QE/BE | 2026-07-24 |
 
 允许的证据：
 
@@ -1704,4 +1710,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-007`，完成度为 56/129；最近阶段性任务为 `SAL-P3-007` 交付首批 15 个基础因子；最近实现 checkpoint 为 `27b87c2e feat(P3): 交付首批基础因子`；上一可评审交付 checkpoint 为 `a63822d0 feat(P3): 实现因子 DSL 与算子白名单`；最新状态同步 checkpoint 将由本次状态复核提交生成，标题为 `docs: 复核 SAL-P3-007 最新开发状态`；上一状态同步 checkpoint 为 `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash`。Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-008` 横截面后处理；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-008`，完成度为 57/129；最近阶段性任务为 `SAL-P3-008` 横截面后处理；最近实现 checkpoint 将由本次实现提交生成，标题为 `feat(P3): 实现横截面因子后处理`；上一可评审交付 checkpoint 为 `27b87c2e feat(P3): 交付首批基础因子`；最新状态同步 checkpoint 将在实现 checkpoint 后补写实际 hash。Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-009` Factor Evaluation；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得在对应任务前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
