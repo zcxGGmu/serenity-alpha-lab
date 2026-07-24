@@ -14,7 +14,7 @@
 - [x] Add `docs/quant-screening-api.md` with routes, response schema, idempotency, pagination, ProblemDetails/Trace/Artifact semantics, non-goals and verification evidence.
 - [x] Update progress checklist, development status, this review and next-session prompt.
 - [x] Run target, related, full, compile, lock, diff and immutable tag verification.
-- [ ] Perform local senior review or subagent review if tooling works, then stage only `SAL-P3-014` files and create the required Chinese checkpoint commit.
+- [x] Perform local senior review or subagent review if tooling works, then stage only `SAL-P3-014` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -33,6 +33,7 @@
 - Comparison endpoint reuses `compare_screen_snapshots()` and returns `quant.screen_snapshot_comparison@1.0.0`; it remains deterministic local comparison, not a backtest or risk gate.
 - Added `tests/application/test_quant_screening_api.py`; Red failed with missing `serenity_alpha_lab.application.quant_screening_api`, Green target `5 passed`.
 - Added `docs/quant-screening-api.md`, `docs/superpowers/plans/2026-07-24-quant-screening-api.md`, `DEC-061` and `AEV-063`; updated P3 progress to `14/17`, total progress to `63/129`, and moved `SAL-P3-015` to `READY`.
+- Implementation checkpoint: `dd4e9465 feat(P3): 实现 Quant Screening API`.
 - Final verification: target `5 passed`; related suite `45 passed`; full pytest `307 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Review note: subagent dispatch was attempted but the client wrapper again rejected the payload with `reasoning_effort must not be empty`; local senior review checked idempotency replay/conflict semantics, JSON-ready responses, pagination cursor stability, trace/artifact metadata, exports, docs/status consistency and no-go boundaries; no Critical or Important issue remains.
 - Scope retained: no Screen Lab UI, real FastAPI/DSA endpoint facade, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
