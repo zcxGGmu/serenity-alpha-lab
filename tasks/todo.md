@@ -1,3 +1,42 @@
+# SAL-P3-015 Screen Lab Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P3-015` by adding a DSA Web Screen Lab extension patch that reuses the frozen Quant Screening API, ScreenSnapshot, ScreenDefinition, CandidateBatch, FactorDefinition, Factor Evaluation, Dataset/Manifest, ProblemDetails, Trace, Artifact and Run/Stage/Event contracts. Do not start `SAL-P3-016`, `SAL-P3-017`, Quant Core/Qlib, formal backtest, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read required handoff docs, current Git state, frontend/coding/TDD/verification skills, ADR-001/002, DSA patch workflow and web routing/test patterns.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-screen-lab.md`.
+- [x] Add Red DSA Web API client tests for `/api/v1/quant` route metadata, Idempotency-Key screen run submission, stable result pagination, single-result lookup and comparison calls.
+- [x] Implement `src/api/quantScreening.ts` in the isolated DSA worktree with typed DTOs and snake_case/camelCase conversion.
+- [x] Add Red Screen Lab page tests covering definition edit controls, draft/published labels, Snapshot/History, Preview/Formal labels, loading/empty/partial/error/stale/permission states, result rows, explanation drawer and comparison.
+- [x] Implement `ScreenLabPage` using the Quant Screening API client and existing DSA UI primitives without calling legacy AlphaSift endpoints for Screen Lab data.
+- [x] Add route/nav/i18n integration for `/screen-lab` and update route tests.
+- [x] Generate and register `patches/dsa/v3.26.1/0004-add-screen-lab.patch` as a DSA `extension` patch.
+- [x] Add `docs/screen-lab.md`, update `docs/upstream-patches.md`, progress/status docs, evidence/decision registers and this review.
+- [x] Run target web tests, related web tests, Python related/full tests, compileall, dependency lock guard, patch check, immutable tag check and `git diff --check`.
+- [x] Perform local senior review because subagent dispatch still fails with empty optional fields, then stage only tracked SAL-P3-015 files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Screen Lab must display Quant API output lineage: `as_of`, concrete `dsv_*` Dataset Versions, schema, trace/run/stage, snapshot/pipeline ids and Artifact manifest.
+- Draft/published definitions, Snapshot/History, and Preview/Formal run modes must be visually distinct and test-covered.
+- UI state coverage must include loading, empty, partial, error, stale and permission-denied; empty tables must not masquerade as loaded results.
+- No legacy AlphaSift API, real Provider/LLM, Worker loop, Quant Core/Qlib, formal backtest or Evidence Agent may be introduced in this task.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-015
+
+- Added `patches/dsa/v3.26.1/0004-add-screen-lab.patch` as a DSA Web extension patch over the isolated `.worktrees/dsa-v3.26.1` runtime source; the generated patch contains only Screen Lab web files and one nav regression test update.
+- Added typed `quantScreeningApi` coverage for `/api/v1/quant/screen-runs`, required `Idempotency-Key`, stable result pagination, single-result explanation lookup and run comparison; request bodies are converted to snake_case and responses to camelCase.
+- Added `ScreenLabPage` with definition inputs, draft/published badges, Snapshot/History panels, Preview/Formal run modes, loading/empty/partial/stale/error/permission states, result rows, explanation drawer and comparison flow.
+- Wired `/screen-lab` route, SidebarNav item and zh/en labels before legacy `/screening`; updated `SidebarNav.test.tsx` after full Vitest caught the stale expected order.
+- Verification: target web `4 files / 24 passed`; full web Vitest `92 passed files, 973 passed, 2 skipped`; `npm run lint` PASS; `npm run build` PASS; Python related `25 passed`; full pytest `307 passed, 3 skipped`; compileall PASS; lock guard PASS; patch check reports `0001..0004` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: code-review subagent dispatch was retried but the client wrapper still injected empty optional fields and rejected `reasoning_effort`; local senior review checked patch scope, no legacy AlphaSift Screen Lab data calls, route/nav/i18n consistency, UI states, Quant API lineage display and no-go boundaries.
+- Scope retained: no `SAL-P3-016`, `SAL-P3-017`, Quant Core/Qlib, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency surface change, static artifact submission or tag movement.
+
+---
+
 # SAL-P3-014 Latest Status Refresh
 
 > Started: 2026-07-25

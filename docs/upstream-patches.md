@@ -11,8 +11,9 @@
 | DSA-PATCH-001 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0001-isolate-intelligence-request-proxies.patch` | `IntelligenceService` 把模块级可变代理字典传给 `requests.get`，前序请求可污染后续离线测试，导致 `SAL-P0-004` full gate 顺序依赖失败 | `scripts/run-dsa-backend-offline-baseline.sh` 全 phase exit 0；`4455 passed, 4 deselected, 48 warnings, 416 subtests passed` |
 | DSA-PATCH-002 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0002-align-alert-market-region-test-contract.patch` | `AlertRuleForm` 的一个 Vitest 用例要求 market-light 区域出现 `jp/kr`，但 Web `MarketRegion` 类型、alert labels 和相邻用例均只支持 `cn/hk/us`，导致 `SAL-P0-005` Web baseline 稳定失败 | 修复前 targeted Vitest `17 passed / 1 failed`；补丁后 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` 为 `18 passed` |
 | DSA-PATCH-003 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0003-align-web-smoke-e2e-contract.patch` | Playwright smoke 真实执行后暴露 e2e 契约漂移：首次登录未填 `passwordConfirm`、首页侧栏已演进为“个股栏”、ReportMarkdown smoke 缺少历史报告 fixture、chat/settings 断言使用旧文案或非唯一 selector | `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/history fixture；`npm run test:smoke -- --reporter=line` 真实执行 `13 passed` |
+| DSA-PATCH-004 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0004-add-screen-lab.patch` | `SAL-P3-015` 在 DSA Web 中增加 Serenity Screen Lab 页面，作为 Quant Screening API 的 UI extension；不修改上游筛选核心语义 | Targeted web `24 passed`；full Vitest `973 passed, 2 skipped`；`npm run lint` PASS；`npm run build` PASS；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0004` already applied |
 
-当前 P0 没有登记为 `divergence` 的补丁。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
+当前没有登记为 `divergence` 的补丁。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
 
 ## DSA-PATCH-001：隔离 Intelligence 请求代理参数
 
@@ -81,6 +82,30 @@
 | 补丁后 `scripts/seed-dsa-web-smoke-fixture.sh` | 通过，生成/复用本地 smoke env、auth password 与历史报告 fixture |
 | 补丁后 `npm run test:smoke -- --reporter=line` | 通过，`13 passed`，无 skipped |
 | `npm run lint` / `npm run build` / `npm run test` | 通过；Vitest `90 passed` files，`965 passed, 2 skipped` |
+
+## DSA-PATCH-004：增加 Screen Lab UI extension
+
+### 背景
+
+`SAL-P3-014` 已冻结 framework-neutral Quant Screening API，但 DSA Web 尚无页面能复用该契约进行定义编辑、Preview/Formal run、结果浏览、单行解释和历史比较。`SAL-P3-015` 要求 Screen Lab 复用 Quant Screening API、ScreenSnapshot、ScreenDefinition Pipeline、CandidateBatch、FactorDefinition、Factor Evaluation、Dataset Catalog/Manifest、ProblemDetails、Trace、Artifact 和 Run/Stage/Event 口径，不能回退到 legacy AlphaSift UI 数据路径。
+
+### 修改
+
+- 新增 `src/api/quantScreening.ts` 与 API client tests，覆盖 `POST /api/v1/quant/screen-runs` 的 `Idempotency-Key`、stable results pagination、single-result explanation lookup 和 run comparison。
+- 新增 `ScreenLabPage` 与 page tests，覆盖定义输入、Draft/Published、Snapshot/History、Preview/Formal、loading/empty/partial/stale/error/permission states、结果行、解释抽屉和 comparison。
+- 新增 lazy route `/screen-lab`、SidebarNav item、zh/en labels 和 route test。
+- 更新 `SidebarNav.test.tsx`，明确导航顺序为 `/chat -> /screen-lab -> /screening`，legacy AlphaSift screening 仍受既有 AlphaSift enablement 控制。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `npm run test -- src/api/__tests__/quantScreening.test.ts src/pages/__tests__/ScreenLabPage.test.tsx src/App.test.tsx` | `3 passed files / 15 passed tests` |
+| `npm run test -- src/components/layout/__tests__/SidebarNav.test.tsx src/api/__tests__/quantScreening.test.ts src/pages/__tests__/ScreenLabPage.test.tsx src/App.test.tsx` | `4 passed files / 24 passed tests` |
+| `npm run test` | 一次重跑后通过，`92 passed files / 973 passed / 2 skipped`；中途曾暴露 stale SidebarNav order 和 unrelated HomePage timeout，均用 targeted/retry 验证关闭 |
+| `npm run lint` | 通过 |
+| `npm run build` | 通过；中途曾捕获并修复 `explanationSteps` optional narrowing |
+| `scripts/apply-dsa-baseline-patches.sh --check-only` | 通过，`0001`、`0002`、`0003`、`0004` 均识别为 already applied |
 
 ## 应用方式
 
