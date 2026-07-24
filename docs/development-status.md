@@ -7,8 +7,8 @@
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：62/129<br>
 > 当前可执行任务：`SAL-P3-014` Quant Screening API，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：本次实现提交，标题为 `feat(P3): 实现 ScreenSnapshot 解释轨迹`；上一 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`<br>
-> 最新状态同步 checkpoint：上一状态同步 checkpoint 为 `0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash`；本次状态同步将在 `SAL-P3-013` 实现提交后复核<br>
+> 最近可评审交付 checkpoint：`10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`；上一 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`<br>
+> 最新状态同步 checkpoint：本次状态同步提交，标题为 `docs: 同步 SAL-P3-013 checkpoint hash`；上一状态同步 checkpoint 为 `0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -221,7 +221,7 @@
 - 2026-07-24：完成 `SAL-P3-010` Factor DAG/cache；新增 `factor_engine@1.0.0`、DAG node CSE、published FactorDefinition version binding、factor-specific Dataset/Factor/Universe/date-range/engine/partition cache key、time-series instrument/date partition、cross-section date partition、duplicate/date-range/identity guards、lookback incremental recompute、failed quality gate publication rejection 和 deterministic cache manifest Artifact；Red contract test `1 error`、review regression Red `5 failed, 3 passed`、Green target `8 passed`、factor related suite `37 passed`、相关 P3/Architecture suite `62 passed`、full pytest `292 passed, 3 skipped`，P3 进度 `10/17`、总进度 `59/129`，`SAL-P3-011` 成为当前 `READY` 任务；实现 checkpoint 为 `d34b8690 feat(P3): 实现 Factor DAG cache`，上一实现 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`。
 - 2026-07-24：完成 `SAL-P3-011` Historical Universe；新增 `quant.historical_universe@1.0.0`、具体 Dataset Version guard、PIT Instrument Master as-of membership/status、上市交易日、ST、退市、显式停牌、daily-bar availability、rule evidence completeness、deterministic `dsv_*` universe version 和 Artifact publication；Red contract test `1 error`、Green target `4 passed`、相关 HistoricalUniverse/P2 Dataset/P3 suite `45 passed`、full pytest `296 passed, 3 skipped`，P3 进度 `11/17`、总进度 `60/129`，`SAL-P3-012` 成为当前 `READY` 任务；实现 checkpoint 为 `adc7741f feat(P3): 实现 Historical Universe`，上一实现 checkpoint 为 `d34b8690 feat(P3): 实现 Factor DAG cache`。
 - 2026-07-24：完成 `SAL-P3-012` ScreenDefinition 与 L0~L4 Pipeline；新增 `quant.screen_pipeline@1.0.0`、版本化 `ScreenDefinition`、具体 Dataset Version guard、published run guard、L1 Provider、L2 Factor、L3 LLM overlay、L4 `top_n`/`max_per_industry` deterministic risk gate、stage trace、candidate/exclusion DTO 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenDefinition/HistoricalUniverse/FactorPostProcessing/FactorDAG/CandidateBatch/ScreeningProvider/Architecture suite `44 passed`、full pytest `299 passed, 3 skipped`，P3 进度 `12/17`、总进度 `61/129`，`SAL-P3-013` 成为当前 `READY` 任务；实现 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`，上一实现 checkpoint 为 `adc7741f feat(P3): 实现 Historical Universe`。
-- 2026-07-24：完成 `SAL-P3-013` ScreenSnapshot 与解释轨迹；新增 `quant.screen_snapshot@1.0.0`、结果行、结构化 explanation steps、passed/failed rank 与 failed-stage invariants、本地 snapshot comparison 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenSnapshot/ScreenDefinition/HistoricalUniverse/FactorPostProcessing/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `39 passed`、full pytest `302 passed, 3 skipped`，P3 进度 `13/17`、总进度 `62/129`，`SAL-P3-014` 成为当前 `READY` 任务；实现 checkpoint 为本次实现提交，标题为 `feat(P3): 实现 ScreenSnapshot 解释轨迹`，上一实现 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`。
+- 2026-07-24：完成 `SAL-P3-013` ScreenSnapshot 与解释轨迹；新增 `quant.screen_snapshot@1.0.0`、结果行、结构化 explanation steps、passed/failed rank 与 failed-stage invariants、本地 snapshot comparison 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenSnapshot/ScreenDefinition/HistoricalUniverse/FactorPostProcessing/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `39 passed`、full pytest `302 passed, 3 skipped`，P3 进度 `13/17`、总进度 `62/129`，`SAL-P3-014` 成为当前 `READY` 任务；实现 checkpoint 为 `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`，上一实现 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -274,8 +274,8 @@
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-013
 - 最近完成：SAL-P3-013 ScreenSnapshot 与解释轨迹
-- 最近可评审交付 checkpoint：本次实现提交，标题为 feat(P3): 实现 ScreenSnapshot 解释轨迹；上一 checkpoint 为 b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline
-- 最新状态同步 checkpoint：上一状态同步 checkpoint 为 0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash；本次状态同步将在 SAL-P3-013 实现提交后复核
+- 最近可评审交付 checkpoint：10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹；上一 checkpoint 为 b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline
+- 最新状态同步 checkpoint：本次状态同步提交，标题为 docs: 同步 SAL-P3-013 checkpoint hash；上一状态同步 checkpoint 为 0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 13/17，总计 62/129
 
 下一步优先执行：
