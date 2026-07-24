@@ -8,8 +8,9 @@
 > 任务完成度：64/129<br>
 > 当前可执行任务：`SAL-P3-016` 筛选性能与复现验收，状态为 `READY`；仍不得启动 SAL-P3-017、Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
 > 最近可评审交付 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`；上一 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`<br>
-> 最新状态同步 checkpoint：本次状态同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`<br>
+> 最新状态同步 checkpoint：`fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`；上一状态同步 checkpoint 为 `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`<br>
 > 本次实现 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`；已完成任务范围推进至 `SAL-P3-015`<br>
+> 本次状态复核 checkpoint：提交后以最终回复和 `git log -1 --oneline` 为准；不改变已完成任务范围<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -285,7 +286,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-015
 - 最近完成：SAL-P3-015 Screen Lab
 - 最近可评审交付 checkpoint：847e5263 feat(P3): 实现 Screen Lab；上一 checkpoint 为 dd4e9465 feat(P3): 实现 Quant Screening API
-- 最新状态同步 checkpoint：本次状态同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint 为 cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash
+- 最新状态同步 checkpoint：fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash；本次状态复核 checkpoint 提交后以最终回复和 git log -1 --oneline 为准
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 15/17，总计 64/129
 
 下一步优先执行：

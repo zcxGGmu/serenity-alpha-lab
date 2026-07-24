@@ -34,6 +34,7 @@
 - Verification: target web `4 files / 24 passed`; full web Vitest `92 passed files, 973 passed, 2 skipped`; `npm run lint` PASS; `npm run build` PASS; Python related `25 passed`; full pytest `307 passed, 3 skipped`; compileall PASS; lock guard PASS; patch check reports `0001..0004` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Review note: code-review subagent dispatch was retried but the client wrapper still injected empty optional fields and rejected `reasoning_effort`; local senior review checked patch scope, no legacy AlphaSift Screen Lab data calls, route/nav/i18n consistency, UI states, Quant API lineage display and no-go boundaries.
 - Scope retained: no `SAL-P3-016`, `SAL-P3-017`, Quant Core/Qlib, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency surface change, static artifact submission or tag movement.
+- Implementation checkpoint: `847e5263 feat(P3): 实现 Screen Lab`; status sync checkpoint: `fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`; final status review checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
 
 ---
 
