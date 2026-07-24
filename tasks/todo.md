@@ -33,7 +33,7 @@
 - Code-review subagent dispatch was attempted repeatedly, but the host wrapper rejected payloads with empty optional `items`/`reasoning_effort`; fallback was local senior review over the focused diff plus fresh verification.
 - Verification: target `3 passed`; import-cycle check PASS; related suite `41 passed`; full pytest `310 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check reports `0001..0004` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope retained: no `SAL-P3-017`, Quant Core/Qlib, formal backtest, Evidence Agent, real Provider/LLM call, Worker execution loop, DSA runtime source migration, dependency surface change or tag movement.
-- Implementation checkpoint: `e7569c83 feat(P3): 实现筛选性能与复现验收`; follow-up status-sync checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
+- Implementation checkpoint: `e7569c83 feat(P3): 实现筛选性能与复现验收`; status-sync checkpoint: `4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash`; final status-review checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
 
 ---
 

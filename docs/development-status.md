@@ -8,9 +8,9 @@
 > 任务完成度：65/129<br>
 > 当前可执行任务：`SAL-P3-017` Gate G3：筛选与因子评审，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
 > 最近可评审交付 checkpoint：`e7569c83 feat(P3): 实现筛选性能与复现验收`；上一 checkpoint 为 `847e5263 feat(P3): 实现 Screen Lab`<br>
-> 最新状态同步 checkpoint：本次 `SAL-P3-016` checkpoint hash 同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`；最新状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
+> 最新状态同步 checkpoint：`4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash`；上一状态同步 checkpoint 为 `fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`<br>
 > 本次实现 checkpoint：`e7569c83 feat(P3): 实现筛选性能与复现验收`；已完成任务范围推进至 `SAL-P3-016`<br>
-> 最新状态复核 checkpoint：`eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
+> 最新状态复核 checkpoint：本次 `SAL-P3-016` 状态复核提交后以最终回复和 `git log -1 --oneline` 为准；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -288,7 +288,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-016
 - 最近完成：SAL-P3-016 筛选性能与复现验收
 - 最近可评审交付 checkpoint：e7569c83 feat(P3): 实现筛选性能与复现验收；上一 checkpoint 为 847e5263 feat(P3): 实现 Screen Lab
-- 最新状态同步 checkpoint：本次 SAL-P3-016 checkpoint hash 同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash；最新状态复核 checkpoint：eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯
+- 最新状态同步 checkpoint：4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash；上一状态同步 checkpoint：fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash；最新状态复核 checkpoint：本次 SAL-P3-016 状态复核提交后以最终回复和 git log -1 --oneline 为准；上一状态复核 checkpoint：eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 16/17，总计 65/129
 
 下一步优先执行：
