@@ -1,3 +1,44 @@
+# SAL-P3-006 Factor DSL and Operator Whitelist Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-006` by adding a pure, whitelisted factor DSL parser/AST/validator/compiler contract for deterministic factor formulas. Support delay, rolling, rank, arithmetic, comparison and conditional expressions. Do not implement factor value execution, base factor catalog, post-processing execution, Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, Screen Lab, Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, `docs/candidate-batch-contract.md`, `docs/factor-definition-version-model.md`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-24-factor-dsl-operator-whitelist.md`.
+- [x] Add Red contract tests for DSL parsing, AST serialization, compiler output, whitelisted operators, input/window validation, future-reference rejection, division guards, type guards and arbitrary Python rejection.
+- [x] Implement `quant.factors.dsl` with tokenizer/parser, immutable AST nodes, validator and execution-plan compiler.
+- [x] Export Factor DSL symbols from `quant.factors`.
+- [x] Add `docs/factor-dsl-operator-whitelist.md` with grammar, operators, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review and record fallback local review when client payload validation blocked dispatch.
+- [x] Stage only `SAL-P3-006` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- DSL expressions must only reference declared `FactorInput.input_id` values and whitelisted operators.
+- `delay()` periods must be positive and cannot create future references; `rolling_*()` windows must be positive and must fit declared `FactorWindow` entries.
+- Division must compile through an explicit guarded divide operation, not an unguarded Python division.
+- Parser/validator must reject arbitrary Python syntax, attribute access, indexing, comprehensions, imports, lambdas, unknown calls and module paths.
+- This task compiles a deterministic plan only; it does not execute factor values, publish caches, start Qlib/Quant Core, run formal backtests, start Evidence Agent, invoke real Provider/LLM paths, implement Worker execution loops or migrate DSA runtime source.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-006
+
+- Added `src/serenity_alpha_lab/quant/factors/dsl.py` with `FactorExpressionPlan`, `FactorExpressionNode`, `FactorDslValueType`, `compile_factor_expression()` and `compile_factor_definition()`.
+- Parser uses Python AST only as a syntax frontend; allowed output is a platform plan, not executable Python.
+- Whitelist covers declared inputs, finite constants, arithmetic, comparison, boolean, `where`, `delay`, rolling operators, `rank`, `abs`, `log` and `sqrt`; `/` compiles to `guarded_divide`.
+- Safety checks reject arbitrary Python/module paths, attribute/index access, comprehensions, lambdas, unknown calls, keyword args, unknown inputs, invalid types, non-positive/future periods, undeclared windows and literal division by zero.
+- Added `docs/factor-dsl-operator-whitelist.md`, `DEC-053` and `AEV-055`; updated P3 progress to `6/17`, total progress to `55/129`, and moved `SAL-P3-007` to `READY`.
+- Red evidence: target contract test failed with missing `serenity_alpha_lab.quant.factors.dsl`.
+- Final verification: target `14 passed`; related FactorDSL/FactorDefinition/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `42 passed`; full pytest `272 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: attempted independent `code-reviewer` subagent dispatch through multiple native payload variants, but the client rejected each as duplicate `message/items` because an empty `message` field was injected by the wrapper. Local senior review checked diff scope, AST safety boundary, data type guard, Dataset Version continuity, FactorWindow validation, package exports, docs/status consistency and no-go guardrails; no Critical or Important issue found.
+- Scope retained: no base factor definitions, factor execution, post-processing execution, Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-005 Status Sync Plan
 
 > Started: 2026-07-24

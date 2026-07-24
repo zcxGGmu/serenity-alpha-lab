@@ -19,17 +19,35 @@ from serenity_alpha_lab.quant.factors.definitions import (
     MissingValueStrategy,
     PostProcessingStep,
 )
+from serenity_alpha_lab.quant.factors.dsl import (
+    FACTOR_DSL_ENGINE_VERSION,
+    FACTOR_DSL_SCHEMA_NAME,
+    FACTOR_DSL_SCHEMA_VERSION,
+    FactorDslError,
+    FactorDslValueType,
+    FactorExpressionNode,
+    FactorExpressionPlan,
+    compile_factor_definition,
+    compile_factor_expression,
+)
 
 __all__ = [
     "FACTOR_DEFINITION_CONTRACT_VERSION",
     "FACTOR_DEFINITION_SCHEMA_NAME",
     "FACTOR_DEFINITION_SCHEMA_VERSION",
+    "FACTOR_DSL_ENGINE_VERSION",
+    "FACTOR_DSL_SCHEMA_NAME",
+    "FACTOR_DSL_SCHEMA_VERSION",
     "FactorDefinition",
     "FactorDefinitionAuditEvent",
     "FactorDefinitionError",
     "FactorDefinitionRetirement",
     "FactorDefinitionStatus",
     "FactorDirection",
+    "FactorDslError",
+    "FactorDslValueType",
+    "FactorExpressionNode",
+    "FactorExpressionPlan",
     "FactorFormula",
     "FactorInput",
     "FactorInputKind",
@@ -38,4 +56,6 @@ __all__ = [
     "MissingValuePolicy",
     "MissingValueStrategy",
     "PostProcessingStep",
+    "compile_factor_definition",
+    "compile_factor_expression",
 ]
