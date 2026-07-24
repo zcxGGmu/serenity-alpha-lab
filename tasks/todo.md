@@ -1,3 +1,43 @@
+# SAL-P3-011 Historical Universe Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-011` by adding a deterministic L0 Historical Universe contract and snapshot builder for point-in-time listing status, ST, delisting, suspension and daily-bar data availability hard filters. Do not implement ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib adapter, Portfolio Backtest, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/factor-dag-cache.md`, current Git status and recent commits.
+- [x] Inspect Instrument Master, Trading Calendar, Raw Daily Bars, Factor DAG/cache and ArtifactStore patterns for immutable DTOs, concrete Dataset Version guards, deterministic records and artifact publication.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-24-historical-universe.md`.
+- [x] Add Red contract tests for UniverseDefinition, PIT membership/status behavior, ST/listing/delisting/suspension/data-availability exclusions, deterministic snapshot records and ArtifactStore publication.
+- [x] Implement `quant.screening.universe` with immutable universe specs, members, exclusions, rule evidence, deterministic snapshot id and publisher.
+- [x] Export Historical Universe symbols from `quant.screening`.
+- [x] Add `docs/historical-universe.md` with rule semantics, evidence requirements, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review or record client/tool fallback, then stage only `SAL-P3-011` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Every universe run must bind concrete `dsv_*` Dataset Version ids; `latest` remains forbidden.
+- Historical membership must query Instrument Master as-of the decision date, not current constituents or current listing/ST status.
+- Exclusions must carry deterministic `rule_id`, `rule_version`, severity and data evidence records with Dataset Version/source references.
+- Suspension and daily-bar availability are hard filters only for L0 universe construction; this task does not define L1/L2 screen stages.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-011
+
+- Added `src/serenity_alpha_lab/quant/screening/universe.py` with `UniverseDefinition`, `UniverseSnapshot`, `UniverseMember`, `UniverseExclusion`, `UniverseDataEvidence`, `UniverseInstrumentTradeStatus`, `build_historical_universe_snapshot()` and `publish_historical_universe_snapshot()`.
+- Historical Universe requires concrete `dsv_*` versions for `instrument_master`, `trading_calendar`, `raw_daily_bars` and `instrument_trade_status`; `latest` is rejected.
+- Snapshot construction queries Instrument Master as-of the decision date, validates `as_of` is a trading day, applies active/listing-days/ST/suspension/daily-bar hard filters and preserves rule-level Dataset/Bronze evidence for every exclusion.
+- `UniverseSnapshot.universe_version_id` is derived as deterministic `dsv_*`; repeated ArtifactStore publication produces identical artifact id/hash.
+- Added `tests/quant/test_historical_universe.py`; Red failed with missing `serenity_alpha_lab.quant.screening.universe`, Green target `4 passed`.
+- Added `docs/historical-universe.md`, `docs/superpowers/plans/2026-07-24-historical-universe.md`, `DEC-058` and `AEV-060`; updated P3 progress to `11/17`, total progress to `60/129`, and moved `SAL-P3-012` to `READY`.
+- Final verification: target `4 passed`; related suite `45 passed`; full pytest `296 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: attempted explorer/code-review subagent dispatch, but the client wrapper rejected payloads by injecting empty optional fields (`reasoning_effort must not be empty`). Local senior review checked PIT status behavior, rule ordering, exclusion evidence completeness, deterministic version/artifact output, exports, docs/status consistency and no-go boundaries; no Critical or Important issue found.
+- Scope retained: no ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-010 Factor DAG Cache Plan
 
 > Started: 2026-07-24
