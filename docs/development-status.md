@@ -1,6 +1,6 @@
 # Serenity Alpha Lab 当前开发状态
 
-> 最后更新：2026-07-24<br>
+> 最后更新：2026-07-25<br>
 > 最近阶段性任务：`SAL-P3-014` Quant Screening API<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P3 AlphaSift、因子与股票筛选<br>
@@ -8,7 +8,8 @@
 > 任务完成度：63/129<br>
 > 当前可执行任务：`SAL-P3-015` Screen Lab，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
 > 最近可评审交付 checkpoint：`dd4e9465 feat(P3): 实现 Quant Screening API`；上一 checkpoint 为 `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`<br>
-> 最新状态同步 checkpoint：本次状态同步提交生成后以最终交付记录和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `7f363739 docs: 复核 SAL-P3-013 最新开发状态`<br>
+> 最新状态同步 checkpoint：`cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`；上一状态同步 checkpoint 为 `7f363739 docs: 复核 SAL-P3-013 最新开发状态`<br>
+> 本次状态复核 checkpoint：提交后以最终回复和 `git log -1 --oneline` 为准；不改变已完成任务范围<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -100,6 +101,7 @@
 ### 当前可执行 P3 任务
 
 - `SAL-P3-015` 当前为 `READY`：优先实现 Screen Lab，构建定义编辑、运行、结果、解释和比较界面；必须清晰区分 draft/published、Snapshot/History、Preview/Formal，并完整处理 loading/empty/partial/error/stale/permission 状态。
+- `SAL-P3-016` 与 `SAL-P3-017` 保持 `TODO`：只有完成 `SAL-P3-015` 后才能推进筛选性能/复现验收与 Gate G3 评审。
 
 ### 全局未完成
 
@@ -110,6 +112,7 @@
 
 ## 当前决策与约束
 
+- 2026-07-25 状态复核：当前没有新增实现任务完成；完成范围仍截至 `SAL-P3-014`，当前唯一 `READY` 阶段任务仍是 `SAL-P3-015` Screen Lab。`cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash` 是本次复核前最新已落地状态同步锚点。
 - Gate G0、Gate G1 与 Gate G2 已通过（均为 `GO with accepted risks`）；Gate G3 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -162,8 +165,8 @@
 ## 下一步
 
 1. 优先执行 `SAL-P3-015` Screen Lab。
-2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
-3. 保持 P0/P1/P2 required checks 和 Gate G2 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
+2. 不得提前启动 `SAL-P3-016`、`SAL-P3-017`、Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+3. Screen Lab 必须复用 `SAL-P3-014` Quant Screening API、`SAL-P3-013` ScreenSnapshot、`SAL-P3-012` ScreenDefinition Pipeline、CandidateBatch、FactorDefinition、Factor Evaluation、Dataset Catalog/Manifest、ProblemDetails、Trace、Artifact 和 Run/Stage/Event；不得绕过这些契约重建 UI 数据口径。
 
 ## 本次状态复核
 
@@ -224,6 +227,7 @@
 - 2026-07-24：完成 `SAL-P3-012` ScreenDefinition 与 L0~L4 Pipeline；新增 `quant.screen_pipeline@1.0.0`、版本化 `ScreenDefinition`、具体 Dataset Version guard、published run guard、L1 Provider、L2 Factor、L3 LLM overlay、L4 `top_n`/`max_per_industry` deterministic risk gate、stage trace、candidate/exclusion DTO 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenDefinition/HistoricalUniverse/FactorPostProcessing/FactorDAG/CandidateBatch/ScreeningProvider/Architecture suite `44 passed`、full pytest `299 passed, 3 skipped`，P3 进度 `12/17`、总进度 `61/129`，`SAL-P3-013` 成为当前 `READY` 任务；实现 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`，上一实现 checkpoint 为 `adc7741f feat(P3): 实现 Historical Universe`。
 - 2026-07-24：完成 `SAL-P3-013` ScreenSnapshot 与解释轨迹；新增 `quant.screen_snapshot@1.0.0`、结果行、结构化 explanation steps、passed/failed rank 与 failed-stage invariants、本地 snapshot comparison 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenSnapshot/ScreenDefinition/HistoricalUniverse/FactorPostProcessing/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `39 passed`、full pytest `302 passed, 3 skipped`，P3 进度 `13/17`、总进度 `62/129`，`SAL-P3-014` 成为当前 `READY` 任务；实现 checkpoint 为 `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`，上一实现 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`。
 - 2026-07-24：完成 `SAL-P3-014` Quant Screening API；新增 `application.quant_screening_api@1.0.0`、`/api/v1/quant` route metadata、FactorDefinition/ScreenDefinition create responses、screen run `202 Accepted`、required Idempotency-Key、same-request replay、stable cursor pagination、single-result lookup、ScreenSnapshot comparison 和 ProblemDetails validation boundary；Red contract test `1 error`、Green target `5 passed`、相关 QuantScreeningAPI/ScreenSnapshot/ScreenDefinition/FactorEvaluation/FactorDefinition/TaskBackend/APIErrors/Trace/Architecture suite `45 passed`、full pytest `307 passed, 3 skipped`，P3 进度 `14/17`、总进度 `63/129`，`SAL-P3-015` 成为当前 `READY` 任务；实现 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`，上一实现 checkpoint 为 `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`。
+- 2026-07-25：按用户要求复核 `SAL-P3-014` 后最新开发状态；确认最近实现 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`，最新已落地状态同步 checkpoint 为 `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..014`，未完成范围从 `SAL-P3-015` 开始，当前 READY 任务为 `SAL-P3-015` Screen Lab，Gate G3 仍未通过。本次仅做状态文档和习惯固化，不启动 Screen Lab、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用、Worker loop 或 DSA runtime source migration。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -278,13 +282,13 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-014
 - 最近完成：SAL-P3-014 Quant Screening API
 - 最近可评审交付 checkpoint：dd4e9465 feat(P3): 实现 Quant Screening API；上一 checkpoint 为 10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹
-- 最新状态同步 checkpoint：本次状态同步提交生成后以最终交付记录和 git log -1 --oneline 为准；上一状态同步 checkpoint 为 7f363739 docs: 复核 SAL-P3-013 最新开发状态
+- 最新状态同步 checkpoint：cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash；本次状态复核 checkpoint 提交后以最终回复和 git log -1 --oneline 为准
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 14/17，总计 63/129
 
 下一步优先执行：
 1. SAL-P3-015 Screen Lab
-2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. 后续 Screening/Factor/UI 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider、SAL-P3-004 CandidateBatch、SAL-P3-005 FactorDefinition、SAL-P3-006 Factor DSL、SAL-P3-007 基础因子 catalog、SAL-P3-008 横截面后处理、SAL-P3-009 Factor Evaluation、SAL-P3-010 Factor DAG/cache、SAL-P3-011 Historical Universe、SAL-P3-012 ScreenDefinition Pipeline、SAL-P3-013 ScreenSnapshot 和 SAL-P3-014 Quant Screening API
+2. 不要提前启动 SAL-P3-016、SAL-P3-017、Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+3. Screen Lab 必须复用 SAL-P3-014 Quant Screening API、SAL-P3-013 ScreenSnapshot、SAL-P3-012 ScreenDefinition Pipeline、CandidateBatch、FactorDefinition、Factor Evaluation、Dataset Catalog/Manifest、ProblemDetails、Trace、Artifact 和 Run/Stage/Event；不得绕过这些契约重建 UI 数据口径
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

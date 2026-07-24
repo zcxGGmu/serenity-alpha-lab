@@ -1,3 +1,26 @@
+# SAL-P3-014 Latest Status Refresh
+
+> Started: 2026-07-25
+> Scope: Refresh recovery documents after `SAL-P3-014` implementation/status checkpoints, make completed vs unfinished work explicit, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P3-015` implementation in this sync.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist anchors, current Git status and recent commits.
+- [x] Confirm latest implementation checkpoint `dd4e9465 feat(P3): 实现 Quant Screening API` and latest landed status-sync checkpoint `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`.
+- [x] Reconfirm completed scope through `SAL-P3-014`, unfinished scope from `SAL-P3-015`, Gate G3 not passed, and strict no-go boundaries.
+- [x] Update `docs/development-status.md`, `docs/development-progress-checklist.md`, this review, and `tasks/lessons.md` with the repeated habit reminder.
+- [x] Run status-anchor scans and `git diff --check`, then create the required Chinese status checkpoint commit.
+
+## Review: SAL-P3-014 Latest Status Refresh
+
+- Confirmed branch `codex/p0-baseline-status` was clean before edits and ahead of origin by 94 commits.
+- Confirmed latest log before edits: `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`, `dd4e9465 feat(P3): 实现 Quant Screening API`, `7f363739 docs: 复核 SAL-P3-013 最新开发状态`.
+- Updated recovery status so the completed range is explicit through `SAL-P3-014`, unfinished work begins at `SAL-P3-015`, and Gate G3 remains unpassed.
+- Updated next-session guidance so only `SAL-P3-015 Screen Lab` is next; `SAL-P3-016`, `SAL-P3-017`, Quant Core, formal backtest, Evidence Agent, real Provider/LLM, Worker loop and DSA runtime source migration remain out of scope.
+- Recorded the user reminder in `tasks/lessons.md`: every stage task must automatically end with state docs, progress checklist, evidence, risk/decision updates, `tasks/todo.md` review, latest checkpoint anchors and a copyable startup prompt.
+
+---
+
 # SAL-P3-014 Quant Screening API Plan
 
 > Started: 2026-07-24

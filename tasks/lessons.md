@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-25: SAL-P3-014 后状态复核必须写清最新已落地状态同步 checkpoint
+
+- 纠正来源：`SAL-P3-014` 实现 checkpoint `dd4e9465` 与状态同步 checkpoint `cd0d6c6f` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使上一轮已经提交状态同步，如果恢复文档仍写“本次状态同步提交生成后以 git log 为准”，下次启动仍需要人工判断哪个 hash 是最新已落地状态同步，降低恢复确定性。
+- 规则：每个阶段性任务完成后，最终交接前必须把最近实现 checkpoint、最新已落地状态同步 checkpoint、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；如果随后又做状态复核提交，文档可写明“本次状态复核 checkpoint 以提交后 `git log -1 --oneline` 和最终回复为准”，但不得丢失上一已落地状态同步实际 hash。
+- 执行：后续从 `SAL-P3-015` 开始，不等待用户提醒；阶段性任务完成后自动做状态/清单/证据/风险/决策/`tasks/todo.md` review/必要 lessons/可复制提示词收尾，并在最终回复直接给出最新实现 checkpoint、最新状态同步或状态复核 checkpoint 和完整下次启动提示词。
+
 ## 2026-07-24: SAL-P3-013 后状态复核必须把 docs sync 实际 hash 写入提示词
 
 - 纠正来源：`SAL-P3-013` 实现 checkpoint `10d97975` 与状态同步 checkpoint `e0ca42d9` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时强调“每个阶段性任务完成后自动去做”。
