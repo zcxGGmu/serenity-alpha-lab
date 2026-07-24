@@ -1,3 +1,28 @@
+# SAL-P3-007 Latest Status Refresh Plan
+
+> Started: 2026-07-24
+> Scope: Refresh recovery-facing documentation after `27b87c2e feat(P3): 交付首批基础因子` and `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash`; clearly mark completed vs unfinished work, record the repeated automatic status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P3-008` implementation in this status-refresh task.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, current Git status and recent commits.
+- [x] Update `tasks/lessons.md` with the repeated automatic status-sync reminder.
+- [x] Update `docs/development-status.md` with current completed/unfinished ranges, actual implementation checkpoint, previous status-sync checkpoint and refreshed next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step summary with the same recovery anchors.
+- [x] Record this review in `tasks/todo.md`.
+- [x] Run status-anchor scan and `git diff --check`.
+- [x] Stage only status-sync files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P3-007 Latest Status Refresh
+
+- Completed range remains `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..007`; unfinished work starts at `SAL-P3-008` and P4/P5/P6 remain untouched.
+- Current Phase remains P3; Gate G3 remains not passed; G0/G1/G2 remain passed as `GO with accepted risks`.
+- Current READY task remains `SAL-P3-008` cross-sectional post-processing; this sync deliberately does not start implementation.
+- Recovery anchors now name implementation checkpoint `27b87c2e feat(P3): 交付首批基础因子` and previous status-sync checkpoint `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash`.
+- Habit reinforced: after every stage task, automatically update status/progress/evidence/`tasks/todo.md` review/lessons as needed, then provide a copyable restart prompt with the actual latest docs checkpoint hash.
+
+---
+
 # SAL-P3-007 Base Factor Definitions Plan
 
 > Started: 2026-07-24
@@ -28,7 +53,7 @@
 - Each definition uses concrete `dsv_*` references for `fundamentals_pit` and/or `adjusted_daily_bars`, declares direction, windows, applicable markets, data requirements and a hand-authored DSL reference plan.
 - Added `tests/quant/test_base_factor_definitions.py`; Red failed with missing base factor exports, Green target `4 passed`.
 - Added `docs/base-factor-definitions.md`, `DEC-054` and `AEV-056`; updated P3 progress to `7/17`, total progress to `56/129`, and moved `SAL-P3-008` to `READY`.
-- Implementation checkpoint: `27b87c2e feat(P3): 交付首批基础因子`; follow-up status-sync checkpoint will record this actual hash in recovery docs.
+- Implementation checkpoint: `27b87c2e feat(P3): 交付首批基础因子`; follow-up status-sync checkpoint `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash` recorded this actual hash in recovery docs.
 - Final verification: target `4 passed`; factor-only related suite `21 passed`; related P3/Architecture suite `46 passed`; full pytest `276 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Review note: independent code-review subagent dispatch was still blocked by client payload validation (`Provide either message or items, but not both`). Local senior review checked diff scope, no-go boundaries, concrete Dataset Version guardrails, immutable metadata, DSL reference matching, public exports, docs/status consistency and unused imports; no Critical or Important issue found.
 - Scope retained: no factor value execution, post-processing execution, Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.

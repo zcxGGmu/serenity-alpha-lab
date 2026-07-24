@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-24: SAL-P3-007 后状态复核必须在最终交接给出实际 docs checkpoint
+
+- 纠正来源：`SAL-P3-007` 实现 checkpoint `27b87c2e` 与状态同步 checkpoint `e3ce4840` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“给我一个提示词，直接发给我”和“每个阶段性任务完成后自动去做”。
+- 模式：即使状态文档已经包含完成范围和下一步，如果最终交接没有再次复核并给出最新 docs checkpoint 实际 hash，用户仍需要额外确认下次启动是否能直接恢复。
+- 规则：每次阶段性任务后或用户提醒状态同步时，必须把最近实现 checkpoint、上一状态同步 checkpoint、已完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词同步到 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；最终回复必须写出最新状态同步 checkpoint 的实际 hash。
+- 执行：后续从 `SAL-P3-008` 开始，不等待用户提醒；实现完成后自动做状态/清单/证据/`tasks/todo.md` review/必要 lessons/可复制提示词收尾，并提交中文 checkpoint。
+
 ## 2026-07-24: SAL-P3-006 后状态复核必须写入最新状态同步 hash
 
 - 纠正来源：`SAL-P3-006` 实现 checkpoint `a63822d0` 与状态同步 checkpoint `6ee91eed` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时再次强调“每个阶段性任务完成后自动去做”。
