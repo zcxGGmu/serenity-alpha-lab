@@ -7,8 +7,8 @@
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：59/129<br>
 > 当前可执行任务：`SAL-P3-011` Historical Universe，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：本次实现提交，标题为 `feat(P3): 实现 Factor DAG cache`；上一 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`<br>
-> 最新状态同步 checkpoint：待本次实现提交后同步实际 hash；上一状态同步 checkpoint 为 `e2d4c9cf docs: 同步 SAL-P3-009 checkpoint hash`<br>
+> 最近可评审交付 checkpoint：`d34b8690 feat(P3): 实现 Factor DAG cache`；上一 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`<br>
+> 最新状态同步 checkpoint：本次状态同步提交，标题为 `docs: 同步 SAL-P3-010 checkpoint hash`；上一状态同步 checkpoint 为 `e2d4c9cf docs: 同步 SAL-P3-009 checkpoint hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -215,7 +215,7 @@
 - 2026-07-24：按用户要求复核 `SAL-P3-007` 后最新开发状态；确认最近可评审交付为 `27b87c2e feat(P3): 交付首批基础因子`，上一状态同步 checkpoint 为 `e3ce4840 docs: 同步 SAL-P3-007 checkpoint hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..007`，未完成范围从 `SAL-P3-008` 开始，当前 READY 任务为 `SAL-P3-008`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-24：完成 `SAL-P3-008` 横截面因子后处理；新增 `quant.factor_cross_section_post_processing@1.0.0`、显式 Dataset Version guard、per-date universe grouping、缺失处理、winsorize、行业/`log_market_cap` neutralization、z-score 标准化和 edge-case warning；Red contract test `1 error`、Green target `4 passed`、factor related suite `25 passed`、相关 P3/Architecture suite `50 passed`、full pytest `280 passed, 3 skipped`，P3 进度 `8/17`、总进度 `57/129`，`SAL-P3-009` 成为当前 `READY` 任务；实现 checkpoint 为 `dc23e769 feat(P3): 实现横截面因子后处理`。
 - 2026-07-24：完成 `SAL-P3-009` Factor Evaluation；新增 `quant.factor_evaluation@1.0.0`、版本化 `FutureReturnWindow`、具体 Dataset Version guard、PIT decision-time guard、sample-overlap warning、覆盖率、IC/ICIR、分组收益、方向调整单调性、目标组换手、暴露 summary 和 deterministic Artifact report 发布；Red contract test `1 error`、Green target `4 passed`、factor related suite `29 passed`、相关 P3/Architecture suite `54 passed`、full pytest `284 passed, 3 skipped`，P3 进度 `9/17`、总进度 `58/129`，`SAL-P3-010` 与 `SAL-P3-011` 成为当前 `READY` 任务；实现 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`，上一实现 checkpoint 为 `dc23e769 feat(P3): 实现横截面因子后处理`。
-- 2026-07-24：完成 `SAL-P3-010` Factor DAG/cache；新增 `factor_engine@1.0.0`、DAG node CSE、published FactorDefinition version binding、factor-specific Dataset/Factor/Universe/date-range/engine/partition cache key、time-series instrument/date partition、cross-section date partition、duplicate/date-range/identity guards、lookback incremental recompute、failed quality gate publication rejection 和 deterministic cache manifest Artifact；Red contract test `1 error`、review regression Red `5 failed, 3 passed`、Green target `8 passed`、factor related suite `37 passed`、相关 P3/Architecture suite `62 passed`、full pytest `292 passed, 3 skipped`，P3 进度 `10/17`、总进度 `59/129`，`SAL-P3-011` 成为当前 `READY` 任务；实现 checkpoint 将由本次提交生成，上一实现 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`。
+- 2026-07-24：完成 `SAL-P3-010` Factor DAG/cache；新增 `factor_engine@1.0.0`、DAG node CSE、published FactorDefinition version binding、factor-specific Dataset/Factor/Universe/date-range/engine/partition cache key、time-series instrument/date partition、cross-section date partition、duplicate/date-range/identity guards、lookback incremental recompute、failed quality gate publication rejection 和 deterministic cache manifest Artifact；Red contract test `1 error`、review regression Red `5 failed, 3 passed`、Green target `8 passed`、factor related suite `37 passed`、相关 P3/Architecture suite `62 passed`、full pytest `292 passed, 3 skipped`，P3 进度 `10/17`、总进度 `59/129`，`SAL-P3-011` 成为当前 `READY` 任务；实现 checkpoint 为 `d34b8690 feat(P3): 实现 Factor DAG cache`，上一实现 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -265,8 +265,8 @@
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-010
 - 最近完成：SAL-P3-010 Factor DAG/cache
-- 最近可评审交付 checkpoint：本次实现提交，标题为 feat(P3): 实现 Factor DAG cache；上一 checkpoint 为 fb7beb02 feat(P3): 实现 Factor Evaluation
-- 最新状态同步 checkpoint：待本次实现提交后同步实际 hash；上一状态同步 checkpoint 为 e2d4c9cf docs: 同步 SAL-P3-009 checkpoint hash
+- 最近可评审交付 checkpoint：d34b8690 feat(P3): 实现 Factor DAG cache；上一 checkpoint 为 fb7beb02 feat(P3): 实现 Factor Evaluation
+- 最新状态同步 checkpoint：本次状态同步提交，标题为 docs: 同步 SAL-P3-010 checkpoint hash；上一状态同步 checkpoint 为 e2d4c9cf docs: 同步 SAL-P3-009 checkpoint hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 10/17，总计 59/129
 
 下一步优先执行：
