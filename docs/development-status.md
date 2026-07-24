@@ -7,9 +7,9 @@
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：64/129<br>
 > 当前可执行任务：`SAL-P3-016` 筛选性能与复现验收，状态为 `READY`；仍不得启动 SAL-P3-017、Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：本次 `SAL-P3-015` 提交生成后以最终回复和 `git log -1 --oneline` 为准；上一 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`<br>
-> 最新状态同步 checkpoint：`cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`；上一状态同步 checkpoint 为 `7f363739 docs: 复核 SAL-P3-013 最新开发状态`<br>
-> 本次实现 checkpoint：提交后以最终回复和 `git log -1 --oneline` 为准；已完成任务范围推进至 `SAL-P3-015`<br>
+> 最近可评审交付 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`；上一 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`<br>
+> 最新状态同步 checkpoint：本次状态同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`<br>
+> 本次实现 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`；已完成任务范围推进至 `SAL-P3-015`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -229,7 +229,7 @@
 - 2026-07-24：完成 `SAL-P3-013` ScreenSnapshot 与解释轨迹；新增 `quant.screen_snapshot@1.0.0`、结果行、结构化 explanation steps、passed/failed rank 与 failed-stage invariants、本地 snapshot comparison 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenSnapshot/ScreenDefinition/HistoricalUniverse/FactorPostProcessing/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `39 passed`、full pytest `302 passed, 3 skipped`，P3 进度 `13/17`、总进度 `62/129`，`SAL-P3-014` 成为当前 `READY` 任务；实现 checkpoint 为 `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`，上一实现 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`。
 - 2026-07-24：完成 `SAL-P3-014` Quant Screening API；新增 `application.quant_screening_api@1.0.0`、`/api/v1/quant` route metadata、FactorDefinition/ScreenDefinition create responses、screen run `202 Accepted`、required Idempotency-Key、same-request replay、stable cursor pagination、single-result lookup、ScreenSnapshot comparison 和 ProblemDetails validation boundary；Red contract test `1 error`、Green target `5 passed`、相关 QuantScreeningAPI/ScreenSnapshot/ScreenDefinition/FactorEvaluation/FactorDefinition/TaskBackend/APIErrors/Trace/Architecture suite `45 passed`、full pytest `307 passed, 3 skipped`，P3 进度 `14/17`、总进度 `63/129`，`SAL-P3-015` 成为当前 `READY` 任务；实现 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`，上一实现 checkpoint 为 `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`。
 - 2026-07-25：按用户要求复核 `SAL-P3-014` 后最新开发状态；确认最近实现 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`，最新已落地状态同步 checkpoint 为 `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..014`，未完成范围从 `SAL-P3-015` 开始，当前 READY 任务为 `SAL-P3-015` Screen Lab，Gate G3 仍未通过。本次仅做状态文档和习惯固化，不启动 Screen Lab、Quant Core、正式回测、Evidence Agent、真实 Provider/LLM 调用、Worker loop 或 DSA runtime source migration。
-- 2026-07-25：完成 `SAL-P3-015` Screen Lab；新增 DSA Web `quantScreeningApi`、`ScreenLabPage`、`/screen-lab` route、SidebarNav/i18n 集成和 `DSA-PATCH-004`；Red API/page/route tests 捕获缺失实现，Green focused web `4 files / 24 passed`，full web `92 files / 973 passed / 2 skipped`，Python full pytest `307 passed, 3 skipped`，P3 进度 `15/17`、总进度 `64/129`，`SAL-P3-016` 成为当前 `READY` 任务；实现 checkpoint 由本次提交生成，提交后以最终回复和 `git log -1 --oneline` 为准。
+- 2026-07-25：完成 `SAL-P3-015` Screen Lab；新增 DSA Web `quantScreeningApi`、`ScreenLabPage`、`/screen-lab` route、SidebarNav/i18n 集成和 `DSA-PATCH-004`；Red API/page/route tests 捕获缺失实现，Green focused web `4 files / 24 passed`，full web `92 files / 973 passed / 2 skipped`，Python full pytest `307 passed, 3 skipped`，P3 进度 `15/17`、总进度 `64/129`，`SAL-P3-016` 成为当前 `READY` 任务；实现 checkpoint 为 `847e5263 feat(P3): 实现 Screen Lab`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -284,8 +284,8 @@
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-015
 - 最近完成：SAL-P3-015 Screen Lab
-- 最近可评审交付 checkpoint：本次 SAL-P3-015 提交生成后以最终回复和 git log -1 --oneline 为准；上一 checkpoint 为 dd4e9465 feat(P3): 实现 Quant Screening API
-- 最新状态同步 checkpoint：cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash；本次实现 checkpoint 提交后以最终回复和 git log -1 --oneline 为准
+- 最近可评审交付 checkpoint：847e5263 feat(P3): 实现 Screen Lab；上一 checkpoint 为 dd4e9465 feat(P3): 实现 Quant Screening API
+- 最新状态同步 checkpoint：本次状态同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint 为 cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 15/17，总计 64/129
 
 下一步优先执行：

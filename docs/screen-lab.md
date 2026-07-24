@@ -12,7 +12,7 @@
 - `docs/superpowers/plans/2026-07-25-screen-lab.md`
 - 本记录、`docs/upstream-patches.md`、`docs/development-progress-checklist.md`、`docs/development-status.md` 和 `tasks/todo.md`
 
-实现 checkpoint 由本次提交生成；提交后以 `git log -1 --oneline` 和最终交接为准。
+实现 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`。
 
 ## 补丁内容
 
