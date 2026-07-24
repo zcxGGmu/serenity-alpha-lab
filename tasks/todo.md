@@ -1,3 +1,44 @@
+# SAL-P3-010 Factor DAG Cache Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-010` by adding a deterministic Factor calculation DAG/cache contract for dependency compilation, common subexpression reuse, cache key derivation, partition planning, incremental recompute planning and quality-gated cache manifest publication. Do not execute factor values, implement Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib adapter, Portfolio Backtest, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/factor-evaluation.md`, current Git status and recent commits.
+- [x] Inspect existing FactorDefinition, Factor DSL, base factor, post-processing, evaluation, Dataset Catalog and ArtifactStore patterns for immutable DTOs, concrete Dataset Version guards, deterministic records and artifact publication.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-24-factor-dag-cache.md`.
+- [x] Add Red contract tests for DAG build specs, common subexpression reuse, cache key completeness, partition planning, incremental recompute planning and quality-gated cache manifest artifact publication.
+- [x] Implement `quant.factors.engine` with immutable DAG/cache specs, node/cache/partition/recompute/manifest DTOs, deterministic planners and artifact publisher.
+- [x] Export Factor DAG/cache symbols from `quant.factors`.
+- [x] Add `docs/factor-dag-cache.md` with graph semantics, cache key fields, partition policy, incremental recompute policy, quality gate, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review or record client/tool fallback, then stage only `SAL-P3-010` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Every cache key must include concrete Dataset Version ids, factor version id, universe version id, date range, engine version and partition id; no `latest` alias is allowed.
+- DAG planning may compile Factor DSL and deduplicate shared expression nodes, but must not execute factor values or publish factor-value datasets.
+- Time-series operators partition by instrument; cross-sectional operators partition by trade date; incremental recompute must include lookback windows affected by changed inputs.
+- Cache manifests may be published only when quality gate status is `passed`; failed runs must not pollute shared cache.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-010
+
+- Added `src/serenity_alpha_lab/quant/factors/engine.py` with `FactorDagBuildSpec`, `FactorDagNode`, `FactorDag`, cache key/partition/plan DTOs, incremental recompute DTOs, quality gate DTOs, `build_factor_dag()`, `plan_factor_cache_partitions()`, `plan_incremental_factor_recompute()` and `publish_factor_cache_manifest()`.
+- DAG build compiles Factor DSL plans, deduplicates common expression nodes, binds published `FactorDefinition.version_id` to the spec's `fdv_*` factor version, records each factor's actual Dataset Version dependencies and rejects `latest` aliases.
+- Cache planning now keys each partition by factor-specific Dataset Versions, factor version, universe version, date range, engine version, partition kind/date/instrument and partition id; duplicate instrument/date inputs are deduped, out-of-range trade dates are rejected and partition/cache identity mismatches fail construction.
+- Incremental recompute uses lookback windows for date changes, factor version ids for factor changes and factor-specific dataset dependency maps for Dataset Version changes, so unrelated Dataset changes do not recompute unrelated factor partitions.
+- Cache manifest publication is deterministic JSON through `ArtifactStore` and is blocked unless `FactorCacheQualityGate.status == passed`.
+- Added `tests/quant/test_factor_dag_cache.py`; initial Red failed with missing `serenity_alpha_lab.quant.factors.engine`; review regression Red captured `5 failed, 3 passed`; Green target `8 passed`.
+- Added `docs/factor-dag-cache.md`, `docs/superpowers/plans/2026-07-24-factor-dag-cache.md`, `DEC-057` and `AEV-059`; updated P3 progress to `10/17`, total progress to `59/129`, and moved `SAL-P3-011` to `READY`.
+- Final verification: target `8 passed`; factor related suite `37 passed`; related P3/Architecture suite `62 passed`; full pytest `292 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: attempted independent `code-reviewer` dispatch multiple times, but the client wrapper rejected payloads by injecting empty or conflicting optional fields (`reasoning_effort must not be empty`; `Provide either message or items, but not both`). Local senior review checked published-version binding, factor-specific cache key scope, partition date/dedup guards, DTO identity invariants, deterministic artifact output, exports, docs/status consistency and no-go boundaries; no Critical or Important issue found.
+- Scope retained: no factor value execution, factor values Dataset publication, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-009 Factor Evaluation Plan
 
 > Started: 2026-07-24
