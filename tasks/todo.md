@@ -1,3 +1,44 @@
+# SAL-P3-014 Quant Screening API Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-014` by adding a framework-neutral Quant Screening API contract for factor/screen definitions, asynchronous screen runs, stable paginated results and snapshot comparison. Reuse `ScreenSnapshot`, `ScreenDefinition`, `CandidateBatch`, `FactorDefinition`, Factor Evaluation, Dataset Catalog/Manifest, `ProblemDetails`, `Trace`, `Artifact`, `TaskBackend` and Run/Stage/Event. Do not implement Screen Lab UI, Quant Core/Qlib adapter, Portfolio Backtest, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, `docs/candidate-batch-contract.md`, `docs/factor-definition-version-model.md`, `docs/factor-dsl-operator-whitelist.md`, `docs/base-factor-definitions.md`, `docs/factor-cross-sectional-post-processing.md`, `docs/factor-evaluation.md`, `docs/factor-dag-cache.md`, `docs/historical-universe.md`, `docs/screen-definition-pipeline.md`, `docs/screen-snapshot-explanation-trace.md`, current Git status and recent commits.
+- [x] Confirm working baseline: branch `codex/p0-baseline-status`, clean worktree, latest commits `7f363739`, `e0ca42d9`, `10d97975`, current task `SAL-P3-014`.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-24-quant-screening-api.md`.
+- [x] Add Red API contract tests for route metadata, definition create payloads, Idempotency-Key 202 run response, stable cursor pagination, row lookup, comparison response and validation errors.
+- [x] Implement `application.quant_screening_api` with immutable route/request/response DTOs, in-memory repository, `TaskBackend` submission, `ScreenSnapshot` result pagination and comparison helpers.
+- [x] Export Quant Screening API symbols from `application`.
+- [x] Add `docs/quant-screening-api.md` with routes, response schema, idempotency, pagination, ProblemDetails/Trace/Artifact semantics, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [ ] Perform local senior review or subagent review if tooling works, then stage only `SAL-P3-014` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- API rows must expose explicit `as_of`, concrete `dsv_*` Dataset Versions, schema name/version, trace/run/stage, snapshot/artifact ids and deterministic pagination metadata.
+- `Idempotency-Key` is required for run creation and must replay the same `202` response for the same request without creating duplicate tasks.
+- Query endpoints read existing `ScreenSnapshot` results; this task does not execute real AlphaSift, factor engines, real Provider/LLM calls, Qlib, formal backtests or Worker loops.
+- ScreenDefinition and FactorDefinition endpoints store/version definitions only; they must not compute factors, run screens, or mutate published manifests outside existing contracts.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-014
+
+- Added `src/serenity_alpha_lab/application/quant_screening_api.py` with `application.quant_screening_api@1.0.0`, `/api/v1/quant` route metadata, response DTOs, `QuantScreeningRunRequest`, `QuantScreeningRunRecord`, `InMemoryQuantScreeningRepository` and `QuantScreeningApiService`.
+- Definition endpoints return JSON-ready FactorDefinition and ScreenDefinition records with schema and trace metadata; they do not execute factors, run screens or mutate published manifests beyond existing DTO contracts.
+- Screen run creation requires `Idempotency-Key`, submits a queued `TaskBackend` command with task type `quant.screen.run`, replays the same `202 Accepted` response for identical requests and rejects conflicting reuse.
+- Result endpoints page existing `ScreenSnapshot.results` with stable offset cursors and explicit `as_of`, concrete Dataset Versions, schema, trace/run/stage, snapshot/pipeline ids and optional Artifact manifest; single-result lookup uses canonical `InstrumentId`.
+- Comparison endpoint reuses `compare_screen_snapshots()` and returns `quant.screen_snapshot_comparison@1.0.0`; it remains deterministic local comparison, not a backtest or risk gate.
+- Added `tests/application/test_quant_screening_api.py`; Red failed with missing `serenity_alpha_lab.application.quant_screening_api`, Green target `5 passed`.
+- Added `docs/quant-screening-api.md`, `docs/superpowers/plans/2026-07-24-quant-screening-api.md`, `DEC-061` and `AEV-063`; updated P3 progress to `14/17`, total progress to `63/129`, and moved `SAL-P3-015` to `READY`.
+- Final verification: target `5 passed`; related suite `45 passed`; full pytest `307 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: subagent dispatch was attempted but the client wrapper again rejected the payload with `reasoning_effort must not be empty`; local senior review checked idempotency replay/conflict semantics, JSON-ready responses, pagination cursor stability, trace/artifact metadata, exports, docs/status consistency and no-go boundaries; no Critical or Important issue remains.
+- Scope retained: no Screen Lab UI, real FastAPI/DSA endpoint facade, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-013 Status Refresh And Habit Reinforcement
 
 > Started: 2026-07-24
