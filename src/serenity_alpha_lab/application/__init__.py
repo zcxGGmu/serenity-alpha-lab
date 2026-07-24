@@ -41,21 +41,6 @@ from serenity_alpha_lab.application.config_profiles import (
     profile_policy,
     redacted_config_diagnostics,
 )
-from serenity_alpha_lab.application.quant_screening_api import (
-    QUANT_SCREENING_API_CONTRACT_VERSION,
-    QUANT_SCREENING_API_ROUTES,
-    QUANT_SCREENING_COMPARISON_SCHEMA_NAME,
-    QUANT_SCREENING_COMPARISON_SCHEMA_VERSION,
-    QUANT_SCREENING_RUN_TASK_TYPE,
-    InMemoryQuantScreeningRepository,
-    QuantApiResponse,
-    QuantApiRoute,
-    QuantScreeningApiError,
-    QuantScreeningApiService,
-    QuantScreeningRunMode,
-    QuantScreeningRunRecord,
-    QuantScreeningRunRequest,
-)
 from serenity_alpha_lab.application.research_orchestrator import (
     ProgressCallback,
     ResearchChatRequest,
@@ -189,3 +174,31 @@ __all__ = [
     "redact_sensitive_data",
     "use_trace_context",
 ]
+
+_LAZY_EXPORTS = {
+    "QUANT_SCREENING_API_CONTRACT_VERSION": "serenity_alpha_lab.application.quant_screening_api",
+    "QUANT_SCREENING_API_ROUTES": "serenity_alpha_lab.application.quant_screening_api",
+    "QUANT_SCREENING_COMPARISON_SCHEMA_NAME": "serenity_alpha_lab.application.quant_screening_api",
+    "QUANT_SCREENING_COMPARISON_SCHEMA_VERSION": "serenity_alpha_lab.application.quant_screening_api",
+    "QUANT_SCREENING_RUN_TASK_TYPE": "serenity_alpha_lab.application.quant_screening_api",
+    "InMemoryQuantScreeningRepository": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantApiResponse": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantApiRoute": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantScreeningApiError": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantScreeningApiService": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantScreeningRunMode": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantScreeningRunRecord": "serenity_alpha_lab.application.quant_screening_api",
+    "QuantScreeningRunRequest": "serenity_alpha_lab.application.quant_screening_api",
+}
+
+
+def __getattr__(name: str) -> object:
+    module_name = _LAZY_EXPORTS.get(name)
+    if module_name is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    from importlib import import_module
+
+    module = import_module(module_name)
+    value = getattr(module, name)
+    globals()[name] = value
+    return value

@@ -1,3 +1,42 @@
+# SAL-P3-016 Screen Performance And Reproducibility Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P3-016` by adding a deterministic screening performance/reproducibility acceptance layer that reuses Screen Lab, Quant Screening API, ScreenSnapshot, ScreenDefinition Pipeline, CandidateBatch, FactorDefinition, Factor Evaluation, Dataset Catalog/Manifest, ProblemDetails, Trace, Artifact and Run/Stage/Event contracts. Do not start `SAL-P3-017`, Quant Core/Qlib, formal backtest, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read required handoff docs, current Git state, TDD/verification/plan skills, Screen Lab/API/snapshot/pipeline implementation and SAL-P3-016 acceptance.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-screen-performance-reproducibility.md`.
+- [x] Add Red contract tests for screening performance budget, stage timing/memory samples, incremental baseline, deterministic result hash, repeated snapshot reproducibility, fixed Run Bundle and deterministic Artifact publication.
+- [x] Implement `quant.screening.performance` with immutable DTOs, budget evaluation, canonical result hashing, run bundle generation, reproducibility comparison and ArtifactStore publishing.
+- [x] Export performance/reproducibility symbols from `quant.screening`.
+- [x] Add `docs/screen-performance-reproducibility.md` with SLO/budget, run bundle schema, reproducibility semantics, non-goals and verification evidence.
+- [x] Update progress checklist, development status, evidence/decision registers and this review.
+- [x] Run target, related, full Python, compileall, dependency lock guard, patch check, immutable tag check and `git diff --check`.
+- [x] Perform local senior review, stage only SAL-P3-016 files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Reproducibility hash must be derived from concrete `dsv_*` Dataset Versions, `sdv_*` ScreenDefinition, engine/code versions and canonical ScreenSnapshot result rows, not from wall-clock time or run-specific trace IDs.
+- Performance report must preserve stage traces, timing, memory and capacity budgets without reimplementing ScreenDefinition Pipeline or ScreenSnapshot logic.
+- Incremental baseline is an acceptance record over existing Factor DAG/cache and screen inputs; this task must not execute real factor values, Worker loops, Quant Core/Qlib or formal backtests.
+- Fixed Run Bundle must retain `as_of`, dataset/schema/trace/run/stage, snapshot/pipeline ids, result hash and optional Artifact manifests for Screen Lab/API consumption.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-016
+
+- Added `src/serenity_alpha_lab/quant/screening/performance.py` with immutable `ScreenPerformanceBudget`, `ScreenStagePerformanceSample`, `ScreenIncrementalBaseline`, `ScreenRunBundle`, `ScreenReproducibilityCheck` and `ScreenPerformanceReport`.
+- Added canonical `screen_result_hash()` and fixed Run Bundle generation; the result hash binds code version, engine version, `sdv_*`, `as_of`, concrete `dsv_*` versions and canonical `ScreenSnapshot.results`, while excluding wall-clock time, trace/run/stage ids and snapshot/pipeline ids.
+- Added deterministic report Artifact publication and SLO/budget failure codes for common screening duration, cached query duration, peak memory, result rows, incremental recompute ratio and reproducibility drift.
+- Fixed an existing import cycle by making Quant Screening API exports lazy in `application.__init__`; direct `from serenity_alpha_lab.application import QuantScreeningApiService` remains supported.
+- Local senior review found and fixed one report consistency issue: observed `result_row_count` now comes from `ScreenSnapshot` result rows rather than the last stage sample.
+- Code-review subagent dispatch was attempted repeatedly, but the host wrapper rejected payloads with empty optional `items`/`reasoning_effort`; fallback was local senior review over the focused diff plus fresh verification.
+- Verification: target `3 passed`; import-cycle check PASS; related suite `41 passed`; full pytest `310 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check reports `0001..0004` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Scope retained: no `SAL-P3-017`, Quant Core/Qlib, formal backtest, Evidence Agent, real Provider/LLM call, Worker execution loop, DSA runtime source migration, dependency surface change or tag movement.
+- Implementation checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
+
+---
+
 # SAL-P3-015 Latest Status Refresh And Habit Reinforcement
 
 > Started: 2026-07-25
