@@ -1,3 +1,42 @@
+# SAL-P3-009 Factor Evaluation Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-009` by adding a deterministic Factor Evaluation contract and offline evaluator for coverage, IC/ICIR, forward return quantile groups, monotonicity, turnover and exposure summaries. Persist the evaluation report as deterministic JSON via the existing `ArtifactStore` contract. Do not implement factor calculation DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib adapter, Portfolio Backtest, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `SAL-P3-009` acceptance, existing factor contracts, artifact store patterns, current Git status and recent commits.
+- [x] Add Red contract tests for `FactorEvaluationSpec`, PIT/sample-overlap guards, IC/ICIR, quantile group returns, monotonicity, turnover, exposure summaries and deterministic artifact publication.
+- [x] Implement `quant.factors.evaluation` with immutable specs, input rows, metrics, report DTOs, validation, deterministic evaluator and artifact publisher.
+- [x] Export Factor Evaluation symbols from `quant.factors`.
+- [x] Add `docs/factor-evaluation.md` with metric definitions, future-return window versioning, PIT/overlap guards, non-goals and verification evidence.
+- [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, this review and next-session prompt, including the actual `SAL-P3-008` checkpoint `dc23e769`.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [ ] Attempt independent review or record tool fallback, then stage only `SAL-P3-009` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Evaluation inputs must reference concrete `dsv_*` Dataset Version ids; `latest` remains forbidden.
+- Formal evaluation must reject rows where factor values are not PIT-valid at the decision time, or where factor/forward-return samples do not overlap on `instrument_id + trade_date`.
+- Future-return windows must be explicitly versioned in the spec, including horizon, unit and return field semantics.
+- Metric output is deterministic and JSON-friendly; warnings must explain small samples, missing pairs, empty bins, zero variance, rank-deficient monotonicity and exposure gaps.
+- This task evaluates already-produced factor values only; it does not compute factor values, build cache/DAG, select a historical universe, run screens, simulate portfolios, call Qlib, or invoke real Provider/LLM paths.
+
+## Review: SAL-P3-009
+
+- Added `src/serenity_alpha_lab/quant/factors/evaluation.py` with `FutureReturnWindow`, `FactorEvaluationSpec`, `FactorEvaluationObservation`, coverage/IC/group/monotonicity/turnover/exposure DTOs, `evaluate_factor()` and `publish_factor_evaluation_report()`.
+- Evaluation spec requires concrete `dsv_*` Dataset Version ids and `fdv_*` factor versions; `latest` is rejected.
+- Formal evaluation rejects non-PIT factor values where `factor_available_at > decision_time`; forward returns are allowed to be available after decision time because they are labels.
+- Metrics use the factor/forward-return intersection sample and record `sample_non_overlap`; report includes coverage ratios, Spearman/Pearson IC, ICIR annualization, quantile group returns, direction-adjusted monotonicity, Top/Bottom target-group turnover and exposure summary.
+- Reports publish deterministic JSON through `ArtifactStore` with `produced_by_run_id` / `produced_by_stage_id`.
+- Added `tests/quant/test_factor_evaluation.py`; Red failed with missing `serenity_alpha_lab.quant.factors.evaluation`, Green target `4 passed`.
+- Added `docs/factor-evaluation.md`, `docs/superpowers/plans/2026-07-24-factor-evaluation.md`, `DEC-056` and `AEV-058`; updated P3 progress to `9/17`, total progress to `58/129`, moved `SAL-P3-010` and `SAL-P3-011` to `READY`, and backfilled `SAL-P3-008` checkpoint as `dc23e769`.
+- Final verification: target `4 passed`; factor related suite `29 passed`; related P3/Architecture suite `54 passed`; full pytest `284 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: attempted independent `code-reviewer` and `python-reviewer` subagents, but both remained running without findings inside the wait window and were closed. Local senior review checked diff scope, metric semantics, PIT guard, sample-overlap behavior, deterministic artifact output, exports, docs/status consistency and no-go boundaries; no Critical or Important issue found.
+- Scope retained: no factor execution, factor values Dataset publication, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-008 Cross-Sectional Post-Processing Plan
 
 > Started: 2026-07-24
