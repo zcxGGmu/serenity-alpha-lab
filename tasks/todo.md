@@ -1,3 +1,28 @@
+# SAL-P3-006 Latest Status Refresh Plan
+
+> Started: 2026-07-24
+> Scope: Refresh recovery-facing documentation after `a63822d0 feat(P3): 实现因子 DSL 与算子白名单` and `6ee91eed docs: 同步 SAL-P3-006 checkpoint hash`; clearly mark completed vs unfinished work, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P3-007` implementation in this status-refresh task.
+
+## Checklist
+
+- [x] Re-read current `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `tasks/todo.md`, current Git status and recent commits.
+- [x] Update `tasks/lessons.md` with the repeated automatic status-sync habit reminder.
+- [x] Update `docs/development-status.md` with current completed/unfinished ranges, actual implementation checkpoint, previous status-sync checkpoint and refreshed next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step summary with the same recovery anchors.
+- [x] Record this review in `tasks/todo.md`.
+- [x] Run status-anchor scan and `git diff --check`.
+- [x] Stage only status-sync files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P3-006 Latest Status Refresh
+
+- Completed range remains `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..006`; unfinished work starts at `SAL-P3-007` and P4/P5/P6 remain untouched.
+- Current Phase remains P3; Gate G3 remains not passed; G0/G1/G2 remain passed as `GO with accepted risks`.
+- Current READY task remains `SAL-P3-007` base factor definitions; this sync deliberately does not start implementation.
+- Recovery anchors now name implementation checkpoint `a63822d0 feat(P3): 实现因子 DSL 与算子白名单` and previous status-sync checkpoint `6ee91eed docs: 同步 SAL-P3-006 checkpoint hash`.
+- Habit reinforced: after every stage task, automatically update status/progress/evidence/`tasks/todo.md` review/lessons as needed, then provide a copyable restart prompt.
+
+---
+
 # SAL-P3-006 Factor DSL and Operator Whitelist Plan
 
 > Started: 2026-07-24

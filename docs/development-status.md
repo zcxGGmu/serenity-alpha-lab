@@ -8,7 +8,7 @@
 > 任务完成度：55/129<br>
 > 当前可执行任务：`SAL-P3-007`，状态为 `READY`；交付首批 15 个基础因子，仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
 > 最近可评审交付 checkpoint：`a63822d0 feat(P3): 实现因子 DSL 与算子白名单`；上一 checkpoint 为 `d405e6ab feat(P3): 实现 FactorDefinition 版本模型`<br>
-> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-006 checkpoint hash`；上一状态同步 checkpoint 为 `33611597 docs: 同步 SAL-P3-005 最新状态与恢复提示`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
+> 最新状态同步 checkpoint：本文件所在提交，标题为 `docs: 同步 SAL-P3-006 最新开发状态与恢复提示`；上一状态同步 checkpoint 为 `6ee91eed docs: 同步 SAL-P3-006 checkpoint hash`；启动后以 `git log -1 --oneline` 确认实际 hash<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -206,6 +206,7 @@
 - 2026-07-23：完成 `SAL-P3-005` FactorDefinition 版本模型；新增 `quant.factor_definition@1.0.0`、FactorDefinition/Formula/Input/Window/Missing/PostProcessing DTO、draft/published/retired 生命周期、本地定义仓库、不可变 published manifest、独立 retirement record 和 audit events；Red contract test `1 error`、Green target `3 passed`、related suite `28 passed`，P3 进度 `5/17`、总进度 `54/129`，`SAL-P3-006` 成为当前 `READY` 任务；实现 checkpoint 为 `d405e6ab feat(P3): 实现 FactorDefinition 版本模型`。
 - 2026-07-24：按用户要求复核 `SAL-P3-005` 后最新开发状态；确认最近可评审交付为 `d405e6ab feat(P3): 实现 FactorDefinition 版本模型`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..005`，未完成范围从 `SAL-P3-006` 开始，当前 READY 任务为 `SAL-P3-006`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-24：完成 `SAL-P3-006` Factor DSL 与算子白名单；新增 `serenity_factor_dsl@1.0.0`、白名单 parser/AST/validator/compiler、`FactorExpressionPlan`、`FactorExpressionNode`、`compile_factor_expression()` 和 `compile_factor_definition()`；Red contract test `1 error`、Green target `14 passed`、related suite `42 passed`，full pytest `272 passed, 3 skipped`，P3 进度 `6/17`、总进度 `55/129`，`SAL-P3-007` 成为当前 `READY` 任务；实现 checkpoint 为 `a63822d0 feat(P3): 实现因子 DSL 与算子白名单`。
+- 2026-07-24：按用户要求再次复核 `SAL-P3-006` 后最新开发状态；确认最近可评审交付为 `a63822d0 feat(P3): 实现因子 DSL 与算子白名单`，上一状态同步 checkpoint 为 `6ee91eed docs: 同步 SAL-P3-006 checkpoint hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..006`，未完成范围从 `SAL-P3-007` 开始，当前 READY 任务为 `SAL-P3-007`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -252,7 +253,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-006
 - 最近完成：SAL-P3-006 Factor DSL 与算子白名单
 - 最近可评审交付 checkpoint：a63822d0 feat(P3): 实现因子 DSL 与算子白名单；上一 checkpoint 为 d405e6ab feat(P3): 实现 FactorDefinition 版本模型
-- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-006 checkpoint hash；上一状态同步 checkpoint 为 33611597 docs: 同步 SAL-P3-005 最新状态与恢复提示
+- 最新状态同步 checkpoint：本文件所在提交，标题为 docs: 同步 SAL-P3-006 最新开发状态与恢复提示；上一状态同步 checkpoint 为 6ee91eed docs: 同步 SAL-P3-006 checkpoint hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 6/17，总计 55/129
 
 下一步优先执行：
