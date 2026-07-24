@@ -1,3 +1,44 @@
+# SAL-P3-012 ScreenDefinition And L0-L4 Pipeline Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-012` by adding a deterministic ScreenDefinition version model and L0-L4 pipeline contract that composes Historical Universe, ScreeningProvider/CandidateBatch, post-processed factors, optional LLM overlay and simple portfolio/risk gates. Do not implement ScreenSnapshot, Quant Screening API, Screen Lab UI, Quant Core/Qlib adapter, Portfolio Backtest, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/historical-universe.md`, current Git status and recent commits.
+- [x] Inspect CandidateBatch, ScreeningProvider, Historical Universe, factor post-processing, Factor DAG/cache and ArtifactStore patterns for immutable DTOs, concrete Dataset Version guards, deterministic records and artifact publication.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-24-screen-definition-pipeline.md`.
+- [x] Add Red contract tests for ScreenDefinition versioning, published-run guard, stage ordering, LLM overlay hard-filter boundary, L4 constraints and deterministic ArtifactStore publication.
+- [x] Implement `quant.screening.pipeline` with immutable definition/stage/snapshot DTOs, deterministic version ids, L0-L4 execution and publisher.
+- [x] Export ScreenDefinition/pipeline symbols from `quant.screening`.
+- [x] Add `docs/screen-definition-pipeline.md` with stage semantics, score/constraint rules, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review or record client/tool fallback, then stage only `SAL-P3-012` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Every ScreenDefinition and formal run must bind concrete `dsv_*` Dataset Version ids; `latest` remains forbidden.
+- Formal pipeline execution must require a published ScreenDefinition version and preserve a full resolved definition snapshot.
+- L0 Historical Universe hard filters run before provider/factor/LLM/risk scoring; LLM overlay cannot reintroduce an excluded security.
+- L4 constraints in this task are deterministic screen gates only, not a portfolio backtest or full Risk Engine.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-012
+
+- Added `src/serenity_alpha_lab/quant/screening/pipeline.py` with `ScreenDefinition`, provider/factor/LLM/risk stage specs, stage traces, pipeline candidates/exclusions, deterministic `sdv_*` definition version ids and deterministic `sps_*` pipeline snapshot ids.
+- Pipeline execution requires a published ScreenDefinition, concrete `dsv_*` Dataset Version ids, matching universe/provider/CandidateBatch/factor versions and exact `as_of` alignment.
+- L0 Historical Universe runs before provider/factor/LLM/final scoring; provider candidates outside L0 are excluded with `l0_universe_member` and cannot be restored by L3 overlay.
+- L2 factor scoring consumes post-processed factor results, combines configured `fdv_*` factor weights and normalizes candidate factor scores inside the run.
+- L4 currently implements deterministic screen gates only: `top_n` and `max_per_industry`; this is not a formal portfolio Risk Engine or backtest.
+- Added `tests/quant/test_screen_definition_pipeline.py`; Red failed with missing `serenity_alpha_lab.quant.screening.pipeline`; regression Red failed `1 failed, 2 passed` when CandidateBatch dataset version guard was temporarily removed; Green target `3 passed`.
+- Added `docs/screen-definition-pipeline.md`, `docs/superpowers/plans/2026-07-24-screen-definition-pipeline.md`, `DEC-059` and `AEV-061`; updated P3 progress to `12/17`, total progress to `61/129`, and moved `SAL-P3-013` to `READY`.
+- Final verification: target `3 passed`; related ScreenDefinition/HistoricalUniverse/FactorPostProcessing/FactorDAG/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `44 passed`; full pytest `299 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: attempted independent code-review subagent dispatch, but the client wrapper rejected payloads with `reasoning_effort must not be empty` and `Provide either message or items, but not both`; local senior review found and fixed CandidateBatch dataset-version mismatch coverage, then checked stage ordering, L0 hard-filter precedence, LLM overlay non-bypass, version hashing, dataset guards, deterministic artifact output, docs/status consistency and no-go boundaries; no Critical or Important issue remains.
+- Scope retained: no ScreenSnapshot, Quant Screening API, Screen Lab UI, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-011 Historical Universe Plan
 
 > Started: 2026-07-24

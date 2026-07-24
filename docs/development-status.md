@@ -1,14 +1,14 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-24<br>
-> 最近阶段性任务：`SAL-P3-011` Historical Universe<br>
+> 最近阶段性任务：`SAL-P3-012` ScreenDefinition 与 L0~L4 Pipeline<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P3 AlphaSift、因子与股票筛选<br>
 > 当前 Gate：G3 未通过；G0、G1、G2 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：60/129<br>
-> 当前可执行任务：`SAL-P3-012` ScreenDefinition 与 L0~L4 Pipeline，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：`adc7741f feat(P3): 实现 Historical Universe`；上一 checkpoint 为 `d34b8690 feat(P3): 实现 Factor DAG cache`<br>
-> 最新状态同步 checkpoint：本次状态同步提交，标题为 `docs: 同步 SAL-P3-011 checkpoint hash`；上一状态同步 checkpoint 为 `da2ef75a docs: 同步 SAL-P3-010 checkpoint hash`<br>
+> 任务完成度：61/129<br>
+> 当前可执行任务：`SAL-P3-013` ScreenSnapshot 与解释轨迹，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
+> 最近可评审交付 checkpoint：本次实现提交，标题为 `feat(P3): 实现 ScreenDefinition Pipeline`；上一 checkpoint 为 `adc7741f feat(P3): 实现 Historical Universe`<br>
+> 最新状态同步 checkpoint：本次状态同步提交，标题为 `docs: 同步 SAL-P3-012 checkpoint hash`；上一状态同步 checkpoint 为 `ba73ae39 docs: 同步 SAL-P3-011 checkpoint hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -91,18 +91,19 @@
 - 完成 `SAL-P3-009`：新增 [Factor Evaluation 记录](./factor-evaluation.md)、Quant 层 [evaluation.py](../src/serenity_alpha_lab/quant/factors/evaluation.py) 和 Factor evaluation contract test，冻结 `quant.factor_evaluation@1.0.0`、`FutureReturnWindow`、覆盖率、IC/ICIR、分组收益、单调性、换手、暴露 summary 和 deterministic Artifact 发布；P3 进度 `9/17`。
 - 完成 `SAL-P3-010`：新增 [Factor DAG/cache 记录](./factor-dag-cache.md)、Quant 层 [engine.py](../src/serenity_alpha_lab/quant/factors/engine.py) 和 Factor DAG/cache contract test，冻结 `factor_engine@1.0.0`、DAG node CSE、factor-specific dataset dependency map、cache key、分区计划、增量重算计划、质量门和 deterministic cache manifest Artifact 发布；P3 进度 `10/17`。
 - 完成 `SAL-P3-011`：新增 [Historical Universe 记录](./historical-universe.md)、Quant Screening 层 [universe.py](../src/serenity_alpha_lab/quant/screening/universe.py) 和 Historical Universe contract test，冻结 `quant.historical_universe@1.0.0`、`UniverseDefinition`、`UniverseSnapshot`、显式 Instrument Trade Status、规则证据、派生 `dsv_*` universe version 和 deterministic Artifact 发布；P3 进度 `11/17`。
+- 完成 `SAL-P3-012`：新增 [ScreenDefinition 与 L0-L4 Pipeline 记录](./screen-definition-pipeline.md)、Quant Screening 层 [pipeline.py](../src/serenity_alpha_lab/quant/screening/pipeline.py) 和 ScreenDefinition pipeline contract test，冻结 `quant.screen_pipeline@1.0.0`、`ScreenDefinition`、L1 Provider、L2 Factor、L3 LLM overlay、L4 deterministic risk gate、stage trace、pipeline candidate/exclusion 和 deterministic Artifact 发布；P3 进度 `12/17`。
 
 ## 未完成
 
 ### 当前可执行 P3 任务
 
-- `SAL-P3-012` 当前为 `READY`：优先实现 ScreenDefinition 与 L0~L4 Pipeline，继续保持具体 Dataset Version、PIT、硬过滤不可绕过和范围隔离约束。
+- `SAL-P3-013` 当前为 `READY`：优先实现 ScreenSnapshot 与解释轨迹，继续保持结构化原因码为权威、人类说明不可覆盖判断、不同交易日/不同定义版本不得混合比较。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P3 至 P6 仍有 69 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake、内部制品引用、ScreeningProvider/Adapter、CandidateBatch、FactorDefinition 版本模型、Factor DSL/算子白名单、首批基础因子、横截面后处理、Factor Evaluation、Factor DAG/cache 和 Historical Universe，但尚未完成 ScreenDefinition、ScreenSnapshot、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P3 至 P6 仍有 68 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 AlphaSift 源码审查、离线 Wheel intake、内部制品引用、ScreeningProvider/Adapter、CandidateBatch、FactorDefinition 版本模型、Factor DSL/算子白名单、首批基础因子、横截面后处理、Factor Evaluation、Factor DAG/cache、Historical Universe 和 ScreenDefinition Pipeline，但尚未完成 ScreenSnapshot、Screen Lab、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -158,7 +159,7 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P3-012` ScreenDefinition 与 L0~L4 Pipeline。
+1. 优先执行 `SAL-P3-013` ScreenSnapshot 与解释轨迹。
 2. 不得提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. 保持 P0/P1/P2 required checks 和 Gate G2 约束作为基线保护，任何上游吸收必须遵守 ADR-001，任何模块化实现必须遵守 ADR-002。
 
@@ -218,6 +219,7 @@
 - 2026-07-24：完成 `SAL-P3-009` Factor Evaluation；新增 `quant.factor_evaluation@1.0.0`、版本化 `FutureReturnWindow`、具体 Dataset Version guard、PIT decision-time guard、sample-overlap warning、覆盖率、IC/ICIR、分组收益、方向调整单调性、目标组换手、暴露 summary 和 deterministic Artifact report 发布；Red contract test `1 error`、Green target `4 passed`、factor related suite `29 passed`、相关 P3/Architecture suite `54 passed`、full pytest `284 passed, 3 skipped`，P3 进度 `9/17`、总进度 `58/129`，`SAL-P3-010` 与 `SAL-P3-011` 成为当前 `READY` 任务；实现 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`，上一实现 checkpoint 为 `dc23e769 feat(P3): 实现横截面因子后处理`。
 - 2026-07-24：完成 `SAL-P3-010` Factor DAG/cache；新增 `factor_engine@1.0.0`、DAG node CSE、published FactorDefinition version binding、factor-specific Dataset/Factor/Universe/date-range/engine/partition cache key、time-series instrument/date partition、cross-section date partition、duplicate/date-range/identity guards、lookback incremental recompute、failed quality gate publication rejection 和 deterministic cache manifest Artifact；Red contract test `1 error`、review regression Red `5 failed, 3 passed`、Green target `8 passed`、factor related suite `37 passed`、相关 P3/Architecture suite `62 passed`、full pytest `292 passed, 3 skipped`，P3 进度 `10/17`、总进度 `59/129`，`SAL-P3-011` 成为当前 `READY` 任务；实现 checkpoint 为 `d34b8690 feat(P3): 实现 Factor DAG cache`，上一实现 checkpoint 为 `fb7beb02 feat(P3): 实现 Factor Evaluation`。
 - 2026-07-24：完成 `SAL-P3-011` Historical Universe；新增 `quant.historical_universe@1.0.0`、具体 Dataset Version guard、PIT Instrument Master as-of membership/status、上市交易日、ST、退市、显式停牌、daily-bar availability、rule evidence completeness、deterministic `dsv_*` universe version 和 Artifact publication；Red contract test `1 error`、Green target `4 passed`、相关 HistoricalUniverse/P2 Dataset/P3 suite `45 passed`、full pytest `296 passed, 3 skipped`，P3 进度 `11/17`、总进度 `60/129`，`SAL-P3-012` 成为当前 `READY` 任务；实现 checkpoint 为 `adc7741f feat(P3): 实现 Historical Universe`，上一实现 checkpoint 为 `d34b8690 feat(P3): 实现 Factor DAG cache`。
+- 2026-07-24：完成 `SAL-P3-012` ScreenDefinition 与 L0~L4 Pipeline；新增 `quant.screen_pipeline@1.0.0`、版本化 `ScreenDefinition`、具体 Dataset Version guard、published run guard、L1 Provider、L2 Factor、L3 LLM overlay、L4 `top_n`/`max_per_industry` deterministic risk gate、stage trace、candidate/exclusion DTO 和 deterministic Artifact publication；Red contract test `1 error`、Green target `3 passed`、相关 ScreenDefinition/HistoricalUniverse/FactorPostProcessing/FactorDAG/CandidateBatch/ScreeningProvider/Architecture suite `44 passed`、full pytest `299 passed, 3 skipped`，P3 进度 `12/17`、总进度 `61/129`，`SAL-P3-013` 成为当前 `READY` 任务；实现 checkpoint 将由本次提交生成，上一实现 checkpoint 为 `adc7741f feat(P3): 实现 Historical Universe`。
 - 2026-07-23：按用户要求同步 `SAL-P3-001` checkpoint 后最新状态；确认最近可评审交付为 `4e6d5ee4 docs(P3): 完成 AlphaSift 源码审查与锁定`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001`，未完成范围从 `SAL-P3-002` 开始，当前 READY 任务为 `SAL-P3-002`，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步并给出可复制提示词”的习惯。
 - 2026-07-22：此前按用户要求复核 `SAL-P2-010` 后状态；当时最近可评审交付为 `3e2056fe feat(P2): 建立 Arrow Schema Registry`，已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..010`，未完成范围为 `SAL-P2-011..020` 与 P3 至 P6，并由此进入 `SAL-P2-011` Dataset Catalog 与 Manifest。
 - 本状态文档已明确列出已完成、未完成、当前约束、已接受风险、下一步和下次启动提示词；后续每个阶段性任务结束时继续自动同步这些内容。
@@ -260,22 +262,23 @@
 16. docs/factor-evaluation.md
 17. docs/factor-dag-cache.md
 18. docs/historical-universe.md
+19. docs/screen-definition-pipeline.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P3 AlphaSift、因子与股票筛选
 - Gate：G3 未通过；G0、G1、G2 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-011
-- 最近完成：SAL-P3-011 Historical Universe
-- 最近可评审交付 checkpoint：adc7741f feat(P3): 实现 Historical Universe；上一 checkpoint 为 d34b8690 feat(P3): 实现 Factor DAG cache
-- 最新状态同步 checkpoint：本次状态同步提交，标题为 docs: 同步 SAL-P3-011 checkpoint hash；上一状态同步 checkpoint 为 da2ef75a docs: 同步 SAL-P3-010 checkpoint hash
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 11/17，总计 60/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-012
+- 最近完成：SAL-P3-012 ScreenDefinition 与 L0~L4 Pipeline
+- 最近可评审交付 checkpoint：本次实现提交，标题为 feat(P3): 实现 ScreenDefinition Pipeline；上一 checkpoint 为 adc7741f feat(P3): 实现 Historical Universe
+- 最新状态同步 checkpoint：本次状态同步提交，标题为 docs: 同步 SAL-P3-012 checkpoint hash；上一状态同步 checkpoint 为 ba73ae39 docs: 同步 SAL-P3-011 checkpoint hash
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 12/17，总计 61/129
 
 下一步优先执行：
-1. SAL-P3-012 ScreenDefinition 与 L0~L4 Pipeline
+1. SAL-P3-013 ScreenSnapshot 与解释轨迹
 2. 不要提前启动 Quant Core、正式回测或 Evidence Agent；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider、SAL-P3-004 CandidateBatch、SAL-P3-005 FactorDefinition、SAL-P3-006 Factor DSL、SAL-P3-007 基础因子 catalog、SAL-P3-008 横截面后处理、SAL-P3-009 Factor Evaluation、SAL-P3-010 Factor DAG/cache 和 SAL-P3-011 Historical Universe
+3. 后续 Screening/Factor 实现必须引用具体 Dataset Version，复用 Gate G2 已冻结的 Provider Policy/fallback trace、Dataset Catalog/Manifest、Quality Gate、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend、可恢复任务事件流、ProblemDetails、Trace、Artifact、Run/Stage/Event、SAL-P3-003 ScreeningProvider、SAL-P3-004 CandidateBatch、SAL-P3-005 FactorDefinition、SAL-P3-006 Factor DSL、SAL-P3-007 基础因子 catalog、SAL-P3-008 横截面后处理、SAL-P3-009 Factor Evaluation、SAL-P3-010 Factor DAG/cache、SAL-P3-011 Historical Universe 和 SAL-P3-012 ScreenDefinition Pipeline
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
