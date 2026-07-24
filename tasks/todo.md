@@ -1,3 +1,28 @@
+# SAL-P3-005 Status Sync Plan
+
+> Started: 2026-07-24
+> Scope: Refresh recovery-facing documentation after `d405e6ab feat(P3): 实现 FactorDefinition 版本模型`, clearly mark completed vs unfinished work, update the next-session prompt, and record the user's repeated habit reminder in lessons. Do not start `SAL-P3-006` implementation in this status-sync task.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current development status, progress checklist, current Git status and recent commits.
+- [x] Replace remaining `SAL-P3-005` checkpoint placeholders with actual implementation checkpoint `d405e6ab feat(P3): 实现 FactorDefinition 版本模型`.
+- [x] Update `docs/development-status.md` with 2026-07-24 status review, completed/unfinished ranges, current READY task and refreshed next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step summary with the actual implementation checkpoint and pending status-sync checkpoint title.
+- [x] Record the repeated “每个阶段性任务完成后自动状态同步并给出提示词” habit in `tasks/lessons.md`.
+- [x] Run status-anchor scans and `git diff --check`.
+- [x] Stage only status-sync files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P3-005 Status Sync
+
+- Latest completed range remains `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..005`; unfinished work starts at `SAL-P3-006`.
+- Current Phase remains P3, Gate G3 remains not passed, and G0/G1/G2 remain passed as `GO with accepted risks`.
+- Current READY task is `SAL-P3-006` Factor DSL and operator whitelist; this sync deliberately does not start implementation.
+- Recovery prompt now includes `docs/factor-definition-version-model.md`, actual implementation checkpoint `d405e6ab`, and the status-sync checkpoint title.
+- Habit reinforced: after every stage task, automatically update status/progress/evidence/`tasks/todo.md` review/lessons as needed, then provide a copyable restart prompt.
+
+---
+
 # SAL-P3-005 FactorDefinition Version Model Plan
 
 > Started: 2026-07-23
