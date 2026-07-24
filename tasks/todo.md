@@ -1,3 +1,43 @@
+# SAL-P3-013 ScreenSnapshot And Explanation Trace Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-013` by adding a deterministic ScreenSnapshot result schema, per-security passed/failed-stage records, score contribution detail, replayable structured explanation trace and comparison helper. Do not implement Quant Screening API, Screen Lab UI, Quant Core/Qlib adapter, Portfolio Backtest, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, `docs/candidate-batch-contract.md`, `docs/factor-definition-version-model.md`, `docs/factor-dsl-operator-whitelist.md`, `docs/base-factor-definitions.md`, `docs/factor-cross-sectional-post-processing.md`, `docs/factor-evaluation.md`, `docs/factor-dag-cache.md`, `docs/historical-universe.md`, `docs/screen-definition-pipeline.md`, current Git status and recent commits.
+- [x] Confirm working baseline with `git status --short --branch`, `git log -3 --oneline`, worktree detection and existing ScreenDefinition target tests.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-24-screen-snapshot-explanation-trace.md`.
+- [x] Add Red contract tests for result schema, passed/failed-stage rows, score contribution records, structured explanation replay, comparison query and deterministic ArtifactStore publication.
+- [x] Implement `quant.screening.snapshot` with immutable ScreenSnapshot DTOs, deterministic IDs, builder from `ScreenPipelineSnapshot`, comparison helper and publisher.
+- [x] Export ScreenSnapshot symbols from `quant.screening`.
+- [x] Add `docs/screen-snapshot-explanation-trace.md` with schema, explanation trace semantics, comparison rules, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review or record client/tool fallback, then stage only `SAL-P3-013` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- ScreenSnapshot is a deterministic result projection over the existing `ScreenPipelineSnapshot`; do not change P3-012 pipeline semantics unless a failing regression proves a root-cause issue.
+- Structured `stage/rule_id/reason/scores/factor_contributions/source_ids` is authoritative; any human summary is non-authoritative and must be replayable from structured fields.
+- Every snapshot must retain concrete Dataset Version ids, ScreenDefinition version, pipeline snapshot id, as-of, trace/run/stage and schema metadata.
+- Comparison query is local deterministic comparison only; do not implement Quant Screening API, pagination, UI, database repository or Worker loop.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-013
+
+- Added `src/serenity_alpha_lab/quant/screening/snapshot.py` with immutable `ScreenSnapshot`, result rows, explanation steps, comparison DTOs, deterministic `ssn_*` IDs, builder from `ScreenPipelineSnapshot` and deterministic ArtifactStore publication.
+- Snapshot construction preserves concrete Dataset Version ids, `pipeline_snapshot_id`, `definition_version_id`, `as_of`, trace/run/stage, passed/failed counts, per-instrument result lookup and sorted passed/failed output rows.
+- Result validation enforces one row per `InstrumentId`, contiguous ranks for passed rows, failed-stage requirements for failed rows, finite scores, concrete `dsv_*` Dataset Versions and exactly `ssn_<32 hex>` snapshot IDs.
+- Structured explanation fields remain authoritative; display `summary` is non-authoritative and comparison stays a local pure helper for passed-set, status, rank and score deltas.
+- Added `tests/quant/test_screen_snapshot.py`; Red failed with missing `serenity_alpha_lab.quant.screening.snapshot`; Green target `3 passed`.
+- Added `docs/screen-snapshot-explanation-trace.md`, `docs/superpowers/plans/2026-07-24-screen-snapshot-explanation-trace.md`, `DEC-060` and `AEV-062`; updated P3 progress to `13/17`, total progress to `62/129`, and moved `SAL-P3-014` to `READY`.
+- Final verification: target `3 passed`; related ScreenSnapshot/ScreenDefinition/HistoricalUniverse/FactorPostProcessing/CandidateBatch/ScreeningProvider/AlphaSift/Architecture suite `39 passed`; full pytest `302 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: independent code-review subagent dispatch was attempted but the client wrapper rejected payloads with `reasoning_effort must not be empty`; local senior review found and fixed one contract drift where manual `screen_snapshot_id` validation allowed 32-64 hex instead of exactly 32 hex. No Critical or Important issue remains.
+- Scope retained: no Quant Screening API, Screen Lab UI, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-012 ScreenDefinition And L0-L4 Pipeline Plan
 
 > Started: 2026-07-24
