@@ -32,6 +32,7 @@
 - `UniverseSnapshot.universe_version_id` is derived as deterministic `dsv_*`; repeated ArtifactStore publication produces identical artifact id/hash.
 - Added `tests/quant/test_historical_universe.py`; Red failed with missing `serenity_alpha_lab.quant.screening.universe`, Green target `4 passed`.
 - Added `docs/historical-universe.md`, `docs/superpowers/plans/2026-07-24-historical-universe.md`, `DEC-058` and `AEV-060`; updated P3 progress to `11/17`, total progress to `60/129`, and moved `SAL-P3-012` to `READY`.
+- Implementation checkpoint: `adc7741f feat(P3): 实现 Historical Universe`.
 - Final verification: target `4 passed`; related suite `45 passed`; full pytest `296 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Review note: attempted explorer/code-review subagent dispatch, but the client wrapper rejected payloads by injecting empty optional fields (`reasoning_effort must not be empty`). Local senior review checked PIT status behavior, rule ordering, exclusion evidence completeness, deterministic version/artifact output, exports, docs/status consistency and no-go boundaries; no Critical or Important issue found.
 - Scope retained: no ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
