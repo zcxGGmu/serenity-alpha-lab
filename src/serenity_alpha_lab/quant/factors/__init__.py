@@ -1,5 +1,19 @@
 """Factor definition and future factor-engine boundary."""
 
+from serenity_alpha_lab.quant.factors.base_factors import (
+    BASE_FACTOR_APPLICABLE_MARKETS,
+    BASE_FACTOR_CATALOG_VERSION,
+    BASE_FACTOR_DATASET_VERSIONS,
+    BASE_FACTOR_DEFINITION_IDS,
+    BASE_FACTOR_EXPECTED_CATEGORIES,
+    BaseFactorCatalog,
+    BaseFactorCatalogError,
+    BaseFactorInputSpec,
+    BaseFactorSpec,
+    base_factor_catalog,
+    base_factor_definitions,
+    compile_base_factor_plans,
+)
 from serenity_alpha_lab.quant.factors.definitions import (
     FACTOR_DEFINITION_CONTRACT_VERSION,
     FACTOR_DEFINITION_SCHEMA_NAME,
@@ -32,6 +46,11 @@ from serenity_alpha_lab.quant.factors.dsl import (
 )
 
 __all__ = [
+    "BASE_FACTOR_APPLICABLE_MARKETS",
+    "BASE_FACTOR_CATALOG_VERSION",
+    "BASE_FACTOR_DATASET_VERSIONS",
+    "BASE_FACTOR_DEFINITION_IDS",
+    "BASE_FACTOR_EXPECTED_CATEGORIES",
     "FACTOR_DEFINITION_CONTRACT_VERSION",
     "FACTOR_DEFINITION_SCHEMA_NAME",
     "FACTOR_DEFINITION_SCHEMA_VERSION",
@@ -52,10 +71,17 @@ __all__ = [
     "FactorInput",
     "FactorInputKind",
     "FactorWindow",
+    "BaseFactorCatalog",
+    "BaseFactorCatalogError",
+    "BaseFactorInputSpec",
+    "BaseFactorSpec",
     "LocalFactorDefinitionRepository",
     "MissingValuePolicy",
     "MissingValueStrategy",
     "PostProcessingStep",
+    "base_factor_catalog",
+    "base_factor_definitions",
+    "compile_base_factor_plans",
     "compile_factor_definition",
     "compile_factor_expression",
 ]

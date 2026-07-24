@@ -1,3 +1,39 @@
+# SAL-P3-007 Base Factor Definitions Plan
+
+> Started: 2026-07-24
+> Scope: Complete `SAL-P3-007` by publishing the first base factor catalog with at least 15 versioned `FactorDefinition` drafts across quality, valuation, growth, momentum, volatility and liquidity. Use existing P2 Dataset Version semantics and the `SAL-P3-006` DSL compiler to verify formula plans against hand-authored references. Do not execute factor values, implement post-processing execution, Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, Quant Core, formal backtesting, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, `docs/ai-stock-quant-platform-development-plan.md`, `docs/gate-g0-baseline-review.md`, `docs/gate-g2-data-task-review.md`, `docs/alphasift-source-review.md`, `docs/alphasift-wheel-intake.md`, `docs/screening-provider-contract.md`, `docs/candidate-batch-contract.md`, `docs/factor-definition-version-model.md`, `docs/factor-dsl-operator-whitelist.md`, current Git status and recent commits.
+- [x] Add Red contract tests for a 15+ base factor catalog, categories, concrete Dataset Version references, direction/window/market metadata, formula compilation and hand-authored plan goldens.
+- [x] Implement `quant.factors.base_factors` with immutable catalog specs, `BaseFactorCatalog`, `base_factor_definitions()` and `compile_base_factor_plans()`.
+- [x] Export base-factor catalog symbols from `quant.factors`.
+- [x] Add `docs/base-factor-definitions.md` with factor table, formulas, data requirements, non-goals and verification evidence.
+- [x] Update progress checklist, development status, this review and next-session prompt.
+- [x] Run target, related, full, compile, lock, diff and immutable tag verification.
+- [x] Attempt independent code review or record tool fallback, then stage only `SAL-P3-007` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Every base factor must reference concrete `dsv_*` Dataset Version ids through `FactorInput`; `latest` remains forbidden.
+- Each factor must declare direction, category, applicable markets, data requirements, windows where relevant and hand-authored expected DSL plan metadata.
+- Formula validation is compile-only: compare DSL plan operators/lookback/inputs/dataset versions to references, but do not compute factor values.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-007
+
+- Added `src/serenity_alpha_lab/quant/factors/base_factors.py` with `base_factor_catalog@1.0.0`, `BaseFactorCatalog`, `BaseFactorSpec`, `BaseFactorInputSpec`, `base_factor_definitions()` and `compile_base_factor_plans()`.
+- Catalog contains exactly 15 factor definition drafts: 3 quality, 3 valuation, 3 growth, 2 momentum, 2 volatility and 2 liquidity factors.
+- Each definition uses concrete `dsv_*` references for `fundamentals_pit` and/or `adjusted_daily_bars`, declares direction, windows, applicable markets, data requirements and a hand-authored DSL reference plan.
+- Added `tests/quant/test_base_factor_definitions.py`; Red failed with missing base factor exports, Green target `4 passed`.
+- Added `docs/base-factor-definitions.md`, `DEC-054` and `AEV-056`; updated P3 progress to `7/17`, total progress to `56/129`, and moved `SAL-P3-008` to `READY`.
+- Final verification: target `4 passed`; factor-only related suite `21 passed`; related P3/Architecture suite `46 passed`; full pytest `276 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Review note: independent code-review subagent dispatch was still blocked by client payload validation (`Provide either message or items, but not both`). Local senior review checked diff scope, no-go boundaries, concrete Dataset Version guardrails, immutable metadata, DSL reference matching, public exports, docs/status consistency and unused imports; no Critical or Important issue found.
+- Scope retained: no factor value execution, post-processing execution, Factor Evaluation, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
+
+---
+
 # SAL-P3-006 Latest Status Refresh Plan
 
 > Started: 2026-07-24
