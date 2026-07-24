@@ -10,7 +10,7 @@
 > 最近可评审交付 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`；上一 checkpoint 为 `dd4e9465 feat(P3): 实现 Quant Screening API`<br>
 > 最新状态同步 checkpoint：`fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`；上一状态同步 checkpoint 为 `cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash`<br>
 > 本次实现 checkpoint：`847e5263 feat(P3): 实现 Screen Lab`；已完成任务范围推进至 `SAL-P3-015`<br>
-> 本次状态复核 checkpoint：提交后以最终回复和 `git log -1 --oneline` 为准；不改变已完成任务范围<br>
+> 最新状态复核 checkpoint：`3c19b937 docs: 复核 SAL-P3-015 最新开发状态`；本次用户提醒状态复核 checkpoint 提交后以最终回复和 `git log -1 --oneline` 为准；不改变已完成任务范围<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -115,6 +115,7 @@
 ## 当前决策与约束
 
 - 2026-07-25 完成 `SAL-P3-015` Screen Lab：新增 DSA Web extension patch `DSA-PATCH-004`、Screen Lab evidence 和状态登记；完成范围推进至 `SAL-P3-015`，当前唯一 `READY` 阶段任务为 `SAL-P3-016` 筛选性能与复现验收。`cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash` 是本次实现前最新已落地状态同步锚点。
+- 2026-07-25 已落地 `SAL-P3-015` 后状态复核 checkpoint `3c19b937 docs: 复核 SAL-P3-015 最新开发状态`；本次用户再次提醒仅补强恢复锚点和固定收尾习惯，不改变完成范围、Gate 结论或下一任务。
 - Gate G0、Gate G1 与 Gate G2 已通过（均为 `GO with accepted risks`）；Gate G3 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -286,7 +287,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-015
 - 最近完成：SAL-P3-015 Screen Lab
 - 最近可评审交付 checkpoint：847e5263 feat(P3): 实现 Screen Lab；上一 checkpoint 为 dd4e9465 feat(P3): 实现 Quant Screening API
-- 最新状态同步 checkpoint：fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash；本次状态复核 checkpoint 提交后以最终回复和 git log -1 --oneline 为准
+- 最新状态同步 checkpoint：fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash；最新状态复核 checkpoint：3c19b937 docs: 复核 SAL-P3-015 最新开发状态；本次用户提醒状态复核 checkpoint 提交后以最终回复和 git log -1 --oneline 为准
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 15/17，总计 64/129
 
 下一步优先执行：

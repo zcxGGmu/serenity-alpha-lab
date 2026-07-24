@@ -1,3 +1,27 @@
+# SAL-P3-015 Latest Status Refresh And Habit Reinforcement
+
+> Started: 2026-07-25
+> Scope: Refresh recovery documents after `SAL-P3-015` implementation/status checkpoints, make completed vs unfinished work explicit, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P3-016` implementation in this sync.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist anchors, current Git status and recent commits.
+- [x] Confirm latest implementation checkpoint `847e5263 feat(P3): 实现 Screen Lab`, latest landed status-sync checkpoint `fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`, and latest landed status-review checkpoint `3c19b937 docs: 复核 SAL-P3-015 最新开发状态`.
+- [x] Reconfirm completed scope through `SAL-P3-015`, unfinished scope from `SAL-P3-016`, Gate G3 not passed, and strict no-go boundaries.
+- [x] Update `docs/development-status.md`, `docs/development-progress-checklist.md`, this review, and `tasks/lessons.md` with the repeated habit reminder.
+- [x] Run status-anchor scans and `git diff --check`, then create the required Chinese status checkpoint commit.
+
+## Review: SAL-P3-015 Latest Status Refresh And Habit Reinforcement
+
+- Confirmed branch `codex/p0-baseline-status` was clean before edits and ahead of origin by 98 commits.
+- Confirmed latest log before edits: `3c19b937 docs: 复核 SAL-P3-015 最新开发状态`, `fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`, `847e5263 feat(P3): 实现 Screen Lab`.
+- Updated recovery status so the completed range remains explicit through `SAL-P3-015`, unfinished work begins at `SAL-P3-016`, and Gate G3 remains unpassed.
+- Updated next-session guidance so only `SAL-P3-016` is next; `SAL-P3-017`, Quant Core, formal backtest, Evidence Agent, real Provider/LLM, Worker loop and DSA runtime source migration remain out of scope.
+- Recorded the user reminder in `tasks/lessons.md`: every stage task must automatically end with state docs, progress checklist, evidence/risk/decision updates, `tasks/todo.md` review, latest checkpoint anchors and a copyable startup prompt.
+- Verification: status-anchor scan found `847e5263` / `fa0ba469` / `3c19b937`, `SAL-P3-016`, P3 `15/17` and total `64/129`; `git diff --check` PASS.
+
+---
+
 # SAL-P3-015 Screen Lab Plan
 
 > Started: 2026-07-25
