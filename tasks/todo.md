@@ -12,7 +12,7 @@
 - [x] Add `docs/factor-evaluation.md` with metric definitions, future-return window versioning, PIT/overlap guards, non-goals and verification evidence.
 - [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, this review and next-session prompt, including the actual `SAL-P3-008` checkpoint `dc23e769`.
 - [x] Run target, related, full, compile, lock, diff and immutable tag verification.
-- [ ] Attempt independent review or record tool fallback, then stage only `SAL-P3-009` files and create the required Chinese checkpoint commit.
+- [x] Attempt independent review or record tool fallback, then stage only `SAL-P3-009` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -31,6 +31,7 @@
 - Reports publish deterministic JSON through `ArtifactStore` with `produced_by_run_id` / `produced_by_stage_id`.
 - Added `tests/quant/test_factor_evaluation.py`; Red failed with missing `serenity_alpha_lab.quant.factors.evaluation`, Green target `4 passed`.
 - Added `docs/factor-evaluation.md`, `docs/superpowers/plans/2026-07-24-factor-evaluation.md`, `DEC-056` and `AEV-058`; updated P3 progress to `9/17`, total progress to `58/129`, moved `SAL-P3-010` and `SAL-P3-011` to `READY`, and backfilled `SAL-P3-008` checkpoint as `dc23e769`.
+- Implementation checkpoint: `fb7beb02 feat(P3): 实现 Factor Evaluation`; follow-up status-sync checkpoint title is `docs: 同步 SAL-P3-009 checkpoint hash`.
 - Final verification: target `4 passed`; factor related suite `29 passed`; related P3/Architecture suite `54 passed`; full pytest `284 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable `upstream/dsa-v3.26.1` remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Review note: attempted independent `code-reviewer` and `python-reviewer` subagents, but both remained running without findings inside the wait window and were closed. Local senior review checked diff scope, metric semantics, PIT guard, sample-overlap behavior, deterministic artifact output, exports, docs/status consistency and no-go boundaries; no Critical or Important issue found.
 - Scope retained: no factor execution, factor values Dataset publication, DAG/cache, Historical Universe, ScreenDefinition, ScreenSnapshot, Quant Screening API, Screen Lab, Quant Core/Qlib Adapter, formal backtest, Evidence Agent, real Provider/LLM call, Worker loop, DSA runtime source migration, dependency install surface change or tag movement.
