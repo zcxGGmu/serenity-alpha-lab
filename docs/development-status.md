@@ -8,7 +8,7 @@
 > 任务完成度：62/129<br>
 > 当前可执行任务：`SAL-P3-014` Quant Screening API，状态为 `READY`；仍不得启动 Quant Core、正式回测、Evidence Agent 或真实 Provider/LLM 调用<br>
 > 最近可评审交付 checkpoint：`10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`；上一 checkpoint 为 `b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline`<br>
-> 最新状态同步 checkpoint：本次状态同步提交，标题为 `docs: 同步 SAL-P3-013 checkpoint hash`；上一状态同步 checkpoint 为 `0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash`<br>
+> 最新状态同步 checkpoint：`e0ca42d9 docs: 同步 SAL-P3-013 checkpoint hash`；上一状态同步 checkpoint 为 `0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -275,7 +275,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-013
 - 最近完成：SAL-P3-013 ScreenSnapshot 与解释轨迹
 - 最近可评审交付 checkpoint：10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹；上一 checkpoint 为 b2d8df93 feat(P3): 实现 ScreenDefinition Pipeline
-- 最新状态同步 checkpoint：本次状态同步提交，标题为 docs: 同步 SAL-P3-013 checkpoint hash；上一状态同步 checkpoint 为 0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash
+- 最新状态同步 checkpoint：e0ca42d9 docs: 同步 SAL-P3-013 checkpoint hash；上一状态同步 checkpoint 为 0cb98fc5 docs: 同步 SAL-P3-012 checkpoint hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 13/17，总计 62/129
 
 下一步优先执行：

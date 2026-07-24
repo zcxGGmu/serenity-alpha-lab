@@ -1,3 +1,26 @@
+# SAL-P3-013 Status Refresh And Habit Reinforcement
+
+> Started: 2026-07-24
+> Scope: Refresh latest recovery docs after `SAL-P3-013` implementation/status checkpoints, make completed vs unfinished work explicit, record the repeated status-sync habit, and provide a copyable next-session prompt. Do not start `SAL-P3-014` implementation in this sync.
+
+## Checklist
+
+- [x] Confirm current Git status and latest checkpoints.
+- [x] Replace status-sync placeholder wording with actual checkpoint `e0ca42d9 docs: 同步 SAL-P3-013 checkpoint hash`.
+- [x] Reconfirm completed scope through `SAL-P3-013`, unfinished scope from `SAL-P3-014`, and strict no-go boundaries in recovery docs.
+- [x] Record the repeated habit reminder in `tasks/lessons.md`.
+- [x] Run status-anchor scans and `git diff --check`, then create the required Chinese status checkpoint commit.
+
+## Review: SAL-P3-013 Status Refresh
+
+- Confirmed latest implementation checkpoint: `10d97975 feat(P3): 实现 ScreenSnapshot 解释轨迹`.
+- Confirmed latest status-sync checkpoint: `e0ca42d9 docs: 同步 SAL-P3-013 checkpoint hash`.
+- Updated `docs/development-status.md` and `docs/development-progress-checklist.md` so next-session recovery can continue at `SAL-P3-014` without manually resolving placeholder commit text.
+- Updated `tasks/lessons.md` to preserve the rule that every stage task must end with status docs, progress ledger, evidence, `tasks/todo.md` review and a copyable startup prompt.
+- Scope retained: no `SAL-P3-014` implementation, no frontend, no Quant Core, no formal backtest, no Evidence Agent, no real Provider/LLM call, no Worker loop and no DSA runtime source migration.
+
+---
+
 # SAL-P3-013 ScreenSnapshot And Explanation Trace Plan
 
 > Started: 2026-07-24
