@@ -34,6 +34,7 @@
 - Code-review subagent dispatch was attempted for SAL-P4-013, but the host wrapper rejected both payload shapes as duplicate `message`/`items`; per lessons, fallback local senior review checked target-weight math, cash availability, created-order-only boundary, deterministic IDs, import boundaries and status anchors.
 - Verification: focused target `4 passed`; related Rebalance/AShareExecution/CostModel/PortfolioLedger/Order/BacktestSpec/ScreenSnapshot/Architecture suite `42 passed`; full pytest `372 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Implementation checkpoint: `876547f4 feat(P4): 实现调仓与目标权重`.
+- Status-sync checkpoint: `38c9e882 docs: 同步 SAL-P4-013 checkpoint hash`.
 
 ---
 
