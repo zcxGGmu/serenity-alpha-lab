@@ -14,10 +14,16 @@ Serenity root Python dependencies now use explicit install surfaces:
 | `core` | API, metadata, report rendering, LLM routing, data processing primitives, and DSA compatibility runtime basics. |
 | `providers` | Market/news/provider SDKs and API clients used by the inherited DSA provider chain. |
 | `desktop` | Bot/notification and local delivery SDKs needed by desktop or standalone user workflows. |
-| `quant` | Optional future quant stack (`polars`, `pyarrow`, `duckdb`, `pyqlib`) that is not installed by desktop/production requirements. |
+| `quant` | Optional quant stack (`polars`, `pyarrow`, `duckdb`, exact `pyqlib==0.9.7`) that is not installed by desktop/production requirements. |
 | `dev` | Test, lint, format, coverage, and security tooling. |
 
 `uv.lock` is the authoritative lock file. Root `requirements.txt` is a generated compatibility export for `core + providers + desktop`; it intentionally excludes `quant` and `dev`.
+
+## Qlib Handling
+
+`SAL-P4-005` locks Qlib as `pyqlib==0.9.7` in the optional `quant` extra only. This keeps Qlib available for the future dedicated Quant Worker while preserving the P1 production/Desktop surface: root `requirements.txt` is still generated from `core + providers + desktop` and does not contain `pyqlib`.
+
+Qlib runtime initialization remains prohibited in FastAPI, Desktop core, domain, application, dataset, provider and report paths. The worker-only policy is recorded in [Qlib 版本锁定与隔离方案](./qlib-version-isolation.md) and ADR-009.
 
 ## AlphaSift Handling
 

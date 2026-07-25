@@ -1,3 +1,40 @@
+# SAL-P4-005 Qlib Version And Isolation Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-005` by locking the Qlib/pyqlib dependency version, documenting license/platform/dependency evidence, and freezing the Quant Worker isolation/resource policy. Do not start formal portfolio backtest runs, Qlib runtime initialization, Ledger/Risk/Quant Lab, Evidence Agent, real Provider/LLM calls, Worker loop, or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/dsa-signal-evaluation-characterization.md`, `docs/signal-evaluation-engine.md`, `docs/backtest-spec.md`, `docs/backtest-artifact.md`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-qlib-version-isolation.md`.
+- [x] Add Red architecture tests for exact `pyqlib==0.9.7` quant extra pin, production/Desktop requirements exclusion, Qlib evidence docs, worker-only policy, no FastAPI/runtime import, and no formal backtest execution.
+- [x] Lock `pyproject.toml` quant extra to exact `pyqlib==0.9.7` and refresh `uv.lock` without adding Qlib to production `requirements.txt`.
+- [x] Add Qlib isolation policy module under `src/serenity_alpha_lab/integrations/qlib/` without importing Qlib.
+- [x] Add `docs/qlib-version-isolation.md` and ADR-009 with license, dependency, platform compatibility, upgrade/stop-use conditions, and Worker resource isolation.
+- [x] Update progress checklist/status docs with `SAL-P4-005` done, P4 `5/22`, total `71/129`, `DEC-069`, `AEV-071`, and `SAL-P4-006` READY but not started.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [ ] Review, stage only `SAL-P4-005` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Qlib is optional `quant` extra only; production/Desktop `requirements.txt` must continue to exclude `pyqlib`.
+- Qlib may be initialized only in a dedicated Quant Worker process after `run_id` / `stage_id` context exists; never in FastAPI import/startup or shared application/domain modules.
+- This task freezes version and isolation policy only; it must not convert datasets, invoke `qlib.init`, run Qlib workflows, create orders/fills, replay ledger, compute risk/metrics, expose backtest API, or start Worker loops.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation and Screen result must stay outside the formal portfolio backtest namespace.
+
+## Review: SAL-P4-005
+
+- Added `tests/architecture/test_qlib_version_isolation.py`; initial Red failed with missing exact pin/doc/ADR/policy module (`4 failed, 1 passed`), Green target now `5 passed`.
+- Updated `pyproject.toml` to lock `pyqlib==0.9.7` under optional `quant` only, refreshed `uv.lock`, and verified `scripts/verify-python-dependency-lock.sh` keeps production/Desktop `requirements.txt` free of `pyqlib`.
+- Added `src/serenity_alpha_lab/integrations/qlib/runtime_policy.py` and exports; the module imports no Qlib/FastAPI/SQLAlchemy runtime and freezes `worker-quant`, dedicated process, 2 CPU, 4096MB, 3600s timeout, 15s heartbeat and 300s checkpoint defaults.
+- Added `docs/qlib-version-isolation.md` and `docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md` documenting MIT license classifier, Python/platform wheel compatibility, direct dependencies, upgrade/stop-use conditions, and Qlib worker-only constraints.
+- Updated `docs/python-dependency-lock.md`, progress/status docs, `DEC-069`, `AEV-071`; `SAL-P4-006` is now READY but not started.
+- Verification: target `5 passed`; related Qlib/dependency/architecture suite `23 passed`; full pytest `335 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
+- Scope retained: no formal portfolio backtest run, no `qlib.init`, no Dataset-to-Qlib conversion, no Qlib Adapter, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint is created after final verification and should be confirmed with `git log -1 --oneline`.
+
+---
+
 # SAL-P4-004 BacktestArtifact Plan
 
 > Started: 2026-07-25
