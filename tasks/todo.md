@@ -1,3 +1,41 @@
+# SAL-P4-016 Unified Performance Metrics Plan
+
+> Started: 2026-07-26
+> Scope: Complete `SAL-P4-016` by implementing pure deterministic unified performance metrics for formal portfolio backtests. Compute returns, risk, drawdown, trading, turnover, cost, benchmark and industry exposure metrics with formula-version metadata, sample period, frequency, risk-free rate and annualization days. Do not start formal portfolio backtest runs, BacktestRun orchestration, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls, Qlib runtime or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, P4 evidence docs through `SAL-P4-015`, current Git status and recent commits.
+- [x] Attempt read-only subagent exploration for SAL-P4-016 boundaries; host wrapper rejected empty optional-field payloads, so fallback local senior review is active per project lessons.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-backtest-performance-metrics.md`.
+- [x] Add Red contract tests for formula registry, sample metadata, return/risk/drawdown metrics, trading/cost/benchmark/exposure metrics, invalid inputs and import boundary.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/metrics.py` with immutable DTOs, metric registry/formula versions, Decimal output quantization and stable report IDs.
+- [x] Export performance metric symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/backtest-performance-metrics.md` with scope, formulas, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-016` done, P4 `16/22`, total `82/129`, decision/evidence rows and `SAL-P4-017` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check and `git diff --check`.
+- [x] Review, stage only `SAL-P4-016` files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P4-016
+
+- Added `tests/quant/test_backtest_performance_metrics.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.metrics` (`1 error`), Green focused target is `3 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/metrics.py` and exported symbols from `quant.backtest`; the module defines `BacktestPerformanceMetricPolicy`, `BacktestMetricRegistry`, `BacktestMetricDefinition`, `BacktestEquityPoint`, `BacktestTurnoverObservation`, `BacktestTradeOutcome`, `BacktestIndustryExposurePoint`, `BacktestPerformanceMetricReport` and `BacktestPerformanceMetricCalculator`.
+- Metric registry freezes formula versions for cumulative/annualized return, volatility, Sharpe, Sortino, max drawdown, drawdown duration, Calmar, win rate, profit/loss ratio, turnover, cost ratio, tracking error, information ratio and industry exposure.
+- Reports explicitly record sample start/end, frequency, period count, annualization days, risk-free rate, metric set version and formula-version mapping; third-party reporting can consume platform outputs but cannot redefine metric formulas.
+- Scope retained: no formal portfolio backtest run, no BacktestRun orchestration, no Ledger/Risk/Audit mutation, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no Qlib runtime import and no legacy `/api/v1/backtest/*` drift.
+- Read-only subagent dispatch for SAL-P4-016 boundary exploration was attempted, but the host wrapper rejected empty optional-field payloads; per lessons, fallback local senior review checked metric formula definitions, sample metadata, cost/turnover binding, no-go scope and import boundary.
+- Local senior review found and fixed max drawdown peak-date attribution so later equity highs do not overwrite the peak date tied to the maximum drawdown; the focused contract test now asserts both peak and trough dates.
+- Verification: Red target `1 error`; focused target `3 passed`; related Metrics/BiasAudit/RiskPolicy/CostModel/PortfolioLedger/BacktestSpec/Architecture suite `34 passed`; full pytest `382 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Implementation checkpoint: pending this commit; follow-up status-sync checkpoint will record the actual hash.
+
+## Guardrails
+
+- Performance metrics are a pure calculation layer; they may consume `BacktestSpec`, explicit equity/benchmark points, `CostBreakdown`, turnover observations, closed trade outcomes and industry exposure observations, but must not run strategies, execute orders, mutate Ledger/Risk/Audit, orchestrate BacktestRun, expose API/UI, initialize Qlib or start Worker runtime.
+- Every report must carry sample period, frequency, annualization days, risk-free rate and formula versions.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+---
+
 # SAL-P4-015 Backtest Bias Audit Plan
 
 > Started: 2026-07-26

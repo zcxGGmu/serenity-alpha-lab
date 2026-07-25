@@ -1,16 +1,16 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-26<br>
-> 最近阶段性任务：`SAL-P4-015` 回测偏差审计<br>
+> 最近阶段性任务：`SAL-P4-016` 统一绩效指标<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P4 真实组合回测与确定性风控<br>
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：81/129<br>
-> 当前可执行任务：`SAL-P4-016` 实现统一绩效指标，状态为 `READY`；不得跳过 Metric/BacktestRun 直接启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：`c8331b3b feat(P4): 实现回测偏差审计`；上一 checkpoint 为 `c09dd889 feat(P4): 实现确定性 RiskPolicy`<br>
+> 任务完成度：82/129<br>
+> 当前可执行任务：`SAL-P4-017` 实现 BacktestRun 编排，状态为 `READY`；不得跳过 BacktestRun/资源控制/正式 API 等任务直接启动正式组合回测运行或 Quant Lab<br>
+> 最近可评审交付 checkpoint：本轮 `SAL-P4-016` 实现提交生成后回填；上一 checkpoint 为 `c8331b3b feat(P4): 实现回测偏差审计`<br>
 > 最新状态同步 checkpoint：`eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash`；上一状态同步 checkpoint 为 `87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash`；上一 hash-anchor checkpoint 为 `23d7d35d docs: 记录 SAL-P4-014 状态同步 hash`<br>
-> 本次实现 checkpoint：`c8331b3b feat(P4): 实现回测偏差审计`；已完成任务范围推进至 `SAL-P4-015`<br>
+> 本次实现 checkpoint：本轮 `SAL-P4-016` 实现提交生成后回填；已完成任务范围推进至 `SAL-P4-016`<br>
 > 最新最终锚点 checkpoint：`4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `8efd14dc docs: 固化 SAL-P4-014 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `287bdd6d docs: 复核 SAL-P4-014 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -118,18 +118,19 @@
 - 完成 `SAL-P4-013`：新增 [Rebalance And Target Weights](./rebalance-target-weights.md)、Quant Backtest [rebalance.py](../src/serenity_alpha_lab/quant/backtest/rebalance.py) 和 [rebalance target weights test](../tests/quant/test_rebalance_target_weights.py)，冻结 `RebalancePolicy`、`WeightingPolicy`、`ModelSignal`、`TargetWeight`、`SkippedRebalanceOrder`、`RebalancePlan` 和 `RebalanceOrderGenerator`；调仓层只输出 `OrderStatus.CREATED` 订单快照，买单只使用扣除 payables 与现金缓冲后的 settled cash，不把 receivables 或同次卖出 proceeds 视为可用现金；本任务不启动正式组合回测、成交/撮合、Ledger mutation、Risk/Metric/Audit/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `13/22`，总进度 `79/129`。
 - 完成 `SAL-P4-014`：新增 [Deterministic RiskPolicy](./risk-policy.md)、Quant Backtest [risk.py](../src/serenity_alpha_lab/quant/backtest/risk.py) 和 [RiskPolicy contract test](../tests/quant/test_risk_policy.py)，冻结 `DeterministicRiskPolicy`、`InstrumentRiskProfile`、`RiskRuleOutcome`、`RiskPolicyResult`、`RiskDecisionStatus`、`RiskRuleStatus` 和 `RiskPolicyEvaluator`；覆盖个股、行业、风格、流动性、换手和回撤规则，`not_evaluable` 默认使整体结果 `block`，且 `agent_override_allowed=false`；本任务不启动正式组合回测、偏差审计/绩效指标/BacktestRun/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `14/22`，总进度 `80/129`。
 - 完成 `SAL-P4-015`：新增 [Backtest Bias Audit](./backtest-bias-audit.md)、Quant Backtest [audit.py](../src/serenity_alpha_lab/quant/backtest/audit.py) 和 [Backtest Bias Audit contract test](../tests/quant/test_backtest_bias_audit.py)，冻结 `BacktestBiasAuditObservation`、`CostSensitivityScenario`、`BacktestBiasAuditPolicy`、`BiasAuditRuleOutcome`、`BacktestBiasAuditReport`、`BacktestBiasAuditStatus`、`BiasAuditRuleStatus` 和 `BacktestBiasAuditor`；自动检查前视、幸存者、PIT、样本重叠和成本敏感性，hard failure / not-evaluable 报告禁止进入排行榜和 Agent 强结论；本任务不启动正式组合回测、绩效指标/BacktestRun/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `15/22`，总进度 `81/129`。
+- 完成 `SAL-P4-016`：新增 [Backtest Performance Metrics](./backtest-performance-metrics.md)、Quant Backtest [metrics.py](../src/serenity_alpha_lab/quant/backtest/metrics.py) 和 [Backtest Performance Metrics contract test](../tests/quant/test_backtest_performance_metrics.py)，冻结 `BacktestPerformanceMetricPolicy`、`BacktestMetricRegistry`、`BacktestMetricDefinition`、`BacktestEquityPoint`、`BacktestTurnoverObservation`、`BacktestTradeOutcome`、`BacktestIndustryExposurePoint`、`BacktestPerformanceMetricReport` 和 `BacktestPerformanceMetricCalculator`；覆盖累计/年化收益、年化波动、Sharpe、Sortino、Calmar、最大回撤/持续期、胜率、盈亏比、换手、成本占比、tracking error、information ratio 和行业暴露，并记录样本期、频率、无风险利率、年化天数与公式版本；本任务不启动正式组合回测、BacktestRun 编排、Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `16/22`，总进度 `82/129`。
 
 ## 未完成
 
 ### 当前可执行 P4 任务
 
-- `SAL-P4-016` 当前为 `READY`：实现统一绩效指标，计算收益、风险、回撤、换手、成本和基准指标；不得跳过 Metric/BacktestRun 任务直接启动正式组合回测。
+- `SAL-P4-017` 当前为 `READY`：串联 Spec、Qlib/策略、Ledger、Risk、Audit、Metrics 和 Artifact；不得跳过 BacktestRun 编排、资源限制、正式 API 等任务直接启动 Quant Lab、Evidence Agent、真实 Provider/LLM 或正式组合回测推广。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P4 至 P6 仍有 48 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy 和回测偏差审计。但尚未完成 Metric、完整 Worker runtime、正式回测、Evidence Agent 或部署环境。
+- P4 至 P6 仍有 47 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计和统一绩效指标。但尚未完成 BacktestRun 编排、完整 Worker runtime、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -157,6 +158,7 @@
 - 2026-07-25 完成 `SAL-P4-013` 调仓与目标权重；新增 pure Quant Backtest rebalance planner、contract tests 和 evidence doc，定义 `RebalancePolicy`、`WeightingPolicy`、`ModelSignal`、`TargetWeight`、`SkippedRebalanceOrder`、`RebalancePlan`、`RebalanceOrderGenerator`、现金缓冲、单票权重上限、最小订单金额、交易单位、sell-before-buy ordering、created-order-only 输出和 concrete model version guard；当前唯一 `READY` 阶段任务为 `SAL-P4-014` 确定性 RiskPolicy。本任务不启动正式组合回测、市场执行/成交、Ledger mutation、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - 2026-07-26 完成 `SAL-P4-014` 确定性 RiskPolicy；新增 pure Quant Backtest risk policy evaluator、contract tests 和 evidence doc，定义 `DeterministicRiskPolicy`、`InstrumentRiskProfile`、`RiskRuleOutcome`、`RiskPolicyResult`、`RiskDecisionStatus`、`RiskRuleStatus` 和 `RiskPolicyEvaluator`；当前唯一 `READY` 阶段任务为 `SAL-P4-015` 回测偏差审计。本任务不启动正式组合回测、偏差审计实现、绩效指标、BacktestRun 编排、Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - 2026-07-26 完成 `SAL-P4-015` 回测偏差审计；新增 pure Quant Backtest bias auditor、contract tests 和 evidence doc，定义 `BacktestBiasAuditObservation`、`CostSensitivityScenario`、`BacktestBiasAuditPolicy`、`BiasAuditRuleOutcome`、`BacktestBiasAuditReport`、`BacktestBiasAuditStatus`、`BiasAuditRuleStatus` 和 `BacktestBiasAuditor`；当前唯一 `READY` 阶段任务为 `SAL-P4-016` 统一绩效指标。本任务不启动正式组合回测、绩效指标实现、BacktestRun 编排、Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
+- 2026-07-26 完成 `SAL-P4-016` 统一绩效指标；新增 pure Quant Backtest performance metric calculator、contract tests 和 evidence doc，定义 `BacktestPerformanceMetricPolicy`、`BacktestMetricRegistry`、`BacktestEquityPoint`、`BacktestPerformanceMetricReport` 和 `BacktestPerformanceMetricCalculator`；当前唯一 `READY` 阶段任务为 `SAL-P4-017` BacktestRun 编排。本任务不启动正式组合回测、BacktestRun 编排、Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -208,8 +210,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P4-016` 统一绩效指标，计算收益、风险、回撤、换手、成本和基准指标。
-2. 不得跳过 Metric/BacktestRun 等任务直接启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Risk/Quant Lab 或 Worker loop；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P4-017` BacktestRun 编排，串联 Spec、Qlib/策略、Ledger、Risk、Audit、Metrics 和 Artifact。
+2. 不得跳过 BacktestRun、资源控制、正式 API 等任务直接启动 Quant Lab、Evidence Agent、真实 Provider/LLM 或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；后续任务必须继续与 legacy `/api/v1/backtest/*` 兼容面隔离。
 
 ## 本次状态复核
@@ -336,24 +338,25 @@
 37. docs/rebalance-target-weights.md
 38. docs/risk-policy.md
 39. docs/backtest-bias-audit.md
-40. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
+40. docs/backtest-performance-metrics.md
+41. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
 
 随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-015
-- 最近完成：SAL-P4-015 回测偏差审计
-- 最近可评审交付 checkpoint：`c8331b3b feat(P4): 实现回测偏差审计`；上一 checkpoint：c09dd889 feat(P4): 实现确定性 RiskPolicy
-- 最新状态同步 checkpoint：87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash；上一状态同步 checkpoint：38c9e882 docs: 同步 SAL-P4-013 checkpoint hash
-- 最新状态同步 hash-anchor checkpoint：23d7d35d docs: 记录 SAL-P4-014 状态同步 hash；上一 hash-anchor checkpoint：fc311881 docs: 记录 SAL-P4-013 状态同步 hash
-- 最新最终锚点 checkpoint：8efd14dc docs: 固化 SAL-P4-014 hash-anchor checkpoint；上一最终锚点 checkpoint：4497a4e6 docs: 固化 SAL-P4-013 hash-anchor checkpoint；上一状态复核 checkpoint：8a96ddb8 docs: 复核 SAL-P4-013 最新开发状态与恢复提示
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 15/22，总计 81/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-016
+- 最近完成：SAL-P4-016 统一绩效指标
+- 最近可评审交付 checkpoint：本轮 `SAL-P4-016` 实现提交生成后回填；上一 checkpoint：c8331b3b feat(P4): 实现回测偏差审计
+- 最新状态同步 checkpoint：eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash；上一状态同步 checkpoint：87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash
+- 最新状态同步 hash-anchor checkpoint：3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash；上一 hash-anchor checkpoint：23d7d35d docs: 记录 SAL-P4-014 状态同步 hash
+- 最新最终锚点 checkpoint：4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint；上一最终锚点 checkpoint：8efd14dc docs: 固化 SAL-P4-014 hash-anchor checkpoint；上一状态复核 checkpoint：287bdd6d docs: 复核 SAL-P4-014 最新开发状态与恢复提示
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 16/22，总计 82/129
 
 下一步优先执行：
-1. SAL-P4-016 统一绩效指标，计算收益、风险、回撤、换手、成本和基准指标
-2. 不要跳过 Metric/BacktestRun 等任务直接启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Risk/Quant Lab 或 Worker loop；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+1. SAL-P4-017 BacktestRun 编排，串联 Spec、Qlib/策略、Ledger、Risk、Audit、Metrics 和 Artifact
+2. 不要跳过 BacktestRun、资源控制、正式 API 等任务直接启动 Quant Lab、Evidence Agent、真实 Provider/LLM 或正式组合回测推广；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；后续任务必须继续与 legacy /api/v1/backtest/* 兼容面隔离
 
 严格遵守 AGENTS.md：

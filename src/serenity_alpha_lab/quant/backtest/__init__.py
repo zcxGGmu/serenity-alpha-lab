@@ -5,7 +5,8 @@ BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
 accounting contract. SAL-P4-010 adds pure cost/slippage calculations.
 SAL-P4-011 adds pure A-share execution rules, SAL-P4-013 adds rebalance
 planning, SAL-P4-014 adds deterministic RiskPolicy evaluation, and SAL-P4-015
-adds deterministic bias audit. APIs are introduced by later P4 tasks.
+adds deterministic bias audit. SAL-P4-016 adds pure performance metrics. APIs
+are introduced by later P4 tasks.
 """
 
 from serenity_alpha_lab.quant.backtest.audit import (
@@ -85,6 +86,24 @@ from serenity_alpha_lab.quant.backtest.ledger import (
     PortfolioLedgerError,
     PositionLot,
 )
+from serenity_alpha_lab.quant.backtest.metrics import (
+    BACKTEST_PERFORMANCE_METRIC_CONTRACT_VERSION,
+    BACKTEST_PERFORMANCE_METRIC_ENGINE_VERSION,
+    BACKTEST_PERFORMANCE_METRIC_SCHEMA_NAME,
+    BACKTEST_PERFORMANCE_METRIC_SCHEMA_VERSION,
+    BACKTEST_PERFORMANCE_METRIC_SET_VERSION,
+    BacktestEquityPoint,
+    BacktestIndustryExposurePoint,
+    BacktestMetricDefinition,
+    BacktestMetricFrequency,
+    BacktestMetricRegistry,
+    BacktestPerformanceMetricCalculator,
+    BacktestPerformanceMetricError,
+    BacktestPerformanceMetricPolicy,
+    BacktestPerformanceMetricReport,
+    BacktestTradeOutcome,
+    BacktestTurnoverObservation,
+)
 from serenity_alpha_lab.quant.backtest.orders import (
     ORDER_STATE_MACHINE_CONTRACT_VERSION,
     ORDER_STATE_MACHINE_SCHEMA_NAME,
@@ -158,6 +177,11 @@ __all__ = [
     "BACKTEST_COST_MODEL_SCHEMA_NAME",
     "BACKTEST_COST_MODEL_SCHEMA_VERSION",
     "BACKTEST_COST_MODEL_VERSION",
+    "BACKTEST_PERFORMANCE_METRIC_CONTRACT_VERSION",
+    "BACKTEST_PERFORMANCE_METRIC_ENGINE_VERSION",
+    "BACKTEST_PERFORMANCE_METRIC_SCHEMA_NAME",
+    "BACKTEST_PERFORMANCE_METRIC_SCHEMA_VERSION",
+    "BACKTEST_PERFORMANCE_METRIC_SET_VERSION",
     "CORPORATE_ACTION_DATASET_SOURCE_SCHEMA",
     "CORPORATE_ACTION_LEDGER_PROCESSOR_CONTRACT_VERSION",
     "CORPORATE_ACTION_LEDGER_PROCESSOR_SCHEMA_NAME",
@@ -198,12 +222,23 @@ __all__ = [
     "BacktestBiasAuditor",
     "BacktestCostSpec",
     "BacktestDatasetSpec",
+    "BacktestEquityPoint",
     "BacktestExecutionSpec",
+    "BacktestIndustryExposurePoint",
+    "BacktestMetricDefinition",
+    "BacktestMetricFrequency",
+    "BacktestMetricRegistry",
     "BacktestOutputArtifact",
+    "BacktestPerformanceMetricCalculator",
+    "BacktestPerformanceMetricError",
+    "BacktestPerformanceMetricPolicy",
+    "BacktestPerformanceMetricReport",
     "BacktestRiskSpec",
     "BacktestSpec",
     "BacktestSpecError",
     "BacktestStrategySpec",
+    "BacktestTradeOutcome",
+    "BacktestTurnoverObservation",
     "BacktestUniverseSpec",
     "AShareExecutionAuditRecord",
     "AShareExecutionError",
