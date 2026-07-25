@@ -8,8 +8,8 @@
 > 任务完成度：77/129<br>
 > 当前可执行任务：`SAL-P4-012` 实现公司行动入账，状态为 `READY`；不得跳过公司行动/Risk/Metric/Audit 直接启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`30efc785 feat(P4): 实现 A 股执行规则`；上一 checkpoint 为 `e194984c feat(P4): 实现费用与滑点模型`<br>
-> 最新状态同步 checkpoint：本次状态同步提交生成后以 `git log -1 --oneline` 确认；上一状态同步 checkpoint 为 `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`<br>
-> 最新状态同步 hash-anchor checkpoint：`ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`；上一 hash-anchor checkpoint 为 `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`<br>
+> 最新状态同步 checkpoint：`7c1e214c docs: 同步 SAL-P4-011 checkpoint hash`；上一状态同步 checkpoint 为 `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`<br>
+> 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交生成后以 `git log -1 --oneline` 确认；上一 hash-anchor checkpoint 为 `ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`<br>
 > 本次实现 checkpoint：`30efc785 feat(P4): 实现 A 股执行规则`；已完成任务范围推进至 `SAL-P4-011`<br>
 > 最新状态复核 checkpoint：`b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -334,8 +334,8 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-011
 - 最近完成：SAL-P4-011 A 股执行规则
 - 最近可评审交付 checkpoint：30efc785 feat(P4): 实现 A 股执行规则；上一 checkpoint：e194984c feat(P4): 实现费用与滑点模型
-- 最新状态同步 checkpoint：本次状态同步提交生成后以 git log -1 --oneline 确认；上一状态同步 checkpoint：e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash
-- 最新状态同步 hash-anchor checkpoint：ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash；上一 hash-anchor checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash
+- 最新状态同步 checkpoint：7c1e214c docs: 同步 SAL-P4-011 checkpoint hash；上一状态同步 checkpoint：e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash
+- 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交生成后以 git log -1 --oneline 确认；上一 hash-anchor checkpoint：ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash
 - 最新状态复核 checkpoint：b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示；上一状态复核 checkpoint：1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示；上一最终锚点 checkpoint：3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 11/22，总计 77/129
 
