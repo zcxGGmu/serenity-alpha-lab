@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`800bef4e docs: 同步 SAL-P4-005 checkpoint hash`；上一状态同步 checkpoint 为 `87dae329 docs: 同步 SAL-P4-004 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`；上一 hash-anchor checkpoint 为 `5a955e18 docs: 记录 SAL-P4-004 状态同步 hash`<br>
 > 本次实现 checkpoint：`82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`；已完成任务范围推进至 `SAL-P4-005`<br>
-> 最新状态复核 checkpoint：本次 `docs: 复核 SAL-P4-005 最新开发状态与恢复提示` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一状态复核 checkpoint 为 `cec881a6 docs: 复核 SAL-P3-016 最新开发状态`<br>
+> 最新状态复核 checkpoint：`6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `cec881a6 docs: 复核 SAL-P3-016 最新开发状态`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -314,7 +314,7 @@
 - 最近可评审交付 checkpoint：82580fdb feat(P4): 锁定 Qlib 版本与隔离方案；上一 checkpoint：471e5857 feat(P4): 定义正式 BacktestArtifact
 - 最新状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash；上一状态同步 checkpoint：87dae329 docs: 同步 SAL-P4-004 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：ee5761ba docs: 记录 SAL-P4-005 状态同步 hash；上一 hash-anchor checkpoint：5a955e18 docs: 记录 SAL-P4-004 状态同步 hash
-- 最新状态复核 checkpoint：本次 `docs: 复核 SAL-P4-005 最新开发状态与恢复提示` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最新状态复核 checkpoint：6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示；上一状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 5/22，总计 71/129
 
 下一步优先执行：

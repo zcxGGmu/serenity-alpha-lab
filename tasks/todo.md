@@ -34,7 +34,7 @@
 - Implementation checkpoint: `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`.
 - Status-sync checkpoint: `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`.
-- Latest status refresh requested by the user is being committed as `docs: 复核 SAL-P4-005 最新开发状态与恢复提示`; it keeps `SAL-P4-006` as READY and does not start any forbidden runtime or formal portfolio backtest work.
+- Latest status refresh checkpoint: `6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`; it keeps `SAL-P4-006` as READY and did not start any forbidden runtime or formal portfolio backtest work.
 
 ---
 
