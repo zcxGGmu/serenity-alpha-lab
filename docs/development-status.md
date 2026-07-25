@@ -8,7 +8,7 @@
 > 任务完成度：70/129<br>
 > 当前可执行任务：`SAL-P4-005` 锁定 Qlib 版本与隔离方案，状态为 `READY`；不得启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`471e5857 feat(P4): 定义正式 BacktestArtifact`；上一 checkpoint 为 `1ecfaa2d feat(P4): 定义正式 BacktestSpec`<br>
-> 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P4-004 checkpoint hash` 提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `d23d5883 docs: 同步 SAL-P4-003 checkpoint hash`<br>
+> 最新状态同步 checkpoint：`87dae329 docs: 同步 SAL-P4-004 checkpoint hash`；上一状态同步 checkpoint 为 `d23d5883 docs: 同步 SAL-P4-003 checkpoint hash`<br>
 > 本次实现 checkpoint：`471e5857 feat(P4): 定义正式 BacktestArtifact`；已完成任务范围推进至 `SAL-P4-004`<br>
 > 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -305,7 +305,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-004
 - 最近完成：SAL-P4-004 定义 BacktestArtifact
 - 最近可评审交付 checkpoint：471e5857 feat(P4): 定义正式 BacktestArtifact；上一 checkpoint：1ecfaa2d feat(P4): 定义正式 BacktestSpec
-- 最新状态同步 checkpoint：本次 docs: 同步 SAL-P4-004 checkpoint hash 提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：d23d5883 docs: 同步 SAL-P4-003 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最新状态同步 checkpoint：87dae329 docs: 同步 SAL-P4-004 checkpoint hash；上一状态同步 checkpoint：d23d5883 docs: 同步 SAL-P4-003 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 4/22，总计 70/129
 
 下一步优先执行：
