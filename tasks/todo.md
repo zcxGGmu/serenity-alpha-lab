@@ -13,7 +13,7 @@
 - [x] Add `docs/portfolio-ledger.md` with scope, accounting semantics, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-009` done, P4 `9/22`, total `75/129`, decision/evidence rows and `SAL-P4-010` READY but not started.
 - [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
-- [ ] Review, stage only `SAL-P4-009` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-009` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -32,6 +32,7 @@
 - Code-review subagent dispatch was attempted, but the host wrapper rejected empty optional fields and then repeated the same schema rejection; per lessons, fallback local senior review checked accounting semantics, replay idempotency, order binding, scope guard and import boundary.
 - Verification: focused target `3 passed`; related suite `28 passed`; full pytest `355 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no fees/slippage model, no A-share execution rules, no corporate-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint: `18d6782d feat(P4): 实现 Portfolio Ledger`.
 
 ---
 
