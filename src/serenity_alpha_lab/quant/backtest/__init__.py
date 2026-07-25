@@ -2,10 +2,21 @@
 
 SAL-P4-003 defines the immutable BacktestSpec. SAL-P4-004 adds the compact
 BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
-accounting contract. Execution models, risk evaluation and APIs are introduced
-by later P4 tasks.
+accounting contract. SAL-P4-010 adds pure cost/slippage calculations. Execution
+models, risk evaluation and APIs are introduced by later P4 tasks.
 """
 
+from serenity_alpha_lab.quant.backtest.costs import (
+    BACKTEST_COST_MODEL_CONTRACT_VERSION,
+    BACKTEST_COST_MODEL_SCHEMA_NAME,
+    BACKTEST_COST_MODEL_SCHEMA_VERSION,
+    BACKTEST_COST_MODEL_VERSION,
+    CostBreakdown,
+    CostLineItem,
+    CostLineItemName,
+    CostModel,
+    CostModelError,
+)
 from serenity_alpha_lab.quant.backtest.artifacts import (
     BACKTEST_ARTIFACT_BUNDLE_CONTENT_TYPE,
     BACKTEST_ARTIFACT_BUNDLE_SCHEMA_NAME,
@@ -68,6 +79,10 @@ __all__ = [
     "BACKTEST_ARTIFACT_CONTRACT_VERSION",
     "BACKTEST_ARTIFACT_ENGINE_SCOPE",
     "BACKTEST_ARTIFACT_ENGINE_VERSION",
+    "BACKTEST_COST_MODEL_CONTRACT_VERSION",
+    "BACKTEST_COST_MODEL_SCHEMA_NAME",
+    "BACKTEST_COST_MODEL_SCHEMA_VERSION",
+    "BACKTEST_COST_MODEL_VERSION",
     "BACKTEST_SPEC_CONTRACT_VERSION",
     "BACKTEST_SPEC_ENGINE_VERSION",
     "BACKTEST_SPEC_SCHEMA_NAME",
@@ -91,6 +106,11 @@ __all__ = [
     "BacktestSpecError",
     "BacktestStrategySpec",
     "BacktestUniverseSpec",
+    "CostBreakdown",
+    "CostLineItem",
+    "CostLineItemName",
+    "CostModel",
+    "CostModelError",
     "ExecutionRecord",
     "LedgerEvent",
     "LedgerEventType",
