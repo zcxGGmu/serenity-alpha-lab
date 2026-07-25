@@ -31,7 +31,7 @@
 - Verification: target `2 passed`; related Gate/P3 suite `24 passed`; full pytest `312 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check reports `0001..0004` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
 - Review: code-review subagent dispatch was attempted three times, but the client rejected payloads with empty optional fields or `message`/`items` conflicts; fallback local senior review checked Gate scope, evidence coverage, executable contract assertions, status anchors, P4 entry constraints and staged-file boundaries.
 - Scope retained: no Quant Core/Qlib implementation, no formal backtest execution, no Evidence Agent, no real Provider/LLM calls, no Worker execution loop, no DSA runtime source migration, no dependency surface change and no tag movement.
-- Implementation checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`; a follow-up status-sync commit should replace placeholder checkpoint text with the actual hash.
+- Implementation checkpoint: `a1078532 docs(P3): 通过 Gate G3 筛选与因子评审`; follow-up status-sync checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
 
 ---
 
