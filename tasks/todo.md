@@ -15,7 +15,7 @@
 - [x] Add `docs/corporate-action-ledger-posting.md` with scope, accounting semantics, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-012` done, P4 `12/22`, total `78/129`, decision/evidence rows and `SAL-P4-013` READY but not started.
 - [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
-- [ ] Review, stage only `SAL-P4-012` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-012` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 

@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`c66555c3 docs: 同步 SAL-P4-012 checkpoint hash`；上一状态同步 checkpoint 为 `7c1e214c docs: 同步 SAL-P4-011 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`07263d73 docs: 记录 SAL-P4-012 状态同步 hash`；上一 hash-anchor checkpoint 为 `9acf345d docs: 记录 SAL-P4-011 状态同步 hash`<br>
 > 本次实现 checkpoint：`de50e5ff feat(P4): 实现公司行动入账`；已完成任务范围推进至 `SAL-P4-012`<br>
-> 最新状态复核 checkpoint：`b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`<br>
+> 最新最终锚点 checkpoint：`05acdb21 docs: 固化 SAL-P4-012 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `5756cba8 docs: 固化 SAL-P4-011 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -338,7 +338,7 @@
 - 最近可评审交付 checkpoint：de50e5ff feat(P4): 实现公司行动入账；上一 checkpoint：30efc785 feat(P4): 实现 A 股执行规则
 - 最新状态同步 checkpoint：c66555c3 docs: 同步 SAL-P4-012 checkpoint hash；上一状态同步 checkpoint：7c1e214c docs: 同步 SAL-P4-011 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：07263d73 docs: 记录 SAL-P4-012 状态同步 hash；上一 hash-anchor checkpoint：9acf345d docs: 记录 SAL-P4-011 状态同步 hash
-- 最新状态复核 checkpoint：b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示；上一状态复核 checkpoint：1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示；上一最终锚点 checkpoint：3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint
+- 最新最终锚点 checkpoint：05acdb21 docs: 固化 SAL-P4-012 hash-anchor checkpoint；上一最终锚点 checkpoint：5756cba8 docs: 固化 SAL-P4-011 hash-anchor checkpoint；上一状态复核 checkpoint：b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 12/22，总计 78/129
 
 下一步优先执行：
