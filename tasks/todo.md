@@ -1,3 +1,40 @@
+# SAL-P4-004 BacktestArtifact Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-004` by defining the formal `BacktestArtifact` output contract and compact bundle manifest. Do not run formal portfolio backtests, Evidence Agent, real Provider/LLM, Qlib, Ledger, Risk, Quant Lab or Worker loop. Legacy DSA Signal Evaluation, AlphaSift T+N evaluation and Screen result stay outside the formal portfolio backtest namespace.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/dsa-signal-evaluation-characterization.md`, `docs/signal-evaluation-engine.md`, `docs/backtest-spec.md`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-backtest-artifact.md`.
+- [x] Add Red contract tests for required orders/executions/positions/cash/equity/metrics/audit outputs, URI-only large result descriptors, preview/formal/partial/invalid states, deterministic bundle summary publishing and invalid contract rejection.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/artifacts.py` with immutable DTOs, validation, compact `to_record()`, deterministic JSON bytes and ArtifactStore publication.
+- [x] Export BacktestArtifact symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/backtest-artifact.md` with output schema map, state semantics, URI-only API boundary, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-004` done, P4 `4/22`, total `70/129`, `DEC-068`, `AEV-070`, and `SAL-P4-005` READY but not started.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-004` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- `BacktestArtifact` is only a formal portfolio backtest output contract; no order generation, fill matching, ledger replay, metrics computation, Qlib adapter, API, UI or Worker execution in this task.
+- Large tabular outputs must be represented by `ArtifactManifest`/URI plus schema, row count and content hash; API summaries must not embed full DataFrames or rows.
+- Bundle states must distinguish `preview`, `formal`, `partial` and `invalid`; invalid/partial bundles must carry explicit errors or warnings.
+- Legacy `/api/v1/backtest/*`, DSA Signal Evaluation, AlphaSift T+N evaluation and Screen results must not be named or treated as formal portfolio backtests.
+
+## Review: SAL-P4-004
+
+- Added `tests/quant/test_backtest_artifact.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.artifacts` (`1 error`), Green target now `3 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/artifacts.py` and exported symbols from `quant.backtest`; the module defines immutable `BacktestOutputArtifact`, `BacktestArtifactBundle`, required output kind/state enums, compact canonical JSON bytes and `ArtifactStore` publication.
+- Contract guards require orders/executions/positions/cash/equity_curve/metrics/audit descriptors, concrete `dsv_*` Dataset Versions, matching manifest/content hashes and valid `preview/formal/partial/invalid` state payloads; it rejects `legacy_signal_evaluation` engine scope.
+- Added `docs/backtest-artifact.md`, `DEC-068`, `AEV-070`; updated progress/status docs so `SAL-P4-004` is DONE, P4 is `4/22`, total is `70/129`, and `SAL-P4-005` is READY.
+- Verification: target `3 passed`; related P4/Architecture suite `15 passed`; full pytest `330 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Code-review subagent dispatch was attempted but the host wrapper repeatedly rejected `message`/`items` payload shape; fallback local senior review checked URI-only output boundaries, required output coverage, state validation, deterministic summary publishing, no execution entrypoints and no-go boundaries.
+- Scope retained: no formal portfolio backtest run, no Qlib runtime, no order generation/fill matching, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`; follow-up status-sync checkpoint will replace placeholder hash anchors.
+
+---
+
 # SAL-P4-003 BacktestSpec Plan
 
 > Started: 2026-07-25
