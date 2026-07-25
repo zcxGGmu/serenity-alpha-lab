@@ -36,6 +36,7 @@
 - Implementation checkpoint: `876547f4 feat(P4): 实现调仓与目标权重`.
 - Status-sync checkpoint: `38c9e882 docs: 同步 SAL-P4-013 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `fc311881 docs: 记录 SAL-P4-013 状态同步 hash`.
+- Final anchor checkpoint: `4497a4e6 docs: 固化 SAL-P4-013 hash-anchor checkpoint`.
 
 ---
 
