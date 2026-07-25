@@ -9,7 +9,7 @@
 - [x] Update `tasks/lessons.md` with the repeated status-refresh habit after `SAL-P4-007`.
 - [x] Update `docs/development-status.md` with completed/unfinished scope, latest checkpoint anchors, current READY task and next-session prompt.
 - [x] Update `docs/development-progress-checklist.md` next-step anchor with the same recoverable status.
-- [ ] Run status-anchor scan and `git diff --check`, then create the required Chinese status review checkpoint commit.
+- [x] Run status-anchor scan and `git diff --check`, then create the required Chinese status review checkpoint commit.
 
 ## Review: SAL-P4-007 Latest Status Refresh
 
@@ -18,7 +18,7 @@
 - Current completed scope is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, and `SAL-P4-001..007`; unfinished P4 work starts at `SAL-P4-008` Order state machine.
 - Current READY task is `SAL-P4-008`; this sync did not start `SAL-P4-008`, formal portfolio backtest, Qlib runtime, Ledger/Risk, Evidence Agent, Worker loop or real Provider/LLM calls.
 - Updated `tasks/lessons.md` to reinforce that every stage task must automatically finish with status docs, progress checklist, review notes, lessons when corrected, and a copyable next-session prompt.
-- Status review checkpoint: this commit will be confirmed with `git log -1 --oneline`, then synchronized into recovery docs if needed.
+- Status review checkpoint: `dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示`.
 
 ---
 
