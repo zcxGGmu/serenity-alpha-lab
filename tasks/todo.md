@@ -35,6 +35,7 @@
 - Verification: focused target `4 passed`; related Rebalance/AShareExecution/CostModel/PortfolioLedger/Order/BacktestSpec/ScreenSnapshot/Architecture suite `42 passed`; full pytest `372 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Implementation checkpoint: `876547f4 feat(P4): 实现调仓与目标权重`.
 - Status-sync checkpoint: `38c9e882 docs: 同步 SAL-P4-013 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `fc311881 docs: 记录 SAL-P4-013 状态同步 hash`.
 
 ---
 
