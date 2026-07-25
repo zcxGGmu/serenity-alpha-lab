@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`0ec68022 docs: 同步 SAL-P4-016 checkpoint hash`；上一状态同步 checkpoint 为 `eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`740fdf38 docs: 记录 SAL-P4-016 状态同步 hash`；上一 hash-anchor checkpoint 为 `3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash`<br>
 > 本次实现 checkpoint：`96101791 feat(P4): 实现统一绩效指标`；已完成任务范围推进至 `SAL-P4-016`<br>
-> 最新最终锚点 checkpoint：本轮 `SAL-P4-016` 最终锚点提交生成后回填；上一最终锚点 checkpoint 为 `4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `73309eea docs: 复核 SAL-P4-015 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`08f41390 docs: 固化 SAL-P4-016 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint`；最新状态复核 checkpoint：本轮 `SAL-P4-016` 状态复核提交生成后以最终回复和 `git log -1 --oneline` 确认；上一状态复核 checkpoint 为 `73309eea docs: 复核 SAL-P4-015 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -351,7 +351,7 @@
 - 最近可评审交付 checkpoint：96101791 feat(P4): 实现统一绩效指标；上一 checkpoint：c8331b3b feat(P4): 实现回测偏差审计
 - 最新状态同步 checkpoint：0ec68022 docs: 同步 SAL-P4-016 checkpoint hash；上一状态同步 checkpoint：eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：740fdf38 docs: 记录 SAL-P4-016 状态同步 hash；上一 hash-anchor checkpoint：3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash
-- 最新最终锚点 checkpoint：本轮 `SAL-P4-016` 最终锚点提交生成后回填；上一最终锚点 checkpoint：4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint；上一状态复核 checkpoint：73309eea docs: 复核 SAL-P4-015 最新开发状态与恢复提示
+- 最新最终锚点 checkpoint：08f41390 docs: 固化 SAL-P4-016 hash-anchor checkpoint；上一最终锚点 checkpoint：4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint；最新状态复核 checkpoint：本轮 `SAL-P4-016` 状态复核提交生成后以最终回复和 git log -1 --oneline 确认；上一状态复核 checkpoint：73309eea docs: 复核 SAL-P4-015 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 16/22，总计 82/129
 
 下一步优先执行：
