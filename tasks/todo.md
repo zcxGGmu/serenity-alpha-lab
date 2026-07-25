@@ -1,3 +1,40 @@
+# SAL-P3-017 Gate G3 Screen Factor Review Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P3-017` by reviewing and approving P3 Screen/Factor outputs as P4 inputs. Reuse all `SAL-P3-001..016` evidence, especially `docs/screen-performance-reproducibility.md`. Do not start Quant Core/Qlib implementation, formal backtest execution, Evidence Agent, real Provider/LLM calls, Worker execution loop or DSA runtime source migration.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P3 evidence docs, `docs/screen-performance-reproducibility.md`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-gate-g3-screen-factor-review.md`.
+- [x] Add Red Gate G3 tests for review document existence and executable offline contract coverage across AlphaSift, factors, screening, API, ProblemDetails, Trace, Artifact, Dataset/Manifest and Run/Stage/Event.
+- [x] Add `docs/gate-g3-screen-factor-review.md` with Gate conclusion, P3 task evidence matrix, pass/fail conditions, accepted risks and P4 entry constraints.
+- [x] Update `docs/development-progress-checklist.md` with `SAL-P3-017` done status, P3 `17/17`, total `66/129`, `DEC-064` and `AEV-066`.
+- [x] Update `docs/development-status.md` and this review with latest completed/unfinished ranges, checkpoint anchors and copyable next-session prompt.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Perform review, stage only `SAL-P3-017` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Gate G3 may approve Screen/Factor contracts as P4 inputs, but must not implement or execute Quant Core/Qlib, formal backtesting, Evidence Agent, real Provider/LLM calls or Worker runtime.
+- Approval must be grounded in `SAL-P3-001..016` evidence and must explicitly cover Screen Lab, Quant Screening API, ScreenSnapshot, ScreenDefinition Pipeline, CandidateBatch, FactorDefinition, Factor Evaluation, Dataset Catalog/Manifest, ProblemDetails, Trace, Artifact, Run/Stage/Event and performance/reproducibility.
+- Any data, bias or reproducibility gap must block affected ScreenDefinition versions from entering P4 formal backtest.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P3-017
+
+- Added `docs/gate-g3-screen-factor-review.md` with Gate G3 conclusion `GO with accepted risks`, P3 task evidence matrix, accepted risks, P4 entry constraints and explicit no-go boundaries.
+- Added `tests/gates/test_gate_g3_screen_factor_review.py`; Red failed on missing Gate G3 review doc (`1 failed, 1 passed`), Green target `2 passed`.
+- Executable Gate G3 test covers 15 base factors, Factor Evaluation Artifact, ScreenDefinition L0-L4 trace, ScreenSnapshot Artifact, performance/reproducibility report, Quant Screening API idempotency/replay/pagination, ProblemDetails trace, concrete Dataset Version guard and Run/Stage/Event lifecycle.
+- Updated `docs/development-progress-checklist.md`: `SAL-P3-017` is DONE, P3 is `17/17`, total progress is `66/129`, P4 is READY, `SAL-P4-001` is READY, `DEC-064` and `AEV-066` are registered.
+- Updated `docs/development-status.md` and next-session prompt to restore at P4/G4 with `SAL-P4-001` as the next task.
+- Verification: target `2 passed`; related Gate/P3 suite `24 passed`; full pytest `312 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check reports `0001..0004` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
+- Review: code-review subagent dispatch was attempted three times, but the client rejected payloads with empty optional fields or `message`/`items` conflicts; fallback local senior review checked Gate scope, evidence coverage, executable contract assertions, status anchors, P4 entry constraints and staged-file boundaries.
+- Scope retained: no Quant Core/Qlib implementation, no formal backtest execution, no Evidence Agent, no real Provider/LLM calls, no Worker execution loop, no DSA runtime source migration, no dependency surface change and no tag movement.
+- Implementation checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`; a follow-up status-sync commit should replace placeholder checkpoint text with the actual hash.
+
+---
+
 # SAL-P3-016 Screen Performance And Reproducibility Plan
 
 > Started: 2026-07-25

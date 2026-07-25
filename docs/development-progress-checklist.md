@@ -75,11 +75,11 @@
 | P0 上游接管 | 1 | DONE | 13/13 | G0 PASS | DSA 可重复基线、金标、SBOM |
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
-| P3 筛选与因子 | 6~9 | DOING | 16/17 | G3 | AlphaSift、Factor、Screen Lab |
-| P4 回测与风控 | 9~13 | TODO | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
+| P3 筛选与因子 | 6~9 | DONE | 17/17 | G3 PASS | AlphaSift、Factor、Screen Lab |
+| P4 回测与风控 | 9~13 | READY | 0/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **65/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **66/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -934,18 +934,21 @@ P0 基线
 
 ### SAL-P3-017 Gate G3：筛选与因子评审
 
-- [ ] [READY] 批准 Screen/Factor 成为回测输入
-- 元数据：优先级 P0 | 负责人 TL/QE/RE | 估算 0.5d | 实际 - | 依赖 SAL-P3-001..016
+- [x] [DONE] 批准 Screen/Factor 成为回测输入
+- 元数据：优先级 P0 | 负责人 TL/QE/RE | 估算 0.5d | 实际 0.5d | 依赖 SAL-P3-001..016 | 开始 2026-07-25 | 完成 2026-07-25
 - 交付物：Gate 记录、因子口径签字、筛选金标。
 - 验收：
   - 15+ 因子、AlphaSift 契约、历史股票池、解释轨迹和性能全部通过。
   - 未通过数据/偏差检查的 Screen 不得进入 P4 正式回测。
+- 结果：Gate G3 评审结论为 `GO with accepted risks`。P3 AlphaSift、因子与股票筛选完成 `17/17`，允许进入 P4；新增 [Gate G3 筛选与因子评审](./gate-g3-screen-factor-review.md) 和 [Gate G3 integration test](../tests/gates/test_gate_g3_screen_factor_review.py)，复核 `SAL-P3-001` 至 `SAL-P3-016` 全部证据。
+- 批准范围：只批准 Screen/Factor 契约作为 P4 输入；不启动 Quant Core/Qlib、不执行正式回测、不启动 Evidence Agent、不调用真实 Provider/LLM、不启动 Worker execution loop、不迁移 DSA runtime source。
+- 验收证据：Red Gate test 初始缺少 `docs/gate-g3-screen-factor-review.md` 时 `1 failed, 1 passed`；补齐 Gate 记录后 target `2 passed`；完整验证记录见 AEV-066。
 
 ## 7. Phase 4：真实组合回测与确定性风控
 
 ### SAL-P4-001 锁定 DSA Signal Evaluation 行为
 
-- [ ] [TODO] 补齐当前 `BacktestEngine` Characterization 和 API 金标
+- [ ] [READY] 补齐当前 `BacktestEngine` Characterization 和 API 金标
 - 元数据：优先级 P0 | 负责人 QE/BE | 估算 1.5d | 实际 - | 依赖 SAL-P3-017
 - 交付物：固定信号、T+N 收益、止盈止损和汇总 fixture。
 - 验收：
@@ -1651,6 +1654,7 @@ P0 基线
 | DEC-061 | 2026-07-24 | Quant Screening API 契约口径 | 采用 `application.quant_screening_api` 冻结 `application.quant_screening_api@1.0.0` framework-neutral API 契约；`QUANT_SCREENING_API_ROUTES` 描述 `/api/v1/quant` factor/screen definition、screen run、result 和 comparison endpoint 形状；screen run 创建必须提供 `Idempotency-Key`，相同 request hash replay 同一 `202` 响应，不同 hash 拒绝；结果查询只读取既有 `ScreenSnapshot` 并稳定分页，所有响应显式携带 as-of、具体 Dataset Version、schema、trace/run/stage 和 Artifact 锚点；本任务不注册真实 FastAPI router、不执行真实筛选、不启动 Worker loop | [quant-screening-api.md](./quant-screening-api.md); [quant_screening_api.py](../src/serenity_alpha_lab/application/quant_screening_api.py); [test_quant_screening_api.py](../tests/application/test_quant_screening_api.py) | SAL-P3-014,SAL-P3-015,SAL-P3-017 | G3 |
 | DEC-062 | 2026-07-25 | Screen Lab UI extension 口径 | 采用 DSA Web extension patch `DSA-PATCH-004` 交付 `/screen-lab`，Screen Lab 只消费 `SAL-P3-014` Quant Screening API，不调用 legacy AlphaSift endpoint 作为页面数据源；UI 必须展示 ScreenSnapshot/ScreenDefinition/Dataset/Trace/Artifact lineage，覆盖 Draft/Published、Snapshot/History、Preview/Formal 和 loading/empty/partial/stale/error/permission 状态；本任务不执行筛选、不接入 Worker、不启动正式回测 | [screen-lab.md](./screen-lab.md); [upstream-patches.md](./upstream-patches.md); [0004-add-screen-lab.patch](../patches/dsa/v3.26.1/0004-add-screen-lab.patch) | SAL-P3-015,SAL-P3-016,SAL-P3-017 | G3 |
 | DEC-063 | 2026-07-25 | 筛选性能与复现验收口径 | 采用 `quant.screening.performance` 冻结 `quant.screen_performance@1.0.0`；P3 SLO 记录普通筛选 `<=3,000ms`、缓存/结果查询 `<=500ms`、峰值内存 `<=512MB`、结果行 `<=6,000`、增量重算比例 `<=15%`；canonical result hash 只绑定代码版本、engine version、`sdv_*` ScreenDefinition、`as_of`、具体 `dsv_*` Dataset Version 和 `ScreenSnapshot.results`，不绑定 wall-clock 或 trace/run/stage；Fixed Run Bundle 保留 snapshot/pipeline/artifact/trace 锚点供审计；本任务不执行真实全市场 Provider/LLM、Worker loop、Quant Core 或正式回测 | [screen-performance-reproducibility.md](./screen-performance-reproducibility.md); [performance.py](../src/serenity_alpha_lab/quant/screening/performance.py); [test_screen_performance_reproducibility.py](../tests/quant/test_screen_performance_reproducibility.py) | SAL-P3-016,SAL-P3-017 | G3 |
+| DEC-064 | 2026-07-25 | Gate G3 筛选与因子评审 | `GO with accepted risks`：P3 Screen/Factor 契约批准作为 P4 输入，P4 可从 `SAL-P4-001` 开始；Gate 复核 AlphaSift intake、ScreeningProvider、CandidateBatch、FactorDefinition/DSL/base factors/post-processing/evaluation/DAG/cache、Historical Universe、ScreenDefinition Pipeline、ScreenSnapshot、Quant Screening API、Screen Lab、性能复现、Dataset Catalog/Manifest、ProblemDetails、Trace、Artifact 和 Run/Stage/Event；本 Gate 不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM、Worker loop 或 DSA runtime source migration | [gate-g3-screen-factor-review.md](./gate-g3-screen-factor-review.md); [test_gate_g3_screen_factor_review.py](../tests/gates/test_gate_g3_screen_factor_review.py); [screen-performance-reproducibility.md](./screen-performance-reproducibility.md) | SAL-P3-017,SAL-P4-001,SAL-P4-003 | G4 |
 
 ## 14. 验收证据登记
 
@@ -1721,6 +1725,7 @@ P0 基线
 | AEV-063 | SAL-P3-014 | Quant Screening API route metadata、Idempotency-Key、202 Run 响应、分页结果和 comparison 测试记录 | [quant-screening-api.md](./quant-screening-api.md); [quant_screening_api.py](../src/serenity_alpha_lab/application/quant_screening_api.py); [test_quant_screening_api.py](../tests/application/test_quant_screening_api.py); [screen-snapshot-explanation-trace.md](./screen-snapshot-explanation-trace.md); [screen-definition-pipeline.md](./screen-definition-pipeline.md); [factor-evaluation.md](./factor-evaluation.md) | Red contract test failed with missing `serenity_alpha_lab.application.quant_screening_api`; Green target `5 passed`; related QuantScreeningAPI/ScreenSnapshot/ScreenDefinition/FactorEvaluation/FactorDefinition/TaskBackend/APIErrors/Trace/Architecture suite `45 passed`; full pytest `307 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; implementation checkpoint `dd4e9465`; contract covers `/api/v1/quant` route metadata、FactorDefinition/ScreenDefinition create responses、required Idempotency-Key、same-request replay、conflicting-key rejection、queued TaskBackend command、stable cursor pagination、single-result lookup、as-of/dataset/schema/trace output、ScreenSnapshot comparison and ProblemDetails validation boundary; no Screen Lab UI、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | BE/QE | 2026-07-24 |
 | AEV-064 | SAL-P3-015 | Screen Lab UI、Quant Screening API client、DSA extension patch 和 full web/Python 验证记录 | [screen-lab.md](./screen-lab.md); [upstream-patches.md](./upstream-patches.md); [0004-add-screen-lab.patch](../patches/dsa/v3.26.1/0004-add-screen-lab.patch); [2026-07-25-screen-lab.md](./superpowers/plans/2026-07-25-screen-lab.md) | Red API test failed with missing `src/api/quantScreening.ts`; Red page test failed with missing `ScreenLabPage`; Red route test failed before `/screen-lab` route was wired; Green focused web `4 files / 24 passed`; full web Vitest `92 files / 973 passed / 2 skipped`; `npm run lint` PASS; `npm run build` PASS after TypeScript optional narrowing fix; related Python suite `25 passed`; full pytest `307 passed, 3 skipped`; compileall PASS; dependency lock guard PASS; patch check `0001..0004` already applied; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; no legacy AlphaSift Screen Lab data source、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | FE/QE | 2026-07-25 |
 | AEV-065 | SAL-P3-016 | 筛选性能预算、内存/增量 baseline、canonical result hash、Fixed Run Bundle 和 deterministic report Artifact 测试记录 | [screen-performance-reproducibility.md](./screen-performance-reproducibility.md); [performance.py](../src/serenity_alpha_lab/quant/screening/performance.py); [test_screen_performance_reproducibility.py](../tests/quant/test_screen_performance_reproducibility.py); [screen-lab.md](./screen-lab.md); [quant-screening-api.md](./quant-screening-api.md); [screen-snapshot-explanation-trace.md](./screen-snapshot-explanation-trace.md) | Initial Red exposed an existing circular import through `application.__init__` / `quant.screening.pipeline`; fixed by lazy Quant Screening API exports and verified direct imports; Red then failed with missing `serenity_alpha_lab.quant.screening.performance`; Green target `3 passed`; related ScreenPerformance/ScreenSnapshot/ScreenDefinition/QuantScreeningAPI/TaskBackend/APIErrors/Trace/Architecture suite `41 passed`; full pytest `310 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0004` already applied; immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS; local review fixed observed `result_row_count` to use ScreenSnapshot rows; contract covers default A-share screening SLO budget、stage timing/memory samples、incremental recompute ratio、concrete Dataset Version rejection、canonical result hash independent of trace/run/stage、result drift failure codes、fixed Run Bundle and deterministic performance report Artifact publication; no SAL-P3-017、Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | QE/BE | 2026-07-25 |
+| AEV-066 | SAL-P3-017 / Gate G3 | Gate G3 筛选与因子评审、离线合成 Screen/Factor 输入和 P4 入口约束验证记录 | [gate-g3-screen-factor-review.md](./gate-g3-screen-factor-review.md); [test_gate_g3_screen_factor_review.py](../tests/gates/test_gate_g3_screen_factor_review.py); [screen-performance-reproducibility.md](./screen-performance-reproducibility.md); [factor-evaluation.md](./factor-evaluation.md); [screen-definition-pipeline.md](./screen-definition-pipeline.md); [quant-screening-api.md](./quant-screening-api.md) | Red Gate test failed with missing `docs/gate-g3-screen-factor-review.md`; Green target `2 passed`; executable gate covers 15 base factors、Factor Evaluation Artifact、ScreenDefinition L0-L4 stage trace、ScreenSnapshot Artifact、performance/reproducibility report、Quant Screening API idempotency/replay/pagination、ProblemDetails trace、Dataset Version guard 和 Run/Stage/Event lifecycle; no Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | TL/QE/RE | 2026-07-25 |
 
 允许的证据：
 
@@ -1758,4 +1763,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-016`，完成度为 65/129；最近阶段性任务为 `SAL-P3-016` 筛选性能与复现验收；最近实现 checkpoint 为 `e7569c83 feat(P3): 实现筛选性能与复现验收`，上一可评审交付 checkpoint 为 `847e5263 feat(P3): 实现 Screen Lab`；最新状态同步 checkpoint 为 `4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash`，上一状态同步 checkpoint 为 `fa0ba469 docs: 同步 SAL-P3-015 checkpoint hash`，本次状态复核 checkpoint 提交后以 `git log -1 --oneline` 和最终回复为准，上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`。Gate G0、G1、G2 已通过（均为 `GO with accepted risks`），Gate G3 未通过。下一步优先执行 `SAL-P3-017` Gate G3：筛选与因子评审；后续实现必须遵守 ADR-001/002、Gate G1/G2 和 P3 入口约束，不得提前启动 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider/LLM 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017`，完成度为 66/129；最近阶段性任务为 `SAL-P3-017` Gate G3：筛选与因子评审；最近实现 checkpoint 将由本次中文 checkpoint 提交生成，上一可评审交付 checkpoint 为 `e7569c83 feat(P3): 实现筛选性能与复现验收`；最新状态同步 checkpoint 提交后以最终回复和 `git log -1 --oneline` 为准，上一状态同步 checkpoint 为 `4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash`，最新状态复核 checkpoint 为 `cec881a6 docs: 复核 SAL-P3-016 最新开发状态`。Gate G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）。下一步优先执行 `SAL-P4-001` 锁定 DSA Signal Evaluation 行为；后续实现必须遵守 ADR-001/002、Gate G1/G2/G3 和 P4 入口约束，不得提前启动未定义的 Quant Core、正式回测、Evidence Agent、未经批准的大规模 DSA 源码迁移，且真实 Provider/LLM 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
