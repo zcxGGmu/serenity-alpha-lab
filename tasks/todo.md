@@ -32,7 +32,8 @@
 - Read-only subagent dispatch for SAL-P4-011 boundary exploration was attempted twice, but the host wrapper rejected empty optional fields; per lessons, fallback local senior review checked BacktestExecutionSpec reuse, order/cost binding, ledger/orchestration boundary, no-go scope and import boundary.
 - Verification: Red target `1 error`; focused target `6 passed`; related AShareExecution/CostModel/Order/PortfolioLedger/BacktestSpec/Architecture suite `35 passed`; full pytest `365 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan found only historical SAL-P4-010 review text plus current SAL-P4-011/SAL-P4-012 anchors; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no company-action processor, no strategy-order generation, no ledger mutation, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
-- Implementation checkpoint: pending this commit.
+- Implementation checkpoint: `30efc785 feat(P4): 实现 A 股执行规则`.
+- Status-sync checkpoint: pending this status-sync commit.
 
 ---
 
