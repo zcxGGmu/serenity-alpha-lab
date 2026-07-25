@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-25: SAL-P4-005 后状态复核必须记录 hash-anchor 与可复制提示词
+
+- 纠正来源：`SAL-P4-005` 实现 checkpoint `82580fdb`、状态同步 checkpoint `800bef4e` 和状态同步 hash-anchor `ee5761ba` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使已经完成实现提交、状态同步提交和 hash-anchor 提交，如果 `docs/development-status.md` 的最新状态复核仍停留在更早的 P3 checkpoint，或下次启动提示词没有列出最新 hash-anchor，下次恢复时仍会误以为状态同步不完整。
+- 规则：每个阶段性任务完成后，必须把最近实现 checkpoint、最新状态同步 checkpoint、最新 hash-anchor checkpoint、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词同时写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；用户再次提醒该习惯时，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-006` 开始，完成阶段任务后自动完成实现/验证/证据/状态/lessons/恢复提示词收尾；最终回复必须直接给出最新实现 checkpoint、状态同步或状态复核 checkpoint、hash-anchor checkpoint 和完整下次启动提示词。
+
 ## 2026-07-25: SAL-P3-015 后状态复核必须保留最新已落地复核 checkpoint
 
 - 纠正来源：`SAL-P3-015` 实现 checkpoint `847e5263`、状态同步 checkpoint `fa0ba469` 与状态复核 checkpoint `3c19b937` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。

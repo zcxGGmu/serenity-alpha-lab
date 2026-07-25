@@ -9,8 +9,9 @@
 > 当前可执行任务：`SAL-P4-006` 实现 Dataset 到 Qlib 转换，状态为 `READY`；不得启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`；上一 checkpoint 为 `471e5857 feat(P4): 定义正式 BacktestArtifact`<br>
 > 最新状态同步 checkpoint：`800bef4e docs: 同步 SAL-P4-005 checkpoint hash`；上一状态同步 checkpoint 为 `87dae329 docs: 同步 SAL-P4-004 checkpoint hash`<br>
+> 最新状态同步 hash-anchor checkpoint：`ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`；上一 hash-anchor checkpoint 为 `5a955e18 docs: 记录 SAL-P4-004 状态同步 hash`<br>
 > 本次实现 checkpoint：`82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`；已完成任务范围推进至 `SAL-P4-005`<br>
-> 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
+> 最新状态复核 checkpoint：本次 `docs: 复核 SAL-P4-005 最新开发状态与恢复提示` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一状态复核 checkpoint 为 `cec881a6 docs: 复核 SAL-P3-016 最新开发状态`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -131,6 +132,7 @@
 - 2026-07-25 完成 `SAL-P4-003` 正式 `BacktestSpec` 定义；BacktestSpec contract、canonical hash、具体 Dataset/Universe/Screen/Factor/code hash guard、legacy Signal Evaluation 拒绝和 same-bar close 执行拒绝均通过验证；当前唯一 `READY` 阶段任务为 `SAL-P4-004` 定义 `BacktestArtifact`。
 - 2026-07-25 完成 `SAL-P4-004` 正式 `BacktestArtifact` 定义；BacktestArtifact contract、订单/成交/持仓/现金/净值/指标/审计 required output descriptors、URI-only 大结果边界、compact bundle summary Artifact、状态语义、具体 Dataset Version guard、manifest/hash guard 和 legacy Signal Evaluation scope 拒绝均通过验证；当前唯一 `READY` 阶段任务为 `SAL-P4-005` 锁定 Qlib 版本与隔离方案。
 - 2026-07-25 完成 `SAL-P4-005` Qlib 版本锁定与隔离方案；`pyqlib==0.9.7` 仅在 optional `quant` extra 中启用，生产/Desktop requirements 继续排除 Qlib，ADR-009 明确 Qlib 只能由后续 Quant Worker Adapter 在 dedicated process 内 lazy import/initialize；当前唯一 `READY` 阶段任务为 `SAL-P4-006` Dataset 到 Qlib 转换。
+- 2026-07-25 按用户要求再次复核 `SAL-P4-005` 后最新开发状态；确认最近实现 checkpoint 为 `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`，最新状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`，最新状态同步 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..005`，未完成范围从 `SAL-P4-006` 开始，当前 READY 任务为 `SAL-P4-006` Dataset 到 Qlib 转换，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步、记录 hash-anchor 并给出可复制提示词”的习惯。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -302,7 +304,7 @@
 29. docs/qlib-version-isolation.md
 30. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
 
-随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
+随后执行 git status --short --branch 和 git log -5 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
@@ -310,7 +312,9 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-005
 - 最近完成：SAL-P4-005 锁定 Qlib 版本与隔离方案
 - 最近可评审交付 checkpoint：82580fdb feat(P4): 锁定 Qlib 版本与隔离方案；上一 checkpoint：471e5857 feat(P4): 定义正式 BacktestArtifact
-- 最新状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash；上一状态同步 checkpoint：87dae329 docs: 同步 SAL-P4-004 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最新状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash；上一状态同步 checkpoint：87dae329 docs: 同步 SAL-P4-004 checkpoint hash
+- 最新状态同步 hash-anchor checkpoint：ee5761ba docs: 记录 SAL-P4-005 状态同步 hash；上一 hash-anchor checkpoint：5a955e18 docs: 记录 SAL-P4-004 状态同步 hash
+- 最新状态复核 checkpoint：本次 `docs: 复核 SAL-P4-005 最新开发状态与恢复提示` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 5/22，总计 71/129
 
 下一步优先执行：
