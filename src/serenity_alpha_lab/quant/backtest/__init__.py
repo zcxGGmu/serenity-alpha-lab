@@ -4,10 +4,25 @@ SAL-P4-003 defines the immutable BacktestSpec. SAL-P4-004 adds the compact
 BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
 accounting contract. SAL-P4-010 adds pure cost/slippage calculations.
 SAL-P4-011 adds pure A-share execution rules, SAL-P4-013 adds rebalance
-planning, and SAL-P4-014 adds deterministic RiskPolicy evaluation. APIs are
-introduced by later P4 tasks.
+planning, SAL-P4-014 adds deterministic RiskPolicy evaluation, and SAL-P4-015
+adds deterministic bias audit. APIs are introduced by later P4 tasks.
 """
 
+from serenity_alpha_lab.quant.backtest.audit import (
+    BACKTEST_BIAS_AUDIT_CONTRACT_VERSION,
+    BACKTEST_BIAS_AUDIT_SCHEMA_NAME,
+    BACKTEST_BIAS_AUDIT_SCHEMA_VERSION,
+    BACKTEST_BIAS_AUDITOR_VERSION,
+    BacktestBiasAuditError,
+    BacktestBiasAuditObservation,
+    BacktestBiasAuditPolicy,
+    BacktestBiasAuditReport,
+    BacktestBiasAuditStatus,
+    BacktestBiasAuditor,
+    BiasAuditRuleOutcome,
+    BiasAuditRuleStatus,
+    CostSensitivityScenario,
+)
 from serenity_alpha_lab.quant.backtest.corporate_actions import (
     CORPORATE_ACTION_DATASET_SOURCE_SCHEMA,
     CORPORATE_ACTION_LEDGER_PROCESSOR_CONTRACT_VERSION,
@@ -135,6 +150,10 @@ __all__ = [
     "BACKTEST_ARTIFACT_CONTRACT_VERSION",
     "BACKTEST_ARTIFACT_ENGINE_SCOPE",
     "BACKTEST_ARTIFACT_ENGINE_VERSION",
+    "BACKTEST_BIAS_AUDIT_CONTRACT_VERSION",
+    "BACKTEST_BIAS_AUDIT_SCHEMA_NAME",
+    "BACKTEST_BIAS_AUDIT_SCHEMA_VERSION",
+    "BACKTEST_BIAS_AUDITOR_VERSION",
     "BACKTEST_COST_MODEL_CONTRACT_VERSION",
     "BACKTEST_COST_MODEL_SCHEMA_NAME",
     "BACKTEST_COST_MODEL_SCHEMA_VERSION",
@@ -171,6 +190,12 @@ __all__ = [
     "BacktestArtifactError",
     "BacktestArtifactKind",
     "BacktestArtifactState",
+    "BacktestBiasAuditError",
+    "BacktestBiasAuditObservation",
+    "BacktestBiasAuditPolicy",
+    "BacktestBiasAuditReport",
+    "BacktestBiasAuditStatus",
+    "BacktestBiasAuditor",
     "BacktestCostSpec",
     "BacktestDatasetSpec",
     "BacktestExecutionSpec",
@@ -188,6 +213,8 @@ __all__ = [
     "AShareExecutionStatus",
     "AShareMarketSnapshot",
     "ASharePositionAvailability",
+    "BiasAuditRuleOutcome",
+    "BiasAuditRuleStatus",
     "CorporateActionLedgerProcessor",
     "CorporateActionLedgerType",
     "CorporateActionRecord",
@@ -196,6 +223,7 @@ __all__ = [
     "CostLineItemName",
     "CostModel",
     "CostModelError",
+    "CostSensitivityScenario",
     "DeterministicRiskPolicy",
     "ExecutionRecord",
     "InstrumentRiskProfile",

@@ -1,3 +1,37 @@
+# SAL-P4-015 Backtest Bias Audit Plan
+
+> Started: 2026-07-26
+> Scope: Complete `SAL-P4-015` by implementing a pure deterministic backtest bias audit for formal portfolio backtests. Cover lookahead, survivorship, PIT availability, sample overlap and cost sensitivity with hard/warning outcomes. Do not start formal portfolio backtest runs, performance metrics, BacktestRun orchestration, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, P4 evidence docs through `SAL-P4-014`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-backtest-bias-audit.md`.
+- [x] Add Red contract tests for lookahead leakage, survivorship leakage, PIT unavailable/unknown records, sample overlap warnings, cost sensitivity warnings and import boundary.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/audit.py` with immutable DTOs, deterministic rule outcomes, invalid-run promotion guards and stable report IDs.
+- [x] Export bias audit symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/backtest-bias-audit.md` with scope, rule semantics, invalid-run guard, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-015` done, P4 `15/22`, total `81/129`, decision/evidence rows and `SAL-P4-016` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-015` files and create the required Chinese checkpoint commit.
+
+## Review: SAL-P4-015
+
+- Added `tests/quant/test_backtest_bias_audit.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.audit` (`1 error`), Green focused target is `3 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/audit.py` and exported symbols from `quant.backtest`; the module defines `BacktestBiasAuditObservation`, `CostSensitivityScenario`, `BacktestBiasAuditPolicy`, `BiasAuditRuleOutcome`, `BacktestBiasAuditReport`, `BacktestBiasAuditStatus`, `BiasAuditRuleStatus` and `BacktestBiasAuditor`.
+- Bias audit covers lookahead data availability, historical as-of universe membership, PIT availability / temporal confidence, sample-overlap warnings, cost-sensitivity warning/block thresholds and deterministic report IDs.
+- Hard failures and not-evaluable outcomes mark reports `invalid`, set `eligible_for_ranking=false` and `agent_strong_conclusion_allowed=false`; warning-only reports retain warning rule IDs but remain promotable for later explicit gates.
+- Scope retained: no formal portfolio backtest run, no performance metrics, no BacktestRun orchestration, no Ledger/Risk mutation, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Verification: Red target `1 error`; focused target `3 passed`; related BiasAudit/RiskPolicy/BacktestSpec/Architecture suite `24 passed`; full pytest `379 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+
+## Guardrails
+
+- BiasAudit is a pure audit layer; it may read `BacktestSpec`, explicit audit observations and explicit cost sensitivity scenario summaries, but must not execute orders, mutate Ledger/Risk, compute performance metrics, orchestrate BacktestRun, expose API/UI, initialize Qlib or start Worker runtime.
+- Hard failures mark the report `invalid`, set `eligible_for_ranking=false` and `agent_strong_conclusion_allowed=false`; warning-only reports remain auditable but must surface warning rule IDs.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+---
+
 # SAL-P4-014 Deterministic RiskPolicy Plan
 
 > Started: 2026-07-26
