@@ -14,7 +14,7 @@
 - [x] Add `docs/cost-slippage-model.md` with scope, formulas, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-010` done, P4 `10/22`, total `76/129`, decision/evidence rows and `SAL-P4-011` READY but not started.
 - [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
-- [ ] Review, stage only `SAL-P4-010` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-010` files and create the required Chinese checkpoint commit.
 
 ## Review: SAL-P4-010
 
@@ -25,6 +25,7 @@
 - Read-only subagent dispatch for SAL-P4-010 boundary exploration was attempted, but the host wrapper rejected empty optional fields and then message/items payload shape; per lessons, fallback local senior review checked BacktestCostSpec reuse, buy/sell asymmetry, participation guard, ledger boundary, no-go scope and import boundary.
 - Verification: Red target `1 error`; focused target `4 passed`; related CostModel/PortfolioLedger/Order/BacktestSpec/Architecture suite `29 passed`; full pytest `359 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no A-share T+1/lot/suspension/limit execution rules, no corporate-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint: `e194984c feat(P4): 实现费用与滑点模型`.
 
 ## Guardrails
 
