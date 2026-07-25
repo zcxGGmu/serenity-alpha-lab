@@ -3,7 +3,8 @@
 SAL-P4-003 defines the immutable BacktestSpec. SAL-P4-004 adds the compact
 BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
 accounting contract. SAL-P4-010 adds pure cost/slippage calculations.
-SAL-P4-011 adds pure A-share execution rules. Risk evaluation and APIs are
+SAL-P4-011 adds pure A-share execution rules, SAL-P4-013 adds rebalance
+planning, and SAL-P4-014 adds deterministic RiskPolicy evaluation. APIs are
 introduced by later P4 tasks.
 """
 
@@ -98,6 +99,20 @@ from serenity_alpha_lab.quant.backtest.rebalance import (
     TargetWeight,
     WeightingPolicy,
 )
+from serenity_alpha_lab.quant.backtest.risk import (
+    RISK_POLICY_CONTRACT_VERSION,
+    RISK_POLICY_EVALUATOR_VERSION,
+    RISK_POLICY_SCHEMA_NAME,
+    RISK_POLICY_SCHEMA_VERSION,
+    DeterministicRiskPolicy,
+    InstrumentRiskProfile,
+    RiskDecisionStatus,
+    RiskPolicyError,
+    RiskPolicyEvaluator,
+    RiskPolicyResult,
+    RiskRuleOutcome,
+    RiskRuleStatus,
+)
 from serenity_alpha_lab.quant.backtest.spec import (
     BACKTEST_SPEC_CONTRACT_VERSION,
     BACKTEST_SPEC_ENGINE_VERSION,
@@ -148,6 +163,10 @@ __all__ = [
     "REBALANCE_POLICY_CONTRACT_VERSION",
     "REBALANCE_POLICY_SCHEMA_NAME",
     "REBALANCE_POLICY_SCHEMA_VERSION",
+    "RISK_POLICY_CONTRACT_VERSION",
+    "RISK_POLICY_EVALUATOR_VERSION",
+    "RISK_POLICY_SCHEMA_NAME",
+    "RISK_POLICY_SCHEMA_VERSION",
     "BacktestArtifactBundle",
     "BacktestArtifactError",
     "BacktestArtifactKind",
@@ -177,7 +196,9 @@ __all__ = [
     "CostLineItemName",
     "CostModel",
     "CostModelError",
+    "DeterministicRiskPolicy",
     "ExecutionRecord",
+    "InstrumentRiskProfile",
     "LedgerEvent",
     "LedgerEventType",
     "ModelSignal",
@@ -196,6 +217,12 @@ __all__ = [
     "RebalancePlan",
     "RebalancePolicy",
     "RebalancePolicyError",
+    "RiskDecisionStatus",
+    "RiskPolicyError",
+    "RiskPolicyEvaluator",
+    "RiskPolicyResult",
+    "RiskRuleOutcome",
+    "RiskRuleStatus",
     "SkippedRebalanceOrder",
     "TERMINAL_ORDER_STATUSES",
     "TargetWeight",
