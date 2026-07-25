@@ -35,6 +35,7 @@
 - Added `docs/signal-evaluation-engine.md`; updated `docs/upstream-patches.md`, `docs/development-progress-checklist.md`, `docs/development-status.md`, `DEC-066`, `AEV-068`, and moved `SAL-P4-003` to READY without starting it.
 - Verification: root + migration + characterization suite `11 passed`; DSA Web focused Vitest `3 files / 26 passed`; DSA Python focused suite `95 passed, 1 warning`; P4-001 snapshot script PASS; DSA patch check `0001..0005` already applied; full pytest `324 passed, 3 skipped`; compileall PASS; dependency lock guard PASS; immutable tag check PASS; status-anchor scan PASS; `git diff --check` PASS. Commit step is being completed in this checkpoint.
 - Scope retained: no `BacktestSpec`, no formal portfolio backtest run, no Qlib/Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no baseline JSON drift and no tag movement.
+- Implementation checkpoint: `6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`; follow-up status-sync checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
 
 ---
 
