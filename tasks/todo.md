@@ -1,3 +1,39 @@
+# SAL-P4-003 BacktestSpec Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-003` by defining the formal `BacktestSpec` input contract and canonical hash. Do not run formal portfolio backtests, Evidence Agent, real Provider/LLM, Qlib, Ledger, Risk engine, Quant Lab or Worker loop. Legacy DSA Signal Evaluation remains only a compatibility surface.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/dsa-signal-evaluation-characterization.md`, `docs/signal-evaluation-engine.md`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-backtest-spec.md`.
+- [x] Add Red contract tests for formal Dataset/Universe/Strategy/Execution/Cost/Risk inputs, canonical hash stability, concrete Dataset Version guards, legacy Signal Evaluation rejection and same-bar close execution rejection.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/spec.py` with immutable DTOs, validation, `to_record()`, canonical JSON and `spec_hash`.
+- [x] Export BacktestSpec symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/backtest-spec.md` with formal scope, canonical hash semantics, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-003` done, P4 `3/22`, total `69/129`, `DEC-067`, `AEV-069`, and `SAL-P4-004` READY but not started.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-003` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- `BacktestSpec` is only a formal portfolio backtest input contract; no order generation, fills, ledger replay, metrics, Qlib adapter, API, UI or Worker execution in this task.
+- Legacy `/api/v1/backtest/*`, DSA Signal Evaluation, AlphaSift T+N evaluation and Screen results must not be named or treated as formal portfolio backtests.
+- Canonical hash must exclude wall-clock/runtime state and be stable across mapping insertion order.
+- Formal inputs must bind concrete `dsv_*`, `sdv_*`, `fdv_*`, `sha256:*`, signal timing, execution timing, initial capital, benchmark, fees, risk limits and random seed.
+
+## Review: SAL-P4-003
+
+- Added `tests/quant/test_backtest_spec.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.spec` (`1 error`), Green target now `3 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/spec.py` and exported symbols from `quant.backtest`; the module defines immutable Dataset/Universe/Strategy/Execution/Cost/Risk DTOs, `BacktestSpec`, canonical JSON and `spec_hash`.
+- Contract guards reject `latest` Dataset alias, missing Dataset hashes, invalid `dsv_*`/`sdv_*`/`ssn_*`/`fdv_*`/`sha256:*` values, legacy Signal Evaluation strategy kind and same-bar close signal execution.
+- Added `docs/backtest-spec.md`, `DEC-067`, `AEV-069`; updated progress/status docs so `SAL-P4-003` is DONE, P4 is `3/22`, total is `69/129`, and `SAL-P4-004` is READY.
+- Verification: target `3 passed`; related P4/Architecture suite `26 passed`; full pytest `327 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Code-review subagent dispatch was attempted but the client wrapper repeatedly rejected `message`/`items` payload shape; fallback local senior review checked hash determinism, version guards, scope boundaries, no execution entrypoints and status anchors.
+- Scope retained: no `BacktestArtifact`, no formal portfolio backtest run, no Qlib, no orders/fills, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+
+---
+
 # SAL-P4-002 SignalEvaluationEngine Migration Plan
 
 > Started: 2026-07-25

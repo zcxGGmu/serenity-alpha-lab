@@ -76,10 +76,10 @@
 | P1 工程加固 | 2~3 | DONE | 16/16 | G1 PASS | Lock、领域协议、迁移、兼容外壳 |
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | DONE | 17/17 | G3 PASS | AlphaSift、Factor、Screen Lab |
-| P4 回测与风控 | 9~13 | DOING | 2/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
+| P4 回测与风控 | 9~13 | DOING | 3/22 | G4 | Qlib、Ledger、正式回测、Quant Lab |
 | P5 Agent 与报告 | 13~16 | TODO | 0/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **68/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **69/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -974,16 +974,19 @@ P0 基线
 
 ### SAL-P4-003 定义 BacktestSpec
 
-- [ ] [READY] 冻结正式组合回测输入和 Canonical Hash
-- 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 - | 依赖 SAL-P4-002
+- [x] [DONE] 冻结正式组合回测输入和 Canonical Hash
+- 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 0.5d | 依赖 SAL-P4-002 | 开始 2026-07-25 | 完成 2026-07-25
 - 交付物：Dataset/Universe/Strategy/Execution/Cost/Risk Spec。
 - 验收：
   - 信号与执行时间、初始资金、基准、费用、随机种子明确。
   - Canonical JSON 在平台间生成相同 spec_hash。
+- 结果：新增 [BacktestSpec Contract](./backtest-spec.md)、Quant Backtest 层 [spec.py](../src/serenity_alpha_lab/quant/backtest/spec.py) 和 [BacktestSpec contract test](../tests/quant/test_backtest_spec.py)，冻结 `quant.backtest_spec@1.0.0`、Dataset/Universe/Strategy/Execution/Cost/Risk 六组正式输入、canonical JSON、`spec_hash`、具体 `dsv_*`/`sdv_*`/`fdv_*`/`sha256:*` guard、legacy Signal Evaluation 拒绝和 same-bar close 执行拒绝。
+- 范围限制：未定义 `BacktestArtifact`、未执行正式组合回测、未启动 Qlib/Ledger/Risk/Quant Lab/Evidence Agent/Worker loop、未调用真实 Provider/LLM、未改动 legacy `/api/v1/backtest/*` 兼容面。
+- 验收证据：Red target 初始因缺少 `serenity_alpha_lab.quant.backtest.spec` 而 `1 error`；Green target `3 passed`；相关 P4/Architecture suite `26 passed`；full pytest `327 passed, 3 skipped`；compileall/lock/patch/diff/tag checks PASS；完整验证记录见 AEV-069。
 
 ### SAL-P4-004 定义 BacktestArtifact
 
-- [ ] [TODO] 标准化订单、成交、持仓、现金、净值、指标和审计输出
+- [ ] [READY] 标准化订单、成交、持仓、现金、净值、指标和审计输出
 - 元数据：优先级 P0 | 负责人 QE/BE | 估算 2d | 实际 - | 依赖 SAL-P4-003,SAL-P1-007
 - 交付物：Arrow/JSON Schema、Artifact Manifest、兼容规则。
 - 验收：
@@ -1665,6 +1668,7 @@ P0 基线
 | DEC-064 | 2026-07-25 | Gate G3 筛选与因子评审 | `GO with accepted risks`：P3 Screen/Factor 契约批准作为 P4 输入，P4 可从 `SAL-P4-001` 开始；Gate 复核 AlphaSift intake、ScreeningProvider、CandidateBatch、FactorDefinition/DSL/base factors/post-processing/evaluation/DAG/cache、Historical Universe、ScreenDefinition Pipeline、ScreenSnapshot、Quant Screening API、Screen Lab、性能复现、Dataset Catalog/Manifest、ProblemDetails、Trace、Artifact 和 Run/Stage/Event；本 Gate 不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM、Worker loop 或 DSA runtime source migration | [gate-g3-screen-factor-review.md](./gate-g3-screen-factor-review.md); [test_gate_g3_screen_factor_review.py](../tests/gates/test_gate_g3_screen_factor_review.py); [screen-performance-reproducibility.md](./screen-performance-reproducibility.md) | SAL-P3-017,SAL-P4-001,SAL-P4-003 | G4 |
 | DEC-065 | 2026-07-25 | DSA Signal Evaluation 与正式组合回测边界 | P4 先冻结当前 DSA `BacktestEngine`、legacy `/api/v1/backtest/*` 和 Agent backtest read-tool surface 为 `legacy_signal_evaluation` 金标；这些 API 名称只作为兼容面保留，不得称为正式组合回测。`SAL-P4-002` 必须在 P4-001 快照完全一致的前提下迁移为 `SignalEvaluationEngine`，之后才能开始 `SAL-P4-003` 定义正式 `BacktestSpec` | [dsa-signal-evaluation-characterization.md](./dsa-signal-evaluation-characterization.md); [run-dsa-signal-evaluation-characterization.sh](../scripts/run-dsa-signal-evaluation-characterization.sh); [test_dsa_signal_evaluation_characterization.py](../tests/architecture/test_dsa_signal_evaluation_characterization.py) | SAL-P4-001,SAL-P4-002,SAL-P4-003 | G4 |
 | DEC-066 | 2026-07-25 | SignalEvaluationEngine 迁移口径 | 采用 Serenity root `quant.signal_evaluation` 作为 legacy DSA T+N 信号评价的准确语义模型，公开 `evaluation_type=signal` 与 `semantic_scope=legacy_signal_evaluation`；DSA `DSA-PATCH-005` 只迁移内部服务/UI 命名并保留 legacy `/api/v1/backtest/*`、`Backtest*` schema、数据库表和 Agent read-tool 兼容面；正式组合回测必须从 `SAL-P4-003` 的 `BacktestSpec` 单独开始 | [signal-evaluation-engine.md](./signal-evaluation-engine.md); [0005-migrate-signal-evaluation-engine.patch](../patches/dsa/v3.26.1/0005-migrate-signal-evaluation-engine.patch); [test_signal_evaluation_engine.py](../tests/quant/test_signal_evaluation_engine.py); [test_dsa_signal_evaluation_engine_migration.py](../tests/architecture/test_dsa_signal_evaluation_engine_migration.py) | SAL-P4-002,SAL-P4-003 | G4 |
+| DEC-067 | 2026-07-25 | 正式 BacktestSpec 输入契约口径 | 采用 `quant.backtest.spec` 冻结 `quant.backtest_spec@1.0.0`；正式组合回测必须绑定具体 Dataset Version/hash、Universe version、Strategy source/code hash、Screen/Factor 版本、信号/执行时间、初始资金、基准、币种、现金利率、费用、滑点、参与率、风险约束和随机种子；`spec_hash` 由不含创建时间/run metadata 的 Canonical JSON 生成，拒绝 `latest`、legacy Signal Evaluation 和 same-bar close 执行 | [backtest-spec.md](./backtest-spec.md); [spec.py](../src/serenity_alpha_lab/quant/backtest/spec.py); [test_backtest_spec.py](../tests/quant/test_backtest_spec.py) | SAL-P4-003,SAL-P4-004,SAL-P4-008,SAL-P4-015,SAL-P4-017 | G4 |
 
 ## 14. 验收证据登记
 
@@ -1738,6 +1742,7 @@ P0 基线
 | AEV-066 | SAL-P3-017 / Gate G3 | Gate G3 筛选与因子评审、离线合成 Screen/Factor 输入和 P4 入口约束验证记录 | [gate-g3-screen-factor-review.md](./gate-g3-screen-factor-review.md); [test_gate_g3_screen_factor_review.py](../tests/gates/test_gate_g3_screen_factor_review.py); [screen-performance-reproducibility.md](./screen-performance-reproducibility.md); [factor-evaluation.md](./factor-evaluation.md); [screen-definition-pipeline.md](./screen-definition-pipeline.md); [quant-screening-api.md](./quant-screening-api.md) | Red Gate test failed with missing `docs/gate-g3-screen-factor-review.md`; Green target `2 passed`; executable gate covers 15 base factors、Factor Evaluation Artifact、ScreenDefinition L0-L4 stage trace、ScreenSnapshot Artifact、performance/reproducibility report、Quant Screening API idempotency/replay/pagination、ProblemDetails trace、Dataset Version guard 和 Run/Stage/Event lifecycle; no Quant Core、formal backtest、Evidence Agent、real Provider/LLM、Worker loop 或 DSA runtime source migration | TL/QE/RE | 2026-07-25 |
 | AEV-067 | SAL-P4-001 | DSA Signal Evaluation behavior、legacy Backtest API schema、Agent read-tool surface 和 snapshot diff 测试记录 | [dsa-signal-evaluation-characterization.md](./dsa-signal-evaluation-characterization.md); [run-dsa-signal-evaluation-characterization.sh](../scripts/run-dsa-signal-evaluation-characterization.sh); [test_dsa_signal_evaluation_characterization.py](../tests/architecture/test_dsa_signal_evaluation_characterization.py); [signal-evaluation-characterization](./baselines/dsa-v3.26.1/signal-evaluation-characterization/) | Red target failed with missing P4 characterization baseline/script/doc (`5 failed`); Green target `5 passed`; snapshot script generated and verified 7 committed snapshots with `engine_case_count=11`、`decision_signal_case_count=5`、`api_route_count=4`、`api_schema_count=5`、`agent_tool_count=3`; baseline records `direction_accuracy_pct=66.67`、`win_rate_pct=66.67`、`formal_backtest_started=false`、`real_provider_calls_zero=true`、`real_llm_calls_zero=true`; no formal portfolio backtest、BacktestSpec、Qlib、Ledger/Risk、Evidence Agent、Worker loop、real Provider/LLM 或 DSA runtime source migration | QE/BE | 2026-07-25 |
 | AEV-068 | SAL-P4-002 | SignalEvaluationEngine root parity、DSA compatibility patch、UI copy migration 和 snapshot immutability 验证记录 | [signal-evaluation-engine.md](./signal-evaluation-engine.md); [signal_evaluation.py](../src/serenity_alpha_lab/quant/signal_evaluation.py); [test_signal_evaluation_engine.py](../tests/quant/test_signal_evaluation_engine.py); [test_dsa_signal_evaluation_engine_migration.py](../tests/architecture/test_dsa_signal_evaluation_engine_migration.py); [0005-migrate-signal-evaluation-engine.patch](../patches/dsa/v3.26.1/0005-migrate-signal-evaluation-engine.patch); [run-dsa-signal-evaluation-characterization.sh](../scripts/run-dsa-signal-evaluation-characterization.sh) | Red root parity failed with missing `serenity_alpha_lab.quant.signal_evaluation`; Green root target `3 passed`; Red DSA migration failed with missing `0005` patch and later guard gap for registered new files; Green migration target `4 passed`; related P4 suite `11 passed`; DSA focused Python `95 passed, 1 warning`; DSA Web focused Vitest `3 files / 26 passed`; P4-001 snapshot script matched committed snapshots; DSA patch check reports `0001..0005` already applied; no baseline JSON drift, no BacktestSpec、formal portfolio backtest、Qlib、Ledger/Risk、Evidence Agent、Worker loop、real Provider/LLM 或 tag movement | BE/QE | 2026-07-25 |
+| AEV-069 | SAL-P4-003 | BacktestSpec 正式输入契约、canonical hash、版本 guard 和边界拒绝测试记录 | [backtest-spec.md](./backtest-spec.md); [spec.py](../src/serenity_alpha_lab/quant/backtest/spec.py); [test_backtest_spec.py](../tests/quant/test_backtest_spec.py); [2026-07-25-backtest-spec.md](./superpowers/plans/2026-07-25-backtest-spec.md) | Red target failed with missing `serenity_alpha_lab.quant.backtest.spec` (`1 error`); Green target `3 passed`; related P4/Architecture suite `26 passed`; full pytest `327 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS; contract covers Dataset/Universe/Strategy/Execution/Cost/Risk inputs、canonical JSON、mapping-order independent `spec_hash`、semantic hash drift、concrete `dsv_*`/`sdv_*`/`fdv_*`/`sha256:*` guards、legacy Signal Evaluation rejection 和 same-bar close execution rejection; no BacktestArtifact、formal portfolio backtest run、Qlib、Ledger/Risk、Quant Lab、Evidence Agent、Worker loop、real Provider/LLM 或 legacy Backtest API drift | QE/BE | 2026-07-25 |
 
 允许的证据：
 
@@ -1775,4 +1780,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017` 和 `SAL-P4-001` 至 `SAL-P4-002`，完成度为 68/129；最近阶段性任务为 `SAL-P4-002` 迁移为 `SignalEvaluationEngine`；最近实现 checkpoint 为 `6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`，上一可评审交付 checkpoint 为 `31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为`；最新状态同步 checkpoint 提交后以最终回复和 `git log -1 --oneline` 为准，上一状态同步 checkpoint 为 `01e6bf3f docs: 同步 SAL-P4-001 checkpoint hash`。Gate G0、G1、G2、G3 已通过（均为 `GO with accepted risks`），Gate G4 仍未通过。下一步优先执行 `SAL-P4-003` 定义正式 `BacktestSpec`；后续实现必须遵守 ADR-001/002、Gate G1/G2/G3 和 P4 入口约束，不得把 DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 直接命名为正式组合回测，且真实 Provider/LLM 调用仍只能由后续 Worker/调度任务在 profile guard 和离线契约保护下接入。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017` 和 `SAL-P4-001` 至 `SAL-P4-003`，完成度为 69/129；最近阶段性任务为 `SAL-P4-003` 定义正式 `BacktestSpec`；最近实现 checkpoint 将由本次提交生成，上一可评审交付 checkpoint 为 `6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`；最新状态同步 checkpoint 提交后以最终回复和 `git log -1 --oneline` 为准，上一状态同步 checkpoint 为 `0b537f86 docs: 同步 SAL-P4-002 checkpoint hash`。Gate G0、G1、G2、G3 已通过（均为 `GO with accepted risks`），Gate G4 仍未通过。下一步优先执行 `SAL-P4-004` 定义 `BacktestArtifact`；后续实现必须遵守 ADR-001/002、Gate G1/G2/G3 和 P4 入口约束，不得启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Qlib/Ledger/Risk/Quant Lab 或 Worker loop。

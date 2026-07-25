@@ -1,15 +1,15 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-25<br>
-> 最近阶段性任务：`SAL-P4-002` 迁移为 `SignalEvaluationEngine`<br>
+> 最近阶段性任务：`SAL-P4-003` 定义正式 `BacktestSpec`<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P4 真实组合回测与确定性风控<br>
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：68/129<br>
-> 当前可执行任务：`SAL-P4-003` 定义正式 `BacktestSpec`，状态为 `READY`；不得把 DSA Signal Evaluation 兼容面当作正式组合回测<br>
-> 最近可评审交付 checkpoint：`6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`；上一 checkpoint 为 `31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为`<br>
-> 最新状态同步 checkpoint：本次 `SAL-P4-002` checkpoint hash 同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `01e6bf3f docs: 同步 SAL-P4-001 checkpoint hash`<br>
-> 本次实现 checkpoint：`6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`；已完成任务范围推进至 `SAL-P4-002`<br>
+> 任务完成度：69/129<br>
+> 当前可执行任务：`SAL-P4-004` 定义 `BacktestArtifact`，状态为 `READY`；不得启动正式组合回测运行<br>
+> 最近可评审交付 checkpoint：本次 `SAL-P4-003` 实现提交后以最终回复和 `git log -1 --oneline` 为准；上一 checkpoint 为 `6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`<br>
+> 最新状态同步 checkpoint：本次 `SAL-P4-003` checkpoint hash 同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `0b537f86 docs: 同步 SAL-P4-002 checkpoint hash`<br>
+> 本次实现 checkpoint：本次 `SAL-P4-003` 实现提交后以最终回复和 `git log -1 --oneline` 为准；已完成任务范围推进至 `SAL-P4-003`<br>
 > 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -104,18 +104,19 @@
 
 - 完成 `SAL-P4-001`：新增 [DSA Signal Evaluation Characterization](./dsa-signal-evaluation-characterization.md)、[P4 characterization script](../scripts/run-dsa-signal-evaluation-characterization.sh)、[P4 characterization test](../tests/architecture/test_dsa_signal_evaluation_characterization.py) 和 [P4 baseline snapshots](./baselines/dsa-v3.26.1/signal-evaluation-characterization/)，冻结 DSA `BacktestEngine.evaluate_single()` / `evaluate_decision_signal()`、legacy `/api/v1/backtest/*` route/schema 与 Agent backtest read tools 当前行为；这些表面只标注为 `legacy_signal_evaluation`，不是正式组合回测；P4 进度 `1/22`，总进度 `67/129`。
 - 完成 `SAL-P4-002`：新增 [SignalEvaluationEngine 迁移记录](./signal-evaluation-engine.md)、root [SignalEvaluationEngine](../src/serenity_alpha_lab/quant/signal_evaluation.py)、[root parity tests](../tests/quant/test_signal_evaluation_engine.py)、[DSA migration tests](../tests/architecture/test_dsa_signal_evaluation_engine_migration.py) 和 `DSA-PATCH-005`；内部语义迁移为 `evaluation_type=signal` / `semantic_scope=legacy_signal_evaluation`，legacy `/api/v1/backtest/*`、`Backtest*` schema、数据库表、Agent read tools 和 `/backtest` route 保留兼容；P4-001 快照完全一致；P4 进度 `2/22`，总进度 `68/129`。
+- 完成 `SAL-P4-003`：新增 [BacktestSpec Contract](./backtest-spec.md)、Quant Backtest [BacktestSpec](../src/serenity_alpha_lab/quant/backtest/spec.py) 和 [BacktestSpec contract test](../tests/quant/test_backtest_spec.py)，冻结正式组合回测 Dataset/Universe/Strategy/Execution/Cost/Risk 输入、canonical JSON、`spec_hash`、具体版本/hash guard、legacy Signal Evaluation 拒绝和 same-bar close 执行拒绝；本任务不执行正式组合回测；P4 进度 `3/22`，总进度 `69/129`。
 
 ## 未完成
 
 ### 当前可执行 P4 任务
 
-- `SAL-P4-003` 当前为 `READY`：从正式 `BacktestSpec` 定义开始，冻结 Dataset/Universe/Strategy/Execution/Cost/Risk 输入和 canonical hash；不得复用 legacy Signal Evaluation 作为组合回测。
+- `SAL-P4-004` 当前为 `READY`：定义 `BacktestArtifact`，标准化订单、成交、持仓、现金、净值、指标和审计输出；不得启动正式组合回测运行。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P4 至 P6 仍有 61 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结与 `SignalEvaluationEngine` 迁移。但尚未完成正式 `BacktestSpec`、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P4 至 P6 仍有 60 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移与正式 `BacktestSpec`。但尚未完成 `BacktestArtifact`、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -125,6 +126,7 @@
 - 2026-07-25 完成 `SAL-P3-017` Gate G3 筛选与因子评审；结论为 `GO with accepted risks`，P3 完成 `17/17`，当前唯一 `READY` 阶段任务为 `SAL-P4-001` 锁定 DSA Signal Evaluation 行为。本次 Gate 只批准 Screen/Factor 契约作为 P4 输入，不批准直接执行正式回测。
 - 2026-07-25 完成 `SAL-P4-001` DSA Signal Evaluation 行为锁定；本次冻结 DSA `BacktestEngine` 文本信号与结构化 DecisionSignal 评价、legacy `/api/v1/backtest/*` API schema、Agent read tools 和 7 个 committed snapshot，明确它们是 `legacy_signal_evaluation` 而非正式组合回测；当前唯一 `READY` 阶段任务为 `SAL-P4-002` 迁移为 `SignalEvaluationEngine`，`SAL-P4-003` 正式 `BacktestSpec` 等待 `SAL-P4-002`。
 - 2026-07-25 完成 `SAL-P4-002` SignalEvaluationEngine 迁移；root quant parity、DSA compatibility patch、Web Signal Evaluation 文案和 P4-001 snapshot guard 均通过验证，legacy Backtest API/schema/table/Agent tool 仅作兼容面；当前唯一 `READY` 阶段任务为 `SAL-P4-003` 定义正式 `BacktestSpec`。
+- 2026-07-25 完成 `SAL-P4-003` 正式 `BacktestSpec` 定义；BacktestSpec contract、canonical hash、具体 Dataset/Universe/Screen/Factor/code hash guard、legacy Signal Evaluation 拒绝和 same-bar close 执行拒绝均通过验证；当前唯一 `READY` 阶段任务为 `SAL-P4-004` 定义 `BacktestArtifact`。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -176,9 +178,9 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P4-003` 定义正式 `BacktestSpec`，从 Dataset/Universe/Strategy/Execution/Cost/Risk 输入和 canonical hash 开始。
+1. 优先执行 `SAL-P4-004` 定义 `BacktestArtifact`，标准化订单、成交、持仓、现金、净值、指标和审计输出。
 2. 不得直接启动正式组合回测运行、Evidence Agent 或真实 Provider/LLM；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
-3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；`SAL-P4-003` 必须与 legacy `/api/v1/backtest/*` 兼容面隔离。
+3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；`SAL-P4-004` 必须继续与 legacy `/api/v1/backtest/*` 兼容面隔离。
 
 ## 本次状态复核
 
@@ -291,22 +293,23 @@
 24. docs/gate-g3-screen-factor-review.md
 25. docs/dsa-signal-evaluation-characterization.md
 26. docs/signal-evaluation-engine.md
+27. docs/backtest-spec.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-002
-- 最近完成：SAL-P4-002 迁移为 SignalEvaluationEngine
-- 最近可评审交付 checkpoint：6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义；上一 checkpoint：31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为
-- 最新状态同步 checkpoint：本次 SAL-P4-002 checkpoint hash 同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：01e6bf3f docs: 同步 SAL-P4-001 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 2/22，总计 68/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-003
+- 最近完成：SAL-P4-003 定义正式 BacktestSpec
+- 最近可评审交付 checkpoint：本次 SAL-P4-003 实现提交后以最终回复和 git log -1 --oneline 为准；上一 checkpoint：6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义
+- 最新状态同步 checkpoint：本次 SAL-P4-003 checkpoint hash 同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：0b537f86 docs: 同步 SAL-P4-002 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 3/22，总计 69/129
 
 下一步优先执行：
-1. SAL-P4-003 定义正式 BacktestSpec，从 Dataset/Universe/Strategy/Execution/Cost/Risk 输入和 canonical hash 开始
+1. SAL-P4-004 定义 BacktestArtifact，标准化订单、成交、持仓、现金、净值、指标和审计输出
 2. 不要直接启动正式组合回测运行、Evidence Agent 或真实 Provider/LLM；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；SAL-P4-003 必须与 legacy /api/v1/backtest/* 兼容面隔离
+3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；SAL-P4-004 必须继续与 legacy /api/v1/backtest/* 兼容面隔离
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
