@@ -148,6 +148,9 @@ verify_worktree_diff_is_registered() {
     status="${line:0:2}"
     path="${line:3}"
     if [[ "$status" == "??" ]]; then
+      if is_allowed_patch_path "$path"; then
+        continue
+      fi
       if ! allow_generated_worktree_untracked_path "$path"; then
         unexpected+=("$line")
       fi

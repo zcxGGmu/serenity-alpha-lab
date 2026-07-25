@@ -1,3 +1,43 @@
+# SAL-P4-002 SignalEvaluationEngine Migration Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-002` by migrating DSA Signal Evaluation semantics to `SignalEvaluationEngine`, preserving legacy `/api/v1/backtest/*` compatibility and keeping `SAL-P4-001` snapshots byte-for-byte identical. Do not start formal portfolio backtesting, Evidence Agent, real Provider/LLM calls or `BacktestSpec`; `SAL-P4-003` must wait until this task is complete.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/dsa-signal-evaluation-characterization.md`, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-signal-evaluation-engine.md`.
+- [x] Add Red root quant tests proving `SignalEvaluationEngine` exactly matches `SAL-P4-001` engine, structured signal and summary snapshots.
+- [x] Add Red architecture test proving the DSA compatibility patch introduces `SignalEvaluationEngine`, `evaluation_type=signal`, and UI Signal Evaluation wording without starting formal backtest APIs.
+- [x] Implement `src/serenity_alpha_lab/quant/signal_evaluation.py` and export the new engine.
+- [x] Add DSA patch `0005-migrate-signal-evaluation-engine.patch` that keeps legacy Backtest API paths/schemas compatible while migrating service/UI naming.
+- [x] Verify `scripts/run-dsa-signal-evaluation-characterization.sh` keeps all `SAL-P4-001` snapshots unchanged.
+- [x] Add `docs/signal-evaluation-engine.md` with migration semantics, compatibility boundary, `evaluation_type=signal`, verification evidence and non-goals.
+- [x] Update progress checklist/status docs with `SAL-P4-002` done, P4 `2/22`, total `68/129`, `DEC-066`, `AEV-068`, and `SAL-P4-003` READY but not started.
+- [x] Run target, related, full Python, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-002` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- `SAL-P4-001` snapshot JSON must remain byte-for-byte identical; any route/schema change that alters `api-surface.json` is out of scope.
+- Legacy `/api/v1/backtest/*`, `Backtest*` schema names and Agent `get_*_backtest_summary` tools remain compatibility surfaces only.
+- New semantics must be named `SignalEvaluationEngine` with `evaluation_type=signal`; visible UI copy should describe signal evaluation, not portfolio strategy backtesting.
+- No `BacktestSpec`, Qlib, ledger, order/execution, portfolio risk, Quant Lab, Evidence Agent, Worker loop or real Provider/LLM call in this task.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+
+## Review: SAL-P4-002
+
+- Added `tests/quant/test_signal_evaluation_engine.py`; initial Red failed with missing `serenity_alpha_lab.quant.signal_evaluation`, Green root parity is `3 passed` against `SAL-P4-001` text signal, structured DecisionSignal and summary goldens.
+- Added `src/serenity_alpha_lab/quant/signal_evaluation.py` and exported `SignalEvaluationEngine`, `SignalEvaluationConfig`, `evaluation_type=signal`, `semantic_scope=legacy_signal_evaluation`, plus compatibility aliases for legacy `BacktestEngine` naming.
+- Added `tests/architecture/test_dsa_signal_evaluation_engine_migration.py`; Red initially failed because patch `0005` was missing, then captured and fixed the registered-new-file guard gap in `scripts/run-dsa-signal-evaluation-characterization.sh`.
+- Added `DSA-PATCH-005` with DSA `src/core/signal_evaluation_engine.py`, backend service migration, diagnostics metadata and DSA Web visible copy changed to “信号评价 / Signal Evaluation” while preserving legacy `/backtest` and `/api/v1/backtest/*` compatibility.
+- Added `docs/signal-evaluation-engine.md`; updated `docs/upstream-patches.md`, `docs/development-progress-checklist.md`, `docs/development-status.md`, `DEC-066`, `AEV-068`, and moved `SAL-P4-003` to READY without starting it.
+- Verification: root + migration + characterization suite `11 passed`; DSA Web focused Vitest `3 files / 26 passed`; DSA Python focused suite `95 passed, 1 warning`; P4-001 snapshot script PASS; DSA patch check `0001..0005` already applied; full pytest `324 passed, 3 skipped`; compileall PASS; dependency lock guard PASS; immutable tag check PASS; status-anchor scan PASS; `git diff --check` PASS. Commit step is being completed in this checkpoint.
+- Scope retained: no `BacktestSpec`, no formal portfolio backtest run, no Qlib/Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no baseline JSON drift and no tag movement.
+
+---
+
 # SAL-P4-001 DSA Signal Evaluation Characterization Plan
 
 > Started: 2026-07-25

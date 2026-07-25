@@ -1,0 +1,371 @@
+diff --git a/apps/dsa-web/e2e/smoke.spec.ts b/apps/dsa-web/e2e/smoke.spec.ts
+index e9bccf17..4ea2770d 100644
+--- a/apps/dsa-web/e2e/smoke.spec.ts
++++ b/apps/dsa-web/e2e/smoke.spec.ts
+@@ -149,7 +149,7 @@ test.describe('web smoke', () => {
+     }
+ 
+     // Check if navigation is visible
+-    await expect(page.getByRole('link', { name: '回测' })).toBeVisible({ timeout: 5000 });
++    await expect(page.getByRole('link', { name: '信号评价' })).toBeVisible({ timeout: 5000 });
+ 
+     await captureSmokeScreenshot(page, testInfo, 'smoke-mobile-shell-nav');
+   });
+@@ -207,11 +207,11 @@ test.describe('web smoke', () => {
+     await captureSmokeScreenshot(page, testInfo, 'smoke-settings-page-en');
+   });
+ 
+-  test('backtest page renders filter controls after login', async ({ page }, testInfo) => {
++  test('signal evaluation page renders filter controls after login', async ({ page }, testInfo) => {
+     await login(page);
+ 
+-    // Navigate to backtest page by clicking the link
+-    await page.getByRole('link', { name: '回测' }).click();
++    // Navigate to the legacy /backtest route by clicking the signal evaluation link.
++    await page.getByRole('link', { name: '信号评价' }).click();
+     await page.waitForLoadState('domcontentloaded');
+     await page.waitForTimeout(1000);
+ 
+@@ -219,7 +219,7 @@ test.describe('web smoke', () => {
+     const filterInput = page.getByPlaceholder('按股票代码筛选（留空表示全部）');
+     await expect(filterInput).toBeVisible({ timeout: 10_000 });
+     await expect(page.getByRole('button', { name: '筛选' })).toBeVisible();
+-    await expect(page.getByRole('button', { name: '运行回测' })).toBeVisible();
++    await expect(page.getByRole('button', { name: '运行信号评价' })).toBeVisible();
+ 
+     await captureSmokeScreenshot(page, testInfo, 'smoke-backtest-page-zh', { fullPage: true });
+   });
+diff --git a/apps/dsa-web/src/api/backtest.ts b/apps/dsa-web/src/api/backtest.ts
+index 97a5b445..c6b2d3a5 100644
+--- a/apps/dsa-web/src/api/backtest.ts
++++ b/apps/dsa-web/src/api/backtest.ts
+@@ -9,11 +9,11 @@ import type {
+   BacktestPhaseFilter,
+ } from '../types/backtest';
+ 
+-// ============ API ============
++// legacy `/api/v1/backtest/*` compatibility API for signal evaluation.
+ 
+ export const backtestApi = {
+   /**
+-   * Trigger backtest evaluation
++   * Trigger legacy signal evaluation.
+    */
+   run: async (params: BacktestRunRequest = {}): Promise<BacktestRunResponse> => {
+     const requestData: Record<string, unknown> = {};
+@@ -33,7 +33,7 @@ export const backtestApi = {
+   },
+ 
+   /**
+-   * Get paginated backtest results
++   * Get paginated signal evaluation results.
+    */
+   getResults: async (params: {
+     code?: string;
+diff --git a/apps/dsa-web/src/i18n/uiText.ts b/apps/dsa-web/src/i18n/uiText.ts
+index 31dde6d4..c19ce03f 100644
+--- a/apps/dsa-web/src/i18n/uiText.ts
++++ b/apps/dsa-web/src/i18n/uiText.ts
+@@ -48,7 +48,7 @@ const zh = {
+   'layout.expandSidebar': '展开侧边栏',
+   'layout.mainNav': '主导航',
+   'layout.nav.alerts': '告警',
+-  'layout.nav.backtest': '回测',
++  'layout.nav.backtest': '信号评价',
+   'layout.nav.chat': '问股',
+   'layout.nav.decisionSignals': 'AI 建议',
+   'layout.nav.home': '首页',
+@@ -62,8 +62,8 @@ const zh = {
+   'layout.openNav': '打开导航菜单',
+   'layout.route.alerts.description': '规则、触发记录与通知尝试',
+   'layout.route.alerts.title': '告警',
+-  'layout.route.backtest.description': '回测任务与结果浏览',
+-  'layout.route.backtest.title': '回测',
++  'layout.route.backtest.description': '历史 AI 建议信号评价与结果浏览',
++  'layout.route.backtest.title': '信号评价',
+   'layout.route.chat.description': '多轮策略问答与历史会话管理',
+   'layout.route.chat.title': '问股',
+   'layout.route.decisionSignals.description': 'AI 建议、风险与观察条件',
+@@ -889,7 +889,7 @@ const en: Record<UiTextKey, string> = {
+   'layout.expandSidebar': 'Expand sidebar',
+   'layout.mainNav': 'Main navigation',
+   'layout.nav.alerts': 'Alerts',
+-  'layout.nav.backtest': 'Backtest',
++  'layout.nav.backtest': 'Signal Evaluation',
+   'layout.nav.chat': 'Ask',
+   'layout.nav.decisionSignals': 'AI signals',
+   'layout.nav.home': 'Home',
+@@ -903,8 +903,8 @@ const en: Record<UiTextKey, string> = {
+   'layout.openNav': 'Open navigation',
+   'layout.route.alerts.description': 'Rules, triggers, and notification attempts',
+   'layout.route.alerts.title': 'Alerts',
+-  'layout.route.backtest.description': 'Backtest jobs and result review',
+-  'layout.route.backtest.title': 'Backtest',
++  'layout.route.backtest.description': 'Historical AI recommendation signal evaluation and result review',
++  'layout.route.backtest.title': 'Signal Evaluation',
+   'layout.route.chat.description': 'Multi-turn strategy Q&A and sessions',
+   'layout.route.chat.title': 'Ask',
+   'layout.route.decisionSignals.description': 'AI recommendations, risks, and watch conditions',
+diff --git a/apps/dsa-web/src/locales/featureText.ts b/apps/dsa-web/src/locales/featureText.ts
+index 6b6d6a9c..7e488d1e 100644
+--- a/apps/dsa-web/src/locales/featureText.ts
++++ b/apps/dsa-web/src/locales/featureText.ts
+@@ -10,8 +10,8 @@ const portfolioAlertTypes = alertTypes.slice(8, 12);
+ const marketAlertTypes = alertTypes.slice(12);
+ 
+ export const BACKTEST_TEXT = {
+-  zh: { documentTitle: '策略回测 - DSA', codePlaceholder: '按股票代码筛选（留空表示全部）', filter: '筛选', evalWindow: '评估窗口', phase: '阶段', startDate: '开始日期', startDateAria: '分析开始日期', endDate: '结束日期', endDateAria: '分析结束日期', oneDayValidation: '1 日验证', forceRerun: '强制重跑', running: '回测中...', runBacktest: '运行回测', oneDayModeDescription: '1 日验证模式会用下一个交易日收盘表现校验 AI 预测。', windowModeDescription: '将评估窗口设为 1，可查看 AI 预测与下一个交易日收盘表现的匹配情况。', overallPerformance: '整体表现', noMetricsTitle: '暂无指标', noMetricsDescription: '运行回测后会生成组合级表现指标。', loadingResults: '正在加载结果...', noResultsTitle: '暂无结果', noResultsDescription: '运行回测后可评估历史分析准确性。', nextDayValidation: '次日验证', resultSet: '结果集', allStocks: '全部股票', filteredStock: '筛选 {code}', dayWindow: '{days} 日窗口', fromDate: '自 {date}', toDate: '至 {date}', scrollHint: '小屏幕可横向滚动', stock: '股票', analysisDate: '分析日期', aiPrediction: 'AI 预测', actualPerformance: '实际表现', windowReturn: '窗口收益', accuracy: '准确性', directionMatch: '方向匹配', result: '结果', status: '状态', totalPage: '共 {total} 条结果 · 第 {page} / {pages} 页', directionAccuracy: '方向准确率', winRate: '胜率', avgSimulatedReturn: '平均模拟收益', avgStockReturn: '平均个股收益', stopLossTriggerRate: '止损触发率', takeProfitTriggerRate: '止盈触发率', avgDaysToFirstHit: '平均命中天数', evaluationCount: '评估数', outcomeSummary: '盈 / 亏 / 中', phaseDistribution: '阶段分布：{text}', processed: '已处理:', saved: '已保存:', completed: '已完成:', insufficient: '数据不足:', errors: '错误:', yes: '是', no: '否', unknown: '未知' },
+-  en: { documentTitle: 'Strategy Backtest - DSA', codePlaceholder: 'Filter by stock code (leave empty for all)', filter: 'Filter', evalWindow: 'Evaluation window', phase: 'Phase', startDate: 'Start date', startDateAria: 'Analysis start date', endDate: 'End date', endDateAria: 'Analysis end date', oneDayValidation: '1D validation', forceRerun: 'Force rerun', running: 'Backtesting...', runBacktest: 'Run backtest', oneDayModeDescription: '1D validation checks AI predictions against the next trading day close.', windowModeDescription: 'Set the evaluation window to 1 to compare AI predictions with the next trading day close.', overallPerformance: 'Overall performance', noMetricsTitle: 'No metrics', noMetricsDescription: 'Portfolio-level performance metrics appear after a backtest runs.', loadingResults: 'Loading results...', noResultsTitle: 'No results', noResultsDescription: 'Run a backtest to evaluate historical analysis accuracy.', nextDayValidation: 'Next-day validation', resultSet: 'Result set', allStocks: 'All stocks', filteredStock: 'Filtered {code}', dayWindow: '{days}-day window', fromDate: 'from {date}', toDate: 'to {date}', scrollHint: 'Scroll horizontally on small screens', stock: 'Stock', analysisDate: 'Analysis date', aiPrediction: 'AI prediction', actualPerformance: 'Actual performance', windowReturn: 'Window return', accuracy: 'Accuracy', directionMatch: 'Direction match', result: 'Result', status: 'Status', totalPage: '{total} results · Page {page} / {pages}', directionAccuracy: 'Direction accuracy', winRate: 'Win rate', avgSimulatedReturn: 'Avg simulated return', avgStockReturn: 'Avg stock return', stopLossTriggerRate: 'Stop-loss trigger rate', takeProfitTriggerRate: 'Take-profit trigger rate', avgDaysToFirstHit: 'Avg days to first hit', evaluationCount: 'Evaluations', outcomeSummary: 'Win / Loss / Neutral', phaseDistribution: 'Phase breakdown: {text}', processed: 'Processed:', saved: 'Saved:', completed: 'Completed:', insufficient: 'Insufficient:', errors: 'Errors:', yes: 'Yes', no: 'No', unknown: 'Unknown' },
++  zh: { documentTitle: '信号评价 - DSA', codePlaceholder: '按股票代码筛选（留空表示全部）', filter: '筛选', evalWindow: '评估窗口', phase: '阶段', startDate: '开始日期', startDateAria: '分析开始日期', endDate: '结束日期', endDateAria: '分析结束日期', oneDayValidation: '1 日验证', forceRerun: '强制重评', running: '评价中...', runBacktest: '运行信号评价', oneDayModeDescription: '1 日验证模式会用下一个交易日收盘表现校验 AI 预测。', windowModeDescription: '将评估窗口设为 1，可查看 AI 预测与下一个交易日收盘表现的匹配情况。', overallPerformance: '整体表现', noMetricsTitle: '暂无指标', noMetricsDescription: '运行信号评价后会生成历史信号评价指标。', loadingResults: '正在加载结果...', noResultsTitle: '暂无结果', noResultsDescription: '运行信号评价后可评估历史分析准确性。', nextDayValidation: '次日验证', resultSet: '结果集', allStocks: '全部股票', filteredStock: '筛选 {code}', dayWindow: '{days} 日窗口', fromDate: '自 {date}', toDate: '至 {date}', scrollHint: '小屏幕可横向滚动', stock: '股票', analysisDate: '分析日期', aiPrediction: 'AI 预测', actualPerformance: '实际表现', windowReturn: '窗口收益', accuracy: '准确性', directionMatch: '方向匹配', result: '结果', status: '状态', totalPage: '共 {total} 条结果 · 第 {page} / {pages} 页', directionAccuracy: '方向准确率', winRate: '胜率', avgSimulatedReturn: '平均模拟收益', avgStockReturn: '平均个股收益', stopLossTriggerRate: '止损触发率', takeProfitTriggerRate: '止盈触发率', avgDaysToFirstHit: '平均命中天数', evaluationCount: '评估数', outcomeSummary: '盈 / 亏 / 中', phaseDistribution: '阶段分布：{text}', processed: '已处理:', saved: '已保存:', completed: '已完成:', insufficient: '数据不足:', errors: '错误:', yes: '是', no: '否', unknown: '未知' },
++  en: { documentTitle: 'Signal Evaluation - DSA', codePlaceholder: 'Filter by stock code (leave empty for all)', filter: 'Filter', evalWindow: 'Evaluation window', phase: 'Phase', startDate: 'Start date', startDateAria: 'Analysis start date', endDate: 'End date', endDateAria: 'Analysis end date', oneDayValidation: '1D validation', forceRerun: 'Force reevaluation', running: 'Evaluating...', runBacktest: 'Run signal evaluation', oneDayModeDescription: '1D validation checks AI predictions against the next trading day close.', windowModeDescription: 'Set the evaluation window to 1 to compare AI predictions with the next trading day close.', overallPerformance: 'Overall performance', noMetricsTitle: 'No metrics', noMetricsDescription: 'Historical signal evaluation metrics appear after signal evaluation runs.', loadingResults: 'Loading results...', noResultsTitle: 'No results', noResultsDescription: 'Run signal evaluation to evaluate historical analysis accuracy.', nextDayValidation: 'Next-day validation', resultSet: 'Result set', allStocks: 'All stocks', filteredStock: 'Filtered {code}', dayWindow: '{days}-day window', fromDate: 'from {date}', toDate: 'to {date}', scrollHint: 'Scroll horizontally on small screens', stock: 'Stock', analysisDate: 'Analysis date', aiPrediction: 'AI prediction', actualPerformance: 'Actual performance', windowReturn: 'Window return', accuracy: 'Accuracy', directionMatch: 'Direction match', result: 'Result', status: 'Status', totalPage: '{total} results · Page {page} / {pages}', directionAccuracy: 'Direction accuracy', winRate: 'Win rate', avgSimulatedReturn: 'Avg simulated return', avgStockReturn: 'Avg stock return', stopLossTriggerRate: 'Stop-loss trigger rate', takeProfitTriggerRate: 'Take-profit trigger rate', avgDaysToFirstHit: 'Avg days to first hit', evaluationCount: 'Evaluations', outcomeSummary: 'Win / Loss / Neutral', phaseDistribution: 'Phase breakdown: {text}', processed: 'Processed:', saved: 'Saved:', completed: 'Completed:', insufficient: 'Insufficient:', errors: 'Errors:', yes: 'Yes', no: 'No', unknown: 'Unknown' },
+ } as const;
+ 
+ export const BACKTEST_PHASE_FILTER_OPTIONS: Record<UiLanguage, Array<Option<BacktestPhaseFilter>>> = {
+diff --git a/apps/dsa-web/src/pages/BacktestPage.tsx b/apps/dsa-web/src/pages/BacktestPage.tsx
+index d00c9ade..5f777f56 100644
+--- a/apps/dsa-web/src/pages/BacktestPage.tsx
++++ b/apps/dsa-web/src/pages/BacktestPage.tsx
+@@ -306,7 +306,7 @@ const BacktestPage: React.FC = () => {
+       setCurrentPage(response.page);
+       setPageError(null);
+     } catch (err) {
+-      console.error('Failed to fetch backtest results:', err);
++      console.error('Failed to fetch signal evaluation results:', err);
+       setPageError(getParsedApiError(err));
+     } finally {
+       setIsLoadingResults(false);
+@@ -367,7 +367,7 @@ const BacktestPage: React.FC = () => {
+     init();
+   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+ 
+-  // Run backtest
++  // Run signal evaluation through the legacy /api/v1/backtest/* compatibility surface.
+   const handleRun = async () => {
+     setIsRunning(true);
+     setRunResult(null);
+diff --git a/apps/dsa-web/src/pages/__tests__/BacktestPage.test.tsx b/apps/dsa-web/src/pages/__tests__/BacktestPage.test.tsx
+index 275c3219..117cde17 100644
+--- a/apps/dsa-web/src/pages/__tests__/BacktestPage.test.tsx
++++ b/apps/dsa-web/src/pages/__tests__/BacktestPage.test.tsx
+@@ -208,17 +208,17 @@ describe('BacktestPage', () => {
+     expect(rowScope.queryByText('预警')).not.toBeInTheDocument();
+   });
+ 
+-  it('renders backtest controls and result headings in English UI mode', async () => {
++  it('renders signal evaluation controls and result headings in English UI mode', async () => {
+     renderEnglishPage();
+ 
+     expect(await screen.findByPlaceholderText('Filter by stock code (leave empty for all)')).toBeInTheDocument();
+     expect(screen.getByText('Evaluation window')).toBeInTheDocument();
+     expect(screen.getAllByText('Phase').length).toBeGreaterThan(0);
+-    expect(screen.getByRole('button', { name: 'Run backtest' })).toBeInTheDocument();
++    expect(screen.getByRole('button', { name: 'Run signal evaluation' })).toBeInTheDocument();
+     expect(screen.getByText('Window return')).toBeInTheDocument();
+     expect(screen.getByText('Direction match')).toBeInTheDocument();
+     expect(screen.getByText('Direction accuracy')).toBeInTheDocument();
+-    expect(screen.queryByText('运行回测')).not.toBeInTheDocument();
++    expect(screen.queryByText('运行信号评价')).not.toBeInTheDocument();
+     expect(screen.queryByText('窗口收益')).not.toBeInTheDocument();
+   });
+ 
+@@ -257,7 +257,7 @@ describe('BacktestPage', () => {
+     });
+   });
+ 
+-  it('runs a backtest and refreshes results using the shared filter values', async () => {
++  it('runs signal evaluation and refreshes results using the shared filter values', async () => {
+     mockRun.mockResolvedValueOnce({
+       processed: 0,
+       saved: 0,
+@@ -278,7 +278,7 @@ describe('BacktestPage', () => {
+     fireEvent.change(windowInput, { target: { value: '15' } });
+     fireEvent.change(fromInput, { target: { value: '2026-03-01' } });
+     fireEvent.change(toInput, { target: { value: '2026-03-31' } });
+-    fireEvent.click(screen.getByRole('button', { name: '运行回测' }));
++    fireEvent.click(screen.getByRole('button', { name: '运行信号评价' }));
+ 
+     await waitFor(() => {
+       expect(mockRun).toHaveBeenCalledWith({
+@@ -336,7 +336,7 @@ describe('BacktestPage', () => {
+     fireEvent.change(windowInput, { target: { value: '' } });
+     fireEvent.change(fromInput, { target: { value: '2026-03-01' } });
+     fireEvent.change(toInput, { target: { value: '2026-03-31' } });
+-    fireEvent.click(screen.getByRole('button', { name: '运行回测' }));
++    fireEvent.click(screen.getByRole('button', { name: '运行信号评价' }));
+ 
+     await waitFor(() => {
+       expect(mockRun).toHaveBeenCalledWith({
+diff --git a/apps/dsa-web/src/types/backtest.ts b/apps/dsa-web/src/types/backtest.ts
+index 81aafaa3..b14ddb6c 100644
+--- a/apps/dsa-web/src/types/backtest.ts
++++ b/apps/dsa-web/src/types/backtest.ts
+@@ -1,5 +1,5 @@
+ /**
+- * Backtest API type definitions
++ * Legacy Backtest API type definitions for signal evaluation.
+  * Mirrors api/v1/schemas/backtest.py
+  */
+ import type { DecisionAction, MarketPhaseSummary } from './analysis';
+diff --git a/src/core/signal_evaluation_engine.py b/src/core/signal_evaluation_engine.py
+new file mode 100644
+index 00000000..4e255397
+--- /dev/null
++++ b/src/core/signal_evaluation_engine.py
+@@ -0,0 +1,47 @@
++# -*- coding: utf-8 -*-
++"""Signal evaluation engine compatibility layer.
++
++This module gives the legacy T+N recommendation evaluation logic its accurate
++semantic name while keeping existing backtest imports and storage compatible.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++
++from src.core.backtest_engine import (
++    OVERALL_SENTINEL_CODE,
++    BacktestEngine,
++    BacktestResultLike,
++    DailyBarLike,
++    EvaluationConfig,
++)
++
++
++SIGNAL_EVALUATION_TYPE = "signal"
++SIGNAL_EVALUATION_SEMANTIC_SCOPE = "legacy_signal_evaluation"
++
++
++@dataclass(frozen=True)
++class SignalEvaluationConfig(EvaluationConfig):
++    evaluation_type: str = SIGNAL_EVALUATION_TYPE
++
++
++class SignalEvaluationEngine(BacktestEngine):
++    """Legacy DSA signal evaluation engine, not a formal portfolio backtest."""
++
++    evaluation_type = SIGNAL_EVALUATION_TYPE
++    semantic_scope = SIGNAL_EVALUATION_SEMANTIC_SCOPE
++
++
++__all__ = [
++    "OVERALL_SENTINEL_CODE",
++    "SIGNAL_EVALUATION_SEMANTIC_SCOPE",
++    "SIGNAL_EVALUATION_TYPE",
++    "BacktestEngine",
++    "BacktestResultLike",
++    "DailyBarLike",
++    "EvaluationConfig",
++    "SignalEvaluationConfig",
++    "SignalEvaluationEngine",
++]
+diff --git a/src/services/backtest_service.py b/src/services/backtest_service.py
+index 3636b35a..3aeda925 100644
+--- a/src/services/backtest_service.py
++++ b/src/services/backtest_service.py
+@@ -12,7 +12,13 @@ from sqlalchemy import and_, select
+ 
+ from data_provider.base import canonical_stock_code, normalize_stock_code
+ from src.config import get_config
+-from src.core.backtest_engine import OVERALL_SENTINEL_CODE, BacktestEngine, EvaluationConfig
++from src.core.signal_evaluation_engine import (
++    OVERALL_SENTINEL_CODE,
++    SIGNAL_EVALUATION_SEMANTIC_SCOPE,
++    SIGNAL_EVALUATION_TYPE,
++    SignalEvaluationConfig,
++    SignalEvaluationEngine,
++)
+ from src.market_phase_summary import extract_market_phase_summary, normalize_analysis_phase_bucket
+ from src.repositories.backtest_repo import BacktestRepository
+ from src.repositories.stock_repo import StockRepository
+@@ -25,7 +31,7 @@ logger = logging.getLogger(__name__)
+ 
+ 
+ class BacktestService:
+-    """Service layer to run and query backtests."""
++    """Compatibility service for legacy backtest-named signal evaluation."""
+ 
+     MAX_DYNAMIC_SUMMARY_ROWS = 2000
+ 
+@@ -61,7 +67,7 @@ class BacktestService:
+         engine_version = getattr(config, "backtest_engine_version", "v1")
+         neutral_band_pct = float(getattr(config, "backtest_neutral_band_pct", 2.0))
+ 
+-        eval_config = EvaluationConfig(
++        eval_config = SignalEvaluationConfig(
+             eval_window_days=int(eval_window_days),
+             neutral_band_pct=neutral_band_pct,
+             engine_version=str(engine_version),
+@@ -172,7 +178,7 @@ class BacktestService:
+                         if len(forward_bars) >= int(eval_window_days):
+                             break
+ 
+-                evaluation = BacktestEngine.evaluate_single(
++                evaluation = SignalEvaluationEngine.evaluate_single(
+                     operation_advice=analysis.operation_advice,
+                     analysis_date=start_daily.date,
+                     start_price=float(start_daily.close),
+@@ -572,6 +578,8 @@ class BacktestService:
+         aligned_existing_result_dates: int = 0,
+     ) -> Dict[str, Any]:
+         diagnostics: Dict[str, Any] = {
++            "evaluation_type": SIGNAL_EVALUATION_TYPE,
++            "semantic_scope": SIGNAL_EVALUATION_SEMANTIC_SCOPE,
+             "code": code,
+             "eval_window_days": eval_window_days,
+             "min_age_days": min_age_days,
+@@ -972,7 +980,7 @@ class BacktestService:
+                     )
+                 )
+             ).scalars().all()
+-            overall_data = BacktestEngine.compute_summary(
++            overall_data = SignalEvaluationEngine.compute_summary(
+                 results=overall_rows,
+                 scope="overall",
+                 code=OVERALL_SENTINEL_CODE,
+@@ -997,7 +1005,7 @@ class BacktestService:
+                         )
+                     )
+                 ).scalars().all()
+-                data = BacktestEngine.compute_summary(
++                data = SignalEvaluationEngine.compute_summary(
+                     results=rows,
+                     scope="stock",
+                     code=normalized_code,
+@@ -1213,7 +1221,7 @@ class BacktestService:
+                 "Date-filtered summary matches too many rows; narrow the analysis date range or stock code."
+             )
+ 
+-        summary = BacktestEngine.compute_summary(
++        summary = SignalEvaluationEngine.compute_summary(
+             results=filtered_rows,
+             scope=scope,
+             code=code,
+diff --git a/src/services/decision_signal_outcome_service.py b/src/services/decision_signal_outcome_service.py
+index f9568698..6b4220b2 100644
+--- a/src/services/decision_signal_outcome_service.py
++++ b/src/services/decision_signal_outcome_service.py
+@@ -10,7 +10,7 @@ import logging
+ import math
+ from typing import Any, Dict, Iterable, List, Optional, Tuple
+ 
+-from src.core.backtest_engine import BacktestEngine, EvaluationConfig
++from src.core.signal_evaluation_engine import SignalEvaluationConfig, SignalEvaluationEngine
+ from src.repositories.decision_signal_outcome_repo import DecisionSignalOutcomeRepository
+ from src.repositories.decision_signal_repo import DecisionSignalRepository
+ from src.repositories.stock_repo import StockRepository
+@@ -411,12 +411,12 @@ class DecisionSignalOutcomeService:
+             analysis_date=anchor_date,
+             eval_window_days=eval_days,
+         )
+-        evaluation = BacktestEngine.evaluate_decision_signal(
++        evaluation = SignalEvaluationEngine.evaluate_decision_signal(
+             direction_expected=direction,
+             anchor_date=anchor_date,
+             start_price=float(start_price),
+             forward_bars=forward_bars,
+-            config=EvaluationConfig(
++            config=SignalEvaluationConfig(
+                 eval_window_days=eval_days,
+                 neutral_band_pct=2.0,
+                 engine_version=DECISION_SIGNAL_OUTCOME_ENGINE_VERSION,

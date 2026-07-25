@@ -12,8 +12,9 @@
 | DSA-PATCH-002 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0002-align-alert-market-region-test-contract.patch` | `AlertRuleForm` 的一个 Vitest 用例要求 market-light 区域出现 `jp/kr`，但 Web `MarketRegion` 类型、alert labels 和相邻用例均只支持 `cn/hk/us`，导致 `SAL-P0-005` Web baseline 稳定失败 | 修复前 targeted Vitest `17 passed / 1 failed`；补丁后 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` 为 `18 passed` |
 | DSA-PATCH-003 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0003-align-web-smoke-e2e-contract.patch` | Playwright smoke 真实执行后暴露 e2e 契约漂移：首次登录未填 `passwordConfirm`、首页侧栏已演进为“个股栏”、ReportMarkdown smoke 缺少历史报告 fixture、chat/settings 断言使用旧文案或非唯一 selector | `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/history fixture；`npm run test:smoke -- --reporter=line` 真实执行 `13 passed` |
 | DSA-PATCH-004 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0004-add-screen-lab.patch` | `SAL-P3-015` 在 DSA Web 中增加 Serenity Screen Lab 页面，作为 Quant Screening API 的 UI extension；不修改上游筛选核心语义 | Targeted web `24 passed`；full Vitest `973 passed, 2 skipped`；`npm run lint` PASS；`npm run build` PASS；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0004` already applied |
+| DSA-PATCH-005 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0005-migrate-signal-evaluation-engine.patch` | `SAL-P4-002` 把 legacy T+N recommendation evaluation 的内部语义迁移为 `SignalEvaluationEngine` / `evaluation_type=signal`，同时保留 legacy `/api/v1/backtest/*`、`Backtest*` schema、数据库表和 Agent read-tool 兼容面；Web 可见文案改为 Signal Evaluation，避免误称正式组合回测 | Root parity `3 passed`；migration architecture `4 passed`；P4 snapshot script PASS；DSA focused Python `95 passed, 1 warning`；focused web Vitest `26 passed`；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0005` already applied |
 
-当前没有登记为 `divergence` 的补丁。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
+当前没有登记为 `divergence` 的补丁。`DSA-PATCH-005` 属于 compatible semantic naming cleanup：它纠正 legacy backtest 命名歧义但保留运行行为、API/schema/table 兼容和 P4-001 快照。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
 
 ## DSA-PATCH-001：隔离 Intelligence 请求代理参数
 
@@ -82,6 +83,30 @@
 | 补丁后 `scripts/seed-dsa-web-smoke-fixture.sh` | 通过，生成/复用本地 smoke env、auth password 与历史报告 fixture |
 | 补丁后 `npm run test:smoke -- --reporter=line` | 通过，`13 passed`，无 skipped |
 | `npm run lint` / `npm run build` / `npm run test` | 通过；Vitest `90 passed` files，`965 passed, 2 skipped` |
+
+## DSA-PATCH-005：迁移 SignalEvaluationEngine 语义命名
+
+### 背景
+
+`SAL-P4-001` 已确认当前 DSA `BacktestEngine` 实际只做 T+N 后验信号评价，不是正式组合回测。继续在 UI、服务和核心命名中称为 Backtest 会阻塞 `SAL-P4-003` 正式 `BacktestSpec` 的边界澄清。
+
+### 修改
+
+- 新增 `src/core/signal_evaluation_engine.py`，把 legacy engine 以 `SignalEvaluationEngine` / `SignalEvaluationConfig` / `evaluation_type=signal` 暴露。
+- `backtest_service.py` 与 `decision_signal_outcome_service.py` 内部改用 signal evaluation 命名，并在 diagnostics 中写入 `evaluation_type=signal` 和 `semantic_scope=legacy_signal_evaluation`。
+- DSA Web 可见文案改为“信号评价 / Signal Evaluation”，但保留 legacy `/backtest` route 和 `/api/v1/backtest/*` client。
+- `scripts/run-dsa-signal-evaluation-characterization.sh` 允许 registered patch 引入的新文件出现在 DSA worktree，避免误报 `src/core/signal_evaluation_engine.py` 为未登记改动。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `.venv/bin/python -m pytest tests/quant/test_signal_evaluation_engine.py -q` | `3 passed` |
+| `.venv/bin/python -m pytest tests/architecture/test_dsa_signal_evaluation_engine_migration.py -q` | `4 passed` |
+| `scripts/run-dsa-signal-evaluation-characterization.sh` | committed snapshots match |
+| `scripts/apply-dsa-baseline-patches.sh --check-only` | `0001..0005` already applied |
+| DSA Web focused Vitest | `3 passed files / 26 passed tests` |
+| DSA focused Python tests | `95 passed, 1 warning` |
 
 ## DSA-PATCH-004：增加 Screen Lab UI extension
 
