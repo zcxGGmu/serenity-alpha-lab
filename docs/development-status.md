@@ -1,15 +1,15 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-25<br>
-> 最近阶段性任务：`SAL-P3-017` Gate G3：筛选与因子评审<br>
+> 最近阶段性任务：`SAL-P4-001` 锁定 DSA Signal Evaluation 行为<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P4 真实组合回测与确定性风控<br>
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：66/129<br>
-> 当前可执行任务：`SAL-P4-001` 锁定 DSA Signal Evaluation 行为，状态为 `READY`；仍不得提前执行正式组合回测、Evidence Agent 或真实 Provider/LLM 调用<br>
-> 最近可评审交付 checkpoint：`a1078532 docs(P3): 通过 Gate G3 筛选与因子评审`；上一 checkpoint 为 `e7569c83 feat(P3): 实现筛选性能与复现验收`<br>
-> 最新状态同步 checkpoint：本次 `SAL-P3-017` checkpoint hash 同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash`<br>
-> 本次实现 checkpoint：`a1078532 docs(P3): 通过 Gate G3 筛选与因子评审`；已完成任务范围推进至 `SAL-P3-017`<br>
+> 任务完成度：67/129<br>
+> 当前可执行任务：`SAL-P4-002` 迁移为 `SignalEvaluationEngine`，状态为 `READY`；`SAL-P4-003` 正式 `BacktestSpec` 必须等待 `SAL-P4-002` 消除 legacy backtest 命名歧义<br>
+> 最近可评审交付 checkpoint：本次 `SAL-P4-001` checkpoint 提交后以最终回复和 `git log -1 --oneline` 为准；上一 checkpoint 为 `a1078532 docs(P3): 通过 Gate G3 筛选与因子评审`<br>
+> 最新状态同步 checkpoint：本次 `SAL-P4-001` 状态同步随 checkpoint 提交，提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `a43f31a9 docs: 同步 SAL-P3-017 checkpoint hash`<br>
+> 本次实现 checkpoint：提交后以最终回复和 `git log -1 --oneline` 为准；已完成任务范围推进至 `SAL-P4-001`<br>
 > 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -100,17 +100,21 @@
 - 完成 `SAL-P3-016`：新增 [筛选性能与复现验收记录](./screen-performance-reproducibility.md)、Quant Screening 层 [performance.py](../src/serenity_alpha_lab/quant/screening/performance.py) 和 Screen performance reproducibility contract test，冻结 `quant.screen_performance@1.0.0`、A 股筛选 SLO/内存/结果行/增量预算、stage timing/memory samples、canonical result hash、fixed Run Bundle、reproducibility check 和 deterministic performance report Artifact 发布；P3 进度 `16/17`。
 - 完成 `SAL-P3-017`：新增 [Gate G3 筛选与因子评审](./gate-g3-screen-factor-review.md) 和 Gate G3 integration test，结论为 `GO with accepted risks`；复核 `SAL-P3-001..016` 全部证据，批准 Screen/Factor 契约作为 P4 输入，但不批准 Quant Core、正式回测、Evidence Agent、真实 Provider/LLM、Worker loop 或 DSA runtime source migration；P3 完成 `17/17`，总进度 `66/129`。
 
+### P4 真实组合回测与确定性风控
+
+- 完成 `SAL-P4-001`：新增 [DSA Signal Evaluation Characterization](./dsa-signal-evaluation-characterization.md)、[P4 characterization script](../scripts/run-dsa-signal-evaluation-characterization.sh)、[P4 characterization test](../tests/architecture/test_dsa_signal_evaluation_characterization.py) 和 [P4 baseline snapshots](./baselines/dsa-v3.26.1/signal-evaluation-characterization/)，冻结 DSA `BacktestEngine.evaluate_single()` / `evaluate_decision_signal()`、legacy `/api/v1/backtest/*` route/schema 与 Agent backtest read tools 当前行为；这些表面只标注为 `legacy_signal_evaluation`，不是正式组合回测；P4 进度 `1/22`，总进度 `67/129`。
+
 ## 未完成
 
 ### 当前可执行 P4 任务
 
-- `SAL-P4-001` 当前为 `READY`：锁定 DSA Signal Evaluation 行为，补齐当前 `BacktestEngine` Characterization 和 API 金标，先区分信号评价与正式组合回测，不得直接启动正式组合回测。
+- `SAL-P4-002` 当前为 `READY`：在保持 `SAL-P4-001` 快照完全一致的前提下迁移为 `SignalEvaluationEngine`，保留旧 Backtest API 兼容面，并让 UI/API 不再把信号评价描述为组合策略回测。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P4 至 P6 仍有 63 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3。但尚未完成完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P4 至 P6 仍有 62 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结。但尚未完成 `SignalEvaluationEngine` 迁移、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -118,6 +122,7 @@
 - 2026-07-25 完成 `SAL-P3-015` Screen Lab：新增 DSA Web extension patch `DSA-PATCH-004`、Screen Lab evidence 和状态登记；完成范围推进至 `SAL-P3-015`，当前唯一 `READY` 阶段任务为 `SAL-P3-016` 筛选性能与复现验收。`cd0d6c6f docs: 同步 SAL-P3-014 checkpoint hash` 是本次实现前最新已落地状态同步锚点。
 - 2026-07-25 完成 `SAL-P3-016` 筛选性能与复现验收，implementation checkpoint `e7569c83 feat(P3): 实现筛选性能与复现验收`；本次补齐筛选性能、内存、增量和结果哈希复现验收，完成范围推进至 `SAL-P3-016`，当前唯一 `READY` 阶段任务为 `SAL-P3-017` Gate G3：筛选与因子评审。
 - 2026-07-25 完成 `SAL-P3-017` Gate G3 筛选与因子评审；结论为 `GO with accepted risks`，P3 完成 `17/17`，当前唯一 `READY` 阶段任务为 `SAL-P4-001` 锁定 DSA Signal Evaluation 行为。本次 Gate 只批准 Screen/Factor 契约作为 P4 输入，不批准直接执行正式回测。
+- 2026-07-25 完成 `SAL-P4-001` DSA Signal Evaluation 行为锁定；本次冻结 DSA `BacktestEngine` 文本信号与结构化 DecisionSignal 评价、legacy `/api/v1/backtest/*` API schema、Agent read tools 和 7 个 committed snapshot，明确它们是 `legacy_signal_evaluation` 而非正式组合回测；当前唯一 `READY` 阶段任务为 `SAL-P4-002` 迁移为 `SignalEvaluationEngine`，`SAL-P4-003` 正式 `BacktestSpec` 等待 `SAL-P4-002`。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -169,9 +174,9 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P4-001` 锁定 DSA Signal Evaluation 行为。
+1. 优先执行 `SAL-P4-002` 迁移为 `SignalEvaluationEngine`，并保持 `SAL-P4-001` 快照完全一致。
 2. 不得直接启动正式组合回测、Evidence Agent 或真实 Provider/LLM；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
-3. P4 必须先冻结 DSA Signal Evaluation 当前行为和 API 金标，再定义正式 BacktestSpec；不得把 DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 直接命名为正式组合回测。
+3. `SAL-P4-003` 正式 `BacktestSpec` 必须等待 `SAL-P4-002` 消除 legacy backtest 命名歧义；不得把 DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 直接命名为正式组合回测。
 
 ## 本次状态复核
 
@@ -282,22 +287,23 @@
 22. docs/screen-lab.md
 23. docs/screen-performance-reproducibility.md
 24. docs/gate-g3-screen-factor-review.md
+25. docs/dsa-signal-evaluation-characterization.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017
-- 最近完成：SAL-P3-017 Gate G3：筛选与因子评审
-- 最近可评审交付 checkpoint：a1078532 docs(P3): 通过 Gate G3 筛选与因子评审；上一 checkpoint 为 e7569c83 feat(P3): 实现筛选性能与复现验收
-- 最新状态同步 checkpoint：本次 SAL-P3-017 checkpoint hash 同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：4f7dd5dc docs: 同步 SAL-P3-016 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，总计 66/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001
+- 最近完成：SAL-P4-001 锁定 DSA Signal Evaluation 行为
+- 最近可评审交付 checkpoint：本次 SAL-P4-001 checkpoint 提交后以最终回复和 git log -1 --oneline 为准；上一 checkpoint 为 a1078532 docs(P3): 通过 Gate G3 筛选与因子评审
+- 最新状态同步 checkpoint：本次 SAL-P4-001 状态同步随 checkpoint 提交，提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：a43f31a9 docs: 同步 SAL-P3-017 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 1/22，总计 67/129
 
 下一步优先执行：
-1. SAL-P4-001 锁定 DSA Signal Evaluation 行为
+1. SAL-P4-002 迁移为 SignalEvaluationEngine，并保持 SAL-P4-001 快照完全一致
 2. 不要直接启动正式组合回测、Evidence Agent 或真实 Provider/LLM；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. P4 必须先冻结 DSA Signal Evaluation 当前行为和 API 金标，再定义正式 BacktestSpec；不得把 DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 直接命名为正式组合回测
+3. SAL-P4-003 正式 BacktestSpec 必须等待 SAL-P4-002 消除 legacy backtest 命名歧义；不得把 DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 直接命名为正式组合回测
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。

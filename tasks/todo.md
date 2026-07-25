@@ -1,3 +1,42 @@
+# SAL-P4-001 DSA Signal Evaluation Characterization Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-001` by locking current DSA `BacktestEngine` / Signal Evaluation behavior, legacy `/api/v1/backtest/*` API schemas and Agent read-tool surfaces. Do not start `SAL-P4-002`, define `BacktestSpec`, execute formal portfolio backtests, start Evidence Agent, call real Provider/LLM, start Worker execution loop or migrate DSA runtime source.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, `docs/development-status.md`, `docs/development-progress-checklist.md`, Gate G3/P4 entry evidence, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-dsa-signal-evaluation-characterization.md`.
+- [x] Add Red characterization tests for P4 Signal Evaluation baseline files, required behavior cases, API surface metadata and non-formal-backtest naming boundary.
+- [x] Add deterministic `scripts/run-dsa-signal-evaluation-characterization.sh` with locked DSA worktree validation and snapshot diff/update flow.
+- [x] Generate committed P4 baseline snapshots under `docs/baselines/dsa-v3.26.1/signal-evaluation-characterization/`.
+- [x] Add `docs/dsa-signal-evaluation-characterization.md` with semantics, API goldens, accepted risks, explicit non-goals and verification evidence.
+- [x] Update `docs/development-progress-checklist.md` with `SAL-P4-001` done status, P4 `1/22`, total `67/129`, `DEC-065`, `AEV-067` and `SAL-P4-002` READY.
+- [x] Update `docs/development-status.md` and this review with latest completed/unfinished ranges, checkpoint anchors and copyable next-session prompt.
+- [x] Run target/baseline/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Perform review, stage only `SAL-P4-001` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- DSA `BacktestEngine` and `/api/v1/backtest/*` names are legacy Signal Evaluation surfaces only; this task must not call them formal portfolio backtests.
+- P4-001 freezes current behavior and goldens; it must not rename code to `SignalEvaluationEngine` because that is `SAL-P4-002`.
+- Formal `BacktestSpec`, Qlib, ledger, order/execution, portfolio risk, Quant Lab, Evidence Agent, real Provider/LLM calls and Worker execution remain out of scope.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P4-001
+
+- Added `tests/architecture/test_dsa_signal_evaluation_characterization.py`; initial Red target failed with missing P4 baseline/script/doc (`5 failed`), Green target now `5 passed`.
+- Added `scripts/run-dsa-signal-evaluation-characterization.sh` and 7 committed snapshots under `docs/baselines/dsa-v3.26.1/signal-evaluation-characterization/`; script output confirms snapshots match the locked DSA worktree.
+- Added `docs/dsa-signal-evaluation-characterization.md` documenting DSA `BacktestEngine` semantics, legacy `/api/v1/backtest/*` API goldens, Agent read-tool scope, summary metrics, non-goals and P4 follow-on constraints.
+- Updated `docs/development-progress-checklist.md`: `SAL-P4-001` is DONE, P4 is `1/22`, total progress is `67/129`, `DEC-065` and `AEV-067` are registered, `SAL-P4-002` is READY, and `SAL-P4-003` now depends on `SAL-P4-002`.
+- Updated `docs/development-status.md` and next-session prompt to resume at `SAL-P4-002` while keeping Gate G4 unpassed and formal BacktestSpec blocked until Signal Evaluation naming is migrated.
+- Verification: target `5 passed`; baseline script PASS; related architecture suite `32 passed`; full pytest `317 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check reports `0001..0004` already applied; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
+- Review: code-review subagent dispatch was attempted but the client rejected payloads around empty optional fields and `message`/`items` conflicts; fallback local review checked script path safety, snapshot determinism, API/tool semantics, status anchors and no-go boundaries, and fixed one wording issue so `SAL-P4-003` explicitly waits for `SAL-P4-002`.
+- Scope retained: no `SAL-P4-002` implementation, no `BacktestSpec`, no formal portfolio backtest, no Qlib/Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no DSA runtime source migration, no dependency surface change and no tag movement.
+- Implementation checkpoint is created by this review commit and should be confirmed with `git log -1 --oneline`.
+
+---
+
 # SAL-P3-017 Gate G3 Screen Factor Review Plan
 
 > Started: 2026-07-25

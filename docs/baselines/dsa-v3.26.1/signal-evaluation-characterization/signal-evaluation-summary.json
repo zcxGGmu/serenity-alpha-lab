@@ -1,0 +1,87 @@
+{
+  "advice_breakdown": {
+    "do not sell, hold and watch": {
+      "loss": 0,
+      "neutral": 0,
+      "total": 1,
+      "win": 1,
+      "win_rate_pct": 100.0
+    },
+    "不要买入，等待确认": {
+      "loss": 1,
+      "neutral": 0,
+      "total": 1,
+      "win": 0,
+      "win_rate_pct": 0.0
+    },
+    "不要卖出，继续持有": {
+      "loss": 0,
+      "neutral": 0,
+      "total": 1,
+      "win": 1,
+      "win_rate_pct": 100.0
+    },
+    "买入": {
+      "loss": 1,
+      "neutral": 0,
+      "total": 4,
+      "win": 2,
+      "win_rate_pct": 66.67
+    },
+    "卖出": {
+      "loss": 0,
+      "neutral": 0,
+      "total": 1,
+      "win": 1,
+      "win_rate_pct": 100.0
+    },
+    "持有": {
+      "loss": 1,
+      "neutral": 0,
+      "total": 1,
+      "win": 0,
+      "win_rate_pct": 0.0
+    },
+    "观望": {
+      "loss": 0,
+      "neutral": 0,
+      "total": 1,
+      "win": 1,
+      "win_rate_pct": 100.0
+    }
+  },
+  "ambiguous_rate": 14.29,
+  "avg_days_to_first_hit": 1.0,
+  "avg_simulated_return_pct": 0.0,
+  "avg_stock_return_pct": 0.5556,
+  "cash_count": 3,
+  "code": "__overall__",
+  "completed_count": 10,
+  "diagnostics": {
+    "eval_status": {
+      "completed": 10,
+      "insufficient_data": 1
+    },
+    "first_hit": {
+      "(none)": 1,
+      "ambiguous": 1,
+      "neither": 5,
+      "not_applicable": 3,
+      "take_profit": 1
+    }
+  },
+  "direction_accuracy_pct": 66.67,
+  "engine_version": "v1",
+  "eval_window_days": 3,
+  "insufficient_count": 1,
+  "long_count": 7,
+  "loss_count": 3,
+  "neutral_count": 0,
+  "neutral_rate_pct": 0.0,
+  "scope": "overall",
+  "stop_loss_trigger_rate": 14.29,
+  "take_profit_trigger_rate": 28.57,
+  "total_evaluations": 11,
+  "win_count": 6,
+  "win_rate_pct": 66.67
+}

@@ -1,0 +1,10 @@
+{
+  "artifact_set": "dsa-signal-evaluation-characterization",
+  "artifacts": {
+    "api-surface.json": "7b1870253ab079f5416c584fca941e3e1f4419bf75c893e7956d25600e3f56d7",
+    "decision-signal-evaluations.json": "f519a7dcfaed2664a1ed124357230b6edc949224132a0c9632120765118533e1",
+    "engine-evaluations.json": "b0c44de279becea790ed06b3e162975dd66eda06ee17fd65831b95866012029f",
+    "inputs.json": "4c7acf3b7b32b88934922e866a7902ec53cde61d5b82eae25e2be8b6bd46e880",
+    "signal-evaluation-summary.json": "107707e41fb8bb1012b83eebeb8486ba005677225de9264504a4bcae4b48b2b2"
+  }
+}
