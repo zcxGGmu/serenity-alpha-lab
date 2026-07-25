@@ -32,6 +32,7 @@
 - Verification: focused target `5 passed`; related suite `25 passed`; full pytest `352 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no fees/slippage, no A-share execution rules, no company-action ledger, no metrics/audit and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `4927ba6f feat(P4): 实现订单状态机`.
+- Status-sync checkpoint: `e58823a4 docs: 同步 SAL-P4-008 checkpoint hash`.
 
 ---
 

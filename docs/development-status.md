@@ -8,7 +8,7 @@
 > 任务完成度：74/129<br>
 > 当前可执行任务：`SAL-P4-009` 实现 Portfolio Ledger，状态为 `READY`；不得在该任务外启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`4927ba6f feat(P4): 实现订单状态机`；上一 checkpoint 为 `6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`<br>
-> 最新状态同步 checkpoint：`8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash`；上一状态同步 checkpoint 为 `76089299 docs: 同步 SAL-P4-006 checkpoint hash`<br>
+> 最新状态同步 checkpoint：`e58823a4 docs: 同步 SAL-P4-008 checkpoint hash`；上一状态同步 checkpoint 为 `8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示`；上一 hash-anchor checkpoint 为 `451d554f docs: 同步 SAL-P4-006 状态复核 hash`<br>
 > 本次实现 checkpoint：`4927ba6f feat(P4): 实现订单状态机`；已完成任务范围推进至 `SAL-P4-008`<br>
 > 最新状态复核 checkpoint：`dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示`<br>
@@ -322,7 +322,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-008
 - 最近完成：SAL-P4-008 订单状态机
 - 最近可评审交付 checkpoint：4927ba6f feat(P4): 实现订单状态机；上一 checkpoint：6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter
-- 最新状态同步 checkpoint：8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash；上一状态同步 checkpoint：76089299 docs: 同步 SAL-P4-006 checkpoint hash
+- 最新状态同步 checkpoint：e58823a4 docs: 同步 SAL-P4-008 checkpoint hash；上一状态同步 checkpoint：8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示；上一 hash-anchor checkpoint：451d554f docs: 同步 SAL-P4-006 状态复核 hash
 - 最新状态复核 checkpoint：dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示；上一状态复核 checkpoint：459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 8/22，总计 74/129
