@@ -26,7 +26,7 @@
 - Read-only subagent dispatch for SAL-P4-016 boundary exploration was attempted, but the host wrapper rejected empty optional-field payloads; per lessons, fallback local senior review checked metric formula definitions, sample metadata, cost/turnover binding, no-go scope and import boundary.
 - Local senior review found and fixed max drawdown peak-date attribution so later equity highs do not overwrite the peak date tied to the maximum drawdown; the focused contract test now asserts both peak and trough dates.
 - Verification: Red target `1 error`; focused target `3 passed`; related Metrics/BiasAudit/RiskPolicy/CostModel/PortfolioLedger/BacktestSpec/Architecture suite `34 passed`; full pytest `382 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
-- Implementation checkpoint: pending this commit; follow-up status-sync checkpoint will record the actual hash.
+- Implementation checkpoint: `96101791 feat(P4): 实现统一绩效指标`; follow-up status-sync checkpoint will record this actual hash in recovery docs.
 
 ## Guardrails
 
