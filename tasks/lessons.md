@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-25: SAL-P4-006 后状态复核必须把最终固化锚点写入恢复提示
+
+- 纠正来源：`SAL-P4-006` 实现 checkpoint `1c5c6e81`、状态同步 checkpoint `76089299`、状态同步 hash-anchor `64c7998e` 和最终锚点固化提交 `ea244bdc` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 已提交，如果 `docs/development-status.md` 的“最新状态复核 checkpoint”仍停留在上一阶段任务，或最终交接没有给出可直接复用的启动提示词，下次恢复仍会误判当前任务是否已完整收尾。
+- 规则：阶段性任务完成后，最终交接前必须再次复核并更新 `docs/development-status.md`、`docs/development-progress-checklist.md` 和 `tasks/todo.md`：明确最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final anchor、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制提示词；用户再次提醒该习惯时必须追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-007` 开始，不等待用户提醒；每个阶段性交付后自动执行实现提交、状态同步、必要 hash-anchor、状态复核、`tasks/lessons.md` 更新（若有纠正）和最终可复制启动提示词。
+
 ## 2026-07-25: SAL-P4-006 子代理派发失败时必须立即降级为本地复核并记录
 
 - 纠正来源：`SAL-P4-006` 收尾期间多次尝试 code-review subagent，host wrapper 对空 optional fields、`message`/`items` 同时出现以及空 `items` 均拒绝，导致派发无法完成。

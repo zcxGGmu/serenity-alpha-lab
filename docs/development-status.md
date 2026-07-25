@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`76089299 docs: 同步 SAL-P4-006 checkpoint hash`；上一状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`64c7998e docs: 记录 SAL-P4-006 状态同步 hash`；上一 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`<br>
 > 本次实现 checkpoint：`1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`；已完成任务范围推进至 `SAL-P4-006`<br>
-> 最新状态复核 checkpoint：`6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `cec881a6 docs: 复核 SAL-P3-016 最新开发状态`<br>
+> 最新状态复核 checkpoint：本次 `SAL-P4-006` 状态复核提交将确认 `ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint` 后的恢复状态，提交后以 `git log -1 --oneline` 确认；上一状态复核 checkpoint 为 `6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -135,6 +135,7 @@
 - 2026-07-25 完成 `SAL-P4-005` Qlib 版本锁定与隔离方案；`pyqlib==0.9.7` 仅在 optional `quant` extra 中启用，生产/Desktop requirements 继续排除 Qlib，ADR-009 明确 Qlib 只能由后续 Quant Worker Adapter 在 dedicated process 内 lazy import/initialize；当前唯一 `READY` 阶段任务为 `SAL-P4-006` Dataset 到 Qlib 转换。
 - 2026-07-25 按用户要求再次复核 `SAL-P4-005` 后最新开发状态；确认最近实现 checkpoint 为 `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`，最新状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`，最新状态同步 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..005`，未完成范围从 `SAL-P4-006` 开始，当前 READY 任务为 `SAL-P4-006` Dataset 到 Qlib 转换，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步、记录 hash-anchor 并给出可复制提示词”的习惯。
 - 2026-07-25 完成 `SAL-P4-006` Dataset 到 Qlib 转换；新增 converter、contract tests 和 evidence doc，生成 deterministic calendar/instrument/feature/field_mapping/summary artifacts，要求 source Dataset Manifest 为 concrete `dsv_*`、schema 匹配且 passed/published，summary 明确 `qlib_runtime_started=false` 与 `formal_backtest_started=false`；当前唯一 `READY` 阶段任务为 `SAL-P4-007` Qlib QuantEngine Adapter。
+- 2026-07-25 按用户要求复核 `SAL-P4-006` 后最新开发状态；确认最近实现 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`，状态同步 checkpoint 为 `76089299 docs: 同步 SAL-P4-006 checkpoint hash`，状态同步 hash-anchor 为 `64c7998e docs: 记录 SAL-P4-006 状态同步 hash`，最终锚点固化提交为 `ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint`；当前已完成 `SAL-P4-001..006`，未完成范围从 `SAL-P4-007` 开始，当前 READY 任务为 `SAL-P4-007` Qlib QuantEngine Adapter。本次状态复核不启动 SAL-P4-007、Qlib runtime、正式组合回测、Ledger/Risk、Evidence Agent、Worker loop 或真实 Provider/LLM。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -317,7 +318,7 @@
 - 最近可评审交付 checkpoint：1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换；上一 checkpoint：82580fdb feat(P4): 锁定 Qlib 版本与隔离方案
 - 最新状态同步 checkpoint：76089299 docs: 同步 SAL-P4-006 checkpoint hash；上一状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：64c7998e docs: 记录 SAL-P4-006 状态同步 hash；上一 hash-anchor checkpoint：ee5761ba docs: 记录 SAL-P4-005 状态同步 hash
-- 最新状态复核 checkpoint：6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示；上一状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最新状态复核 checkpoint：本次 SAL-P4-006 状态复核提交将确认 ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint 后的恢复状态；上一状态复核 checkpoint：6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 6/22，总计 72/129
 
 下一步优先执行：

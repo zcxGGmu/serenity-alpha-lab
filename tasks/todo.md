@@ -1,3 +1,28 @@
+# SAL-P4-006 Latest Status Refresh
+
+> Started: 2026-07-25
+> Scope: Refresh recovery docs after `SAL-P4-006` checkpoints `1c5c6e81`, `76089299`, `64c7998e` and final anchor `ea244bdc`; make completed vs unfinished work explicit, update lessons for the repeated habit reminder, and provide a copyable next-session prompt. Do not start `SAL-P4-007`, Qlib runtime, formal portfolio backtest, Ledger/Risk, Evidence Agent, Worker loop or real Provider/LLM calls in this sync.
+
+## Checklist
+
+- [x] Confirm current Git status and latest checkpoint chain.
+- [x] Update `tasks/lessons.md` with the repeated status-refresh habit after `SAL-P4-006`.
+- [x] Update `docs/development-status.md` with completed/unfinished scope, latest checkpoint anchors, current READY task and next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step anchor with the same recoverable status.
+- [ ] Run status-anchor scan and `git diff --check`, then create the required Chinese status review checkpoint commit.
+
+## Review: SAL-P4-006 Latest Status Refresh
+
+- Confirmed implementation checkpoint `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`.
+- Confirmed status-sync checkpoint `76089299 docs: 同步 SAL-P4-006 checkpoint hash`.
+- Confirmed status-sync hash-anchor checkpoint `64c7998e docs: 记录 SAL-P4-006 状态同步 hash`.
+- Confirmed final anchor commit `ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint`.
+- Current completed scope remains `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, and `SAL-P4-001..006`; current READY task is `SAL-P4-007` Qlib QuantEngine Adapter.
+- Scope retained: no `SAL-P4-007` implementation, no Qlib runtime, no formal portfolio backtest, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no `upstream/dsa-v3.26.1` tag movement.
+- Status review checkpoint: this docs refresh commit will be created after verification and should be confirmed with `git log -1 --oneline`.
+
+---
+
 # SAL-P4-006 Qlib Dataset Conversion Plan
 
 > Started: 2026-07-25
