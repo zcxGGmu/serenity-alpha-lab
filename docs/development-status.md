@@ -7,9 +7,9 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：69/129<br>
 > 当前可执行任务：`SAL-P4-004` 定义 `BacktestArtifact`，状态为 `READY`；不得启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：本次 `SAL-P4-003` 实现提交后以最终回复和 `git log -1 --oneline` 为准；上一 checkpoint 为 `6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`<br>
-> 最新状态同步 checkpoint：本次 `SAL-P4-003` checkpoint hash 同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `0b537f86 docs: 同步 SAL-P4-002 checkpoint hash`<br>
-> 本次实现 checkpoint：本次 `SAL-P4-003` 实现提交后以最终回复和 `git log -1 --oneline` 为准；已完成任务范围推进至 `SAL-P4-003`<br>
+> 最近可评审交付 checkpoint：`1ecfaa2d feat(P4): 定义正式 BacktestSpec`；上一 checkpoint 为 `6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义`<br>
+> 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P4-003 checkpoint hash` 提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `0b537f86 docs: 同步 SAL-P4-002 checkpoint hash`<br>
+> 本次实现 checkpoint：`1ecfaa2d feat(P4): 定义正式 BacktestSpec`；已完成任务范围推进至 `SAL-P4-003`<br>
 > 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -302,8 +302,8 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-003
 - 最近完成：SAL-P4-003 定义正式 BacktestSpec
-- 最近可评审交付 checkpoint：本次 SAL-P4-003 实现提交后以最终回复和 git log -1 --oneline 为准；上一 checkpoint：6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义
-- 最新状态同步 checkpoint：本次 SAL-P4-003 checkpoint hash 同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：0b537f86 docs: 同步 SAL-P4-002 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最近可评审交付 checkpoint：1ecfaa2d feat(P4): 定义正式 BacktestSpec；上一 checkpoint：6760b838 feat(P4): 迁移 SignalEvaluationEngine 语义
+- 最新状态同步 checkpoint：本次 docs: 同步 SAL-P4-003 checkpoint hash 提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：0b537f86 docs: 同步 SAL-P4-002 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 3/22，总计 69/129
 
 下一步优先执行：

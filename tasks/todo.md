@@ -31,6 +31,7 @@
 - Verification: target `3 passed`; related P4/Architecture suite `26 passed`; full pytest `327 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Code-review subagent dispatch was attempted but the client wrapper repeatedly rejected `message`/`items` payload shape; fallback local senior review checked hash determinism, version guards, scope boundaries, no execution entrypoints and status anchors.
 - Scope retained: no `BacktestArtifact`, no formal portfolio backtest run, no Qlib, no orders/fills, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint: `1ecfaa2d feat(P4): 定义正式 BacktestSpec`; follow-up status-sync checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
 
 ---
 
