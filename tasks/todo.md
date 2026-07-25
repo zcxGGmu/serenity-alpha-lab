@@ -13,7 +13,7 @@
 - [x] Add `docs/qlib-version-isolation.md` and ADR-009 with license, dependency, platform compatibility, upgrade/stop-use conditions, and Worker resource isolation.
 - [x] Update progress checklist/status docs with `SAL-P4-005` done, P4 `5/22`, total `71/129`, `DEC-069`, `AEV-071`, and `SAL-P4-006` READY but not started.
 - [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
-- [ ] Review, stage only `SAL-P4-005` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-005` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -31,7 +31,8 @@
 - Updated `docs/python-dependency-lock.md`, progress/status docs, `DEC-069`, `AEV-071`; `SAL-P4-006` is now READY but not started.
 - Verification: target `5 passed`; related Qlib/dependency/architecture suite `23 passed`; full pytest `335 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no `qlib.init`, no Dataset-to-Qlib conversion, no Qlib Adapter, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
-- Implementation checkpoint is created after final verification and should be confirmed with `git log -1 --oneline`.
+- Implementation checkpoint: `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`.
+- Status-sync checkpoint will be created next as `docs: 同步 SAL-P4-005 checkpoint hash`, then recorded with a follow-up hash-anchor commit.
 
 ---
 

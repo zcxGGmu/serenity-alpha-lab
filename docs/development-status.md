@@ -7,9 +7,9 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：71/129<br>
 > 当前可执行任务：`SAL-P4-006` 实现 Dataset 到 Qlib 转换，状态为 `READY`；不得启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：本次 `feat(P4): 锁定 Qlib 版本与隔离方案` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一 checkpoint 为 `471e5857 feat(P4): 定义正式 BacktestArtifact`<br>
-> 最新状态同步 checkpoint：`87dae329 docs: 同步 SAL-P4-004 checkpoint hash`；上一状态同步 checkpoint 为 `d23d5883 docs: 同步 SAL-P4-003 checkpoint hash`<br>
-> 本次实现 checkpoint：本次提交生成后以 `git log -1 --oneline` 和最终回复为准；已完成任务范围推进至 `SAL-P4-005`<br>
+> 最近可评审交付 checkpoint：`82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`；上一 checkpoint 为 `471e5857 feat(P4): 定义正式 BacktestArtifact`<br>
+> 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P4-005 checkpoint hash` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一状态同步 checkpoint 为 `87dae329 docs: 同步 SAL-P4-004 checkpoint hash`<br>
+> 本次实现 checkpoint：`82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`；已完成任务范围推进至 `SAL-P4-005`<br>
 > 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -298,6 +298,9 @@
 25. docs/dsa-signal-evaluation-characterization.md
 26. docs/signal-evaluation-engine.md
 27. docs/backtest-spec.md
+28. docs/backtest-artifact.md
+29. docs/qlib-version-isolation.md
+30. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
 
 随后执行 git status --short --branch 和 git log -3 --oneline，确认当前状态。
 
@@ -306,8 +309,8 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-005
 - 最近完成：SAL-P4-005 锁定 Qlib 版本与隔离方案
-- 最近可评审交付 checkpoint：本次 `feat(P4): 锁定 Qlib 版本与隔离方案` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一 checkpoint：471e5857 feat(P4): 定义正式 BacktestArtifact
-- 最新状态同步 checkpoint：87dae329 docs: 同步 SAL-P4-004 checkpoint hash；上一状态同步 checkpoint：d23d5883 docs: 同步 SAL-P4-003 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最近可评审交付 checkpoint：82580fdb feat(P4): 锁定 Qlib 版本与隔离方案；上一 checkpoint：471e5857 feat(P4): 定义正式 BacktestArtifact
+- 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P4-005 checkpoint hash` 提交生成后以 `git log -1 --oneline` 和最终回复为准；上一状态同步 checkpoint：87dae329 docs: 同步 SAL-P4-004 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 5/22，总计 71/129
 
 下一步优先执行：
