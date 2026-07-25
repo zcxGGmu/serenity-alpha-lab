@@ -7,6 +7,16 @@ SAL-P4-011 adds pure A-share execution rules. Risk evaluation and APIs are
 introduced by later P4 tasks.
 """
 
+from serenity_alpha_lab.quant.backtest.corporate_actions import (
+    CORPORATE_ACTION_DATASET_SOURCE_SCHEMA,
+    CORPORATE_ACTION_LEDGER_PROCESSOR_CONTRACT_VERSION,
+    CORPORATE_ACTION_LEDGER_PROCESSOR_SCHEMA_NAME,
+    CORPORATE_ACTION_LEDGER_PROCESSOR_SCHEMA_VERSION,
+    CORPORATE_ACTION_LEDGER_PROCESSOR_VERSION,
+    DELISTING_LIQUIDATION_SOURCE_SCHEMA,
+    CorporateActionLedgerProcessor,
+    corporate_action_id,
+)
 from serenity_alpha_lab.quant.backtest.costs import (
     BACKTEST_COST_MODEL_CONTRACT_VERSION,
     BACKTEST_COST_MODEL_SCHEMA_NAME,
@@ -50,6 +60,8 @@ from serenity_alpha_lab.quant.backtest.ledger import (
     PORTFOLIO_LEDGER_CONTRACT_VERSION,
     PORTFOLIO_LEDGER_SCHEMA_NAME,
     PORTFOLIO_LEDGER_SCHEMA_VERSION,
+    CorporateActionLedgerType,
+    CorporateActionRecord,
     ExecutionRecord,
     LedgerEvent,
     LedgerEventType,
@@ -98,6 +110,12 @@ __all__ = [
     "BACKTEST_COST_MODEL_SCHEMA_NAME",
     "BACKTEST_COST_MODEL_SCHEMA_VERSION",
     "BACKTEST_COST_MODEL_VERSION",
+    "CORPORATE_ACTION_DATASET_SOURCE_SCHEMA",
+    "CORPORATE_ACTION_LEDGER_PROCESSOR_CONTRACT_VERSION",
+    "CORPORATE_ACTION_LEDGER_PROCESSOR_SCHEMA_NAME",
+    "CORPORATE_ACTION_LEDGER_PROCESSOR_SCHEMA_VERSION",
+    "CORPORATE_ACTION_LEDGER_PROCESSOR_VERSION",
+    "DELISTING_LIQUIDATION_SOURCE_SCHEMA",
     "A_SHARE_EXECUTION_MODEL_CONTRACT_VERSION",
     "A_SHARE_EXECUTION_MODEL_SCHEMA_NAME",
     "A_SHARE_EXECUTION_MODEL_SCHEMA_VERSION",
@@ -133,6 +151,9 @@ __all__ = [
     "AShareExecutionStatus",
     "AShareMarketSnapshot",
     "ASharePositionAvailability",
+    "CorporateActionLedgerProcessor",
+    "CorporateActionLedgerType",
+    "CorporateActionRecord",
     "CostBreakdown",
     "CostLineItem",
     "CostLineItemName",
@@ -154,5 +175,6 @@ __all__ = [
     "PositionLot",
     "TERMINAL_ORDER_STATUSES",
     "TimeInForce",
+    "corporate_action_id",
     "publish_backtest_artifact_bundle",
 ]

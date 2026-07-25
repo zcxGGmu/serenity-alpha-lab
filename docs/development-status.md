@@ -1,16 +1,16 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-25<br>
-> 最近阶段性任务：`SAL-P4-011` A 股执行规则<br>
+> 最近阶段性任务：`SAL-P4-012` 公司行动入账<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P4 真实组合回测与确定性风控<br>
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：77/129<br>
-> 当前可执行任务：`SAL-P4-012` 实现公司行动入账，状态为 `READY`；不得跳过公司行动/Risk/Metric/Audit 直接启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：`30efc785 feat(P4): 实现 A 股执行规则`；上一 checkpoint 为 `e194984c feat(P4): 实现费用与滑点模型`<br>
+> 任务完成度：78/129<br>
+> 当前可执行任务：`SAL-P4-013` 实现调仓与目标权重，状态为 `READY`；不得跳过 Risk/Metric/Audit 直接启动正式组合回测运行<br>
+> 最近可评审交付 checkpoint：本次实现 checkpoint 将由 `feat(P4): 实现公司行动入账` 生成；上一 checkpoint 为 `30efc785 feat(P4): 实现 A 股执行规则`<br>
 > 最新状态同步 checkpoint：`7c1e214c docs: 同步 SAL-P4-011 checkpoint hash`；上一状态同步 checkpoint 为 `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`9acf345d docs: 记录 SAL-P4-011 状态同步 hash`；上一 hash-anchor checkpoint 为 `ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`<br>
-> 本次实现 checkpoint：`30efc785 feat(P4): 实现 A 股执行规则`；已完成任务范围推进至 `SAL-P4-011`<br>
+> 本次实现 checkpoint：本次提交生成后回填；已完成任务范围推进至 `SAL-P4-012`<br>
 > 最新状态复核 checkpoint：`b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -114,18 +114,19 @@
 - 完成 `SAL-P4-009`：新增 [Portfolio Ledger](./portfolio-ledger.md)、Quant Backtest [ledger.py](../src/serenity_alpha_lab/quant/backtest/ledger.py) 和 [Portfolio Ledger test](../tests/quant/test_portfolio_ledger.py)，冻结 `PortfolioLedger`、`LedgerEvent`、`PositionLot`、`ExecutionRecord`、初始现金、买入 payable、卖出 receivable、现金结算、估值 snapshot、FIFO lot reduction、权益恒等式和 deterministic replay；本任务不启动正式组合回测、费用/滑点、A 股执行规则、公司行动、Risk/Metric/Audit/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `9/22`，总进度 `75/129`。
 - 完成 `SAL-P4-010`：新增 [Cost And Slippage Model](./cost-slippage-model.md)、Quant Backtest [costs.py](../src/serenity_alpha_lab/quant/backtest/costs.py) 和 [Cost/slippage model test](../tests/quant/test_cost_slippage_model.py)，冻结 `CostModel`、`CostBreakdown`、佣金/最低佣金、卖出印花税、过户费、滑点、冲击成本、有效成交价、成本前后现金口径和参与率 guard；CostModel 只输出显式交易成本，Ledger 仍由调用方传入 `transaction_cost`；本任务不启动正式组合回测、A 股执行规则、公司行动、Risk/Metric/Audit/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `10/22`，总进度 `76/129`。
 - 完成 `SAL-P4-011`：新增 [A-Share Execution Rules](./a-share-execution-rules.md)、Quant Backtest [execution.py](../src/serenity_alpha_lab/quant/backtest/execution.py) 和 [A-share execution rules test](../tests/quant/test_a_share_execution_rules.py)，冻结 `AShareExecutionModel`、`AShareMarketSnapshot`、`ASharePositionAvailability`、T+1 可卖数量、交易单位、停牌/交易状态、涨跌停、限价 crossing、参与率 guard、不可成交订单 `expire_after_rebalance` / `keep_open_until_cancelled` / `reject_order` 策略和 structured audit records；ExecutionModel 只返回 updated Order、fill event、CostBreakdown 和 audit records，不修改 Ledger；本任务不启动正式组合回测、公司行动、调仓/目标权重、Risk/Metric/Audit/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `11/22`，总进度 `77/129`。
+- 完成 `SAL-P4-012`：新增 [Corporate Action Ledger Posting](./corporate-action-ledger-posting.md)、Quant Backtest [corporate_actions.py](../src/serenity_alpha_lab/quant/backtest/corporate_actions.py)、扩展 [ledger.py](../src/serenity_alpha_lab/quant/backtest/ledger.py) 和 [corporate action ledger test](../tests/quant/test_corporate_action_ledger.py)，冻结 `CorporateActionLedgerProcessor`、`LedgerEventType.CORPORATE_ACTION`、`CorporateActionLedgerType`、`CorporateActionRecord`、现金分红 receivable、送转/拆股 pro-rata lot 调整、配股 payable/new lot 和退市清算 FIFO realized P&L；Processor 不读取复权价格/因子，不修改 raw/adjusted Dataset，只追加 Ledger 公司行动事件；本任务不启动正式组合回测、调仓/目标权重、Risk/Metric/Audit/Quant Lab/Evidence Agent/Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更；P4 进度 `12/22`，总进度 `78/129`。
 
 ## 未完成
 
 ### 当前可执行 P4 任务
 
-- `SAL-P4-012` 当前为 `READY`：实现公司行动入账，处理现金分红、送转、配股和退市清算；不得跳过 Risk/Metric/Audit 任务直接启动正式组合回测。
+- `SAL-P4-013` 当前为 `READY`：实现调仓与目标权重，将 Screen/Model Signal 转为受约束订单；不得跳过 Risk/Metric/Audit 任务直接启动正式组合回测。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P4 至 P6 仍有 52 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型和 A 股执行规则。但尚未完成公司行动入账、Risk/Metric/Audit、完整 Worker runtime、正式回测、Evidence Agent 或部署环境。
+- P4 至 P6 仍有 51 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则和公司行动入账。但尚未完成调仓/目标权重、Risk/Metric/Audit、完整 Worker runtime、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -149,6 +150,7 @@
 - 2026-07-25 完成 `SAL-P4-010` Cost And Slippage Model；新增 pure Quant Backtest cost contract、contract tests 和 evidence doc，定义 `CostModel`、`CostBreakdown`、commission/min commission、sell-only stamp tax、transfer fee、slippage、impact、effective price、pre/post-cost cash amount 和 participation-rate guard；当前唯一 `READY` 阶段任务为 `SAL-P4-011` A 股执行规则。本任务不启动正式组合回测、A 股 T+1/交易单位/停牌/涨跌停执行规则、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - 2026-07-25 按用户要求复核 `SAL-P4-010` 后最新开发状态；确认最近实现 checkpoint 为 `e194984c feat(P4): 实现费用与滑点模型`，状态同步 checkpoint 为 `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`，状态同步 hash-anchor 为 `ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`，最终锚点固化提交为 `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`，状态复核 checkpoint 为 `b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示`；当前已完成 `SAL-P4-001..010`，未完成范围从 `SAL-P4-011` 开始，当前 READY 任务为 `SAL-P4-011` A 股执行规则。本次状态复核仅同步状态文档、进度清单、`tasks/todo.md` 和 lessons，不启动 A 股执行规则、正式组合回测、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - 2026-07-25 完成 `SAL-P4-011` A 股执行规则；新增 pure Quant Backtest execution contract、contract tests 和 evidence doc，定义 `AShareExecutionModel`、`AShareMarketSnapshot`、`ASharePositionAvailability`、T+1 sellable quantity、lot-size guard、suspension/trading status、limit-up/down unfillable rules、limit price crossing、participation guard、unfilled-order policy 和 deterministic audit records；当前唯一 `READY` 阶段任务为 `SAL-P4-012` 公司行动入账。本任务不启动正式组合回测、公司行动、调仓/目标权重、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
+- 2026-07-25 完成 `SAL-P4-012` 公司行动入账；新增 pure Quant Backtest corporate action ledger processor、contract tests 和 evidence doc，定义 `CorporateActionLedgerProcessor`、`LedgerEventType.CORPORATE_ACTION`、`CorporateActionLedgerType`、`CorporateActionRecord`、现金分红 receivable、送转/拆股 pro-rata lot 调整、配股 payable/new lot、退市清算 FIFO realized P&L、deterministic replay 和 no adjusted-price double-counting guard；当前唯一 `READY` 阶段任务为 `SAL-P4-013` 调仓与目标权重。本任务不启动正式组合回测、调仓/目标权重实现、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -200,8 +202,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P4-012` 公司行动入账，处理现金分红、送转、配股和退市清算。
-2. 不得跳过公司行动、Risk/Metric/Audit 等任务直接启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Risk/Quant Lab 或 Worker loop；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P4-013` 调仓与目标权重，将 Screen/Model Signal 转为受约束订单。
+2. 不得跳过调仓、Risk/Metric/Audit 等任务直接启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Risk/Quant Lab 或 Worker loop；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；后续任务必须继续与 legacy `/api/v1/backtest/*` 兼容面隔离。
 
 ## 本次状态复核
@@ -331,17 +333,17 @@
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-011
-- 最近完成：SAL-P4-011 A 股执行规则
-- 最近可评审交付 checkpoint：30efc785 feat(P4): 实现 A 股执行规则；上一 checkpoint：e194984c feat(P4): 实现费用与滑点模型
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-012
+- 最近完成：SAL-P4-012 公司行动入账
+- 最近可评审交付 checkpoint：本次实现 checkpoint 将由 feat(P4): 实现公司行动入账 生成；上一 checkpoint：30efc785 feat(P4): 实现 A 股执行规则
 - 最新状态同步 checkpoint：7c1e214c docs: 同步 SAL-P4-011 checkpoint hash；上一状态同步 checkpoint：e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：9acf345d docs: 记录 SAL-P4-011 状态同步 hash；上一 hash-anchor checkpoint：ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash
 - 最新状态复核 checkpoint：b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示；上一状态复核 checkpoint：1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示；上一最终锚点 checkpoint：3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 11/22，总计 77/129
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 12/22，总计 78/129
 
 下一步优先执行：
-1. SAL-P4-012 公司行动入账，处理现金分红、送转、配股和退市清算
-2. 不要跳过公司行动、Risk/Metric/Audit 等任务直接启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Risk/Quant Lab 或 Worker loop；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+1. SAL-P4-013 调仓与目标权重，将 Screen/Model Signal 转为受约束订单
+2. 不要跳过调仓、Risk/Metric/Audit 等任务直接启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Risk/Quant Lab 或 Worker loop；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；后续任务必须继续与 legacy /api/v1/backtest/* 兼容面隔离
 
 严格遵守 AGENTS.md：

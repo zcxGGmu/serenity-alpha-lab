@@ -34,6 +34,15 @@ class LedgerEventType(StrEnum):
     EXECUTION = "execution"
     CASH_SETTLED = "cash_settled"
     VALUATION = "valuation"
+    CORPORATE_ACTION = "corporate_action"
+
+
+class CorporateActionLedgerType(StrEnum):
+    CASH_DIVIDEND = "cash_dividend"
+    BONUS_SHARE = "bonus_share"
+    SHARE_SPLIT = "share_split"
+    RIGHTS_ISSUE = "rights_issue"
+    DELISTING_LIQUIDATION = "delisting_liquidation"
 
 
 @dataclass(frozen=True, slots=True)
@@ -163,6 +172,85 @@ class ExecutionRecord:
 
 
 @dataclass(frozen=True, slots=True)
+class CorporateActionRecord:
+    corporate_action_id: str
+    corporate_action_type: CorporateActionLedgerType | str
+    instrument_id: InstrumentId
+    trade_date: date
+    settlement_date: date | None
+    quantity: Decimal | int | str
+    share_delta: Decimal | int | str
+    price: Decimal | int | str | None = None
+    cash_amount: Decimal | int | str = Decimal("0")
+    receivable_amount: Decimal | int | str = Decimal("0")
+    payable_amount: Decimal | int | str = Decimal("0")
+    realized_pnl: Decimal | int | str | None = None
+    source_event_id: str = ""
+    source_schema: str = ""
+    metadata: Mapping[str, object] | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "corporate_action_id",
+            _required_string("corporate_action_id", self.corporate_action_id),
+        )
+        object.__setattr__(
+            self,
+            "corporate_action_type",
+            _enum_value(CorporateActionLedgerType, "corporate_action_type", self.corporate_action_type),
+        )
+        if type(self.instrument_id) is not InstrumentId:
+            raise PortfolioLedgerError("instrument_id must be an InstrumentId")
+        _require_date("trade_date", self.trade_date)
+        if self.settlement_date is not None:
+            _require_date("settlement_date", self.settlement_date)
+        object.__setattr__(
+            self,
+            "quantity",
+            _decimal_min("quantity", self.quantity, Decimal("0"), exclusive=True),
+        )
+        object.__setattr__(self, "share_delta", _decimal_value("share_delta", self.share_delta))
+        object.__setattr__(self, "price", _optional_positive_decimal("price", self.price))
+        object.__setattr__(self, "cash_amount", _decimal_min("cash_amount", self.cash_amount, Decimal("0")))
+        object.__setattr__(
+            self,
+            "receivable_amount",
+            _decimal_min("receivable_amount", self.receivable_amount, Decimal("0")),
+        )
+        object.__setattr__(
+            self,
+            "payable_amount",
+            _decimal_min("payable_amount", self.payable_amount, Decimal("0")),
+        )
+        object.__setattr__(self, "realized_pnl", _optional_decimal("realized_pnl", self.realized_pnl))
+        object.__setattr__(self, "source_event_id", _required_string("source_event_id", self.source_event_id))
+        object.__setattr__(self, "source_schema", _required_string("source_schema", self.source_schema))
+        object.__setattr__(self, "metadata", _normalize_metadata(self.metadata))
+
+    def to_record(self) -> dict[str, object]:
+        record: dict[str, object] = {
+            "corporate_action_id": self.corporate_action_id,
+            "corporate_action_type": self.corporate_action_type.value,
+            "instrument_id": self.instrument_id.canonical,
+            "trade_date": self.trade_date.isoformat(),
+            "quantity": _decimal_to_string(self.quantity),
+            "share_delta": _decimal_to_string(self.share_delta),
+            "cash_amount": _decimal_to_string(self.cash_amount),
+            "receivable_amount": _decimal_to_string(self.receivable_amount),
+            "payable_amount": _decimal_to_string(self.payable_amount),
+            "source_event_id": self.source_event_id,
+            "source_schema": self.source_schema,
+        }
+        _set_if_present(record, "settlement_date", self.settlement_date.isoformat() if self.settlement_date else None)
+        _set_if_present(record, "price", _optional_decimal_to_string(self.price))
+        _set_if_present(record, "realized_pnl", _optional_decimal_to_string(self.realized_pnl))
+        if self.metadata:
+            record["metadata"] = dict(self.metadata)
+        return record
+
+
+@dataclass(frozen=True, slots=True)
 class LedgerEvent:
     event_id: str
     sequence: int
@@ -184,6 +272,10 @@ class LedgerEvent:
     lot_id: str | None = None
     realized_pnl: Decimal | int | str | None = None
     source_execution_id: str | None = None
+    corporate_action_id: str | None = None
+    corporate_action_type: CorporateActionLedgerType | str | None = None
+    share_delta: Decimal | int | str = Decimal("0")
+    source_schema: str | None = None
     valuation_date: date | None = None
     valuation_prices: Mapping[InstrumentId | str, Decimal | int | str] | None = None
     message: str = ""
@@ -217,6 +309,14 @@ class LedgerEvent:
         object.__setattr__(self, "lot_id", _optional_string(self.lot_id))
         object.__setattr__(self, "realized_pnl", _optional_decimal("realized_pnl", self.realized_pnl))
         object.__setattr__(self, "source_execution_id", _optional_string(self.source_execution_id))
+        object.__setattr__(self, "corporate_action_id", _optional_string(self.corporate_action_id))
+        object.__setattr__(
+            self,
+            "corporate_action_type",
+            _optional_enum_value(CorporateActionLedgerType, "corporate_action_type", self.corporate_action_type),
+        )
+        object.__setattr__(self, "share_delta", _decimal_value("share_delta", self.share_delta))
+        object.__setattr__(self, "source_schema", _optional_string(self.source_schema))
         if self.valuation_date is not None:
             _require_date("valuation_date", self.valuation_date)
         object.__setattr__(self, "valuation_prices", _normalize_valuation_prices(self.valuation_prices))
@@ -247,6 +347,15 @@ class LedgerEvent:
         _set_if_present(record, "lot_id", self.lot_id)
         _set_if_present(record, "realized_pnl", _optional_decimal_to_string(self.realized_pnl))
         _set_if_present(record, "source_execution_id", self.source_execution_id)
+        _set_if_present(record, "corporate_action_id", self.corporate_action_id)
+        _set_if_present(
+            record,
+            "corporate_action_type",
+            self.corporate_action_type.value if self.corporate_action_type else None,
+        )
+        if self.share_delta != 0:
+            record["share_delta"] = _decimal_to_string(self.share_delta)
+        _set_if_present(record, "source_schema", self.source_schema)
         _set_if_present(record, "valuation_date", self.valuation_date.isoformat() if self.valuation_date else None)
         if self.valuation_prices:
             record["valuation_prices"] = {
@@ -302,6 +411,53 @@ class LedgerEvent:
                 raise PortfolioLedgerError("valuation event requires valuation_prices")
             return
 
+        if self.event_type is LedgerEventType.CORPORATE_ACTION:
+            required = {
+                "instrument_id": self.instrument_id,
+                "corporate_action_id": self.corporate_action_id,
+                "corporate_action_type": self.corporate_action_type,
+                "quantity": self.quantity,
+                "source_schema": self.source_schema,
+            }
+            missing = sorted(name for name, value in required.items() if value is None)
+            if missing:
+                raise PortfolioLedgerError(f"corporate action event missing fields: {', '.join(missing)}")
+            if self.cash_delta != 0:
+                raise PortfolioLedgerError("corporate action posting cannot directly change settled cash")
+            assert self.corporate_action_type is not None
+            if self.corporate_action_type is CorporateActionLedgerType.CASH_DIVIDEND:
+                if self.price is None or self.receivable_delta <= 0 or self.settlement_date is None:
+                    raise PortfolioLedgerError("cash dividend requires per-share price, settlement_date and receivable")
+                if self.share_delta != 0 or self.payable_delta != 0:
+                    raise PortfolioLedgerError("cash dividend cannot change shares or payables")
+                return
+            if self.corporate_action_type is CorporateActionLedgerType.BONUS_SHARE:
+                if self.share_delta <= 0:
+                    raise PortfolioLedgerError("bonus share requires positive share_delta")
+                if self.receivable_delta != 0 or self.payable_delta != 0:
+                    raise PortfolioLedgerError("bonus share cannot change cash balances")
+                return
+            if self.corporate_action_type is CorporateActionLedgerType.SHARE_SPLIT:
+                if self.share_delta == 0:
+                    raise PortfolioLedgerError("share split requires non-zero share_delta")
+                if self.receivable_delta != 0 or self.payable_delta != 0:
+                    raise PortfolioLedgerError("share split cannot change cash balances")
+                return
+            if self.corporate_action_type is CorporateActionLedgerType.RIGHTS_ISSUE:
+                if self.price is None or self.share_delta <= 0 or self.payable_delta <= 0 or self.settlement_date is None:
+                    raise PortfolioLedgerError("rights issue requires price, positive share_delta, settlement_date and payable")
+                if self.lot_id is None:
+                    raise PortfolioLedgerError("rights issue requires lot_id")
+                return
+            if self.corporate_action_type is CorporateActionLedgerType.DELISTING_LIQUIDATION:
+                if self.price is None or self.receivable_delta <= 0 or self.settlement_date is None:
+                    raise PortfolioLedgerError("delisting liquidation requires price, settlement_date and receivable")
+                if self.quantity is None or self.share_delta != -self.quantity:
+                    raise PortfolioLedgerError("delisting liquidation share_delta must remove the full quantity")
+                if self.realized_pnl is None:
+                    raise PortfolioLedgerError("delisting liquidation requires realized_pnl")
+                return
+
 
 @dataclass(frozen=True, slots=True)
 class PortfolioLedger:
@@ -316,6 +472,7 @@ class PortfolioLedger:
     payables: Decimal = Decimal("0")
     position_lots: tuple[PositionLot, ...] = ()
     executions: tuple[ExecutionRecord, ...] = ()
+    corporate_actions: tuple[CorporateActionRecord, ...] = ()
     valuation_prices: Mapping[str, Decimal] = field(default_factory=lambda: MappingProxyType({}))
     valuation_date: date | None = None
     contract_version: str = PORTFOLIO_LEDGER_CONTRACT_VERSION
@@ -346,6 +503,11 @@ class PortfolioLedger:
             if type(execution) is not ExecutionRecord:
                 raise PortfolioLedgerError("executions must contain ExecutionRecord values")
         object.__setattr__(self, "executions", executions)
+        corporate_actions = tuple(self.corporate_actions)
+        for action in corporate_actions:
+            if type(action) is not CorporateActionRecord:
+                raise PortfolioLedgerError("corporate_actions must contain CorporateActionRecord values")
+        object.__setattr__(self, "corporate_actions", corporate_actions)
         object.__setattr__(self, "valuation_prices", _normalize_price_mapping(self.valuation_prices))
         if self.valuation_date is not None:
             _require_date("valuation_date", self.valuation_date)
@@ -556,6 +718,194 @@ class PortfolioLedger:
             )
         )
 
+    def record_cash_dividend(
+        self,
+        *,
+        event_id: str,
+        occurred_at: datetime,
+        ex_date: date,
+        settlement_date: date,
+        instrument_id: InstrumentId,
+        cash_dividend_per_share: Decimal | int | str,
+        corporate_action_id: str,
+        source_schema: str,
+        metadata: Mapping[str, object] | None = None,
+    ) -> PortfolioLedger:
+        quantity = self.position_quantity(instrument_id)
+        if quantity <= 0:
+            raise PortfolioLedgerError("cash dividend requires an open position")
+        per_share = _decimal_min("cash_dividend_per_share", cash_dividend_per_share, Decimal("0"), exclusive=True)
+        amount = quantity * per_share
+        return self._apply_event(
+            LedgerEvent(
+                event_id=event_id,
+                sequence=len(self.events) + 1,
+                event_type=LedgerEventType.CORPORATE_ACTION,
+                occurred_at=occurred_at,
+                trade_date=ex_date,
+                settlement_date=settlement_date,
+                instrument_id=instrument_id,
+                quantity=quantity,
+                price=per_share,
+                receivable_delta=amount,
+                corporate_action_id=corporate_action_id,
+                corporate_action_type=CorporateActionLedgerType.CASH_DIVIDEND,
+                source_schema=source_schema,
+                metadata=metadata,
+            )
+        )
+
+    def record_bonus_share(
+        self,
+        *,
+        event_id: str,
+        occurred_at: datetime,
+        ex_date: date,
+        instrument_id: InstrumentId,
+        bonus_share_ratio: Decimal | int | str,
+        corporate_action_id: str,
+        source_schema: str,
+        metadata: Mapping[str, object] | None = None,
+    ) -> PortfolioLedger:
+        quantity = self.position_quantity(instrument_id)
+        if quantity <= 0:
+            raise PortfolioLedgerError("bonus share requires an open position")
+        ratio = _decimal_min("bonus_share_ratio", bonus_share_ratio, Decimal("0"), exclusive=True)
+        share_delta = quantity * ratio
+        return self._apply_event(
+            LedgerEvent(
+                event_id=event_id,
+                sequence=len(self.events) + 1,
+                event_type=LedgerEventType.CORPORATE_ACTION,
+                occurred_at=occurred_at,
+                trade_date=ex_date,
+                instrument_id=instrument_id,
+                quantity=quantity,
+                share_delta=share_delta,
+                corporate_action_id=corporate_action_id,
+                corporate_action_type=CorporateActionLedgerType.BONUS_SHARE,
+                source_schema=source_schema,
+                metadata=metadata,
+            )
+        )
+
+    def record_share_split(
+        self,
+        *,
+        event_id: str,
+        occurred_at: datetime,
+        ex_date: date,
+        instrument_id: InstrumentId,
+        split_ratio: Decimal | int | str,
+        corporate_action_id: str,
+        source_schema: str,
+        metadata: Mapping[str, object] | None = None,
+    ) -> PortfolioLedger:
+        quantity = self.position_quantity(instrument_id)
+        if quantity <= 0:
+            raise PortfolioLedgerError("share split requires an open position")
+        ratio = _decimal_min("split_ratio", split_ratio, Decimal("0"), exclusive=True)
+        share_delta = quantity * (ratio - Decimal("1"))
+        return self._apply_event(
+            LedgerEvent(
+                event_id=event_id,
+                sequence=len(self.events) + 1,
+                event_type=LedgerEventType.CORPORATE_ACTION,
+                occurred_at=occurred_at,
+                trade_date=ex_date,
+                instrument_id=instrument_id,
+                quantity=quantity,
+                share_delta=share_delta,
+                corporate_action_id=corporate_action_id,
+                corporate_action_type=CorporateActionLedgerType.SHARE_SPLIT,
+                source_schema=source_schema,
+                metadata=metadata,
+            )
+        )
+
+    def record_rights_issue(
+        self,
+        *,
+        event_id: str,
+        occurred_at: datetime,
+        ex_date: date,
+        settlement_date: date,
+        instrument_id: InstrumentId,
+        rights_issue_ratio: Decimal | int | str,
+        rights_issue_price: Decimal | int | str,
+        corporate_action_id: str,
+        source_schema: str,
+        metadata: Mapping[str, object] | None = None,
+    ) -> PortfolioLedger:
+        quantity = self.position_quantity(instrument_id)
+        if quantity <= 0:
+            raise PortfolioLedgerError("rights issue requires an open position")
+        ratio = _decimal_min("rights_issue_ratio", rights_issue_ratio, Decimal("0"), exclusive=True)
+        price = _decimal_min("rights_issue_price", rights_issue_price, Decimal("0"), exclusive=True)
+        share_delta = quantity * ratio
+        payable = share_delta * price
+        return self._apply_event(
+            LedgerEvent(
+                event_id=event_id,
+                sequence=len(self.events) + 1,
+                event_type=LedgerEventType.CORPORATE_ACTION,
+                occurred_at=occurred_at,
+                trade_date=ex_date,
+                settlement_date=settlement_date,
+                instrument_id=instrument_id,
+                quantity=quantity,
+                price=price,
+                payable_delta=payable,
+                lot_id=f"lot:{corporate_action_id}",
+                corporate_action_id=corporate_action_id,
+                corporate_action_type=CorporateActionLedgerType.RIGHTS_ISSUE,
+                share_delta=share_delta,
+                source_schema=source_schema,
+                metadata=metadata,
+            )
+        )
+
+    def record_delisting_liquidation(
+        self,
+        *,
+        event_id: str,
+        occurred_at: datetime,
+        liquidation_date: date,
+        settlement_date: date,
+        instrument_id: InstrumentId,
+        liquidation_price: Decimal | int | str,
+        corporate_action_id: str,
+        source_schema: str,
+        metadata: Mapping[str, object] | None = None,
+    ) -> PortfolioLedger:
+        quantity = self.position_quantity(instrument_id)
+        if quantity <= 0:
+            raise PortfolioLedgerError("delisting liquidation requires an open position")
+        price = _decimal_min("liquidation_price", liquidation_price, Decimal("0"), exclusive=True)
+        receivable = quantity * price
+        _lots, removed_cost = self._reduce_lots(instrument_id, quantity, dry_run=True)
+        realized_pnl = receivable - removed_cost
+        return self._apply_event(
+            LedgerEvent(
+                event_id=event_id,
+                sequence=len(self.events) + 1,
+                event_type=LedgerEventType.CORPORATE_ACTION,
+                occurred_at=occurred_at,
+                trade_date=liquidation_date,
+                settlement_date=settlement_date,
+                instrument_id=instrument_id,
+                quantity=quantity,
+                price=price,
+                receivable_delta=receivable,
+                realized_pnl=realized_pnl,
+                corporate_action_id=corporate_action_id,
+                corporate_action_type=CorporateActionLedgerType.DELISTING_LIQUIDATION,
+                share_delta=-quantity,
+                source_schema=source_schema,
+                metadata=metadata,
+            )
+        )
+
     def mark_to_market(
         self,
         *,
@@ -612,6 +962,7 @@ class PortfolioLedger:
             "positions": self._positions_record(),
             "position_lots": [lot.to_record() for lot in self.position_lots],
             "executions": [execution.to_record() for execution in self.executions],
+            "corporate_actions": [action.to_record() for action in self.corporate_actions],
             "reconciliation": self.reconciliation_record(),
             "last_event": self.events[-1].to_record() if self.events else None,
             "events": [event.to_record() for event in self.events],
@@ -637,6 +988,7 @@ class PortfolioLedger:
         payables = self.payables + event.payable_delta
         lots = self.position_lots
         executions = self.executions
+        corporate_actions = self.corporate_actions
         valuation_prices = self.valuation_prices
         valuation_date = self.valuation_date
 
@@ -648,6 +1000,9 @@ class PortfolioLedger:
         if event.event_type is LedgerEventType.EXECUTION:
             lots, execution = self._apply_execution_event(event)
             executions = (*executions, execution)
+        elif event.event_type is LedgerEventType.CORPORATE_ACTION:
+            lots, corporate_action = self._apply_corporate_action_event(event)
+            corporate_actions = (*corporate_actions, corporate_action)
         elif event.event_type is LedgerEventType.VALUATION:
             assert event.valuation_prices is not None
             valuation_prices = event.valuation_prices
@@ -661,6 +1016,7 @@ class PortfolioLedger:
             payables=payables,
             position_lots=lots,
             executions=executions,
+            corporate_actions=corporate_actions,
             valuation_prices=valuation_prices,
             valuation_date=valuation_date,
         )
@@ -715,6 +1071,64 @@ class PortfolioLedger:
         )
         return lots, execution
 
+    def _apply_corporate_action_event(self, event: LedgerEvent) -> tuple[tuple[PositionLot, ...], CorporateActionRecord]:
+        assert event.instrument_id is not None
+        assert event.corporate_action_id is not None
+        assert event.corporate_action_type is not None
+        assert event.quantity is not None
+        assert event.source_schema is not None
+
+        lots = self.position_lots
+        cash_amount = Decimal("0")
+        receivable_amount = event.receivable_delta
+        payable_amount = event.payable_delta
+        realized_pnl = event.realized_pnl
+
+        if event.corporate_action_type is CorporateActionLedgerType.CASH_DIVIDEND:
+            cash_amount = event.receivable_delta
+        elif event.corporate_action_type in {
+            CorporateActionLedgerType.BONUS_SHARE,
+            CorporateActionLedgerType.SHARE_SPLIT,
+        }:
+            lots = self._adjust_lots_pro_rata(event.instrument_id, event.share_delta)
+        elif event.corporate_action_type is CorporateActionLedgerType.RIGHTS_ISSUE:
+            assert event.lot_id is not None
+            lot = PositionLot(
+                lot_id=event.lot_id,
+                instrument_id=event.instrument_id,
+                opened_trade_date=event.trade_date,
+                source_execution_id=event.corporate_action_id,
+                quantity=event.share_delta,
+                cost_basis=event.payable_delta,
+            )
+            lots = (*self.position_lots, lot)
+        elif event.corporate_action_type is CorporateActionLedgerType.DELISTING_LIQUIDATION:
+            lots, removed_cost = self._reduce_lots(event.instrument_id, event.quantity)
+            expected_pnl = event.receivable_delta - removed_cost
+            if realized_pnl != expected_pnl:
+                raise PortfolioLedgerError("delisting liquidation realized_pnl does not match FIFO lots")
+        else:
+            raise PortfolioLedgerError(f"unsupported corporate_action_type: {event.corporate_action_type}")
+
+        record = CorporateActionRecord(
+            corporate_action_id=event.corporate_action_id,
+            corporate_action_type=event.corporate_action_type,
+            instrument_id=event.instrument_id,
+            trade_date=event.trade_date,
+            settlement_date=event.settlement_date,
+            quantity=event.quantity,
+            share_delta=event.share_delta,
+            price=event.price,
+            cash_amount=cash_amount,
+            receivable_amount=receivable_amount,
+            payable_amount=payable_amount,
+            realized_pnl=realized_pnl,
+            source_event_id=event.event_id,
+            source_schema=event.source_schema,
+            metadata=event.metadata,
+        )
+        return lots, record
+
     def _reduce_lots(
         self,
         instrument_id: InstrumentId,
@@ -741,6 +1155,38 @@ class PortfolioLedger:
         if dry_run:
             return self.position_lots, removed_cost
         return tuple(new_lots), removed_cost
+
+    def _adjust_lots_pro_rata(
+        self,
+        instrument_id: InstrumentId,
+        share_delta: Decimal,
+    ) -> tuple[PositionLot, ...]:
+        share_delta = _decimal_value("share_delta", share_delta)
+        if share_delta == 0:
+            raise PortfolioLedgerError("share_delta cannot be zero")
+        total_quantity = self.position_quantity(instrument_id)
+        if total_quantity <= 0:
+            raise PortfolioLedgerError("corporate action requires an open position")
+        if total_quantity + share_delta <= 0:
+            raise PortfolioLedgerError("corporate action would remove all shares without liquidation")
+
+        remaining_delta = share_delta
+        matching_lot_indexes = [index for index, lot in enumerate(self.position_lots) if lot.instrument_id == instrument_id]
+        new_lots: list[PositionLot] = []
+        for index, lot in enumerate(self.position_lots):
+            if lot.instrument_id != instrument_id:
+                new_lots.append(lot)
+                continue
+            if index == matching_lot_indexes[-1]:
+                lot_delta = remaining_delta
+            else:
+                lot_delta = share_delta * lot.quantity / total_quantity
+                remaining_delta -= lot_delta
+            new_quantity = lot.quantity + lot_delta
+            if new_quantity <= 0:
+                raise PortfolioLedgerError("corporate action lot adjustment produced non-positive quantity")
+            new_lots.append(replace(lot, quantity=new_quantity))
+        return tuple(new_lots)
 
     def _positions_record(self) -> dict[str, dict[str, object]]:
         positions: dict[str, dict[str, object]] = {}

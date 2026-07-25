@@ -1,3 +1,42 @@
+# SAL-P4-012 Corporate Action Ledger Posting Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-012` by implementing pure deterministic company-action ledger posting for formal portfolio backtests. Support cash dividends, bonus/split shares, rights issues and delisting liquidation. Do not start formal portfolio backtest runs, rebalance/target-weight generation, Risk/Metric/Audit, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P4 backtest docs, P2 company-action docs, A-share execution rules, order/ledger/cost docs, current Git status and recent commits.
+- [x] Attempt read-only subagent exploration for SAL-P4-012 boundaries; host wrapper rejected optional `reasoning_effort` payload twice, so fallback local senior review is active per project lessons.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-corporate-action-ledger-posting.md`.
+- [x] Add Red contract tests for cash dividend receivable, bonus/split share lot adjustment, rights issue payable/new lot, delisting liquidation, deterministic replay and no adjusted-price double counting.
+- [x] Extend `src/serenity_alpha_lab/quant/backtest/ledger.py` with immutable corporate-action ledger events and records.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/corporate_actions.py` as a narrow processor for P2 `CorporateAction` records and explicit delisting liquidation fixtures.
+- [x] Export company-action ledger symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/corporate-action-ledger-posting.md` with scope, accounting semantics, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-012` done, P4 `12/22`, total `78/129`, decision/evidence rows and `SAL-P4-013` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [ ] Review, stage only `SAL-P4-012` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Company-action posting is a pure accounting layer; it may append ledger events but must not generate strategy orders, rebalance targets, market fills, risk checks, metrics, audit reports, API/UI output, Qlib runtime work or Worker orchestration.
+- Use P2 `CorporateAction` records as the Dataset input for cash dividends, bonus/split shares and rights issues; delisting liquidation remains an explicit ledger posting fixture until a later Dataset source exists.
+- Do not consume adjusted daily bar prices/factors when posting cash/share flows; raw/adjusted price continuity belongs to P2 Dataset derivation and must not be double-counted in Ledger.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+## Review: SAL-P4-012
+
+- Added `tests/quant/test_corporate_action_ledger.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.corporate_actions` (`1 error`), Green focused target is `3 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/corporate_actions.py` and extended `src/serenity_alpha_lab/quant/backtest/ledger.py`; the module defines `CorporateActionLedgerProcessor`, stable dataset-backed corporate action IDs, explicit delisting liquidation posting, `CorporateActionLedgerType`, `CorporateActionRecord` and `LedgerEventType.CORPORATE_ACTION`.
+- Accounting covers cash dividend receivables, bonus/share split pro-rata lot quantity adjustments with unchanged total cost basis, rights issue payables and new lots, delisting liquidation receivables, FIFO realized P&L and deterministic replay.
+- No double-counting guard is explicit: Processor consumes P2 `CorporateAction` records and does not read `AdjustedDailyBar`, adjustment factors or adjusted OHLC values; Dataset price continuity remains P2 responsibility.
+- Read-only subagent dispatch for SAL-P4-012 boundary exploration was attempted twice, but the host wrapper rejected optional `reasoning_effort` payloads; per lessons, fallback local senior review checked Ledger event semantics, P2 Dataset boundary, no adjusted-price double count, no-go scope and import boundary.
+- Verification: Red target `1 error`; focused target `3 passed`; related CorporateActionLedger/PortfolioLedger/P2CorporateActions/AShareExecution/CostModel/Order/BacktestSpec/Architecture suite `41 passed`; full pytest `368 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Scope retained: no formal portfolio backtest run, no rebalance/target-weight generation, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint: this commit will be `feat(P4): 实现公司行动入账`; actual hash will be written by the immediate status-sync checkpoint.
+
+---
+
 # SAL-P4-011 A-Share Execution Rules Plan
 
 > Started: 2026-07-25
