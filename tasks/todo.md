@@ -1,3 +1,40 @@
+# SAL-P4-009 Portfolio Ledger Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-009` by implementing a pure formal backtest Portfolio Ledger for cash, position lots, receivables/payables, execution replay, valuation snapshots and reconciliation invariants. Do not start formal portfolio backtest runs, fees/slippage models, A-share execution rules, corporate-action processors, Risk/Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/order-state-machine.md`, P4 backtest docs, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-portfolio-ledger.md`.
+- [x] Add Red contract tests for initial cash, buy/sell executions, settlement, position lots, valuation, reconciliation equation, deterministic replay and event conflict rejection.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/ledger.py` with immutable DTOs, append-only events, replay, FIFO position lots, receivables/payables and equity equation checks.
+- [x] Export Portfolio Ledger symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/portfolio-ledger.md` with scope, accounting semantics, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-009` done, P4 `9/22`, total `75/129`, decision/evidence rows and `SAL-P4-010` READY but not started.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [ ] Review, stage only `SAL-P4-009` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Portfolio Ledger is a pure domain/accounting layer; no order generation, matching engine, cost/slippage model, A-share execution model, corporate-action processor, RiskPolicy, metrics, API, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM call or Qlib runtime.
+- Ledger events must be append-only and replayable; duplicate event IDs are idempotent only when payloads are identical.
+- Equity must always reconcile as `cash + position_market_value + receivables - payables`.
+- Costs may be recorded as explicit execution inputs, but fee/slippage calculation remains `SAL-P4-010`.
+- Corporate action events remain out of scope until `SAL-P4-012`; this task only provides the ledger substrate later processors can consume.
+
+## Review: SAL-P4-009
+
+- Added `tests/quant/test_portfolio_ledger.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.ledger` (`1 error`), Green focused target is `3 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/ledger.py` and exported symbols from `quant.backtest`; the module defines `PortfolioLedger`, `LedgerEvent`, `LedgerEventType`, `PositionLot`, `ExecutionRecord` and `PortfolioLedgerError`.
+- Ledger accounting covers initial cash, buy payable, sell receivable, cash settlement, valuation snapshot, FIFO lot reduction, realized P&L on explicit sell fills, equity reconciliation and deterministic replay.
+- Contract guards reject sell quantity above current lots, over-settlement, missing valuation prices, spec/run/stage mismatch, non-fill order events, conflicting duplicate event IDs and Qlib/FastAPI/SQLAlchemy import boundary drift.
+- Code-review subagent dispatch was attempted, but the host wrapper rejected empty optional fields and then repeated the same schema rejection; per lessons, fallback local senior review checked accounting semantics, replay idempotency, order binding, scope guard and import boundary.
+- Verification: focused target `3 passed`; related suite `28 passed`; full pytest `355 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Scope retained: no formal portfolio backtest run, no fees/slippage model, no A-share execution rules, no corporate-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+
+---
+
 # SAL-P4-008 Order State Machine Plan
 
 > Started: 2026-07-25

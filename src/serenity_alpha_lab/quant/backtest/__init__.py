@@ -1,8 +1,9 @@
 """Formal portfolio backtest contracts.
 
 SAL-P4-003 defines the immutable BacktestSpec. SAL-P4-004 adds the compact
-BacktestArtifact output contract. Execution, order generation, ledger replay,
-risk evaluation and APIs are introduced by later P4 tasks.
+BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
+accounting contract. Execution models, risk evaluation and APIs are introduced
+by later P4 tasks.
 """
 
 from serenity_alpha_lab.quant.backtest.artifacts import (
@@ -18,6 +19,17 @@ from serenity_alpha_lab.quant.backtest.artifacts import (
     BacktestArtifactState,
     BacktestOutputArtifact,
     publish_backtest_artifact_bundle,
+)
+from serenity_alpha_lab.quant.backtest.ledger import (
+    PORTFOLIO_LEDGER_CONTRACT_VERSION,
+    PORTFOLIO_LEDGER_SCHEMA_NAME,
+    PORTFOLIO_LEDGER_SCHEMA_VERSION,
+    ExecutionRecord,
+    LedgerEvent,
+    LedgerEventType,
+    PortfolioLedger,
+    PortfolioLedgerError,
+    PositionLot,
 )
 from serenity_alpha_lab.quant.backtest.orders import (
     ORDER_STATE_MACHINE_CONTRACT_VERSION,
@@ -63,6 +75,9 @@ __all__ = [
     "ORDER_STATE_MACHINE_CONTRACT_VERSION",
     "ORDER_STATE_MACHINE_SCHEMA_NAME",
     "ORDER_STATE_MACHINE_SCHEMA_VERSION",
+    "PORTFOLIO_LEDGER_CONTRACT_VERSION",
+    "PORTFOLIO_LEDGER_SCHEMA_NAME",
+    "PORTFOLIO_LEDGER_SCHEMA_VERSION",
     "BacktestArtifactBundle",
     "BacktestArtifactError",
     "BacktestArtifactKind",
@@ -76,6 +91,9 @@ __all__ = [
     "BacktestSpecError",
     "BacktestStrategySpec",
     "BacktestUniverseSpec",
+    "ExecutionRecord",
+    "LedgerEvent",
+    "LedgerEventType",
     "Order",
     "OrderEvent",
     "OrderEventType",
@@ -84,6 +102,9 @@ __all__ = [
     "OrderStateMachineError",
     "OrderStatus",
     "OrderType",
+    "PortfolioLedger",
+    "PortfolioLedgerError",
+    "PositionLot",
     "TERMINAL_ORDER_STATUSES",
     "TimeInForce",
     "publish_backtest_artifact_bundle",
