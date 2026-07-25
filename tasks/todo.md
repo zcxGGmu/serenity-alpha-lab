@@ -1,3 +1,41 @@
+# SAL-P4-007 Qlib QuantEngine Adapter Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-007` by implementing a Qlib QuantEngine Adapter boundary that wraps train/predict/backtest/evaluate_factor and Recorder metadata. Do not start a formal portfolio backtest run, Ledger/Risk/Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls, arbitrary module-path config, or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P4 evidence docs, Qlib isolation/conversion docs, ADR-009, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-qlib-quant-engine-adapter.md`.
+- [x] Add Red contract tests for controlled config templates, run/stage/spec/dataset binding, fake-facade train/predict/backtest/evaluate_factor calls, Recorder mapping and no Qlib runtime import at module import.
+- [x] Implement `src/serenity_alpha_lab/integrations/qlib/quant_engine_adapter.py` with immutable DTOs, injectable/lazy facade, deterministic evidence Artifact publishing and controlled template validation.
+- [x] Export adapter symbols from `src/serenity_alpha_lab/integrations/qlib/__init__.py` without importing or initializing Qlib runtime.
+- [x] Add `docs/qlib-quant-engine-adapter.md` with scope, config templates, Recorder mapping, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-007` done, P4 `7/22`, total `73/129`, decision/evidence rows and `SAL-P4-008` READY but not started.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-007` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Qlib Adapter may wrap engine operations and Recorder metadata only inside the dedicated Quant Worker boundary; no FastAPI import/startup initialization.
+- Config inputs must use approved template IDs and must not accept `module_path`, `class`, `module`, `import_path` or arbitrary dotted Python paths from API/UI/YAML/strategy payloads.
+- Qlib internal backtest output is engine evidence only in this task; formal orders/fills/ledger/risk/metrics/audit remain `SAL-P4-008..016`.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result and Dataset conversion artifacts must stay outside the formal portfolio backtest namespace.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P4-007
+
+- Added `tests/integrations/test_qlib_quant_engine_adapter.py`; initial Red failed with missing `serenity_alpha_lab.integrations.qlib.quant_engine_adapter` (`1 error`), Green focused target is `4 passed`.
+- Added `src/serenity_alpha_lab/integrations/qlib/quant_engine_adapter.py` and exported symbols from `integrations.qlib`; the module defines controlled `QlibQuantEngineTemplate`, `QlibQuantEngineConfig`, `QlibQuantEngineRequest`, injectable/lazy facade boundary, `QlibRecorderSnapshot`, step result and run report contracts.
+- Adapter wraps `train`, `predict`, `backtest` and `evaluate_factor` through an injected facade, publishes deterministic `integration.qlib.quant_engine_step@1.0.0` artifacts and compact `integration.qlib.quant_engine_run_report@1.0.0`, and tags Recorder metadata with platform `run_id`, `stage_id`, `trace_id` and `BacktestSpec.spec_hash`.
+- Contract guards reject unknown templates and arbitrary module path fields (`module_path`, `module`, `class`, `class_name`, `import_path`), require concrete platform context and `QlibDatasetConversionArtifacts`, and keep Qlib/FastAPI/SQLAlchemy out of import-time AST.
+- Code-review subagent dispatch was attempted, but the host wrapper rejected payload shape with message/items conflicts; fallback local senior review checked ADR-009 compliance, runtime import boundary, config path guards, Recorder mapping, deterministic artifact payloads and no-go scope.
+- Verification: focused target `4 passed`; related suite `23 passed`; full pytest `347 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Scope retained: no formal portfolio backtest run, no orders/fills, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift; Qlib internal backtest remains adapter evidence only.
+- Implementation checkpoint: will be created by this review commit and then synchronized with the actual hash.
+
+---
+
 # SAL-P4-006 Latest Status Refresh
 
 > Started: 2026-07-25

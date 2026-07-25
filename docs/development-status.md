@@ -1,16 +1,16 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-25<br>
-> 最近阶段性任务：`SAL-P4-006` Dataset 到 Qlib 转换<br>
+> 最近阶段性任务：`SAL-P4-007` Qlib QuantEngine Adapter<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P4 真实组合回测与确定性风控<br>
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：72/129<br>
-> 当前可执行任务：`SAL-P4-007` 实现 Qlib QuantEngine Adapter，状态为 `READY`；不得在该任务外启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：`1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`；上一 checkpoint 为 `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`<br>
+> 任务完成度：73/129<br>
+> 当前可执行任务：`SAL-P4-008` 实现订单状态机，状态为 `READY`；不得在该任务外启动正式组合回测运行<br>
+> 最近可评审交付 checkpoint：本次 `SAL-P4-007` 实现提交生成后以 `git log -1 --oneline` 确认；上一 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`<br>
 > 最新状态同步 checkpoint：`76089299 docs: 同步 SAL-P4-006 checkpoint hash`；上一状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`64c7998e docs: 记录 SAL-P4-006 状态同步 hash`；上一 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`<br>
-> 本次实现 checkpoint：`1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`；已完成任务范围推进至 `SAL-P4-006`<br>
+> 本次实现 checkpoint：本次 `SAL-P4-007` 实现提交生成后以 `git log -1 --oneline` 确认；已完成任务范围推进至 `SAL-P4-007`<br>
 > 最新状态复核 checkpoint：`459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -109,18 +109,19 @@
 - 完成 `SAL-P4-004`：新增 [BacktestArtifact Contract](./backtest-artifact.md)、Quant Backtest [BacktestArtifact](../src/serenity_alpha_lab/quant/backtest/artifacts.py) 和 [BacktestArtifact contract test](../tests/quant/test_backtest_artifact.py)，冻结正式组合回测订单、成交、持仓、现金、净值、指标和审计输出描述符、compact bundle summary Artifact、`preview/formal/partial/invalid` 状态、URI-only 大结果边界、具体 Dataset Version guard 和 legacy Signal Evaluation scope 拒绝；本任务不执行正式组合回测；P4 进度 `4/22`，总进度 `70/129`。
 - 完成 `SAL-P4-005`：新增 [Qlib 版本锁定与隔离方案](./qlib-version-isolation.md)、[ADR-009](./adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md)、Qlib runtime policy [runtime_policy.py](../src/serenity_alpha_lab/integrations/qlib/runtime_policy.py) 和 [Qlib isolation architecture test](../tests/architecture/test_qlib_version_isolation.py)；`quant` extra 精确锁定 `pyqlib==0.9.7`，生产/Desktop `requirements.txt` 仍排除 `pyqlib`，默认 policy 限定 Qlib 只能在 `worker-quant` dedicated process 中由后续 Adapter lazy import；本任务不启动 Qlib runtime 或正式组合回测；P4 进度 `5/22`，总进度 `71/129`。
 - 完成 `SAL-P4-006`：新增 [Qlib Dataset Conversion](./qlib-dataset-conversion.md)、Qlib integration 边界 [dataset_converter.py](../src/serenity_alpha_lab/integrations/qlib/dataset_converter.py) 和 [Qlib Dataset conversion test](../tests/integrations/test_qlib_dataset_conversion.py)，将 passed/published 的 `TradingCalendarDataset`、`InstrumentMasterDataset` 和 `AdjustedDailyBarsDataset` 转为 deterministic calendar/instrument/feature/field_mapping/summary artifacts，记录 CN symbol 映射、字段双向 lineage、source Dataset version/file hash 和 compact summary；本任务不启动 Qlib runtime、Qlib Adapter 或正式组合回测；P4 进度 `6/22`，总进度 `72/129`。
+- 完成 `SAL-P4-007`：新增 [Qlib QuantEngine Adapter](./qlib-quant-engine-adapter.md)、Qlib integration 边界 [quant_engine_adapter.py](../src/serenity_alpha_lab/integrations/qlib/quant_engine_adapter.py) 和 [Qlib QuantEngine Adapter test](../tests/integrations/test_qlib_quant_engine_adapter.py)，包装 `train`、`predict`、`backtest`、`evaluate_factor` 与 Recorder-like 输出映射，冻结受控 template ID、arbitrary module path rejection、平台 run/stage/trace/spec/dataset 绑定和 deterministic step/run report Artifact；本任务不启动正式组合回测、订单/Ledger/Risk/Quant Lab/Evidence Agent/Worker loop 或真实 Provider/LLM；P4 进度 `7/22`，总进度 `73/129`。
 
 ## 未完成
 
 ### 当前可执行 P4 任务
 
-- `SAL-P4-007` 当前为 `READY`：实现 Qlib QuantEngine Adapter，包装 train/predict/backtest/evaluate_factor 和 Recorder；不得绕过 ADR-009 Worker isolation，不得接受任意 module path，不得把 Dataset 转换 artifact 或 legacy Signal Evaluation 命名为正式组合回测。
+- `SAL-P4-008` 当前为 `READY`：实现订单状态机，定义 order、状态事件、拒绝、部分成交和过期；不得跳过后续 Ledger/Risk/Metric/Audit 任务直接启动正式组合回测。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P4 至 P6 仍有 58 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案和 Dataset 到 Qlib 转换。但尚未完成 Qlib Adapter、完整 Worker runtime、Quant Core、正式回测、Evidence Agent 或部署环境。
+- P4 至 P6 仍有 56 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换和 Qlib QuantEngine Adapter。但尚未完成订单状态机、Portfolio Ledger、完整 Worker runtime、正式回测、Evidence Agent 或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -136,6 +137,7 @@
 - 2026-07-25 按用户要求再次复核 `SAL-P4-005` 后最新开发状态；确认最近实现 checkpoint 为 `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`，最新状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`，最新状态同步 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`，当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..005`，未完成范围从 `SAL-P4-006` 开始，当前 READY 任务为 `SAL-P4-006` Dataset 到 Qlib 转换，并已在 `tasks/lessons.md` 再次固化“阶段性任务完成后自动状态同步、记录 hash-anchor 并给出可复制提示词”的习惯。
 - 2026-07-25 完成 `SAL-P4-006` Dataset 到 Qlib 转换；新增 converter、contract tests 和 evidence doc，生成 deterministic calendar/instrument/feature/field_mapping/summary artifacts，要求 source Dataset Manifest 为 concrete `dsv_*`、schema 匹配且 passed/published，summary 明确 `qlib_runtime_started=false` 与 `formal_backtest_started=false`；当前唯一 `READY` 阶段任务为 `SAL-P4-007` Qlib QuantEngine Adapter。
 - 2026-07-25 按用户要求复核 `SAL-P4-006` 后最新开发状态；确认最近实现 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`，状态同步 checkpoint 为 `76089299 docs: 同步 SAL-P4-006 checkpoint hash`，状态同步 hash-anchor 为 `64c7998e docs: 记录 SAL-P4-006 状态同步 hash`，最终锚点固化提交为 `ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint`；当前已完成 `SAL-P4-001..006`，未完成范围从 `SAL-P4-007` 开始，当前 READY 任务为 `SAL-P4-007` Qlib QuantEngine Adapter。本次状态复核不启动 SAL-P4-007、Qlib runtime、正式组合回测、Ledger/Risk、Evidence Agent、Worker loop 或真实 Provider/LLM。
+- 2026-07-25 完成 `SAL-P4-007` Qlib QuantEngine Adapter；新增 adapter、contract tests 和 evidence doc，包装 `train`、`predict`、`backtest`、`evaluate_factor`，通过 injected fake facade 验证调用顺序和 Recorder snapshot 映射，要求 config 使用 approved template ID 并拒绝 arbitrary Python module path；当前唯一 `READY` 阶段任务为 `SAL-P4-008` 订单状态机。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -187,8 +189,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P4-007` Qlib QuantEngine Adapter，包装 train/predict/backtest/evaluate_factor 和 Recorder，并继续遵守 ADR-009 dedicated Worker boundary。
-2. 不得在 `SAL-P4-007` 范围外启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Ledger/Risk/Quant Lab 或 Worker loop；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P4-008` 订单状态机，定义 order、状态事件、拒绝、部分成交和过期。
+2. 不得在 `SAL-P4-008` 范围外启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Ledger/Risk/Quant Lab 或 Worker loop；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；后续任务必须继续与 legacy `/api/v1/backtest/*` 兼容面隔离。
 
 ## 本次状态复核
@@ -306,24 +308,25 @@
 28. docs/backtest-artifact.md
 29. docs/qlib-version-isolation.md
 30. docs/qlib-dataset-conversion.md
-31. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
+31. docs/qlib-quant-engine-adapter.md
+32. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
 
 随后执行 git status --short --branch 和 git log -5 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-006
-- 最近完成：SAL-P4-006 Dataset 到 Qlib 转换
-- 最近可评审交付 checkpoint：1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换；上一 checkpoint：82580fdb feat(P4): 锁定 Qlib 版本与隔离方案
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-007
+- 最近完成：SAL-P4-007 Qlib QuantEngine Adapter
+- 最近可评审交付 checkpoint：本次 SAL-P4-007 实现提交生成后以 git log -1 --oneline 确认；上一 checkpoint：1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换
 - 最新状态同步 checkpoint：76089299 docs: 同步 SAL-P4-006 checkpoint hash；上一状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：64c7998e docs: 记录 SAL-P4-006 状态同步 hash；上一 hash-anchor checkpoint：ee5761ba docs: 记录 SAL-P4-005 状态同步 hash
 - 最新状态复核 checkpoint：459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示；上一状态复核 checkpoint：6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 6/22，总计 72/129
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 7/22，总计 73/129
 
 下一步优先执行：
-1. SAL-P4-007 Qlib QuantEngine Adapter，包装 train/predict/backtest/evaluate_factor 和 Recorder
-2. 不要在 `SAL-P4-007` 范围外启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Ledger/Risk/Quant Lab 或 Worker loop；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+1. SAL-P4-008 订单状态机，定义 order、状态事件、拒绝、部分成交和过期
+2. 不要在 `SAL-P4-008` 范围外启动正式组合回测运行、Evidence Agent、真实 Provider/LLM、Ledger/Risk/Quant Lab 或 Worker loop；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation 或 Screen result 不得直接命名为正式组合回测；后续任务必须继续与 legacy /api/v1/backtest/* 兼容面隔离
 
 严格遵守 AGENTS.md：
