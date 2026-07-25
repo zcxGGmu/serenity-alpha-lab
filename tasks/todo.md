@@ -32,7 +32,7 @@
 - Code-review subagent dispatch was attempted, but the host wrapper rejected payload shape with message/items conflicts; fallback local senior review checked ADR-009 compliance, runtime import boundary, config path guards, Recorder mapping, deterministic artifact payloads and no-go scope.
 - Verification: focused target `4 passed`; related suite `23 passed`; full pytest `347 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no orders/fills, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift; Qlib internal backtest remains adapter evidence only.
-- Implementation checkpoint: will be created by this review commit and then synchronized with the actual hash.
+- Implementation checkpoint: `6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`.
 
 ---
 

@@ -7,10 +7,10 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：73/129<br>
 > 当前可执行任务：`SAL-P4-008` 实现订单状态机，状态为 `READY`；不得在该任务外启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：本次 `SAL-P4-007` 实现提交生成后以 `git log -1 --oneline` 确认；上一 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`<br>
+> 最近可评审交付 checkpoint：`6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`；上一 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`<br>
 > 最新状态同步 checkpoint：`76089299 docs: 同步 SAL-P4-006 checkpoint hash`；上一状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`64c7998e docs: 记录 SAL-P4-006 状态同步 hash`；上一 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`<br>
-> 本次实现 checkpoint：本次 `SAL-P4-007` 实现提交生成后以 `git log -1 --oneline` 确认；已完成任务范围推进至 `SAL-P4-007`<br>
+> 本次实现 checkpoint：`6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`；已完成任务范围推进至 `SAL-P4-007`<br>
 > 最新状态复核 checkpoint：`459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -318,7 +318,7 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-007
 - 最近完成：SAL-P4-007 Qlib QuantEngine Adapter
-- 最近可评审交付 checkpoint：本次 SAL-P4-007 实现提交生成后以 git log -1 --oneline 确认；上一 checkpoint：1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换
+- 最近可评审交付 checkpoint：6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter；上一 checkpoint：1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换
 - 最新状态同步 checkpoint：76089299 docs: 同步 SAL-P4-006 checkpoint hash；上一状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：64c7998e docs: 记录 SAL-P4-006 状态同步 hash；上一 hash-anchor checkpoint：ee5761ba docs: 记录 SAL-P4-005 状态同步 hash
 - 最新状态复核 checkpoint：459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示；上一状态复核 checkpoint：6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示
