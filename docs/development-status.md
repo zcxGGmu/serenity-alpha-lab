@@ -8,10 +8,10 @@
 > 任务完成度：73/129<br>
 > 当前可执行任务：`SAL-P4-008` 实现订单状态机，状态为 `READY`；不得在该任务外启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`；上一 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`<br>
-> 最新状态同步 checkpoint：`76089299 docs: 同步 SAL-P4-006 checkpoint hash`；上一状态同步 checkpoint 为 `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`<br>
-> 最新状态同步 hash-anchor checkpoint：`64c7998e docs: 记录 SAL-P4-006 状态同步 hash`；上一 hash-anchor checkpoint 为 `ee5761ba docs: 记录 SAL-P4-005 状态同步 hash`<br>
+> 最新状态同步 checkpoint：`8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash`；上一状态同步 checkpoint 为 `76089299 docs: 同步 SAL-P4-006 checkpoint hash`<br>
+> 最新状态同步 hash-anchor checkpoint：本次 `SAL-P4-007` 状态复核提交生成后以 `git log -1 --oneline` 确认；上一 hash-anchor checkpoint 为 `451d554f docs: 同步 SAL-P4-006 状态复核 hash`<br>
 > 本次实现 checkpoint：`6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`；已完成任务范围推进至 `SAL-P4-007`<br>
-> 最新状态复核 checkpoint：`459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示`<br>
+> 最新状态复核 checkpoint：本次 `SAL-P4-007` 状态复核提交生成后以 `git log -1 --oneline` 确认；上一状态复核 checkpoint 为 `459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -138,6 +138,7 @@
 - 2026-07-25 完成 `SAL-P4-006` Dataset 到 Qlib 转换；新增 converter、contract tests 和 evidence doc，生成 deterministic calendar/instrument/feature/field_mapping/summary artifacts，要求 source Dataset Manifest 为 concrete `dsv_*`、schema 匹配且 passed/published，summary 明确 `qlib_runtime_started=false` 与 `formal_backtest_started=false`；当前唯一 `READY` 阶段任务为 `SAL-P4-007` Qlib QuantEngine Adapter。
 - 2026-07-25 按用户要求复核 `SAL-P4-006` 后最新开发状态；确认最近实现 checkpoint 为 `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`，状态同步 checkpoint 为 `76089299 docs: 同步 SAL-P4-006 checkpoint hash`，状态同步 hash-anchor 为 `64c7998e docs: 记录 SAL-P4-006 状态同步 hash`，最终锚点固化提交为 `ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint`；当前已完成 `SAL-P4-001..006`，未完成范围从 `SAL-P4-007` 开始，当前 READY 任务为 `SAL-P4-007` Qlib QuantEngine Adapter。本次状态复核不启动 SAL-P4-007、Qlib runtime、正式组合回测、Ledger/Risk、Evidence Agent、Worker loop 或真实 Provider/LLM。
 - 2026-07-25 完成 `SAL-P4-007` Qlib QuantEngine Adapter；新增 adapter、contract tests 和 evidence doc，包装 `train`、`predict`、`backtest`、`evaluate_factor`，通过 injected fake facade 验证调用顺序和 Recorder snapshot 映射，要求 config 使用 approved template ID 并拒绝 arbitrary Python module path；当前唯一 `READY` 阶段任务为 `SAL-P4-008` 订单状态机。
+- 2026-07-25 按用户要求复核 `SAL-P4-007` 后最新开发状态；确认最近实现 checkpoint 为 `6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`，状态同步 checkpoint 为 `8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash`；当前已完成 `SAL-P4-001..007`，未完成范围从 `SAL-P4-008` 开始，当前 READY 任务为 `SAL-P4-008` 订单状态机。本次状态复核仅同步文档、进度和 lessons，不启动 `SAL-P4-008`、正式组合回测、Qlib runtime、Ledger/Risk、Evidence Agent、Worker loop 或真实 Provider/LLM。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -319,9 +320,9 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-007
 - 最近完成：SAL-P4-007 Qlib QuantEngine Adapter
 - 最近可评审交付 checkpoint：6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter；上一 checkpoint：1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换
-- 最新状态同步 checkpoint：76089299 docs: 同步 SAL-P4-006 checkpoint hash；上一状态同步 checkpoint：800bef4e docs: 同步 SAL-P4-005 checkpoint hash
-- 最新状态同步 hash-anchor checkpoint：64c7998e docs: 记录 SAL-P4-006 状态同步 hash；上一 hash-anchor checkpoint：ee5761ba docs: 记录 SAL-P4-005 状态同步 hash
-- 最新状态复核 checkpoint：459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示；上一状态复核 checkpoint：6bbca629 docs: 复核 SAL-P4-005 最新开发状态与恢复提示
+- 最新状态同步 checkpoint：8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash；上一状态同步 checkpoint：76089299 docs: 同步 SAL-P4-006 checkpoint hash
+- 最新状态同步 hash-anchor checkpoint：本次 SAL-P4-007 状态复核提交生成后以 git log -1 --oneline 确认；上一 hash-anchor checkpoint：451d554f docs: 同步 SAL-P4-006 状态复核 hash
+- 最新状态复核 checkpoint：本次 SAL-P4-007 状态复核提交生成后以 git log -1 --oneline 确认；上一状态复核 checkpoint：459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 7/22，总计 73/129
 
 下一步优先执行：
