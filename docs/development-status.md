@@ -8,8 +8,8 @@
 > 任务完成度：76/129<br>
 > 当前可执行任务：`SAL-P4-011` 实现 A 股执行规则，状态为 `READY`；不得跳过执行规则/公司行动/Risk/Metric/Audit 直接启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`e194984c feat(P4): 实现费用与滑点模型`；上一 checkpoint 为 `18d6782d feat(P4): 实现 Portfolio Ledger`<br>
-> 最新状态同步 checkpoint：`2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`；上一状态同步 checkpoint 为 `e58823a4 docs: 同步 SAL-P4-008 checkpoint hash`<br>
-> 最新状态同步 hash-anchor checkpoint：`6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`；上一 hash-anchor checkpoint 为 `7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash`<br>
+> 最新状态同步 checkpoint：`e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`；上一状态同步 checkpoint 为 `2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`<br>
+> 最新状态同步 hash-anchor checkpoint：本次状态同步 hash-anchor 提交生成后回填；上一 hash-anchor checkpoint 为 `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`<br>
 > 本次实现 checkpoint：`e194984c feat(P4): 实现费用与滑点模型`；已完成任务范围推进至 `SAL-P4-010`<br>
 > 最新状态复核 checkpoint：`1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -330,8 +330,8 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-010
 - 最近完成：SAL-P4-010 Cost And Slippage Model
 - 最近可评审交付 checkpoint：e194984c feat(P4): 实现费用与滑点模型；上一 checkpoint：18d6782d feat(P4): 实现 Portfolio Ledger
-- 最新状态同步 checkpoint：2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash；上一状态同步 checkpoint：e58823a4 docs: 同步 SAL-P4-008 checkpoint hash
-- 最新状态同步 hash-anchor checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash；上一 hash-anchor checkpoint：7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash
+- 最新状态同步 checkpoint：e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash；上一状态同步 checkpoint：2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash
+- 最新状态同步 hash-anchor checkpoint：本次状态同步 hash-anchor 提交生成后回填；上一 hash-anchor checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash
 - 最新状态复核 checkpoint：1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示；上一最终锚点 checkpoint：dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 10/22，总计 76/129
 
