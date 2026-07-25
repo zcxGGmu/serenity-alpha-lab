@@ -32,6 +32,7 @@
 - Verification: Red target `1 error`; focused target `4 passed`; related Risk/Rebalance/AShareExecution/CostModel/PortfolioLedger/Order/BacktestSpec/Architecture suite `43 passed`; full pytest `376 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan clean; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no order execution/fills, no Ledger mutation, no bias audit, no performance metrics, no BacktestRun orchestration, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `c09dd889 feat(P4): 实现确定性 RiskPolicy`.
+- Status-sync checkpoint: `87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash`.
 
 ---
 
