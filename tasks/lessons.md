@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-25: SAL-P4-006 子代理派发失败时必须立即降级为本地复核并记录
+
+- 纠正来源：`SAL-P4-006` 收尾期间多次尝试 code-review subagent，host wrapper 对空 optional fields、`message`/`items` 同时出现以及空 `items` 均拒绝，导致派发无法完成。
+- 模式：如果反复调整 subagent payload 仍被平台包装层拒绝，继续重试会消耗上下文且不增加验证质量；但 AGENTS.md 仍要求使用子代理策略，因此必须把尝试、失败原因和本地复核范围写入 review。
+- 规则：后续阶段任务需要 code review subagent 时，只做一次最小 payload 尝试；若仍因包装层 schema 被拒绝，立即停止重试，改为本地 senior review + 新鲜验证，并在 `tasks/todo.md` review 中记录 fallback。
+- 执行：从 `SAL-P4-007` 开始，子代理失败不得阻断实现/验证/状态同步；最终完成声明仍以本轮实际测试、diff review 和 checkpoint 为准。
+
 ## 2026-07-25: SAL-P4-005 后状态复核必须记录 hash-anchor 与可复制提示词
 
 - 纠正来源：`SAL-P4-005` 实现 checkpoint `82580fdb`、状态同步 checkpoint `800bef4e` 和状态同步 hash-anchor `ee5761ba` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
