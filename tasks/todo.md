@@ -34,6 +34,7 @@
 - Implementation checkpoint: `c09dd889 feat(P4): 实现确定性 RiskPolicy`.
 - Status-sync checkpoint: `87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `23d7d35d docs: 记录 SAL-P4-014 状态同步 hash`.
+- Final anchor checkpoint: `8efd14dc docs: 固化 SAL-P4-014 hash-anchor checkpoint`.
 
 ---
 
