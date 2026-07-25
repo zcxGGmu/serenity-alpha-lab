@@ -35,6 +35,7 @@
 - Scope retained: no formal portfolio backtest run, no rebalance/target-weight generation, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `de50e5ff feat(P4): 实现公司行动入账`.
 - Status-sync checkpoint: `c66555c3 docs: 同步 SAL-P4-012 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `07263d73 docs: 记录 SAL-P4-012 状态同步 hash`.
 
 ---
 
