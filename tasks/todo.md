@@ -32,7 +32,7 @@
 - Verification: target `5 passed`; related Qlib/dependency/architecture suite `23 passed`; full pytest `335 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no `qlib.init`, no Dataset-to-Qlib conversion, no Qlib Adapter, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `82580fdb feat(P4): 锁定 Qlib 版本与隔离方案`.
-- Status-sync checkpoint will be created next as `docs: 同步 SAL-P4-005 checkpoint hash`, then recorded with a follow-up hash-anchor commit.
+- Status-sync checkpoint: `800bef4e docs: 同步 SAL-P4-005 checkpoint hash`; follow-up hash-anchor commit records this checkpoint.
 
 ---
 
