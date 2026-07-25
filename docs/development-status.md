@@ -7,10 +7,10 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：80/129<br>
 > 当前可执行任务：`SAL-P4-015` 实现回测偏差审计，状态为 `READY`；不得跳过 Audit/Metric 直接启动正式组合回测运行<br>
-> 最近可评审交付 checkpoint：本次实现提交生成后以 `git log -1 --oneline` 和最终回复为准；上一 checkpoint 为 `876547f4 feat(P4): 实现调仓与目标权重`<br>
+> 最近可评审交付 checkpoint：`c09dd889 feat(P4): 实现确定性 RiskPolicy`；上一 checkpoint 为 `876547f4 feat(P4): 实现调仓与目标权重`<br>
 > 最新状态同步 checkpoint：`38c9e882 docs: 同步 SAL-P4-013 checkpoint hash`；上一状态同步 checkpoint 为 `c66555c3 docs: 同步 SAL-P4-012 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`fc311881 docs: 记录 SAL-P4-013 状态同步 hash`；上一 hash-anchor checkpoint 为 `07263d73 docs: 记录 SAL-P4-012 状态同步 hash`<br>
-> 本次实现 checkpoint：本次提交生成后以 `git log -1 --oneline` 和最终回复为准；已完成任务范围推进至 `SAL-P4-014`<br>
+> 本次实现 checkpoint：`c09dd889 feat(P4): 实现确定性 RiskPolicy`；已完成任务范围推进至 `SAL-P4-014`<br>
 > 最新最终锚点 checkpoint：`4497a4e6 docs: 固化 SAL-P4-013 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `05acdb21 docs: 固化 SAL-P4-012 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `a7ddd16f docs: 复核 SAL-P4-012 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -342,7 +342,7 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-014
 - 最近完成：SAL-P4-014 确定性 RiskPolicy
-- 最近可评审交付 checkpoint：本次实现提交生成后以 `git log -1 --oneline` 和最终回复为准；上一 checkpoint：876547f4 feat(P4): 实现调仓与目标权重
+- 最近可评审交付 checkpoint：`c09dd889 feat(P4): 实现确定性 RiskPolicy`；上一 checkpoint：876547f4 feat(P4): 实现调仓与目标权重
 - 最新状态同步 checkpoint：38c9e882 docs: 同步 SAL-P4-013 checkpoint hash；上一状态同步 checkpoint：c66555c3 docs: 同步 SAL-P4-012 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：fc311881 docs: 记录 SAL-P4-013 状态同步 hash；上一 hash-anchor checkpoint：07263d73 docs: 记录 SAL-P4-012 状态同步 hash
 - 最新最终锚点 checkpoint：4497a4e6 docs: 固化 SAL-P4-013 hash-anchor checkpoint；上一最终锚点 checkpoint：05acdb21 docs: 固化 SAL-P4-012 hash-anchor checkpoint；上一状态复核 checkpoint：a7ddd16f docs: 复核 SAL-P4-012 最新开发状态与恢复提示
