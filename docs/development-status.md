@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`；上一状态同步 checkpoint 为 `2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`；上一 hash-anchor checkpoint 为 `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`<br>
 > 本次实现 checkpoint：`e194984c feat(P4): 实现费用与滑点模型`；已完成任务范围推进至 `SAL-P4-010`<br>
-> 最新状态复核 checkpoint：`1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint`<br>
+> 最新状态复核 checkpoint：待本次 `SAL-P4-010` 状态复核提交生成；上一状态复核 checkpoint 为 `1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -146,6 +146,7 @@
 - 2026-07-25 完成 `SAL-P4-009` Portfolio Ledger；新增 pure Quant Backtest ledger contract、contract tests 和 evidence doc，定义 `PortfolioLedger`、`LedgerEvent`、FIFO `PositionLot`、`ExecutionRecord`、买入 payable、卖出 receivable、现金结算、估值 snapshot、权益恒等式和幂等 replay；当前唯一 `READY` 阶段任务为 `SAL-P4-010` 费用与滑点模型。本任务不启动正式组合回测、费用/滑点计算、A 股执行规则、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - 2026-07-25 按用户要求再次复核 `SAL-P4-009` 后最新开发状态；确认最近实现 checkpoint 为 `18d6782d feat(P4): 实现 Portfolio Ledger`，状态同步 checkpoint 为 `2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`，状态同步 hash-anchor 为 `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`，最终锚点固化提交为 `dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint`，状态复核 checkpoint 为 `1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示`；当前已完成 `SAL-P4-001..009`，未完成范围从 `SAL-P4-010` 开始，当前 READY 任务为 `SAL-P4-010` 费用与滑点模型。本次状态复核不启动费用/滑点实现、正式组合回测、A 股执行规则、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop 或真实 Provider/LLM。
 - 2026-07-25 完成 `SAL-P4-010` Cost And Slippage Model；新增 pure Quant Backtest cost contract、contract tests 和 evidence doc，定义 `CostModel`、`CostBreakdown`、commission/min commission、sell-only stamp tax、transfer fee、slippage、impact、effective price、pre/post-cost cash amount 和 participation-rate guard；当前唯一 `READY` 阶段任务为 `SAL-P4-011` A 股执行规则。本任务不启动正式组合回测、A 股 T+1/交易单位/停牌/涨跌停执行规则、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
+- 2026-07-25 按用户要求复核 `SAL-P4-010` 后最新开发状态；确认最近实现 checkpoint 为 `e194984c feat(P4): 实现费用与滑点模型`，状态同步 checkpoint 为 `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`，状态同步 hash-anchor 为 `ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`，最终锚点固化提交为 `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`；当前已完成 `SAL-P4-001..010`，未完成范围从 `SAL-P4-011` 开始，当前 READY 任务为 `SAL-P4-011` A 股执行规则。本次状态复核仅同步状态文档、进度清单、`tasks/todo.md` 和 lessons，不启动 A 股执行规则、正式组合回测、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -332,7 +333,7 @@
 - 最近可评审交付 checkpoint：e194984c feat(P4): 实现费用与滑点模型；上一 checkpoint：18d6782d feat(P4): 实现 Portfolio Ledger
 - 最新状态同步 checkpoint：e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash；上一状态同步 checkpoint：2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash；上一 hash-anchor checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash
-- 最新状态复核 checkpoint：1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示；上一最终锚点 checkpoint：dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint
+- 最新状态复核 checkpoint：待本次 SAL-P4-010 状态复核提交生成；上一状态复核 checkpoint：1627ec4f docs: 复核 SAL-P4-009 最新开发状态与恢复提示；上一最终锚点 checkpoint：3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 10/22，总计 76/129
 
 下一步优先执行：

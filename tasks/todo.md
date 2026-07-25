@@ -1,3 +1,29 @@
+# SAL-P4-010 Latest Status Refresh
+
+> Started: 2026-07-25
+> Scope: Refresh recovery docs after `SAL-P4-010` implementation checkpoint `e194984c`, status-sync checkpoint `e8ad2fd8`, status-sync hash-anchor `ca9eabf2` and final anchor `3a46eccc`; make completed vs unfinished work explicit, update lessons for the repeated habit reminder, and provide a copyable next-session prompt. Do not start `SAL-P4-011`, formal portfolio backtest, company actions, Risk/Metric/Audit, Quant Lab, Evidence Agent, Worker loop or real Provider/LLM calls in this sync.
+
+## Checklist
+
+- [x] Confirm current Git status and latest checkpoint chain.
+- [x] Update `tasks/lessons.md` with the repeated status-refresh habit after `SAL-P4-010`.
+- [x] Update `docs/development-status.md` with completed/unfinished scope, checkpoint anchors, current READY task and next-session prompt.
+- [x] Update `docs/development-progress-checklist.md` next-step anchor with the same recoverable status.
+- [x] Run status-anchor scan and `git diff --check`, then create the required Chinese status review checkpoint commit.
+
+## Review: SAL-P4-010 Latest Status Refresh
+
+- Confirmed implementation checkpoint `e194984c feat(P4): 实现费用与滑点模型`.
+- Confirmed status-sync checkpoint `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`.
+- Confirmed status-sync hash-anchor checkpoint `ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`.
+- Confirmed final anchor commit `3a46eccc docs: 固化 SAL-P4-010 hash-anchor checkpoint`.
+- Current completed scope is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017` and `SAL-P4-001..010`; unfinished P4 work starts at `SAL-P4-011` A 股执行规则.
+- Scope retained: no `SAL-P4-011` implementation, no formal portfolio backtest, no company-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Verification: `git diff --check` PASS; status-anchor scan for stale current `SAL-P4-010` READY / `75/129` / `P4 9/22` only matched historical `SAL-P4-009` review text, while current anchors point to `SAL-P4-011`, P4 `10/22` and total `76/129`.
+- Status review checkpoint: pending this sync commit.
+
+---
+
 # SAL-P4-010 Cost And Slippage Model Plan
 
 > Started: 2026-07-25
