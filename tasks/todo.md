@@ -1,3 +1,39 @@
+# SAL-P4-008 Order State Machine Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-008` by defining formal portfolio backtest order intent, order events, state transitions, rejection, partial fill, expiration and idempotent replay. Do not start formal portfolio backtest runs, Ledger/Risk/Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls, A-share execution rules, fees/slippage, corporate-action ledger or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P4 evidence docs, ADR-009, current Git status and recent commits.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-order-state-machine.md`.
+- [x] Add Red contract tests for created/accepted/partially_filled/filled/rejected/expired/cancelled transitions, invalid transition rejection, terminal-state immutability and idempotent replay.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/orders.py` with immutable DTOs, validation, append-only events, transition guards, deterministic `to_record()` and replay.
+- [x] Export order state machine symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/order-state-machine.md` with scope, state/event semantics, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-008` done, P4 `8/22`, total `74/129`, decision/evidence rows and `SAL-P4-009` READY but not started.
+- [x] Run target/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-008` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Order state machine is a pure contract/domain layer; no Ledger/cash/position replay, fees/slippage, A-share execution rules, corporate actions, RiskPolicy, metrics, API, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM call or Qlib runtime.
+- Every state change must be represented as an immutable event; replay must be deterministic and duplicate event IDs must be idempotent only when the payload is identical.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Dataset conversion and Qlib internal backtest evidence stay outside the formal portfolio backtest namespace.
+- Keep `upstream/dsa-v3.26.1` immutable and do not submit `.worktrees`, `.cache`, `.venv`, `node_modules`, `static`, Playwright artifacts, pycache or unrelated files.
+
+## Review: SAL-P4-008
+
+- Added `tests/quant/test_order_state_machine.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.orders` (`1 error`), Green focused target is `5 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/orders.py` and exported symbols from `quant.backtest`; the module defines `OrderIntent`, `OrderEvent`, `Order`, `OrderSide`, `OrderType`, `TimeInForce`, `OrderStatus` and `OrderEventType` for `created/accepted/partially_filled/filled/rejected/expired/cancelled` states.
+- Contract guards reject fill-before-accept, overfills, terminal mutations, conflicting duplicate `event_id` payloads, missing terminal reasons, invalid timestamps/quantities and invalid `BacktestSpec` hash binding; duplicate event IDs are idempotent only when payloads are identical.
+- Added `docs/order-state-machine.md`, `DEC-072` and `AEV-074`; progress now moves to P4 `8/22`, total `74/129`, with `SAL-P4-009` Portfolio Ledger READY but not started.
+- Code-review subagent dispatch was attempted, but the host wrapper repeatedly rejected optional field and `message`/`items` payload shapes; fallback local senior review checked transition semantics, replay idempotency, terminal states, import boundary and no-go scope.
+- Verification: focused target `5 passed`; related suite `25 passed`; full pytest `352 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Scope retained: no formal portfolio backtest run, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no fees/slippage, no A-share execution rules, no company-action ledger, no metrics/audit and no legacy `/api/v1/backtest/*` drift.
+
+---
+
 # SAL-P4-007 Latest Status Refresh
 
 > Started: 2026-07-25
