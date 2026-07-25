@@ -9,9 +9,9 @@
 > 当前可执行任务：`SAL-P4-016` 实现统一绩效指标，状态为 `READY`；不得跳过 Metric/BacktestRun 直接启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`c8331b3b feat(P4): 实现回测偏差审计`；上一 checkpoint 为 `c09dd889 feat(P4): 实现确定性 RiskPolicy`<br>
 > 最新状态同步 checkpoint：`eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash`；上一状态同步 checkpoint 为 `87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash`<br>
-> 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P4-015 状态同步 hash` 提交生成后以 `git log -1 --oneline` 为准；上一 hash-anchor checkpoint 为 `23d7d35d docs: 记录 SAL-P4-014 状态同步 hash`<br>
+> 最新状态同步 hash-anchor checkpoint：`3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash`；上一 hash-anchor checkpoint 为 `23d7d35d docs: 记录 SAL-P4-014 状态同步 hash`<br>
 > 本次实现 checkpoint：`c8331b3b feat(P4): 实现回测偏差审计`；已完成任务范围推进至 `SAL-P4-015`<br>
-> 最新最终锚点 checkpoint：`8efd14dc docs: 固化 SAL-P4-014 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `4497a4e6 docs: 固化 SAL-P4-013 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `8a96ddb8 docs: 复核 SAL-P4-013 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：本次 `docs: 固化 SAL-P4-015 hash-anchor checkpoint` 提交生成后以 `git log -1 --oneline` 为准；上一最终锚点 checkpoint 为 `8efd14dc docs: 固化 SAL-P4-014 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `287bdd6d docs: 复核 SAL-P4-014 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成

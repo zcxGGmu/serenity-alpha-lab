@@ -25,6 +25,7 @@
 - Verification: Red target `1 error`; focused target `3 passed`; related BiasAudit/RiskPolicy/BacktestSpec/Architecture suite `24 passed`; full pytest `379 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Implementation checkpoint: `c8331b3b feat(P4): 实现回测偏差审计`.
 - Status-sync checkpoint: `eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash`.
 
 ## Guardrails
 
