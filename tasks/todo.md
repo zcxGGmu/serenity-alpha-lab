@@ -33,7 +33,8 @@
 - Verification: focused target `8 passed`; related suite `52 passed`; full pytest `343 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no `qlib.init`, no Qlib Adapter, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `1c5c6e81 feat(P4): 实现 Dataset 到 Qlib 转换`.
-- Status-sync checkpoint: this docs sync commit will be created after replacing the implementation hash placeholders and should be confirmed with `git log -1 --oneline`.
+- Status-sync checkpoint: `76089299 docs: 同步 SAL-P4-006 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: this docs hash-anchor commit will record the status-sync hash and should be confirmed with `git log -1 --oneline`.
 
 ---
 
