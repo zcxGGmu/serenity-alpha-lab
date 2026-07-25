@@ -9,7 +9,7 @@
 - [x] Update `tasks/lessons.md` with the repeated status-refresh habit after `SAL-P4-006`.
 - [x] Update `docs/development-status.md` with completed/unfinished scope, latest checkpoint anchors, current READY task and next-session prompt.
 - [x] Update `docs/development-progress-checklist.md` next-step anchor with the same recoverable status.
-- [ ] Run status-anchor scan and `git diff --check`, then create the required Chinese status review checkpoint commit.
+- [x] Run status-anchor scan and `git diff --check`, then create the required Chinese status review checkpoint commit.
 
 ## Review: SAL-P4-006 Latest Status Refresh
 
@@ -19,7 +19,7 @@
 - Confirmed final anchor commit `ea244bdc docs: 固化 SAL-P4-006 hash-anchor checkpoint`.
 - Current completed scope remains `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, and `SAL-P4-001..006`; current READY task is `SAL-P4-007` Qlib QuantEngine Adapter.
 - Scope retained: no `SAL-P4-007` implementation, no Qlib runtime, no formal portfolio backtest, no Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no `upstream/dsa-v3.26.1` tag movement.
-- Status review checkpoint: this docs refresh commit will be created after verification and should be confirmed with `git log -1 --oneline`.
+- Status review checkpoint: `459bc76e docs: 复核 SAL-P4-006 最新开发状态与恢复提示`.
 
 ---
 
