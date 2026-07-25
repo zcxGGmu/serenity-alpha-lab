@@ -33,6 +33,7 @@
 - Scope retained: no formal portfolio backtest run, no order execution/fills, no Ledger mutation, no bias audit, no performance metrics, no BacktestRun orchestration, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `c09dd889 feat(P4): 实现确定性 RiskPolicy`.
 - Status-sync checkpoint: `87c0b8d4 docs: 同步 SAL-P4-014 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `23d7d35d docs: 记录 SAL-P4-014 状态同步 hash`.
 
 ---
 
