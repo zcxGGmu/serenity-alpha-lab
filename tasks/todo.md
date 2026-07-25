@@ -26,6 +26,7 @@
 - Implementation checkpoint: `c8331b3b feat(P4): 实现回测偏差审计`.
 - Status-sync checkpoint: `eb4ffd5a docs: 同步 SAL-P4-015 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `3249dcd7 docs: 记录 SAL-P4-015 状态同步 hash`.
+- Final anchor checkpoint: `4b47034f docs: 固化 SAL-P4-015 hash-anchor checkpoint`.
 
 ## Guardrails
 
