@@ -33,6 +33,7 @@
 - Verification: focused target `3 passed`; related suite `28 passed`; full pytest `355 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope retained: no formal portfolio backtest run, no fees/slippage model, no A-share execution rules, no corporate-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `18d6782d feat(P4): 实现 Portfolio Ledger`.
+- Status-sync checkpoint: `2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`.
 
 ---
 

@@ -8,7 +8,7 @@
 > 任务完成度：75/129<br>
 > 当前可执行任务：`SAL-P4-010` 实现费用与滑点模型，状态为 `READY`；不得跳过成本/执行规则/公司行动/Risk/Metric/Audit 直接启动正式组合回测运行<br>
 > 最近可评审交付 checkpoint：`18d6782d feat(P4): 实现 Portfolio Ledger`；上一 checkpoint 为 `4927ba6f feat(P4): 实现订单状态机`<br>
-> 最新状态同步 checkpoint：`e58823a4 docs: 同步 SAL-P4-008 checkpoint hash`；上一状态同步 checkpoint 为 `8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash`<br>
+> 最新状态同步 checkpoint：`2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`；上一状态同步 checkpoint 为 `e58823a4 docs: 同步 SAL-P4-008 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash`；上一 hash-anchor checkpoint 为 `dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示`<br>
 > 本次实现 checkpoint：`18d6782d feat(P4): 实现 Portfolio Ledger`；已完成任务范围推进至 `SAL-P4-009`<br>
 > 最新状态复核 checkpoint：`7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash`；上一状态复核 checkpoint 为 `dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示`<br>
@@ -326,7 +326,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-009
 - 最近完成：SAL-P4-009 Portfolio Ledger
 - 最近可评审交付 checkpoint：18d6782d feat(P4): 实现 Portfolio Ledger；上一 checkpoint：4927ba6f feat(P4): 实现订单状态机
-- 最新状态同步 checkpoint：e58823a4 docs: 同步 SAL-P4-008 checkpoint hash；上一状态同步 checkpoint：8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash
+- 最新状态同步 checkpoint：2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash；上一状态同步 checkpoint：e58823a4 docs: 同步 SAL-P4-008 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash；上一 hash-anchor checkpoint：dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示
 - 最新状态复核 checkpoint：7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash；上一状态复核 checkpoint：dc88df2d docs: 复核 SAL-P4-007 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 9/22，总计 75/129
