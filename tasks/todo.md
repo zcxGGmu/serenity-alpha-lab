@@ -27,6 +27,7 @@
 - Scope retained: no formal portfolio backtest run, no A-share T+1/lot/suspension/limit execution rules, no corporate-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `e194984c feat(P4): 实现费用与滑点模型`.
 - Status-sync checkpoint: `e8ad2fd8 docs: 同步 SAL-P4-010 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `ca9eabf2 docs: 记录 SAL-P4-010 状态同步 hash`.
 
 ## Guardrails
 
