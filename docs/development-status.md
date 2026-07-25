@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`；上一状态同步 checkpoint 为 `e58823a4 docs: 同步 SAL-P4-008 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`；上一 hash-anchor checkpoint 为 `7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash`<br>
 > 本次实现 checkpoint：`18d6782d feat(P4): 实现 Portfolio Ledger`；已完成任务范围推进至 `SAL-P4-009`<br>
-> 最新状态复核 checkpoint：`6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`；上一状态复核 checkpoint 为 `7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash`<br>
+> 最新状态复核/最终锚点 checkpoint：`dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint`；上一状态复核 checkpoint 为 `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -143,6 +143,7 @@
 - 2026-07-25 按用户要求复核 `SAL-P4-007` 后最新开发状态；确认最近实现 checkpoint 为 `6e81ae6f feat(P4): 实现 Qlib QuantEngine Adapter`，状态同步 checkpoint 为 `8bc892d4 docs: 同步 SAL-P4-007 checkpoint hash`；当前已完成 `SAL-P4-001..007`，未完成范围从 `SAL-P4-008` 开始，当前 READY 任务为 `SAL-P4-008` 订单状态机。本次状态复核仅同步文档、进度和 lessons，不启动 `SAL-P4-008`、正式组合回测、Qlib runtime、Ledger/Risk、Evidence Agent、Worker loop 或真实 Provider/LLM。
 - 2026-07-25 完成 `SAL-P4-008` 订单状态机；新增 pure Quant Backtest order contract、contract tests 和 evidence doc，定义 `OrderIntent`、`OrderEvent`、`Order`、状态转换、非法转换拒绝、部分成交、过期/取消/拒绝原因和幂等 replay；当前唯一 `READY` 阶段任务为 `SAL-P4-009` Portfolio Ledger。本任务不启动正式组合回测、Ledger/Risk/Quant Lab、Evidence Agent、Worker loop、费用/滑点、A 股执行规则、公司行动、真实 Provider/LLM 或 legacy Backtest API 变更。
 - 2026-07-25 完成 `SAL-P4-009` Portfolio Ledger；新增 pure Quant Backtest ledger contract、contract tests 和 evidence doc，定义 `PortfolioLedger`、`LedgerEvent`、FIFO `PositionLot`、`ExecutionRecord`、买入 payable、卖出 receivable、现金结算、估值 snapshot、权益恒等式和幂等 replay；当前唯一 `READY` 阶段任务为 `SAL-P4-010` 费用与滑点模型。本任务不启动正式组合回测、费用/滑点计算、A 股执行规则、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM 或 legacy Backtest API 变更。
+- 2026-07-25 按用户要求再次复核 `SAL-P4-009` 后最新开发状态；确认最近实现 checkpoint 为 `18d6782d feat(P4): 实现 Portfolio Ledger`，状态同步 checkpoint 为 `2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`，状态同步 hash-anchor 为 `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`，最终锚点固化提交为 `dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint`；当前已完成 `SAL-P4-001..009`，未完成范围从 `SAL-P4-010` 开始，当前 READY 任务为 `SAL-P4-010` 费用与滑点模型。本次状态复核不启动费用/滑点实现、正式组合回测、A 股执行规则、公司行动、Risk/Metric/Audit/Quant Lab、Evidence Agent、Worker loop 或真实 Provider/LLM。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -318,7 +319,7 @@
 33. docs/portfolio-ledger.md
 34. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
 
-随后执行 git status --short --branch 和 git log -5 --oneline，确认当前状态。
+随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P4 真实组合回测与确定性风控
@@ -328,7 +329,7 @@
 - 最近可评审交付 checkpoint：18d6782d feat(P4): 实现 Portfolio Ledger；上一 checkpoint：4927ba6f feat(P4): 实现订单状态机
 - 最新状态同步 checkpoint：2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash；上一状态同步 checkpoint：e58823a4 docs: 同步 SAL-P4-008 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash；上一 hash-anchor checkpoint：7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash
-- 最新状态复核 checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash；上一状态复核 checkpoint：7b5ae6c4 docs: 记录 SAL-P4-008 状态同步 hash
+- 最新状态复核/最终锚点 checkpoint：dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint；上一状态复核 checkpoint：6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 9/22，总计 75/129
 
 下一步优先执行：
@@ -342,7 +343,7 @@
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
 - 后续实现必须遵守 ADR-001/002 与 Gate G2/G3；不要在对应任务前开始正式组合回测、Evidence Agent、真实 Provider/LLM 调用或未经批准的大规模 DSA 源码迁移。
-- 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review 和下次启动提示词。
+- 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review、tasks/lessons.md（如有纠正）和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 ```
 

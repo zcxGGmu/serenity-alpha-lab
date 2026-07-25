@@ -35,6 +35,8 @@
 - Implementation checkpoint: `18d6782d feat(P4): 实现 Portfolio Ledger`.
 - Status-sync checkpoint: `2d6f78a8 docs: 同步 SAL-P4-009 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `6ecb95d3 docs: 记录 SAL-P4-009 状态同步 hash`.
+- Final anchor/status review checkpoint before this refresh: `dbc6f286 docs: 固化 SAL-P4-009 hash-anchor checkpoint`.
+- User reminder review: latest docs now keep `SAL-P4-009` as completed, `SAL-P4-010` as the only READY task, P4 at `9/22`, total at `75/129`, and repeat the automatic status-sync/next-start-prompt habit for every future stage task.
 
 ---
 

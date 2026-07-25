@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-25: SAL-P4-009 后状态复核必须把最终锚点和可复制提示词一起交付
+
+- 纠正来源：`SAL-P4-009` 实现 checkpoint `18d6782d`、状态同步 checkpoint `2d6f78a8`、状态同步 hash-anchor `6ecb95d3` 和最终锚点固化提交 `dbc6f286` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 都已提交，如果最终交接没有直接给出最新完成/未完成范围、当前 READY 任务、最终锚点和可复制启动提示词，下次恢复仍需要人工拼接状态，容易误启动 `SAL-P4-010` 之外的正式组合回测或 Evidence/Worker 流程。
+- 规则：每个阶段性任务完成后，最终回复前必须复核 `docs/development-status.md`、`docs/development-progress-checklist.md`、任务 evidence、`tasks/todo.md` review 和必要的 `tasks/lessons.md`；明确最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、已完成范围、未完成起点、当前 READY 任务、严格禁区和完整可复制启动提示词。
+- 执行：后续从 `SAL-P4-010` 开始，不等待用户提醒；完成阶段任务后自动做实现/验证/状态/进度/证据/风险/决策/lessons（如有纠正）/恢复提示词收尾，并提交中文 checkpoint。
+
 ## 2026-07-25: SAL-P4-007 后状态复核必须推进到最新状态同步 checkpoint
 
 - 纠正来源：`SAL-P4-007` 实现 checkpoint `6e81ae6f` 和状态同步 checkpoint `8bc892d4` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
