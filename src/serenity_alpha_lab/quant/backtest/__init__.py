@@ -2,8 +2,9 @@
 
 SAL-P4-003 defines the immutable BacktestSpec. SAL-P4-004 adds the compact
 BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
-accounting contract. SAL-P4-010 adds pure cost/slippage calculations. Execution
-models, risk evaluation and APIs are introduced by later P4 tasks.
+accounting contract. SAL-P4-010 adds pure cost/slippage calculations.
+SAL-P4-011 adds pure A-share execution rules. Risk evaluation and APIs are
+introduced by later P4 tasks.
 """
 
 from serenity_alpha_lab.quant.backtest.costs import (
@@ -16,6 +17,20 @@ from serenity_alpha_lab.quant.backtest.costs import (
     CostLineItemName,
     CostModel,
     CostModelError,
+)
+from serenity_alpha_lab.quant.backtest.execution import (
+    A_SHARE_EXECUTION_MODEL_CONTRACT_VERSION,
+    A_SHARE_EXECUTION_MODEL_SCHEMA_NAME,
+    A_SHARE_EXECUTION_MODEL_SCHEMA_VERSION,
+    A_SHARE_EXECUTION_MODEL_VERSION,
+    AShareExecutionAuditRecord,
+    AShareExecutionError,
+    AShareExecutionModel,
+    AShareExecutionOutcome,
+    AShareExecutionResult,
+    AShareExecutionStatus,
+    AShareMarketSnapshot,
+    ASharePositionAvailability,
 )
 from serenity_alpha_lab.quant.backtest.artifacts import (
     BACKTEST_ARTIFACT_BUNDLE_CONTENT_TYPE,
@@ -83,6 +98,10 @@ __all__ = [
     "BACKTEST_COST_MODEL_SCHEMA_NAME",
     "BACKTEST_COST_MODEL_SCHEMA_VERSION",
     "BACKTEST_COST_MODEL_VERSION",
+    "A_SHARE_EXECUTION_MODEL_CONTRACT_VERSION",
+    "A_SHARE_EXECUTION_MODEL_SCHEMA_NAME",
+    "A_SHARE_EXECUTION_MODEL_SCHEMA_VERSION",
+    "A_SHARE_EXECUTION_MODEL_VERSION",
     "BACKTEST_SPEC_CONTRACT_VERSION",
     "BACKTEST_SPEC_ENGINE_VERSION",
     "BACKTEST_SPEC_SCHEMA_NAME",
@@ -106,6 +125,14 @@ __all__ = [
     "BacktestSpecError",
     "BacktestStrategySpec",
     "BacktestUniverseSpec",
+    "AShareExecutionAuditRecord",
+    "AShareExecutionError",
+    "AShareExecutionModel",
+    "AShareExecutionOutcome",
+    "AShareExecutionResult",
+    "AShareExecutionStatus",
+    "AShareMarketSnapshot",
+    "ASharePositionAvailability",
     "CostBreakdown",
     "CostLineItem",
     "CostLineItemName",

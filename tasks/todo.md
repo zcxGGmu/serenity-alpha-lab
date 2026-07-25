@@ -1,3 +1,41 @@
+# SAL-P4-011 A-Share Execution Rules Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-011` by implementing a pure deterministic A-share execution model for formal portfolio backtests. Support T+1 sellability, trade unit checks, suspension, limit-up/down unfillable cases and audited unfilled-order policy. Do not start formal portfolio backtest runs, corporate-action processors, Risk/Metric/Audit, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P4 backtest docs, order/ledger/cost docs, ADR-009, current Git status and recent commits.
+- [x] Attempt read-only subagent exploration for SAL-P4-011 boundaries; host wrapper rejected empty optional fields twice, so fallback local senior review is active per project lessons.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-a-share-execution-rules.md`.
+- [x] Add Red contract tests for T+1 sellability, lot-size validation, suspension rejection, limit-up/down unfillable handling, keep-open vs expire policy, deterministic audit records and CostModel integration.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/execution.py` with immutable DTOs, Decimal math, `BacktestExecutionSpec` reuse, Order state-machine integration and cost-model binding.
+- [x] Export A-share execution model symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/a-share-execution-rules.md` with scope, rules, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-011` done, P4 `11/22`, total `77/129`, decision/evidence rows and `SAL-P4-012` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [x] Review, stage only `SAL-P4-011` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- The execution model may accept/reject/expire/fill `Order` snapshots but must not generate strategy orders, mutate the ledger, process company actions, compute risk/metrics/audit, expose API/UI, start Qlib runtime or start Worker orchestration.
+- Use `BacktestExecutionSpec` as the single execution parameter source; do not duplicate T+1, lot-size, suspension, limit or unfilled-order assumptions elsewhere.
+- Same-bar close execution remains forbidden; close/after-close signals must execute on a later trade date.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+## Review: SAL-P4-011
+
+- Added `tests/quant/test_a_share_execution_rules.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.execution` (`1 error`), Green focused target is `6 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/execution.py` and exported symbols from `quant.backtest`; the module defines `AShareExecutionModel`, `AShareMarketSnapshot`, `ASharePositionAvailability`, `AShareExecutionResult`, `AShareExecutionAuditRecord` and execution constants.
+- Execution model reuses `BacktestExecutionSpec`, `Order` and `CostModel`; it enforces same-date close signal rejection, lot-size guard, suspension/non-trading handling, T+1 sellable quantity, limit-up/down unfillable cases, limit-price crossing and CostModel participation before filling.
+- Unfillable orders resolve through explicit `expire_after_rebalance`, `keep_open_until_cancelled` or `reject_order` policies with deterministic audit records; unsupported policies raise `AShareExecutionError`.
+- Read-only subagent dispatch for SAL-P4-011 boundary exploration was attempted twice, but the host wrapper rejected empty optional fields; per lessons, fallback local senior review checked BacktestExecutionSpec reuse, order/cost binding, ledger/orchestration boundary, no-go scope and import boundary.
+- Verification: Red target `1 error`; focused target `6 passed`; related AShareExecution/CostModel/Order/PortfolioLedger/BacktestSpec/Architecture suite `35 passed`; full pytest `365 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan found only historical SAL-P4-010 review text plus current SAL-P4-011/SAL-P4-012 anchors; `git diff --check` PASS.
+- Scope retained: no formal portfolio backtest run, no company-action processor, no strategy-order generation, no ledger mutation, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Implementation checkpoint: pending this commit.
+
+---
+
 # SAL-P4-010 Latest Status Refresh
 
 > Started: 2026-07-25
