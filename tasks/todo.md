@@ -34,7 +34,7 @@
 - Scope retained: no formal portfolio backtest run, no company-action processor, no strategy-order generation, no ledger mutation, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Implementation checkpoint: `30efc785 feat(P4): 实现 A 股执行规则`.
 - Status-sync checkpoint: `7c1e214c docs: 同步 SAL-P4-011 checkpoint hash`.
-- Status-sync hash-anchor checkpoint: pending this hash-anchor commit.
+- Status-sync hash-anchor checkpoint: `9acf345d docs: 记录 SAL-P4-011 状态同步 hash`.
 
 ---
 
