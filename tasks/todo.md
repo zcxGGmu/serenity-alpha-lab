@@ -20,7 +20,7 @@
 - Current completed scope is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017` and `SAL-P4-001..010`; unfinished P4 work starts at `SAL-P4-011` A 股执行规则.
 - Scope retained: no `SAL-P4-011` implementation, no formal portfolio backtest, no company-action processor, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
 - Verification: `git diff --check` PASS; status-anchor scan for stale current `SAL-P4-010` READY / `75/129` / `P4 9/22` only matched historical `SAL-P4-009` review text, while current anchors point to `SAL-P4-011`, P4 `10/22` and total `76/129`.
-- Status review checkpoint: pending this sync commit.
+- Status review checkpoint: `b84593d8 docs: 复核 SAL-P4-010 最新开发状态与恢复提示`.
 
 ---
 
