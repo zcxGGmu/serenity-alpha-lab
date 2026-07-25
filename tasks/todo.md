@@ -1,3 +1,42 @@
+# SAL-P4-013 Rebalance And Target Weights Plan
+
+> Started: 2026-07-25
+> Scope: Complete `SAL-P4-013` by implementing pure deterministic rebalance and target-weight order generation for formal portfolio backtests. Convert ScreenSnapshot and model signals into constrained created `Order` snapshots / `OrderIntent`s. Do not start formal portfolio backtest runs, market execution/fills, Ledger mutation, Risk/Metric/Audit, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, P4 evidence docs including A-share execution rules, ScreenSnapshot contracts, current Git status and recent commits.
+- [x] Attempt read-only subagent exploration for SAL-P4-013 boundaries; host wrapper rejected empty `reasoning_effort`, so fallback local senior review is active per project lessons.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-25-rebalance-target-weights.md`.
+- [x] Add Red contract tests for ScreenSnapshot equal/score weighting, model explicit target weights, cash buffer, max-weight cap, min-order skip, lot rounding, sell-before-buy deterministic order creation and import boundary.
+- [x] Implement `src/serenity_alpha_lab/quant/backtest/rebalance.py` with immutable DTOs, Decimal math, BacktestSpec/Risk/ExecutionSpec reuse, PortfolioLedger state reads and Order state-machine creation only.
+- [x] Export rebalance symbols from `src/serenity_alpha_lab/quant/backtest/__init__.py`.
+- [x] Add `docs/rebalance-target-weights.md` with scope, target-weight semantics, constraints, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-013` done, P4 `13/22`, total `79/129`, decision/evidence rows and `SAL-P4-014` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check, status-anchor scan and `git diff --check`.
+- [ ] Review, stage only `SAL-P4-013` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Rebalance is a pure planning layer; it may create order intents and created order snapshots, but must not accept/fill/expire orders, call AShareExecutionModel, mutate PortfolioLedger, process company actions, compute risk/metrics/audit, expose API/UI, start Qlib runtime or start Worker orchestration.
+- Use `BacktestSpec.execution.lot_size`, `BacktestSpec.risk.cash_buffer_pct`, `BacktestSpec.risk.max_weight_per_instrument` and policy-level `min_order_notional` as the explicit constraints for this task; full deterministic RiskPolicy remains `SAL-P4-014`.
+- ScreenSnapshot inputs must bind `BacktestSpec.strategy.screen_snapshot_id`; model signals must use explicit target weights or deterministic score weighting and concrete version metadata.
+- Buy orders must respect settled cash after buffer and payables; receivables are not counted as available cash. Sell orders are generated before buy orders, but unsettled sell proceeds are not assumed available for same rebalance buys.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+## Review: SAL-P4-013
+
+- Added `tests/quant/test_rebalance_target_weights.py`; initial Red failed with missing `serenity_alpha_lab.quant.backtest.rebalance` (`1 error`), Green focused target is `4 passed`.
+- Added `src/serenity_alpha_lab/quant/backtest/rebalance.py` and exported symbols from `quant.backtest`; the module defines `RebalancePolicy`, `WeightingPolicy`, `ModelSignal`, `TargetWeight`, `SkippedRebalanceOrder`, `RebalancePlan` and `RebalanceOrderGenerator`.
+- Rebalance planning covers ScreenSnapshot equal/score weighting, model explicit target weights, cash buffer, max instrument cap, min order notional, lot rounding, sell-before-buy deterministic ordering, stable plan/order/event IDs and concrete model-version binding (`latest` rejected).
+- Buy cash is constrained to settled cash after payables and cash buffer; receivables and same-rebalance sell proceeds are not counted as available buy cash.
+- Scope retained: generated orders stay at `OrderStatus.CREATED`; no order execution/fills, no `AShareExecutionModel`, no Ledger mutation, no Risk/Metric/Audit/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call and no legacy `/api/v1/backtest/*` drift.
+- Code-review subagent dispatch was attempted for SAL-P4-013, but the host wrapper rejected both payload shapes as duplicate `message`/`items`; per lessons, fallback local senior review checked target-weight math, cash availability, created-order-only boundary, deterministic IDs, import boundaries and status anchors.
+- Verification: focused target `4 passed`; related Rebalance/AShareExecution/CostModel/PortfolioLedger/Order/BacktestSpec/ScreenSnapshot/Architecture suite `42 passed`; full pytest `372 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Implementation checkpoint: pending current `feat(P4): 实现调仓与目标权重` commit.
+
+---
+
 # SAL-P4-012 Corporate Action Ledger Posting Plan
 
 > Started: 2026-07-25
