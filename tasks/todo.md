@@ -33,7 +33,7 @@
 - Verification: target `5 passed`; baseline script PASS; related architecture suite `32 passed`; full pytest `317 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check reports `0001..0004` already applied; immutable tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; status-anchor scan and `git diff --check` PASS.
 - Review: code-review subagent dispatch was attempted but the client rejected payloads around empty optional fields and `message`/`items` conflicts; fallback local review checked script path safety, snapshot determinism, API/tool semantics, status anchors and no-go boundaries, and fixed one wording issue so `SAL-P4-003` explicitly waits for `SAL-P4-002`.
 - Scope retained: no `SAL-P4-002` implementation, no `BacktestSpec`, no formal portfolio backtest, no Qlib/Ledger/Risk/Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no DSA runtime source migration, no dependency surface change and no tag movement.
-- Implementation checkpoint is created by this review commit and should be confirmed with `git log -1 --oneline`.
+- Implementation checkpoint: `31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为`; follow-up status-sync checkpoint is created after this review update and should be confirmed with `git log -1 --oneline`.
 
 ---
 

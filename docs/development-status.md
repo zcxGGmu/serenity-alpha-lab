@@ -7,9 +7,9 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：67/129<br>
 > 当前可执行任务：`SAL-P4-002` 迁移为 `SignalEvaluationEngine`，状态为 `READY`；`SAL-P4-003` 正式 `BacktestSpec` 必须等待 `SAL-P4-002` 消除 legacy backtest 命名歧义<br>
-> 最近可评审交付 checkpoint：本次 `SAL-P4-001` checkpoint 提交后以最终回复和 `git log -1 --oneline` 为准；上一 checkpoint 为 `a1078532 docs(P3): 通过 Gate G3 筛选与因子评审`<br>
-> 最新状态同步 checkpoint：本次 `SAL-P4-001` 状态同步随 checkpoint 提交，提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `a43f31a9 docs: 同步 SAL-P3-017 checkpoint hash`<br>
-> 本次实现 checkpoint：提交后以最终回复和 `git log -1 --oneline` 为准；已完成任务范围推进至 `SAL-P4-001`<br>
+> 最近可评审交付 checkpoint：`31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为`；上一 checkpoint 为 `a1078532 docs(P3): 通过 Gate G3 筛选与因子评审`<br>
+> 最新状态同步 checkpoint：本次 `SAL-P4-001` checkpoint hash 同步提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `a43f31a9 docs: 同步 SAL-P3-017 checkpoint hash`<br>
+> 本次实现 checkpoint：`31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为`；已完成任务范围推进至 `SAL-P4-001`<br>
 > 最新状态复核 checkpoint：`cec881a6 docs: 复核 SAL-P3-016 最新开发状态`；上一状态复核 checkpoint 为 `eb476ff0 docs: 复核 SAL-P3-015 恢复状态与习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -296,8 +296,8 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001
 - 最近完成：SAL-P4-001 锁定 DSA Signal Evaluation 行为
-- 最近可评审交付 checkpoint：本次 SAL-P4-001 checkpoint 提交后以最终回复和 git log -1 --oneline 为准；上一 checkpoint 为 a1078532 docs(P3): 通过 Gate G3 筛选与因子评审
-- 最新状态同步 checkpoint：本次 SAL-P4-001 状态同步随 checkpoint 提交，提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：a43f31a9 docs: 同步 SAL-P3-017 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
+- 最近可评审交付 checkpoint：31eebf67 feat(P4): 锁定 DSA Signal Evaluation 行为；上一 checkpoint 为 a1078532 docs(P3): 通过 Gate G3 筛选与因子评审
+- 最新状态同步 checkpoint：本次 SAL-P4-001 checkpoint hash 同步提交后以最终回复和 git log -1 --oneline 为准；上一状态同步 checkpoint：a43f31a9 docs: 同步 SAL-P3-017 checkpoint hash；最新状态复核 checkpoint：cec881a6 docs: 复核 SAL-P3-016 最新开发状态
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 1/22，总计 67/129
 
 下一步优先执行：
