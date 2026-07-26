@@ -14,7 +14,7 @@
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-002` done, P5 `2/18`, total `90/129`, `AEV-090`, `DEC-088` and next-step status.
 - [x] Update `docs/development-status.md` with latest task/checkpoint placeholders, completion range and next startup prompt for `SAL-P5-003`.
 - [x] Run focused Evidence Store tests, related Evidence/Repository/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [ ] Review changes, record subagent fallback, stage only `SAL-P5-002` files and create required Chinese checkpoint commit.
+- [x] Review changes, record subagent fallback, stage only `SAL-P5-002` files and create required Chinese checkpoint commit.
 
 ## Scope Guard
 
@@ -35,3 +35,4 @@
 - Full pytest: `414 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Local senior review confirmed `repositories.evidence_store` depends only on stdlib + P1 `ArtifactStore` + P5 schema, stores sanitized canonical body bytes, rejects conflicting immutable metadata, preserves previous records on revision, enforces scope checks, and does not import or start Evidence Agent, Provider/LLM, Worker, Qlib, FastAPI, SQLAlchemy or DSA runtime.
+- Implementation checkpoint: `bb02d84e feat(P5): 实现 Evidence Store`.
