@@ -14,7 +14,7 @@
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-001` done, P5 `1/18`, total `89/129`, `AEV-089`, `DEC-087` and P5 next-step status.
 - [x] Update `docs/development-status.md` with latest task/checkpoint placeholders, completion range and next startup prompt for `SAL-P5-002`.
 - [x] Run focused evidence tests, related architecture tests, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [ ] Review changes, record subagent fallback, stage only `SAL-P5-001` files and create required Chinese checkpoint commit.
+- [x] Review changes, record subagent fallback, stage only `SAL-P5-001` files and create required Chinese checkpoint commit.
 
 ## Scope Guard
 
@@ -35,3 +35,4 @@
 - Full pytest: `410 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Local senior review confirmed `evidence.schema` imports only stdlib + Pydantic, preserves P3/P4 evidence scope separation, rejects `latest`, rejects ScreenSnapshot as formal portfolio backtest evidence, and does not start Evidence Agent, Provider/LLM, Worker loop or Qlib runtime.
+- Implementation checkpoint: `25f6ed45 feat(P5): 定义 Evidence Claim Report Schema`.
