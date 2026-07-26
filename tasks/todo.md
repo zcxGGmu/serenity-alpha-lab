@@ -45,4 +45,4 @@
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Local senior review confirmed `evidence.quant_adapter` imports only stdlib plus P5 evidence schema, requires caller-provided ArtifactManifest, never reads artifact bodies, never writes Evidence Store, and performs no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA runtime work.
 
-- Status sync checkpoint: `c539c7b9 docs: 同步 SAL-P5-005 checkpoint hash`; SAL-P5-005 hash-anchor commit will record this status-sync hash.
+- Status sync checkpoint: `c539c7b9 docs: 同步 SAL-P5-005 checkpoint hash`; SAL-P5-005 hash-anchor checkpoint `6b101e0f docs: 记录 SAL-P5-005 状态同步 hash` records this status-sync hash.

@@ -9,9 +9,9 @@
 > 当前可执行任务：`SAL-P5-006` Prompt 与输出 Schema Registry 为 `READY`；不得从 Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成<br>
 > 最近可评审交付 checkpoint：`890ac789 feat(P5): 实现 Quant Evidence Adapter`；上一 checkpoint 为 `93365555 feat(P5): 实现来源信任与非结构化清洗`<br>
 > 最新状态同步 checkpoint：`c539c7b9 docs: 同步 SAL-P5-005 checkpoint hash`；上一状态同步 checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一 hash-anchor checkpoint 为 `00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：本次 `SAL-P5-005` hash-anchor 提交生成后以 `git log -1 --oneline` 与最终回复为准；上一 hash-anchor checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`<br>
+> 最新状态同步 hash-anchor checkpoint：`6b101e0f docs: 记录 SAL-P5-005 状态同步 hash`；上一 hash-anchor checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`<br>
 > 本次阶段任务 checkpoint：`890ac789 feat(P5): 实现 Quant Evidence Adapter`；已完成任务范围推进至 `SAL-P5-005`<br>
-> 最新最终锚点 checkpoint：本次 `SAL-P5-005` hash-anchor 提交生成后以 `git log -1 --oneline` 与最终回复为准；上一最终锚点 checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`6b101e0f docs: 记录 SAL-P5-005 状态同步 hash`；上一最终锚点 checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
