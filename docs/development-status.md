@@ -1,17 +1,17 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-26<br>
-> 最近阶段性任务：`SAL-P4-021` Quant Lab<br>
+> 最近阶段性任务：`SAL-P4-022` Gate G4：回测与风控评审<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
-> 当前 Phase：P4 真实组合回测与确定性风控<br>
-> 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
-> 任务完成度：87/129<br>
-> 当前可执行任务：`SAL-P4-022` Gate G4：回测与风控评审，状态为 `READY`；不得跳过 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM 或 Worker loop<br>
-> 最近可评审交付 checkpoint：`643b4452 feat(P4): 实现 Quant Lab`；上一 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`<br>
-> 最新状态同步 checkpoint：`70303f8f docs: 同步 SAL-P4-021 checkpoint hash`；上一状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`<br>
-> 最新状态同步 hash-anchor checkpoint：`52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；上一 hash-anchor checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`<br>
-> 本次实现 checkpoint：`643b4452 feat(P4): 实现 Quant Lab`；已完成任务范围推进至 `SAL-P4-021`<br>
-> 最新最终锚点 checkpoint：`8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；上一最终锚点 checkpoint 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；最新状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`<br>
+> 当前 Phase：P5 证据化 Agent、报告与成本治理<br>
+> 当前 Gate：G4 已通过；G0、G1、G2、G3、G4 均为 `GO with accepted risks`；G5 未通过<br>
+> 任务完成度：88/129<br>
+> 当前可执行任务：`SAL-P5-001` 定义 Evidence/Claim/Report Schema，状态为 `READY`；不得从 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或生产调度<br>
+> 最近可评审交付 checkpoint：本次提交 `docs(P4): 通过 Gate G4 回测与风控评审`；上一 checkpoint 为 `643b4452 feat(P4): 实现 Quant Lab`<br>
+> 最新状态同步 checkpoint：本次提交同步 Gate G4 状态；上一状态同步 checkpoint 为 `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`<br>
+> 最新状态同步 hash-anchor checkpoint：本次提交包含状态同步；上一 hash-anchor checkpoint 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`<br>
+> 本次实现 checkpoint：本次提交 `docs(P4): 通过 Gate G4 回测与风控评审`；已完成任务范围推进至 `SAL-P4-022`<br>
+> 最新最终锚点 checkpoint：本次提交包含 Gate G4 最终状态；上一最终锚点 checkpoint 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；最新状态复核 checkpoint：本次提交；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -124,18 +124,19 @@
 - 完成 `SAL-P4-019`：新增 [Backtest Golden And Property Tests](./backtest-golden-property-tests.md)、Quant Backtest [golden.py](../src/serenity_alpha_lab/quant/backtest/golden.py) 和 [Backtest golden/property tests](../tests/quant/test_backtest_golden_property.py)，冻结 `quant.backtest_golden_fixture@1.0.0`、3 支证券、20 个交易日、60 根日线、订单/成交/Ledger/净值/指标金标和 result hash `sha256:76e9c93b060bdec6cc05497a477efa2de870168f20d18f349e2a78393d4e78d1`；覆盖停牌、涨跌停、T+1、费用、现金分红、调仓和 full-read/chunked-read 等价；本任务不启动正式 API、Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更；P4 进度 `19/22`，总进度 `85/129`。
 - 完成 `SAL-P4-020`：新增 [Formal Backtest API](./backtest-api.md)、Application [backtest_api.py](../src/serenity_alpha_lab/application/backtest_api.py) 和 [Formal Backtest API contract test](../tests/application/test_backtest_api.py)，冻结 `application.formal_backtest_api@1.0.0`、`quant.backtest_api_run@1.0.0`、`quant.backtest.run` task type、`portfolio_backtest` evaluation type 和 `/api/v1/quant/backtest-runs` route metadata；实现幂等创建、compact 状态、metrics/audit Artifact payload 读取、orders/positions cursor pagination、cancel API 和 explicit artifact download authorization；本任务不注册 FastAPI router、不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy DSA `/api/v1/backtest/*` 变更；P4 进度 `20/22`，总进度 `86/129`。
 - 完成 `SAL-P4-021`：新增 [Quant Lab](./quant-lab.md)、`DSA-PATCH-006`、DSA Web `quantBacktestApi` client、`QuantLabPage`、`/quant-lab` route、SidebarNav item、zh/en labels 和 API/page/route/nav tests；Quant Lab 只通过 `/api/v1/quant/backtest-runs` 创建/读取正式组合回测 run，展示 Preview/Formal、Artifact validity、ranking eligibility、compact runtime flags、净值/回撤、orders/trades、positions、bias audit、Artifact download、Dataset/schema/trace/artifact lineage 和 cancellation；本任务不通过 Gate G4、不启动 Evidence Agent、Worker loop、Qlib runtime、真实 Provider/LLM 调用或正式回测推广；P4 进度 `21/22`，总进度 `87/129`。
+- 完成 `SAL-P4-022`：新增 [Gate G4 Backtest And Risk Review](./gate-g4-backtest-risk-review.md)、[Gate G4 integration test](../tests/gates/test_gate_g4_backtest_risk_review.py) 和 [Gate G4 plan](./superpowers/plans/2026-07-26-gate-g4-backtest-risk-review.md)，结论为 `GO with accepted risks`；Gate 复核 formal backtest、RiskPolicy、BiasAudit、Metrics、BacktestRun、Resource Control、Golden fixture、Formal Backtest API 与 Quant Lab 全链路证据，批准作为 P5 Evidence/Claim/Report Schema 输入；本 Gate 不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；P4 完成 `22/22`，总进度 `88/129`。
 
 ## 未完成
 
-### 当前可执行 P4 任务
+### 当前可执行 P5 任务
 
-- `SAL-P4-022` 当前为 `READY`：Gate G4：回测与风控评审；不得跳过 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM 或 Worker loop。
+- `SAL-P5-001` 当前为 `READY`：定义 Evidence/Claim/Report Schema；不得从 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或生产调度。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P4 至 P6 仍有 42 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API 和 Quant Lab。但尚未完成 Gate G4、Evidence Agent、完整 Worker runtime、正式回测推广或部署环境。
+- P5 至 P6 仍有 41 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4。尚未完成 Evidence Schema、Evidence Agent、完整 Worker runtime、正式回测推广或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -169,9 +170,10 @@
 - 2026-07-26 完成 `SAL-P4-019` 回测金标与性质测试；新增 pure fixed-data golden fixture、contract tests 和 evidence doc，定义 `BacktestGoldenFixture`、`BacktestGoldenBar`、`BacktestGoldenRunner`、`BacktestGoldenResult` 和 `BacktestGoldenOrderRole`；当前唯一 `READY` 阶段任务为 `SAL-P4-020` 真实回测 API。本任务不启动正式 API、Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更；golden fixture 只作为 SAL-P4-020 输入，不代表 Gate G4 通过或生产正式组合回测推广。
 - 2026-07-26 完成 `SAL-P4-020` 真实回测 API；新增 framework-neutral FormalBacktestApiService、route metadata、contract tests 和 evidence doc，定义 `BacktestApiRoute`、`BacktestApiResponse`、`BacktestApiRunRecord`、`InMemoryBacktestApiRepository`、`BacktestArtifactAccessSubject` 和 `BacktestArtifactAccessPolicy`；当前唯一 `READY` 阶段任务为 `SAL-P4-021` Quant Lab。本任务不注册 FastAPI router、不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更；formal API 只作为 SAL-P4-021 输入，不代表 Gate G4 通过或生产正式组合回测推广。
 - 2026-07-26 完成 `SAL-P4-021` Quant Lab；新增 DSA Web extension patch `DSA-PATCH-006`、`quantBacktestApi` client、`QuantLabPage`、`/quant-lab` route/nav/i18n 和 evidence doc，页面通过 `/api/v1/quant/backtest-runs` 创建/读取正式组合回测 run 并展示 Preview/Formal、Artifact validity、ranking eligibility、runtime flags、净值/回撤、orders/trades、positions、bias audit、Artifact download 和 lineage；当前唯一 `READY` 阶段任务为 `SAL-P4-022` Gate G4：回测与风控评审。本任务不通过 Gate G4、不启动 Evidence Agent、Worker loop、Qlib runtime、真实 Provider/LLM 调用或正式回测推广。
+- 2026-07-26 完成 `SAL-P4-022` Gate G4：回测与风控评审；新增 Gate G4 review、Gate integration test 和 AEV-088，结论为 `GO with accepted risks`，P4 完成 `22/22`，总进度 `88/129`，当前唯一 `READY` 阶段任务为 `SAL-P5-001` 定义 Evidence/Claim/Report Schema。本 Gate 只批准 P4 formal backtest 证据链进入 P5 Schema 输入，不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
 - 2026-07-26 按用户要求复核 `SAL-P4-020` 后最新开发状态；确认最近实现 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`，状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`，状态同步 hash-anchor 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；当时已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..020`，未完成范围从 `SAL-P4-021` 开始，当时 READY 任务为 `SAL-P4-021` Quant Lab。本次状态复核不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更，并已在 `tasks/lessons.md` 再次固化阶段性任务完成后自动状态同步和可复制提示词习惯。
 - 2026-07-26 按用户要求再次复核 `SAL-P4-021` 后最新开发状态；确认最近实现 checkpoint 为 `643b4452 feat(P4): 实现 Quant Lab`，状态同步 checkpoint 为 `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`，状态同步 hash-anchor 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`，状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`，状态复核 hash-anchor 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..021`，未完成范围从 `SAL-P4-022` 开始，当前 READY 任务为 `SAL-P4-022` Gate G4。本次复核仅同步状态与交接习惯，不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或正式组合回测推广，并已在 `tasks/lessons.md` 固化阶段任务后自动收尾规则。
-- Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
+- Gate G0、Gate G1、Gate G2、Gate G3 与 Gate G4 已通过（均为 `GO with accepted risks`）；G5 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
 - ADR-002 已批准渐进式模块化策略：旧 DSA 路径只能经显式 Compatibility Facade 迁移，P1 不拆微服务。
@@ -222,9 +224,9 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P4-022` Gate G4：回测与风控评审，复核 formal backtest、Risk、Audit、Metrics、API 与 Quant Lab 全链路证据。
-2. 不得跳过 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop 或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
-3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；后续任务必须继续与 legacy `/api/v1/backtest/*` 兼容面隔离。
+1. 优先执行 `SAL-P5-001` 定义 Evidence/Claim/Report Schema，将 P3 Screen/Factor 与 P4 formal backtest 证据链映射为可引用、可验证、可版本化的 Evidence 和 Claim。
+2. 不得从 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态。
 
 ## 本次状态复核
 
@@ -356,32 +358,33 @@
 43. docs/backtest-golden-property-tests.md
 44. docs/backtest-api.md
 45. docs/quant-lab.md
-46. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
+46. docs/gate-g4-backtest-risk-review.md
+47. docs/adr/ADR-009-qlib-adapter-boundary-and-version-upgrade-strategy.md
 
 随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
 当前状态：
-- Phase：P4 真实组合回测与确定性风控
-- Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-021
-- 最近完成：SAL-P4-021 Quant Lab
-- 最近可评审交付 checkpoint：643b4452 feat(P4): 实现 Quant Lab；上一 checkpoint：c1bb1dcc feat(P4): 实现真实回测 API
-- 最新状态同步 checkpoint：70303f8f docs: 同步 SAL-P4-021 checkpoint hash；上一状态同步 checkpoint：64346b83 docs: 同步 SAL-P4-020 checkpoint hash
-- 最新状态同步 hash-anchor checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；上一 hash-anchor checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash
-- 最新最终锚点 checkpoint：8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash；上一最终锚点 checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；最新状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示；上一状态复核 checkpoint：d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 21/22，总计 87/129
+- Phase：P5 证据化 Agent、报告与成本治理
+- Gate：G4 已通过；G0、G1、G2、G3、G4 均为 GO with accepted risks；G5 未通过
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022
+- 最近完成：SAL-P4-022 Gate G4：回测与风控评审
+- 最近可评审交付 checkpoint：本次提交 docs(P4): 通过 Gate G4 回测与风控评审；上一 checkpoint：643b4452 feat(P4): 实现 Quant Lab
+- 最新状态同步 checkpoint：本次提交同步 Gate G4 状态；上一状态同步 checkpoint：70303f8f docs: 同步 SAL-P4-021 checkpoint hash
+- 最新状态同步 hash-anchor checkpoint：本次提交包含状态同步；上一 hash-anchor checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash
+- 最新最终锚点 checkpoint：本次提交包含 Gate G4 最终状态；上一最终锚点 checkpoint：8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash；最新状态复核 checkpoint：本次提交；上一状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，总计 88/129
 
 下一步优先执行：
-1. SAL-P4-022 Gate G4：回测与风控评审，复核 P4 formal backtest、Risk、Audit、Metrics、API 与 Quant Lab 全链路证据
-2. 不要跳过 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop 或正式组合回测推广；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
-3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；后续任务必须继续与 legacy /api/v1/backtest/* 兼容面隔离
+1. SAL-P5-001 定义 Evidence/Claim/Report Schema，将 P3 Screen/Factor 与 P4 formal backtest 证据链映射为可引用、可验证、可版本化的 Evidence 和 Claim
+2. 不要从 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态
 
 严格遵守 AGENTS.md：
 - 不要把未完成任务标为完成。
 - 不要移动 `upstream/dsa-v3.26.1` tag。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
-- 后续实现必须遵守 ADR-001/002、ADR-009 与 Gate G2/G3/G4；不要跳过 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM 调用、Worker loop、正式组合回测推广或未经批准的大规模 DSA 源码迁移。
+- 后续实现必须遵守 ADR-001/002、ADR-009 与 Gate G2/G3/G4；不要从 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM 调用、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移。
 - 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review、tasks/lessons.md（如有纠正）和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 ```
