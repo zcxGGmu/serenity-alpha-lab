@@ -1,3 +1,41 @@
+# SAL-P4-017 BacktestRun Orchestration Plan
+
+> Started: 2026-07-26
+> Scope: Complete `SAL-P4-017` by implementing a pure BacktestRun orchestration application use case. It must validate and finalize supplied `BacktestSpec`, Qlib/strategy engine evidence, `PortfolioLedger`, `RiskPolicyResult`, `BacktestBiasAuditReport`, `BacktestPerformanceMetricReport`, and `BacktestArtifactBundle`; create deterministic Run/Stage lifecycle evidence; publish a compact run summary Artifact; enforce idempotency/reuse; and apply dirty-code formal-run guardrails. Do not start `SAL-P4-018` resource controls, formal API, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM, or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, P4 evidence docs through `SAL-P4-016`, ADR-009, current Git status and recent commits.
+- [x] Attempt read-only subagent exploration for SAL-P4-017 boundaries; host wrapper rejected empty optional/message+items payload shapes, so fallback local senior review is active per project lessons.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-backtest-run-orchestration.md`.
+- [x] Add Red contract tests for stage orchestration, compact summary Artifact, idempotency replay, successful-run reuse, dirty-code rejection/downgrade, mismatch rejection and import boundary.
+- [x] Implement `src/serenity_alpha_lab/application/backtest_run.py` with immutable DTOs, in-memory repository, BacktestRun orchestration, lifecycle stages and summary publication.
+- [x] Export BacktestRun symbols from `src/serenity_alpha_lab/application/__init__.py`.
+- [x] Add `docs/backtest-run-orchestration.md` with scope, stage semantics, idempotency/reuse, dirty-code policy, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-017` done, P4 `17/22`, total `83/129`, decision/evidence rows and `SAL-P4-018` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check and `git diff --check`.
+- [ ] Review, stage only `SAL-P4-017` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- BacktestRun orchestration validates and finalizes supplied deterministic outputs; it must not execute live strategy loops, launch Qlib runtime, mutate Ledger/Risk/Audit/Metrics, expose API/UI, start Quant Lab, start Evidence Agent, start Worker loop, or call real Provider/LLM.
+- Formal promotion requires clean code, `BacktestArtifactBundle.state=formal`, RiskPolicy not `block`, BiasAudit not `invalid`, and all layer records bound to the same `spec_id`, `spec_hash`, `run_id` and concrete Dataset versions.
+- Dirty formal code without a patch hash is rejected; dirty formal code with a `sha256:*` patch hash is downgraded to preview and not ranking-eligible.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+## Review: SAL-P4-017
+
+- Added `tests/application/test_backtest_run_orchestration.py`; initial Red failed with missing `serenity_alpha_lab.application.backtest_run` (`1 error`), Green focused target is `4 passed`.
+- Added `src/serenity_alpha_lab/application/backtest_run.py` and lazy exports from `application.__init__`; the module defines `BacktestRunRequest`, `BacktestRunRecord`, `BacktestRunStageRecord`, `BacktestRunMode`, `BacktestRunCodeState`, `BacktestRunStatus`, `BacktestRunOrchestrator` and `InMemoryBacktestRunRepository`.
+- BacktestRun orchestration validates supplied Spec, Qlib/strategy engine evidence, Ledger, Risk, Audit, Metrics and BacktestArtifactBundle against one `spec_id` / `spec_hash` / `run_id`, records deterministic `Run` / `Stage` lifecycle evidence and publishes a compact `quant.backtest_run@1.0.0` summary Artifact.
+- Idempotency and reuse are explicit: same `Idempotency-Key` + same request replays the same record; same successful `spec_hash + dataset_hashes + engine_version + effective_mode + code_state + patch_hash` reuses the previous successful run; same key with different request raises conflict.
+- Dirty formal requests without patch hash are rejected; dirty formal requests with `sha256:*` patch hash downgrade to preview, record `dirty_code_downgraded_to_preview` and become not ranking-eligible.
+- Read-only subagent dispatch for SAL-P4-017 boundary exploration was attempted but host wrapper rejected empty optional fields and `message`/`items` payload shapes; per lessons, fallback local senior review checked run lifecycle, idempotency/reuse, cross-layer bindings, dirty-code policy, no-go scope and import boundary.
+- Scope retained: no resource controls/cancel/checkpoint, no formal API, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no Qlib runtime import and no legacy `/api/v1/backtest/*` drift.
+- Verification: Red target `1 error`; focused target `4 passed`; related BacktestRun/QlibAdapter/Artifact/Metrics/Audit/Risk/Ledger/Spec/Architecture suite `41 passed`; full pytest `386 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+
+---
+
 # SAL-P4-016 Unified Performance Metrics Plan
 
 > Started: 2026-07-26
