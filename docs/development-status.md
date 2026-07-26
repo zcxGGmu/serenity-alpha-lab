@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`70303f8f docs: 同步 SAL-P4-021 checkpoint hash`；上一状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；上一 hash-anchor checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`<br>
 > 本次实现 checkpoint：`643b4452 feat(P4): 实现 Quant Lab`；已完成任务范围推进至 `SAL-P4-021`<br>
-> 最新最终锚点 checkpoint：`52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；上一最终锚点 checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；最新状态复核 checkpoint：本次状态复核提交生成后以最终回复为准；上一状态复核 checkpoint 为 `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；上一最终锚点 checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；最新状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -367,7 +367,7 @@
 - 最近可评审交付 checkpoint：643b4452 feat(P4): 实现 Quant Lab；上一 checkpoint：c1bb1dcc feat(P4): 实现真实回测 API
 - 最新状态同步 checkpoint：70303f8f docs: 同步 SAL-P4-021 checkpoint hash；上一状态同步 checkpoint：64346b83 docs: 同步 SAL-P4-020 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；上一 hash-anchor checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash
-- 最新最终锚点 checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；上一最终锚点 checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash；最新状态复核 checkpoint：本次状态复核提交生成后以最终回复为准；上一状态复核 checkpoint：d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示
+- 最新最终锚点 checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；上一最终锚点 checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash；最新状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示；上一状态复核 checkpoint：d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 21/22，总计 87/129
 
 下一步优先执行：

@@ -36,3 +36,4 @@
 - Implementation checkpoint created: `643b4452 feat(P4): 实现 Quant Lab`; status sync commit will record this hash.
 - Status sync checkpoint created: `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`; this hash-anchor update records it.
 - Hash-anchor checkpoint created: `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`; final status review commit will be reported in the handoff.
+- Final status review checkpoint created: `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`; this final hash record commit closes the handoff state.
