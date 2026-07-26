@@ -1,35 +1,35 @@
-# SAL-P4-020 Formal Backtest API Plan
+# SAL-P4-021 Quant Lab Plan
 
-> Scope: Complete `SAL-P4-020` by adding a framework-neutral formal portfolio backtest API facade for `/api/v1/quant/backtest-runs`. It must expose create/status/metrics/orders/positions/audit/cancel/artifact query behavior, keep large result rows behind Artifact reads with cursor pagination, and remain clearly separated from legacy DSA Signal Evaluation. Do not start Quant Lab, Evidence Agent, real Provider/LLM calls, Qlib runtime, or a Worker loop.
+> Scope: Complete `SAL-P4-021` by adding a DSA Web extension patch for Quant Lab on top of the framework-neutral `/api/v1/quant/backtest-runs` contract. Build run creation, progress/status, equity/drawdown, orders/trades, positions, audit and artifact download surfaces. Do not start Evidence Agent, real Provider/LLM calls, Qlib runtime, a Worker loop or Gate G4 promotion.
 
 ## Checklist
 
-- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, P4 evidence docs, current Git status and recent commits.
-- [x] Attempt read-only subagent exploration for SAL-P4-020 boundaries; platform wrapper injected empty optional fields again, so fallback local senior review is active per project lessons.
-- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-formal-backtest-api.md`.
-- [x] Red: add `tests/application/test_backtest_api.py` covering route metadata, idempotent creation, status/metrics/audit responses, cursor-paginated orders/positions, artifact authorization and boundary imports.
-- [x] Green: implement `src/serenity_alpha_lab/application/backtest_api.py` with route DTOs, API service, in-memory repository, task submission, resource-supervisor integration and artifact access policy.
-- [x] Add `docs/backtest-api.md` with route contract, response semantics, artifact pagination/authorization, legacy separation, non-goals and verification evidence.
-- [x] Update progress checklist/status docs with `SAL-P4-020` done, P4 `20/22`, total `86/129`, decision/evidence rows and `SAL-P4-021` READY but not started.
-- [x] Run focused, related and full verification plus compile/lock/patch/tag/diff checks.
-- [x] Review, stage only `SAL-P4-020` files and create the required Chinese checkpoint commit.
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, Gate/evidence docs, backtest API/resource/orchestration docs, Screen Lab precedent, ADR-009, current Git status and recent commits.
+- [x] Confirm current branch and checkpoints: `codex/p0-baseline-status` is clean and ahead of origin; latest log starts with `750a9388`, `d4ce97d9`, `9c308f2e`, `64346b83`, `c1bb1dcc`.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-quant-lab.md`.
+- [x] Red: add DSA Web tests for `quantBacktestApi`, `QuantLabPage`, `/quant-lab` routing and sidebar/i18n registration.
+- [x] Green: implement `src/api/quantBacktest.ts` with `/api/v1/quant/backtest-runs` create/status/metrics/orders/positions/audit/artifact/cancel client functions.
+- [x] Green: implement `src/pages/QuantLabPage.tsx` with parameter summary, Preview/Formal run creation, compact progress/runtime flags, result tabs, raw tables and artifact download controls.
+- [x] Green: wire `QuantLabPage` into `App.tsx`, `SidebarNav.tsx`, route labels and related tests without renaming legacy `/backtest` Signal Evaluation.
+- [x] Generate `patches/dsa/v3.26.1/0006-add-quant-lab.patch` and update `docs/upstream-patches.md` with DSA-PATCH-006.
+- [x] Add `docs/quant-lab.md` with UI contract, API lineage, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-021` done, P4 `21/22`, total `87/129`, decision/evidence rows and `SAL-P4-022` READY.
+- [x] Run focused web tests, lint/build, Python related checks, compile/lock/patch/tag/diff checks.
+- [ ] Review, stage only `SAL-P4-021` files and create required Chinese checkpoint commit.
 
 ## Scope Guard
 
-- The formal API namespace is `/api/v1/quant/backtest-runs`; legacy `/api/v1/backtest/*` remains Signal Evaluation and must not be renamed or reused.
-- API create submits metadata and starts resource-supervisor tracking only; it must not run a Worker loop or execute real Provider/LLM/Qlib runtime work.
-- Metrics, orders, positions and audit outputs are read from formal `BacktestArtifactBundle` descriptors and immutable Artifact content; no large rows are embedded in create/status responses.
-- Artifact download/query must require an explicit access subject and authorization policy.
-- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion artifacts remain outside the formal portfolio backtest namespace.
+- Quant Lab uses `/api/v1/quant/backtest-runs`; legacy `/api/v1/backtest/*` remains Signal Evaluation and keeps the sidebar label “信号评价”.
+- Preview/Formal and valid/invalid/ranking eligibility states must be visually distinct and never imply Gate G4 has passed.
+- Create/status responses remain compact; large rows are loaded through orders/positions pagination and artifact payload endpoints.
+- Every chart/table must surface dataset versions, schema, trace/run/stage and artifact IDs/hashes where available.
+- Qlib internal evidence, Dataset conversion artifacts, Screen results, AlphaSift T+N evaluation and legacy Signal Evaluation must not be presented as formal portfolio backtest results.
 
 ## Review Notes
 
-- Red target initially failed with `ModuleNotFoundError: No module named 'serenity_alpha_lab.application.backtest_api'`.
-- Green focused target `uv run --extra core --extra dev python -m pytest tests/application/test_backtest_api.py -q` passed with `7 passed`.
-- Related suite passed with `37 passed`; full suite passed with `402 passed, 3 skipped`.
-- Compileall, dependency lock guard, DSA patch check, immutable `upstream/dsa-v3.26.1` tag check and `git diff --check` passed.
-- Subagent exploration dispatch was attempted but rejected twice by wrapper schema validation; per lessons, review fell back to local diff inspection plus fresh verification.
-- Implementation checkpoint: `c1bb1dcc feat(P4): 实现真实回测 API`.
-- Status-sync checkpoint: `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`.
-- Status-sync hash-anchor checkpoint: `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`.
-- Latest status review checkpoint: `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`.
+- Started 2026-07-26 from clean working tree after `SAL-P4-020`; no user corrections recorded so `tasks/lessons.md` remains unchanged for now.
+- Completed Quant Lab implementation as `DSA-PATCH-006` against the DSA Web extension surface; root source remains authoritative for formal API contracts.
+- Fresh green evidence: focused web `4 passed files / 27 passed tests`, web lint PASS, web build PASS, related Python suite `34 passed`, compileall PASS, dependency lock guard PASS, clean temp DSA worktree sequential patch apply `0001..0006` PASS, tag/diff checks PASS.
+- Default live-worktree `--check-only` was not treated as the patch-chain proof after 0006 because reverse-checking `DSA-PATCH-004` against a final worktree that also contains `DSA-PATCH-006` can fail on shared App/Sidebar/i18n context; clean sequential apply is the replay proof recorded in `docs/quant-lab.md`.
+- Subagent attempt failed once due host wrapper optional-field validation (`reasoning_effort must not be empty`); per `tasks/lessons.md`, fallback was local senior review plus fresh verification.
+- No user correction occurred in this turn, so `tasks/lessons.md` was not changed.

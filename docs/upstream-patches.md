@@ -13,8 +13,9 @@
 | DSA-PATCH-003 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0003-align-web-smoke-e2e-contract.patch` | Playwright smoke 真实执行后暴露 e2e 契约漂移：首次登录未填 `passwordConfirm`、首页侧栏已演进为“个股栏”、ReportMarkdown smoke 缺少历史报告 fixture、chat/settings 断言使用旧文案或非唯一 selector | `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/history fixture；`npm run test:smoke -- --reporter=line` 真实执行 `13 passed` |
 | DSA-PATCH-004 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0004-add-screen-lab.patch` | `SAL-P3-015` 在 DSA Web 中增加 Serenity Screen Lab 页面，作为 Quant Screening API 的 UI extension；不修改上游筛选核心语义 | Targeted web `24 passed`；full Vitest `973 passed, 2 skipped`；`npm run lint` PASS；`npm run build` PASS；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0004` already applied |
 | DSA-PATCH-005 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0005-migrate-signal-evaluation-engine.patch` | `SAL-P4-002` 把 legacy T+N recommendation evaluation 的内部语义迁移为 `SignalEvaluationEngine` / `evaluation_type=signal`，同时保留 legacy `/api/v1/backtest/*`、`Backtest*` schema、数据库表和 Agent read-tool 兼容面；Web 可见文案改为 Signal Evaluation，避免误称正式组合回测 | Root parity `3 passed`；migration architecture `4 passed`；P4 snapshot script PASS；DSA focused Python `95 passed, 1 warning`；focused web Vitest `26 passed`；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0005` already applied |
+| DSA-PATCH-006 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0006-add-quant-lab.patch` | `SAL-P4-021` 在 DSA Web 中增加 Serenity Quant Lab 页面，作为 `/api/v1/quant/backtest-runs` 正式组合回测 API 的 UI extension；不修改 legacy `/api/v1/backtest/*` Signal Evaluation 语义，不启动 Worker/Qlib/Provider/LLM runtime | Focused web `4 passed files / 27 passed tests`；`npm run lint` PASS；`npm run build` PASS；related Python suite `34 passed`；compileall/lock/tag/diff checks PASS；clean temp DSA worktree sequentially applied `0001..0006` |
 
-当前没有登记为 `divergence` 的补丁。`DSA-PATCH-005` 属于 compatible semantic naming cleanup：它纠正 legacy backtest 命名歧义但保留运行行为、API/schema/table 兼容和 P4-001 快照。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
+当前没有登记为 `divergence` 的补丁。`DSA-PATCH-005` 属于 compatible semantic naming cleanup：它纠正 legacy backtest 命名歧义但保留运行行为、API/schema/table 兼容和 P4-001 快照。`DSA-PATCH-006` 属于 UI extension：它只新增 Quant Lab 对正式回测 API 的展示和操作入口，不改变上游 legacy Signal Evaluation 行为。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
 
 ## DSA-PATCH-001：隔离 Intelligence 请求代理参数
 
@@ -131,6 +132,33 @@
 | `npm run lint` | 通过 |
 | `npm run build` | 通过；中途曾捕获并修复 `explanationSteps` optional narrowing |
 | `scripts/apply-dsa-baseline-patches.sh --check-only` | 通过，`0001`、`0002`、`0003`、`0004` 均识别为 already applied |
+
+## DSA-PATCH-006：增加 Quant Lab UI extension
+
+### 背景
+
+`SAL-P4-020` 已冻结 framework-neutral `/api/v1/quant/backtest-runs` 正式组合回测 API，但 DSA Web 尚无页面能创建 Preview/Formal run、查看 compact status、净值/回撤、订单、持仓、偏差审计、Artifact 下载和 lineage。`SAL-P4-021` 要求 Quant Lab 复用该 formal API contract，并继续与 legacy `/api/v1/backtest/*` Signal Evaluation 隔离。
+
+### 修改
+
+- 新增 `src/api/quantBacktest.ts` 与 API client tests，覆盖 `POST /api/v1/quant/backtest-runs` 的 `Idempotency-Key`、status、metrics、orders、positions、audit、artifact download 和 cancel。
+- 新增 `QuantLabPage` 与 page tests，覆盖 Preview/Formal 创建、mode/artifact/ranking 独立 badge、compact runtime flags、metrics、equity/drawdown、orders、positions、audit、lineage、download、cancel、permission 和 generic error states。
+- 新增 lazy route `/quant-lab`、SidebarNav item、zh/en labels 和 route/nav tests。
+- 保持 `/backtest` route 与 `/api/v1/backtest/*` label 为 Signal Evaluation；Quant Lab 不触发 Evidence Agent、Worker loop、Qlib runtime、真实 Provider/LLM 调用或 Gate G4 promotion。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `npm run test -- src/api/__tests__/quantBacktest.test.ts src/pages/__tests__/QuantLabPage.test.tsx src/App.test.tsx src/components/layout/__tests__/SidebarNav.test.tsx` | 通过，`4 passed files / 27 passed tests` |
+| `npm run lint` | 通过 |
+| `npm run build` | 通过；Vite 生成 `QuantLabPage-CR2xIlDc.js` chunk |
+| Root related Python suite | 通过，`34 passed` |
+| `uv run --extra core --extra dev python -m compileall -q src/serenity_alpha_lab tests` | 通过 |
+| `scripts/verify-python-dependency-lock.sh` | 通过，`Resolved 298 packages` |
+| Clean temp DSA worktree + `scripts/apply-dsa-baseline-patches.sh --worktree <temp>` | 通过，`0001` 至 `0006` 顺序应用 |
+| `git rev-parse upstream/dsa-v3.26.1` | `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` |
+| `git diff --check` | 通过 |
 
 ## 应用方式
 

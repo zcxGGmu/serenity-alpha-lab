@@ -1,0 +1,1233 @@
+diff --git a/apps/dsa-web/src/App.test.tsx b/apps/dsa-web/src/App.test.tsx
+index 980db790..618a06ae 100644
+--- a/apps/dsa-web/src/App.test.tsx
++++ b/apps/dsa-web/src/App.test.tsx
+@@ -64,6 +64,10 @@ vi.mock('./pages/ScreenLabPage', () => ({
+   default: () => <div data-testid="screen-lab-page">Screen Lab</div>,
+ }));
+ 
++vi.mock('./pages/QuantLabPage', () => ({
++  default: () => <div data-testid="quant-lab-page">Quant Lab</div>,
++}));
++
+ vi.mock('./pages/SettingsPage', () => ({
+   default: () => <div data-testid="settings-page">Settings</div>,
+ }));
+@@ -156,6 +160,16 @@ describe('App routing behavior', () => {
+     expect(screen.queryByTestId('home-page')).not.toBeInTheDocument();
+   });
+ 
++  it('routes /quant-lab to the Quant Lab page after auth is ready', async () => {
++    window.history.pushState({}, '', '/quant-lab');
++
++    render(<App />);
++
++    expect(await screen.findByTestId('quant-lab-page')).toBeInTheDocument();
++    expect(setCurrentRoute).toHaveBeenCalledWith('/quant-lab');
++    expect(screen.queryByTestId('backtest-page')).not.toBeInTheDocument();
++  });
++
+   it('routes /decision-signals to the AI signals page after auth is ready', async () => {
+     window.history.pushState({}, '', '/decision-signals');
+ 
+diff --git a/apps/dsa-web/src/App.tsx b/apps/dsa-web/src/App.tsx
+index d25ec9ce..0b12a7aa 100644
+--- a/apps/dsa-web/src/App.tsx
++++ b/apps/dsa-web/src/App.tsx
+@@ -24,6 +24,7 @@ const AlertsPage = lazy(() => import('./pages/AlertsPage'));
+ const TokenUsagePage = lazy(() => import('./pages/TokenUsagePage'));
+ const StockScreeningPage = lazy(() => import('./pages/StockScreeningPage'));
+ const ScreenLabPage = lazy(() => import('./pages/ScreenLabPage'));
++const QuantLabPage = lazy(() => import('./pages/QuantLabPage'));
+ 
+ const AppContent: React.FC = () => {
+   const location = useLocation();
+@@ -85,6 +86,7 @@ const AppContent: React.FC = () => {
+         <Route path="/portfolio" element={<PortfolioPage />} />
+         <Route path="/decision-signals" element={<DecisionSignalsPage />} />
+         <Route path="/screen-lab" element={<ScreenLabPage />} />
++        <Route path="/quant-lab" element={<QuantLabPage />} />
+         <Route path="/screening" element={<StockScreeningPage />} />
+         <Route path="/backtest" element={<BacktestPage />} />
+         <Route path="/alerts" element={<AlertsPage />} />
+diff --git a/apps/dsa-web/src/api/__tests__/quantBacktest.test.ts b/apps/dsa-web/src/api/__tests__/quantBacktest.test.ts
+new file mode 100644
+index 00000000..8c9f6e64
+--- /dev/null
++++ b/apps/dsa-web/src/api/__tests__/quantBacktest.test.ts
+@@ -0,0 +1,167 @@
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import { quantBacktestApi } from '../quantBacktest';
++
++const { get, post } = vi.hoisted(() => ({
++  get: vi.fn(),
++  post: vi.fn(),
++}));
++
++vi.mock('../index', () => ({
++  default: {
++    get,
++    post,
++  },
++}));
++
++describe('quantBacktestApi', () => {
++  beforeEach(() => {
++    get.mockReset();
++    post.mockReset();
++  });
++
++  it('submits formal portfolio backtest runs with an Idempotency-Key', async () => {
++    post.mockResolvedValueOnce({
++      data: {
++        run_id: 'run_bt_123',
++        task_id: 'task_bt_123',
++        task_status: 'queued',
++        execution_status: 'running',
++        run_type: 'formal_portfolio_backtest',
++        evaluation_type: 'portfolio_backtest',
++        requested_mode: 'formal',
++        spec: { spec_id: 'spec_cn_quality', spec_hash: 'sha256:abc' },
++        dataset_versions: { adjusted_daily_bars: 'dsv_11111111111111111111111111111111' },
++        schema: { name: 'quant.backtest_api_run', version: '1.0.0' },
++        trace: { trace_id: 'trace-bt-1', run_id: 'run-bt-1', stage_id: 'stage-bt-1' },
++        runtime: { formal_backtest_api_started: true, worker_loop_started: false },
++      },
++    });
++
++    const result = await quantBacktestApi.createBacktestRun(
++      {
++        specId: 'spec_cn_quality',
++        specHash: 'sha256:abc',
++        requestedMode: 'formal',
++        screenSnapshotId: 'ssn_22222222222222222222222222222222',
++        screenDefinitionVersionId: 'sdv_33333333333333333333333333333333',
++        datasetVersions: { adjustedDailyBars: 'dsv_11111111111111111111111111111111' },
++        initialCash: 1000000,
++        benchmark: '000300.XSHG',
++        costModelVersion: 'cn_a_share_cost_model@1.0.0',
++      },
++      'idem-quant-lab-1',
++    );
++
++    expect(post).toHaveBeenCalledWith(
++      '/api/v1/quant/backtest-runs',
++      {
++        spec_id: 'spec_cn_quality',
++        spec_hash: 'sha256:abc',
++        requested_mode: 'formal',
++        screen_snapshot_id: 'ssn_22222222222222222222222222222222',
++        screen_definition_version_id: 'sdv_33333333333333333333333333333333',
++        dataset_versions: { adjusted_daily_bars: 'dsv_11111111111111111111111111111111' },
++        initial_cash: 1000000,
++        benchmark: '000300.XSHG',
++        cost_model_version: 'cn_a_share_cost_model@1.0.0',
++      },
++      { headers: { 'Idempotency-Key': 'idem-quant-lab-1' } },
++    );
++    expect(result.runId).toBe('run_bt_123');
++    expect(result.evaluationType).toBe('portfolio_backtest');
++    expect(result.runtime?.workerLoopStarted).toBe(false);
++  });
++
++  it('loads status, metrics, paginated rows, audit and artifact payloads from formal backtest routes', async () => {
++    get
++      .mockResolvedValueOnce({
++        data: {
++          run_id: 'run_bt_123',
++          task_status: 'succeeded',
++          execution_status: 'succeeded',
++          final_status: 'succeeded',
++          effective_mode: 'formal',
++          eligible_for_ranking: true,
++          artifact_bundle: { state: 'formal' },
++          runtime: { formal_backtest_api_started: true, qlib_runtime_started: false },
++        },
++      })
++      .mockResolvedValueOnce({
++        data: {
++          artifact: { kind: 'metrics', artifact_id: 'art_metrics' },
++          payload: { metrics: { cumulative_return: '0.024660', max_drawdown: '-0.011000' } },
++        },
++      })
++      .mockResolvedValueOnce({
++        data: {
++          rows: [{ order_id: 'ord-1', instrument_id: '600519.XSHG', status: 'filled' }],
++          pagination: { page_size: 25, cursor: null, next_cursor: '25', total_count: 40 },
++        },
++      })
++      .mockResolvedValueOnce({
++        data: {
++          rows: [{ instrument_id: '600519.XSHG', weight: '0.240000', market_value: '2460.000' }],
++          pagination: { page_size: 25, cursor: null, next_cursor: null, total_count: 1 },
++        },
++      })
++      .mockResolvedValueOnce({
++        data: {
++          artifact: { kind: 'audit', artifact_id: 'art_audit' },
++          payload: { status: 'pass', outcomes: [{ rule_id: 'lookahead_bias', status: 'pass' }] },
++        },
++      })
++      .mockResolvedValueOnce({
++        data: {
++          artifact: { kind: 'metrics', artifact_id: 'art_metrics' },
++          payload: { metrics: { sharpe_ratio: '1.250000' } },
++        },
++      });
++
++    const status = await quantBacktestApi.getBacktestRun('run_bt_123');
++    const metrics = await quantBacktestApi.getBacktestMetrics('run_bt_123');
++    const orders = await quantBacktestApi.listBacktestOrders('run_bt_123', { pageSize: 25 });
++    const positions = await quantBacktestApi.listBacktestPositions('run_bt_123', { pageSize: 25 });
++    const audit = await quantBacktestApi.getBacktestAudit('run_bt_123');
++    const artifact = await quantBacktestApi.downloadBacktestArtifact('run_bt_123', 'metrics');
++    const metricsPayload = metrics.payload as { metrics: { cumulativeReturn: string } };
++    const auditPayload = audit.payload as { outcomes: Array<{ ruleId: string }> };
++    const artifactPayload = artifact.payload as { metrics: { sharpeRatio: string } };
++
++    expect(get).toHaveBeenNthCalledWith(1, '/api/v1/quant/backtest-runs/run_bt_123');
++    expect(get).toHaveBeenNthCalledWith(2, '/api/v1/quant/backtest-runs/run_bt_123/metrics');
++    expect(get).toHaveBeenNthCalledWith(3, '/api/v1/quant/backtest-runs/run_bt_123/orders', {
++      params: { page_size: 25, cursor: undefined },
++    });
++    expect(get).toHaveBeenNthCalledWith(4, '/api/v1/quant/backtest-runs/run_bt_123/positions', {
++      params: { page_size: 25, cursor: undefined },
++    });
++    expect(get).toHaveBeenNthCalledWith(5, '/api/v1/quant/backtest-runs/run_bt_123/audit');
++    expect(get).toHaveBeenNthCalledWith(6, '/api/v1/quant/backtest-runs/run_bt_123/artifacts/metrics');
++    expect(status.eligibleForRanking).toBe(true);
++    expect(metricsPayload.metrics.cumulativeReturn).toBe('0.024660');
++    expect(orders.rows[0].orderId).toBe('ord-1');
++    expect(positions.rows[0].instrumentId).toBe('600519.XSHG');
++    expect(auditPayload.outcomes[0].ruleId).toBe('lookahead_bias');
++    expect(artifactPayload.metrics.sharpeRatio).toBe('1.250000');
++  });
++
++  it('sends cancel requests without using the legacy Signal Evaluation namespace', async () => {
++    post.mockResolvedValueOnce({
++      data: {
++        run_id: 'run_bt_123',
++        task_status: 'cancelled',
++        execution_status: 'running',
++        termination_reason: 'user_requested_cancel',
++      },
++    });
++
++    const result = await quantBacktestApi.cancelBacktestRun('run_bt_123', 'user_requested_cancel');
++
++    expect(post).toHaveBeenCalledWith(
++      '/api/v1/quant/backtest-runs/run_bt_123/cancel',
++      { reason: 'user_requested_cancel' },
++    );
++    expect(post.mock.calls[0][0]).not.toContain('/api/v1/backtest');
++    expect(result.terminationReason).toBe('user_requested_cancel');
++  });
++});
+diff --git a/apps/dsa-web/src/api/quantBacktest.ts b/apps/dsa-web/src/api/quantBacktest.ts
+new file mode 100644
+index 00000000..4022d19c
+--- /dev/null
++++ b/apps/dsa-web/src/api/quantBacktest.ts
+@@ -0,0 +1,175 @@
++import apiClient from './index';
++import { toCamelCase } from './utils';
++
++export type QuantBacktestMode = 'preview' | 'formal';
++
++export type QuantBacktestSchemaRef = {
++  name: string;
++  version: string;
++};
++
++export type QuantBacktestTraceRef = {
++  traceId: string;
++  runId?: string | null;
++  stageId?: string | null;
++};
++
++export type QuantBacktestArtifactRef = {
++  kind?: string;
++  artifactId?: string;
++  uri?: string;
++  sha256?: string;
++  contentType?: string;
++  state?: string;
++};
++
++export type QuantBacktestDatasetVersions = Record<string, string>;
++
++export type QuantBacktestCreatePayload = {
++  specId: string;
++  specHash: string;
++  requestedMode: QuantBacktestMode;
++  screenSnapshotId: string;
++  screenDefinitionVersionId: string;
++  datasetVersions: QuantBacktestDatasetVersions;
++  initialCash: number;
++  benchmark: string;
++  costModelVersion: string;
++};
++
++export type QuantBacktestRun = {
++  runId: string;
++  taskId?: string;
++  taskStatus?: string;
++  executionStatus?: string;
++  finalStatus?: string;
++  runType?: string;
++  evaluationType?: string;
++  requestedMode?: QuantBacktestMode | string;
++  effectiveMode?: QuantBacktestMode | string;
++  eligibleForRanking?: boolean;
++  terminationReason?: string;
++  spec?: {
++    specId?: string;
++    specHash?: string;
++  };
++  datasetVersions?: QuantBacktestDatasetVersions;
++  schema?: QuantBacktestSchemaRef;
++  trace?: QuantBacktestTraceRef;
++  resourcePolicy?: Record<string, unknown>;
++  runtime?: Record<string, boolean>;
++  artifactBundle?: QuantBacktestArtifactRef | null;
++  metricsArtifact?: QuantBacktestArtifactRef | null;
++  auditArtifact?: QuantBacktestArtifactRef | null;
++};
++
++export type QuantBacktestArtifactPayload<TPayload = Record<string, unknown>> = {
++  artifact?: QuantBacktestArtifactRef | null;
++  payload: TPayload;
++};
++
++export type QuantBacktestTablePage<TRow = Record<string, unknown>> = {
++  rows: TRow[];
++  pagination: {
++    pageSize: number;
++    cursor?: string | null;
++    nextCursor?: string | null;
++    totalCount: number;
++  };
++};
++
++function isPlainRecord(value: unknown): value is Record<string, unknown> {
++  return typeof value === 'object' && value !== null && !Array.isArray(value);
++}
++
++function toSnakeKey(value: string): string {
++  return value.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
++}
++
++function toSnakeCase(value: unknown): unknown {
++  if (Array.isArray(value)) {
++    return value.map((item) => toSnakeCase(item));
++  }
++
++  if (!isPlainRecord(value)) {
++    return value;
++  }
++
++  return Object.fromEntries(
++    Object.entries(value).map(([key, entry]) => [toSnakeKey(key), toSnakeCase(entry)]),
++  );
++}
++
++function runUrl(runId: string): string {
++  return `/api/v1/quant/backtest-runs/${encodeURIComponent(runId)}`;
++}
++
++export const quantBacktestApi = {
++  async createBacktestRun(
++    payload: QuantBacktestCreatePayload,
++    idempotencyKey: string,
++  ): Promise<QuantBacktestRun> {
++    const response = await apiClient.post<Record<string, unknown>>(
++      '/api/v1/quant/backtest-runs',
++      toSnakeCase(payload),
++      { headers: { 'Idempotency-Key': idempotencyKey } },
++    );
++    return toCamelCase<QuantBacktestRun>(response.data);
++  },
++
++  async getBacktestRun(runId: string): Promise<QuantBacktestRun> {
++    const response = await apiClient.get<Record<string, unknown>>(runUrl(runId));
++    return toCamelCase<QuantBacktestRun>(response.data);
++  },
++
++  async getBacktestMetrics(runId: string): Promise<QuantBacktestArtifactPayload> {
++    const response = await apiClient.get<Record<string, unknown>>(`${runUrl(runId)}/metrics`);
++    return toCamelCase<QuantBacktestArtifactPayload>(response.data);
++  },
++
++  async listBacktestOrders(
++    runId: string,
++    options: { cursor?: string | null; pageSize?: number } = {},
++  ): Promise<QuantBacktestTablePage> {
++    const response = await apiClient.get<Record<string, unknown>>(`${runUrl(runId)}/orders`, {
++      params: {
++        page_size: options.pageSize ?? 100,
++        cursor: options.cursor ?? undefined,
++      },
++    });
++    return toCamelCase<QuantBacktestTablePage>(response.data);
++  },
++
++  async listBacktestPositions(
++    runId: string,
++    options: { cursor?: string | null; pageSize?: number } = {},
++  ): Promise<QuantBacktestTablePage> {
++    const response = await apiClient.get<Record<string, unknown>>(`${runUrl(runId)}/positions`, {
++      params: {
++        page_size: options.pageSize ?? 100,
++        cursor: options.cursor ?? undefined,
++      },
++    });
++    return toCamelCase<QuantBacktestTablePage>(response.data);
++  },
++
++  async getBacktestAudit(runId: string): Promise<QuantBacktestArtifactPayload> {
++    const response = await apiClient.get<Record<string, unknown>>(`${runUrl(runId)}/audit`);
++    return toCamelCase<QuantBacktestArtifactPayload>(response.data);
++  },
++
++  async downloadBacktestArtifact(runId: string, artifactKind: string): Promise<QuantBacktestArtifactPayload> {
++    const response = await apiClient.get<Record<string, unknown>>(
++      `${runUrl(runId)}/artifacts/${encodeURIComponent(artifactKind)}`,
++    );
++    return toCamelCase<QuantBacktestArtifactPayload>(response.data);
++  },
++
++  async cancelBacktestRun(runId: string, reason = 'user_requested_cancel'): Promise<QuantBacktestRun> {
++    const response = await apiClient.post<Record<string, unknown>>(
++      `${runUrl(runId)}/cancel`,
++      { reason },
++    );
++    return toCamelCase<QuantBacktestRun>(response.data);
++  },
++};
+diff --git a/apps/dsa-web/src/components/layout/SidebarNav.tsx b/apps/dsa-web/src/components/layout/SidebarNav.tsx
+index e346feb8..40658d14 100644
+--- a/apps/dsa-web/src/components/layout/SidebarNav.tsx
++++ b/apps/dsa-web/src/components/layout/SidebarNav.tsx
+@@ -31,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
+   { key: 'home', labelKey: 'layout.nav.home', to: '/', icon: Home, exact: true },
+   { key: 'chat', labelKey: 'layout.nav.chat', to: '/chat', icon: MessageSquareQuote, badge: 'completion' },
+   { key: 'screen-lab', labelKey: 'layout.nav.screenLab', to: '/screen-lab', icon: Microscope },
++  { key: 'quant-lab', labelKey: 'layout.nav.quantLab', to: '/quant-lab', icon: BarChart3 },
+   { key: 'screening', labelKey: 'layout.nav.screening', to: '/screening', icon: Search },
+   { key: 'portfolio', labelKey: 'layout.nav.portfolio', to: '/portfolio', icon: BriefcaseBusiness },
+   { key: 'decision-signals', labelKey: 'layout.nav.decisionSignals', to: '/decision-signals', icon: Activity },
+diff --git a/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx b/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
+index 39b9722a..03105caf 100644
+--- a/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
++++ b/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
+@@ -60,7 +60,7 @@ describe('SidebarNav', () => {
+     expect(await screen.findByRole('link', { name: '选股' })).toHaveAttribute('href', '/screening');
+   });
+ 
+-  it('places screen lab after chat and legacy screening after the lab when AlphaSift is enabled', async () => {
++  it('places screen lab and quant lab before legacy screening when AlphaSift is enabled', async () => {
+     mockGetAlphaSiftStatus.mockResolvedValueOnce({ enabled: true, available: false, installSpecIsDefault: false });
+ 
+     render(
+@@ -70,9 +70,10 @@ describe('SidebarNav', () => {
+     );
+ 
+     await screen.findByRole('link', { name: '筛选实验室' });
++    await screen.findByRole('link', { name: '回测实验室' });
+     await screen.findByRole('link', { name: '选股' });
+     const hrefs = screen.getAllByRole('link').map((link) => link.getAttribute('href'));
+-    expect(hrefs.slice(0, 6)).toEqual(['/', '/chat', '/screen-lab', '/screening', '/portfolio', '/decision-signals']);
++    expect(hrefs.slice(0, 7)).toEqual(['/', '/chat', '/screen-lab', '/quant-lab', '/screening', '/portfolio', '/decision-signals']);
+   });
+ 
+   it('refreshes the screening navigation item after any config save event', async () => {
+@@ -140,6 +141,18 @@ describe('SidebarNav', () => {
+     expect(alertsLink).toHaveClass('font-medium');
+   });
+ 
++  it('renders the Quant Lab navigation item and marks it active', () => {
++    render(
++      <MemoryRouter initialEntries={['/quant-lab']}>
++        <SidebarNav />
++      </MemoryRouter>,
++    );
++
++    const quantLabLink = screen.getByRole('link', { name: '回测实验室' });
++    expect(quantLabLink).toHaveAttribute('href', '/quant-lab');
++    expect(quantLabLink).toHaveClass('font-medium');
++  });
++
+   it('renders the AI signals navigation item and marks it active', () => {
+     render(
+       <MemoryRouter initialEntries={['/decision-signals']}>
+diff --git a/apps/dsa-web/src/i18n/uiText.ts b/apps/dsa-web/src/i18n/uiText.ts
+index c19ce03f..61dec0ba 100644
+--- a/apps/dsa-web/src/i18n/uiText.ts
++++ b/apps/dsa-web/src/i18n/uiText.ts
+@@ -53,6 +53,7 @@ const zh = {
+   'layout.nav.decisionSignals': 'AI 建议',
+   'layout.nav.home': '首页',
+   'layout.nav.portfolio': '持仓',
++  'layout.nav.quantLab': '回测实验室',
+   'layout.nav.settings': '设置',
+   'layout.nav.screenLab': '筛选实验室',
+   'layout.nav.screening': '选股',
+@@ -72,6 +73,8 @@ const zh = {
+   'layout.route.home.title': '首页',
+   'layout.route.portfolio.description': '组合快照、手工录入与风险分析',
+   'layout.route.portfolio.title': '持仓',
++  'layout.route.quantLab.description': '正式组合回测创建、净值、回撤、交易、持仓和偏差审计',
++  'layout.route.quantLab.title': '回测实验室',
+   'layout.route.settings.description': '系统配置、模型与认证管理',
+   'layout.route.settings.title': '设置',
+   'layout.route.screenLab.description': 'ScreenDefinition 配置、Quant Screening Run、结果解释与历史比较',
+@@ -894,6 +897,7 @@ const en: Record<UiTextKey, string> = {
+   'layout.nav.decisionSignals': 'AI signals',
+   'layout.nav.home': 'Home',
+   'layout.nav.portfolio': 'Portfolio',
++  'layout.nav.quantLab': 'Quant Lab',
+   'layout.nav.settings': 'Settings',
+   'layout.nav.screenLab': 'Screen Lab',
+   'layout.nav.screening': 'Screening',
+@@ -913,6 +917,8 @@ const en: Record<UiTextKey, string> = {
+   'layout.route.home.title': 'Home',
+   'layout.route.portfolio.description': 'Portfolio snapshots, manual entries, and risk analysis',
+   'layout.route.portfolio.title': 'Portfolio',
++  'layout.route.quantLab.description': 'Formal portfolio backtest creation, equity, drawdown, trades, positions, and bias audit',
++  'layout.route.quantLab.title': 'Quant Lab',
+   'layout.route.settings.description': 'System config, models, and authentication',
+   'layout.route.settings.title': 'Settings',
+   'layout.route.screenLab.description': 'ScreenDefinition configuration, Quant Screening runs, result explanations, and history comparison',
+diff --git a/apps/dsa-web/src/pages/QuantLabPage.tsx b/apps/dsa-web/src/pages/QuantLabPage.tsx
+new file mode 100644
+index 00000000..0d058397
+--- /dev/null
++++ b/apps/dsa-web/src/pages/QuantLabPage.tsx
+@@ -0,0 +1,491 @@
++import type React from 'react';
++import { useMemo, useState } from 'react';
++import {
++  Activity,
++  Ban,
++  BarChart3,
++  Boxes,
++  Clock3,
++  Download,
++  FileText,
++  LineChart,
++  ListChecks,
++  Play,
++  ShieldAlert,
++  ShieldCheck,
++  Table2,
++  WalletCards,
++} from 'lucide-react';
++import { AppPage, Badge, Button, Card, EmptyState, InlineAlert } from '../components/common';
++import {
++  quantBacktestApi,
++  type QuantBacktestArtifactPayload,
++  type QuantBacktestCreatePayload,
++  type QuantBacktestMode,
++  type QuantBacktestRun,
++  type QuantBacktestTablePage,
++} from '../api/quantBacktest';
++
++const DEFAULT_PAGE_SIZE = 25;
++const DEMO_SPEC_ID = 'spec_cn_quality_momentum_v1';
++const DEMO_SPEC_HASH = 'sha256:abc';
++const DEMO_SCREEN_SNAPSHOT_ID = 'ssn_22222222222222222222222222222222';
++const DEMO_SCREEN_DEFINITION_VERSION_ID = 'sdv_33333333333333333333333333333333';
++const DEMO_DATASET_VERSION = 'dsv_11111111111111111111111111111111';
++
++type PageState = 'initial' | 'loading' | 'ready' | 'error' | 'permission-denied';
++
++type QuantLabError = {
++  title: string;
++  message: string;
++};
++
++function getErrorStatus(error: unknown): number | undefined {
++  if (typeof error !== 'object' || error === null) {
++    return undefined;
++  }
++  return (error as { response?: { status?: number } }).response?.status;
++}
++
++function getErrorMessage(error: unknown): string {
++  if (error instanceof Error && error.message.trim()) {
++    return error.message.trim();
++  }
++  if (typeof error === 'object' && error !== null) {
++    const data = (error as { response?: { data?: { title?: string; detail?: string; message?: string } } }).response?.data;
++    const message = data?.detail || data?.message || data?.title;
++    if (typeof message === 'string' && message.trim()) {
++      return message.trim();
++    }
++  }
++  return 'Unknown error';
++}
++
++function formatPercent(value: unknown): string {
++  const numeric = Number(value);
++  if (!Number.isFinite(numeric)) {
++    return '-';
++  }
++  return `${(numeric * 100).toFixed(2)}%`;
++}
++
++function formatNumber(value: unknown): string {
++  const numeric = Number(value);
++  if (!Number.isFinite(numeric)) {
++    return value == null ? '-' : String(value);
++  }
++  return numeric.toLocaleString(undefined, { maximumFractionDigits: 3 });
++}
++
++function formatObjectEntries(values?: Record<string, unknown> | null): string {
++  if (!values || Object.keys(values).length === 0) {
++    return '-';
++  }
++  return Object.entries(values).map(([key, value]) => `${key}: ${String(value)}`).join(' · ');
++}
++
++function metricValue(metrics: QuantBacktestArtifactPayload | null, key: string): unknown {
++  return (metrics?.payload as { metrics?: Record<string, unknown> } | undefined)?.metrics?.[key];
++}
++
++function equityCurve(metrics: QuantBacktestArtifactPayload | null): Array<Record<string, unknown>> {
++  const points = (metrics?.payload as { equityCurve?: Array<Record<string, unknown>> } | undefined)?.equityCurve;
++  return Array.isArray(points) ? points : [];
++}
++
++function auditOutcomes(audit: QuantBacktestArtifactPayload | null): Array<Record<string, unknown>> {
++  const outcomes = (audit?.payload as { outcomes?: Array<Record<string, unknown>> } | undefined)?.outcomes;
++  return Array.isArray(outcomes) ? outcomes : [];
++}
++
++function modeStateBadge(run: QuantBacktestRun | null): { label: string; variant: 'success' | 'warning' | 'info' | 'danger' } {
++  if (!run) {
++    return { label: 'No run', variant: 'info' };
++  }
++  if (run.effectiveMode === 'preview') {
++    return { label: 'Preview only', variant: 'info' };
++  }
++  if (run.effectiveMode === 'formal') {
++    return { label: 'Formal mode', variant: 'warning' };
++  }
++  return { label: String(run.effectiveMode || run.requestedMode || 'unknown'), variant: 'warning' };
++}
++
++function artifactStateBadge(run: QuantBacktestRun | null): { label: string; variant: 'success' | 'warning' | 'info' | 'danger' } {
++  if (!run?.artifactBundle) {
++    return { label: 'No artifact', variant: 'info' };
++  }
++  if (run.artifactBundle.state === 'invalid') {
++    return { label: 'Invalid artifact', variant: 'danger' };
++  }
++  if (run.artifactBundle.state === 'formal') {
++    return { label: 'Formal valid', variant: 'success' };
++  }
++  if (run.artifactBundle.state === 'partial') {
++    return { label: 'Partial artifact', variant: 'warning' };
++  }
++  return { label: String(run.artifactBundle.state || 'artifact'), variant: 'info' };
++}
++
++const StatCard: React.FC<{ title: string; value: string; detail?: string }> = ({ title, value, detail }) => (
++  <Card padding="sm">
++    <p className="text-xs text-secondary-text">{title}</p>
++    <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
++    {detail ? <p className="mt-1 text-xs text-secondary-text">{detail}</p> : null}
++  </Card>
++);
++
++const LineagePanel: React.FC<{ run: QuantBacktestRun | null }> = ({ run }) => {
++  if (!run) {
++    return null;
++  }
++  return (
++    <div className="grid gap-3 rounded-2xl border border-border/70 bg-card/80 p-4 text-xs text-secondary-text md:grid-cols-2 xl:grid-cols-4">
++      <div>
++        <p className="font-semibold text-foreground">Dataset versions</p>
++        <p className="mt-1 break-all">{formatObjectEntries(run.datasetVersions)}</p>
++      </div>
++      <div>
++        <p className="font-semibold text-foreground">Spec / schema</p>
++        <p className="mt-1 break-all">{run.spec?.specHash || '-'}</p>
++        <p className="mt-1">{run.schema?.name}@{run.schema?.version}</p>
++      </div>
++      <div>
++        <p className="font-semibold text-foreground">Trace</p>
++        <p className="mt-1 break-all">{run.trace?.traceId || '-'}</p>
++        <p className="mt-1 break-all">{run.trace?.stageId || '-'}</p>
++      </div>
++      <div>
++        <p className="font-semibold text-foreground">Artifacts</p>
++        <p className="mt-1 break-all">{run.metricsArtifact?.artifactId || run.artifactBundle?.artifactId || '-'}</p>
++        <p className="mt-1 break-all">{run.metricsArtifact?.sha256 || run.auditArtifact?.sha256 || '-'}</p>
++      </div>
++    </div>
++  );
++};
++
++const RawTable: React.FC<{
++  icon: React.ReactNode;
++  rows: Record<string, unknown>[];
++  columns: string[];
++}> = ({ icon, rows, columns }) => {
++  if (rows.length === 0) {
++    return (
++      <EmptyState
++        title="No raw rows"
++        description="This Artifact-backed table has no rows yet."
++        icon={<Clock3 className="h-8 w-8" />}
++      />
++    );
++  }
++  return (
++    <div className="overflow-hidden rounded-2xl border border-border/70">
++      <div className="flex items-center gap-2 border-b border-border/70 bg-surface/70 px-4 py-3 text-sm font-semibold text-foreground">
++        {icon}
++        Raw table
++      </div>
++      <div className="max-h-[360px] overflow-auto">
++        <table className="min-w-full divide-y divide-border/70 text-sm">
++          <thead className="sticky top-0 bg-card text-xs uppercase tracking-normal text-secondary-text">
++            <tr>
++              {columns.map((column) => (
++                <th key={column} className="px-4 py-3 text-left font-semibold">{column}</th>
++              ))}
++            </tr>
++          </thead>
++          <tbody className="divide-y divide-border/60 bg-card/70">
++            {rows.map((row, rowIndex) => (
++              <tr key={`${String(row[columns[0]])}-${rowIndex}`}>
++                {columns.map((column) => (
++                  <td key={column} className="px-4 py-3 font-mono text-xs text-secondary-text">
++                    {String(row[column] ?? '-')}
++                  </td>
++                ))}
++              </tr>
++            ))}
++          </tbody>
++        </table>
++      </div>
++    </div>
++  );
++};
++
++const QuantLabPage: React.FC = () => {
++  const [runMode, setRunMode] = useState<QuantBacktestMode>('formal');
++  const [pageState, setPageState] = useState<PageState>('initial');
++  const [error, setError] = useState<QuantLabError | null>(null);
++  const [currentRun, setCurrentRun] = useState<QuantBacktestRun | null>(null);
++  const [metrics, setMetrics] = useState<QuantBacktestArtifactPayload | null>(null);
++  const [orders, setOrders] = useState<QuantBacktestTablePage | null>(null);
++  const [positions, setPositions] = useState<QuantBacktestTablePage | null>(null);
++  const [audit, setAudit] = useState<QuantBacktestArtifactPayload | null>(null);
++  const [notice, setNotice] = useState<string | null>(null);
++
++  const modeBadge = modeStateBadge(currentRun);
++  const artifactBadge = artifactStateBadge(currentRun);
++  const curve = useMemo(() => equityCurve(metrics), [metrics]);
++  const outcomes = useMemo(() => auditOutcomes(audit), [audit]);
++
++  const payload: QuantBacktestCreatePayload = {
++    specId: DEMO_SPEC_ID,
++    specHash: DEMO_SPEC_HASH,
++    requestedMode: runMode,
++    screenSnapshotId: DEMO_SCREEN_SNAPSHOT_ID,
++    screenDefinitionVersionId: DEMO_SCREEN_DEFINITION_VERSION_ID,
++    datasetVersions: {
++      adjustedDailyBars: DEMO_DATASET_VERSION,
++      corporateActions: DEMO_DATASET_VERSION,
++      fundamentalsPit: DEMO_DATASET_VERSION,
++      screenSnapshot: DEMO_DATASET_VERSION,
++    },
++    initialCash: 1000000,
++    benchmark: '000300.XSHG',
++    costModelVersion: 'cn_a_share_cost_model@1.0.0',
++  };
++
++  async function runBacktest(nextRunMode: QuantBacktestMode) {
++    setRunMode(nextRunMode);
++    setPageState('loading');
++    setError(null);
++    setNotice(null);
++    try {
++      const accepted = await quantBacktestApi.createBacktestRun(
++        { ...payload, requestedMode: nextRunMode },
++        `quant-lab-${nextRunMode}-${payload.specId}`,
++      );
++      const status = await quantBacktestApi.getBacktestRun(accepted.runId);
++      const [nextMetrics, nextOrders, nextPositions, nextAudit] = await Promise.all([
++        quantBacktestApi.getBacktestMetrics(accepted.runId),
++        quantBacktestApi.listBacktestOrders(accepted.runId, { pageSize: DEFAULT_PAGE_SIZE }),
++        quantBacktestApi.listBacktestPositions(accepted.runId, { pageSize: DEFAULT_PAGE_SIZE }),
++        quantBacktestApi.getBacktestAudit(accepted.runId),
++      ]);
++      setCurrentRun(status);
++      setMetrics(nextMetrics);
++      setOrders(nextOrders);
++      setPositions(nextPositions);
++      setAudit(nextAudit);
++      setPageState('ready');
++    } catch (requestError) {
++      if (getErrorStatus(requestError) === 403) {
++        setPageState('permission-denied');
++        setError({ title: 'Permission denied', message: getErrorMessage(requestError) });
++        return;
++      }
++      setPageState('error');
++      setError({ title: 'Quant Lab request failed', message: getErrorMessage(requestError) });
++    }
++  }
++
++  async function downloadMetricsArtifact() {
++    if (!currentRun) {
++      return;
++    }
++    await quantBacktestApi.downloadBacktestArtifact(currentRun.runId, 'metrics');
++    setNotice('Metrics artifact downloaded');
++  }
++
++  async function cancelCurrentRun() {
++    if (!currentRun) {
++      return;
++    }
++    const cancelled = await quantBacktestApi.cancelBacktestRun(currentRun.runId, 'user_requested_cancel');
++    setCurrentRun({ ...currentRun, ...cancelled });
++    setNotice('Cancel requested');
++  }
++
++  return (
++    <AppPage className="max-w-[1480px] space-y-6 pb-12 pt-6">
++      <div data-testid="quant-lab-page" className="contents">
++        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
++          <div className="flex items-start gap-3">
++            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-cyan/10 text-cyan shadow-[0_14px_36px_hsl(var(--primary)/0.14)]">
++              <LineChart className="h-5 w-5" />
++            </span>
++            <div>
++              <span className="label-uppercase">Formal Portfolio Backtest</span>
++              <h1 className="mt-1 text-2xl font-bold tracking-normal text-foreground">Quant Lab</h1>
++              <p className="mt-2 max-w-3xl text-sm leading-6 text-secondary-text">
++                Create Preview/Formal BacktestRuns through the formal Quant Backtest API, inspect compact status,
++                and review equity, drawdown, orders, positions, audit, and artifacts without using legacy Signal Evaluation.
++              </p>
++            </div>
++          </div>
++          <div className="flex flex-wrap gap-2">
++            <Badge variant="info" size="md">Preview</Badge>
++            <Badge variant="warning" size="md">Formal</Badge>
++            <Badge variant="success" size="md">portfolio_backtest</Badge>
++            <Badge variant={modeBadge.variant} size="md">{modeBadge.label}</Badge>
++            <Badge variant={artifactBadge.variant} size="md">{artifactBadge.label}</Badge>
++            <Badge variant={currentRun?.eligibleForRanking ? 'success' : 'warning'} size="md">
++              {currentRun?.eligibleForRanking ? 'Ranking eligible' : 'Not ranking eligible'}
++            </Badge>
++          </div>
++        </div>
++
++        <InlineAlert
++          variant="info"
++          title="Contract boundary"
++          message="Quant Lab uses /api/v1/quant/backtest-runs only. Legacy Signal Evaluation stays separate at /api/v1/backtest/* and remains labelled 信号评价."
++        />
++        {pageState === 'permission-denied' && error ? (
++          <InlineAlert variant="danger" title={error.title} message={error.message} />
++        ) : null}
++        {pageState === 'error' && error ? (
++          <InlineAlert variant="danger" title={error.title} message={error.message} />
++        ) : null}
++        {notice ? <InlineAlert variant="success" title={notice} message="The latest UI action completed against the formal Quant Backtest API client." /> : null}
++
++        <div className="grid gap-5 xl:grid-cols-[390px_1fr]">
++          <div className="space-y-5">
++            <Card title="Run setup" subtitle="BacktestSpec input" padding="md">
++              <div className="space-y-3 text-sm">
++                <div className="rounded-xl border border-border/70 bg-surface/70 p-3">
++                  <p className="font-semibold text-foreground">Signal and execution timing</p>
++                  <p className="mt-1 text-xs leading-5 text-secondary-text">T close signals execute no earlier than T+1 with A-share trade unit, suspension, limit and T+1 sellability rules.</p>
++                </div>
++                <div className="grid gap-2">
++                  <p className="font-mono text-xs text-secondary-text">Spec: {DEMO_SPEC_ID}</p>
++                  <p className="font-mono text-xs text-secondary-text">ScreenSnapshot: {DEMO_SCREEN_SNAPSHOT_ID}</p>
++                  <p className="font-mono text-xs text-secondary-text">Dataset: {DEMO_DATASET_VERSION}</p>
++                  <p className="text-xs text-secondary-text">Initial cash: {formatNumber(payload.initialCash)} · Benchmark: {payload.benchmark}</p>
++                </div>
++              </div>
++            </Card>
++
++            <Card title="Run controls" subtitle="Preview / Formal" padding="md">
++              <div className="grid gap-3">
++                <div className="grid grid-cols-2 gap-2">
++                  <button type="button" className={`rounded-xl border px-3 py-2 text-sm font-semibold ${runMode === 'preview' ? 'border-cyan bg-cyan/10 text-cyan' : 'border-border bg-surface text-secondary-text'}`} onClick={() => setRunMode('preview')}>
++                    Preview mode
++                  </button>
++                  <button type="button" className={`rounded-xl border px-3 py-2 text-sm font-semibold ${runMode === 'formal' ? 'border-warning bg-warning/10 text-warning' : 'border-border bg-surface text-secondary-text'}`} onClick={() => setRunMode('formal')}>
++                    Formal mode
++                  </button>
++                </div>
++                <Button isLoading={pageState === 'loading'} loadingText="Submitting..." onClick={() => void runBacktest('formal')}>
++                  <Play className="h-4 w-4" />
++                  Run formal backtest
++                </Button>
++                <Button variant="secondary" isLoading={pageState === 'loading' && runMode === 'preview'} onClick={() => void runBacktest('preview')}>
++                  <Activity className="h-4 w-4" />
++                  Run preview backtest
++                </Button>
++                <Button variant="danger-subtle" disabled={!currentRun} onClick={() => void cancelCurrentRun()}>
++                  <Ban className="h-4 w-4" />
++                  Cancel backtest run
++                </Button>
++              </div>
++            </Card>
++
++            <Card title="Runtime flags" subtitle="Scope guard" padding="md">
++              <div className="space-y-2 text-xs text-secondary-text">
++                {Object.entries(currentRun?.runtime || {
++                  formalBacktestApiStarted: true,
++                  workerLoopStarted: false,
++                  qlibRuntimeStarted: false,
++                  legacySignalEvaluationStarted: false,
++                }).map(([key, value]) => (
++                  <p key={key} className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-surface/60 px-3 py-2">
++                    <span>{key}</span>
++                    <Badge variant={value ? 'success' : 'default'}>{String(value)}</Badge>
++                  </p>
++                ))}
++              </div>
++            </Card>
++          </div>
++
++          <div className="space-y-5">
++            <div className="grid gap-3 md:grid-cols-4">
++              <StatCard title="Cumulative return" value={formatPercent(metricValue(metrics, 'cumulativeReturn'))} />
++              <StatCard title="Max drawdown" value={formatPercent(metricValue(metrics, 'maxDrawdown'))} />
++              <StatCard title="Sharpe" value={formatNumber(metricValue(metrics, 'sharpeRatio'))} />
++              <StatCard title="Turnover" value={formatPercent(metricValue(metrics, 'turnover'))} />
++            </div>
++
++            <LineagePanel run={currentRun} />
++
++            {!currentRun ? (
++              <EmptyState
++                title="No BacktestRun loaded"
++                description="Create a Preview or Formal run to load compact status plus Artifact-backed metrics, orders, positions and audit tables."
++                icon={<BarChart3 className="h-8 w-8" />}
++              />
++            ) : null}
++
++            {currentRun ? (
++              <div className="space-y-5">
++                <Card title="Equity / Drawdown" subtitle="Artifact-backed chart data" padding="md">
++                  <div className="grid gap-3 md:grid-cols-2">
++                    {curve.map((point) => (
++                      <div key={String(point.tradeDate)} className="rounded-xl border border-border/70 bg-surface/70 p-3">
++                        <p className="font-mono text-xs text-secondary-text">{String(point.tradeDate)}</p>
++                        <p className="mt-2 text-lg font-semibold text-foreground">{formatNumber(point.equity)}</p>
++                        <p className="mt-1 text-xs text-warning">drawdown {formatPercent(point.drawdown)}</p>
++                      </div>
++                    ))}
++                  </div>
++                </Card>
++
++                <Card title="Orders / trades" subtitle="Cursor-paginated raw table" padding="md">
++                  <RawTable icon={<Table2 className="h-4 w-4 text-cyan" />} rows={orders?.rows || []} columns={['orderId', 'instrumentId', 'side', 'quantity', 'fillPrice', 'status']} />
++                </Card>
++
++                <Card title="Positions" subtitle="Portfolio ledger output" padding="md">
++                  <RawTable icon={<WalletCards className="h-4 w-4 text-cyan" />} rows={positions?.rows || []} columns={['instrumentId', 'quantity', 'marketValue', 'weight', 'realizedPnl']} />
++                </Card>
++
++                <Card title="Bias audit" subtitle="Promotion guard" padding="md">
++                  <div className="space-y-3">
++                    {outcomes.map((outcome) => (
++                      <div key={String(outcome.ruleId)} className="rounded-xl border border-border/70 bg-surface/70 p-3">
++                        <div className="flex flex-wrap items-center gap-2">
++                          <ShieldCheck className="h-4 w-4 text-success" />
++                          <span className="font-mono text-xs font-semibold text-foreground">{String(outcome.ruleId)}</span>
++                          <Badge variant={outcome.status === 'warn' ? 'warning' : 'success'}>{String(outcome.status)}</Badge>
++                        </div>
++                        <p className="mt-2 text-xs text-secondary-text">{String(outcome.reason || '-')}</p>
++                      </div>
++                    ))}
++                  </div>
++                </Card>
++
++                <Card title="Artifacts" subtitle="Download authorization" padding="md">
++                  <div className="flex flex-wrap items-center gap-3">
++                    <Button variant="secondary" onClick={() => void downloadMetricsArtifact()}>
++                      <Download className="h-4 w-4" />
++                      Download metrics artifact
++                    </Button>
++                    <Badge variant="info">{metrics?.artifact?.artifactId || currentRun.metricsArtifact?.artifactId || 'art_metrics'}</Badge>
++                    <Badge variant="history">{audit?.artifact?.artifactId || currentRun.auditArtifact?.artifactId || 'art_audit'}</Badge>
++                  </div>
++                </Card>
++              </div>
++            ) : null}
++          </div>
++        </div>
++
++        <div className="grid gap-3 md:grid-cols-4">
++          <Card padding="sm">
++            <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><Boxes className="h-4 w-4 text-cyan" />Dataset versions</div>
++            <p className="mt-2 text-xs text-secondary-text">No latest alias is displayed as formal evidence.</p>
++          </Card>
++          <Card padding="sm">
++            <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><ListChecks className="h-4 w-4 text-cyan" />Raw tables</div>
++            <p className="mt-2 text-xs text-secondary-text">Orders and positions stay behind cursor pagination.</p>
++          </Card>
++          <Card padding="sm">
++            <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><ShieldAlert className="h-4 w-4 text-cyan" />Audit guards</div>
++            <p className="mt-2 text-xs text-secondary-text">Invalid audit or artifact state blocks ranking and Agent conclusions.</p>
++          </Card>
++          <Card padding="sm">
++            <div className="flex items-center gap-2 text-sm font-semibold text-foreground"><FileText className="h-4 w-4 text-cyan" />Artifact review</div>
++            <p className="mt-2 text-xs text-secondary-text">Charts always pair with raw Artifact references.</p>
++          </Card>
++        </div>
++      </div>
++    </AppPage>
++  );
++};
++
++export default QuantLabPage;
+diff --git a/apps/dsa-web/src/pages/__tests__/QuantLabPage.test.tsx b/apps/dsa-web/src/pages/__tests__/QuantLabPage.test.tsx
+new file mode 100644
+index 00000000..b6bf7256
+--- /dev/null
++++ b/apps/dsa-web/src/pages/__tests__/QuantLabPage.test.tsx
+@@ -0,0 +1,230 @@
++import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import QuantLabPage from '../QuantLabPage';
++
++const {
++  cancelBacktestRun,
++  createBacktestRun,
++  downloadBacktestArtifact,
++  getBacktestAudit,
++  getBacktestMetrics,
++  getBacktestRun,
++  listBacktestOrders,
++  listBacktestPositions,
++} = vi.hoisted(() => ({
++  cancelBacktestRun: vi.fn(),
++  createBacktestRun: vi.fn(),
++  downloadBacktestArtifact: vi.fn(),
++  getBacktestAudit: vi.fn(),
++  getBacktestMetrics: vi.fn(),
++  getBacktestRun: vi.fn(),
++  listBacktestOrders: vi.fn(),
++  listBacktestPositions: vi.fn(),
++}));
++
++vi.mock('../../api/quantBacktest', () => ({
++  quantBacktestApi: {
++    cancelBacktestRun: (...args: unknown[]) => cancelBacktestRun(...args),
++    createBacktestRun: (...args: unknown[]) => createBacktestRun(...args),
++    downloadBacktestArtifact: (...args: unknown[]) => downloadBacktestArtifact(...args),
++    getBacktestAudit: (...args: unknown[]) => getBacktestAudit(...args),
++    getBacktestMetrics: (...args: unknown[]) => getBacktestMetrics(...args),
++    getBacktestRun: (...args: unknown[]) => getBacktestRun(...args),
++    listBacktestOrders: (...args: unknown[]) => listBacktestOrders(...args),
++    listBacktestPositions: (...args: unknown[]) => listBacktestPositions(...args),
++  },
++}));
++
++const acceptedRun = {
++  runId: 'run_bt_123',
++  taskId: 'task_bt_123',
++  taskStatus: 'queued',
++  executionStatus: 'running',
++  runType: 'formal_portfolio_backtest',
++  evaluationType: 'portfolio_backtest',
++  requestedMode: 'formal',
++  effectiveMode: 'formal',
++  eligibleForRanking: false,
++  spec: { specId: 'spec_cn_quality', specHash: 'sha256:abc' },
++  datasetVersions: { adjustedDailyBars: 'dsv_11111111111111111111111111111111' },
++  schema: { name: 'quant.backtest_api_run', version: '1.0.0' },
++  trace: { traceId: 'trace-bt-1', runId: 'run-bt-1', stageId: 'stage-bt-1' },
++  resourcePolicy: { queueName: 'worker-quant', maxMemoryMb: 4096, wallClockTimeoutSeconds: 3600 },
++  runtime: {
++    formalBacktestApiStarted: true,
++    resourceControlsStarted: true,
++    quantLabStarted: false,
++    evidenceAgentStarted: false,
++    workerLoopStarted: false,
++    realProviderCallsStarted: false,
++    realLlmCallsStarted: false,
++    qlibRuntimeStarted: false,
++    legacySignalEvaluationStarted: false,
++  },
++};
++
++const succeededRun = {
++  ...acceptedRun,
++  taskStatus: 'succeeded',
++  executionStatus: 'succeeded',
++  finalStatus: 'succeeded',
++  effectiveMode: 'formal',
++  eligibleForRanking: true,
++  artifactBundle: { state: 'formal', artifactId: 'bundle_bt_123' },
++  metricsArtifact: { kind: 'metrics', artifactId: 'art_metrics', sha256: 'sha256:metrics' },
++  auditArtifact: { kind: 'audit', artifactId: 'art_audit', sha256: 'sha256:audit' },
++};
++
++const metrics = {
++  artifact: { kind: 'metrics', artifactId: 'art_metrics', sha256: 'sha256:metrics' },
++  payload: {
++    metrics: {
++      cumulativeReturn: '0.024660',
++      annualizedReturn: '0.317000',
++      maxDrawdown: '-0.011000',
++      sharpeRatio: '1.250000',
++      calmarRatio: '2.840000',
++      turnover: '0.180000',
++    },
++    equityCurve: [
++      { tradeDate: '2026-07-01', equity: '10000.000', drawdown: '0.000000' },
++      { tradeDate: '2026-07-20', equity: '10246.600', drawdown: '-0.011000' },
++    ],
++  },
++};
++
++const orders = {
++  rows: [
++    { orderId: 'ord-formal-buy-600519', instrumentId: '600519.XSHG', status: 'filled', side: 'buy', quantity: '100', fillPrice: '100.000' },
++    { orderId: 'ord-formal-sell-600519', instrumentId: '600519.XSHG', status: 'filled', side: 'sell', quantity: '100', fillPrice: '102.000' },
++  ],
++  pagination: { pageSize: 25, cursor: null, nextCursor: null, totalCount: 2 },
++};
++
++const positions = {
++  rows: [
++    { instrumentId: '600519.XSHG', quantity: '0', marketValue: '0.000', weight: '0.000000', realizedPnl: '196.600' },
++  ],
++  pagination: { pageSize: 25, cursor: null, nextCursor: null, totalCount: 1 },
++};
++
++const audit = {
++  artifact: { kind: 'audit', artifactId: 'art_audit', sha256: 'sha256:audit' },
++  payload: {
++    status: 'pass',
++    eligibleForRanking: true,
++    outcomes: [
++      { ruleId: 'lookahead_bias', status: 'pass', reason: 'available_at <= decision_time' },
++      { ruleId: 'cost_sensitivity', status: 'warn', reason: 'cost stress within threshold' },
++    ],
++  },
++};
++
++describe('QuantLabPage', () => {
++  beforeEach(() => {
++    vi.clearAllMocks();
++    createBacktestRun.mockResolvedValue(acceptedRun);
++    getBacktestRun.mockResolvedValue(succeededRun);
++    getBacktestMetrics.mockResolvedValue(metrics);
++    listBacktestOrders.mockResolvedValue(orders);
++    listBacktestPositions.mockResolvedValue(positions);
++    getBacktestAudit.mockResolvedValue(audit);
++    downloadBacktestArtifact.mockResolvedValue(metrics);
++    cancelBacktestRun.mockResolvedValue({ ...acceptedRun, taskStatus: 'cancelled', terminationReason: 'user_requested_cancel' });
++  });
++
++  it('renders Quant Lab setup, scope labels and empty result state', () => {
++    render(<QuantLabPage />);
++
++    expect(screen.getByTestId('quant-lab-page')).toBeInTheDocument();
++    expect(screen.getByRole('heading', { name: 'Quant Lab' })).toBeInTheDocument();
++    expect(screen.getByText('Preview')).toBeInTheDocument();
++    expect(screen.getByText('Formal')).toBeInTheDocument();
++    expect(screen.getByText('portfolio_backtest')).toBeInTheDocument();
++    expect(screen.getByText('No BacktestRun loaded')).toBeInTheDocument();
++    expect(screen.getByText(/\/api\/v1\/quant\/backtest-runs/)).toBeInTheDocument();
++    expect(screen.getByText(/Legacy Signal Evaluation stays separate/)).toBeInTheDocument();
++  });
++
++  it('creates a formal run and renders metrics, drawdown, orders, positions, audit and lineage', async () => {
++    render(<QuantLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run formal backtest' }));
++
++    await waitFor(() => {
++      expect(createBacktestRun).toHaveBeenCalledWith(
++        expect.objectContaining({
++          requestedMode: 'formal',
++          screenSnapshotId: 'ssn_22222222222222222222222222222222',
++          screenDefinitionVersionId: 'sdv_33333333333333333333333333333333',
++        }),
++        expect.stringMatching(/^quant-lab-/),
++      );
++    });
++    expect(getBacktestRun).toHaveBeenCalledWith('run_bt_123');
++    expect(getBacktestMetrics).toHaveBeenCalledWith('run_bt_123');
++    expect(listBacktestOrders).toHaveBeenCalledWith('run_bt_123', { pageSize: 25 });
++    expect(listBacktestPositions).toHaveBeenCalledWith('run_bt_123', { pageSize: 25 });
++    expect(getBacktestAudit).toHaveBeenCalledWith('run_bt_123');
++
++    expect(await screen.findByText('Formal valid')).toBeInTheDocument();
++    expect(screen.getByText('Ranking eligible')).toBeInTheDocument();
++    expect(screen.getByText('2.47%')).toBeInTheDocument();
++    expect(screen.getByText('-1.10%')).toBeInTheDocument();
++    expect(screen.getByText('ord-formal-buy-600519')).toBeInTheDocument();
++    expect(screen.getAllByText('600519.XSHG').length).toBeGreaterThan(0);
++    expect(screen.getByText('lookahead_bias')).toBeInTheDocument();
++    expect(screen.getAllByText(/dsv_11111111111111111111111111111111/).length).toBeGreaterThan(0);
++    expect(screen.getByText(/trace-bt-1/)).toBeInTheDocument();
++    expect(screen.getAllByText(/art_metrics/).length).toBeGreaterThan(0);
++  });
++
++  it('keeps preview and invalid states visibly separate from formal ranking results', async () => {
++    createBacktestRun.mockResolvedValueOnce({ ...acceptedRun, requestedMode: 'preview', effectiveMode: 'preview' });
++    getBacktestRun.mockResolvedValueOnce({
++      ...succeededRun,
++      effectiveMode: 'preview',
++      eligibleForRanking: false,
++      artifactBundle: { state: 'invalid', artifactId: 'bundle_invalid' },
++    });
++
++    render(<QuantLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run preview backtest' }));
++
++    expect(await screen.findByText('Preview only')).toBeInTheDocument();
++    expect(screen.getByText('Invalid artifact')).toBeInTheDocument();
++    expect(screen.getByText('Not ranking eligible')).toBeInTheDocument();
++  });
++
++  it('downloads artifacts and sends cancellation through the formal namespace', async () => {
++    render(<QuantLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run formal backtest' }));
++    await screen.findByText('Formal valid');
++
++    fireEvent.click(screen.getByRole('button', { name: 'Download metrics artifact' }));
++    await waitFor(() => expect(downloadBacktestArtifact).toHaveBeenCalledWith('run_bt_123', 'metrics'));
++
++    fireEvent.click(screen.getByRole('button', { name: 'Cancel backtest run' }));
++    await waitFor(() => expect(cancelBacktestRun).toHaveBeenCalledWith('run_bt_123', 'user_requested_cancel'));
++    expect(await screen.findByText('Cancel requested')).toBeInTheDocument();
++  });
++
++  it('renders ProblemDetails-compatible permission and generic error states', async () => {
++    createBacktestRun.mockRejectedValueOnce({ response: { status: 403, data: { title: 'permission denied' } } });
++
++    render(<QuantLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run formal backtest' }));
++
++    expect(await screen.findByText('Permission denied')).toBeInTheDocument();
++
++    createBacktestRun.mockRejectedValueOnce(new Error('network down'));
++    fireEvent.click(screen.getByRole('button', { name: 'Run formal backtest' }));
++
++    const alert = await screen.findByText('Quant Lab request failed');
++    expect(alert).toBeInTheDocument();
++    expect(within(alert.closest('[role="alert"]') ?? document.body).getByText('network down')).toBeInTheDocument();
++  });
++});
