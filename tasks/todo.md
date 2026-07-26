@@ -30,4 +30,5 @@
 - Related suite passed with `46 passed`; full suite passed with `395 passed, 3 skipped`.
 - Compileall, dependency lock guard, DSA patch check, immutable `upstream/dsa-v3.26.1` tag check and `git diff --check` passed.
 - Subagent code-review dispatch was attempted but rejected by wrapper schema validation; per lessons, review fell back to local diff inspection plus fresh verification.
+- Implementation checkpoint: `81117543 test(P4): 建立回测金标与性质测试`.
 - Result hash: `sha256:76e9c93b060bdec6cc05497a477efa2de870168f20d18f349e2a78393d4e78d1`; final cash/equity `10246.600`, costs `3.400`, realized P&L `196.600`, cumulative return `0.024660`.
