@@ -7,10 +7,10 @@
 > 当前 Gate：G4 已通过；G0、G1、G2、G3、G4 均为 `GO with accepted risks`；G5 未通过<br>
 > 任务完成度：92/129<br>
 > 当前可执行任务：`SAL-P5-005` Quant Evidence Adapter、`SAL-P5-006` Prompt 与输出 Schema Registry 均为 `READY`；不得从 Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成<br>
-> 最近可评审交付 checkpoint：本次 `SAL-P5-004` 实现提交生成后以 `git log -1 --oneline` 与最终回复为准；上一 checkpoint 为 `59196858 feat(P5): 实现 EvidenceBundle Builder`<br>
-> 最新状态同步 checkpoint：`c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`；上一状态同步 checkpoint 为 `dd4dac78 docs: 同步 SAL-P5-002 checkpoint hash`；上一 hash 记录 checkpoint 为 `13b4985e docs: 记录 SAL-P5-002 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最近可评审交付 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`；上一 checkpoint 为 `59196858 feat(P5): 实现 EvidenceBundle Builder`<br>
+> 最新状态同步 checkpoint：本次 `SAL-P5-004` 状态同步提交生成后以 `git log -1 --oneline` 与最终回复为准；上一状态同步 checkpoint 为 `c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`；上一 hash 记录 checkpoint 为 `ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
 > 最新状态同步 hash-anchor checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；上一 hash-anchor checkpoint 为 `13b4985e docs: 记录 SAL-P5-002 状态同步 hash`<br>
-> 本次阶段任务 checkpoint：本次 `SAL-P5-004` 实现提交生成后以 `git log -1 --oneline` 与最终回复为准；已完成任务范围推进至 `SAL-P5-004`<br>
+> 本次阶段任务 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`；已完成任务范围推进至 `SAL-P5-004`<br>
 > 最新最终锚点 checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；上一最终锚点 checkpoint 为 `13b4985e docs: 记录 SAL-P5-002 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -380,8 +380,8 @@
 - Gate：G4 已通过；G0、G1、G2、G3、G4 均为 GO with accepted risks；G5 未通过
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-004
 - 最近完成：SAL-P5-004 Source Trust and Unstructured Cleaning
-- 最近可评审交付 checkpoint：本次 `SAL-P5-004` 实现提交生成后以 `git log -1 --oneline` 与最终回复为准；上一 checkpoint：`59196858 feat(P5): 实现 EvidenceBundle Builder`
-- 最新状态同步 checkpoint：`c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`；上一状态同步 checkpoint：`dd4dac78 docs: 同步 SAL-P5-002 checkpoint hash`；上一 hash 记录 checkpoint：`13b4985e docs: 记录 SAL-P5-002 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`
+- 最近可评审交付 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`；上一 checkpoint：`59196858 feat(P5): 实现 EvidenceBundle Builder`
+- 最新状态同步 checkpoint：本次 `SAL-P5-004` 状态同步提交生成后以 `git log -1 --oneline` 与最终回复为准；上一状态同步 checkpoint：`c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`；上一 hash 记录 checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`
 - 最新状态同步 hash-anchor checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；上一 hash-anchor checkpoint：`13b4985e docs: 记录 SAL-P5-002 状态同步 hash`
 - 最新最终锚点 checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；上一最终锚点 checkpoint：`13b4985e docs: 记录 SAL-P5-002 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 4/18，总计 92/129
