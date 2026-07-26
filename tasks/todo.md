@@ -1,3 +1,42 @@
+# SAL-P4-018 Backtest Resource Control Plan
+
+> Started: 2026-07-26
+> Scope: Complete `SAL-P4-018` by implementing BacktestRun resource limits, cooperative cancellation and checkpoint artifacts. Add a pure application-layer supervisor for isolated-child-process snapshots, resource policy, timeout/OOM/cancel classification and partial checkpoints. Do not start formal API routes, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls, Qlib runtime, or legacy DSA Backtest API changes.
+
+## Checklist
+
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, development plan, P4 evidence docs, current Git status and recent commits.
+- [x] Attempt read-only subagent exploration for SAL-P4-018 boundaries; host wrapper rejected first empty optional-field payload and second `message`/`items` combined payload, so fallback local senior review is active per project lessons.
+- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-backtest-resource-control.md`.
+- [x] Add Red contract tests for resource policy defaults, successful child finalization, timeout partial checkpoint, cooperative cancel, OOM classification and import boundary.
+- [x] Implement `src/serenity_alpha_lab/application/backtest_resource_control.py` with immutable DTOs, in-memory execution repository, checkpoint Artifact publication and resource supervisor.
+- [x] Export resource-control symbols from `src/serenity_alpha_lab/application/__init__.py`.
+- [x] Add `docs/backtest-resource-control.md` with scope, resource defaults, cancellation/checkpoint semantics, non-goals and verification evidence.
+- [x] Update progress checklist/status docs with `SAL-P4-018` done, P4 `18/22`, total `84/129`, decision/evidence rows and `SAL-P4-019` READY but not started.
+- [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check and `git diff --check`.
+- [ ] Review, stage only `SAL-P4-018` files and create the required Chinese checkpoint commit.
+
+## Guardrails
+
+- Resource control supervises isolated child-process snapshots; it must not implement formal API, Quant Lab, Evidence Agent, Worker loop, real Provider/LLM calls or Qlib runtime.
+- Timeout, cancel and OOM outcomes must publish explicit partial checkpoint artifacts and must never create a `BacktestRunStatus.SUCCEEDED` finalization record.
+- Successful child completion may delegate to the existing `BacktestRunOrchestrator.finalize()` without changing SAL-P4-017 semantics.
+- Legacy DSA Signal Evaluation, AlphaSift T+N evaluation, Screen result, Qlib internal evidence and Dataset conversion remain outside the formal portfolio backtest namespace.
+
+## Review: SAL-P4-018
+
+- Added `tests/application/test_backtest_resource_control.py`; initial Red failed with missing `serenity_alpha_lab.application.backtest_resource_control` (`1 error`), Green focused target is `5 passed`.
+- Added `src/serenity_alpha_lab/application/backtest_resource_control.py` and lazy exports from `application.__init__`; the module defines `BacktestRunResourcePolicy`, `BacktestRunChildProcessSnapshot`, `BacktestRunExecutionRecord`, `BacktestRunCheckpoint`, `BacktestRunResourceSupervisor` and `InMemoryBacktestRunExecutionRepository`.
+- Resource policy defaults reuse ADR-009 `QlibRuntimeIsolationPolicy`: `worker-quant`, dedicated process, 2 CPU, 4096MB memory, 3600s wall-clock timeout, 15s heartbeat and 300s checkpoint interval; the module does not import Qlib runtime.
+- Timeout, cooperative cancel, OOM and failed child-process observations publish `quant.backtest_run_checkpoint@1.0.0` partial Artifact records with process id, stage, progress, resource usage, partial output artifact ids and resume next-stage hint; none produce `BacktestRunStatus.SUCCEEDED`.
+- Successful child observations delegate to existing `BacktestRunOrchestrator.finalize()` and preserve SAL-P4-017 success finalization semantics.
+- Read-only subagent dispatch for SAL-P4-018 boundary exploration was attempted twice, but the host wrapper rejected empty optional-field payloads and then duplicate `message`/`items`; per lessons, fallback local senior review checked resource policy, child snapshot semantics, timeout/cancel/OOM non-success states, checkpoint payload and no-go scope.
+- Scope retained: no formal API, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no Qlib runtime and no legacy `/api/v1/backtest/*` drift.
+- Verification: Red target `1 error`; focused target `5 passed`; related BacktestResourceControl/BacktestRun/QlibAdapter/PersistentTaskBackend/TaskEventStream/BacktestArtifact/Architecture suite `43 passed`; full pytest `391 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Implementation checkpoint: pending this commit; status sync will record the actual hash after commit.
+
+---
+
 # SAL-P4-017 BacktestRun Orchestration Plan
 
 > Started: 2026-07-26
