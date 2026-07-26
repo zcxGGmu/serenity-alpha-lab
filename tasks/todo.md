@@ -14,7 +14,7 @@
 - [x] Add `docs/backtest-resource-control.md` with scope, resource defaults, cancellation/checkpoint semantics, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-018` done, P4 `18/22`, total `84/129`, decision/evidence rows and `SAL-P4-019` READY but not started.
 - [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check and `git diff --check`.
-- [ ] Review, stage only `SAL-P4-018` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-018` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -33,7 +33,7 @@
 - Read-only subagent dispatch for SAL-P4-018 boundary exploration was attempted twice, but the host wrapper rejected empty optional-field payloads and then duplicate `message`/`items`; per lessons, fallback local senior review checked resource policy, child snapshot semantics, timeout/cancel/OOM non-success states, checkpoint payload and no-go scope.
 - Scope retained: no formal API, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no Qlib runtime and no legacy `/api/v1/backtest/*` drift.
 - Verification: Red target `1 error`; focused target `5 passed`; related BacktestResourceControl/BacktestRun/QlibAdapter/PersistentTaskBackend/TaskEventStream/BacktestArtifact/Architecture suite `43 passed`; full pytest `391 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
-- Implementation checkpoint: pending this commit; status sync will record the actual hash after commit.
+- Implementation checkpoint: `7366eff7 feat(P4): 实现回测资源控制与 checkpoint`.
 
 ---
 
