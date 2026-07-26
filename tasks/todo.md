@@ -12,7 +12,7 @@
 - [x] Export EvidenceBundle Builder types from `src/serenity_alpha_lab/application/__init__.py`.
 - [x] Add `docs/evidence-bundle-builder.md` with bundle semantics, priority policy, token estimate policy, scope limits and non-goals.
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-003` done, P5 `3/18`, total `91/129`, `AEV-091`, `DEC-089` and next-step status.
-- [x] Update `docs/development-status.md` with latest task/checkpoint placeholders, completion range and next startup prompt for `SAL-P5-004` / `SAL-P5-005` as allowed by dependencies.
+- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-004` / `SAL-P5-005` as allowed by dependencies.
 - [x] Run focused EvidenceBundle tests, related Evidence/Store/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
 - [x] Review changes, record subagent fallback, stage only `SAL-P5-003` files and create required Chinese checkpoint commit.
 
