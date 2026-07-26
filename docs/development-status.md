@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`553771ea docs: 同步 SAL-P4-017 checkpoint hash`；上一状态同步 checkpoint 为 `0ec68022 docs: 同步 SAL-P4-016 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`6713a971 docs: 记录 SAL-P4-017 状态同步 hash`；上一 hash-anchor checkpoint 为 `740fdf38 docs: 记录 SAL-P4-016 状态同步 hash`<br>
 > 本次实现 checkpoint：`0badd06d feat(P4): 实现 BacktestRun 编排`；已完成任务范围推进至 `SAL-P4-017`<br>
-> 最新最终锚点 checkpoint：本轮 SAL-P4-017 最终锚点提交生成后以最终回复和 `git log -1 --oneline` 确认；上一最终锚点 checkpoint 为 `08f41390 docs: 固化 SAL-P4-016 hash-anchor checkpoint`；最新状态复核 checkpoint：本轮 `SAL-P4-017` 状态复核提交生成后以最终回复和 `git log -1 --oneline` 确认；上一状态复核 checkpoint 为 `7151250d docs: 复核 SAL-P4-016 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `08f41390 docs: 固化 SAL-P4-016 hash-anchor checkpoint`；最新状态复核 checkpoint：本轮 `SAL-P4-017` 状态复核提交生成后以最终回复和 `git log -1 --oneline` 确认；上一状态复核 checkpoint 为 `7151250d docs: 复核 SAL-P4-016 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -354,7 +354,7 @@
 - 最近可评审交付 checkpoint：0badd06d feat(P4): 实现 BacktestRun 编排；上一 checkpoint：96101791 feat(P4): 实现统一绩效指标
 - 最新状态同步 checkpoint：553771ea docs: 同步 SAL-P4-017 checkpoint hash；上一状态同步 checkpoint：0ec68022 docs: 同步 SAL-P4-016 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：6713a971 docs: 记录 SAL-P4-017 状态同步 hash；上一 hash-anchor checkpoint：740fdf38 docs: 记录 SAL-P4-016 状态同步 hash
-- 最新最终锚点 checkpoint：本轮 SAL-P4-017 最终锚点提交生成后以最终回复和 git log -1 --oneline 确认；上一最终锚点 checkpoint：08f41390 docs: 固化 SAL-P4-016 hash-anchor checkpoint；最新状态复核 checkpoint：本轮 `SAL-P4-017` 状态复核提交生成后以最终回复和 git log -1 --oneline 确认；上一状态复核 checkpoint：7151250d docs: 复核 SAL-P4-016 最新开发状态与恢复提示
+- 最新最终锚点 checkpoint：e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint；上一最终锚点 checkpoint：08f41390 docs: 固化 SAL-P4-016 hash-anchor checkpoint；最新状态复核 checkpoint：本轮 `SAL-P4-017` 状态复核提交生成后以最终回复和 git log -1 --oneline 确认；上一状态复核 checkpoint：7151250d docs: 复核 SAL-P4-016 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 17/22，总计 83/129
 
 下一步优先执行：

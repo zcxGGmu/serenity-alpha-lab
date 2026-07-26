@@ -36,6 +36,7 @@
 - Implementation checkpoint: `0badd06d feat(P4): 实现 BacktestRun 编排`.
 - Status-sync checkpoint: `553771ea docs: 同步 SAL-P4-017 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `6713a971 docs: 记录 SAL-P4-017 状态同步 hash`.
+- Final anchor checkpoint: `e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint`.
 
 ---
 
