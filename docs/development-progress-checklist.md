@@ -77,9 +77,9 @@
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | DONE | 17/17 | G3 PASS | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | DONE | 22/22 | G4 PASS | Qlib、Ledger、正式回测、Quant Lab |
-| P5 Agent 与报告 | 13~16 | DOING | 2/18 | G5 | Evidence、引用、预算、可信报告 |
+| P5 Agent 与报告 | 13~16 | DOING | 3/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **90/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **91/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -1240,16 +1240,19 @@ P0 基线
 
 ### SAL-P5-003 实现 EvidenceBundle Builder
 
-- [ ] [READY] 按证券、决策时间、角色和预算构建最小上下文
-- 元数据：优先级 P0 | 负责人 AI | 估算 3d | 实际 - | 依赖 SAL-P5-002
+- [x] [DONE] 按证券、决策时间、角色和预算构建最小上下文
+- 元数据：优先级 P0 | 负责人 AI | 估算 3d | 实际 0.5d | 依赖 SAL-P5-002 | 开始 2026-07-26 | 完成 2026-07-26
 - 交付物：Builder、优先级、去重、裁剪和 Token 估算。
 - 验收：
   - 不包含 available_at 晚于 decision_time 的证据。
   - 超限时按优先级裁剪，不破坏 Schema 指令。
+- 结果：新增 [EvidenceBundle Builder](./evidence-bundle-builder.md)、Application [evidence_bundle_builder.py](../src/serenity_alpha_lab/application/evidence_bundle_builder.py) 和 [EvidenceBundle Builder contract test](../tests/application/test_evidence_bundle_builder.py)，冻结 `research.evidence_bundle@1.0.0` 离线上下文构建口径；`EvidenceBundleBuilder` 读取 `LocalEvidenceStore` 可见 metadata，按 `decision_time`、`instrument_id`、role、trust、scope、recency、`content_hash` 去重和 deterministic token budget 构建最小 prompt payload。
+- 范围限制：本任务只构建结构化 EvidenceBundle context，不执行 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、Citation Validator、Quant Evidence Adapter、报告渲染或正式组合回测推广。
+- 验收证据：Red target 初始因缺少 `serenity_alpha_lab.application.evidence_bundle_builder` 而 `1 error`；Green focused target `3 passed`；EvidenceBundle + Evidence Store + Evidence schema + architecture related suite `27 passed`；完整验证记录见 AEV-091。
 
 ### SAL-P5-004 实现来源信任与非结构化清洗
 
-- [ ] [TODO] 对公告、新闻、搜索和社交内容分级与去噪
+- [ ] [READY] 对公告、新闻、搜索和社交内容分级与去噪
 - 元数据：优先级 P0 | 负责人 AI/SEC | 估算 2.5d | 实际 - | 依赖 SAL-P5-002
 - 交付物：TrustPolicy、URL/正文哈希、时间冲突、恶意标记。
 - 验收：
@@ -1258,7 +1261,7 @@ P0 基线
 
 ### SAL-P5-005 实现 Quant Evidence Adapter
 
-- [ ] [TODO] 把 Screen/Factor/Backtest/Risk 转成结构化证据
+- [ ] [READY] 把 Screen/Factor/Backtest/Risk 转成结构化证据
 - 元数据：优先级 P0 | 负责人 QE/AI | 估算 2d | 实际 - | 依赖 SAL-P4-022,SAL-P5-001
 - 交付物：Evidence producer、数值/单位/口径映射、测试。
 - 验收：
@@ -1267,7 +1270,7 @@ P0 基线
 
 ### SAL-P5-006 建立 Prompt 与输出 Schema Registry
 
-- [ ] [TODO] 版本化角色 Prompt、工具、模型能力和输出契约
+- [ ] [READY] 版本化角色 Prompt、工具、模型能力和输出契约
 - 元数据：优先级 P0 | 负责人 AI | 估算 2d | 实际 - | 依赖 SAL-P1-009,SAL-P5-001
 - 交付物：Registry、发布状态、hash、变更对比。
 - 验收：
@@ -1753,6 +1756,7 @@ P0 基线
 | DEC-086 | 2026-07-26 | Gate G4 回测与风控评审 | `GO with accepted risks`：P4 formal backtest、RiskPolicy、BiasAudit、Metrics、BacktestRun、Resource Control、Golden fixture、Formal Backtest API 与 Quant Lab 证据链批准作为 P5 Evidence/Claim/Report Schema 输入；Gate 明确 Signal Evaluation、Factor Evaluation 与 Portfolio Backtest 语义分离，legacy `/api/v1/backtest/*` 仍只表示 DSA Signal Evaluation。Gate G4 不批准直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广 | [gate-g4-backtest-risk-review.md](./gate-g4-backtest-risk-review.md); [test_gate_g4_backtest_risk_review.py](../tests/gates/test_gate_g4_backtest_risk_review.py); [quant-lab.md](./quant-lab.md) | SAL-P4-022,SAL-P5-001,SAL-P6-011 | G5 |
 | DEC-087 | 2026-07-26 | Evidence/Claim/Report Schema 口径 | 采用 `serenity_alpha_lab.evidence.schema` 冻结 `research.evidence@1.0.0`、`research.claim@1.0.0`、`research.report@1.0.0` 和 `research.report_citation@1.0.0`；Evidence 必须携带 source、available_at、content_hash、trust 和 concrete `dsv_*` Dataset Version，Claim 必须携带 citation_ids 与 verification_status，numeric_metric Claim 必须携带 unit、formula_version 且 `computation_policy=deterministic_evidence`。P3 Screen/Factor 与 P4 formal backtest 来源通过 `quant_evidence_source_matrix()` 显式分名，Screen result、Factor Evaluation、legacy Signal Evaluation、Qlib internal evidence、Dataset conversion artifacts 和 AlphaSift T+N evaluation 不得命名为 formal portfolio backtest output | [evidence-claim-report-schema.md](./evidence-claim-report-schema.md); [schema.py](../src/serenity_alpha_lab/evidence/schema.py); [test_evidence_schema_contract.py](../tests/evidence/test_evidence_schema_contract.py); [2026-07-26-evidence-claim-report-schema.md](./superpowers/plans/2026-07-26-evidence-claim-report-schema.md) | SAL-P5-001,SAL-P5-002,SAL-P5-005,SAL-P5-013,SAL-P5-015 | G5 |
 | DEC-088 | 2026-07-26 | Evidence Store 持久化口径 | 采用 `repositories.evidence_store.LocalEvidenceStore` 作为首个 Evidence Store 实现；正文在进入 `ArtifactStore` 前进行脱敏和 canonical JSON 序列化，`research.evidence_body@1.0.0` body artifact hash 写回 `EvidenceRecord.content_hash` / `artifact_hash`，metadata 以 tenant/evidence_id 本地 JSON 持久化；Evidence 不可原地修改，修正必须创建 replacement evidence 并追加 `EvidenceRevisionRecord`；`private` / `team` / `public` 查询按 tenant/team/user scope 隔离。本任务不实现 EvidenceBundle、Quant Evidence Adapter、Citation Validator、Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或报告渲染 | [evidence-store.md](./evidence-store.md); [evidence_store.py](../src/serenity_alpha_lab/repositories/evidence_store.py); [test_evidence_store.py](../tests/repositories/test_evidence_store.py); [2026-07-26-evidence-store.md](./superpowers/plans/2026-07-26-evidence-store.md) | SAL-P5-002,SAL-P5-003,SAL-P5-004,SAL-P5-005,SAL-P5-013 | G5 |
+| DEC-089 | 2026-07-26 | EvidenceBundle Builder 口径 | 采用 `application.evidence_bundle_builder.EvidenceBundleBuilder` 冻结 `research.evidence_bundle@1.0.0` 离线上下文构建边界；Builder 只读取 `LocalEvidenceStore.find_evidence()` 返回的可见 `EvidenceRecord` metadata，按 tenant/team/user、`instrument_id`、timezone-aware `decision_time`、role 和 token budget 过滤/排序。`available_at > decision_time`、异证券 evidence、kind/scope filter 外 evidence、重复 `content_hash` 和超预算 records 必须进入 excluded evidence；固定 schema instructions 必须完整保留，预算无法容纳时 fail-fast。本任务不执行 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、Quant Evidence Adapter、Citation Validator、报告渲染或正式组合回测推广 | [evidence-bundle-builder.md](./evidence-bundle-builder.md); [evidence_bundle_builder.py](../src/serenity_alpha_lab/application/evidence_bundle_builder.py); [test_evidence_bundle_builder.py](../tests/application/test_evidence_bundle_builder.py); [2026-07-26-evidence-bundle-builder.md](./superpowers/plans/2026-07-26-evidence-bundle-builder.md) | SAL-P5-003,SAL-P5-004,SAL-P5-005,SAL-P5-006,SAL-P5-008,SAL-P5-009,SAL-P5-010 | G5 |
 
 ## 14. 验收证据登记
 
@@ -1848,6 +1852,7 @@ P0 基线
 | AEV-088 | SAL-P4-022 / Gate G4 | Gate G4 回测与风控评审、P4 formal backtest 全链路复核和 P5 入口约束验证记录 | [gate-g4-backtest-risk-review.md](./gate-g4-backtest-risk-review.md); [test_gate_g4_backtest_risk_review.py](../tests/gates/test_gate_g4_backtest_risk_review.py); [2026-07-26-gate-g4-backtest-risk-review.md](./superpowers/plans/2026-07-26-gate-g4-backtest-risk-review.md) | Red target `1 failed, 1 passed` with missing `docs/gate-g4-backtest-risk-review.md`; Green focused target `2 passed`; related P4 suite PASS after fresh verification; full pytest / compileall / dependency lock / DSA patch / immutable tag / diff checks recorded in `tasks/todo.md`; contract verifies golden hash `sha256:76e9c93b060bdec6cc05497a477efa2de870168f20d18f349e2a78393d4e78d1`, stage chain `spec -> engine -> ledger -> risk -> audit -> metrics -> artifacts -> summary`, Risk/Audit pass, ranking eligibility, formal `/api/v1/quant/backtest-runs` route metadata, no `latest` in spec, no `legacy_signal_evaluation` in formal run record, and no Evidence Agent、Worker loop、real Provider/LLM、Qlib runtime 或 production promotion | TL/QE/RE/SEC | 2026-07-26 |
 | AEV-089 | SAL-P5-001 | Evidence/Claim/Report Schema、P3/P4 quant evidence source mapping、Claim verification guard 和报告引用图验证记录 | [evidence-claim-report-schema.md](./evidence-claim-report-schema.md); [schema.py](../src/serenity_alpha_lab/evidence/schema.py); [test_evidence_schema_contract.py](../tests/evidence/test_evidence_schema_contract.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py); [2026-07-26-evidence-claim-report-schema.md](./superpowers/plans/2026-07-26-evidence-claim-report-schema.md) | Red target failed with missing `serenity_alpha_lab.evidence.schema` (`1 error`); Green focused target `5 passed`; related Evidence/Architecture suite `20 passed`; full pytest `410 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS; contract covers Evidence source/available_at/content_hash/trust/dataset_versions, concrete `dsv_*` guard, Screen/Factor vs formal portfolio backtest scope separation, numeric Claim citation/unit/formula/deterministic policy guard, ResearchReport citation graph and decision_time validation, JSON Schema export and no FastAPI/Qlib/LiteLLM/Provider/DSA runtime import boundary; no Evidence Store、EvidenceBundle Builder、Quant Evidence Adapter、Citation Validator、Agent、real Provider/LLM、Worker loop 或 Qlib runtime | AI/BE/QE | 2026-07-26 |
 | AEV-090 | SAL-P5-002 | Evidence Store 本地持久化、正文 Artifact、去重、修订和访问隔离验证记录 | [evidence-store.md](./evidence-store.md); [evidence_store.py](../src/serenity_alpha_lab/repositories/evidence_store.py); [test_evidence_store.py](../tests/repositories/test_evidence_store.py); [test_local_artifact_store.py](../tests/repositories/test_local_artifact_store.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py); [2026-07-26-evidence-store.md](./superpowers/plans/2026-07-26-evidence-store.md) | Red target failed with missing `serenity_alpha_lab.repositories.evidence_store` (`1 error`); Green focused target `4 passed`; related EvidenceStore/EvidenceSchema/LocalArtifactStore/Architecture suite `28 passed`; full pytest `414 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS; contract covers sanitized canonical body publication via `ArtifactStore`、body hash written to `EvidenceRecord.content_hash` and `artifact_hash`、immutable metadata conflict rejection、same-scope dedupe、replacement evidence revision link、private/team/public read isolation and no FastAPI/SQLAlchemy/Qlib/LiteLLM/Provider/DSA runtime import boundary; no EvidenceBundle、Quant Evidence Adapter、Citation Validator、Agent、real Provider/LLM、Worker loop、Qlib runtime 或 report renderer | BE/AI | 2026-07-26 |
+| AEV-091 | SAL-P5-003 | EvidenceBundle Builder、decision-time guard、instrument scope、content-hash dedupe、role priority 和 token budget trimming 验证记录 | [evidence-bundle-builder.md](./evidence-bundle-builder.md); [evidence_bundle_builder.py](../src/serenity_alpha_lab/application/evidence_bundle_builder.py); [test_evidence_bundle_builder.py](../tests/application/test_evidence_bundle_builder.py); [test_evidence_store.py](../tests/repositories/test_evidence_store.py); [test_evidence_schema_contract.py](../tests/evidence/test_evidence_schema_contract.py); [test_architecture_boundaries.py](../tests/architecture/test_architecture_boundaries.py); [2026-07-26-evidence-bundle-builder.md](./superpowers/plans/2026-07-26-evidence-bundle-builder.md) | Red target failed with missing `serenity_alpha_lab.application.evidence_bundle_builder` (`1 error`); Green focused target `3 passed`; related EvidenceBundle/EvidenceStore/EvidenceSchema/Architecture suite `27 passed`; full pytest `417 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS; contract covers `available_at <= decision_time` guard、matching/global instrument context、异证券 exclusion、role-specific priority、trust/scope/recency scoring、duplicate `content_hash` exclusion、budget trimming、schema instruction preservation and no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA runtime import boundary; no Evidence Agent、Quant Evidence Adapter、Citation Validator、report renderer、production scheduler 或 formal backtest promotion | AI/BE | 2026-07-26 |
 
 允许的证据：
 
@@ -1885,4 +1890,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017`、`SAL-P4-001` 至 `SAL-P4-022`、`SAL-P5-001` 和 `SAL-P5-002`，完成度为 90/129；最近阶段性任务为 `SAL-P5-002` Evidence Store；最近可评审交付 checkpoint 为 `bb02d84e feat(P5): 实现 Evidence Store`，上一可评审交付 checkpoint 为 `25f6ed45 feat(P5): 定义 Evidence Claim Report Schema`，最近状态同步 checkpoint 为 `dd4dac78 docs: 同步 SAL-P5-002 checkpoint hash`；上一状态同步 checkpoint 为 `539b4652 docs: 同步 SAL-P5-001 checkpoint hash`，上一 Gate checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`。Gate G0、G1、G2、G3、G4 已通过（均为 `GO with accepted risks`），G5 未通过；下一步优先执行 `SAL-P5-003` 实现 EvidenceBundle Builder；后续实现必须遵守 ADR-001/002、ADR-009、DEC-087、DEC-088 与 Gate G2/G3/G4，不得从 Evidence Store 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移，且不得把 Qlib internal evidence、Dataset 转换、Screen result、AlphaSift T+N evaluation 或 legacy Signal Evaluation 命名为正式组合回测。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017`、`SAL-P4-001` 至 `SAL-P4-022`、`SAL-P5-001` 至 `SAL-P5-003`，完成度为 91/129；最近阶段性任务为 `SAL-P5-003` EvidenceBundle Builder；最近可评审交付 checkpoint 为本次 `feat(P5): 实现 EvidenceBundle Builder` 提交生成后以最终回复为准，上一可评审交付 checkpoint 为 `bb02d84e feat(P5): 实现 Evidence Store`，最近状态同步 checkpoint 将由本次状态同步提交生成，上一状态同步 checkpoint 为 `dd4dac78 docs: 同步 SAL-P5-002 checkpoint hash`，上一 hash-anchor checkpoint 为 `13b4985e docs: 记录 SAL-P5-002 状态同步 hash`，上一 Gate checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`。Gate G0、G1、G2、G3、G4 已通过（均为 `GO with accepted risks`），G5 未通过；下一步优先执行 `SAL-P5-004`、`SAL-P5-005` 或 `SAL-P5-006`，不得跳到 Agent 改造任务；后续实现必须遵守 ADR-001/002、ADR-009、DEC-087、DEC-088、DEC-089 与 Gate G2/G3/G4，不得从 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移，且不得把 Qlib internal evidence、Dataset 转换、Screen result、AlphaSift T+N evaluation 或 legacy Signal Evaluation 命名为正式组合回测。
