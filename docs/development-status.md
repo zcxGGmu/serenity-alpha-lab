@@ -8,7 +8,7 @@
 > 任务完成度：85/129<br>
 > 当前可执行任务：`SAL-P4-020` 实现真实回测 API，状态为 `READY`；不得跳过正式 API 直接启动 Quant Lab、Evidence Agent、真实 Provider/LLM 或 Worker loop<br>
 > 最近可评审交付 checkpoint：`81117543 test(P4): 建立回测金标与性质测试`；上一 checkpoint 为 `7366eff7 feat(P4): 实现回测资源控制与 checkpoint`<br>
-> 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P4-019 checkpoint hash` 提交生成后，以 `git log -1 --oneline` 和最终回复为准；上一状态同步 checkpoint 为 `8276271a docs: 同步 SAL-P4-018 checkpoint hash`<br>
+> 最新状态同步 checkpoint：`e1b80460 docs: 同步 SAL-P4-019 checkpoint hash`；上一状态同步 checkpoint 为 `8276271a docs: 同步 SAL-P4-018 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`d4f3ebd9 docs: 记录 SAL-P4-018 状态同步 hash`；上一 hash-anchor checkpoint 为 `6713a971 docs: 记录 SAL-P4-017 状态同步 hash`<br>
 > 本次实现 checkpoint：`81117543 test(P4): 建立回测金标与性质测试`；已完成任务范围推进至 `SAL-P4-019`<br>
 > 最新最终锚点 checkpoint：`2661a97d docs: 固化 SAL-P4-018 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint`；最新状态复核 checkpoint：`ddc8978e docs: 复核 SAL-P4-018 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `72df2fe2 docs: 复核 SAL-P4-017 最新开发状态与恢复提示`<br>
@@ -358,7 +358,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-019
 - 最近完成：SAL-P4-019 回测金标与性质测试
 - 最近可评审交付 checkpoint：81117543 test(P4): 建立回测金标与性质测试；上一 checkpoint：7366eff7 feat(P4): 实现回测资源控制与 checkpoint
-- 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P4-019 checkpoint hash` 提交生成后，以 `git log -1 --oneline` 和最终回复为准；上一状态同步 checkpoint：8276271a docs: 同步 SAL-P4-018 checkpoint hash
+- 最新状态同步 checkpoint：e1b80460 docs: 同步 SAL-P4-019 checkpoint hash；上一状态同步 checkpoint：8276271a docs: 同步 SAL-P4-018 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：d4f3ebd9 docs: 记录 SAL-P4-018 状态同步 hash；上一 hash-anchor checkpoint：6713a971 docs: 记录 SAL-P4-017 状态同步 hash
 - 最新最终锚点 checkpoint：2661a97d docs: 固化 SAL-P4-018 hash-anchor checkpoint；上一最终锚点 checkpoint：e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint；最新状态复核 checkpoint：ddc8978e docs: 复核 SAL-P4-018 最新开发状态与恢复提示；上一状态复核 checkpoint：72df2fe2 docs: 复核 SAL-P4-017 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 19/22，总计 85/129
