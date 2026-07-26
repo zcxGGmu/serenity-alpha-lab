@@ -14,7 +14,7 @@
 - [x] Add `docs/backtest-run-orchestration.md` with scope, stage semantics, idempotency/reuse, dirty-code policy, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-017` done, P4 `17/22`, total `83/129`, decision/evidence rows and `SAL-P4-018` READY but not started.
 - [x] Run focused/related/full Python verification, compileall, dependency lock guard, DSA patch check, immutable tag check and `git diff --check`.
-- [ ] Review, stage only `SAL-P4-017` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-017` files and create the required Chinese checkpoint commit.
 
 ## Guardrails
 
@@ -33,6 +33,7 @@
 - Read-only subagent dispatch for SAL-P4-017 boundary exploration was attempted but host wrapper rejected empty optional fields and `message`/`items` payload shapes; per lessons, fallback local senior review checked run lifecycle, idempotency/reuse, cross-layer bindings, dirty-code policy, no-go scope and import boundary.
 - Scope retained: no resource controls/cancel/checkpoint, no formal API, no Quant Lab, no Evidence Agent, no Worker loop, no real Provider/LLM call, no Qlib runtime import and no legacy `/api/v1/backtest/*` drift.
 - Verification: Red target `1 error`; focused target `4 passed`; related BacktestRun/QlibAdapter/Artifact/Metrics/Audit/Risk/Ledger/Spec/Architecture suite `41 passed`; full pytest `386 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Implementation checkpoint: `0badd06d feat(P4): 实现 BacktestRun 编排`.
 
 ---
 
