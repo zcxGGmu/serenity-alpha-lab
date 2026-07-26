@@ -5,8 +5,9 @@ BacktestArtifact output contract and SAL-P4-009 adds the pure Portfolio Ledger
 accounting contract. SAL-P4-010 adds pure cost/slippage calculations.
 SAL-P4-011 adds pure A-share execution rules, SAL-P4-013 adds rebalance
 planning, SAL-P4-014 adds deterministic RiskPolicy evaluation, and SAL-P4-015
-adds deterministic bias audit. SAL-P4-016 adds pure performance metrics. APIs
-are introduced by later P4 tasks.
+adds deterministic bias audit. SAL-P4-016 adds pure performance metrics.
+SAL-P4-019 adds fixed-data golden/property validation. APIs are introduced by
+later P4 tasks.
 """
 
 from serenity_alpha_lab.quant.backtest.audit import (
@@ -58,6 +59,20 @@ from serenity_alpha_lab.quant.backtest.execution import (
     AShareExecutionStatus,
     AShareMarketSnapshot,
     ASharePositionAvailability,
+)
+from serenity_alpha_lab.quant.backtest.golden import (
+    BACKTEST_GOLDEN_FIXTURE_CONTRACT_VERSION,
+    BACKTEST_GOLDEN_FIXTURE_SCHEMA_NAME,
+    BACKTEST_GOLDEN_FIXTURE_SCHEMA_VERSION,
+    BACKTEST_GOLDEN_RUNNER_VERSION,
+    BACKTEST_GOLDEN_SCOPE,
+    BacktestGoldenBar,
+    BacktestGoldenFixture,
+    BacktestGoldenFixtureError,
+    BacktestGoldenOrderRole,
+    BacktestGoldenResult,
+    BacktestGoldenRunner,
+    default_backtest_golden_fixture,
 )
 from serenity_alpha_lab.quant.backtest.artifacts import (
     BACKTEST_ARTIFACT_BUNDLE_CONTENT_TYPE,
@@ -177,6 +192,11 @@ __all__ = [
     "BACKTEST_COST_MODEL_SCHEMA_NAME",
     "BACKTEST_COST_MODEL_SCHEMA_VERSION",
     "BACKTEST_COST_MODEL_VERSION",
+    "BACKTEST_GOLDEN_FIXTURE_CONTRACT_VERSION",
+    "BACKTEST_GOLDEN_FIXTURE_SCHEMA_NAME",
+    "BACKTEST_GOLDEN_FIXTURE_SCHEMA_VERSION",
+    "BACKTEST_GOLDEN_RUNNER_VERSION",
+    "BACKTEST_GOLDEN_SCOPE",
     "BACKTEST_PERFORMANCE_METRIC_CONTRACT_VERSION",
     "BACKTEST_PERFORMANCE_METRIC_ENGINE_VERSION",
     "BACKTEST_PERFORMANCE_METRIC_SCHEMA_NAME",
@@ -224,6 +244,12 @@ __all__ = [
     "BacktestDatasetSpec",
     "BacktestEquityPoint",
     "BacktestExecutionSpec",
+    "BacktestGoldenBar",
+    "BacktestGoldenFixture",
+    "BacktestGoldenFixtureError",
+    "BacktestGoldenOrderRole",
+    "BacktestGoldenResult",
+    "BacktestGoldenRunner",
     "BacktestIndustryExposurePoint",
     "BacktestMetricDefinition",
     "BacktestMetricFrequency",
@@ -292,5 +318,6 @@ __all__ = [
     "TimeInForce",
     "WeightingPolicy",
     "corporate_action_id",
+    "default_backtest_golden_fixture",
     "publish_backtest_artifact_bundle",
 ]
