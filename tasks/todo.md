@@ -30,3 +30,4 @@
 - Compileall, dependency lock guard, DSA patch check, immutable `upstream/dsa-v3.26.1` tag check and `git diff --check` passed.
 - Subagent exploration dispatch was attempted but rejected twice by wrapper schema validation; per lessons, review fell back to local diff inspection plus fresh verification.
 - Implementation checkpoint: `c1bb1dcc feat(P4): 实现真实回测 API`.
+- Status-sync checkpoint: `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`.
