@@ -1,38 +1,39 @@
-# SAL-P5-003 EvidenceBundle Builder Plan
+# SAL-P5-004 Source Trust and Unstructured Cleaning Plan
 
-> Scope: Implement an offline EvidenceBundle Builder that constructs minimal, role-scoped context from `SAL-P5-002` Evidence Store records by instrument, decision time and token budget. This task must not start Evidence Agent, real Provider/LLM calls, Worker loop, Qlib runtime, production scheduling, report rendering, Citation Validator, Quant Evidence Adapter or formal portfolio backtest promotion.
+> Scope: Implement an offline source trust and unstructured-content cleaning boundary for announcements, news/search snippets and social text. This task must not fetch external content, execute Evidence Agent stages, call real Providers or LLMs, start Worker loops, initialize Qlib runtime, schedule production work, render reports or promote formal portfolio backtests.
 
 ## Checklist
 
-- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/evidence-claim-report-schema.md`, `docs/evidence-store.md`, current Evidence schema/store code and current Git state.
-- [x] Attempt read-only subagent review; platform rejected payload shape after retries, so follow project lesson and use local senior review plus fresh verification fallback.
-- [x] Write implementation plan at `docs/superpowers/plans/2026-07-26-evidence-bundle-builder.md`.
-- [x] Red: add `tests/application/test_evidence_bundle_builder.py` proving decision-time filtering, instrument scoping, content-hash dedupe, role priority, budget trimming and schema-instruction budget guard fail before implementation.
-- [x] Green: add `src/serenity_alpha_lab/application/evidence_bundle_builder.py` with request/budget/item/bundle DTOs and an offline builder over `LocalEvidenceStore`.
-- [x] Export EvidenceBundle Builder types from `src/serenity_alpha_lab/application/__init__.py`.
-- [x] Add `docs/evidence-bundle-builder.md` with bundle semantics, priority policy, token estimate policy, scope limits and non-goals.
-- [x] Update `docs/development-progress-checklist.md` with `SAL-P5-003` done, P5 `3/18`, total `91/129`, `AEV-091`, `DEC-089` and next-step status.
-- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-004` / `SAL-P5-005` as allowed by dependencies.
-- [x] Run focused EvidenceBundle tests, related Evidence/Store/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [x] Review changes, record subagent fallback, stage only `SAL-P5-003` files and create required Chinese checkpoint commit.
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, `docs/evidence-claim-report-schema.md`, `docs/evidence-store.md`, `docs/evidence-bundle-builder.md`, current Evidence schema/store/bundle code and current Git state.
+- [x] Attempt read-only subagent review; platform wrapper repeated the known empty optional-field rejection, so follow project lesson and use local senior review plus fresh verification fallback.
+- [x] Red: add `tests/evidence/test_source_trust_cleaning.py` proving source classification, URL/body canonical hashes, low-trust strong-claim guard, external-instruction cleaning and time-conflict flags fail before implementation.
+- [x] Green: add `src/serenity_alpha_lab/evidence/source_trust.py` with pure offline TrustPolicy, source descriptors, cleaned body output and deterministic hashes.
+- [x] Export source trust types from `src/serenity_alpha_lab/evidence/__init__.py`.
+- [x] Add architecture guard covering the new evidence module remains free of Provider/LLM/Agent/Worker/Qlib/runtime imports.
+- [x] Add `docs/source-trust-unstructured-cleaning.md` with policy semantics, cleaning rules, scope limits and non-goals.
+- [x] Update `docs/development-progress-checklist.md` with `SAL-P5-004` done, P5 `4/18`, total `92/129`, `DEC-090`, `AEV-092` and next-step status.
+- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-005` / `SAL-P5-006`.
+- [x] Run focused source trust tests, related Evidence/Store/Bundle/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
+- [x] Review changes, record subagent fallback, stage only `SAL-P5-004` files and create required Chinese checkpoint commit.
 
 ## Scope Guard
 
-- Builder may read accessible `EvidenceRecord` metadata through the local Evidence Store and assemble deterministic context payloads only.
-- Builder must exclude evidence with `available_at > decision_time`.
-- When `instrument_id` is provided, Builder may include matching instrument evidence and global evidence only; different instrument evidence must be excluded.
-- Duplicate `content_hash` records are deduped deterministically, keeping the highest-priority record.
-- Token estimates are deterministic approximations. The fixed schema instructions are never truncated; if the budget cannot fit them, the builder fails fast.
-- Over-budget evidence is trimmed by priority and recorded as excluded metadata; it must not silently disappear.
-- Builder APIs must stay offline and local; no Provider SDK, LiteLLM, Qlib, Worker, scheduler, renderer, FastAPI router, SQLAlchemy database or DSA runtime import.
+- Trust policy is deterministic and local. It consumes caller-provided source metadata and raw text only.
+- URL canonicalization and hashing must not perform DNS, HTTP, browser, search, Provider SDK or LLM calls.
+- Cleaning removes external instructions from prompt/tool surfaces while retaining redacted markers and issue metadata for audit.
+- Low/untrusted sources cannot alone support strong conclusions; output must expose a machine-readable `strong_claim_allowed=false` and corroboration requirement.
+- Published/observed/available timestamp conflicts must be explicit warnings, not silently normalized.
+- The module must live under `serenity_alpha_lab.evidence` and import only stdlib plus existing Evidence schema types.
+- This task does not add Evidence Agent stages, Quant Evidence Adapter, Prompt Registry, Citation Validator, report renderer, Worker runtime, Qlib runtime or production scheduling.
 
 ## Review Notes
 
-- Started 2026-07-26 from clean branch `codex/p0-baseline-status`, ahead of origin, with latest log starting `13b4985e`, `dd4dac78`, `bb02d84e`.
-- Subagent dispatch attempts failed due wrapper payload validation (`reasoning_effort must not be empty`; then message/items exclusivity despite empty `message`). Per project lesson, no further retry. Fallback is local senior review plus fresh verification.
-- Red target: `1 error`, missing `serenity_alpha_lab.application.evidence_bundle_builder`.
-- Focused target: `3 passed`.
-- Related EvidenceBundle / Evidence Store / Evidence Schema / Architecture suite: `27 passed`.
-- Full pytest: `417 passed, 3 skipped`.
+- Started 2026-07-26 from clean branch `codex/p0-baseline-status`, ahead of origin, with latest log starting `9bd5584e`, `ae703bba`, `c1b34935`, `59196858`.
+- Subagent dispatch failed with `reasoning_effort must not be empty` because the wrapper populated empty optional fields; per `tasks/lessons.md`, no further retry. Fallback is local senior review plus fresh verification.
+- Red target: `1 error`, missing `serenity_alpha_lab.evidence.source_trust`.
+- Focused target: `5 passed`.
+- Related SourceTrust / Architecture suite: `21 passed`.
+- Related SourceTrust / Evidence Store / EvidenceBundle / Evidence Schema / Architecture suite: `33 passed`.
+- Full pytest: `423 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
-- Local senior review confirmed `application.evidence_bundle_builder` depends only on stdlib + P5 schema + P5 Evidence Store, preserves schema instructions before evidence trimming, excludes future and different-instrument evidence, dedupes by `content_hash`, records budget exclusions, and does not import or start Evidence Agent, Provider/LLM, Worker, Qlib, FastAPI, SQLAlchemy or DSA runtime.
+- Local senior review confirmed `evidence.source_trust` depends only on stdlib + P5 evidence schema, performs no network/fetch/Agent/Provider/LLM/Worker/Qlib work, emits prompt-safe records without raw body, and keeps low-trust/time-conflict/malicious-instruction guards explicit for later P5 stages.

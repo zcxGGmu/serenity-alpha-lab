@@ -26,6 +26,21 @@ from serenity_alpha_lab.evidence.schema import (
     evidence_json_schemas,
     quant_evidence_source_matrix,
 )
+from serenity_alpha_lab.evidence.source_trust import (
+    SOURCE_TRUST_CONTRACT_VERSION,
+    SOURCE_TRUST_SCHEMA_NAME,
+    SOURCE_TRUST_SCHEMA_VERSION,
+    SourceTrustError,
+    SourceTrustIssue,
+    SourceTrustIssueSeverity,
+    SourceTrustPolicy,
+    SourceTrustVerdict,
+    UnstructuredSourceInput,
+    UnstructuredSourceType,
+    canonicalize_url,
+    clean_unstructured_body,
+    normalize_body_text,
+)
 
 __all__ = [
     "EVIDENCE_CONTRACT_VERSION",
@@ -37,6 +52,9 @@ __all__ = [
     "RESEARCH_REPORT_CONTRACT_VERSION",
     "RESEARCH_REPORT_SCHEMA_NAME",
     "RESEARCH_REPORT_SCHEMA_VERSION",
+    "SOURCE_TRUST_CONTRACT_VERSION",
+    "SOURCE_TRUST_SCHEMA_NAME",
+    "SOURCE_TRUST_SCHEMA_VERSION",
     "ClaimComputationPolicy",
     "ClaimKind",
     "ClaimVerificationStatus",
@@ -50,6 +68,16 @@ __all__ = [
     "ResearchClaim",
     "ResearchReport",
     "ResearchReportLevel",
+    "SourceTrustError",
+    "SourceTrustIssue",
+    "SourceTrustIssueSeverity",
+    "SourceTrustPolicy",
+    "SourceTrustVerdict",
+    "UnstructuredSourceInput",
+    "UnstructuredSourceType",
+    "canonicalize_url",
+    "clean_unstructured_body",
     "evidence_json_schemas",
+    "normalize_body_text",
     "quant_evidence_source_matrix",
 ]

@@ -194,6 +194,29 @@ def test_evidence_schema_stays_free_of_runtime_integrations() -> None:
     )
 
 
+def test_source_trust_policy_stays_offline_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "evidence" / "source_trust.py"
+    allowed_modules = {
+        "__future__",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "hashlib",
+        "re",
+        "serenity_alpha_lab.evidence.schema",
+        "urllib.parse",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_integrations_do_not_reach_into_repositories() -> None:
     assert_no_forbidden_imports(
         "integrations",
