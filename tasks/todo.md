@@ -12,7 +12,7 @@
 - [x] Add `docs/backtest-api.md` with route contract, response semantics, artifact pagination/authorization, legacy separation, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-020` done, P4 `20/22`, total `86/129`, decision/evidence rows and `SAL-P4-021` READY but not started.
 - [x] Run focused, related and full verification plus compile/lock/patch/tag/diff checks.
-- [ ] Review, stage only `SAL-P4-020` files and create the required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-020` files and create the required Chinese checkpoint commit.
 
 ## Scope Guard
 
@@ -29,4 +29,4 @@
 - Related suite passed with `37 passed`; full suite passed with `402 passed, 3 skipped`.
 - Compileall, dependency lock guard, DSA patch check, immutable `upstream/dsa-v3.26.1` tag check and `git diff --check` passed.
 - Subagent exploration dispatch was attempted but rejected twice by wrapper schema validation; per lessons, review fell back to local diff inspection plus fresh verification.
-- Implementation checkpoint: pending commit.
+- Implementation checkpoint: `c1bb1dcc feat(P4): 实现真实回测 API`.

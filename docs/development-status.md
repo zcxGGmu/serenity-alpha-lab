@@ -7,10 +7,10 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：86/129<br>
 > 当前可执行任务：`SAL-P4-021` 实现 Quant Lab，状态为 `READY`；不得跳过 Quant Lab 直接启动 Evidence Agent、真实 Provider/LLM 或 Worker loop<br>
-> 最近可评审交付 checkpoint：本次实现 checkpoint 将由本次提交生成；上一 checkpoint 为 `81117543 test(P4): 建立回测金标与性质测试`<br>
+> 最近可评审交付 checkpoint：`c1bb1dcc feat(P4): 实现真实回测 API`；上一 checkpoint 为 `81117543 test(P4): 建立回测金标与性质测试`<br>
 > 最新状态同步 checkpoint：`e1b80460 docs: 同步 SAL-P4-019 checkpoint hash`；上一状态同步 checkpoint 为 `8276271a docs: 同步 SAL-P4-018 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`51568001 docs: 记录 SAL-P4-019 状态同步 hash`；上一 hash-anchor checkpoint 为 `d4f3ebd9 docs: 记录 SAL-P4-018 状态同步 hash`<br>
-> 本次实现 checkpoint：将由本次提交生成；已完成任务范围推进至 `SAL-P4-020`<br>
+> 本次实现 checkpoint：`c1bb1dcc feat(P4): 实现真实回测 API`；已完成任务范围推进至 `SAL-P4-020`<br>
 > 最新最终锚点 checkpoint：`2661a97d docs: 固化 SAL-P4-018 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint`；最新状态复核 checkpoint：`ddc8978e docs: 复核 SAL-P4-018 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `72df2fe2 docs: 复核 SAL-P4-017 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -360,7 +360,7 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-020
 - 最近完成：SAL-P4-020 真实回测 API
-- 最近可评审交付 checkpoint：本次实现 checkpoint 将由本次提交生成；上一 checkpoint：81117543 test(P4): 建立回测金标与性质测试
+- 最近可评审交付 checkpoint：c1bb1dcc feat(P4): 实现真实回测 API；上一 checkpoint：81117543 test(P4): 建立回测金标与性质测试
 - 最新状态同步 checkpoint：e1b80460 docs: 同步 SAL-P4-019 checkpoint hash；上一状态同步 checkpoint：8276271a docs: 同步 SAL-P4-018 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：51568001 docs: 记录 SAL-P4-019 状态同步 hash；上一 hash-anchor checkpoint：d4f3ebd9 docs: 记录 SAL-P4-018 状态同步 hash
 - 最新最终锚点 checkpoint：2661a97d docs: 固化 SAL-P4-018 hash-anchor checkpoint；上一最终锚点 checkpoint：e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint；最新状态复核 checkpoint：ddc8978e docs: 复核 SAL-P4-018 最新开发状态与恢复提示；上一状态复核 checkpoint：72df2fe2 docs: 复核 SAL-P4-017 最新开发状态与恢复提示
