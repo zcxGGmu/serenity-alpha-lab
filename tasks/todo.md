@@ -13,7 +13,7 @@
 - [x] Add architecture guard showing `evidence.quant_adapter` remains free of Provider/LLM/Agent/Worker/Qlib/SQLAlchemy/FastAPI/runtime imports.
 - [x] Add `docs/quant-evidence-adapter.md` with mapping table, numeric/unit/formula policy, non-goals and verification evidence.
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-005` done, P5 `5/18`, total `93/129`, new DEC/AEV rows and next-step status.
-- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-006`; implementation hash will be backfilled after checkpoint commit.
+- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-006`; implementation checkpoint `890ac789 feat(P5): 实现 Quant Evidence Adapter` backfilled after checkpoint commit.
 - [x] Run focused adapter tests, related Evidence/Schema/Bundle/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
 - [x] Review changes, stage only `SAL-P5-005` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit.
 
