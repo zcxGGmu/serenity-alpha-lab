@@ -35,6 +35,7 @@
 - Verification: Red target `1 error`; focused target `5 passed`; related BacktestResourceControl/BacktestRun/QlibAdapter/PersistentTaskBackend/TaskEventStream/BacktestArtifact/Architecture suite `43 passed`; full pytest `391 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Implementation checkpoint: `7366eff7 feat(P4): 实现回测资源控制与 checkpoint`.
 - Status-sync checkpoint: `8276271a docs: 同步 SAL-P4-018 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `d4f3ebd9 docs: 记录 SAL-P4-018 状态同步 hash`.
 
 ---
 
