@@ -44,6 +44,26 @@ QUANT_FORBIDDEN_INTERNAL_PREFIXES = (
     "serenity_alpha_lab.integrations.dsa.notification",
 )
 
+EVIDENCE_FORBIDDEN_IMPORT_ROOTS = {
+    "akshare",
+    "baostock",
+    "efinance",
+    "fastapi",
+    "litellm",
+    "pandas",
+    "qlib",
+    "sqlalchemy",
+    "tushare",
+    "yfinance",
+}
+
+EVIDENCE_FORBIDDEN_INTERNAL_PREFIXES = (
+    "serenity_alpha_lab.agents",
+    "serenity_alpha_lab.integrations",
+    "serenity_alpha_lab.repositories",
+    "serenity_alpha_lab.services",
+)
+
 INTEGRATION_FORBIDDEN_INTERNAL_PREFIXES = (
     "serenity_alpha_lab.repositories",
 )
@@ -163,6 +183,14 @@ def test_quant_does_not_depend_on_agent_or_notifications() -> None:
     assert_no_forbidden_imports(
         "quant",
         forbidden_prefixes=QUANT_FORBIDDEN_INTERNAL_PREFIXES,
+    )
+
+
+def test_evidence_schema_stays_free_of_runtime_integrations() -> None:
+    assert_no_forbidden_imports(
+        "evidence",
+        forbidden_roots=EVIDENCE_FORBIDDEN_IMPORT_ROOTS,
+        forbidden_prefixes=EVIDENCE_FORBIDDEN_INTERNAL_PREFIXES,
     )
 
 
