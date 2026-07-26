@@ -15,7 +15,7 @@
 - [x] Add `docs/quant-lab.md` with UI contract, API lineage, non-goals and verification evidence.
 - [x] Update progress checklist/status docs with `SAL-P4-021` done, P4 `21/22`, total `87/129`, decision/evidence rows and `SAL-P4-022` READY.
 - [x] Run focused web tests, lint/build, Python related checks, compile/lock/patch/tag/diff checks.
-- [ ] Review, stage only `SAL-P4-021` files and create required Chinese checkpoint commit.
+- [x] Review, stage only `SAL-P4-021` files and create required Chinese checkpoint commit.
 
 ## Scope Guard
 
@@ -33,3 +33,4 @@
 - Default live-worktree `--check-only` was not treated as the patch-chain proof after 0006 because reverse-checking `DSA-PATCH-004` against a final worktree that also contains `DSA-PATCH-006` can fail on shared App/Sidebar/i18n context; clean sequential apply is the replay proof recorded in `docs/quant-lab.md`.
 - Subagent attempt failed once due host wrapper optional-field validation (`reasoning_effort must not be empty`); per `tasks/lessons.md`, fallback was local senior review plus fresh verification.
 - No user correction occurred in this turn, so `tasks/lessons.md` was not changed.
+- Implementation checkpoint created: `643b4452 feat(P4): 实现 Quant Lab`; status sync commit will record this hash.

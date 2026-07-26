@@ -7,10 +7,10 @@
 > 当前 Gate：G4 未通过；G0、G1、G2、G3 已通过（均为 `GO with accepted risks`）<br>
 > 任务完成度：87/129<br>
 > 当前可执行任务：`SAL-P4-022` Gate G4：回测与风控评审，状态为 `READY`；不得跳过 Gate G4 直接启动 Evidence Agent、真实 Provider/LLM 或 Worker loop<br>
-> 最近可评审交付 checkpoint：本次提交生成后回填；上一 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`<br>
+> 最近可评审交付 checkpoint：`643b4452 feat(P4): 实现 Quant Lab`；上一 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`<br>
 > 最新状态同步 checkpoint：本次状态同步提交生成后回填；上一状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交生成后回填；上一 hash-anchor checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`<br>
-> 本次实现 checkpoint：本次提交生成后回填；已完成任务范围推进至 `SAL-P4-021`<br>
+> 本次实现 checkpoint：`643b4452 feat(P4): 实现 Quant Lab`；已完成任务范围推进至 `SAL-P4-021`<br>
 > 最新最终锚点 checkpoint：本次状态复核后回填；上一最终锚点 checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；最新状态复核 checkpoint：本次状态复核后回填；上一状态复核 checkpoint 为 `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -364,7 +364,7 @@
 - Gate：G4 未通过；G0、G1、G2、G3 已通过（GO with accepted risks）
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-021
 - 最近完成：SAL-P4-021 Quant Lab
-- 最近可评审交付 checkpoint：本次提交生成后回填；上一 checkpoint：c1bb1dcc feat(P4): 实现真实回测 API
+- 最近可评审交付 checkpoint：643b4452 feat(P4): 实现 Quant Lab；上一 checkpoint：c1bb1dcc feat(P4): 实现真实回测 API
 - 最新状态同步 checkpoint：本次状态同步提交生成后回填；上一状态同步 checkpoint：64346b83 docs: 同步 SAL-P4-020 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交生成后回填；上一 hash-anchor checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash
 - 最新最终锚点 checkpoint：本次状态复核后回填；上一最终锚点 checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash；最新状态复核 checkpoint：本次状态复核后回填；上一状态复核 checkpoint：d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示
