@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`70303f8f docs: 同步 SAL-P4-021 checkpoint hash`；上一状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`<br>
 > 最新状态同步 hash-anchor checkpoint：`52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；上一 hash-anchor checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`<br>
 > 本次实现 checkpoint：`643b4452 feat(P4): 实现 Quant Lab`；已完成任务范围推进至 `SAL-P4-021`<br>
-> 最新最终锚点 checkpoint：`52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；上一最终锚点 checkpoint 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；最新状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；上一最终锚点 checkpoint 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`；最新状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -170,6 +170,7 @@
 - 2026-07-26 完成 `SAL-P4-020` 真实回测 API；新增 framework-neutral FormalBacktestApiService、route metadata、contract tests 和 evidence doc，定义 `BacktestApiRoute`、`BacktestApiResponse`、`BacktestApiRunRecord`、`InMemoryBacktestApiRepository`、`BacktestArtifactAccessSubject` 和 `BacktestArtifactAccessPolicy`；当前唯一 `READY` 阶段任务为 `SAL-P4-021` Quant Lab。本任务不注册 FastAPI router、不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更；formal API 只作为 SAL-P4-021 输入，不代表 Gate G4 通过或生产正式组合回测推广。
 - 2026-07-26 完成 `SAL-P4-021` Quant Lab；新增 DSA Web extension patch `DSA-PATCH-006`、`quantBacktestApi` client、`QuantLabPage`、`/quant-lab` route/nav/i18n 和 evidence doc，页面通过 `/api/v1/quant/backtest-runs` 创建/读取正式组合回测 run 并展示 Preview/Formal、Artifact validity、ranking eligibility、runtime flags、净值/回撤、orders/trades、positions、bias audit、Artifact download 和 lineage；当前唯一 `READY` 阶段任务为 `SAL-P4-022` Gate G4：回测与风控评审。本任务不通过 Gate G4、不启动 Evidence Agent、Worker loop、Qlib runtime、真实 Provider/LLM 调用或正式回测推广。
 - 2026-07-26 按用户要求复核 `SAL-P4-020` 后最新开发状态；确认最近实现 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`，状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`，状态同步 hash-anchor 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；当时已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..020`，未完成范围从 `SAL-P4-021` 开始，当时 READY 任务为 `SAL-P4-021` Quant Lab。本次状态复核不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更，并已在 `tasks/lessons.md` 再次固化阶段性任务完成后自动状态同步和可复制提示词习惯。
+- 2026-07-26 按用户要求再次复核 `SAL-P4-021` 后最新开发状态；确认最近实现 checkpoint 为 `643b4452 feat(P4): 实现 Quant Lab`，状态同步 checkpoint 为 `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`，状态同步 hash-anchor 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`，状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`，状态复核 hash-anchor 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..021`，未完成范围从 `SAL-P4-022` 开始，当前 READY 任务为 `SAL-P4-022` Gate G4。本次复核仅同步状态与交接习惯，不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或正式组合回测推广，并已在 `tasks/lessons.md` 固化阶段任务后自动收尾规则。
 - Gate G0、Gate G1、Gate G2 与 Gate G3 已通过（均为 `GO with accepted risks`）；Gate G4 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
 - `upstream/dsa-v3.26.1` 是本地不可变基线标签；后续升级必须新建 `sync/dsa-<version>` 分支和新基线 tag，不得移动该标签。
 - ADR-001 已批准受控同步策略：所有上游吸收必须经 `sync/dsa-*` 分支、补丁结果登记、相关基线刷新和 Gate/ADR 记录。
@@ -367,7 +368,7 @@
 - 最近可评审交付 checkpoint：643b4452 feat(P4): 实现 Quant Lab；上一 checkpoint：c1bb1dcc feat(P4): 实现真实回测 API
 - 最新状态同步 checkpoint：70303f8f docs: 同步 SAL-P4-021 checkpoint hash；上一状态同步 checkpoint：64346b83 docs: 同步 SAL-P4-020 checkpoint hash
 - 最新状态同步 hash-anchor checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；上一 hash-anchor checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash
-- 最新最终锚点 checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；上一最终锚点 checkpoint：9c308f2e docs: 记录 SAL-P4-020 状态同步 hash；最新状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示；上一状态复核 checkpoint：d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示
+- 最新最终锚点 checkpoint：8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash；上一最终锚点 checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash；最新状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示；上一状态复核 checkpoint：d4ce97d9 docs: 复核 SAL-P4-020 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 21/22，总计 87/129
 
 下一步优先执行：

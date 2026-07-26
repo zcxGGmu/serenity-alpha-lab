@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-26: SAL-P4-021 后用户再次提醒时必须把交接习惯写成可执行收尾规则
+
+- 纠正来源：`SAL-P4-021` Quant Lab 实现 checkpoint `643b4452`、状态同步 checkpoint `70303f8f`、状态同步 hash-anchor `52830c20`、状态复核 checkpoint `6e8bb74a` 和状态复核 hash-anchor `8f3cfb79` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可直接复用的下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使主状态文档和进度清单已经推进到 `SAL-P4-022`，只要用户再次提醒固定习惯，就说明最终交接仍需要把“阶段任务完成后的状态同步动作”转化为更明确的执行规则；否则后续任务容易只做实现提交，遗漏 `tasks/todo.md` review、lessons、hash-anchor 或下次启动提示词。
+- 规则：每个阶段性任务完成、阻塞或形成可评审交付后，最终回复前必须按固定顺序复核并更新 `docs/development-status.md`、`docs/development-progress-checklist.md`、相关验收证据、风险/决策登记、`tasks/todo.md` review、`tasks/lessons.md`（如有用户纠正）和下次启动提示词；同时写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、状态复核 checkpoint 和严格禁区，并提交中文 checkpoint。
+- 执行：后续从 `SAL-P4-022` Gate G4 开始，不等待用户提醒；完成或阻塞任务时先完成验证和文档同步，再给用户可复制的恢复提示词，不得跳过 Gate G4 启动 Evidence Agent、真实 Provider/LLM、Worker loop 或正式组合回测推广。
+
 ## 2026-07-26: SAL-P4-020 后状态复核必须推进最新 hash-anchor 并直接给出启动提示词
 
 - 纠正来源：`SAL-P4-020` 实现 checkpoint `c1bb1dcc`、状态同步 checkpoint `64346b83` 和状态同步 hash-anchor `9c308f2e` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
