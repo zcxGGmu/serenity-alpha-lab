@@ -35,3 +35,4 @@
 - No user correction occurred in this turn, so `tasks/lessons.md` was not changed.
 - Implementation checkpoint created: `643b4452 feat(P4): 实现 Quant Lab`; status sync commit will record this hash.
 - Status sync checkpoint created: `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`; this hash-anchor update records it.
+- Hash-anchor checkpoint created: `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`; final status review commit will be reported in the handoff.
