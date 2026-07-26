@@ -37,6 +37,7 @@
 - Status-sync checkpoint: `553771ea docs: 同步 SAL-P4-017 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `6713a971 docs: 记录 SAL-P4-017 状态同步 hash`.
 - Final anchor checkpoint: `e616de21 docs: 固化 SAL-P4-017 hash-anchor checkpoint`.
+- Status review checkpoint: `72df2fe2 docs: 复核 SAL-P4-017 最新开发状态与恢复提示`.
 
 ---
 
