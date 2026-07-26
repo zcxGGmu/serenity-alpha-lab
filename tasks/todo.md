@@ -36,3 +36,4 @@
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Local senior review confirmed `repositories.evidence_store` depends only on stdlib + P1 `ArtifactStore` + P5 schema, stores sanitized canonical body bytes, rejects conflicting immutable metadata, preserves previous records on revision, enforces scope checks, and does not import or start Evidence Agent, Provider/LLM, Worker, Qlib, FastAPI, SQLAlchemy or DSA runtime.
 - Implementation checkpoint: `bb02d84e feat(P5): 实现 Evidence Store`.
+- Status-sync checkpoint: `dd4dac78 docs: 同步 SAL-P5-002 checkpoint hash`.
