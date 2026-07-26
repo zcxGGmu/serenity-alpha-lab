@@ -31,3 +31,5 @@
 - Subagent exploration dispatch was attempted but rejected twice by wrapper schema validation; per lessons, review fell back to local diff inspection plus fresh verification.
 - Implementation checkpoint: `c1bb1dcc feat(P4): 实现真实回测 API`.
 - Status-sync checkpoint: `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`.
+- Latest status review: pending this checkpoint.
