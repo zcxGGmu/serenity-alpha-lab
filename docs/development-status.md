@@ -8,10 +8,10 @@
 > 任务完成度：89/129<br>
 > 当前可执行任务：`SAL-P5-002` 实现 Evidence Store，状态为 `READY`；不得从 Schema 定义直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或生产调度<br>
 > 最近可评审交付 checkpoint：`25f6ed45 feat(P5): 定义 Evidence Claim Report Schema`；上一 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 checkpoint：本次 `SAL-P5-001` 状态同步提交将记录实现 checkpoint `25f6ed45`；上一状态同步 checkpoint 为 `f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：无独立 hash-anchor；最新状态复核 checkpoint 为 `f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`，Gate G4 checkpoint 为 `1466c11c`；上一 hash-anchor checkpoint 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`<br>
+> 最新状态同步 checkpoint：`539b4652 docs: 同步 SAL-P5-001 checkpoint hash`；已记录实现 checkpoint `25f6ed45`；上一状态同步 checkpoint 为 `f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 hash-anchor checkpoint：状态同步 checkpoint 已锚定为 `539b4652 docs: 同步 SAL-P5-001 checkpoint hash`；上一 hash-anchor checkpoint 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`25f6ed45 feat(P5): 定义 Evidence Claim Report Schema`；已完成任务范围推进至 `SAL-P5-001`<br>
-> 最新最终锚点 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一最终锚点 checkpoint 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`539b4652 docs: 同步 SAL-P5-001 checkpoint hash`；上一最终锚点 checkpoint 为 `f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -372,9 +372,9 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001
 - 最近完成：SAL-P5-001 Evidence/Claim/Report Schema
 - 最近可评审交付 checkpoint：`25f6ed45 feat(P5): 定义 Evidence Claim Report Schema`；上一 checkpoint：1466c11c docs(P4): 通过 Gate G4 回测与风控评审
-- 最新状态同步 checkpoint：本次 `SAL-P5-001` 状态同步提交将记录实现 checkpoint `25f6ed45`；上一状态同步 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`
-- 最新状态同步 hash-anchor checkpoint：无独立 hash-anchor；最新状态复核 checkpoint 为 `f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`，Gate G4 checkpoint 为 `1466c11c`；上一 hash-anchor checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash
-- 最新最终锚点 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一最终锚点 checkpoint：8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示
+- 最新状态同步 checkpoint：`539b4652 docs: 同步 SAL-P5-001 checkpoint hash`；已记录实现 checkpoint `25f6ed45`；上一状态同步 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`
+- 最新状态同步 hash-anchor checkpoint：状态同步 checkpoint 已锚定为 `539b4652 docs: 同步 SAL-P5-001 checkpoint hash`；上一 hash-anchor checkpoint：52830c20 docs: 记录 SAL-P4-021 状态同步 hash
+- 最新最终锚点 checkpoint：`539b4652 docs: 同步 SAL-P5-001 checkpoint hash`；上一最终锚点 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 1/18，总计 89/129
 
 下一步优先执行：
