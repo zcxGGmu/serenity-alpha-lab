@@ -41,11 +41,22 @@ from serenity_alpha_lab.evidence.source_trust import (
     clean_unstructured_body,
     normalize_body_text,
 )
+from serenity_alpha_lab.evidence.quant_adapter import (
+    QUANT_EVIDENCE_ADAPTER_CONTRACT_VERSION,
+    QUANT_EVIDENCE_ADAPTER_SCHEMA_NAME,
+    QUANT_EVIDENCE_ADAPTER_SCHEMA_VERSION,
+    QuantEvidenceAdapter,
+    QuantEvidenceAdapterError,
+    QuantEvidenceAdapterRecord,
+)
 
 __all__ = [
     "EVIDENCE_CONTRACT_VERSION",
     "EVIDENCE_SCHEMA_NAME",
     "EVIDENCE_SCHEMA_VERSION",
+    "QUANT_EVIDENCE_ADAPTER_CONTRACT_VERSION",
+    "QUANT_EVIDENCE_ADAPTER_SCHEMA_NAME",
+    "QUANT_EVIDENCE_ADAPTER_SCHEMA_VERSION",
     "RESEARCH_CLAIM_CONTRACT_VERSION",
     "RESEARCH_CLAIM_SCHEMA_NAME",
     "RESEARCH_CLAIM_SCHEMA_VERSION",
@@ -64,6 +75,9 @@ __all__ = [
     "EvidenceSchemaError",
     "EvidenceSource",
     "EvidenceTrustLevel",
+    "QuantEvidenceAdapter",
+    "QuantEvidenceAdapterError",
+    "QuantEvidenceAdapterRecord",
     "ReportCitation",
     "ResearchClaim",
     "ResearchReport",

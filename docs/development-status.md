@@ -1,17 +1,17 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-26<br>
-> 最近阶段性任务：`SAL-P5-004` Source Trust and Unstructured Cleaning<br>
+> 最近阶段性任务：`SAL-P5-005` Quant Evidence Adapter<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P5 证据化 Agent、报告与成本治理<br>
 > 当前 Gate：G4 已通过；G0、G1、G2、G3、G4 均为 `GO with accepted risks`；G5 未通过<br>
-> 任务完成度：92/129<br>
-> 当前可执行任务：`SAL-P5-005` Quant Evidence Adapter、`SAL-P5-006` Prompt 与输出 Schema Registry 均为 `READY`；不得从 Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成<br>
-> 最近可评审交付 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`；上一 checkpoint 为 `59196858 feat(P5): 实现 EvidenceBundle Builder`<br>
-> 最新状态同步 checkpoint：`f3777eaf docs: 同步 SAL-P5-004 checkpoint hash`；上一状态同步 checkpoint 为 `c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`；上一 hash 记录 checkpoint 为 `ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；上一 hash-anchor checkpoint 为 `ae703bba docs: 记录 SAL-P5-003 状态同步 hash`<br>
-> 本次阶段任务 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`；已完成任务范围推进至 `SAL-P5-004`<br>
-> 最新最终锚点 checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；上一最终锚点 checkpoint 为 `ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
+> 任务完成度：93/129<br>
+> 当前可执行任务：`SAL-P5-006` Prompt 与输出 Schema Registry 为 `READY`；不得从 Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成<br>
+> 最近可评审交付 checkpoint：本次 `SAL-P5-005` 实现提交生成后以 `git log -1 --oneline` 与后续状态同步为准；上一 checkpoint 为 `93365555 feat(P5): 实现来源信任与非结构化清洗`<br>
+> 最新状态同步 checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一状态同步 checkpoint 为 `f3777eaf docs: 同步 SAL-P5-004 checkpoint hash`；上一 hash-anchor checkpoint 为 `00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 hash-anchor checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一 hash-anchor checkpoint 为 `00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`<br>
+> 本次阶段任务 checkpoint：本次 `SAL-P5-005` 实现提交生成后以 `git log -1 --oneline` 与后续状态同步为准；已完成任务范围推进至 `SAL-P5-005`<br>
+> 最新最终锚点 checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一最终锚点 checkpoint 为 `00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -129,18 +129,19 @@
 - 完成 `SAL-P5-002`：新增 [Evidence Store](./evidence-store.md)、Repository [evidence_store.py](../src/serenity_alpha_lab/repositories/evidence_store.py) 和 [Evidence Store contract test](../tests/repositories/test_evidence_store.py)，冻结 `research.evidence_body@1.0.0` body artifact 口径；`LocalEvidenceStore` 通过 P1 `ArtifactStore` 发布脱敏 canonical JSON body，持久化不可变 `EvidenceRecord` metadata、tenant/team/user scope、body artifact/hash 和 append-only revision link；P5 进度 `2/18`，总进度 `90/129`。
 - 完成 `SAL-P5-003`：新增 [EvidenceBundle Builder](./evidence-bundle-builder.md)、Application [evidence_bundle_builder.py](../src/serenity_alpha_lab/application/evidence_bundle_builder.py) 和 [EvidenceBundle Builder contract test](../tests/application/test_evidence_bundle_builder.py)，冻结 `research.evidence_bundle@1.0.0` 离线上下文构建口径；Builder 读取 `LocalEvidenceStore` 可见 metadata，按证券、决策时间、角色、trust/scope/recency 和 token budget 构建最小上下文，不嵌入 Evidence body；P5 进度 `3/18`，总进度 `91/129`。
 - 完成 `SAL-P5-004`：新增 [Source Trust and Unstructured Cleaning](./source-trust-unstructured-cleaning.md)、Evidence [source_trust.py](../src/serenity_alpha_lab/evidence/source_trust.py) 和 [Source Trust contract test](../tests/evidence/test_source_trust_cleaning.py)，冻结 `research.source_trust@1.0.0` 离线来源信任与 prompt-safe 清洗口径；`SourceTrustPolicy` 对公告、监管披露、公司公告、新闻、搜索结果、社交和未知来源分配 trust，生成 canonical URL、URL/body SHA-256、time conflict issue、malicious instruction issue、corroboration guard 和 strong-claim guard；P5 进度 `4/18`，总进度 `92/129`。
+- 完成 `SAL-P5-005`：新增 [Quant Evidence Adapter](./quant-evidence-adapter.md)、Evidence [quant_adapter.py](../src/serenity_alpha_lab/evidence/quant_adapter.py) 和 [Quant Evidence Adapter contract test](../tests/evidence/test_quant_evidence_adapter.py)，冻结 `research.quant_evidence_adapter@1.0.0` 离线 DTO-to-evidence 映射口径；`QuantEvidenceAdapter` 将 ScreenSnapshot、FactorEvaluationReport、BacktestPerformanceMetricReport、RiskPolicyResult 和 BacktestBiasAuditReport 转成 `EvidenceRecord` 与 deterministic `ReportCitation`，保留 concrete Dataset Version、Artifact id/hash、source schema、run/stage/trace、unit 和 formula version；P5 进度 `5/18`，总进度 `93/129`。
 
 ## 未完成
 
 ### 当前可执行 P5 任务
 
-- `SAL-P5-005`、`SAL-P5-006` 当前均为 `READY`：分别实现 Quant Evidence Adapter、Prompt 与输出 Schema Registry；不得从 Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成。
+- `SAL-P5-006` 当前为 `READY`：实现 Prompt 与输出 Schema Registry；不得从 Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P5 至 P6 仍有 38 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder 和 Source Trust。尚未完成 Quant Evidence Adapter、Evidence Agent、完整 Worker runtime、正式回测推广或部署环境。
+- P5 至 P6 仍有 36 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder、Source Trust 和 Quant Evidence Adapter。尚未完成 Prompt/Output Schema Registry、Evidence Agent、完整 Worker runtime、正式回测推广或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -179,6 +180,7 @@
 - 2026-07-26 完成 `SAL-P5-002` Evidence Store；新增 local repository、contract tests 和 evidence doc，定义 `LocalEvidenceStore`、`PersistedEvidence`、`EvidenceRevisionRecord`、`EvidenceAccessScope` 和 `EvidenceRevisionReason`；正文通过 P1 `ArtifactStore` 内容寻址保存，metadata 保持不可变，修订追加 replacement link，并按 tenant/team/user scope 隔离查询；当前 `READY` 阶段任务为 `SAL-P5-003` EvidenceBundle Builder。本任务不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成。
 - 2026-07-26 完成 `SAL-P5-003` EvidenceBundle Builder；新增 offline application builder、contract tests 和 evidence doc，定义 `EvidenceBundleRequest`、`EvidenceBundleBudget`、`EvidenceBundleItem`、`EvidenceBundle`、`EvidenceBundleRole` 和 deterministic token estimate；Builder 从 `LocalEvidenceStore` 读取可见 metadata，过滤 future evidence 和异证券 evidence，按 role/trust/scope/instrument/recency 排序，按 `content_hash` 去重并按预算裁剪；后续 `SAL-P5-004`、`SAL-P5-005`、`SAL-P5-006` 均可消费。本任务不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成。
 - 2026-07-26 完成 `SAL-P5-004` Source Trust and Unstructured Cleaning；新增 offline Evidence source trust policy、contract tests 和 evidence doc，定义 `UnstructuredSourceInput`、`UnstructuredSourceType`、`SourceTrustIssue`、`SourceTrustVerdict` 和 `SourceTrustPolicy`；策略 canonicalize URL、移除 tracking query、计算 URL/raw/cleaned body hashes、清理外部 prompt/tool 指令、标记 time conflict、低可信 corroboration 和 strong-claim guard；当前 `READY` 阶段任务为 `SAL-P5-005` Quant Evidence Adapter 与 `SAL-P5-006` Prompt 与输出 Schema Registry。本任务不抓取外部内容、不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成。
+- 2026-07-26 完成 `SAL-P5-005` Quant Evidence Adapter；新增 offline Evidence quant adapter、contract tests 和 evidence doc，定义 `QuantEvidenceAdapter`、`QuantEvidenceAdapterRecord` 和 `QuantEvidenceAdapterError`；Adapter 验证调用方提供的 `ArtifactManifest` 与 DTO canonical body hash 一致，将 ScreenSnapshot、FactorEvaluationReport、BacktestPerformanceMetricReport、RiskPolicyResult 和 BacktestBiasAuditReport 映射为 `EvidenceRecord` 与 deterministic citation，保留 unit、formula_version、dataset_versions、artifact_hash 和 `llm_recompute_allowed=false`。当前 `READY` 阶段任务为 `SAL-P5-006` Prompt 与输出 Schema Registry。本任务不写 Evidence Store、不构建 EvidenceBundle、不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成。
 - 2026-07-26 按用户要求复核 `SAL-P4-020` 后最新开发状态；确认最近实现 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`，状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`，状态同步 hash-anchor 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；当时已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..020`，未完成范围从 `SAL-P4-021` 开始，当时 READY 任务为 `SAL-P4-021` Quant Lab。本次状态复核不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更，并已在 `tasks/lessons.md` 再次固化阶段性任务完成后自动状态同步和可复制提示词习惯。
 - 2026-07-26 按用户要求再次复核 `SAL-P4-021` 后最新开发状态；确认最近实现 checkpoint 为 `643b4452 feat(P4): 实现 Quant Lab`，状态同步 checkpoint 为 `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`，状态同步 hash-anchor 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`，状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`，状态复核 hash-anchor 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..021`，未完成范围从 `SAL-P4-022` 开始，当前 READY 任务为 `SAL-P4-022` Gate G4。本次复核仅同步状态与交接习惯，不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或正式组合回测推广，并已在 `tasks/lessons.md` 固化阶段任务后自动收尾规则。
 - Gate G0、Gate G1、Gate G2、Gate G3 与 Gate G4 已通过（均为 `GO with accepted risks`）；G5 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
@@ -232,8 +234,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P5-005` Quant Evidence Adapter 或 `SAL-P5-006` Prompt 与输出 Schema Registry；两者均为 `READY`，但不得跳到 Agent 改造任务。
-2. 不得从 Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P5-006` Prompt 与输出 Schema Registry；不得跳到 Agent 改造任务。
+2. 不得从 Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态。
 
 ## 本次状态复核
@@ -372,23 +374,24 @@
 49. docs/evidence-store.md
 50. docs/evidence-bundle-builder.md
 51. docs/source-trust-unstructured-cleaning.md
+52. docs/quant-evidence-adapter.md
 
 随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P5 证据化 Agent、报告与成本治理
 - Gate：G4 已通过；G0、G1、G2、G3、G4 均为 GO with accepted risks；G5 未通过
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-004
-- 最近完成：SAL-P5-004 Source Trust and Unstructured Cleaning
-- 最近可评审交付 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`；上一 checkpoint：`59196858 feat(P5): 实现 EvidenceBundle Builder`
-- 最新状态同步 checkpoint：`f3777eaf docs: 同步 SAL-P5-004 checkpoint hash`；上一状态同步 checkpoint：`c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`；上一 hash 记录 checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`
-- 最新状态同步 hash-anchor checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；上一 hash-anchor checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`
-- 最新最终锚点 checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；上一最终锚点 checkpoint：`ae703bba docs: 记录 SAL-P5-003 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 4/18，总计 92/129
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-005
+- 最近完成：SAL-P5-005 Quant Evidence Adapter
+- 最近可评审交付 checkpoint：本次 SAL-P5-005 实现提交生成后以 `git log -1 --oneline` 与后续状态同步为准；上一 checkpoint：`93365555 feat(P5): 实现来源信任与非结构化清洗`
+- 最新状态同步 checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一状态同步 checkpoint：`f3777eaf docs: 同步 SAL-P5-004 checkpoint hash`；上一 hash-anchor checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`
+- 最新状态同步 hash-anchor checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一 hash-anchor checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`
+- 最新最终锚点 checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；上一最终锚点 checkpoint：`00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 5/18，总计 93/129
 
 下一步优先执行：
-1. SAL-P5-005 Quant Evidence Adapter 或 SAL-P5-006 Prompt 与输出 Schema Registry；两者均为 READY，不能跳到 Agent 改造任务
-2. 不要从 Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+1. SAL-P5-006 Prompt 与输出 Schema Registry；不能跳到 Agent 改造任务
+2. 不要从 Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或报告生成；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态
 
 严格遵守 AGENTS.md：

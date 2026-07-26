@@ -217,6 +217,29 @@ def test_source_trust_policy_stays_offline_and_runtime_free() -> None:
     assert failures == []
 
 
+def test_quant_evidence_adapter_stays_offline_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "evidence" / "quant_adapter.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "hashlib",
+        "json",
+        "serenity_alpha_lab.evidence.schema",
+        "typing",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+
+    assert failures == []
+
+
 def test_integrations_do_not_reach_into_repositories() -> None:
     assert_no_forbidden_imports(
         "integrations",

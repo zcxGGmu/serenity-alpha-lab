@@ -77,9 +77,9 @@
 | P2 数据与任务 | 3~6 | DONE | 20/20 | G2 PASS | Catalog、Schema Registry、PIT Dataset、质量规则、Provider 收口、持久任务 |
 | P3 筛选与因子 | 6~9 | DONE | 17/17 | G3 PASS | AlphaSift、Factor、Screen Lab |
 | P4 回测与风控 | 9~13 | DONE | 22/22 | G4 PASS | Qlib、Ledger、正式回测、Quant Lab |
-| P5 Agent 与报告 | 13~16 | DOING | 4/18 | G5 | Evidence、引用、预算、可信报告 |
+| P5 Agent 与报告 | 13~16 | DOING | 5/18 | G5 | Evidence、引用、预算、可信报告 |
 | P6 发布加固 | 16~18 | TODO | 0/23 | G6 | RC、稳定性、安全、发布与 Runbook |
-| **合计** | **16~18 周** | **DOING** | **92/129** |  |  |
+| **合计** | **16~18 周** | **DOING** | **93/129** |  |  |
 
 容量基线：128 个有数值估算的任务共约 268.5 理想人日，另有 10 个交易日稳定观察。4 人团队按 75%~85% 有效容量约需 16~18 周；5 人团队可争取 13~15 周。任何更短承诺都必须明确减少 MVP 范围或增加人员，不能压缩数据正确性、回测真实性、安全和 Gate。
 
@@ -1264,12 +1264,15 @@ P0 基线
 
 ### SAL-P5-005 实现 Quant Evidence Adapter
 
-- [ ] [READY] 把 Screen/Factor/Backtest/Risk 转成结构化证据
-- 元数据：优先级 P0 | 负责人 QE/AI | 估算 2d | 实际 - | 依赖 SAL-P4-022,SAL-P5-001
+- [x] [DONE] 把 Screen/Factor/Backtest/Risk 转成结构化证据
+- 元数据：优先级 P0 | 负责人 QE/AI | 估算 2d | 实际 0.5d | 依赖 SAL-P4-022,SAL-P5-001 | 开始 2026-07-26 | 完成 2026-07-26
 - 交付物：Evidence producer、数值/单位/口径映射、测试。
 - 验收：
   - LLM 无需自行计算指标。
   - 数值证据可追溯到具体 Artifact 和公式版本。
+- 结果：新增 [Quant Evidence Adapter](./quant-evidence-adapter.md)、Evidence [quant_adapter.py](../src/serenity_alpha_lab/evidence/quant_adapter.py) 和 [Quant Evidence Adapter contract test](../tests/evidence/test_quant_evidence_adapter.py)，冻结 `research.quant_evidence_adapter@1.0.0` 离线 DTO-to-evidence 映射口径；`QuantEvidenceAdapter` 将 ScreenSnapshot、FactorEvaluationReport、BacktestPerformanceMetricReport、RiskPolicyResult 和 BacktestBiasAuditReport 转成 `EvidenceRecord` 与 deterministic `ReportCitation`，保留 concrete Dataset Version、Artifact id/hash、source schema、run/stage/trace、unit 和 formula version。
+- 范围限制：本任务只消费已生成 DTO 与调用方提供的 ArtifactManifest，不执行 Qlib、Factor/Backtest 计算、Evidence Store 写入、EvidenceBundle 构建、Evidence Agent、真实 Provider/LLM、Worker loop、生产调度、Citation Validator、报告渲染或正式组合回测推广。
+- 验收证据：Red target 初始因缺少 `serenity_alpha_lab.evidence.quant_adapter` 而 `1 error`，audit path 二次 Red 因缺少 `from_backtest_bias_audit_report` 而 `1 failed`；Green focused target `3 passed`；QuantEvidenceAdapter + Evidence schema/store/bundle/source trust + architecture related suite `37 passed`；完整验证记录见 AEV-093。
 
 ### SAL-P5-006 建立 Prompt 与输出 Schema Registry
 
@@ -1761,6 +1764,7 @@ P0 基线
 | DEC-088 | 2026-07-26 | Evidence Store 持久化口径 | 采用 `repositories.evidence_store.LocalEvidenceStore` 作为首个 Evidence Store 实现；正文在进入 `ArtifactStore` 前进行脱敏和 canonical JSON 序列化，`research.evidence_body@1.0.0` body artifact hash 写回 `EvidenceRecord.content_hash` / `artifact_hash`，metadata 以 tenant/evidence_id 本地 JSON 持久化；Evidence 不可原地修改，修正必须创建 replacement evidence 并追加 `EvidenceRevisionRecord`；`private` / `team` / `public` 查询按 tenant/team/user scope 隔离。本任务不实现 EvidenceBundle、Quant Evidence Adapter、Citation Validator、Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或报告渲染 | [evidence-store.md](./evidence-store.md); [evidence_store.py](../src/serenity_alpha_lab/repositories/evidence_store.py); [test_evidence_store.py](../tests/repositories/test_evidence_store.py); [2026-07-26-evidence-store.md](./superpowers/plans/2026-07-26-evidence-store.md) | SAL-P5-002,SAL-P5-003,SAL-P5-004,SAL-P5-005,SAL-P5-013 | G5 |
 | DEC-089 | 2026-07-26 | EvidenceBundle Builder 口径 | 采用 `application.evidence_bundle_builder.EvidenceBundleBuilder` 冻结 `research.evidence_bundle@1.0.0` 离线上下文构建边界；Builder 只读取 `LocalEvidenceStore.find_evidence()` 返回的可见 `EvidenceRecord` metadata，按 tenant/team/user、`instrument_id`、timezone-aware `decision_time`、role 和 token budget 过滤/排序。`available_at > decision_time`、异证券 evidence、kind/scope filter 外 evidence、重复 `content_hash` 和超预算 records 必须进入 excluded evidence；固定 schema instructions 必须完整保留，预算无法容纳时 fail-fast。本任务不执行 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、Quant Evidence Adapter、Citation Validator、报告渲染或正式组合回测推广 | [evidence-bundle-builder.md](./evidence-bundle-builder.md); [evidence_bundle_builder.py](../src/serenity_alpha_lab/application/evidence_bundle_builder.py); [test_evidence_bundle_builder.py](../tests/application/test_evidence_bundle_builder.py); [2026-07-26-evidence-bundle-builder.md](./superpowers/plans/2026-07-26-evidence-bundle-builder.md) | SAL-P5-003,SAL-P5-004,SAL-P5-005,SAL-P5-006,SAL-P5-008,SAL-P5-009,SAL-P5-010 | G5 |
 | DEC-090 | 2026-07-26 | 来源信任与非结构化清洗口径 | 采用 `evidence.source_trust.SourceTrustPolicy` 冻结 `research.source_trust@1.0.0` 离线 source trust boundary；策略只消费调用方提供的 `UnstructuredSourceInput`，canonicalize URL、移除 tracking query、计算 URL/raw body/cleaned body SHA-256，并按 `official_disclosure`、`regulatory_filing`、`company_announcement`、`wire_news`、`news`、`search_result`、`social_post`、`unknown` 分配 trust。低可信或时间冲突/恶意外部指令 source 必须设置 `corroboration_required=true`，其中 low/untrusted、time conflict 或 malicious instruction 均设置 `strong_claim_allowed=false`；`to_prompt_safe_record()` 不输出 raw body，外部 prompt/tool 指令替换为 `[REMOVED_EXTERNAL_INSTRUCTION]`。本任务不抓取外部内容、不写 Evidence Store、不执行 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、Citation Validator、报告渲染或正式组合回测推广 | [source-trust-unstructured-cleaning.md](./source-trust-unstructured-cleaning.md); [source_trust.py](../src/serenity_alpha_lab/evidence/source_trust.py); [test_source_trust_cleaning.py](../tests/evidence/test_source_trust_cleaning.py) | SAL-P5-004,SAL-P5-006,SAL-P5-009,SAL-P5-012,SAL-P5-013,SAL-P5-015 | G5 |
+| DEC-091 | 2026-07-26 | Quant Evidence Adapter 口径 | 采用 `evidence.quant_adapter.QuantEvidenceAdapter` 冻结 `research.quant_evidence_adapter@1.0.0` 离线 DTO-to-evidence 映射边界；Adapter 只消费已生成的 Screen、Factor、Backtest Metrics、RiskPolicy 和 BiasAudit DTO 及调用方提供的 `ArtifactManifest`，验证 canonical body hash 与 artifact sha256 一致后输出 `EvidenceRecord` 与 deterministic `ReportCitation`。Screen/Factor 保持 screening/factor scope，Backtest Metrics/Risk/BiasAudit 才进入 `formal_portfolio_backtest`；所有数值引用必须携带 body field path、unit、formula_version、dataset_versions、run/stage 和 artifact_hash，并设置 `llm_recompute_allowed=false`。本任务不写 Evidence Store、不构建 EvidenceBundle、不执行 Qlib/Factor/Backtest 计算、不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Citation Validator、报告渲染或正式组合回测推广 | [quant-evidence-adapter.md](./quant-evidence-adapter.md); [quant_adapter.py](../src/serenity_alpha_lab/evidence/quant_adapter.py); [test_quant_evidence_adapter.py](../tests/evidence/test_quant_evidence_adapter.py) | SAL-P5-005,SAL-P5-006,SAL-P5-008,SAL-P5-009,SAL-P5-010,SAL-P5-013,SAL-P5-015 | G5 |
 
 ## 14. 验收证据登记
 
@@ -1895,4 +1899,4 @@ P0 基线
 
 ## 17. 下一步
 
-当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017`、`SAL-P4-001` 至 `SAL-P4-022`、`SAL-P5-001` 至 `SAL-P5-004`，完成度为 92/129；最近阶段性任务为 `SAL-P5-004` Source Trust and Unstructured Cleaning；最近可评审交付 checkpoint 为 `93365555 feat(P5): 实现来源信任与非结构化清洗`，上一可评审交付 checkpoint 为 `59196858 feat(P5): 实现 EvidenceBundle Builder`，最近状态同步 checkpoint 为 `f3777eaf docs: 同步 SAL-P5-004 checkpoint hash`，最新 hash-anchor checkpoint 为 `00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`，上一状态同步 checkpoint 为 `c1b34935 docs: 同步 SAL-P5-003 checkpoint hash`，上一 hash-anchor checkpoint 为 `ae703bba docs: 记录 SAL-P5-003 状态同步 hash`，上一 Gate checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`。Gate G0、G1、G2、G3、G4 已通过（均为 `GO with accepted risks`），G5 未通过；下一步优先执行 `SAL-P5-005` Quant Evidence Adapter 或 `SAL-P5-006` Prompt 与输出 Schema Registry，暂不跳到 Agent 改造任务；后续实现必须遵守 ADR-001/002、ADR-009、DEC-087、DEC-088、DEC-089、DEC-090 与 Gate G2/G3/G4，不得从 source trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移，且不得把 Qlib internal evidence、Dataset 转换、Screen result、AlphaSift T+N evaluation 或 legacy Signal Evaluation 命名为正式组合回测。
+当前已完成 `SAL-P0-001` 至 `SAL-P0-013`、`SAL-P1-001` 至 `SAL-P1-016`、`SAL-P2-001` 至 `SAL-P2-020`、`SAL-P3-001` 至 `SAL-P3-017`、`SAL-P4-001` 至 `SAL-P4-022`、`SAL-P5-001` 至 `SAL-P5-005`，完成度为 93/129；最近阶段性任务为 `SAL-P5-005` Quant Evidence Adapter；最近可评审交付 checkpoint 将由本次实现提交生成，上一可评审交付 checkpoint 为 `93365555 feat(P5): 实现来源信任与非结构化清洗`，最近状态同步 checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`，上一 hash-anchor checkpoint 为 `00c81f28 docs: 记录 SAL-P5-004 状态同步 hash`，上一 Gate checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`。Gate G0、G1、G2、G3、G4 已通过（均为 `GO with accepted risks`），G5 未通过；下一步优先执行 `SAL-P5-006` Prompt 与输出 Schema Registry，暂不跳到 Agent 改造任务；后续实现必须遵守 ADR-001/002、ADR-009、DEC-087、DEC-088、DEC-089、DEC-090、DEC-091 与 Gate G2/G3/G4，不得从 Quant Evidence Adapter、source trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移，且不得把 Qlib internal evidence、Dataset 转换、Screen result、AlphaSift T+N evaluation 或 legacy Signal Evaluation 命名为正式组合回测。
