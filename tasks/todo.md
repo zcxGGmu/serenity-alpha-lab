@@ -35,6 +35,7 @@
 - Verification: Red target `1 error`; focused target `4 passed`; related BacktestRun/QlibAdapter/Artifact/Metrics/Audit/Risk/Ledger/Spec/Architecture suite `41 passed`; full pytest `386 passed, 3 skipped`; compileall PASS; dependency lock guard PASS with `Resolved 298 packages`; DSA patch check `0001..0005` already applied; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Implementation checkpoint: `0badd06d feat(P4): 实现 BacktestRun 编排`.
 - Status-sync checkpoint: `553771ea docs: 同步 SAL-P4-017 checkpoint hash`.
+- Status-sync hash-anchor checkpoint: `6713a971 docs: 记录 SAL-P4-017 状态同步 hash`.
 
 ---
 
