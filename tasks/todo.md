@@ -34,3 +34,4 @@
 - Subagent attempt failed once due host wrapper optional-field validation (`reasoning_effort must not be empty`); per `tasks/lessons.md`, fallback was local senior review plus fresh verification.
 - No user correction occurred in this turn, so `tasks/lessons.md` was not changed.
 - Implementation checkpoint created: `643b4452 feat(P4): 实现 Quant Lab`; status sync commit will record this hash.
+- Status sync checkpoint created: `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`; this hash-anchor update records it.
