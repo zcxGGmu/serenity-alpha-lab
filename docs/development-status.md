@@ -8,10 +8,10 @@
 > 任务完成度：95/129<br>
 > 当前可执行任务：`SAL-P5-008` Technical Agent 改造为 `READY`；不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
 > 最近可评审交付 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`；上一 checkpoint 为 `cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`<br>
-> 最新状态同步 checkpoint：本次状态同步提交生成后由下一次 hash-anchor 固化；上一状态同步 checkpoint 为 `49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`；上一 hash-anchor checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；上一 hash-anchor checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`<br>
+> 最新状态同步 checkpoint：`aac19354 docs: 同步 SAL-P5-007 checkpoint hash`；上一状态同步 checkpoint 为 `49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`；上一 hash-anchor checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交后回填；上一 hash-anchor checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`；已完成任务范围推进至 `SAL-P5-007`<br>
-> 最新最终锚点 checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；上一最终锚点 checkpoint 为 `a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：本次 hash-anchor 提交后回填；上一最终锚点 checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -236,8 +236,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P5-007` Agent Stage 持久化；不得跳到 role Agent 改造任务。
-2. 不得从 Prompt Registry、Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P5-008` Technical Agent 改造；不得跳到 Intel/Risk/Decision Agent、Model routing、Citation Validator 或报告渲染任务。
+2. 不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态。
 
 ## 本次状态复核
@@ -388,9 +388,9 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-007
 - 最近完成：SAL-P5-007 Agent Stage 持久化
 - 最近可评审交付 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`；上一 checkpoint：`cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`
-- 最新状态同步 checkpoint：本次状态同步提交生成后由下一次 hash-anchor 固化；上一状态同步 checkpoint：`49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`
-- 最新状态同步 hash-anchor checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；上一 hash-anchor checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`
-- 最新最终锚点 checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；上一最终锚点 checkpoint：`a724fdb8 docs: 固化 SAL-P5-004 hash-anchor checkpoint`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
+- 最新状态同步 checkpoint：`aac19354 docs: 同步 SAL-P5-007 checkpoint hash`；上一状态同步 checkpoint：`49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`
+- 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交后回填；上一 hash-anchor checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`
+- 最新最终锚点 checkpoint：本次 hash-anchor 提交后回填；上一最终锚点 checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 7/18，总计 95/129
 
 下一步优先执行：

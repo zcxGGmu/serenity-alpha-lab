@@ -43,4 +43,4 @@
 - Full pytest: `437 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; diff hygiene PASS.
 - Subagent scope review attempted but wrapper rejected empty optional fields; local senior review confirmed `agent_stage_store` imports only persistence-safe dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/DSA Agent runtime work.
-- Implementation checkpoint: `c12b81fe feat(P5): 实现 Agent Stage 持久化`; status-sync/hash-anchor checkpoints are being finalized in follow-up docs commits.
+- Implementation checkpoint: `c12b81fe feat(P5): 实现 Agent Stage 持久化`; status-sync checkpoint is `aac19354 docs: 同步 SAL-P5-007 checkpoint hash`; hash-anchor/final-anchor are being finalized in follow-up docs commits.
