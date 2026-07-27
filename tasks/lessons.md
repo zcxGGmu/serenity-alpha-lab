@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-27: SAL-P5-008 后用户再次提醒交接习惯时必须新增状态复核锚点
+
+- 纠正来源：`SAL-P5-008` Technical Agent 改造实现 checkpoint `74701974`、状态同步 checkpoint `7b0d572a`、状态同步 hash-anchor `cc1b327e`、最终 docs 固化 checkpoint `e35b0612`、状态复核 checkpoint `7d6b325f`、状态复核 hash-anchor `4f377abf` 和状态复核最终固化 checkpoint `044a487e` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使上一轮已经完成实现、状态同步、hash-anchor、最终固化和状态复核，如果用户再次提醒交接习惯，说明恢复入口仍需要把最新复核动作本身固化成项目规则和可追踪 checkpoint；否则后续可能只依赖聊天回复，而没有仓库内的最新执行记录。
+- 规则：每次阶段性任务完成后，最终交接前必须按固定顺序复核并必要时更新 `docs/development-status.md`、`docs/development-progress-checklist.md`、相关验收证据、风险/决策登记、`tasks/todo.md` review、`tasks/lessons.md`（用户提醒或纠正时必更）和下次启动提示词；同时写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、状态复核 checkpoint、严格禁区和可复制启动提示词，并提交中文 checkpoint。
+- 执行：后续从 `SAL-P5-009` Intel Agent 改造开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor，不得跳到 Risk/Decision Agent、Model routing、Citation Validator 或报告渲染任务。
+
 ## 2026-07-27: SAL-P5-007 后状态复核必须推进状态复核锚点
 
 - 纠正来源：`SAL-P5-007` Agent Stage 持久化实现 checkpoint `c12b81fe`、状态同步 checkpoint `aac19354`、状态同步 hash-anchor `8d66ecf0` 和最终 docs 固化 checkpoint `f10b48f5` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
