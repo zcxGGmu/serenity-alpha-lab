@@ -43,4 +43,5 @@
 - Full pytest: `437 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; diff hygiene PASS.
 - Subagent scope review attempted but wrapper rejected empty optional fields; local senior review confirmed `agent_stage_store` imports only persistence-safe dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/DSA Agent runtime work.
-- Implementation checkpoint: `c12b81fe feat(P5): 实现 Agent Stage 持久化`; status-sync checkpoint is `aac19354 docs: 同步 SAL-P5-007 checkpoint hash`; hash-anchor checkpoint is `8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`; final docs solidification is this commit.
+- Implementation checkpoint: `c12b81fe feat(P5): 实现 Agent Stage 持久化`; status-sync checkpoint is `aac19354 docs: 同步 SAL-P5-007 checkpoint hash`; hash-anchor checkpoint is `8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`; final docs solidification is `f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`.
+- Follow-up status review: user asked to refresh latest completed/unfinished status and reinforce the automatic handoff habit; docs now record `SAL-P5-008` as the next READY task and keep this pass strictly documentation-only.

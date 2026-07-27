@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-27: SAL-P5-007 后状态复核必须推进状态复核锚点
+
+- 纠正来源：`SAL-P5-007` Agent Stage 持久化实现 checkpoint `c12b81fe`、状态同步 checkpoint `aac19354`、状态同步 hash-anchor `8d66ecf0` 和最终 docs 固化 checkpoint `f10b48f5` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使状态同步、hash-anchor 和最终 docs 固化都已完成，如果 `docs/development-status.md` 的“最新状态复核 checkpoint”仍停在较早的 P4 复核，下次启动会误以为 SAL-P5-007 后的状态复核没有落地，或者需要人工拼接 `SAL-P5-008` 的恢复入口。
+- 规则：每个阶段性任务完成后，最终交接前必须把最新状态复核 checkpoint、最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、完成/未完成范围、当前 READY 任务、严格禁区和可复制启动提示词同时推进到当前任务；用户再次提醒该习惯时，立即追加本文件，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-008` Technical Agent 改造开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor。
+
 ## 2026-07-26: SAL-P4-022 后状态复核必须消除 checkpoint 占位并提交
 
 - 纠正来源：`SAL-P4-022` Gate G4 checkpoint `1466c11c` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
