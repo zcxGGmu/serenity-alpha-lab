@@ -44,4 +44,4 @@
 - Full pytest: `432 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Subagent scope review attempted but wrapper rejected payloads; local senior review confirmed `evidence.prompt_registry` imports only stdlib, registers metadata only, rejects `latest` and unsafe tool scopes, and performs no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA runtime work.
-- Diff hygiene PASS; implementation checkpoint is `cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`; status-sync checkpoint is `49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`; hash-anchor/final-anchor are being finalized in follow-up docs commits.
+- Diff hygiene PASS; implementation checkpoint is `cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`; status-sync checkpoint is `49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`; hash-anchor checkpoint is `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`; final docs solidification is this commit.
