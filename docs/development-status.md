@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`7b0d572a docs: 同步 SAL-P5-008 checkpoint hash`；上一状态同步 checkpoint 为 `aac19354 docs: 同步 SAL-P5-007 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
 > 最新状态同步 hash-anchor checkpoint：`cc1b327e docs: 记录 SAL-P5-008 状态同步 hash`；上一 hash-anchor checkpoint 为 `8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`74701974 feat(P5): 改造 Technical Agent`；已完成任务范围推进至 `SAL-P5-008`<br>
-> 最新最终锚点 checkpoint：`e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`；上一最终 docs 固化 checkpoint 为 `f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`；最新状态复核 checkpoint：`7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；上一状态复核 hash 为 `eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`<br>
+> 最新最终锚点 checkpoint：`e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`；上一最终 docs 固化 checkpoint 为 `f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`；最新状态复核 checkpoint：`7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`4f377abf docs: 记录 SAL-P5-008 状态复核 hash`；上一状态复核 checkpoint 为 `bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；上一状态复核 hash-anchor checkpoint 为 `eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -397,7 +397,7 @@
 - 最近可评审交付 checkpoint：`74701974 feat(P5): 改造 Technical Agent`；上一 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`
 - 最新状态同步 checkpoint：`7b0d572a docs: 同步 SAL-P5-008 checkpoint hash`；上一状态同步 checkpoint：`aac19354 docs: 同步 SAL-P5-007 checkpoint hash`
 - 最新状态同步 hash-anchor checkpoint：`cc1b327e docs: 记录 SAL-P5-008 状态同步 hash`；上一 hash-anchor checkpoint：`8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`
-- 最新最终锚点 checkpoint：`e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`；上一最终 docs 固化 checkpoint：`f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`；最新状态复核 checkpoint：`7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`；上一状态复核 checkpoint：`bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；上一状态复核 hash：`eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`
+- 最新最终锚点 checkpoint：`e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`；上一最终 docs 固化 checkpoint：`f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`；最新状态复核 checkpoint：`7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`4f377abf docs: 记录 SAL-P5-008 状态复核 hash`；上一状态复核 checkpoint：`bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；上一状态复核 hash-anchor checkpoint：`eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 8/18，总计 96/129
 
 下一步优先执行：

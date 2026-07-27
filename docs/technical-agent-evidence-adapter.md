@@ -137,6 +137,6 @@ For DSA dashboard compatibility, the adapter also returns a nested `data_perspec
 
 ## Approval Record
 
-This record approves offline Technical Agent evidence adaptation as input to `SAL-P5-009` Intel Agent rewrite and later model routing, citation validation and report rendering. Implementation checkpoint: `74701974 feat(P5): 改造 Technical Agent`; status-sync checkpoint: `7b0d572a docs: 同步 SAL-P5-008 checkpoint hash`; hash-anchor checkpoint: `cc1b327e docs: 记录 SAL-P5-008 状态同步 hash`; final docs solidification checkpoint: `e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`; status review checkpoint: `7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`.
+This record approves offline Technical Agent evidence adaptation as input to `SAL-P5-009` Intel Agent rewrite and later model routing, citation validation and report rendering. Implementation checkpoint: `74701974 feat(P5): 改造 Technical Agent`; status-sync checkpoint: `7b0d572a docs: 同步 SAL-P5-008 checkpoint hash`; hash-anchor checkpoint: `cc1b327e docs: 记录 SAL-P5-008 状态同步 hash`; final docs solidification checkpoint: `e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`; status review checkpoint: `7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`; status review hash-anchor checkpoint: `4f377abf docs: 记录 SAL-P5-008 状态复核 hash`.
 
 Later P5 tasks must still implement actual Agent execution, Intel/Risk/Decision roles, model budget/cache enforcement, Citation Validator, tool runtime security and trusted report publication before Gate G5 can pass.
