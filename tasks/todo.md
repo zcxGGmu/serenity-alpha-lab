@@ -46,4 +46,4 @@
 - Code-review subagent reported HIGH evidence allowlist and numeric citation lineage gaps plus MEDIUM DSA dashboard/documentation mismatches; fixed by enforcing kind+scope+`llm_recompute_allowed=false`, evidence/citation dataset/run/stage/artifact lineage, numeric claim value/unit/formula/dataset/run/artifact consistency and nested `data_perspective` compatibility.
 - Dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS.
 - Subagent scope review attempted twice but wrapper rejected payloads; local senior review confirmed `technical_agent` imports only offline application/evidence dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA Agent runtime work.
-- Implementation checkpoint: `74701974 feat(P5): 改造 Technical Agent`; status-sync checkpoint will be created after this hash backfill.
+- Implementation checkpoint: `74701974 feat(P5): 改造 Technical Agent`; status-sync checkpoint: `7b0d572a docs: 同步 SAL-P5-008 checkpoint hash`.
