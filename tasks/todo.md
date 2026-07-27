@@ -14,7 +14,7 @@
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-006` done, P5 `6/18`, total `94/129`, new DEC/AEV rows and next-step status.
 - [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-007`.
 - [x] Run focused registry tests, related Evidence/Bundle/Quant/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [ ] Review changes, stage only `SAL-P5-006` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit.
+- [x] Review changes, stage only `SAL-P5-006` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit.
 
 ## File Targets
 
@@ -44,4 +44,4 @@
 - Full pytest: `432 passed, 3 skipped`.
 - Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Subagent scope review attempted but wrapper rejected payloads; local senior review confirmed `evidence.prompt_registry` imports only stdlib, registers metadata only, rejects `latest` and unsafe tool scopes, and performs no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA runtime work.
-- Diff hygiene and checkpoint hashes will be recorded after final documentation sync.
+- Diff hygiene PASS; implementation checkpoint is `cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`; status-sync/hash-anchor checkpoints are being finalized in follow-up docs commits.
