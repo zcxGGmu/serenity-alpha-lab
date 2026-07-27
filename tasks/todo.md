@@ -12,9 +12,9 @@
 - [x] Add architecture guard proving Intel Agent boundary has no concrete DSA Agent, Provider/LLM, Worker, Qlib, FastAPI, SQLAlchemy, repository write or report renderer imports.
 - [x] Add `docs/intel-agent-evidence-adapter.md` with contract table, evidence/source trust rules, event time rules, conflict/staleness/malicious handling, DSA compatibility fields, non-goals and verification evidence.
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-009` done, P5 `9/18`, total `97/129`, AEV/DEC rows and next-step status.
-- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-010`; exact implementation checkpoint hash will be filled immediately after commit.
+- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-010`; implementation checkpoint hash has been recorded as `a6974362 feat(P5): 改造 Intel Agent`.
 - [x] Run focused Intel tests, architecture guard, related Intel/SourceTrust/EvidenceBundle/PromptRegistry/AgentStage/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [ ] Review changes, stage only SAL-P5-009 files, create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
+- [x] Review changes, stage only SAL-P5-009 files, create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
 
 ## File Targets
 
