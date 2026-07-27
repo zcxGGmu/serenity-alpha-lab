@@ -9,9 +9,9 @@
 > 当前可执行任务：`SAL-P5-008` Technical Agent 改造为 `READY`；不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
 > 最近可评审交付 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`；上一 checkpoint 为 `cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`<br>
 > 最新状态同步 checkpoint：`aac19354 docs: 同步 SAL-P5-007 checkpoint hash`；上一状态同步 checkpoint 为 `49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`；上一 hash-anchor checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交后回填；上一 hash-anchor checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`<br>
+> 最新状态同步 hash-anchor checkpoint：`8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`；上一 hash-anchor checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`；已完成任务范围推进至 `SAL-P5-007`<br>
-> 最新最终锚点 checkpoint：本次 hash-anchor 提交后回填；上一最终锚点 checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
+> 最新最终锚点 checkpoint：`8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`；上一最终锚点 checkpoint 为 `252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -389,8 +389,8 @@
 - 最近完成：SAL-P5-007 Agent Stage 持久化
 - 最近可评审交付 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`；上一 checkpoint：`cccc1416 feat(P5): 实现 Prompt 与输出 Schema Registry`
 - 最新状态同步 checkpoint：`aac19354 docs: 同步 SAL-P5-007 checkpoint hash`；上一状态同步 checkpoint：`49a8cd23 docs: 同步 SAL-P5-006 checkpoint hash`
-- 最新状态同步 hash-anchor checkpoint：本次 hash-anchor 提交后回填；上一 hash-anchor checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`
-- 最新最终锚点 checkpoint：本次 hash-anchor 提交后回填；上一最终锚点 checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
+- 最新状态同步 hash-anchor checkpoint：`8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`；上一 hash-anchor checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`
+- 最新最终锚点 checkpoint：`8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`；上一最终锚点 checkpoint：`252189c3 docs: 记录 SAL-P5-006 状态同步 hash`；最新状态复核 checkpoint：`f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`；上一状态复核 checkpoint：`6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 7/18，总计 95/129
 
 下一步优先执行：
