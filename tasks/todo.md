@@ -11,10 +11,10 @@
 - [x] Export public stage persistence symbols from `src/serenity_alpha_lab/repositories/__init__.py`.
 - [x] Add architecture guard proving Agent Stage persistence remains free of concrete DSA Agent, Provider/LLM, Worker, Qlib, FastAPI and report renderer imports.
 - [x] Add `docs/agent-stage-persistence.md` with contract table, checkpoint/resume rules, non-goals and verification evidence.
-- [ ] Update `docs/development-progress-checklist.md` with `SAL-P5-007` done, P5 `7/18`, total `95/129`, new DEC/AEV rows and next-step status.
-- [ ] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-008`.
-- [ ] Run focused stage-store tests, related TaskBackend/RunLifecycle/PromptRegistry/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [ ] Review changes, stage only `SAL-P5-007` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
+- [x] Update `docs/development-progress-checklist.md` with `SAL-P5-007` done, P5 `7/18`, total `95/129`, new DEC/AEV rows and next-step status.
+- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-008`.
+- [x] Run focused stage-store tests, related TaskBackend/RunLifecycle/PromptRegistry/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
+- [x] Review changes, stage only `SAL-P5-007` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
 
 ## File Targets
 
@@ -32,3 +32,15 @@
 - A completed/degraded stage checkpoint is reusable after process restart and appears as `skip_reused` in a resume plan; failed/skipped stages are not treated as successful model-call cache hits.
 - A successful model-call receipt records provider/model identifiers, binding hash, request/response hashes, token/cost/latency metadata and a caller-provided idempotency key; replaying the same receipt is idempotent, while changing immutable receipt fields raises a conflict.
 - Failure policy is explicit per stage: `degrade`, `skip` or `fail_run`. Cancel requests mark pending/running stages as cancelled without executing cleanup hooks.
+
+
+## Review Notes
+
+- Red target: `1 error`, missing `serenity_alpha_lab.repositories.agent_stage_store`.
+- Focused target: `4 passed`.
+- Agent stage architecture guard: `1 passed`.
+- Related AgentStageStore / PersistentTaskBackend / TaskEventStream / RunLifecycle / PromptRegistry / ResearchOrchestrator / Architecture suite: `54 passed`.
+- Full pytest: `437 passed, 3 skipped`.
+- Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; diff hygiene PASS.
+- Subagent scope review attempted but wrapper rejected empty optional fields; local senior review confirmed `agent_stage_store` imports only persistence-safe dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/DSA Agent runtime work.
+- Implementation checkpoint: `c12b81fe feat(P5): 实现 Agent Stage 持久化`; status-sync/hash-anchor checkpoints are being finalized in follow-up docs commits.
