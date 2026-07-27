@@ -14,7 +14,7 @@
 - [x] Update `docs/development-progress-checklist.md` with `SAL-P5-008` done, P5 `8/18`, total `96/129`, new DEC/AEV rows and next-step status.
 - [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-009`.
 - [x] Run focused Technical Agent tests, related EvidenceBundle/QuantEvidence/PromptRegistry/AgentStage/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [ ] Review changes, stage only `SAL-P5-008` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
+- [x] Review changes, stage only `SAL-P5-008` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
 
 ## File Targets
 
@@ -46,3 +46,4 @@
 - Code-review subagent reported HIGH evidence allowlist and numeric citation lineage gaps plus MEDIUM DSA dashboard/documentation mismatches; fixed by enforcing kind+scope+`llm_recompute_allowed=false`, evidence/citation dataset/run/stage/artifact lineage, numeric claim value/unit/formula/dataset/run/artifact consistency and nested `data_perspective` compatibility.
 - Dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS.
 - Subagent scope review attempted twice but wrapper rejected payloads; local senior review confirmed `technical_agent` imports only offline application/evidence dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA Agent runtime work.
+- Implementation checkpoint: `74701974 feat(P5): 改造 Technical Agent`; status-sync checkpoint will be created after this hash backfill.

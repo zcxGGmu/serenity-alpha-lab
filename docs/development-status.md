@@ -7,10 +7,10 @@
 > 当前 Gate：G4 已通过；G0、G1、G2、G3、G4 均为 `GO with accepted risks`；G5 未通过<br>
 > 任务完成度：96/129<br>
 > 当前可执行任务：`SAL-P5-009` Intel Agent 改造为 `READY`；不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
-> 最近可评审交付 checkpoint：本轮 `feat(P5): 改造 Technical Agent` 中文 checkpoint commit 生成后同步实际 hash；上一 checkpoint 为 `c12b81fe feat(P5): 实现 Agent Stage 持久化`<br>
+> 最近可评审交付 checkpoint：`74701974 feat(P5): 改造 Technical Agent`；上一 checkpoint 为 `c12b81fe feat(P5): 实现 Agent Stage 持久化`<br>
 > 最新状态同步 checkpoint：本轮 `docs: 同步 SAL-P5-008 checkpoint hash` 中文 checkpoint commit 生成后同步实际 hash；上一状态同步 checkpoint 为 `aac19354 docs: 同步 SAL-P5-007 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
 > 最新状态同步 hash-anchor checkpoint：本轮必要 hash-anchor 生成后同步实际 hash；上一 hash-anchor checkpoint 为 `8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`<br>
-> 本次阶段任务 checkpoint：本轮 `feat(P5): 改造 Technical Agent` 中文 checkpoint commit 生成后同步实际 hash；已完成任务范围推进至 `SAL-P5-008`<br>
+> 本次阶段任务 checkpoint：`74701974 feat(P5): 改造 Technical Agent`；已完成任务范围推进至 `SAL-P5-008`<br>
 > 最新最终锚点 checkpoint：`f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`；最新状态复核 checkpoint：`bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；最新状态复核 hash：`eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`；上一状态复核 checkpoint 为 `f7fc3c80 docs: 复核 SAL-P4-022 最新开发状态与恢复提示`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -393,7 +393,7 @@
 - Gate：G4 已通过；G0、G1、G2、G3、G4 均为 GO with accepted risks；G5 未通过
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-008
 - 最近完成：SAL-P5-008 Technical Agent 改造
-- 最近可评审交付 checkpoint：本轮 `feat(P5): 改造 Technical Agent` 中文 checkpoint commit 生成后同步实际 hash；上一 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`
+- 最近可评审交付 checkpoint：`74701974 feat(P5): 改造 Technical Agent`；上一 checkpoint：`c12b81fe feat(P5): 实现 Agent Stage 持久化`
 - 最新状态同步 checkpoint：本轮 `docs: 同步 SAL-P5-008 checkpoint hash` 中文 checkpoint commit 生成后同步实际 hash；上一状态同步 checkpoint：`aac19354 docs: 同步 SAL-P5-007 checkpoint hash`
 - 最新状态同步 hash-anchor checkpoint：本轮必要 hash-anchor 生成后同步实际 hash；上一 hash-anchor checkpoint：`8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`
 - 最新最终锚点 checkpoint：`f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`；最新状态复核 checkpoint：`bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；最新状态复核 hash：`eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`

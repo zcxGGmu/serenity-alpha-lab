@@ -137,4 +137,6 @@ For DSA dashboard compatibility, the adapter also returns a nested `data_perspec
 
 ## Approval Record
 
-This record approves offline Technical Agent evidence adaptation as input to `SAL-P5-009` Intel Agent rewrite and later model routing, citation validation and report rendering. Later P5 tasks must still implement actual Agent execution, Intel/Risk/Decision roles, model budget/cache enforcement, Citation Validator, tool runtime security and trusted report publication before Gate G5 can pass.
+This record approves offline Technical Agent evidence adaptation as input to `SAL-P5-009` Intel Agent rewrite and later model routing, citation validation and report rendering. Implementation checkpoint: `74701974 feat(P5): 改造 Technical Agent`.
+
+Later P5 tasks must still implement actual Agent execution, Intel/Risk/Decision roles, model budget/cache enforcement, Citation Validator, tool runtime security and trusted report publication before Gate G5 can pass.
