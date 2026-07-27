@@ -32,6 +32,7 @@ class EvidenceSchemaError(ValueError):
 
 
 class EvidenceKind(StrEnum):
+    UNSTRUCTURED_SOURCE = "unstructured_source"
     HISTORICAL_UNIVERSE = "historical_universe"
     FACTOR_CACHE_MANIFEST = "factor_cache_manifest"
     FACTOR_EVALUATION = "factor_evaluation"
@@ -48,6 +49,7 @@ class EvidenceKind(StrEnum):
 
 
 class EvidenceEvaluationScope(StrEnum):
+    MARKET_INTELLIGENCE = "market_intelligence"
     DATASET_LINEAGE = "dataset_lineage"
     SCREENING = "screening"
     FACTOR_EVALUATION = "factor_evaluation"

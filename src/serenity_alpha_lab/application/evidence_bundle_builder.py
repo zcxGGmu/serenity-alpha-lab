@@ -379,6 +379,7 @@ _ROLE_KIND_WEIGHTS: dict[EvidenceBundleRole, dict[EvidenceKind, int]] = {
         EvidenceKind.FORMAL_BACKTEST_API_RECORD: 720,
     },
     EvidenceBundleRole.INTEL: {
+        EvidenceKind.UNSTRUCTURED_SOURCE: 1_000,
         EvidenceKind.QUANT_LAB_LINEAGE: 800,
         EvidenceKind.FORMAL_BACKTEST_API_RECORD: 760,
         EvidenceKind.SCREEN_SNAPSHOT: 700,

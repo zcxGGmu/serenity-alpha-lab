@@ -78,6 +78,28 @@ def test_builder_filters_decision_time_instrument_and_dedupes_by_content_hash(tm
     assert "body" not in payload["evidence_records"][0]
 
 
+def test_builder_prioritizes_unstructured_source_evidence_for_intel_role(tmp_path: Path) -> None:
+    store = _store(tmp_path)
+    _put(store, _evidence("ev_screen", EvidenceKind.SCREEN_SNAPSHOT), {"screen": "context"})
+    _put(store, _evidence("ev_source", EvidenceKind.UNSTRUCTURED_SOURCE), {"source": "official disclosure"})
+
+    bundle = EvidenceBundleBuilder(store).build(
+        EvidenceBundleRequest(
+            tenant_id="tenant-a",
+            team_id="team-alpha",
+            owner_user_id="user-1",
+            instrument_id=INSTRUMENT,
+            decision_time=NOW,
+            role=EvidenceBundleRole.INTEL,
+            budget=EvidenceBundleBudget(max_prompt_tokens=2_000),
+        )
+    )
+
+    assert [item.evidence.evidence_id for item in bundle.items][:2] == ["ev_source", "ev_screen"]
+    assert bundle.items[0].priority_reasons[0] == "instrument_match"
+    assert f"role:intel:{EvidenceKind.UNSTRUCTURED_SOURCE.value}" in bundle.items[0].priority_reasons
+
+
 def test_builder_trims_evidence_by_priority_without_truncating_schema_instructions(tmp_path: Path) -> None:
     store = _store(tmp_path)
     _put(store, _evidence("ev_risk", EvidenceKind.RISK_POLICY_RESULT, summary="Risk policy passed."), {"risk": "pass"})
@@ -185,6 +207,10 @@ def _evidence(
 
 
 def _scope_for(kind: EvidenceKind) -> EvidenceEvaluationScope:
+    if kind is EvidenceKind.UNSTRUCTURED_SOURCE:
+        return EvidenceEvaluationScope.MARKET_INTELLIGENCE
+    if kind is EvidenceKind.SCREEN_SNAPSHOT:
+        return EvidenceEvaluationScope.SCREENING
     if kind is EvidenceKind.FACTOR_EVALUATION:
         return EvidenceEvaluationScope.FACTOR_EVALUATION
     if kind is EvidenceKind.FORMAL_BACKTEST_API_RECORD:
@@ -194,6 +220,8 @@ def _scope_for(kind: EvidenceKind) -> EvidenceEvaluationScope:
 
 def _schema_for(kind: EvidenceKind) -> str:
     return {
+        EvidenceKind.UNSTRUCTURED_SOURCE: "research.source_trust",
+        EvidenceKind.SCREEN_SNAPSHOT: "quant.screen_snapshot",
         EvidenceKind.BACKTEST_PERFORMANCE_METRICS: "quant.backtest.performance_metrics",
         EvidenceKind.RISK_POLICY_RESULT: "quant.backtest.risk_policy",
         EvidenceKind.BACKTEST_BIAS_AUDIT: "quant.backtest.bias_audit",
