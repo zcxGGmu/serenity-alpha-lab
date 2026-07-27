@@ -1,47 +1,48 @@
-# SAL-P5-007 Agent Stage Persistence Plan
+# SAL-P5-008 Technical Agent Evidence Adapter Plan
 
-> Scope: Add offline Agent Stage persistence for run/stage checkpoints, prompt binding snapshots, model-call receipts and resume/cancel/degrade/fail policy. This task must not execute Evidence Agent stages, call real Providers/LLMs, start Worker loops, initialize Qlib runtime, schedule production work, render reports or promote formal portfolio backtests.
+> Scope: Add an offline Technical Agent compatibility boundary that consumes only technical/screen/factor EvidenceBundle records, validates structured cited output, and produces DSA-compatible technical dashboard fields. This task must not call real Providers or LLMs, start Worker loops, initialize Qlib runtime, schedule production work, render reports, validate final report citations, or promote formal portfolio backtests.
 
 ## Checklist
 
-- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P5 evidence docs, Prompt Registry doc, current Git state and relevant Run/Task/ResearchOrchestrator patterns.
-- [x] Attempt read-only subagent scope review; wrapper rejected payloads with empty optional field errors, so follow project lesson and use local senior review plus fresh verification fallback.
-- [x] Red: add `tests/repositories/test_agent_stage_store.py` proving persisted stage definitions, prompt run bindings, model-call receipts, resume from last successful checkpoint, cancel propagation and degrade/fail policy.
-- [x] Green: add `src/serenity_alpha_lab/repositories/agent_stage_store.py` with SQLAlchemy-backed stage repository, deterministic `stage_id` helper, checkpoint records and idempotent model-call receipt reuse.
-- [x] Export public stage persistence symbols from `src/serenity_alpha_lab/repositories/__init__.py`.
-- [x] Add architecture guard proving Agent Stage persistence remains free of concrete DSA Agent, Provider/LLM, Worker, Qlib, FastAPI and report renderer imports.
-- [x] Add `docs/agent-stage-persistence.md` with contract table, checkpoint/resume rules, non-goals and verification evidence.
-- [x] Update `docs/development-progress-checklist.md` with `SAL-P5-007` done, P5 `7/18`, total `95/129`, new DEC/AEV rows and next-step status.
-- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-008`.
-- [x] Run focused stage-store tests, related TaskBackend/RunLifecycle/PromptRegistry/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
-- [x] Review changes, stage only `SAL-P5-007` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
+- [x] Re-read `AGENTS.md`, `tasks/lessons.md`, current status/checklist, P5 evidence docs, Prompt Registry, Agent Stage persistence, current Git state and DSA Technical Agent compatibility fields.
+- [x] Attempt read-only subagent scope review; wrapper rejected both attempts (`reasoning_effort must not be empty`, then `full-history forked agents inherit the parent agent type`), so follow project lesson and use local senior review plus fresh verification fallback.
+- [x] Red: add `tests/application/test_technical_agent_evidence_adapter.py` proving Technical Agent prompt payload uses only technical/screen/factor evidence, rejects formal backtest evidence, requires cited numeric claims, and maps to legacy DSA dashboard/opinion fields.
+- [x] Green: add `src/serenity_alpha_lab/application/technical_agent.py` with offline prompt request/payload, structured output, result validation and DSA compatibility mapping.
+- [x] Export public Technical Agent adapter symbols from `src/serenity_alpha_lab/application/__init__.py`.
+- [x] Add architecture guard proving the Technical Agent boundary has no concrete DSA Agent, Provider/LLM, Worker, Qlib, FastAPI, SQLAlchemy or report renderer imports.
+- [x] Add `docs/technical-agent-evidence-adapter.md` with contract table, evidence allowlist, citation rules, DSA compatibility fields, non-goals and verification evidence.
+- [x] Update `docs/development-progress-checklist.md` with `SAL-P5-008` done, P5 `8/18`, total `96/129`, new DEC/AEV rows and next-step status.
+- [x] Update `docs/development-status.md` with latest task/checkpoint anchors, completion range and next startup prompt for `SAL-P5-009`.
+- [x] Run focused Technical Agent tests, related EvidenceBundle/QuantEvidence/PromptRegistry/AgentStage/Architecture suite, full pytest, compileall, dependency lock guard, immutable tag check and `git diff --check`.
+- [ ] Review changes, stage only `SAL-P5-008` files and create required Chinese checkpoint commit, then status/hash-anchor docs commit if needed.
 
 ## File Targets
 
-- Create: `src/serenity_alpha_lab/repositories/agent_stage_store.py` for persisted Agent stage metadata and checkpoints.
-- Create: `tests/repositories/test_agent_stage_store.py` for Red/Green contract coverage.
-- Modify: `src/serenity_alpha_lab/repositories/__init__.py` to export public stage-store symbols.
+- Create: `src/serenity_alpha_lab/application/technical_agent.py` for offline Technical Agent evidence adapter and DSA compatibility result mapping.
+- Create: `tests/application/test_technical_agent_evidence_adapter.py` for Red/Green contract coverage.
+- Modify: `src/serenity_alpha_lab/application/__init__.py` to export public Technical Agent symbols.
 - Modify: `tests/architecture/test_architecture_boundaries.py` to lock runtime-free imports.
-- Create: `docs/agent-stage-persistence.md` for SAL-P5-007 evidence record.
+- Create: `docs/technical-agent-evidence-adapter.md` for SAL-P5-008 evidence record.
 - Modify: `docs/development-status.md` and `docs/development-progress-checklist.md` only during task status sync.
 
 ## Scope Guard
 
-- Stage persistence stores metadata and hashes only; it does not invoke models, execute tools, call Providers, read Evidence bodies, render reports or run Worker loops.
-- `stage_id` is deterministic from `run_id`, `stage_name`, `input_hash` and `prompt_version`; callers may also pass a precomputed id for compatibility.
-- A completed/degraded stage checkpoint is reusable after process restart and appears as `skip_reused` in a resume plan; failed/skipped stages are not treated as successful model-call cache hits.
-- A successful model-call receipt records provider/model identifiers, binding hash, request/response hashes, token/cost/latency metadata and a caller-provided idempotency key; replaying the same receipt is idempotent, while changing immutable receipt fields raises a conflict.
-- Failure policy is explicit per stage: `degrade`, `skip` or `fail_run`. Cancel requests mark pending/running stages as cancelled without executing cleanup hooks.
-
+- The adapter prepares prompt payloads and validates already-produced structured output only; it never invokes a model, runs tools, fetches quotes/history, calculates indicators, reads Evidence bodies, writes Evidence Store, renders reports or starts workers.
+- Technical Agent input is limited to `screen_snapshot`, `screen_pipeline_snapshot`, `factor_evaluation` and `factor_cache_manifest` evidence. Formal portfolio backtest, risk, bias audit, API lineage and UI lineage evidence are rejected for this role.
+- Numeric claims must use `deterministic_evidence`, include unit/formula version, and cite output citations whose `evidence_id` exists in the current EvidenceBundle.
+- DSA compatibility is a mapping layer only: it returns `agent_name=technical`, `signal`, `confidence`, `reasoning`, `key_levels`, raw structured payload, and dashboard fields such as `technical_analysis`, `trend_analysis`, `ma_analysis`, `volume_analysis` and `pattern_analysis`.
+- Later tasks still own Intel/Risk/Decision Agent rewrites, model routing/cache/budget, Citation Validator, report renderer and final G5 research report publication.
 
 ## Review Notes
 
-- Red target: `1 error`, missing `serenity_alpha_lab.repositories.agent_stage_store`.
-- Focused target: `4 passed`.
-- Agent stage architecture guard: `1 passed`.
-- Related AgentStageStore / PersistentTaskBackend / TaskEventStream / RunLifecycle / PromptRegistry / ResearchOrchestrator / Architecture suite: `54 passed`.
-- Full pytest: `437 passed, 3 skipped`.
-- Compileall PASS; dependency lock guard PASS (`Resolved 298 packages`); immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; diff hygiene PASS.
-- Subagent scope review attempted but wrapper rejected empty optional fields; local senior review confirmed `agent_stage_store` imports only persistence-safe dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/DSA Agent runtime work.
-- Implementation checkpoint: `c12b81fe feat(P5): 实现 Agent Stage 持久化`; status-sync checkpoint is `aac19354 docs: 同步 SAL-P5-007 checkpoint hash`; hash-anchor checkpoint is `8d66ecf0 docs: 记录 SAL-P5-007 状态同步 hash`; final docs solidification is `f10b48f5 docs: 固化 SAL-P5-007 hash-anchor checkpoint`.
-- Follow-up status review: user asked to refresh latest completed/unfinished status and reinforce the automatic handoff habit; status review checkpoint is `bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`, docs now record `SAL-P5-008` as the next READY task and keep this pass strictly documentation-only.
+- Red target: `1 error`, missing `serenity_alpha_lab.application.technical_agent`.
+- Review regression Red target: `3 failed, 4 passed`, proving missing evidence scope/recompute guard, numeric citation mismatch guard and DSA `data_perspective` compatibility block.
+- Focused target: `7 passed`.
+- Technical Agent architecture guard: `1 passed`.
+- Related TechnicalAgent / EvidenceBundle / QuantEvidenceAdapter / PromptRegistry / AgentStageStore / Architecture suite: `41 passed`.
+- Full pytest: `445 passed, 3 skipped`.
+- Compileall PASS; immutable tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Added explicit prompt binding run/stage context guard so Technical Agent payloads cannot be prepared with a mismatched concrete `PromptRunBinding`.
+- Code-review subagent reported HIGH evidence allowlist and numeric citation lineage gaps plus MEDIUM DSA dashboard/documentation mismatches; fixed by enforcing kind+scope+`llm_recompute_allowed=false`, evidence/citation dataset/run/stage/artifact lineage, numeric claim value/unit/formula/dataset/run/artifact consistency and nested `data_perspective` compatibility.
+- Dependency lock guard PASS with `Resolved 298 packages`; `git diff --check` PASS.
+- Subagent scope review attempted twice but wrapper rejected payloads; local senior review confirmed `technical_agent` imports only offline application/evidence dependencies and performs no Provider/LLM/Worker/Qlib/FastAPI/SQLAlchemy/DSA Agent runtime work.
