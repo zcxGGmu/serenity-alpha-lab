@@ -265,6 +265,49 @@ def test_prompt_registry_stays_offline_and_runtime_free() -> None:
     assert failures == []
 
 
+def test_agent_stage_store_stays_persistence_only_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "repositories" / "agent_stage_store.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "decimal",
+        "enum",
+        "hashlib",
+        "json",
+        "re",
+        "serenity_alpha_lab.evidence.prompt_registry",
+        "sqlalchemy",
+        "sqlalchemy.engine",
+        "sqlalchemy.exc",
+        "sqlalchemy.types",
+        "typing",
+    }
+    forbidden_prefixes = (
+        "src.agent",
+        "src.core.pipeline",
+        "api.v1.endpoints.agent",
+        "bot.commands",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {"akshare", "baostock", "efinance", "fastapi", "litellm", "qlib", "tushare", "yfinance"}
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden runtime {module}")
+
+    assert failures == []
+
+
 def test_integrations_do_not_reach_into_repositories() -> None:
     assert_no_forbidden_imports(
         "integrations",
