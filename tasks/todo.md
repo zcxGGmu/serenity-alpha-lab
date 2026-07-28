@@ -14,7 +14,7 @@
 - [x] Add `docs/decision-agent-counterargument-synthesis.md`.
 - [x] Run focused, related and full verification.
 - [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, evidence/risk/decision records, this review section and next startup prompt.
-- [ ] Create Chinese checkpoint commit for `SAL-P5-011`.
+- [x] Create Chinese checkpoint commit for `SAL-P5-011`: `50e6aa39 feat(P5): 实现多空反证与最终综合`.
 
 ## Current State
 
@@ -22,8 +22,8 @@
 - Gate: G4 passed; G5 not passed.
 - Completed: `SAL-P5-001..011`.
 - Current READY task after checkpoint: `SAL-P5-012` 模型路由、缓存与预算.
-- Actual latest checkpoint from `git log -8`: `f6464426 docs: 固化 SAL-P5-010 状态复核 hash`; the earlier status docs still need to be advanced during this task closeout.
-- Latest implementation checkpoint: `22ecff19 feat(P5): 改造 Risk Portfolio Agent`.
+- Implementation checkpoint: `50e6aa39 feat(P5): 实现多空反证与最终综合`; this follow-up status sync will record the actual hash.
+- Previous implementation checkpoint: `22ecff19 feat(P5): 改造 Risk Portfolio Agent`.
 
 ## Implementation Notes
 
