@@ -76,8 +76,22 @@ from serenity_alpha_lab.evidence.prompt_registry import (
     ToolSideEffect,
     default_prompt_schema_registry,
 )
+from serenity_alpha_lab.evidence.citation_validator import (
+    CITATION_VALIDATION_RESULT_SCHEMA_NAME,
+    CITATION_VALIDATION_RESULT_SCHEMA_VERSION,
+    CITATION_VALIDATOR_CONTRACT_VERSION,
+    CitationValidationIssue,
+    CitationValidationIssueCode,
+    CitationValidationResult,
+    CitationValidationSeverity,
+    CitationValidator,
+    CitationValidatorError,
+)
 
 __all__ = [
+    "CITATION_VALIDATION_RESULT_SCHEMA_NAME",
+    "CITATION_VALIDATION_RESULT_SCHEMA_VERSION",
+    "CITATION_VALIDATOR_CONTRACT_VERSION",
     "EVIDENCE_CONTRACT_VERSION",
     "EVIDENCE_SCHEMA_NAME",
     "EVIDENCE_SCHEMA_VERSION",
@@ -108,6 +122,12 @@ __all__ = [
     "ClaimComputationPolicy",
     "ClaimKind",
     "ClaimVerificationStatus",
+    "CitationValidationIssue",
+    "CitationValidationIssueCode",
+    "CitationValidationResult",
+    "CitationValidationSeverity",
+    "CitationValidator",
+    "CitationValidatorError",
     "EvidenceEvaluationScope",
     "EvidenceKind",
     "EvidenceRecord",

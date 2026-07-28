@@ -1,62 +1,67 @@
-# SAL-P5-012 Model Routing / Cache / Budget Implementation Plan
+# SAL-P5-013 Citation Validator Implementation Plan
 
-> Scope: Complete only `SAL-P5-012` by adding an offline model invocation planner for route selection, exact cache keys, price-table cost estimates, invocation/run/day budgets, rate-limit fallback and explicit partial/budget-exhausted outcomes. Do not jump to Citation Validator, report rendering or later P5 tasks. Do not start real Provider/LLM calls, LiteLLM runtime calls, Worker loops, Qlib runtime, production scheduling, report generation or formal backtest promotion.
+> Scope: Complete only `SAL-P5-013` by adding an offline Citation Validator for ResearchReport / ResearchClaim / ReportCitation graphs. The validator must check evidence existence, mandatory citations, value/unit/formula/dataset/run/stage/artifact consistency, decision-time availability and one-attempt repair degradation. Do not jump to report rendering or later P5 tasks. Do not start real Provider/LLM calls, Worker loops, Qlib runtime, production scheduling, report generation or formal backtest promotion.
 
 ## Checklist
 
 - [x] Re-read required project docs and confirm `git status --short --branch` / `git log -8 --oneline`.
-- [x] Attempt read-only subagent exploration; fallback locally if tool wrapper rejects dispatch.
-- [x] Create `docs/superpowers/plans/2026-07-28-model-routing-cache-budget.md`.
-- [x] Write Red tests in `tests/application/test_model_routing_cache_budget.py`.
-- [x] Run Red focused test and confirm failure for missing `serenity_alpha_lab.application.model_routing`.
-- [x] Implement `src/serenity_alpha_lab/application/model_routing.py` as an offline model invocation planner.
-- [x] Export public symbols from `src/serenity_alpha_lab/application/__init__.py`.
-- [x] Add architecture guard proving model routing stays offline and runtime-free.
-- [x] Add `docs/model-routing-cache-budget.md`.
+- [x] Attempt scoped subagent exploration; fallback locally if the wrapper rejects dispatch.
+- [x] Create `docs/superpowers/plans/2026-07-28-citation-validator.md`.
+- [x] Write Red tests in `tests/evidence/test_citation_validator.py`.
+- [x] Run Red focused test and confirm failure for missing `serenity_alpha_lab.evidence.citation_validator`.
+- [x] Implement `src/serenity_alpha_lab/evidence/citation_validator.py` as an offline validator.
+- [x] Export public symbols from `src/serenity_alpha_lab/evidence/__init__.py`.
+- [x] Add architecture guard proving Citation Validator stays offline and runtime-free.
+- [x] Add `docs/citation-validator.md`.
 - [x] Run focused, related and full verification.
 - [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, evidence/risk/decision records, this review section and next startup prompt.
-- [x] Create Chinese checkpoint commit for `SAL-P5-012`: `83ae4310 feat(P5): 实现模型路由缓存与预算`.
+- [ ] Create Chinese checkpoint commit for `SAL-P5-013`.
 
 ## Current State
 
 - Phase: P5 证据化 Agent、报告与成本治理.
 - Gate: G4 passed; G5 not passed.
-- Completed after implementation: `SAL-P5-001..012`.
-- Current READY task after checkpoint: `SAL-P5-013` Citation Validator.
-- Implementation checkpoint: `83ae4310 feat(P5): 实现模型路由缓存与预算`.
-- Status-sync checkpoint: `a3224012 docs: 同步 SAL-P5-012 checkpoint hash`.
-- Hash-anchor checkpoint: `a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`.
-- Final anchor checkpoint: `e8a8e386 docs: 固化 SAL-P5-012 状态同步 hash-anchor`.
-- Status review checkpoint: `ac89ccee docs: 复核 SAL-P5-012 最新开发状态与恢复提示`.
-- Status review hash-anchor: `22014b23 docs: 记录 SAL-P5-012 状态复核 hash`.
-- Implementation checkpoint entering task: `50e6aa39 feat(P5): 实现多空反证与最终综合`.
-- Status-sync checkpoint entering task: `e9e5ad69 docs: 同步 SAL-P5-011 checkpoint hash`.
-- Hash-anchor checkpoint entering task: `c675fa0b docs: 记录 SAL-P5-011 状态同步 hash`; latest final anchor: `39ea0445 docs: 固化 SAL-P5-011 状态同步 hash-anchor`.
+- Completed entering task: `SAL-P5-001..012`.
+- Current READY task: `SAL-P5-013` Citation Validator.
+- Implementation checkpoint entering task: `83ae4310 feat(P5): 实现模型路由缓存与预算`.
+- Latest status-sync checkpoint entering task: `a3224012 docs: 同步 SAL-P5-012 checkpoint hash`.
+- Latest status-sync hash-anchor entering task: `a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`.
+- Latest status review checkpoint entering task: `ac89ccee docs: 复核 SAL-P5-012 最新开发状态与恢复提示`.
+- Latest status review hash-anchor entering task: `22014b23 docs: 记录 SAL-P5-012 状态复核 hash`.
+- Latest final anchor entering task: `46c78732 docs: 固化 SAL-P5-012 状态复核 hash-anchor`.
 
 ## Implementation Notes
 
-- New module should be pure offline application logic: no LiteLLM import, no provider clients, no Worker loop, no SQLAlchemy dependency, no Evidence body reads and no DSA runtime calls.
-- `ModelInvocationCacheKey` must include EvidenceBundle hash, PromptRunBinding hash, output schema hash, model/provider/version, model capability hash, parameter version/hash and route/price version.
-- `ModelInvocationPlanner` should return a deterministic plan: `cache_hit`, `ready`, `degraded`, `budget_exhausted` or `rate_limited`.
-- Cache reuse should match caller-provided successful receipt records by `request_hash`, `prompt_binding_hash`, provider/model and model-call receipt hash; cache hits must not consume budget.
-- Budget checks must cover invocation, run and daily caps. If no route fits, return explicit partial/budget-exhausted metadata rather than silently continuing.
-- Rate-limit checks should skip saturated routes and either choose an explicit fallback or return `rate_limited`; no hidden retry loop.
-- Prices are versioned offline configuration/fixtures, not live vendor pricing. This task must not fetch or infer current provider prices.
+- New module should be pure offline evidence logic under `serenity_alpha_lab.evidence`: no Provider SDK, no LiteLLM, no Worker, no SQLAlchemy, no Qlib, no FastAPI, no DSA runtime, no report renderer and no Evidence body reads.
+- `CitationValidator` should consume already-constructed `ResearchReport`, `ResearchClaim`, `ReportCitation` and `EvidenceRecord` schema objects.
+- Required-citation claims: `numeric_metric`, `temporal_fact`, `risk_gate` and `lineage_fact`; numeric/ratio/price-target values remain `numeric_metric`.
+- Numeric claims must keep `deterministic_evidence`; claim value, unit, formula version, dataset versions, run id, stage id and artifact hash must match cited deterministic citations.
+- Temporal/directional/value-bearing claims must match cited value when both claim and citation expose a value.
+- Citations must point to included evidence and preserve dataset/run/stage/artifact lineage; cited evidence must be available no later than report `decision_time`.
+- The repair flow is exactly one caller-supplied repaired report attempt. If a claim still fails after that attempt, remove it from the validated report and downgrade the report level; failed claims must not remain `verified`.
+- Keep markdown/HTML report rendering out of scope; `ResearchReport` remains the authority.
 
 ## Planned Verification
 
-- Red target: `uv run --extra core --extra dev python -m pytest tests/application/test_model_routing_cache_budget.py -q`.
+- Red target: `uv run --extra core --extra dev python -m pytest tests/evidence/test_citation_validator.py -q`.
 - Focused target after implementation: same command should pass.
-- Architecture guard: model routing imports only Python stdlib plus EvidenceBundle/PromptRegistry schema modules.
-- Related suite: Model routing + PromptRegistry + EvidenceBundle + AgentStageStore + architecture tests.
+- Architecture guard: Citation Validator imports only Python stdlib and `serenity_alpha_lab.evidence.schema`.
+- Related suite: Citation Validator + Evidence schema + Quant Evidence Adapter + Technical/Intel/RiskPortfolio/Decision adapters + architecture tests.
 - Full suite: `uv run --extra core --extra dev python -m pytest -q`, compileall, dependency lock, immutable upstream tag, `git diff --check`.
 
 ## Review
 
-- Subagent exploration fallback: read-only subagent dispatch was attempted with scoped prompts, but the tool wrapper rejected optional argument serialization (`reasoning_effort must not be empty`, then `Provide either message or items, but not both`). Per `tasks/lessons.md`, proceeding with local senior review plus fresh verification instead of repeated retries.
-- Red: `uv run --extra core --extra dev python -m pytest tests/application/test_model_routing_cache_budget.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.application.model_routing'`.
-- Green focused: `uv run --extra core --extra dev python -m pytest tests/application/test_model_routing_cache_budget.py -q` -> `4 passed`.
-- Architecture guard: `uv run --extra core --extra dev python -m pytest tests/architecture/test_architecture_boundaries.py::test_model_routing_stays_offline_and_runtime_free -q` -> `1 passed`.
-- Related suite: ModelRouting/PromptRegistry/EvidenceBundle/AgentStageStore/Architecture `40 passed`.
-- Full verification: related suite `40 passed`; `uv run --extra core --extra dev python -m pytest -q` -> `466 passed, 3 skipped`; compileall PASS; dependency lock PASS (`Resolved 298 packages`); immutable upstream tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS after final status touch.
-- Scope review: no real Provider/LLM/LiteLLM call, Worker loop, Qlib runtime, production scheduling, Citation Validator, report rendering or formal backtest promotion was started.
+- Subagent review fallback: scoped subagent dispatch was attempted for SAL-P5-013 review, but wrapper payload validation rejected the dispatch attempts. Per the project lesson from SAL-P4-006, stopped retries and used local senior review plus fresh verification.
+- Red: `uv run --extra core --extra dev python -m pytest tests/evidence/test_citation_validator.py -q` failed during collection with `ModuleNotFoundError: No module named 'serenity_alpha_lab.evidence.citation_validator'`.
+- Initial Green: focused target passed with `3 passed`; local review then found a sharper lineage gap where citation/evidence mismatches were not attached to consuming claims.
+- Regression Red: added `test_citation_validator_marks_claim_failed_when_citation_disagrees_with_evidence_lineage`; focused target failed with `IndexError: tuple index out of range` because `failed_claims` was empty.
+- Regression Green: propagated broken-citation issues to each consuming claim and deduplicated downgrade warning codes; focused target passed.
+- Local robustness review: added low-level invalid report graph checks for missing cited evidence and future-dated evidence, then changed report/claim copying to avoid re-triggering schema validation before issues can be returned.
+- Focused target: `uv run --extra core --extra dev python -m pytest tests/evidence/test_citation_validator.py -q` -> `7 passed`.
+- Architecture guard: `uv run --extra core --extra dev python -m pytest tests/architecture/test_architecture_boundaries.py::test_citation_validator_stays_offline_and_runtime_free -q` -> `1 passed`.
+- Related P5 suite: `uv run --extra core --extra dev python -m pytest tests/evidence/test_citation_validator.py tests/evidence/test_evidence_schema_contract.py tests/evidence/test_quant_evidence_adapter.py tests/application/test_technical_agent_evidence_adapter.py tests/application/test_intel_agent_evidence_adapter.py tests/application/test_risk_portfolio_agent_evidence_adapter.py tests/application/test_decision_agent_counterargument_synthesis.py tests/architecture/test_architecture_boundaries.py -q` -> `59 passed`.
+- Full suite: `uv run --extra core --extra dev python -m pytest -q` -> `474 passed, 3 skipped`.
+- Compile: `uv run --extra core --extra dev python -m compileall -q src/serenity_alpha_lab tests` -> PASS.
+- Dependency lock: `scripts/verify-python-dependency-lock.sh` -> PASS, `Resolved 298 packages`.
+- Immutable upstream tag: `git rev-parse upstream/dsa-v3.26.1` -> `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
+- Diff hygiene: `git diff --check` -> PASS.
