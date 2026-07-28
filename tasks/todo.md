@@ -15,7 +15,7 @@
 - [x] Add `docs/citation-validator.md`.
 - [x] Run focused, related and full verification.
 - [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, evidence/risk/decision records, this review section and next startup prompt.
-- [ ] Create Chinese checkpoint commit for `SAL-P5-013`.
+- [x] Create Chinese checkpoint commit for `SAL-P5-013`.
 
 ## Current State
 
@@ -65,3 +65,4 @@
 - Dependency lock: `scripts/verify-python-dependency-lock.sh` -> PASS, `Resolved 298 packages`.
 - Immutable upstream tag: `git rev-parse upstream/dsa-v3.26.1` -> `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Diff hygiene: `git diff --check` -> PASS.
+- Implementation checkpoint: `dfd82553 feat(P5): 实现 Citation Validator`.
