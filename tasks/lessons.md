@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-28: SAL-P5-012 后再次提醒时必须推进状态复核与启动提示词
+
+- 纠正来源：`SAL-P5-012` 模型路由、缓存与预算实现 checkpoint `83ae4310`、状态同步 checkpoint `a3224012`、状态同步 hash-anchor checkpoint `a7ab1a52` 和最终固化 checkpoint `e8a8e386` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步、hash-anchor 和最终固化都已完成，如果最新状态复核锚点、下次启动提示词或 lessons 没有同步到当前任务，下次启动仍可能误认为当前可执行任务是已完成的 `SAL-P5-012`，或跳过 `SAL-P5-013` 的严格边界直接进入报告渲染/真实 runtime。
+- 规则：每个阶段性任务完成后的最终交接必须再次复核 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md`、`tasks/lessons.md` 和下次启动提示词；用户再次提醒习惯时，必须新增 lessons、写清已完成/未完成、当前 READY 任务、实现/状态同步/hash-anchor/final-anchor 和严格禁区，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-013` Citation Validator 开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor；不得跳到报告渲染、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
 ## 2026-07-28: SAL-P5-010 后再次提醒时必须推进状态复核 checkpoint
 
 - 纠正来源：`SAL-P5-010` Risk/Portfolio Agent 改造实现 checkpoint `22ecff19`、状态同步 checkpoint `490590ba`、状态同步 hash-anchor checkpoint `dbe74521` 和最终固化 checkpoint `c70a7077` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
