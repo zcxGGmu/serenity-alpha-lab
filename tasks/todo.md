@@ -23,7 +23,7 @@
 - Completed: `SAL-P5-001..010`.
 - Current READY task: `SAL-P5-011` 多空反证与最终综合.
 - Latest implementation checkpoint: `22ecff19 feat(P5): 改造 Risk Portfolio Agent`.
-- Latest status sync/hash anchors: `7521d6d9`, `c2da5fe8`, `ec5208de`, `f18d1b6e`; SAL-P5-010 status sync/hash-anchor pending this handoff.
+- Latest status sync/hash anchors: `490590ba` status sync; SAL-P5-010 hash-anchor pending this handoff. Previous anchors: `7521d6d9`, `c2da5fe8`, `ec5208de`, `f18d1b6e`.
 
 ## Implementation Notes
 
@@ -40,4 +40,4 @@
 - Related suite: RiskPortfolioAgent/EvidenceBundle/QuantEvidenceAdapter/PromptRegistry/AgentStageStore/Architecture `41 passed`.
 - Full verification: pytest `456 passed, 3 skipped`; compileall PASS; dependency lock PASS (`Resolved 298 packages`); upstream tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope review: no real Provider/LLM, Worker loop, Qlib runtime, production scheduling, report rendering, Citation Validator or formal backtest promotion was started.
-- Commit: implementation checkpoint `22ecff19 feat(P5): 改造 Risk Portfolio Agent`; follow-up status sync/hash-anchor pending this handoff.
+- Commit: implementation checkpoint `22ecff19 feat(P5): 改造 Risk Portfolio Agent`; status sync checkpoint `490590ba docs: 同步 SAL-P5-010 checkpoint hash`; follow-up hash-anchor pending this handoff.

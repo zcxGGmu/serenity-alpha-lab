@@ -8,8 +8,8 @@
 > 任务完成度：98/129<br>
 > 当前可执行任务：`SAL-P5-011` 多空反证与最终综合为下一步；不得跳到 Model routing、Citation Validator 或报告渲染任务；不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
 > 最近可评审交付 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`；上一 checkpoint 为 `a6974362 feat(P5): 改造 Intel Agent`<br>
-> 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P5-010 checkpoint hash` 提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint 为 `7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：本次状态同步 hash-anchor 尚未生成；上一 hash-anchor checkpoint 为 `c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`；SAL-P5-008 交接习惯 hash-anchor checkpoint 为 `8c978cd5 docs: 记录 SAL-P5-008 交接习惯复核 hash`<br>
+> 最新状态同步 checkpoint：`490590ba docs: 同步 SAL-P5-010 checkpoint hash`；上一状态同步 checkpoint 为 `7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P5-010 状态同步 hash` 提交后以最终回复和 `git log -1 --oneline` 为准；上一 hash-anchor checkpoint 为 `c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`；SAL-P5-008 交接习惯 hash-anchor checkpoint 为 `8c978cd5 docs: 记录 SAL-P5-008 交接习惯复核 hash`<br>
 > 本次阶段任务 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`；已完成任务范围推进至 `SAL-P5-010`<br>
 > 最新状态复核 checkpoint：`ec5208de docs: 复核 SAL-P5-009 最新开发状态与恢复提示`；最新最终锚点 checkpoint：`c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`；上一最终锚点 checkpoint 为 `8c978cd5 docs: 记录 SAL-P5-008 交接习惯复核 hash`；上一最终 docs 固化 checkpoint 为 `e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`；上一交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`；上一状态复核 checkpoint：`7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`；上一状态复核 hash-anchor checkpoint：`4f377abf docs: 记录 SAL-P5-008 状态复核 hash`；上一状态复核最终固化 checkpoint：`044a487e docs: 固化 SAL-P5-008 状态复核 hash`；SAL-P5-007 状态复核 checkpoint 为 `bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；SAL-P5-007 状态复核 hash-anchor checkpoint 为 `eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -404,8 +404,8 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-010
 - 最近完成：SAL-P5-010 Risk/Portfolio Agent 改造
 - 最近可评审交付 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`；上一 checkpoint：`a6974362 feat(P5): 改造 Intel Agent`
-- 最新状态同步 checkpoint：本次 `docs: 同步 SAL-P5-010 checkpoint hash` 提交后以最终回复和 `git log -1 --oneline` 为准；上一状态同步 checkpoint：`7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`
-- 最新状态同步 hash-anchor checkpoint：本次状态同步 hash-anchor 尚未生成；上一 hash-anchor checkpoint：`c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`
+- 最新状态同步 checkpoint：`490590ba docs: 同步 SAL-P5-010 checkpoint hash`；上一状态同步 checkpoint：`7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`
+- 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P5-010 状态同步 hash` 提交后以最终回复和 `git log -1 --oneline` 为准；上一 hash-anchor checkpoint：`c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`
 - 最新状态复核 checkpoint：`ec5208de docs: 复核 SAL-P5-009 最新开发状态与恢复提示`；最新最终锚点 checkpoint：`c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`；上一最终锚点 checkpoint：`8c978cd5 docs: 记录 SAL-P5-008 交接习惯复核 hash`；上一最终 docs 固化 checkpoint：`e35b0612 docs: 固化 SAL-P5-008 hash-anchor checkpoint`；上一交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`；上一状态复核 checkpoint：`7d6b325f docs: 复核 SAL-P5-008 最新开发状态与恢复提示`；上一状态复核 hash-anchor checkpoint：`4f377abf docs: 记录 SAL-P5-008 状态复核 hash`；上一状态复核最终固化 checkpoint：`044a487e docs: 固化 SAL-P5-008 状态复核 hash`；SAL-P5-007 状态复核 checkpoint：`bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；SAL-P5-007 状态复核 hash-anchor checkpoint：`eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 10/18，总计 98/129
 
