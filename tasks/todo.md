@@ -15,7 +15,7 @@
 - [x] Add `docs/model-routing-cache-budget.md`.
 - [x] Run focused, related and full verification.
 - [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, evidence/risk/decision records, this review section and next startup prompt.
-- [ ] Create Chinese checkpoint commit for `SAL-P5-012`.
+- [x] Create Chinese checkpoint commit for `SAL-P5-012`: `83ae4310 feat(P5): 实现模型路由缓存与预算`.
 
 ## Current State
 
@@ -23,6 +23,7 @@
 - Gate: G4 passed; G5 not passed.
 - Completed after implementation: `SAL-P5-001..012`.
 - Current READY task after checkpoint: `SAL-P5-013` Citation Validator.
+- Implementation checkpoint: `83ae4310 feat(P5): 实现模型路由缓存与预算`.
 - Implementation checkpoint entering task: `50e6aa39 feat(P5): 实现多空反证与最终综合`.
 - Status-sync checkpoint entering task: `e9e5ad69 docs: 同步 SAL-P5-011 checkpoint hash`.
 - Hash-anchor checkpoint entering task: `c675fa0b docs: 记录 SAL-P5-011 状态同步 hash`; latest final anchor: `39ea0445 docs: 固化 SAL-P5-011 状态同步 hash-anchor`.
