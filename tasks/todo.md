@@ -10,7 +10,7 @@
 - [x] Update `docs/development-progress-checklist.md` section 17 with latest `SAL-P5-009` implementation, status-sync and hash-anchor checkpoints.
 - [x] Update `tasks/lessons.md` because the user explicitly reminded the stage-completion handoff habit again.
 - [x] Run status anchor scan and `git diff --check`.
-- [ ] Commit the docs-only status review checkpoint in Chinese.
+- [x] Commit the docs-only status review checkpoint in Chinese.
 
 ## Current State
 
@@ -26,4 +26,5 @@
 - This handoff review intentionally does not modify runtime code.
 - The next implementation must stay on `SAL-P5-010`; do not jump to model routing, Citation Validator or report rendering.
 - The fixed habit is now re-recorded in `tasks/lessons.md`: after every stage task, update status/checklist/evidence/risk/decision/todo review/lessons if corrected/recovery prompt before final handoff.
+- Status review checkpoint: `ec5208de docs: 复核 SAL-P5-009 最新开发状态与恢复提示`.
 - Verification: status anchor scan confirms `a6974362`, `7521d6d9`, `c2da5fe8`, `SAL-P5-010`, progress `97/129`, and no live task jump; `git diff --check` PASS.
