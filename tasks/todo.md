@@ -75,5 +75,7 @@
 - [x] Re-read current status and git anchors after `SAL-P5-013` final anchor.
 - [x] Update `tasks/lessons.md` for the repeated phase-completion status-sync reminder.
 - [x] Update recovery state to show `SAL-P5-014` as the next READY task.
-- [ ] Create Chinese status review checkpoint for `SAL-P5-013`.
-- Review: current clean checkpoint entering this review is `84424467 docs: 记录 SAL-P5-013 最终锚点`; no implementation code changed; no Agent tool security, report rendering, real Provider/LLM, Worker, Qlib runtime, production scheduling or formal portfolio backtest was started.
+- [x] Create Chinese status review checkpoint for `SAL-P5-013`.
+- Status review checkpoint: `acceebab docs: 复核 SAL-P5-013 最新开发状态与恢复提示`.
+- Status review hash-anchor checkpoint: this `docs: 记录 SAL-P5-013 状态复核 hash` commit will generate it.
+- Review: current clean checkpoint entering this review was `84424467 docs: 记录 SAL-P5-013 最终锚点`; no implementation code changed; no Agent tool security, report rendering, real Provider/LLM, Worker, Qlib runtime, production scheduling or formal portfolio backtest was started.
