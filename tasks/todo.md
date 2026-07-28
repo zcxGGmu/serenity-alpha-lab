@@ -23,8 +23,8 @@
 - Current READY task: `SAL-P5-015` 可信 ResearchReport 与 Renderer.
 - Implementation checkpoint: `1840f173 feat(P5): 实现 Agent 工具安全`.
 - Previous implementation checkpoint: `dfd82553 feat(P5): 实现 Citation Validator`.
-- Latest status-sync checkpoint entering task: `a64145ac docs: 同步 SAL-P5-013 checkpoint hash`.
-- Latest status-sync hash-anchor entering task: `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`.
+- Latest status-sync checkpoint: `57c6eb6d docs: 同步 SAL-P5-014 checkpoint hash`.
+- Latest status-sync hash-anchor: this `docs: 记录 SAL-P5-014 状态同步 hash` commit; confirm with `git log -1 --oneline` after commit.
 - Latest final anchor entering task: `84424467 docs: 记录 SAL-P5-013 最终锚点`.
 - Latest status review checkpoint entering task: `acceebab docs: 复核 SAL-P5-013 最新开发状态与恢复提示`.
 - Latest status review hash-anchor entering task: `31a0dabe docs: 记录 SAL-P5-013 状态复核 hash`.
