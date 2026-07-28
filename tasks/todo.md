@@ -68,3 +68,4 @@
 - Implementation checkpoint: `dfd82553 feat(P5): 实现 Citation Validator`.
 - Status-sync checkpoint: `a64145ac docs: 同步 SAL-P5-013 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`.
+- Final anchor checkpoint: `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`.
