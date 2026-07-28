@@ -8,7 +8,7 @@
 > 任务完成度：101/129<br>
 > 当前可执行任务：`SAL-P5-014` Agent 工具安全为下一步；不得跳到报告渲染或 P5 后续任务；不得从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
 > 最近可评审交付 checkpoint：`dfd82553 feat(P5): 实现 Citation Validator`；上一 checkpoint 为 `83ae4310 feat(P5): 实现模型路由缓存与预算`<br>
-> 最新状态同步 checkpoint：`a3224012 docs: 同步 SAL-P5-012 checkpoint hash`；上一状态同步 checkpoint 为 `e9e5ad69 docs: 同步 SAL-P5-011 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 checkpoint：`a64145ac docs: 同步 SAL-P5-013 checkpoint hash`；上一状态同步 checkpoint 为 `a3224012 docs: 同步 SAL-P5-012 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
 > 最新状态同步 hash-anchor checkpoint：`a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`；上一 hash-anchor checkpoint 为 `c675fa0b docs: 记录 SAL-P5-011 状态同步 hash`；SAL-P5-008 交接习惯 hash-anchor checkpoint 为 `8c978cd5 docs: 记录 SAL-P5-008 交接习惯复核 hash`<br>
 > 本次阶段任务 checkpoint：`dfd82553 feat(P5): 实现 Citation Validator`；已完成任务范围推进至 `SAL-P5-013`<br>
 > 最新状态复核 checkpoint：`ac89ccee docs: 复核 SAL-P5-012 最新开发状态与恢复提示`；上一状态复核 checkpoint：`4f37b244 docs: 复核 SAL-P5-010 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`22014b23 docs: 记录 SAL-P5-012 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`188d9b78 docs: 记录 SAL-P5-010 状态复核 hash`；最新最终锚点 checkpoint：`46c78732 docs: 固化 SAL-P5-012 状态复核 hash-anchor`；上一最终锚点 checkpoint 为 `e8a8e386 docs: 固化 SAL-P5-012 状态同步 hash-anchor`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`；SAL-P5-007 状态复核 checkpoint 为 `bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；SAL-P5-007 状态复核 hash-anchor checkpoint 为 `eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`<br>
@@ -419,7 +419,7 @@
 - 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-013
 - 最近完成：SAL-P5-013 Citation Validator
 - 最近可评审交付 checkpoint：`dfd82553 feat(P5): 实现 Citation Validator`；上一 checkpoint：`83ae4310 feat(P5): 实现模型路由缓存与预算`
-- 最新状态同步 checkpoint：`a3224012 docs: 同步 SAL-P5-012 checkpoint hash`；上一状态同步 checkpoint：`e9e5ad69 docs: 同步 SAL-P5-011 checkpoint hash`
+- 最新状态同步 checkpoint：`a64145ac docs: 同步 SAL-P5-013 checkpoint hash`；上一状态同步 checkpoint：`a3224012 docs: 同步 SAL-P5-012 checkpoint hash`
 - 最新状态同步 hash-anchor checkpoint：`a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`；上一 hash-anchor checkpoint：`c675fa0b docs: 记录 SAL-P5-011 状态同步 hash`
 - 最新状态复核 checkpoint：`ac89ccee docs: 复核 SAL-P5-012 最新开发状态与恢复提示`；上一状态复核 checkpoint：`4f37b244 docs: 复核 SAL-P5-010 最新开发状态与恢复提示`
 - 最新状态复核 hash-anchor checkpoint：`22014b23 docs: 记录 SAL-P5-012 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`188d9b78 docs: 记录 SAL-P5-010 状态复核 hash`；最新最终锚点 checkpoint：`46c78732 docs: 固化 SAL-P5-012 状态复核 hash-anchor`；上一最终锚点 checkpoint：`e8a8e386 docs: 固化 SAL-P5-012 状态同步 hash-anchor`

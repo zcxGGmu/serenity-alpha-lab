@@ -66,3 +66,4 @@
 - Immutable upstream tag: `git rev-parse upstream/dsa-v3.26.1` -> `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Diff hygiene: `git diff --check` -> PASS.
 - Implementation checkpoint: `dfd82553 feat(P5): 实现 Citation Validator`.
+- Status-sync checkpoint: `a64145ac docs: 同步 SAL-P5-013 checkpoint hash`.
