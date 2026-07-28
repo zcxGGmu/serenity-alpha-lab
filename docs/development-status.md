@@ -1,16 +1,16 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-28<br>
-> 最近阶段性任务：`SAL-P5-010` Risk/Portfolio Agent 改造<br>
+> 最近阶段性任务：`SAL-P5-011` 多空反证与最终综合<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P5 证据化 Agent、报告与成本治理<br>
 > 当前 Gate：G4 已通过；G0、G1、G2、G3、G4 均为 `GO with accepted risks`；G5 未通过<br>
-> 任务完成度：98/129<br>
-> 当前可执行任务：`SAL-P5-011` 多空反证与最终综合为下一步；不得跳到 Model routing、Citation Validator 或报告渲染任务；不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
-> 最近可评审交付 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`；上一 checkpoint 为 `a6974362 feat(P5): 改造 Intel Agent`<br>
+> 任务完成度：99/129<br>
+> 当前可执行任务：`SAL-P5-012` 模型路由、缓存与预算为下一步；不得跳到 Citation Validator、报告渲染或 P5 后续任务；不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广<br>
+> 最近可评审交付 checkpoint：本次 `SAL-P5-011` 中文 checkpoint 提交后回填实际 hash；上一 checkpoint 为 `22ecff19 feat(P5): 改造 Risk Portfolio Agent`<br>
 > 最新状态同步 checkpoint：`490590ba docs: 同步 SAL-P5-010 checkpoint hash`；上一状态同步 checkpoint 为 `7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
 > 最新状态同步 hash-anchor checkpoint：`dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`；上一 hash-anchor checkpoint 为 `c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`；SAL-P5-008 交接习惯 hash-anchor checkpoint 为 `8c978cd5 docs: 记录 SAL-P5-008 交接习惯复核 hash`<br>
-> 本次阶段任务 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`；已完成任务范围推进至 `SAL-P5-010`<br>
+> 本次阶段任务 checkpoint：本次 `SAL-P5-011` 中文 checkpoint 提交后回填实际 hash；已完成任务范围推进至 `SAL-P5-011`<br>
 > 最新状态复核 checkpoint：`4f37b244 docs: 复核 SAL-P5-010 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`188d9b78 docs: 记录 SAL-P5-010 状态复核 hash`；最新最终锚点 checkpoint：`c70a7077 docs: 固化 SAL-P5-010 hash-anchor checkpoint`；上一状态复核 checkpoint：`ec5208de docs: 复核 SAL-P5-009 最新开发状态与恢复提示`；上一状态复核 hash-anchor checkpoint：`f18d1b6e docs: 记录 SAL-P5-009 状态复核 hash`；上一最终锚点 checkpoint 为 `dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`；SAL-P5-007 状态复核 checkpoint 为 `bc4a491a docs: 复核 SAL-P5-007 最新开发状态与恢复提示`；SAL-P5-007 状态复核 hash-anchor checkpoint 为 `eb918c0a docs: 记录 SAL-P5-007 状态复核 hash`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -135,19 +135,20 @@
 - 完成 `SAL-P5-008`：新增 [Technical Agent Evidence Adapter](./technical-agent-evidence-adapter.md)、Application [technical_agent.py](../src/serenity_alpha_lab/application/technical_agent.py) 和 [Technical Agent adapter contract test](../tests/application/test_technical_agent_evidence_adapter.py)，冻结 `research.agent.technical@1.0.0` 离线 Technical Agent 证据适配口径；`EvidenceScopedTechnicalAgent` 只接收 technical `EvidenceBundle` 与 concrete `PromptRunBinding`，按 kind+scope+`llm_recompute_allowed=false` 拒绝 formal backtest/risk/audit/API/UI lineage evidence，校验 numeric Claim citation lineage/value 一致，并输出 DSA 兼容 opinion/dashboard 与 `data_perspective` 字段；P5 进度 `8/18`，总进度 `96/129`。
 - 完成 `SAL-P5-009`：新增 [Intel Agent Evidence Adapter](./intel-agent-evidence-adapter.md)、Application [intel_agent.py](../src/serenity_alpha_lab/application/intel_agent.py) 和 [Intel Agent adapter contract test](../tests/application/test_intel_agent_evidence_adapter.py)，冻结 `research.agent.intel@1.0.0` 离线 Intel Agent 证据适配口径；新增 `unstructured_source` / `market_intelligence` Evidence 表示，`EvidenceScopedIntelAgent` 只接收 intel `EvidenceBundle` 与 concrete `PromptRunBinding`，消费 `metadata.source_trust` prompt-safe 记录，分离 event/published/observed/available timestamps，排除 duplicate/malicious source，标记 stale/low-trust source，并输出 DSA 兼容 news/intel fields；P5 进度 `9/18`，总进度 `97/129`。
 - 完成 `SAL-P5-010`：新增 [Risk/Portfolio Agent Evidence Adapter](./risk-portfolio-agent-evidence-adapter.md)、Application [risk_portfolio_agent.py](../src/serenity_alpha_lab/application/risk_portfolio_agent.py) 和 [Risk/Portfolio Agent adapter contract test](../tests/application/test_risk_portfolio_agent_evidence_adapter.py)，冻结 `research.agent.risk_portfolio@1.0.0` 离线 Risk/Portfolio Agent 证据适配口径；`EvidenceScopedRiskPortfolioAgent` 只接收 risk_portfolio EvidenceBundle 与 concrete PromptRunBinding，allowlist 限定 formal portfolio backtest risk/metrics/audit/run/artifact/API evidence，保留 hard gate summary，禁止 Agent 输出覆盖 `block` / `not_evaluable` / ranking / strong-conclusion hard facts，并输出 legacy DSA risk/portfolio opinion/dashboard compatibility fields；P5 进度 `10/18`，总进度 `98/129`。
+- 完成 `SAL-P5-011`：新增 [Decision Agent Counterargument and Final Synthesis](./decision-agent-counterargument-synthesis.md)、Application [decision_agent.py](../src/serenity_alpha_lab/application/decision_agent.py) 和 [Decision Agent counterargument contract test](../tests/application/test_decision_agent_counterargument_synthesis.py)，冻结 `research.agent.decision@1.0.0` 离线 Decision Agent 多空反证与最终综合口径；`EvidenceScopedDecisionAgent` 只消费 Technical/Intel/RiskPortfolio 已验证 result、decision EvidenceBundle 与 concrete PromptRunBinding，要求 bull/bear cases distinct、citation evidence 来自当前 bundle 且已被前序 role output 引用，保留 Risk/Portfolio `block` / `not_evaluable` / ranking / strong-conclusion hard gates，并输出 legacy DSA decision opinion/dashboard compatibility fields；P5 进度 `11/18`，总进度 `99/129`。
 
 ## 未完成
 
 ### 当前可执行 P5 任务
 
-- `SAL-P5-010` 已完成：Risk/Portfolio Agent adapter 仅作为后续多空反证/Decision Agent、model routing/cache/budget、Citation Validator 和 report renderer 输入；不得从 Risk/Portfolio adapter、Intel Agent adapter、Technical Agent adapter、Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广。
-- `SAL-P5-011` 多空反证与最终综合为下一步；不得跳到 Model routing、Citation Validator 或报告渲染任务。
+- `SAL-P5-011` 已完成：Decision Agent adapter 仅作为后续 model routing/cache/budget、Citation Validator 和 report renderer 输入；不得从 Decision adapter、Risk/Portfolio adapter、Intel Agent adapter、Technical Agent adapter、Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广。
+- `SAL-P5-012` 模型路由、缓存与预算为下一步；不得跳到 Citation Validator、报告渲染或 P5 后续任务。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P5 至 P6 仍有 31 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder、Source Trust、Quant Evidence Adapter、Prompt/Output Schema Registry、Agent Stage 持久化、Technical Agent 改造、Intel Agent 改造和 Risk/Portfolio Agent 改造。尚未完成 Decision Agent 改造、模型路由/预算、Citation Validator、可信报告渲染、完整 Worker runtime、正式回测推广或部署环境。
+- P5 至 P6 仍有 30 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder、Source Trust、Quant Evidence Adapter、Prompt/Output Schema Registry、Agent Stage 持久化、Technical Agent 改造、Intel Agent 改造、Risk/Portfolio Agent 改造和 Decision Agent 多空反证与最终综合。尚未完成模型路由/预算、Citation Validator、可信报告渲染、完整 Worker runtime、正式回测推广或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -197,6 +198,7 @@
 - 2026-07-28 按用户要求复核 `SAL-P5-009` 后最新开发状态；确认实现 checkpoint 为 `a6974362 feat(P5): 改造 Intel Agent`，状态同步 checkpoint 为 `7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`，状态同步 hash-anchor checkpoint 为 `c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`；当前已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..022`、`SAL-P5-001..009`，未完成范围从 `SAL-P5-010` 开始，当前 READY 任务为 `SAL-P5-010` Risk/Portfolio Agent 改造。本次复核仅同步最新状态、清单、`tasks/todo.md` 和 lessons，不启动 Risk/Decision Agent、model routing、Citation Validator、报告渲染、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
 - 2026-07-28 完成 `SAL-P5-010` Risk/Portfolio Agent 改造；新增 offline application adapter、contract tests 和 evidence doc，定义 `EvidenceScopedRiskPortfolioAgent`、`RiskPortfolioAgentPromptRequest`、`RiskPortfolioAgentPromptPayload`、`RiskPortfolioStructuredOutput` 和 `RiskPortfolioAgentResult`；adapter 只消费 risk_portfolio EvidenceBundle 与 concrete PromptRunBinding，allowlist 限定 formal portfolio backtest risk/metrics/audit/run/artifact/API evidence，要求 `llm_recompute_allowed=false`，保留 hard gate summary，防止 `block` / `not_evaluable` / ranking / strong-conclusion hard facts 被 Agent 输出升级，numeric Claim 必须 cite current bundle evidence 且保持 deterministic evidence policy、lineage/value/unit/formula/dataset/run/stage/artifact 一致，并输出 legacy DSA risk/portfolio compatibility fields。当前下一步为 `SAL-P5-011` 多空反证与最终综合。本任务不执行 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、Citation Validator 或报告生成；实现 checkpoint 为 `22ecff19 feat(P5): 改造 Risk Portfolio Agent`。
 - 2026-07-28 按用户再次提醒复核 `SAL-P5-010` 后最新开发状态；确认实现 checkpoint 为 `22ecff19 feat(P5): 改造 Risk Portfolio Agent`，状态同步 checkpoint 为 `490590ba docs: 同步 SAL-P5-010 checkpoint hash`，状态同步 hash-anchor checkpoint 为 `dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`，最终固化 checkpoint 为 `c70a7077 docs: 固化 SAL-P5-010 hash-anchor checkpoint`；当前已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..022`、`SAL-P5-001..010`，未完成范围从 `SAL-P5-011` 开始，当前 READY 任务为 `SAL-P5-011` 多空反证与最终综合。本次复核仅同步状态文档、进度清单、`tasks/todo.md`、`tasks/lessons.md` 和可复制启动提示词，不启动 Decision Agent、model routing、Citation Validator、报告渲染、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；状态复核 checkpoint 为 `4f37b244 docs: 复核 SAL-P5-010 最新开发状态与恢复提示`；状态复核 hash-anchor 为 `188d9b78 docs: 记录 SAL-P5-010 状态复核 hash`。
+- 2026-07-28 完成 `SAL-P5-011` 多空反证与最终综合；新增 offline Decision Agent adapter、contract tests 和 evidence doc，定义 `EvidenceScopedDecisionAgent`、`DecisionAgentPromptRequest`、`DecisionAgentPromptPayload`、`DecisionCase`、`DecisionDisagreementSummary`、`DecisionInvalidationCondition`、`DecisionStructuredOutput` 和 `DecisionAgentResult`；adapter 只消费 Technical/Intel/RiskPortfolio 已验证 result、decision EvidenceBundle 与 concrete PromptRunBinding，记录 prior role result hashes 与 citation evidence ids，要求 bull/bear cases distinct、Final Decision 不新增前序 Evidence 中不存在的事实，并保留 Risk/Portfolio `block` / `not_evaluable` / ranking / strong-conclusion hard gates。Red target 捕获缺少 `decision_agent` module，Green focused `4 passed`，相关 P5 suite `54 passed`，全量 pytest `461 passed, 3 skipped`；当前下一步为 `SAL-P5-012` 模型路由、缓存与预算。本任务不启动 model routing/cache/budget、Citation Validator、报告渲染、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；实现 checkpoint 将由本次中文提交生成并在后续状态同步中回填。
 - 2026-07-26 按用户要求复核 `SAL-P4-020` 后最新开发状态；确认最近实现 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`，状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`，状态同步 hash-anchor 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；当时已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..020`，未完成范围从 `SAL-P4-021` 开始，当时 READY 任务为 `SAL-P4-021` Quant Lab。本次状态复核不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更，并已在 `tasks/lessons.md` 再次固化阶段性任务完成后自动状态同步和可复制提示词习惯。
 - 2026-07-26 按用户要求再次复核 `SAL-P4-021` 后最新开发状态；确认最近实现 checkpoint 为 `643b4452 feat(P4): 实现 Quant Lab`，状态同步 checkpoint 为 `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`，状态同步 hash-anchor 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`，状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`，状态复核 hash-anchor 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..021`，未完成范围从 `SAL-P4-022` 开始，当前 READY 任务为 `SAL-P4-022` Gate G4。本次复核仅同步状态与交接习惯，不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或正式组合回测推广，并已在 `tasks/lessons.md` 固化阶段任务后自动收尾规则。
 - Gate G0、Gate G1、Gate G2、Gate G3 与 Gate G4 已通过（均为 `GO with accepted risks`）；G5 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
@@ -250,8 +252,8 @@
 
 ## 下一步
 
-1. 优先执行 `SAL-P5-011` 多空反证与最终综合；不得跳到 Model routing、Citation Validator 或报告渲染任务。
-2. 不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
+1. 优先执行 `SAL-P5-012` 模型路由、缓存与预算；不得跳到 Citation Validator、报告渲染或 P5 后续任务。
+2. 不得从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态。
 
 ## 本次状态复核
@@ -396,23 +398,24 @@
 55. docs/technical-agent-evidence-adapter.md
 56. docs/intel-agent-evidence-adapter.md
 57. docs/risk-portfolio-agent-evidence-adapter.md
+58. docs/decision-agent-counterargument-synthesis.md
 
 随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P5 证据化 Agent、报告与成本治理
 - Gate：G4 已通过；G0、G1、G2、G3、G4 均为 GO with accepted risks；G5 未通过
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-010
-- 最近完成：SAL-P5-010 Risk/Portfolio Agent 改造
-- 最近可评审交付 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`；上一 checkpoint：`a6974362 feat(P5): 改造 Intel Agent`
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-011
+- 最近完成：SAL-P5-011 多空反证与最终综合
+- 最近可评审交付 checkpoint：本次 `SAL-P5-011` 中文 checkpoint 提交后回填实际 hash；上一 checkpoint：`22ecff19 feat(P5): 改造 Risk Portfolio Agent`
 - 最新状态同步 checkpoint：`490590ba docs: 同步 SAL-P5-010 checkpoint hash`；上一状态同步 checkpoint：`7521d6d9 docs: 同步 SAL-P5-009 checkpoint hash`
 - 最新状态同步 hash-anchor checkpoint：`dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`；上一 hash-anchor checkpoint：`c2da5fe8 docs: 记录 SAL-P5-009 状态同步 hash`
 - 最新状态复核 checkpoint：`4f37b244 docs: 复核 SAL-P5-010 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`188d9b78 docs: 记录 SAL-P5-010 状态复核 hash`；最新最终锚点 checkpoint：`c70a7077 docs: 固化 SAL-P5-010 hash-anchor checkpoint`；上一状态复核 checkpoint：`ec5208de docs: 复核 SAL-P5-009 最新开发状态与恢复提示`；上一状态复核 hash-anchor checkpoint：`f18d1b6e docs: 记录 SAL-P5-009 状态复核 hash`；上一最终锚点 checkpoint：`dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 10/18，总计 98/129
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 11/18，总计 99/129
 
 下一步优先执行：
-1. SAL-P5-011 多空反证与最终综合；不能跳到 Model routing、Citation Validator 或报告渲染任务
-2. 不要从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
+1. SAL-P5-012 模型路由、缓存与预算；不能跳到 Citation Validator、报告渲染或 P5 后续任务
+2. 不要从 Agent Stage Store、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、报告生成或正式组合回测推广；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态
 
 严格遵守 AGENTS.md：
@@ -420,7 +423,7 @@
 - 不要移动 `upstream/dsa-v3.26.1` tag。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
-- 后续实现必须遵守 ADR-001/002、ADR-009、DEC-087、DEC-088、DEC-089、DEC-090、DEC-091、DEC-092、DEC-093、DEC-094、DEC-095、DEC-096 与 Gate G2/G3/G4；不要从 Agent Stage Store、Prompt Registry、Source Trust、Technical/Intel/RiskPortfolio Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM 调用、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移。
+- 后续实现必须遵守 ADR-001/002、ADR-009、DEC-087、DEC-088、DEC-089、DEC-090、DEC-091、DEC-092、DEC-093、DEC-094、DEC-095、DEC-096、DEC-097 与 Gate G2/G3/G4；不要从 Agent Stage Store、Prompt Registry、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM 调用、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移。
 - 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review、tasks/lessons.md（如有纠正）和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 ```
