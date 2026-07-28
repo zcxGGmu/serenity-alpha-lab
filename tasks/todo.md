@@ -24,6 +24,7 @@
 - Completed after implementation: `SAL-P5-001..012`.
 - Current READY task after checkpoint: `SAL-P5-013` Citation Validator.
 - Implementation checkpoint: `83ae4310 feat(P5): 实现模型路由缓存与预算`.
+- Status-sync checkpoint: `a3224012 docs: 同步 SAL-P5-012 checkpoint hash`.
 - Implementation checkpoint entering task: `50e6aa39 feat(P5): 实现多空反证与最终综合`.
 - Status-sync checkpoint entering task: `e9e5ad69 docs: 同步 SAL-P5-011 checkpoint hash`.
 - Hash-anchor checkpoint entering task: `c675fa0b docs: 记录 SAL-P5-011 状态同步 hash`; latest final anchor: `39ea0445 docs: 固化 SAL-P5-011 状态同步 hash-anchor`.
