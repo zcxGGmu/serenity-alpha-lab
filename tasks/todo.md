@@ -22,7 +22,8 @@
 - Gate: G4 passed; G5 not passed.
 - Completed: `SAL-P5-001..011`.
 - Current READY task after checkpoint: `SAL-P5-012` 模型路由、缓存与预算.
-- Implementation checkpoint: `50e6aa39 feat(P5): 实现多空反证与最终综合`; this follow-up status sync will record the actual hash.
+- Implementation checkpoint: `50e6aa39 feat(P5): 实现多空反证与最终综合`.
+- Status-sync checkpoint: `e9e5ad69 docs: 同步 SAL-P5-011 checkpoint hash`.
 - Previous implementation checkpoint: `22ecff19 feat(P5): 改造 Risk Portfolio Agent`.
 
 ## Implementation Notes
