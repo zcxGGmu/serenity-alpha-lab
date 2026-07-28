@@ -68,4 +68,12 @@
 - Implementation checkpoint: `dfd82553 feat(P5): 实现 Citation Validator`.
 - Status-sync checkpoint: `a64145ac docs: 同步 SAL-P5-013 checkpoint hash`.
 - Status-sync hash-anchor checkpoint: `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`.
-- Final anchor checkpoint: `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`.
+- Status-sync final anchor checkpoint: `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`.
+- Final anchor record checkpoint: `84424467 docs: 记录 SAL-P5-013 最终锚点`.
+## Status Review 2026-07-28
+
+- [x] Re-read current status and git anchors after `SAL-P5-013` final anchor.
+- [x] Update `tasks/lessons.md` for the repeated phase-completion status-sync reminder.
+- [x] Update recovery state to show `SAL-P5-014` as the next READY task.
+- [ ] Create Chinese status review checkpoint for `SAL-P5-013`.
+- Review: current clean checkpoint entering this review is `84424467 docs: 记录 SAL-P5-013 最终锚点`; no implementation code changed; no Agent tool security, report rendering, real Provider/LLM, Worker, Qlib runtime, production scheduling or formal portfolio backtest was started.
