@@ -14,16 +14,16 @@
 - [x] Add `docs/risk-portfolio-agent-evidence-adapter.md`.
 - [x] Run focused, related and full verification.
 - [x] Update `docs/development-progress-checklist.md`, `docs/development-status.md`, evidence/risk/decision records, this review section and next startup prompt.
-- [ ] Create Chinese checkpoint commit for `SAL-P5-010`.
+- [x] Create Chinese checkpoint commit for `SAL-P5-010`.
 
 ## Current State
 
 - Phase: P5 证据化 Agent、报告与成本治理.
 - Gate: G4 passed; G5 not passed.
-- Completed: `SAL-P5-001..009`.
-- Current READY task: `SAL-P5-010` Risk/Portfolio Agent 改造.
-- Latest implementation checkpoint: `a6974362 feat(P5): 改造 Intel Agent`.
-- Latest status sync/hash anchors: `7521d6d9`, `c2da5fe8`, `ec5208de`, `f18d1b6e`.
+- Completed: `SAL-P5-001..010`.
+- Current READY task: `SAL-P5-011` 多空反证与最终综合.
+- Latest implementation checkpoint: `22ecff19 feat(P5): 改造 Risk Portfolio Agent`.
+- Latest status sync/hash anchors: `7521d6d9`, `c2da5fe8`, `ec5208de`, `f18d1b6e`; SAL-P5-010 status sync/hash-anchor pending this handoff.
 
 ## Implementation Notes
 
@@ -40,4 +40,4 @@
 - Related suite: RiskPortfolioAgent/EvidenceBundle/QuantEvidenceAdapter/PromptRegistry/AgentStageStore/Architecture `41 passed`.
 - Full verification: pytest `456 passed, 3 skipped`; compileall PASS; dependency lock PASS (`Resolved 298 packages`); upstream tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope review: no real Provider/LLM, Worker loop, Qlib runtime, production scheduling, report rendering, Citation Validator or formal backtest promotion was started.
-- Commit: pending Chinese checkpoint commit and follow-up status hash sync.
+- Commit: implementation checkpoint `22ecff19 feat(P5): 改造 Risk Portfolio Agent`; follow-up status sync/hash-anchor pending this handoff.
