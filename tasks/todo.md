@@ -23,7 +23,7 @@
 - Completed: `SAL-P5-001..010`.
 - Current READY task: `SAL-P5-011` 多空反证与最终综合.
 - Latest implementation checkpoint: `22ecff19 feat(P5): 改造 Risk Portfolio Agent`.
-- Latest status sync/hash anchors: `490590ba` status sync; `dbe74521` status sync hash-anchor; `c70a7077` final hash-anchor solidification. SAL-P5-010 status review checkpoint pending this handoff. Previous review anchors: `ec5208de`, `f18d1b6e`.
+- Latest status sync/hash anchors: `490590ba` status sync; `dbe74521` status sync hash-anchor; `c70a7077` final hash-anchor solidification. status review checkpoint `4f37b244`. Previous review anchors: `ec5208de`, `f18d1b6e`.
 
 ## Implementation Notes
 
@@ -40,5 +40,5 @@
 - Related suite: RiskPortfolioAgent/EvidenceBundle/QuantEvidenceAdapter/PromptRegistry/AgentStageStore/Architecture `41 passed`.
 - Full verification: pytest `456 passed, 3 skipped`; compileall PASS; dependency lock PASS (`Resolved 298 packages`); upstream tag remained `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
 - Scope review: no real Provider/LLM, Worker loop, Qlib runtime, production scheduling, report rendering, Citation Validator or formal backtest promotion was started.
-- Commit: implementation checkpoint `22ecff19 feat(P5): 改造 Risk Portfolio Agent`; status sync checkpoint `490590ba docs: 同步 SAL-P5-010 checkpoint hash`; hash-anchor checkpoint `dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`; final solidification checkpoint `c70a7077 docs: 固化 SAL-P5-010 hash-anchor checkpoint`; status review checkpoint pending this handoff.
+- Commit: implementation checkpoint `22ecff19 feat(P5): 改造 Risk Portfolio Agent`; status sync checkpoint `490590ba docs: 同步 SAL-P5-010 checkpoint hash`; hash-anchor checkpoint `dbe74521 docs: 记录 SAL-P5-010 状态同步 hash`; final solidification checkpoint `c70a7077 docs: 固化 SAL-P5-010 hash-anchor checkpoint`; status review checkpoint `4f37b244 docs: 复核 SAL-P5-010 最新开发状态与恢复提示`.
 - Status handoff: user requested another latest-state update and reusable startup prompt; `tasks/lessons.md`, `docs/development-status.md`, and `docs/development-progress-checklist.md` are being updated to carry the SAL-P5-010 review anchor.
