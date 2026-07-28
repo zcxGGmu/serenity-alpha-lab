@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-28: SAL-P5-009 后状态复核必须把 hash-anchor 和可复制提示词同步到仓库
+
+- 纠正来源：`SAL-P5-009` Intel Agent 改造实现 checkpoint `a6974362`、状态同步 checkpoint `7521d6d9`、状态同步 hash-anchor checkpoint `c2da5fe8` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 都已完成，如果 `docs/development-status.md` 顶部状态、进度清单尾部或恢复提示词仍把最新 hash-anchor 停在上一任务，下次启动会误判当前进度，或者需要人工比对 `git log`。
+- 规则：每个阶段性任务完成、阻塞或形成可评审交付后，最终交接前必须复核并同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、验收证据/风险/决策登记、`tasks/todo.md` review、`tasks/lessons.md`（用户提醒或纠正时必更）和下次启动提示词；必须写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、严格禁区和可复制启动提示词。
+- 执行：后续从 `SAL-P5-010` Risk/Portfolio Agent 改造开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要中文 checkpoint，不得跳到 Model routing、Citation Validator 或报告渲染任务。
+
 ## 2026-07-27: SAL-P5-008 后用户再次提醒交接习惯时必须新增状态复核锚点
 
 - 纠正来源：`SAL-P5-008` Technical Agent 改造实现 checkpoint `74701974`、状态同步 checkpoint `7b0d572a`、状态同步 hash-anchor `cc1b327e`、最终 docs 固化 checkpoint `e35b0612`、状态复核 checkpoint `7d6b325f`、状态复核 hash-anchor `4f377abf` 和状态复核最终固化 checkpoint `044a487e` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
