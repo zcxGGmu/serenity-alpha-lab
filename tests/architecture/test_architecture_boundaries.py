@@ -326,6 +326,106 @@ def test_report_renderer_stays_offline_and_runtime_free() -> None:
     assert failures == []
 
 
+def test_report_delivery_ui_stays_offline_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "application" / "report_delivery.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "hashlib",
+        "json",
+        "serenity_alpha_lab.evidence.report_renderer",
+        "typing",
+    }
+    forbidden_prefixes = (
+        "src.agent",
+        "src.core.pipeline",
+        "api.v1.endpoints.agent",
+        "bot.commands",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.repositories",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {
+        "akshare",
+        "baostock",
+        "efinance",
+        "fastapi",
+        "litellm",
+        "qlib",
+        "sqlalchemy",
+        "tushare",
+        "yfinance",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden runtime {module}")
+
+    assert failures == []
+
+
+def test_notification_outbox_stays_persistence_only_and_sender_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "repositories" / "notification_outbox.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "hashlib",
+        "json",
+        "serenity_alpha_lab.evidence.report_renderer",
+        "sqlalchemy",
+        "sqlalchemy.engine",
+        "sqlalchemy.exc",
+        "sqlalchemy.types",
+        "typing",
+    }
+    forbidden_prefixes = (
+        "src.agent",
+        "src.core.pipeline",
+        "src.notification",
+        "src.notification_sender",
+        "api.v1.endpoints.agent",
+        "bot.commands",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {
+        "akshare",
+        "baostock",
+        "efinance",
+        "fastapi",
+        "litellm",
+        "qlib",
+        "requests",
+        "tushare",
+        "yfinance",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden sender/runtime {module}")
+
+    assert failures == []
+
+
 def test_prompt_registry_stays_offline_and_runtime_free() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "evidence" / "prompt_registry.py"

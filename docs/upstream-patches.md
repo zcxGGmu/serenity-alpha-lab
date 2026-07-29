@@ -14,8 +14,9 @@
 | DSA-PATCH-004 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0004-add-screen-lab.patch` | `SAL-P3-015` 在 DSA Web 中增加 Serenity Screen Lab 页面，作为 Quant Screening API 的 UI extension；不修改上游筛选核心语义 | Targeted web `24 passed`；full Vitest `973 passed, 2 skipped`；`npm run lint` PASS；`npm run build` PASS；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0004` already applied |
 | DSA-PATCH-005 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0005-migrate-signal-evaluation-engine.patch` | `SAL-P4-002` 把 legacy T+N recommendation evaluation 的内部语义迁移为 `SignalEvaluationEngine` / `evaluation_type=signal`，同时保留 legacy `/api/v1/backtest/*`、`Backtest*` schema、数据库表和 Agent read-tool 兼容面；Web 可见文案改为 Signal Evaluation，避免误称正式组合回测 | Root parity `3 passed`；migration architecture `4 passed`；P4 snapshot script PASS；DSA focused Python `95 passed, 1 warning`；focused web Vitest `26 passed`；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0005` already applied |
 | DSA-PATCH-006 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0006-add-quant-lab.patch` | `SAL-P4-021` 在 DSA Web 中增加 Serenity Quant Lab 页面，作为 `/api/v1/quant/backtest-runs` 正式组合回测 API 的 UI extension；不修改 legacy `/api/v1/backtest/*` Signal Evaluation 语义，不启动 Worker/Qlib/Provider/LLM runtime | Focused web `4 passed files / 27 passed tests`；`npm run lint` PASS；`npm run build` PASS；related Python suite `34 passed`；compileall/lock/tag/diff checks PASS；clean temp DSA worktree sequentially applied `0001..0006` |
+| DSA-PATCH-007 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0007-add-research-report-delivery-ui.patch` | `SAL-P5-016` 在 DSA Web 中增加可信 Research Report 页面，作为 `/api/v1/research/reports/{report_id}` 与通知 Outbox 状态 GET API 的 UI extension；不注册 backend route、不调用通知 sender、不启动真实 Provider/LLM/Worker/Qlib runtime | Focused web `4 passed files / 26 passed tests`；`npm run lint` PASS；`npm run build` PASS；related Python suite `79 passed`；full pytest `490 passed, 3 skipped`；clean temp DSA worktree sequentially applied `0001..0007` |
 
-当前没有登记为 `divergence` 的补丁。`DSA-PATCH-005` 属于 compatible semantic naming cleanup：它纠正 legacy backtest 命名歧义但保留运行行为、API/schema/table 兼容和 P4-001 快照。`DSA-PATCH-006` 属于 UI extension：它只新增 Quant Lab 对正式回测 API 的展示和操作入口，不改变上游 legacy Signal Evaluation 行为。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
+当前没有登记为 `divergence` 的补丁。`DSA-PATCH-005` 属于 compatible semantic naming cleanup：它纠正 legacy backtest 命名歧义但保留运行行为、API/schema/table 兼容和 P4-001 快照。`DSA-PATCH-006` 与 `DSA-PATCH-007` 属于 UI extension：它们分别新增 Quant Lab 与可信 Research Report 页面，不改变上游 legacy Signal Evaluation 行为，也不启动后端 Worker、Provider、LLM、Qlib 或通知 sender runtime。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
 
 ## DSA-PATCH-001：隔离 Intelligence 请求代理参数
 
@@ -159,6 +160,31 @@
 | Clean temp DSA worktree + `scripts/apply-dsa-baseline-patches.sh --worktree <temp>` | 通过，`0001` 至 `0006` 顺序应用 |
 | `git rev-parse upstream/dsa-v3.26.1` | `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` |
 | `git diff --check` | 通过 |
+
+## DSA-PATCH-007：增加 Research Report Delivery UI extension
+
+### 背景
+
+`SAL-P5-015` 已冻结可信 ResearchReport Renderer，但 DSA Web 尚无页面可以消费未来 `/api/v1/research/reports/{report_id}` payload，并以用户可审计方式展开 claim、citation、evidence、source 和 artifact hash。`SAL-P5-016` 还需要把通知 Outbox 状态作为只读状态面展示，但不得实现发送器或启动真实通知 runtime。
+
+### 修改
+
+- 新增 `src/api/researchReports.ts` 与 API client tests，只调用 `GET /api/v1/research/reports/{report_id}` 和 `GET /api/v1/research/reports/{report_id}/notifications`。
+- 新增 `ResearchReportPage` 与 page tests，覆盖 canonical authority/hash、model/cost/dataset/risk/disclaimer、claim citation expansion、evidence source URI、artifact hash 和 Outbox status display。
+- 新增 lazy route `/research-reports/:reportId`、SidebarNav item、zh/en labels 和 route/nav tests。
+- 保持 UI extension GET-only；不注册后端 route、不调用 sender、不触发 Provider/LLM、Worker loop、Qlib runtime、production scheduler 或 Gate G5 promotion。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `npm run test -- src/api/__tests__/researchReports.test.ts src/pages/__tests__/ResearchReportPage.test.tsx src/App.test.tsx src/components/layout/__tests__/SidebarNav.test.tsx` | 通过，`4 passed files / 26 passed tests` |
+| `npm run lint` | 通过 |
+| `npm run build` | 通过；Vite 生成 `ResearchReportPage-CDhe0e93.js` chunk |
+| Root related Python suite | 通过，`79 passed` |
+| `uv run --extra core --extra dev python -m pytest -q` | 通过，`490 passed, 3 skipped` |
+| Clean temp DSA worktree + `scripts/apply-dsa-baseline-patches.sh --worktree <temp>` | 通过，`0001` 至 `0007` 顺序应用 |
+| `git rev-parse upstream/dsa-v3.26.1` | `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` |
 
 ## 应用方式
 

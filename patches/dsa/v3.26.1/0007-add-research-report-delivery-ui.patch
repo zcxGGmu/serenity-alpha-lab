@@ -1,0 +1,885 @@
+diff --git a/apps/dsa-web/src/App.test.tsx b/apps/dsa-web/src/App.test.tsx
+index 618a06ae..b24873ae 100644
+--- a/apps/dsa-web/src/App.test.tsx
++++ b/apps/dsa-web/src/App.test.tsx
+@@ -68,6 +68,10 @@ vi.mock('./pages/QuantLabPage', () => ({
+   default: () => <div data-testid="quant-lab-page">Quant Lab</div>,
+ }));
+ 
++vi.mock('./pages/ResearchReportPage', () => ({
++  default: () => <div data-testid="research-report-page">Research report</div>,
++}));
++
+ vi.mock('./pages/SettingsPage', () => ({
+   default: () => <div data-testid="settings-page">Settings</div>,
+ }));
+@@ -170,6 +174,16 @@ describe('App routing behavior', () => {
+     expect(screen.queryByTestId('backtest-page')).not.toBeInTheDocument();
+   });
+ 
++  it('routes /research-reports/:reportId to the trusted report page after auth is ready', async () => {
++    window.history.pushState({}, '', '/research-reports/rpt_delivery');
++
++    render(<App />);
++
++    expect(await screen.findByTestId('research-report-page')).toBeInTheDocument();
++    expect(setCurrentRoute).toHaveBeenCalledWith('/research-reports/rpt_delivery');
++    expect(screen.queryByTestId('quant-lab-page')).not.toBeInTheDocument();
++  });
++
+   it('routes /decision-signals to the AI signals page after auth is ready', async () => {
+     window.history.pushState({}, '', '/decision-signals');
+ 
+diff --git a/apps/dsa-web/src/App.tsx b/apps/dsa-web/src/App.tsx
+index 0b12a7aa..c2a8c83d 100644
+--- a/apps/dsa-web/src/App.tsx
++++ b/apps/dsa-web/src/App.tsx
+@@ -25,6 +25,7 @@ const TokenUsagePage = lazy(() => import('./pages/TokenUsagePage'));
+ const StockScreeningPage = lazy(() => import('./pages/StockScreeningPage'));
+ const ScreenLabPage = lazy(() => import('./pages/ScreenLabPage'));
+ const QuantLabPage = lazy(() => import('./pages/QuantLabPage'));
++const ResearchReportPage = lazy(() => import('./pages/ResearchReportPage'));
+ 
+ const AppContent: React.FC = () => {
+   const location = useLocation();
+@@ -87,6 +88,7 @@ const AppContent: React.FC = () => {
+         <Route path="/decision-signals" element={<DecisionSignalsPage />} />
+         <Route path="/screen-lab" element={<ScreenLabPage />} />
+         <Route path="/quant-lab" element={<QuantLabPage />} />
++        <Route path="/research-reports/:reportId" element={<ResearchReportPage />} />
+         <Route path="/screening" element={<StockScreeningPage />} />
+         <Route path="/backtest" element={<BacktestPage />} />
+         <Route path="/alerts" element={<AlertsPage />} />
+diff --git a/apps/dsa-web/src/api/__tests__/researchReports.test.ts b/apps/dsa-web/src/api/__tests__/researchReports.test.ts
+new file mode 100644
+index 00000000..74914c92
+--- /dev/null
++++ b/apps/dsa-web/src/api/__tests__/researchReports.test.ts
+@@ -0,0 +1,108 @@
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import { researchReportsApi } from '../researchReports';
++
++const { get } = vi.hoisted(() => ({
++  get: vi.fn(),
++}));
++
++vi.mock('../index', () => ({
++  default: {
++    get,
++  },
++}));
++
++describe('researchReportsApi', () => {
++  beforeEach(() => {
++    get.mockReset();
++  });
++
++  it('loads trusted report pages from the research report namespace', async () => {
++    get.mockResolvedValueOnce({
++      data: {
++        contract_version: 'research.report_delivery_ui@1.0.0',
++        schema: { name: 'research.report_page', version: '1.0.0' },
++        authority: 'canonical_json',
++        authoritative_json_hash: 'sha256:' + 'a'.repeat(64),
++        rendering_hash: 'sha256:' + 'b'.repeat(64),
++        markdown_source: 'derived_from_authoritative_json',
++        html_source: 'derived_from_authoritative_json',
++        report: {
++          report_id: 'rpt_delivery',
++          report_level: 'verified',
++          as_of: '2026-07-29T15:30:00+00:00',
++        },
++        display_context: {
++          title: 'Trusted Alpha Delivery Report',
++          model: { provider: 'openai', name: 'gpt-4.1-mini', version: '2026-07-01' },
++          cost: { total_cost_usd: '0.123456' },
++          risk_summary: 'Risk gate remains block.',
++          disclaimer: 'Research only; not investment advice.',
++        },
++        dataset_versions: { adjusted_daily_bars: 'dsv_11111111111111111111111111111111' },
++        claims: [
++          {
++            claim_id: 'cl_metric',
++            kind: 'numeric_metric',
++            statement: 'The formal portfolio backtest cumulative return was 12.0%.',
++            verification_status: 'verified',
++            citation_ids: ['cit_metric'],
++            citations: [
++              {
++                citation_id: 'cit_metric',
++                evidence_id: 'ev_metric',
++                evidence_field_path: 'body.returns.cumulative_return',
++                evidence: {
++                  evidence_id: 'ev_metric',
++                  kind: 'backtest_performance_metrics',
++                  evaluation_scope: 'formal_portfolio_backtest',
++                  title: 'Backtest metric evidence',
++                  summary: 'Formal backtest cumulative return metric.',
++                  available_at: '2026-07-29T15:30:00+00:00',
++                  trust: 'authoritative',
++                  source_link: 'artifact://tenant/run/metrics@sha256',
++                  artifact: { artifact_id: 'art_metrics', artifact_hash: 'sha256:' + 'a'.repeat(64) },
++                },
++              },
++            ],
++          },
++        ],
++        citations: [],
++        evidence_lineage: [],
++        notification_statuses: [],
++        citation_graph_hash: 'sha256:' + 'c'.repeat(64),
++        display: { markdown: '# Trusted Alpha Delivery Report', html: '<article />' },
++      },
++    });
++
++    const page = await researchReportsApi.getReportPage('rpt_delivery');
++
++    expect(get).toHaveBeenCalledWith('/api/v1/research/reports/rpt_delivery');
++    expect(page.contractVersion).toBe('research.report_delivery_ui@1.0.0');
++    expect(page.authority).toBe('canonical_json');
++    expect(page.claims[0].claimId).toBe('cl_metric');
++    expect(page.claims[0].citations[0].evidence.sourceLink).toBe('artifact://tenant/run/metrics@sha256');
++    expect(page.markdownSource).toBe('derived_from_authoritative_json');
++    expect(page.htmlSource).toBe('derived_from_authoritative_json');
++  });
++
++  it('loads notification Outbox status without calling a send endpoint', async () => {
++    get.mockResolvedValueOnce({
++      data: [
++        {
++          message_id: 'msg-report-email',
++          channel: 'email',
++          dedupe_key: 'report:rpt_delivery:email',
++          status: 'sent',
++          attempt: 1,
++          sent_at: '2026-07-29T15:31:00+00:00',
++        },
++      ],
++    });
++
++    const statuses = await researchReportsApi.listReportNotifications('rpt_delivery');
++
++    expect(get).toHaveBeenCalledWith('/api/v1/research/reports/rpt_delivery/notifications');
++    expect(statuses[0].messageId).toBe('msg-report-email');
++    expect(statuses[0].dedupeKey).toBe('report:rpt_delivery:email');
++  });
++});
+diff --git a/apps/dsa-web/src/api/researchReports.ts b/apps/dsa-web/src/api/researchReports.ts
+new file mode 100644
+index 00000000..a0a134dd
+--- /dev/null
++++ b/apps/dsa-web/src/api/researchReports.ts
+@@ -0,0 +1,125 @@
++import apiClient from './index';
++import { toCamelCase } from './utils';
++
++export type ResearchReportSchemaRef = {
++  name: string;
++  version: string;
++};
++
++export type ResearchReportNotificationStatus = {
++  messageId: string;
++  channel: string;
++  dedupeKey: string;
++  status: string;
++  attempt: number;
++  lastError?: string | null;
++  sentAt?: string | null;
++};
++
++export type ResearchReportEvidenceSummary = {
++  evidenceId: string;
++  kind: string;
++  evaluationScope: string;
++  title: string;
++  summary: string;
++  availableAt: string;
++  trust: string;
++  source?: Record<string, unknown>;
++  sourceLink?: string | null;
++  datasetVersions?: Record<string, string>;
++  runId?: string | null;
++  stageId?: string | null;
++  traceId?: string | null;
++  artifact?: {
++    artifactId?: string;
++    artifactHash?: string;
++  } | null;
++  formulaVersions?: Record<string, string>;
++};
++
++export type ResearchReportCitationSummary = {
++  citationId: string;
++  evidenceId: string;
++  evidenceFieldPath: string;
++  citedValue?: unknown;
++  unit?: string | null;
++  formulaVersion?: string | null;
++  datasetVersions?: Record<string, string>;
++  runId?: string | null;
++  stageId?: string | null;
++  artifactHash?: string | null;
++  evidence: ResearchReportEvidenceSummary;
++};
++
++export type ResearchReportClaimSummary = {
++  claimId: string;
++  kind: string;
++  statement: string;
++  verificationStatus: string;
++  citationIds: string[];
++  computationPolicy?: string;
++  value?: unknown;
++  unit?: string | null;
++  formulaVersion?: string | null;
++  datasetVersions?: Record<string, string>;
++  warnings?: string[];
++  citations: ResearchReportCitationSummary[];
++};
++
++export type ResearchReportPagePayload = {
++  contractVersion: string;
++  schema: ResearchReportSchemaRef;
++  authority: string;
++  authoritativeJsonHash: string;
++  renderingHash: string;
++  markdownSource: string;
++  htmlSource: string;
++  report: {
++    reportId: string;
++    reportLevel: string;
++    asOf: string;
++    generatedAt?: string | null;
++    runId?: string | null;
++    traceId?: string | null;
++  };
++  displayContext: {
++    title?: string;
++    model?: { provider?: string; name?: string; version?: string };
++    cost?: { currency?: string; totalCostUsd?: string };
++    riskSummary?: string;
++    disclaimer?: string;
++  };
++  datasetVersions: Record<string, string>;
++  summary?: Record<string, unknown>;
++  validation?: {
++    issueCount?: number;
++    issues?: Array<Record<string, unknown>>;
++  };
++  claims: ResearchReportClaimSummary[];
++  citations: Array<Record<string, unknown>>;
++  evidenceLineage: ResearchReportEvidenceSummary[];
++  notificationStatuses: ResearchReportNotificationStatus[];
++  citationGraphHash: string;
++  display: {
++    markdown: string;
++    html: string;
++  };
++};
++
++function reportUrl(reportId: string): string {
++  return `/api/v1/research/reports/${encodeURIComponent(reportId)}`;
++}
++
++export const researchReportsApi = {
++  async getReportPage(reportId: string): Promise<ResearchReportPagePayload> {
++    const response = await apiClient.get<Record<string, unknown>>(reportUrl(reportId));
++    return toCamelCase<ResearchReportPagePayload>(response.data);
++  },
++
++  async listReportNotifications(reportId: string): Promise<ResearchReportNotificationStatus[]> {
++    const response = await apiClient.get<Record<string, unknown>[]>(
++      `${reportUrl(reportId)}/notifications`,
++    );
++    return toCamelCase<ResearchReportNotificationStatus[]>(response.data);
++  },
++};
+diff --git a/apps/dsa-web/src/components/layout/SidebarNav.tsx b/apps/dsa-web/src/components/layout/SidebarNav.tsx
+index 40658d14..dc291614 100644
+--- a/apps/dsa-web/src/components/layout/SidebarNav.tsx
++++ b/apps/dsa-web/src/components/layout/SidebarNav.tsx
+@@ -1,6 +1,6 @@
+ import React, { useEffect, useState } from 'react';
+-import { Activity, BarChart3, Bell, BriefcaseBusiness, Gauge, Home, LogOut, MessageSquareQuote, Microscope, Search, Settings2 } from 'lucide-react';
+-import { NavLink } from 'react-router-dom';
++import { Activity, BarChart3, Bell, BriefcaseBusiness, FileText, Gauge, Home, LogOut, MessageSquareQuote, Microscope, Search, Settings2 } from 'lucide-react';
++import { NavLink, useLocation } from 'react-router-dom';
+ import { ALPHASIFT_CONFIG_CHANGED_EVENT, SYSTEM_CONFIG_CHANGED_EVENT, alphasiftApi } from '../../api/alphasift';
+ import { useAuth } from '../../contexts/AuthContext';
+ import { useAgentChatStore } from '../../stores/agentChatStore';
+@@ -32,6 +32,7 @@ const NAV_ITEMS: NavItem[] = [
+   { key: 'chat', labelKey: 'layout.nav.chat', to: '/chat', icon: MessageSquareQuote, badge: 'completion' },
+   { key: 'screen-lab', labelKey: 'layout.nav.screenLab', to: '/screen-lab', icon: Microscope },
+   { key: 'quant-lab', labelKey: 'layout.nav.quantLab', to: '/quant-lab', icon: BarChart3 },
++  { key: 'research-reports', labelKey: 'layout.nav.researchReports', to: '/research-reports/rpt_demo', icon: FileText },
+   { key: 'screening', labelKey: 'layout.nav.screening', to: '/screening', icon: Search },
+   { key: 'portfolio', labelKey: 'layout.nav.portfolio', to: '/portfolio', icon: BriefcaseBusiness },
+   { key: 'decision-signals', labelKey: 'layout.nav.decisionSignals', to: '/decision-signals', icon: Activity },
+@@ -44,6 +45,7 @@ const NAV_ITEMS: NavItem[] = [
+ export const SidebarNav: React.FC<SidebarNavProps> = ({ collapsed = false, onNavigate, variant = 'default' }) => {
+   const { authEnabled, logout } = useAuth();
+   const { t } = useUiLanguage();
++  const location = useLocation();
+   const completionBadge = useAgentChatStore((state) => state.completionBadge);
+   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+   const [showAlphaSiftNav, setShowAlphaSiftNav] = useState(false);
+@@ -118,6 +120,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ collapsed = false, onNav
+       <nav className={cn('flex flex-col gap-1.5', isRail ? '' : 'flex-1')} aria-label={t('layout.mainNav')}>
+         {navItems.map(({ key, labelKey, to, icon: Icon, exact, badge }) => {
+           const label = t(labelKey);
++          const isSectionActive = key === 'research-reports' && location.pathname.startsWith('/research-reports/');
+           return (
+           <NavLink
+             key={key}
+@@ -128,13 +131,13 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ collapsed = false, onNav
+             className={({ isActive }) =>
+               cn(
+                 itemInteractiveClass,
+-                isActive ? itemActiveClass : ''
++                isActive || isSectionActive ? itemActiveClass : ''
+               )
+             }
+           >
+             {({ isActive }) => (
+               <>
+-                <Icon className={cn(itemIconClass, isActive ? 'text-[var(--nav-icon-active)]' : 'text-current')} />
++                <Icon className={cn(itemIconClass, isActive || isSectionActive ? 'text-[var(--nav-icon-active)]' : 'text-current')} />
+                 {!collapsed ? <span className={itemLabelClass}>{label}</span> : null}
+                 {badge === 'completion' && completionBadge ? (
+                   <StatusDot
+diff --git a/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx b/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
+index 03105caf..f4fd3fe0 100644
+--- a/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
++++ b/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
+@@ -60,7 +60,7 @@ describe('SidebarNav', () => {
+     expect(await screen.findByRole('link', { name: '选股' })).toHaveAttribute('href', '/screening');
+   });
+ 
+-  it('places screen lab and quant lab before legacy screening when AlphaSift is enabled', async () => {
++  it('places lab and report surfaces before legacy screening when AlphaSift is enabled', async () => {
+     mockGetAlphaSiftStatus.mockResolvedValueOnce({ enabled: true, available: false, installSpecIsDefault: false });
+ 
+     render(
+@@ -71,9 +71,10 @@ describe('SidebarNav', () => {
+ 
+     await screen.findByRole('link', { name: '筛选实验室' });
+     await screen.findByRole('link', { name: '回测实验室' });
++    await screen.findByRole('link', { name: '研究报告' });
+     await screen.findByRole('link', { name: '选股' });
+     const hrefs = screen.getAllByRole('link').map((link) => link.getAttribute('href'));
+-    expect(hrefs.slice(0, 7)).toEqual(['/', '/chat', '/screen-lab', '/quant-lab', '/screening', '/portfolio', '/decision-signals']);
++    expect(hrefs.slice(0, 8)).toEqual(['/', '/chat', '/screen-lab', '/quant-lab', '/research-reports/rpt_demo', '/screening', '/portfolio', '/decision-signals']);
+   });
+ 
+   it('refreshes the screening navigation item after any config save event', async () => {
+@@ -153,6 +154,18 @@ describe('SidebarNav', () => {
+     expect(quantLabLink).toHaveClass('font-medium');
+   });
+ 
++  it('renders the research reports navigation item and marks report paths active', () => {
++    render(
++      <MemoryRouter initialEntries={['/research-reports/rpt_delivery']}>
++        <SidebarNav />
++      </MemoryRouter>,
++    );
++
++    const reportsLink = screen.getByRole('link', { name: '研究报告' });
++    expect(reportsLink).toHaveAttribute('href', '/research-reports/rpt_demo');
++    expect(reportsLink).toHaveClass('font-medium');
++  });
++
+   it('renders the AI signals navigation item and marks it active', () => {
+     render(
+       <MemoryRouter initialEntries={['/decision-signals']}>
+diff --git a/apps/dsa-web/src/i18n/uiText.ts b/apps/dsa-web/src/i18n/uiText.ts
+index 61dec0ba..96b908b8 100644
+--- a/apps/dsa-web/src/i18n/uiText.ts
++++ b/apps/dsa-web/src/i18n/uiText.ts
+@@ -54,6 +54,7 @@ const zh = {
+   'layout.nav.home': '首页',
+   'layout.nav.portfolio': '持仓',
+   'layout.nav.quantLab': '回测实验室',
++  'layout.nav.researchReports': '研究报告',
+   'layout.nav.settings': '设置',
+   'layout.nav.screenLab': '筛选实验室',
+   'layout.nav.screening': '选股',
+@@ -75,6 +76,8 @@ const zh = {
+   'layout.route.portfolio.title': '持仓',
+   'layout.route.quantLab.description': '正式组合回测创建、净值、回撤、交易、持仓和偏差审计',
+   'layout.route.quantLab.title': '回测实验室',
++  'layout.route.researchReports.description': '可信报告、引用展开、证据血缘和通知 Outbox 状态',
++  'layout.route.researchReports.title': '研究报告',
+   'layout.route.settings.description': '系统配置、模型与认证管理',
+   'layout.route.settings.title': '设置',
+   'layout.route.screenLab.description': 'ScreenDefinition 配置、Quant Screening Run、结果解释与历史比较',
+@@ -898,6 +901,7 @@ const en: Record<UiTextKey, string> = {
+   'layout.nav.home': 'Home',
+   'layout.nav.portfolio': 'Portfolio',
+   'layout.nav.quantLab': 'Quant Lab',
++  'layout.nav.researchReports': 'Research Reports',
+   'layout.nav.settings': 'Settings',
+   'layout.nav.screenLab': 'Screen Lab',
+   'layout.nav.screening': 'Screening',
+@@ -919,6 +923,8 @@ const en: Record<UiTextKey, string> = {
+   'layout.route.portfolio.title': 'Portfolio',
+   'layout.route.quantLab.description': 'Formal portfolio backtest creation, equity, drawdown, trades, positions, and bias audit',
+   'layout.route.quantLab.title': 'Quant Lab',
++  'layout.route.researchReports.description': 'Trusted reports, citation expansion, evidence lineage, and notification Outbox status',
++  'layout.route.researchReports.title': 'Research Reports',
+   'layout.route.settings.description': 'System config, models, and authentication',
+   'layout.route.settings.title': 'Settings',
+   'layout.route.screenLab.description': 'ScreenDefinition configuration, Quant Screening runs, result explanations, and history comparison',
+diff --git a/apps/dsa-web/src/pages/ResearchReportPage.tsx b/apps/dsa-web/src/pages/ResearchReportPage.tsx
+new file mode 100644
+index 00000000..8bcc2b04
+--- /dev/null
++++ b/apps/dsa-web/src/pages/ResearchReportPage.tsx
+@@ -0,0 +1,282 @@
++import type React from 'react';
++import { useEffect, useMemo, useState } from 'react';
++import { Bell, BookOpen, Boxes, Clock3, FileText, Link2, ShieldCheck, WalletCards } from 'lucide-react';
++import { useParams } from 'react-router-dom';
++import { AppPage, Badge, Button, Card, EmptyState, InlineAlert } from '../components/common';
++import {
++  researchReportsApi,
++  type ResearchReportClaimSummary,
++  type ResearchReportNotificationStatus,
++  type ResearchReportPagePayload,
++} from '../api/researchReports';
++
++type PageState = 'loading' | 'ready' | 'error';
++
++type ReportLoadState = {
++  reportId: string;
++  pageState: PageState;
++  report: ResearchReportPagePayload | null;
++  notifications: ResearchReportNotificationStatus[];
++  error: string | null;
++};
++
++function statusTone(status: string): 'success' | 'warning' | 'danger' | 'info' | 'default' {
++  if (status === 'verified' || status === 'sent') {
++    return 'success';
++  }
++  if (status === 'partial' || status === 'pending' || status === 'sending') {
++    return 'warning';
++  }
++  if (status === 'blocked' || status === 'dead_letter' || status === 'rejected') {
++    return 'danger';
++  }
++  return 'info';
++}
++
++function formatObjectEntries(values?: Record<string, string> | null): string {
++  if (!values || Object.keys(values).length === 0) {
++    return '-';
++  }
++  return Object.entries(values).map(([key, value]) => `${key}: ${value}`).join(' · ');
++}
++
++function errorMessage(error: unknown): string {
++  if (error instanceof Error && error.message.trim()) {
++    return error.message.trim();
++  }
++  const response = (error as { response?: { data?: { title?: string; detail?: string; message?: string } } } | null)?.response;
++  return response?.data?.detail || response?.data?.message || response?.data?.title || 'Unknown error';
++}
++
++const ReportMeta: React.FC<{ report: ResearchReportPagePayload }> = ({ report }) => (
++  <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
++    <Card padding="sm">
++      <p className="flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="h-4 w-4" />Authority</p>
++      <p className="mt-2 break-all font-mono text-xs text-foreground">{report.authority}</p>
++      <p className="mt-1 break-all font-mono text-xs text-secondary-text">{report.authoritativeJsonHash}</p>
++    </Card>
++    <Card padding="sm">
++      <p className="flex items-center gap-2 text-xs text-secondary-text"><Clock3 className="h-4 w-4" />As-of</p>
++      <p className="mt-2 font-mono text-xs text-foreground">{report.report.asOf}</p>
++      <p className="mt-1 text-xs text-secondary-text">{report.report.generatedAt || 'not recorded'}</p>
++    </Card>
++    <Card padding="sm">
++      <p className="flex items-center gap-2 text-xs text-secondary-text"><WalletCards className="h-4 w-4" />Model / cost</p>
++      <p className="mt-2 text-sm text-foreground">
++        {report.displayContext.model?.provider} / {report.displayContext.model?.name}
++      </p>
++      <p className="mt-1 font-mono text-xs text-secondary-text">USD {report.displayContext.cost?.totalCostUsd || '-'}</p>
++    </Card>
++    <Card padding="sm">
++      <p className="flex items-center gap-2 text-xs text-secondary-text"><Boxes className="h-4 w-4" />Datasets</p>
++      <p className="mt-2 break-all text-xs text-foreground">{formatObjectEntries(report.datasetVersions)}</p>
++    </Card>
++  </div>
++);
++
++const NotificationStatusPanel: React.FC<{ statuses: ResearchReportNotificationStatus[] }> = ({ statuses }) => {
++  if (statuses.length === 0) {
++    return (
++      <EmptyState
++        title="No notification status"
++        description="Transactional Outbox rows appear here after report delivery is queued."
++        icon={<Bell className="h-8 w-8" />}
++      />
++    );
++  }
++  return (
++    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
++      {statuses.map((status) => (
++        <Card key={status.messageId} padding="sm">
++          <div className="flex items-start justify-between gap-3">
++            <div>
++              <p className="font-semibold text-foreground">{status.channel}</p>
++              <p className="mt-1 break-all font-mono text-xs text-secondary-text">{status.dedupeKey}</p>
++            </div>
++            <Badge variant={statusTone(status.status)}>{status.status}</Badge>
++          </div>
++          <p className="mt-3 text-xs text-secondary-text">attempt {status.attempt}</p>
++          {status.sentAt ? <p className="mt-1 font-mono text-xs text-success">{status.sentAt}</p> : null}
++          {status.lastError ? <p className="mt-1 text-xs text-danger">{status.lastError}</p> : null}
++        </Card>
++      ))}
++    </div>
++  );
++};
++
++const ClaimCard: React.FC<{ claim: ResearchReportClaimSummary }> = ({ claim }) => {
++  const [expanded, setExpanded] = useState(false);
++  return (
++    <Card padding="sm">
++      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
++        <div className="min-w-0">
++          <div className="flex flex-wrap items-center gap-2">
++            <Badge variant={statusTone(claim.verificationStatus)}>{claim.verificationStatus}</Badge>
++            <Badge variant="info">{claim.kind}</Badge>
++            {claim.unit ? <Badge variant="default">{claim.unit}</Badge> : null}
++          </div>
++          <p className="mt-3 text-sm font-semibold text-foreground">{claim.statement}</p>
++          <p className="mt-2 break-all font-mono text-xs text-secondary-text">
++            {claim.claimId} · citations {claim.citationIds.join(', ')}
++          </p>
++        </div>
++        <Button variant="secondary" size="sm" onClick={() => setExpanded((value) => !value)}>
++          <BookOpen className="h-4 w-4" />
++          {expanded ? 'Hide evidence' : 'Expand evidence'}
++        </Button>
++      </div>
++
++      {expanded ? (
++        <div className="mt-4 space-y-3 border-t border-border/70 pt-4">
++          {claim.citations.map((citation) => (
++            <div key={citation.citationId} className="rounded-xl border border-border/70 bg-surface/70 p-3">
++              <div className="flex flex-wrap items-center gap-2">
++                <Badge variant="info">{citation.citationId}</Badge>
++                <span className="font-mono text-xs text-secondary-text">{citation.evidenceFieldPath}</span>
++              </div>
++              <p className="mt-2 text-sm font-semibold text-foreground">{citation.evidence.title}</p>
++              <p className="mt-1 text-xs text-secondary-text">{citation.evidence.summary}</p>
++              <div className="mt-3 grid gap-2 text-xs text-secondary-text md:grid-cols-2">
++                <p className="break-all">Evidence: {citation.evidence.evidenceId}</p>
++                <p className="break-all">Artifact: {citation.evidence.artifact?.artifactId || '-'}</p>
++                <p className="break-all">Hash: {citation.artifactHash || citation.evidence.artifact?.artifactHash || '-'}</p>
++                <p className="break-all">Run: {citation.runId || citation.evidence.runId || '-'}</p>
++              </div>
++              {citation.evidence.sourceLink ? (
++                <p className="mt-3 flex items-center gap-2 break-all font-mono text-xs text-cyan">
++                  <Link2 className="h-3.5 w-3.5 shrink-0" />
++                  {citation.evidence.sourceLink}
++                </p>
++              ) : null}
++            </div>
++          ))}
++        </div>
++      ) : null}
++    </Card>
++  );
++};
++
++const ResearchReportPage: React.FC = () => {
++  const { reportId } = useParams();
++  const resolvedReportId = reportId || 'rpt_demo';
++  const [loadState, setLoadState] = useState<ReportLoadState>(() => ({
++    reportId: resolvedReportId,
++    pageState: 'loading',
++    report: null,
++    notifications: [],
++    error: null,
++  }));
++
++  useEffect(() => {
++    let active = true;
++    void Promise.all([
++      researchReportsApi.getReportPage(resolvedReportId),
++      researchReportsApi.listReportNotifications(resolvedReportId),
++    ])
++      .then(([nextReport, nextNotifications]) => {
++        if (!active) {
++          return;
++        }
++        setLoadState({
++          reportId: resolvedReportId,
++          pageState: 'ready',
++          report: nextReport,
++          notifications: nextNotifications.length > 0 ? nextNotifications : nextReport.notificationStatuses,
++          error: null,
++        });
++      })
++      .catch((loadError: unknown) => {
++        if (!active) {
++          return;
++        }
++        setLoadState({
++          reportId: resolvedReportId,
++          pageState: 'error',
++          report: null,
++          notifications: [],
++          error: errorMessage(loadError),
++        });
++      });
++
++    return () => {
++      active = false;
++    };
++  }, [resolvedReportId]);
++
++  const currentLoadState = loadState.reportId === resolvedReportId
++    ? loadState
++    : {
++        reportId: resolvedReportId,
++        pageState: 'loading' as const,
++        report: null,
++        notifications: [],
++        error: null,
++      };
++  const { pageState, report, notifications, error } = currentLoadState;
++  const validationIssues = useMemo(() => report?.validation?.issues || [], [report]);
++
++  return (
++    <AppPage>
++      <div data-testid="research-report-page" className="space-y-5">
++        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
++          <div>
++            <p className="label-uppercase">Trusted Research</p>
++            <h1 className="mt-2 flex items-center gap-2 text-2xl font-bold text-foreground">
++              <FileText className="h-6 w-6 text-cyan" />
++              {report?.displayContext.title || 'Research Report'}
++            </h1>
++            <p className="mt-2 max-w-3xl text-sm text-secondary-text">
++              Claims expand to citations, evidence lineage, source links and Artifact hashes from canonical JSON.
++            </p>
++          </div>
++          {report ? <Badge variant={statusTone(report.report.reportLevel)} size="md">{report.report.reportLevel}</Badge> : null}
++        </div>
++
++        {pageState === 'loading' ? (
++          <EmptyState title="Loading report" description="Fetching trusted report payload and Outbox status." icon={<Clock3 className="h-8 w-8" />} />
++        ) : null}
++
++        {pageState === 'error' ? (
++          <InlineAlert title="Report load failed" message={error || 'Unknown error'} variant="danger" />
++        ) : null}
++
++        {pageState === 'ready' && report ? (
++          <>
++            <ReportMeta report={report} />
++            <InlineAlert
++              title="Authority"
++              message={`${report.markdownSource}; Markdown and HTML remain display formats derived from canonical JSON.`}
++              variant="info"
++            />
++            <Card title="Risk and disclaimer" subtitle="Report context">
++              <p className="text-sm text-foreground">{report.displayContext.riskSummary}</p>
++              <p className="mt-2 text-xs text-secondary-text">{report.displayContext.disclaimer}</p>
++            </Card>
++            <section className="space-y-3">
++              <div className="flex items-center justify-between gap-3">
++                <h2 className="text-lg font-semibold text-foreground">Claims and citations</h2>
++                <Badge variant="info">{report.claims.length} claims</Badge>
++              </div>
++              {report.claims.length > 0 ? report.claims.map((claim) => <ClaimCard key={claim.claimId} claim={claim} />) : (
++                <EmptyState title="No claims" description="No claims survived citation validation." icon={<FileText className="h-8 w-8" />} />
++              )}
++            </section>
++            <section className="space-y-3">
++              <h2 className="text-lg font-semibold text-foreground">Notification Outbox</h2>
++              <NotificationStatusPanel statuses={notifications} />
++            </section>
++            {validationIssues.length > 0 ? (
++              <InlineAlert
++                title="Validation issues"
++                message={validationIssues.map((issue) => String(issue.code || issue.message || 'issue')).join(', ')}
++                variant="warning"
++              />
++            ) : null}
++          </>
++        ) : null}
++      </div>
++    </AppPage>
++  );
++};
++
++export default ResearchReportPage;
+diff --git a/apps/dsa-web/src/pages/__tests__/ResearchReportPage.test.tsx b/apps/dsa-web/src/pages/__tests__/ResearchReportPage.test.tsx
+new file mode 100644
+index 00000000..a611280b
+--- /dev/null
++++ b/apps/dsa-web/src/pages/__tests__/ResearchReportPage.test.tsx
+@@ -0,0 +1,159 @@
++import { fireEvent, render, screen, waitFor } from '@testing-library/react';
++import { MemoryRouter, Route, Routes } from 'react-router-dom';
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import ResearchReportPage from '../ResearchReportPage';
++
++const { getReportPage, listReportNotifications } = vi.hoisted(() => ({
++  getReportPage: vi.fn(),
++  listReportNotifications: vi.fn(),
++}));
++
++vi.mock('../../api/researchReports', () => ({
++  researchReportsApi: {
++    getReportPage: (...args: unknown[]) => getReportPage(...args),
++    listReportNotifications: (...args: unknown[]) => listReportNotifications(...args),
++  },
++}));
++
++const reportPage = {
++  contractVersion: 'research.report_delivery_ui@1.0.0',
++  schema: { name: 'research.report_page', version: '1.0.0' },
++  authority: 'canonical_json',
++  authoritativeJsonHash: 'sha256:' + 'a'.repeat(64),
++  renderingHash: 'sha256:' + 'b'.repeat(64),
++  markdownSource: 'derived_from_authoritative_json',
++  htmlSource: 'derived_from_authoritative_json',
++  report: {
++    reportId: 'rpt_delivery',
++    reportLevel: 'verified',
++    asOf: '2026-07-29T15:30:00+00:00',
++    generatedAt: '2026-07-29T15:31:00+00:00',
++    runId: 'run-report',
++    traceId: 'trace-report',
++  },
++  displayContext: {
++    title: 'Trusted Alpha Delivery Report',
++    model: { provider: 'openai', name: 'gpt-4.1-mini', version: '2026-07-01' },
++    cost: { currency: 'USD', totalCostUsd: '0.123456' },
++    riskSummary: 'Risk gate remains block until deterministic policy rerun.',
++    disclaimer: 'Research only; not investment advice.',
++  },
++  datasetVersions: { adjustedDailyBars: 'dsv_11111111111111111111111111111111' },
++  summary: { claimCount: 1 },
++  validation: { issueCount: 0, issues: [] },
++  claims: [
++    {
++      claimId: 'cl_metric',
++      kind: 'numeric_metric',
++      statement: 'The formal portfolio backtest cumulative return was 12.0%.',
++      verificationStatus: 'verified',
++      citationIds: ['cit_metric'],
++      computationPolicy: 'deterministic_evidence',
++      unit: 'ratio',
++      citations: [
++        {
++          citationId: 'cit_metric',
++          evidenceId: 'ev_metric',
++          evidenceFieldPath: 'body.returns.cumulative_return',
++          citedValue: '0.120000',
++          unit: 'ratio',
++          formulaVersion: 'cumulative_return@1.0.0',
++          datasetVersions: { adjustedDailyBars: 'dsv_11111111111111111111111111111111' },
++          runId: 'run-backtest',
++          stageId: 'stage-metrics',
++          artifactHash: 'sha256:' + 'c'.repeat(64),
++          evidence: {
++            evidenceId: 'ev_metric',
++            kind: 'backtest_performance_metrics',
++            evaluationScope: 'formal_portfolio_backtest',
++            title: 'Backtest metric evidence',
++            summary: 'Formal backtest cumulative return metric.',
++            availableAt: '2026-07-29T15:30:00+00:00',
++            trust: 'authoritative',
++            sourceLink: 'artifact://tenant/run/metrics@sha256',
++            artifact: { artifactId: 'art_metrics', artifactHash: 'sha256:' + 'c'.repeat(64) },
++            runId: 'run-backtest',
++            stageId: 'stage-metrics',
++          },
++        },
++      ],
++    },
++  ],
++  citations: [],
++  evidenceLineage: [],
++  notificationStatuses: [],
++  citationGraphHash: 'sha256:' + 'd'.repeat(64),
++  display: { markdown: '# Trusted Alpha Delivery Report', html: '<article />' },
++};
++
++const notifications = [
++  {
++    messageId: 'msg-report-email',
++    channel: 'email',
++    dedupeKey: 'report:rpt_delivery:email',
++    status: 'sent',
++    attempt: 1,
++    sentAt: '2026-07-29T15:31:00+00:00',
++  },
++];
++
++function renderPage(path = '/research-reports/rpt_delivery') {
++  return render(
++    <MemoryRouter initialEntries={[path]}>
++      <Routes>
++        <Route path="/research-reports/:reportId" element={<ResearchReportPage />} />
++      </Routes>
++    </MemoryRouter>,
++  );
++}
++
++describe('ResearchReportPage', () => {
++  beforeEach(() => {
++    vi.clearAllMocks();
++    getReportPage.mockResolvedValue(reportPage);
++    listReportNotifications.mockResolvedValue(notifications);
++  });
++
++  it('renders trusted report metadata, canonical authority and notification status', async () => {
++    renderPage();
++
++    expect(await screen.findByTestId('research-report-page')).toBeInTheDocument();
++    expect(getReportPage).toHaveBeenCalledWith('rpt_delivery');
++    expect(listReportNotifications).toHaveBeenCalledWith('rpt_delivery');
++    expect(await screen.findByRole('heading', { name: 'Trusted Alpha Delivery Report' })).toBeInTheDocument();
++    expect(screen.getAllByText('verified').length).toBeGreaterThanOrEqual(1);
++    expect(screen.getByText('canonical_json')).toBeInTheDocument();
++    expect(screen.getByText(/sha256:aaaaaaaa/)).toBeInTheDocument();
++    expect(screen.getByText(/dsv_11111111111111111111111111111111/)).toBeInTheDocument();
++    expect(screen.getByText('openai / gpt-4.1-mini')).toBeInTheDocument();
++    expect(screen.getByText('USD 0.123456')).toBeInTheDocument();
++    expect(screen.getByText('Risk gate remains block until deterministic policy rerun.')).toBeInTheDocument();
++    expect(screen.getByText('report:rpt_delivery:email')).toBeInTheDocument();
++    expect(screen.getByText('attempt 1')).toBeInTheDocument();
++    expect(screen.getByText(/derived_from_authoritative_json/)).toBeInTheDocument();
++  });
++
++  it('expands a claim to cited evidence, source links and artifact hashes', async () => {
++    renderPage();
++
++    await screen.findByText('The formal portfolio backtest cumulative return was 12.0%.');
++    fireEvent.click(screen.getByRole('button', { name: 'Expand evidence' }));
++
++    expect(await screen.findByText('cit_metric')).toBeInTheDocument();
++    expect(screen.getByText('body.returns.cumulative_return')).toBeInTheDocument();
++    expect(screen.getByText('Backtest metric evidence')).toBeInTheDocument();
++    expect(screen.getByText(/artifact:\/\/tenant\/run\/metrics@sha256/)).toBeInTheDocument();
++    expect(screen.getByText(/art_metrics/)).toBeInTheDocument();
++    expect(screen.getByText(/run-backtest/)).toBeInTheDocument();
++  });
++
++  it('renders load errors without attempting notification sends', async () => {
++    getReportPage.mockRejectedValueOnce({ response: { data: { title: 'report not found' } } });
++
++    renderPage('/research-reports/missing');
++
++    expect(await screen.findByText('Report load failed')).toBeInTheDocument();
++    expect(screen.getByText('report not found')).toBeInTheDocument();
++    await waitFor(() => expect(listReportNotifications).toHaveBeenCalledTimes(1));
++  });
++});
