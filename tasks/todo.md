@@ -24,7 +24,8 @@
 - Implementation checkpoint: `a816cf72 feat(P5): 实现可信 ResearchReport Renderer`.
 - Implementation checkpoint entering task: `1840f173 feat(P5): 实现 Agent 工具安全`.
 - Status-sync checkpoint after task: `f9e9c961 docs: 同步 SAL-P5-015 checkpoint hash`.
-- Status-sync hash-anchor after task: this `docs: 记录 SAL-P5-015 状态同步 hash` commit; confirm hash with `git log -1 --oneline` after commit.
+- Status-sync hash-anchor after task: `65a0e446 docs: 记录 SAL-P5-015 状态同步 hash`.
+- Status-review checkpoint after user reminder: this `docs: 复核 SAL-P5-015 最新开发状态与恢复提示` commit; confirm hash with `git log -1 --oneline` after commit.
 - Latest status-sync checkpoint entering task: `57c6eb6d docs: 同步 SAL-P5-014 checkpoint hash`.
 - Latest status-sync hash-anchor entering task: `488f2955 docs: 记录 SAL-P5-014 状态同步 hash`.
 - Previous implementation checkpoint: `dfd82553 feat(P5): 实现 Citation Validator`.
@@ -52,3 +53,4 @@
 - Immutable upstream tag: `git rev-parse upstream/dsa-v3.26.1` -> `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 - Diff hygiene: `git diff --check` -> PASS.
 - Subagent dispatch note: implementation/code-review subagent attempts were stopped after repeated wrapper schema errors; local review plus fresh verification was used instead, and no UI/notification, Agent evaluation or P5 follow-on work was started.
+- Status review: user requested another latest-state sync and reusable startup prompt after `65a0e446`; updated docs/status/checklist/todo/lessons and preserved `SAL-P5-016` as the only next task.

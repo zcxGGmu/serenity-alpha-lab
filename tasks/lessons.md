@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-29: SAL-P5-015 后再次提醒时必须把状态同步 hash-anchor 和状态复核入口一起固化
+
+- 纠正来源：`SAL-P5-015` 可信 ResearchReport Renderer 实现 checkpoint `a816cf72`、状态同步 checkpoint `f9e9c961` 和状态同步 hash-anchor checkpoint `65a0e446` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 已提交，如果 `docs/development-status.md` 的最新状态复核仍停在较早任务，或下次启动提示词没有写清最新 hash-anchor 与唯一下一步，恢复会话仍需要人工拼接 `git log`，也可能误跳到 Agent 评测、Gate G5 或后续 P5 runtime。
+- 规则：每个阶段性任务完成后，最终交接前必须额外复核 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md` 和下次启动提示词，写清最近实现 checkpoint、状态同步 checkpoint、hash-anchor、状态复核入口、已完成/未完成范围、当前 READY 任务和严格禁区；用户再次提醒该习惯时，立即追加 lessons 并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-016` 引用 UI 与通知 Outbox 开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要 checkpoint；不得跳到 Agent 评测、Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
 ## 2026-07-28: SAL-P5-013 后再次提醒时必须推进状态复核锚点与可复制提示词
 
 - 纠正来源：`SAL-P5-013` Citation Validator 实现 checkpoint `dfd82553`、状态同步 checkpoint `a64145ac`、状态同步 hash-anchor checkpoint `1d421656`、状态同步最终固化 checkpoint `1326b033` 和最终锚点记录 checkpoint `84424467` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
