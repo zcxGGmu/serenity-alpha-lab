@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-31: SAL-P6-003 后再次提醒时必须把状态复核锚点推进到最新恢复入口
+
+- 纠正来源：`SAL-P6-003` 加固密钥与配置实现 checkpoint `984813fd`、状态同步 checkpoint `00418b3d` 和状态同步 hash 记录 checkpoint `70b003c2` 已完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使阶段任务实现、状态同步和 hash 记录已经提交，如果 `docs/development-status.md` 顶部恢复栏、清单尾部、`tasks/todo.md` 或下次启动提示词仍把状态复核/最终锚点停在上一任务，下次会话会误判最新可恢复入口，或需要人工从 `git log` 拼接状态。
+- 规则：每个阶段性任务完成后的最终交接必须再次复核并同步：已完成/未完成范围、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、状态同步 hash 记录、状态复核 checkpoint、最终锚点、严格禁区和完整可复制启动提示词；用户再次提醒该习惯时，立即追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P6-004` 加固输入、抓取与报告渲染开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、中文 checkpoint 和必要 hash-anchor；不得跳到 `SAL-P6-005+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、release packaging 或正式组合回测推广。
+
 ## 2026-07-30: SAL-P6-002 后必须把状态同步 hash 记录推进到最新恢复入口
 
 - 纠正来源：`SAL-P6-002` 资源与 Artifact 授权实现 checkpoint `33f76bad`、状态同步 checkpoint `09d49744` 和状态同步 hash 记录 checkpoint `03c31a21` 已完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
