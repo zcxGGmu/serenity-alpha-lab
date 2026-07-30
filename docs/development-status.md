@@ -8,8 +8,8 @@
 > 任务完成度：110/129<br>
 > 当前可执行任务：`SAL-P6-005` 建立安全与供应链门禁为下一步；不得跳到 `SAL-P6-006+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、release packaging、正式组合回测推广或其他 P6 后续任务；不得从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter、EvidenceBundle、Auth/RBAC catalog、ResourceAuthorizationPolicy、SignedArtifactUrlIssuer、WorkerResourceGrant、ConfigProfiles secret/config contracts 或 InputFetchSecurity contracts 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、正式组合回测推广<br>
 > 最近可评审交付 checkpoint：`47fd9cf2 feat(P6): 加固输入抓取与报告渲染`；上一可评审交付 checkpoint 为 `984813fd feat(P6): 加固密钥与配置`；再上一可评审交付 checkpoint 为 `33f76bad feat(P6): 实现资源与 Artifact 授权`<br>
-> 最新状态同步 checkpoint：`00418b3d docs: 同步 SAL-P6-003 checkpoint hash`；上一状态同步 checkpoint：`09d49744 docs: 同步 SAL-P6-002 checkpoint hash`；最新状态同步 hash 记录 checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；上一状态同步 hash 记录 checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；上一状态同步 hash-anchor checkpoint 为 `03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`；再上一 hash-anchor checkpoint 为 `f4912114 docs: 固化 SAL-P6-001 状态同步 hash-anchor`；SAL-P5-017 hash-anchor checkpoint 为 `6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；SAL-P5-016 hash-anchor checkpoint 为 `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`<br>
+> 最新状态同步 checkpoint：`268032b9 docs: 同步 SAL-P6-004 checkpoint hash`；上一状态同步 checkpoint：`00418b3d docs: 同步 SAL-P6-003 checkpoint hash`；最新状态同步 hash 记录 checkpoint：本次 `docs: 记录 SAL-P6-004 状态同步 hash` 提交生成后确认；上一状态同步 hash 记录 checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P6-004 状态同步 hash` 提交生成后确认；上一状态同步 hash-anchor checkpoint 为 `70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；再上一 hash-anchor checkpoint 为 `03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`；SAL-P5-017 hash-anchor checkpoint 为 `6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；SAL-P5-016 hash-anchor checkpoint 为 `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`47fd9cf2 feat(P6): 加固输入抓取与报告渲染`；已完成任务范围推进至 `SAL-P6-004`<br>
 > 最新状态复核 checkpoint：`dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`；上一状态复核 checkpoint：`981c4b4f docs: 复核 SAL-P6-002 最新开发状态与恢复提示`；再上一状态复核 checkpoint：`3cd35100 docs: 复核 SAL-P6-001 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`3574678e docs: 记录 SAL-P6-003 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`3f97b071 docs: 记录 SAL-P6-002 状态复核 hash`；最新最终锚点 checkpoint：`3574678e docs: 记录 SAL-P6-003 状态复核 hash`；上一最终锚点 checkpoint 为 `dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
@@ -304,6 +304,7 @@
 - 2026-07-31 完成 `SAL-P6-003` 加固密钥与配置；扩展 framework-neutral `config_profiles` secret/config contracts，新增 `SecretReference`、`SecretRotationPlan`、`ConfigAuditRecord`、`config_api_diagnostics()`、contract tests、architecture guard 和 evidence doc，冻结 metadata-only Secret Manager/OS Keychain 引用、配置 API safe diagnostics、轮换计划和配置审计口径。Red target missing `ConfigAuditAction` import `1 error`，focused Green `13 passed`，architecture guard `1 passed`，related Config/Auth/Resource/Architecture suite `57 passed`，全量 pytest `515 passed, 3 skipped`，compileall/lock/tag checks PASS；当前下一步为 `SAL-P6-004` 加固输入、抓取与报告渲染。本任务不导入真实 Keychain/Secret Manager/cloud SDK、不注册 config route、不写 `.env`/数据库/备份、不启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、release packaging 或正式组合回测推广；实现 checkpoint 为 `984813fd feat(P6): 加固密钥与配置`。
 - 2026-07-31 按用户要求复核 `SAL-P6-003` 后最新开发状态；确认实现 checkpoint 为 `984813fd feat(P6): 加固密钥与配置`，状态同步 checkpoint 为 `00418b3d docs: 同步 SAL-P6-003 checkpoint hash`，状态同步 hash 记录 checkpoint 为 `70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；当前已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..022`、`SAL-P5-001..018`、`SAL-P6-001..003`，未完成范围从 `SAL-P6-004` 开始，当前 READY 任务为 `SAL-P6-004` 加固输入、抓取与报告渲染。本次复核仅同步状态文档、进度清单、`tasks/todo.md`、`tasks/lessons.md` 和可复制启动提示词，不启动 `SAL-P6-004` 实现、`SAL-P6-005+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、release packaging、正式组合回测推广或其他 P6 后续任务；状态复核 checkpoint 为 `dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`。
 - 2026-07-31 完成 `SAL-P6-004` 加固输入、抓取与报告渲染；新增 framework-neutral `input_fetch_security` contracts，强化 `ResearchReportPagePresenter` 安全输出，冻结 URL/fetch policy、upload metadata scanning、trusted report HTML/link sanitizer 和 security headers。Red target missing module `1 error`，focused Green `6 passed`，architecture/focused security `8 passed`，related SourceTrust/AgentToolSecurity/Renderer/Delivery/Architecture suite `53 passed`，全量 pytest `520 passed, 3 skipped`，compileall/lock/tag/diff checks PASS；当前下一步为 `SAL-P6-005` 建立安全与供应链门禁。本任务不执行 live fetch/DNS/browser/upload parser/AV/FastAPI route，不调用真实 Provider/LLM，不启动 Worker loop、Qlib runtime、notification sender、production scheduler、release packaging 或正式组合回测推广；实现 checkpoint 为 `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`。
+- 2026-07-31 同步 `SAL-P6-004` checkpoint hash；确认实现 checkpoint 为 `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`，状态同步 checkpoint 为 `268032b9 docs: 同步 SAL-P6-004 checkpoint hash`；当前已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..022`、`SAL-P5-001..018`、`SAL-P6-001..004`，未完成范围从 `SAL-P6-005` 开始，当前 READY 任务为 `SAL-P6-005` 建立安全与供应链门禁。本次同步仅更新状态锚点、进度清单、`tasks/todo.md` 和计划 checklist，不启动 `SAL-P6-005` 实现、`SAL-P6-006+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、release packaging、正式组合回测推广或其他 P6 后续任务。
 - 2026-07-20：完成 `SAL-P1-001`，批准上游与模块化 ADR；后续实现继续受 ADR-001/002 约束。
 - 2026-07-20：完成 `SAL-P1-002` 与 `SAL-P1-004`，新增 Python 项目元数据、DSA entry-point wrappers、目标包骨架和架构边界测试。当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-004`，Gate G1 仍未通过；`SAL-P1-003` 与 `SAL-P1-006` 是推荐下一步。
 - 2026-07-20：完成 `SAL-P1-003` 与 `SAL-P1-006`，新增 Python extras/lock/requirements drift guard 和 Run/Stage/Event 领域模型；当前已完成 `SAL-P0-001` 至 `SAL-P0-013` 和 `SAL-P1-001`、`SAL-P1-002`、`SAL-P1-003`、`SAL-P1-004`、`SAL-P1-006`，Gate G1 仍未通过；`SAL-P1-005`、`SAL-P1-007`、`SAL-P1-008`、`SAL-P1-011` 是推荐下一步。
@@ -455,18 +456,19 @@
 66. docs/auth-rbac.md
 67. docs/resource-artifact-authorization.md
 68. docs/secret-config-hardening.md
-69. docs/upstream-patches.md
+69. docs/input-fetch-report-hardening.md
+70. docs/upstream-patches.md
 
 随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
 当前状态：
 - Phase：P6 安全、稳定性与发布加固
 - Gate：G5 已通过；G0、G1、G2、G3、G4、G5 均为 GO with accepted risks；G6 未通过
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-018，SAL-P6-001 至 SAL-P6-003
-- 最近完成：SAL-P6-003 加固密钥与配置
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-018，SAL-P6-001 至 SAL-P6-004
+- 最近完成：SAL-P6-004 加固输入、抓取与报告渲染
 - 最近可评审交付 checkpoint：`47fd9cf2 feat(P6): 加固输入抓取与报告渲染`；上一可评审交付 checkpoint：`984813fd feat(P6): 加固密钥与配置`；再上一可评审交付 checkpoint：`33f76bad feat(P6): 实现资源与 Artifact 授权`
-- 最新状态同步 checkpoint：`00418b3d docs: 同步 SAL-P6-003 checkpoint hash`；上一状态同步 checkpoint：`09d49744 docs: 同步 SAL-P6-002 checkpoint hash`；最新状态同步 hash 记录 checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；上一状态同步 hash 记录 checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`
-- 最新状态同步 hash-anchor checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；上一状态同步 hash-anchor checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`；再上一 hash-anchor checkpoint：`f4912114 docs: 固化 SAL-P6-001 状态同步 hash-anchor`
+- 最新状态同步 checkpoint：`268032b9 docs: 同步 SAL-P6-004 checkpoint hash`；上一状态同步 checkpoint：`00418b3d docs: 同步 SAL-P6-003 checkpoint hash`；最新状态同步 hash 记录 checkpoint：本次 `docs: 记录 SAL-P6-004 状态同步 hash` 提交生成后确认；上一状态同步 hash 记录 checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`
+- 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P6-004 状态同步 hash` 提交生成后确认；上一状态同步 hash-anchor checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；再上一 hash-anchor checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`
 - 最新状态复核 checkpoint：`dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`；上一状态复核 checkpoint：`981c4b4f docs: 复核 SAL-P6-002 最新开发状态与恢复提示`；再上一状态复核 checkpoint：`3cd35100 docs: 复核 SAL-P6-001 最新开发状态与恢复提示`
 - 最新状态复核 hash-anchor checkpoint：`3574678e docs: 记录 SAL-P6-003 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`3f97b071 docs: 记录 SAL-P6-002 状态复核 hash`；最新最终锚点 checkpoint：`3574678e docs: 记录 SAL-P6-003 状态复核 hash`；上一最终锚点 checkpoint：`dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 18/18，P6 4/23，总计 110/129
@@ -481,7 +483,7 @@
 - 不要移动 `upstream/dsa-v3.26.1` tag。
 - 保留用户已有改动，不执行破坏性 Git 操作。
 - 不提交 .worktrees、.cache、node_modules、static、Playwright artifacts、pycache 或无关未跟踪目录。
-- 后续实现必须遵守 ADR-001/002、ADR-009、DEC-087 至 DEC-107 与 Gate G2/G3/G4/G5；不要从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter、EvidenceBundle 或 ConfigProfiles secret/config contracts 直接启动真实 Provider/LLM 调用、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移。
+- 后续实现必须遵守 ADR-001/002、ADR-009、DEC-087 至 DEC-108 与 Gate G2/G3/G4/G5；不要从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter、EvidenceBundle、ConfigProfiles secret/config contracts 或 InputFetchSecurity contracts 直接启动真实 Provider/LLM 调用、Worker loop、Qlib runtime、正式组合回测推广或未经批准的大规模 DSA 源码迁移。
 - 每完成阶段性任务，自动更新 docs/development-status.md、docs/development-progress-checklist.md、验收证据、风险、决策、tasks/todo.md review、tasks/lessons.md（如有纠正）和下次启动提示词。
 - 每形成可评审交付时主动提交详细中文 commit。
 ```

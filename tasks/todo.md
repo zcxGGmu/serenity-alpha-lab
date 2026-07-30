@@ -21,8 +21,8 @@
 
 - Phase: P6 安全、稳定性与发布加固.
 - Gate: G5 已通过；G6 未通过.
-- Completed entering task: `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001..003`.
-- Current READY task: `SAL-P6-004` 加固输入、抓取与报告渲染.
+- Completed after task: `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001..004`.
+- Current READY task after completion: `SAL-P6-005` 建立安全与供应链门禁.
 - Implementation checkpoint entering task: `984813fd feat(P6): 加固密钥与配置`.
 - Latest final anchor entering task: `69a824ce docs: 固化 SAL-P6-003 启动提示锚点`.
 - Strict boundary: do not start `SAL-P6-005+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
@@ -35,7 +35,7 @@
 - Hardened `ResearchReportPagePresenter` so trusted report display HTML is validated before page payload creation, unsafe source links are removed with `source_link_security` metadata, and security headers are attached.
 - Verification completed before checkpoint: focused Green `6 passed`, architecture/focused security `8 passed`, related suite `53 passed`, full pytest `520 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no live fetch/DNS/browser/upload parser/AV/FastAPI route, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
-- Chinese implementation checkpoint created: `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`; this status-sync update records the actual hash for recovery.
+- Chinese implementation checkpoint created: `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`; status-sync checkpoint created: `268032b9 docs: 同步 SAL-P6-004 checkpoint hash`; this hash-anchor update records the actual status-sync hash for recovery.
 
 ---
 
