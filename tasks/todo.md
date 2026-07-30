@@ -1,3 +1,31 @@
+# SAL-P6-001 Auth And RBAC Implementation Plan
+
+> Scope: Complete only `SAL-P6-001` by freezing the desktop/standalone/team identity model, RBAC role/permission matrix, optional OIDC claim-mapping contract and API authorization requirements. Do not start `SAL-P6-002` object-level signed URL authorization, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, backup/restore, Worker loop, real Provider/LLM, Qlib runtime, notification sender, production scheduler, release packaging or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read required recovery, P0-P5 evidence, P6 entry, security and upstream-patch docs.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Write SAL-P6-001 implementation plan in `docs/superpowers/plans/2026-07-30-auth-rbac.md`.
+- [x] Add failing contract tests for desktop usability, team RBAC separation, optional OIDC claim mapping, API route requirements and deterministic redacted records.
+- [x] Run focused Red target and record expected missing-module failure.
+- [x] Implement framework-neutral `application.auth_rbac` identity, policy, route catalog and OIDC declaration/claim mapping.
+- [x] Export public RBAC symbols and add an architecture import guard.
+- [x] Add `docs/auth-rbac.md` evidence record and update progress/status registers for P6 `1/23`, total `107/129`, `SAL-P6-002` next.
+- [x] Run focused Green, related suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
+- [ ] Create Chinese checkpoint commit for `SAL-P6-001`.
+
+## Review
+
+- Plan check-in completed before code changes. Implementation stayed application-layer only and runtime-free.
+- Red target failed as expected with missing `serenity_alpha_lab.application.auth_rbac` (`1 error`).
+- Implemented `security.auth_rbac@1.0.0` in `src/serenity_alpha_lab/application/auth_rbac.py`: desktop local owner, standalone local roles, team-mode data/run/config/admin separation, tenant/team mismatch denies, optional OIDC declaration/claim mapping and deterministic API authorization catalog.
+- Verification completed before checkpoint: focused Green `5 passed`, architecture guard `1 passed`, related suite `41 passed`, full pytest `503 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
+- Scope held: no `SAL-P6-002` signed URL/object policy, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, Worker loop, real Provider/LLM, Qlib runtime, notification sender, production scheduler, release packaging or formal backtest promotion was started.
+- Chinese implementation checkpoint pending; actual hash will be recorded immediately after commit in a status-sync pass.
+
+---
+
 # SAL-P5-018 Post-Completion Status Sync
 
 > Scope: Record the actual `SAL-P5-018` checkpoint hash, refresh recovery prompts, and capture the repeated lesson to always do this automatically after every phase task. Do not start `SAL-P6-001` implementation, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender or formal backtest promotion.

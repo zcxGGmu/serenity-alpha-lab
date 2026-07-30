@@ -1,16 +1,16 @@
 # Serenity Alpha Lab 当前开发状态
 
 > 最后更新：2026-07-30<br>
-> 最近阶段性任务：`SAL-P5-018` Gate G5 可信研究评审<br>
+> 最近阶段性任务：`SAL-P6-001` 完善认证与 RBAC<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P6 安全、稳定性与发布加固<br>
 > 当前 Gate：G5 已通过；G0、G1、G2、G3、G4、G5 均为 `GO with accepted risks`；G6 未通过<br>
-> 任务完成度：106/129<br>
-> 当前可执行任务：`SAL-P6-001` 完善认证与 RBAC 为下一步，但本次未启动；不得跳到真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或其他 P6 后续任务；不得从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、正式组合回测推广<br>
-> 最近可评审交付 checkpoint：`e65172b1 docs(P5): 通过 Gate G5 可信研究评审`；上一实现 checkpoint 为 `91d6d15b feat(P5): 建立 Agent 金标回归评测`<br>
-> 最新状态同步 checkpoint：`7d4d2e65 docs: 同步 SAL-P5-018 checkpoint hash`；上一状态同步 checkpoint 为 `4607532d docs: 同步 SAL-P5-017 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：`6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；上一 hash-anchor checkpoint 为 `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint 为 `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint 为 `a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`<br>
-> 本次阶段任务 checkpoint：`e65172b1 docs(P5): 通过 Gate G5 可信研究评审`；已完成任务范围推进至 `SAL-P5-018`<br>
+> 任务完成度：107/129<br>
+> 当前可执行任务：`SAL-P6-002` 实现资源与 Artifact 授权为下一步；不得跳到 `SAL-P6-003+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或其他 P6 后续任务；不得从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter、EvidenceBundle 或 Auth/RBAC catalog 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、正式组合回测推广<br>
+> 最近可评审交付 checkpoint：本次中文实现提交生成后由紧随其后的状态同步回写；上一可评审交付 checkpoint 为 `e65172b1 docs(P5): 通过 Gate G5 可信研究评审`；上一实现 checkpoint 为 `91d6d15b feat(P5): 建立 Agent 金标回归评测`<br>
+> 最新状态同步 checkpoint：`7d4d2e65 docs: 同步 SAL-P5-018 checkpoint hash`；最新状态同步 hash 记录 checkpoint：`84af387e docs: 记录 SAL-P5-018 状态同步 hash`；上一状态同步 checkpoint 为 `4607532d docs: 同步 SAL-P5-017 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
+> 最新状态同步 hash-anchor checkpoint：`84af387e docs: 记录 SAL-P5-018 状态同步 hash`；上一 hash-anchor checkpoint 为 `6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；SAL-P5-016 hash-anchor checkpoint 为 `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint 为 `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`<br>
+> 本次阶段任务 checkpoint：本次中文实现提交生成后由紧随其后的状态同步回写；已完成任务范围推进至 `SAL-P6-001`<br>
 > 最新状态复核 checkpoint：`62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`；上一状态复核 checkpoint：`b815b7d6 docs: 复核 SAL-P5-016 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`839293a4 docs: 记录 SAL-P5-017 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`e96dc3cb docs: 记录 SAL-P5-016 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint 为 `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
@@ -144,17 +144,21 @@
 - 完成 `SAL-P5-017`：新增 [Agent Golden Regression Evaluation](./agent-golden-regression-evaluation.md)、Application [agent_evaluation.py](../src/serenity_alpha_lab/application/agent_evaluation.py) 和 [Agent golden regression tests](../tests/application/test_agent_golden_regression_evaluation.py)，冻结 `research.agent_evaluation@1.0.0` 离线 Agent 金标与回归评测口径；默认 catalog 含 `56` 个案例，覆盖正常、缺失数据、财务异常、重大事件、观点冲突、恶意内容和多市场样本，scorer 验证引用准确率、无依据数值率、schema 成功率、安全核心集和模型/Prompt 回归差异；P5 进度 `17/18`，总进度 `105/129`。
 - 完成 `SAL-P5-018`：新增 [Gate G5 Trusted Research Review](./gate-g5-trusted-research-review.md)、[Gate G5 integration test](../tests/gates/test_gate_g5_trusted_research_review.py) 和 [Gate G5 implementation plan](./superpowers/plans/2026-07-30-gate-g5-trusted-research-review.md)，结论为 `GO with accepted risks`；focused Gate G5 `2 passed`，相关 P5 suite `78 passed`，全量 pytest `497 passed, 3 skipped`，compileall/lock/tag/diff/clean temp DSA patch replay checks PASS；P5 离线可信研究链批准作为 P6 RC hardening 输入，仍不批准真实 Provider/LLM、Agent/tool runtime、Worker loop、Qlib runtime、通知 sender、生产调度或正式组合回测推广；P5 进度 `18/18`，总进度 `106/129`。
 
+### P6 安全、稳定性与发布加固
+
+- 完成 `SAL-P6-001`：新增 [Auth And RBAC](./auth-rbac.md)、Application [auth_rbac.py](../src/serenity_alpha_lab/application/auth_rbac.py) 和 [Auth/RBAC contract test](../tests/application/test_auth_rbac.py)，冻结 `security.auth_rbac@1.0.0` framework-neutral 身份与权限契约；定义 desktop/standalone/team 模式、`AuthSubject`、`ResourceScope`、角色/权限矩阵、`RbacPolicy`、可选 OIDC declaration/claim mapping 和 API authorization catalog。Desktop local owner 不要求 OIDC/team setup；team mode 分离 data/run/config/admin 权限。Red target missing module `1 error`，focused Green `5 passed`，architecture guard `1 passed`，related suite `41 passed`，全量 pytest `503 passed, 3 skipped`，compileall/lock/tag/diff checks PASS；P6 进度 `1/23`，总进度 `107/129`。
+
 ## 未完成
 
 ### 当前可执行 P6 任务
 
-- `SAL-P5-018` 已完成：Gate G5 只批准离线可信研究链进入 P6 RC hardening 输入；不得从 Gate G5、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Citation Validator、AgentToolSecurityGuard、ModelInvocationPlanner、Prompt Registry、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Agent/tool execution、Worker loop、Qlib runtime、通知 sender、生产调度或正式组合回测推广。
-- `SAL-P6-001` 完善认证与 RBAC 是下一步 `READY` 入口；本次仅更新恢复状态，不实现认证/RBAC、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或任何其他 P6 任务。
+- `SAL-P6-001` 已完成：Auth/RBAC 只冻结 framework-neutral 身份、角色/权限矩阵、OIDC declaration/claim mapping 和 API authorization catalog；不得从 Auth/RBAC catalog 直接启动真实 Provider/LLM、Agent/tool execution、Worker loop、Qlib runtime、通知 sender、生产调度或正式组合回测推广。
+- `SAL-P6-002` 实现资源与 Artifact 授权 是下一步 `READY` 入口；本次不启动对象 signed URL 以外的 `SAL-P6-003+`、Secret Manager、SSRF/file upload hardening、SCA gates、OpenTelemetry、backup/restore、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或任何其他 P6 后续任务。
 
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P6 仍有 23 项工程任务未完成。
+- P6 仍有 22 项工程任务未完成。
 - 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder、Source Trust、Quant Evidence Adapter、Prompt/Output Schema Registry、Agent Stage 持久化、Technical Agent 改造、Intel Agent 改造、Risk/Portfolio Agent 改造、Decision Agent 多空反证与最终综合、模型路由/缓存/预算、Citation Validator、Agent 工具安全、Trusted ResearchReport Renderer、引用 UI 与通知 Outbox、Agent 金标与回归评测和 Gate G5。尚未完成完整 Worker runtime、正式回测生产推广或部署/发布环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
@@ -283,7 +287,7 @@
 
 ## 下一步
 
-1. 下一步在用户允许时执行 `SAL-P6-001` 完善认证与 RBAC；本次不启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或其他 P6 后续任务。
+1. 下一步在用户允许时执行 `SAL-P6-002` 实现资源与 Artifact 授权；本次不启动 `SAL-P6-003+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或其他 P6 后续任务。
 2. 不得从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入。
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态。
 
@@ -444,17 +448,17 @@
 当前状态：
 - Phase：P6 安全、稳定性与发布加固
 - Gate：G5 已通过；G0、G1、G2、G3、G4、G5 均为 GO with accepted risks；G6 未通过
-- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-018
-- 最近完成：SAL-P5-018 Gate G5 可信研究评审
-- 最近可评审交付 checkpoint：`e65172b1 docs(P5): 通过 Gate G5 可信研究评审`；上一实现 checkpoint：`91d6d15b feat(P5): 建立 Agent 金标回归评测`
+- 已完成：SAL-P0-001 至 SAL-P0-013，SAL-P1-001 至 SAL-P1-016，SAL-P2-001 至 SAL-P2-020，SAL-P3-001 至 SAL-P3-017，SAL-P4-001 至 SAL-P4-022，SAL-P5-001 至 SAL-P5-018，SAL-P6-001
+- 最近完成：SAL-P6-001 完善认证与 RBAC
+- 最近可评审交付 checkpoint：本次中文实现提交生成后由紧随其后的状态同步回写；上一可评审交付 checkpoint：`e65172b1 docs(P5): 通过 Gate G5 可信研究评审`；上一实现 checkpoint：`91d6d15b feat(P5): 建立 Agent 金标回归评测`
 - 最新状态同步 checkpoint：`7d4d2e65 docs: 同步 SAL-P5-018 checkpoint hash`；上一状态同步 checkpoint：`4607532d docs: 同步 SAL-P5-017 checkpoint hash`
-- 最新状态同步 hash-anchor checkpoint：`6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；上一 hash-anchor checkpoint：`bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint：`1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint：`a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`
+- 最新状态同步 hash-anchor checkpoint：`84af387e docs: 记录 SAL-P5-018 状态同步 hash`；上一 hash-anchor checkpoint：`6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；SAL-P5-016 hash-anchor checkpoint：`bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint：`1d421656 docs: 记录 SAL-P5-013 状态同步 hash`
 - 最新状态复核 checkpoint：`62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`；上一状态复核 checkpoint：`b815b7d6 docs: 复核 SAL-P5-016 最新开发状态与恢复提示`
 - 最新状态复核 hash-anchor checkpoint：`839293a4 docs: 记录 SAL-P5-017 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`e96dc3cb docs: 记录 SAL-P5-016 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint：`1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`
-- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 18/18，P6 0/23，总计 106/129
+- 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 18/18，P6 1/23，总计 107/129
 
 下一步优先执行：
-1. SAL-P6-001 完善认证与 RBAC；不能直接跳到真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或其他 P6 后续任务
+1. SAL-P6-002 实现资源与 Artifact 授权；不能直接跳到 SAL-P6-003+、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、正式组合回测推广或其他 P6 后续任务
 2. 不要从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、AgentEvaluationScorer、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；真实 Provider/LLM 调用仍只能在后续 Worker/调度任务中通过 profile guard、离线契约和 fallback trace 接入
 3. legacy DSA Signal Evaluation、AlphaSift T+N evaluation、Screen result、Qlib internal evidence 或 Dataset conversion artifacts 不得直接命名为正式组合回测；P5 Claim 不得让 LLM 自行重算收益、风险、回撤、成本、成交、账本或风控状态
 

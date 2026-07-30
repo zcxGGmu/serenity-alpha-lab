@@ -426,6 +426,56 @@ def test_notification_outbox_stays_persistence_only_and_sender_free() -> None:
     assert failures == []
 
 
+def test_auth_rbac_stays_framework_neutral_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "application" / "auth_rbac.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "enum",
+        "hashlib",
+        "json",
+        "serenity_alpha_lab.application.api_errors",
+        "typing",
+    }
+    forbidden_prefixes = (
+        "api.v1",
+        "bot.commands",
+        "src.auth",
+        "src.services",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.repositories",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {
+        "akshare",
+        "authlib",
+        "baostock",
+        "efinance",
+        "fastapi",
+        "jwt",
+        "litellm",
+        "qlib",
+        "requests",
+        "sqlalchemy",
+        "tushare",
+        "yfinance",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden auth/runtime {module}")
+
+    assert failures == []
+
+
 def test_prompt_registry_stays_offline_and_runtime_free() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "evidence" / "prompt_registry.py"
