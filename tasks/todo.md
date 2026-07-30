@@ -32,7 +32,7 @@
 - Implemented metadata-only secret/config hardening in `src/serenity_alpha_lab/application/config_profiles.py`: `SecretReference`, `SecretRotationPlan`, `ConfigAuditRecord`, `config_api_diagnostics()`, strict `env://`/`keychain://`/`secretmanager://` reference validation, reference hashes, last-four summaries and sanitized metadata.
 - Verification completed before checkpoint: focused Green `13 passed`, ConfigProfiles architecture guard `1 passed`, related Config/Auth/Resource/Architecture suite `57 passed`, full pytest `515 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no real Keychain/Secret Manager/cloud SDK, FastAPI config route, `.env` write, database persistence, backup/restore, Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
-- Chinese implementation checkpoint created: `984813fd feat(P6): 加固密钥与配置`; status-sync checkpoint will record this hash.
+- Chinese implementation checkpoint created: `984813fd feat(P6): 加固密钥与配置`; status-sync checkpoint created: `00418b3d docs: 同步 SAL-P6-003 checkpoint hash`.
 
 ---
 
