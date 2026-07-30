@@ -1,3 +1,25 @@
+# SAL-P5-017 Post-Completion Status Review
+
+> Scope: Update repository recovery state after completed `SAL-P5-017`. Do not start `SAL-P5-018`, Gate G5 execution, real Provider/LLM, Worker loop, Qlib runtime, production scheduling or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read current recovery docs and confirm actual git state.
+- [x] Update `docs/development-status.md` to show completed through `SAL-P5-017`, unfinished from `SAL-P5-018`, current checkpoints and recovery prompt.
+- [x] Update `docs/development-progress-checklist.md` tail summary so latest status-review anchors no longer point at `SAL-P5-016`.
+- [x] Update `tasks/lessons.md` for the repeated instruction to automatically perform status docs, recovery prompt and checkpoint commits after each phase task.
+- [x] Run document status-anchor checks and `git diff --check`.
+- [ ] Create Chinese status-review checkpoint and follow-up hash-anchor commit.
+
+## Review
+
+- Confirmed current phase remains P5 and Gate G5 is not passed.
+- Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..017`; unfinished range starts at `SAL-P5-018` Gate G5 and P6 remains incomplete.
+- Latest implementation checkpoint entering this review is `91d6d15b feat(P5): 建立 Agent 金标回归评测`; latest status-sync checkpoint is `4607532d docs: 同步 SAL-P5-017 checkpoint hash`; latest status-sync hash-anchor is `6e75580a docs: 记录 SAL-P5-017 状态同步 hash`.
+- Status-review checkpoint and hash-anchor will be created and then backfilled into recovery docs.
+
+---
+
 # SAL-P5-017 Agent Golden Regression Evaluation Plan
 
 > Scope: Complete only `SAL-P5-017` by adding offline Agent golden cases, a deterministic stub, a scorer and a regression report. Do not start Gate G5, real Provider/LLM, Worker loop, Qlib runtime, production scheduling or formal backtest promotion.
