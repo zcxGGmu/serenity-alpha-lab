@@ -17,7 +17,7 @@
 - Current phase remains P6 安全、稳定性与发布加固; Gate G5 is passed and G6 is not passed.
 - Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001..003`; unfinished range starts at `SAL-P6-004`.
 - Latest implementation checkpoint entering this review is `984813fd feat(P6): 加固密钥与配置`; latest status-sync checkpoint is `00418b3d docs: 同步 SAL-P6-003 checkpoint hash`; latest status-sync hash record is `70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`.
-- Status-review checkpoint created: `dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`; hash-record checkpoint will record this review anchor.
+- Status-review checkpoint created: `dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`; hash-record checkpoint created: `3574678e docs: 记录 SAL-P6-003 状态复核 hash`.
 
 ---
 
