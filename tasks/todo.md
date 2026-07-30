@@ -12,7 +12,7 @@
 - [x] Export public resource-authorization symbols and add an architecture import guard proving no FastAPI/Authlib/JWT/requests/SQLAlchemy/Provider/LLM/Worker/Qlib runtime imports.
 - [x] Add `docs/resource-artifact-authorization.md` evidence record and update progress/status registers for P6 `2/23`, total `108/129`, `SAL-P6-003` next.
 - [x] Run focused Green, related Auth/RBAC + Artifact/Evidence/Backtest/Report suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
-- [ ] Create Chinese checkpoint commit for `SAL-P6-002`.
+- [x] Create Chinese checkpoint commit for `SAL-P6-002`.
 
 ## Recovery Anchors
 
@@ -31,7 +31,7 @@
 - Implemented `security.resource_artifact_authorization@1.0.0` in `src/serenity_alpha_lab/application/resource_authorization.py`: tenant/team/private owner authorization, Artifact parent-read binding, deterministic audit records, percent-encoded HMAC signed URL issue/verify, duplicated signature/query rejection, and run-bound task-scoped Worker grants.
 - Verification completed before checkpoint: focused Green `6 passed`, architecture guard `1 passed`, related suite `62 passed`, full pytest `510 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no Secret Manager/OS Keychain, FastAPI middleware, object-store adapter, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
-- Chinese implementation checkpoint is pending; after commit, update recovery docs with the actual hash.
+- Chinese implementation checkpoint: `33f76bad feat(P6): 实现资源与 Artifact 授权`; recovery docs are updated with the actual hash.
 
 ---
 
