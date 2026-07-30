@@ -464,9 +464,9 @@
 - 最近完成：SAL-P6-003 加固密钥与配置
 - 最近可评审交付 checkpoint：`984813fd feat(P6): 加固密钥与配置`；上一可评审交付 checkpoint：`33f76bad feat(P6): 实现资源与 Artifact 授权`；再上一可评审交付 checkpoint：`10397052 feat(P6): 完善认证与 RBAC`
 - 最新状态同步 checkpoint：`00418b3d docs: 同步 SAL-P6-003 checkpoint hash`；上一状态同步 checkpoint：`09d49744 docs: 同步 SAL-P6-002 checkpoint hash`；最新状态同步 hash 记录 checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；上一状态同步 hash 记录 checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`
-- 最新状态同步 hash-anchor checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`；上一状态同步 hash-anchor checkpoint：`f4912114 docs: 固化 SAL-P6-001 状态同步 hash-anchor`；再上一 hash-anchor checkpoint：`a44e6483 docs: 记录 SAL-P6-001 状态同步 hash`
-- 最新状态复核 checkpoint：`981c4b4f docs: 复核 SAL-P6-002 最新开发状态与恢复提示`；上一状态复核 checkpoint：`3cd35100 docs: 复核 SAL-P6-001 最新开发状态与恢复提示`；再上一状态复核 checkpoint：`62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`
-- 最新状态复核 hash-anchor checkpoint：`3f97b071 docs: 记录 SAL-P6-002 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`86691933 docs: 记录 SAL-P6-001 状态复核 hash`；最新最终锚点 checkpoint：`3f97b071 docs: 记录 SAL-P6-002 状态复核 hash`；上一最终锚点 checkpoint：`981c4b4f docs: 复核 SAL-P6-002 最新开发状态与恢复提示`
+- 最新状态同步 hash-anchor checkpoint：`70b003c2 docs: 记录 SAL-P6-003 状态同步 hash`；上一状态同步 hash-anchor checkpoint：`03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`；再上一 hash-anchor checkpoint：`f4912114 docs: 固化 SAL-P6-001 状态同步 hash-anchor`
+- 最新状态复核 checkpoint：`dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`；上一状态复核 checkpoint：`981c4b4f docs: 复核 SAL-P6-002 最新开发状态与恢复提示`；再上一状态复核 checkpoint：`3cd35100 docs: 复核 SAL-P6-001 最新开发状态与恢复提示`
+- 最新状态复核 hash-anchor checkpoint：`3574678e docs: 记录 SAL-P6-003 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`3f97b071 docs: 记录 SAL-P6-002 状态复核 hash`；最新最终锚点 checkpoint：`3574678e docs: 记录 SAL-P6-003 状态复核 hash`；上一最终锚点 checkpoint：`dc55fad0 docs: 复核 SAL-P6-003 最新开发状态与恢复提示`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 18/18，P6 3/23，总计 109/129
 
 下一步优先执行：
