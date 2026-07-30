@@ -1,3 +1,30 @@
+# SAL-P5-018 Gate G5 Trusted Research Review Plan
+
+> Scope: Complete only `SAL-P5-018` Gate G5 by adding the trusted research review record, executable gate test and state/checklist sync. Do not start real Provider/LLM, Worker loop, Qlib runtime, production scheduling, formal backtest promotion or P6 implementation beyond naming `SAL-P6-001` as next.
+
+## Checklist
+
+- [x] Re-read required recovery, evidence, report, security, evaluation and upstream patch docs.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Write SAL-P5-018 implementation plan in `docs/superpowers/plans/2026-07-30-gate-g5-trusted-research-review.md`.
+- [x] Add failing Gate G5 review test covering document approval, trusted report expansion, Agent evaluation thresholds, model cache/budget and tool security boundaries.
+- [x] Run focused Red target and record expected missing-review-document failure.
+- [x] Add `docs/gate-g5-trusted-research-review.md` with conclusion, evidence matrix, accepted risks, P6 entry constraints and verification record.
+- [x] Update progress checklist, development status, decision/evidence rows and next startup prompt for P5 `18/18`, total `106/129`, Gate G5 passed with accepted risks and `SAL-P6-001` next.
+- [x] Run focused Green test, related P5 suite, full pytest, compileall, dependency lock, patch replay/check-only, immutable tag and diff hygiene checks.
+- [x] Create Chinese checkpoint commit for `SAL-P5-018`.
+
+## Review
+
+- Completed Gate G5 trusted research review for `SAL-P5-018`; P5 is now `18/18`, total progress is `106/129`, and `SAL-P6-001` is the next READY entry.
+- Red target failed as expected with missing `docs/gate-g5-trusted-research-review.md` (`1 failed, 1 passed`); focused Green passed (`2 passed`).
+- Verification completed: related P5 suite `78 passed`, full pytest `497 passed, 3 skipped`, compileall PASS, dependency lock guard PASS, immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
+- DSA patch validation note: live patched worktree `--check-only` hit expected already-applied context conflict at `0004`; clean temp DSA worktree sequentially applied `0001..0007` successfully.
+- Scope held: no real Provider/LLM, Agent/tool runtime, Worker loop, Qlib runtime, notification sender, production scheduler, P6 implementation or formal backtest promotion was started.
+- Chinese checkpoint commit is created as the final Git step for this task.
+
+---
+
 # SAL-P5-017 Post-Completion Status Review
 
 > Scope: Update repository recovery state after completed `SAL-P5-017`. Do not start `SAL-P5-018`, Gate G5 execution, real Provider/LLM, Worker loop, Qlib runtime, production scheduling or formal backtest promotion.
