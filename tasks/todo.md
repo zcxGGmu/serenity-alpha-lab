@@ -1,3 +1,26 @@
+# SAL-P6-001 Post-Completion Status Review
+
+> Scope: Refresh recovery state after completed `SAL-P6-001` and the latest user reminder. Do not start `SAL-P6-002` implementation, `SAL-P6-003+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read current recovery docs, progress checklist, todo and lessons.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Update `docs/development-status.md` to show completed through `SAL-P6-001`, unfinished from `SAL-P6-002`, current checkpoints and recovery prompt.
+- [x] Update `docs/development-progress-checklist.md` tail summary with the latest `SAL-P6-001` anchors.
+- [x] Update `tasks/lessons.md` for the repeated instruction to automatically do this after every phase task.
+- [x] Run document status-anchor checks and `git diff --check`.
+- [x] Create a Chinese status-review checkpoint commit.
+
+## Review
+
+- Current phase remains P6 安全、稳定性与发布加固; Gate G5 is passed and G6 is not passed.
+- Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001`; unfinished range starts at `SAL-P6-002`.
+- Latest implementation checkpoint entering this review is `10397052 feat(P6): 完善认证与 RBAC`; latest status-sync checkpoint is `23878a6d docs: 同步 SAL-P6-001 checkpoint hash`; latest status-sync hash record is `a44e6483 docs: 记录 SAL-P6-001 状态同步 hash`; latest status-sync final anchor is `f4912114 docs: 固化 SAL-P6-001 状态同步 hash-anchor`.
+- Status-review checkpoint will be recorded after this review commit is created.
+
+---
+
 # SAL-P6-001 Auth And RBAC Implementation Plan
 
 > Scope: Complete only `SAL-P6-001` by freezing the desktop/standalone/team identity model, RBAC role/permission matrix, optional OIDC claim-mapping contract and API authorization requirements. Do not start `SAL-P6-002` object-level signed URL authorization, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, backup/restore, Worker loop, real Provider/LLM, Qlib runtime, notification sender, production scheduler, release packaging or formal backtest promotion.

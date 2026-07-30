@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-30: SAL-P6-001 后再次提醒时必须把复核状态推进到 P6 当前入口
+
+- 纠正来源：`SAL-P6-001` 完善认证与 RBAC 实现 checkpoint `10397052`、状态同步 checkpoint `23878a6d`、状态同步 hash 记录 `a44e6483` 和状态同步最终固化 checkpoint `f4912114` 已完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使 P6 进度已推进到 `1/23`，如果顶部状态栏、清单尾部或启动提示仍只记录 P5 复核锚点，下一次会话会误判 `SAL-P6-001` 是否已完整收尾，或需要人工把 `git log` 与状态文档重新拼接。
+- 规则：每个阶段性任务完成后，最终交接前必须再次复核并同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md`、`tasks/lessons.md`（如有纠正）和下次启动提示词，写清最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、已完成范围、未完成起点、当前 READY 任务和严格禁区。
+- 执行：后续从 `SAL-P6-002` 资源与 Artifact 授权开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和中文 checkpoint；不得跳到 `SAL-P6-003+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender 或正式组合回测推广。
+
 ## 2026-07-30: SAL-P5-018 后必须把实际 checkpoint hash 回写到恢复提示词
 
 - 纠正来源：`SAL-P5-018` Gate G5 可信研究评审 checkpoint `e65172b1` 完成后，用户要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
