@@ -1,3 +1,27 @@
+# SAL-P5-016 Post-Completion Status Review
+
+> Scope: Update repository recovery state after completed `SAL-P5-016`. Do not start `SAL-P5-017`, Gate G5, real Provider/LLM, Worker loop, Qlib runtime, production scheduling or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read current recovery handoff, status snapshot, progress checklist, todo and lessons.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Update `docs/development-status.md` to show completed through `SAL-P5-016`, unfinished from `SAL-P5-017`, and current recovery prompt.
+- [x] Update `docs/development-progress-checklist.md` tail summary to remove stale `SAL-P5-016` unfinished wording.
+- [x] Update `tasks/lessons.md` for the user's repeated instruction to automatically do this after every phase task.
+- [x] Run document status-anchor checks and `git diff --check`.
+- [x] Create a Chinese status-review checkpoint commit.
+
+## Review
+
+- Current phase remains P5 证据化 Agent、报告与成本治理.
+- Gate G4 remains passed; Gate G5 is not passed.
+- Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..016`.
+- Current unfinished range starts at `SAL-P5-017` Agent 金标与回归评测; `SAL-P5-018` Gate G5 and all P6 release tasks remain incomplete.
+- Latest implementation checkpoint entering this review is `518a785f feat(P5): 实现引用 UI 与通知 Outbox`; latest status-sync hash-anchor is `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`.
+
+---
+
 # SAL-P5-016 Citation UI And Notification Outbox Implementation Plan
 
 > Scope: Complete only `SAL-P5-016` by adding offline citation expansion UI payloads and a transactional notification Outbox for trusted `ResearchReport` delivery. Do not jump to Agent evaluation, Gate G5, Worker runtime, real Provider/LLM calls, Qlib runtime, production scheduling or formal backtest promotion.

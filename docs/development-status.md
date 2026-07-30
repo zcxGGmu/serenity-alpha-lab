@@ -1,6 +1,6 @@
 # Serenity Alpha Lab 当前开发状态
 
-> 最后更新：2026-07-29<br>
+> 最后更新：2026-07-30<br>
 > 最近阶段性任务：`SAL-P5-016` 引用 UI 与通知 Outbox<br>
 > 工作区要求：从 `/Users/zq/Desktop/ai-projs/posp/serenity-alpha-lab` 恢复，并重新执行 `git status`，以实际工作区为准<br>
 > 当前 Phase：P5 证据化 Agent、报告与成本治理<br>
@@ -9,9 +9,9 @@
 > 当前可执行任务：`SAL-P5-017` Agent 金标与回归评测为下一步，但本次未启动；不得跳到 Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、正式组合回测推广或 P5 后续任务；不得从 Agent Stage Store、ModelInvocationPlanner、Prompt Registry、Citation Validator、AgentToolSecurityGuard、TrustedResearchReportRenderer、ResearchReportPagePresenter、NotificationOutboxStore、Quant Evidence Adapter、Source Trust、Technical/Intel/RiskPortfolio/Decision Agent adapter 或 EvidenceBundle 直接启动真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、正式组合回测推广<br>
 > 最近可评审交付 checkpoint：`518a785f feat(P5): 实现引用 UI 与通知 Outbox`；上一 checkpoint 为 `a816cf72 feat(P5): 实现可信 ResearchReport Renderer`<br>
 > 最新状态同步 checkpoint：`b562b844 docs: 同步 SAL-P5-016 checkpoint hash`；上一状态同步 checkpoint 为 `f9e9c961 docs: 同步 SAL-P5-015 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
-> 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P5-016 状态同步 hash` 提交生成，提交后以 `git log -1 --oneline` 和最终回复确认；上一 hash-anchor checkpoint 为 `65a0e446 docs: 记录 SAL-P5-015 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint 为 `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint 为 `a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`<br>
+> 最新状态同步 hash-anchor checkpoint：`bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；上一 hash-anchor checkpoint 为 `65a0e446 docs: 记录 SAL-P5-015 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint 为 `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint 为 `a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`518a785f feat(P5): 实现引用 UI 与通知 Outbox`；已完成任务范围推进至 `SAL-P5-016`<br>
-> 最新状态复核 checkpoint：`124f69a7 docs: 复核 SAL-P5-015 最新开发状态与恢复提示`；上一状态复核 checkpoint：`acceebab docs: 复核 SAL-P5-013 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`ead0ca32 docs: 记录 SAL-P5-015 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`31a0dabe docs: 记录 SAL-P5-013 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint 为 `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`<br>
+> 最新状态复核 checkpoint：本次 `docs: 复核 SAL-P5-016 最新开发状态与恢复提示` 提交生成，提交后以 `git log -1 --oneline` 和最终回复确认；上一状态复核 checkpoint：`124f69a7 docs: 复核 SAL-P5-015 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`ead0ca32 docs: 记录 SAL-P5-015 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`31a0dabe docs: 记录 SAL-P5-013 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint 为 `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -155,8 +155,8 @@
 ### 全局未完成
 
 - 当前仓库已导入 DSA 上游 Git 历史和基线 tag，但尚未把 DSA 源码合入本项目工作树。
-- P5 至 P6 仍有 26 项工程任务未完成。
-- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder、Source Trust、Quant Evidence Adapter、Prompt/Output Schema Registry、Agent Stage 持久化、Technical Agent 改造、Intel Agent 改造、Risk/Portfolio Agent 改造、Decision Agent 多空反证与最终综合、模型路由/缓存/预算、Citation Validator、Agent 工具安全和 Trusted ResearchReport Renderer。尚未完成引用 UI/通知 Outbox、Agent 金标与回归评测、完整 Worker runtime、正式回测推广或部署环境。
+- P5 至 P6 仍有 25 项工程任务未完成。
+- 已完成 P2 Dataset、Provider、Data Sync、PostgreSQL standalone Profile、PersistentTaskBackend 和可恢复任务事件流，并通过 Gate G2；已完成 P3 AlphaSift、Factor、ScreenDefinition、ScreenSnapshot、Quant Screening API、Screen Lab、性能/复现验收和 Gate G3；已完成 P4 DSA Signal Evaluation 行为/API 金标冻结、`SignalEvaluationEngine` 迁移、正式 `BacktestSpec`、`BacktestArtifact`、Qlib 版本/隔离方案、Dataset 到 Qlib 转换、Qlib QuantEngine Adapter、订单状态机、Portfolio Ledger、费用/滑点模型、A 股执行规则、公司行动入账、调仓/目标权重、确定性 RiskPolicy、回测偏差审计、统一绩效指标、BacktestRun 编排、资源控制、回测金标/性质测试、真实回测 API、Quant Lab 和 Gate G4；已完成 P5 Evidence/Claim/Report Schema、Evidence Store、EvidenceBundle Builder、Source Trust、Quant Evidence Adapter、Prompt/Output Schema Registry、Agent Stage 持久化、Technical Agent 改造、Intel Agent 改造、Risk/Portfolio Agent 改造、Decision Agent 多空反证与最终综合、模型路由/缓存/预算、Citation Validator、Agent 工具安全、Trusted ResearchReport Renderer、引用 UI 与通知 Outbox。尚未完成 Agent 金标与回归评测、Gate G5、完整 Worker runtime、正式回测推广或部署环境。
 - 供应链 Critical/High、Web registry 混用和 Docker 镜像漏洞是已接受的 G0 风险，但继续阻断发布或未评审依赖漂移；Serenity root Python 动态 Git 生产依赖风险已由 `SAL-P1-003` 关闭。
 
 ## 当前决策与约束
@@ -224,6 +224,7 @@
 - 2026-07-29 记录 `SAL-P5-015` 状态复核 hash；确认状态复核 checkpoint 为 `124f69a7 docs: 复核 SAL-P5-015 最新开发状态与恢复提示`，当前 READY 任务仍为 `SAL-P5-016` 引用 UI 与通知 Outbox。本次 hash-anchor 仅固化恢复状态，不启动 UI/通知、Agent 评测、Gate G5 或后续 P5 runtime。
 - 2026-07-29 完成 `SAL-P5-016` 引用 UI 与通知 Outbox；新增 offline `ResearchReportPagePresenter`、SQLAlchemy `NotificationOutboxStore`、contract tests、architecture guards、DSA Web `DSA-PATCH-007` 和证据文档，冻结 `research.report_delivery_ui@1.0.0` 与 `research.notification_outbox@1.0.0`。Red target 捕获缺少 `report_delivery` / `notification_outbox` modules，focused Python/architecture `6 passed`，DSA Web focused `4 passed files / 26 passed tests`，DSA lint/build PASS，相关 P5 suite `79 passed`，全量 pytest `490 passed, 3 skipped`，compileall/lock/tag/patch replay checks PASS；当前下一步为 `SAL-P5-017` Agent 金标与回归评测，但本次不启动。本任务不实现 sender、不注册后端 runtime route、不调用真实 Provider/LLM、不启动 Worker loop、Qlib runtime、生产调度、Gate G5 或正式组合回测推广；实现 checkpoint 为 `518a785f feat(P5): 实现引用 UI 与通知 Outbox`。
 - 2026-07-29 同步 `SAL-P5-016` checkpoint hash；确认实现 checkpoint 为 `518a785f feat(P5): 实现引用 UI 与通知 Outbox`，状态同步 checkpoint 为 `b562b844 docs: 同步 SAL-P5-016 checkpoint hash`，当前已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..022`、`SAL-P5-001..016`，未完成范围从 `SAL-P5-017` 开始。本次同步仅更新实现锚点、进度清单和恢复提示，不启动 Agent 评测、Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+- 2026-07-30 按用户要求复核 `SAL-P5-016` 后最新开发状态；确认实现 checkpoint 为 `518a785f feat(P5): 实现引用 UI 与通知 Outbox`，状态同步 checkpoint 为 `b562b844 docs: 同步 SAL-P5-016 checkpoint hash`，状态同步 hash-anchor checkpoint 为 `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；当前已完成范围为 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..022`、`SAL-P5-001..016`，未完成范围从 `SAL-P5-017` 开始，当前 READY 任务为 `SAL-P5-017` Agent 金标与回归评测。本次复核仅同步状态文档、进度清单、`tasks/todo.md`、`tasks/lessons.md` 和可复制启动提示词，不启动 Agent 评测、Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广；状态复核 checkpoint 为本次 `docs: 复核 SAL-P5-016 最新开发状态与恢复提示` 提交。
 - 2026-07-26 按用户要求复核 `SAL-P4-020` 后最新开发状态；确认最近实现 checkpoint 为 `c1bb1dcc feat(P4): 实现真实回测 API`，状态同步 checkpoint 为 `64346b83 docs: 同步 SAL-P4-020 checkpoint hash`，状态同步 hash-anchor 为 `9c308f2e docs: 记录 SAL-P4-020 状态同步 hash`；当时已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..020`，未完成范围从 `SAL-P4-021` 开始，当时 READY 任务为 `SAL-P4-021` Quant Lab。本次状态复核不启动 Quant Lab、Evidence Agent、Worker loop、真实 Provider/LLM、Qlib runtime 或 legacy Backtest API 变更，并已在 `tasks/lessons.md` 再次固化阶段性任务完成后自动状态同步和可复制提示词习惯。
 - 2026-07-26 按用户要求再次复核 `SAL-P4-021` 后最新开发状态；确认最近实现 checkpoint 为 `643b4452 feat(P4): 实现 Quant Lab`，状态同步 checkpoint 为 `70303f8f docs: 同步 SAL-P4-021 checkpoint hash`，状态同步 hash-anchor 为 `52830c20 docs: 记录 SAL-P4-021 状态同步 hash`，状态复核 checkpoint 为 `6e8bb74a docs: 复核 SAL-P4-021 最新开发状态与恢复提示`，状态复核 hash-anchor 为 `8f3cfb79 docs: 记录 SAL-P4-021 状态复核 hash`；当前已完成 `SAL-P0-001..013`、`SAL-P1-001..016`、`SAL-P2-001..020`、`SAL-P3-001..017`、`SAL-P4-001..021`，未完成范围从 `SAL-P4-022` 开始，当前 READY 任务为 `SAL-P4-022` Gate G4。本次复核仅同步状态与交接习惯，不启动 Evidence Agent、真实 Provider/LLM、Worker loop、Qlib runtime 或正式组合回测推广，并已在 `tasks/lessons.md` 固化阶段任务后自动收尾规则。
 - Gate G0、Gate G1、Gate G2、Gate G3 与 Gate G4 已通过（均为 `GO with accepted risks`）；G5 尚未通过。DSA `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` 仍是当前上游产品基线。
@@ -428,6 +429,8 @@
 60. docs/citation-validator.md
 61. docs/agent-tool-security.md
 62. docs/trusted-research-report-renderer.md
+63. docs/research-report-delivery-ui-outbox.md
+64. docs/upstream-patches.md
 
 随后执行 git status --short --branch 和 git log -8 --oneline，确认当前状态。
 
@@ -438,9 +441,9 @@
 - 最近完成：SAL-P5-016 引用 UI 与通知 Outbox
 - 最近可评审交付 checkpoint：`518a785f feat(P5): 实现引用 UI 与通知 Outbox`；上一 checkpoint：`a816cf72 feat(P5): 实现可信 ResearchReport Renderer`
 - 最新状态同步 checkpoint：`b562b844 docs: 同步 SAL-P5-016 checkpoint hash`；上一状态同步 checkpoint：`f9e9c961 docs: 同步 SAL-P5-015 checkpoint hash`
-- 最新状态同步 hash-anchor checkpoint：本次 `docs: 记录 SAL-P5-016 状态同步 hash` 提交生成，提交后以 `git log -1 --oneline` 和最终回复确认；上一 hash-anchor checkpoint：`65a0e446 docs: 记录 SAL-P5-015 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint：`1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint：`a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`
-- 最新状态复核 checkpoint：`124f69a7 docs: 复核 SAL-P5-015 最新开发状态与恢复提示`；上一状态复核 checkpoint：`acceebab docs: 复核 SAL-P5-013 最新开发状态与恢复提示`
-- 最新状态复核 hash-anchor checkpoint：本次 `docs: 记录 SAL-P5-015 状态复核 hash` 提交生成，提交后以 `git log -1 --oneline` 和最终回复确认；上一状态复核 hash-anchor checkpoint：`31a0dabe docs: 记录 SAL-P5-013 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint：`1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`
+- 最新状态同步 hash-anchor checkpoint：`bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；上一 hash-anchor checkpoint：`65a0e446 docs: 记录 SAL-P5-015 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint：`1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint：`a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`
+- 最新状态复核 checkpoint：本次 `docs: 复核 SAL-P5-016 最新开发状态与恢复提示` 提交生成，提交后以 `git log -1 --oneline` 和最终回复确认；上一状态复核 checkpoint：`124f69a7 docs: 复核 SAL-P5-015 最新开发状态与恢复提示`
+- 最新状态复核 hash-anchor checkpoint：`ead0ca32 docs: 记录 SAL-P5-015 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`31a0dabe docs: 记录 SAL-P5-013 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint：`1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 16/18，总计 104/129
 
 下一步优先执行：

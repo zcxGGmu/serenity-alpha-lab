@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-30: SAL-P5-016 后再次提醒时必须把复核动作本身落到仓库
+
+- 纠正来源：`SAL-P5-016` 引用 UI 与通知 Outbox 实现 checkpoint `518a785f`、状态同步 checkpoint `b562b844` 和状态同步 hash-anchor checkpoint `bfc921aa` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使清单和状态主体已经推进到 `SAL-P5-016`，如果顶部状态栏、尾部恢复摘要或下次启动提示词仍留下旧任务复核锚点、hash-anchor 占位或“尚未完成引用 UI/通知 Outbox”等过期表述，下次会话仍可能误判当前 READY 任务或重复启动已完成任务。
+- 规则：阶段性任务完成后的最终收尾必须额外扫描并消除旧占位和矛盾句子，写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、状态同步 hash-anchor、状态复核 checkpoint、严格禁区和可复制下次启动提示词；用户再次提醒该习惯时，立即追加 lessons 并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-017` Agent 金标与回归评测开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要 checkpoint；不得跳到 Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
 ## 2026-07-29: SAL-P5-015 后再次提醒时必须把状态同步 hash-anchor 和状态复核入口一起固化
 
 - 纠正来源：`SAL-P5-015` 可信 ResearchReport Renderer 实现 checkpoint `a816cf72`、状态同步 checkpoint `f9e9c961` 和状态同步 hash-anchor checkpoint `65a0e446` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
