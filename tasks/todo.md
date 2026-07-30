@@ -31,7 +31,7 @@
 - Implemented `security.resource_artifact_authorization@1.0.0` in `src/serenity_alpha_lab/application/resource_authorization.py`: tenant/team/private owner authorization, Artifact parent-read binding, deterministic audit records, percent-encoded HMAC signed URL issue/verify, duplicated signature/query rejection, and run-bound task-scoped Worker grants.
 - Verification completed before checkpoint: focused Green `6 passed`, architecture guard `1 passed`, related suite `62 passed`, full pytest `510 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no Secret Manager/OS Keychain, FastAPI middleware, object-store adapter, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
-- Chinese implementation checkpoint: `33f76bad feat(P6): 实现资源与 Artifact 授权`; recovery docs are updated with the actual hash.
+- Chinese implementation checkpoint: `33f76bad feat(P6): 实现资源与 Artifact 授权`; status-sync checkpoint: `09d49744 docs: 同步 SAL-P6-002 checkpoint hash`.
 
 ---
 
