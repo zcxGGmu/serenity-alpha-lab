@@ -35,7 +35,7 @@
 - Hardened `ResearchReportPagePresenter` so trusted report display HTML is validated before page payload creation, unsafe source links are removed with `source_link_security` metadata, and security headers are attached.
 - Verification completed before checkpoint: focused Green `6 passed`, architecture/focused security `8 passed`, related suite `53 passed`, full pytest `520 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no live fetch/DNS/browser/upload parser/AV/FastAPI route, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
-- Chinese implementation checkpoint created: `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`; status-sync checkpoint created: `268032b9 docs: 同步 SAL-P6-004 checkpoint hash`; this hash-anchor update records the actual status-sync hash for recovery.
+- Chinese implementation checkpoint created: `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`; status-sync checkpoint created: `268032b9 docs: 同步 SAL-P6-004 checkpoint hash`; hash-anchor checkpoint created: `92ffad9a docs: 记录 SAL-P6-004 状态同步 hash`.
 
 ---
 
