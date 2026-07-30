@@ -1,12 +1,20 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
 from serenity_alpha_lab.application.config_profiles import (
+    ConfigAuditAction,
+    ConfigAuditRecord,
+    ConfigAuditStatus,
     ConfigProfileError,
     RuntimeProfile,
+    SecretReference,
+    SecretRotationPlan,
+    SecretStorageBackend,
+    config_api_diagnostics,
     load_runtime_settings,
     preview_runtime_config_update,
     profile_policy,
@@ -116,3 +124,182 @@ def test_desktop_profile_can_plan_env_file_update_without_writing_file(tmp_path)
     assert preview.env_file_mutation_allowed is True
     assert preview.would_rewrite_env_file is True
     assert env_file.read_text(encoding="utf-8") == "SERENITY_PROFILE=desktop\n"
+
+
+def test_secret_references_use_keychain_or_secret_manager_without_plaintext_leakage() -> None:
+    keychain_ref = SecretReference(
+        field_name="openai_api_key",
+        backend=SecretStorageBackend.OS_KEYCHAIN,
+        reference_uri="keychain://serenity/openai-api-key",
+        last_four="9abc",
+    )
+    secret_manager_ref = SecretReference(
+        field_name="tushare_token",
+        backend=SecretStorageBackend.SECRET_MANAGER,
+        reference_uri="secretmanager://production/tushare-token",
+        version="v2",
+        last_four="1234",
+    )
+
+    keychain_record = keychain_ref.to_record()
+    storage_record = secret_manager_ref.to_storage_record()
+    serialized = json.dumps([keychain_record, storage_record], sort_keys=True)
+
+    assert keychain_record["backend"] == "os_keychain"
+    assert keychain_record["configured"] is True
+    assert keychain_record["last_four"] == "9abc"
+    assert keychain_record["reference_hash"].startswith("sha256:")
+    assert storage_record["reference_uri"] == "secretmanager://production/tushare-token"
+    assert storage_record["reference_hash"].startswith("sha256:")
+    assert "sk-live-should-not-leak" not in serialized
+
+    with pytest.raises(ConfigProfileError, match="secret reference URI"):
+        SecretReference(
+            field_name="openai_api_key",
+            backend=SecretStorageBackend.SECRET_MANAGER,
+            reference_uri="sk-live-should-not-be-a-reference",
+        )
+    with pytest.raises(ConfigProfileError, match="query or fragment"):
+        SecretReference(
+            field_name="openai_api_key",
+            backend=SecretStorageBackend.SECRET_MANAGER,
+            reference_uri="secretmanager://production/openai?token=leak",
+        )
+
+
+def test_config_api_diagnostics_show_only_presence_backend_and_last_four() -> None:
+    settings = load_runtime_settings(
+        {
+            "SERENITY_PROFILE": "standalone",
+            "SERENITY_DATABASE_URL": "postgresql://serenity.example/db",
+            "OPENAI_API_KEY": "sk-live-should-not-leak",
+        }
+    )
+    diagnostics = config_api_diagnostics(
+        settings,
+        secret_references=(
+            SecretReference(
+                field_name="tushare_token",
+                backend=SecretStorageBackend.SECRET_MANAGER,
+                reference_uri="secretmanager://production/tushare-token",
+                version="v7",
+                last_four="7890",
+            ),
+        ),
+    )
+    serialized = json.dumps(diagnostics, sort_keys=True)
+
+    assert diagnostics["database_url"]["value"] == "postgresql://serenity.example/db"
+    assert diagnostics["openai_api_key"]["configured"] is True
+    assert diagnostics["openai_api_key"]["backend"] == "environment"
+    assert diagnostics["openai_api_key"]["last_four"] == "leak"
+    assert "value" not in diagnostics["openai_api_key"]
+    assert diagnostics["tushare_token"]["configured"] is True
+    assert diagnostics["tushare_token"]["backend"] == "secret_manager"
+    assert diagnostics["tushare_token"]["last_four"] == "7890"
+    assert "sk-live-should-not-leak" not in serialized
+    assert "[REDACTED]" not in serialized
+
+
+def test_secret_rotation_plan_records_old_and_new_reference_hashes_only() -> None:
+    requested_at = datetime(2026, 7, 31, 9, 30, tzinfo=UTC)
+    old_ref = SecretReference(
+        field_name="openai_api_key",
+        backend=SecretStorageBackend.SECRET_MANAGER,
+        reference_uri="secretmanager://production/openai-v1",
+        version="v1",
+        last_four="old1",
+    )
+    new_ref = SecretReference(
+        field_name="openai_api_key",
+        backend=SecretStorageBackend.SECRET_MANAGER,
+        reference_uri="secretmanager://production/openai-v2",
+        version="v2",
+        last_four="new2",
+    )
+
+    plan = SecretRotationPlan.create(
+        field_name="openai_api_key",
+        old_reference=old_ref,
+        new_reference=new_ref,
+        requested_by="user-1",
+        tenant_id="tenant-a",
+        profile=RuntimeProfile.STANDALONE,
+        requested_at=requested_at,
+        effective_after=requested_at + timedelta(minutes=30),
+        dry_run=True,
+    )
+    record = plan.to_record()
+    serialized = json.dumps(record, sort_keys=True)
+
+    assert plan.rotation_id.startswith("scr_")
+    assert record["dry_run"] is True
+    assert record["old_reference"]["last_four"] == "old1"
+    assert record["new_reference"]["last_four"] == "new2"
+    assert record["old_reference"]["reference_hash"] != record["new_reference"]["reference_hash"]
+    assert "secretmanager://production/openai-v1" not in serialized
+    assert "secretmanager://production/openai-v2" not in serialized
+
+    with pytest.raises(ConfigProfileError, match="new_reference must differ"):
+        SecretRotationPlan.create(
+            field_name="openai_api_key",
+            old_reference=old_ref,
+            new_reference=old_ref,
+            requested_by="user-1",
+            tenant_id="tenant-a",
+            profile=RuntimeProfile.STANDALONE,
+            requested_at=requested_at,
+            effective_after=requested_at + timedelta(minutes=30),
+        )
+
+
+def test_config_audit_record_is_deterministic_and_redacts_sensitive_payloads() -> None:
+    created_at = datetime(2026, 7, 31, 10, 0, tzinfo=UTC)
+    old_ref = SecretReference(
+        field_name="openai_api_key",
+        backend=SecretStorageBackend.SECRET_MANAGER,
+        reference_uri="secretmanager://production/openai-v1",
+        version="v1",
+        last_four="old1",
+    )
+    new_ref = SecretReference(
+        field_name="openai_api_key",
+        backend=SecretStorageBackend.SECRET_MANAGER,
+        reference_uri="secretmanager://production/openai-v2",
+        version="v2",
+        last_four="new2",
+    )
+
+    audit = ConfigAuditRecord.create(
+        action=ConfigAuditAction.SECRET_ROTATION_PLANNED,
+        status=ConfigAuditStatus.ALLOWED,
+        actor_subject_id="user-1",
+        tenant_id="tenant-a",
+        profile=RuntimeProfile.STANDALONE,
+        field_name="openai_api_key",
+        created_at=created_at,
+        before=old_ref,
+        after=new_ref,
+        metadata={"ticket": "SEC-123", "raw_token": "sk-live-should-not-leak"},
+    )
+    repeat = ConfigAuditRecord.create(
+        action=ConfigAuditAction.SECRET_ROTATION_PLANNED,
+        status=ConfigAuditStatus.ALLOWED,
+        actor_subject_id="user-1",
+        tenant_id="tenant-a",
+        profile=RuntimeProfile.STANDALONE,
+        field_name="openai_api_key",
+        created_at=created_at,
+        before=old_ref,
+        after=new_ref,
+        metadata={"ticket": "SEC-123", "raw_token": "sk-live-should-not-leak"},
+    )
+    record = audit.to_record()
+    serialized = json.dumps(record, sort_keys=True)
+
+    assert record["audit_hash"] == repeat.to_record()["audit_hash"]
+    assert record["audit_id"].startswith("cad_")
+    assert record["metadata"]["ticket"] == "SEC-123"
+    assert record["metadata"]["raw_token"] == "[REDACTED]"
+    assert "sk-live-should-not-leak" not in serialized
+    assert "secretmanager://production/openai-v2" not in serialized

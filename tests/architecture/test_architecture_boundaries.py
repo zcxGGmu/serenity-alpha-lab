@@ -528,6 +528,64 @@ def test_resource_authorization_stays_framework_neutral_and_runtime_free() -> No
     assert failures == []
 
 
+def test_config_profiles_secret_hardening_stays_framework_neutral_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "application" / "config_profiles.py"
+    allowed_modules = {
+        "__future__",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "pydantic",
+        "pydantic_settings",
+        "typing",
+        "urllib.parse",
+    }
+    forbidden_prefixes = (
+        "api.v1",
+        "bot.commands",
+        "src.config",
+        "src.services",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.repositories",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {
+        "akshare",
+        "authlib",
+        "baostock",
+        "boto3",
+        "efinance",
+        "fastapi",
+        "google",
+        "hvac",
+        "jwt",
+        "keyring",
+        "litellm",
+        "qlib",
+        "requests",
+        "sqlalchemy",
+        "tushare",
+        "yfinance",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden secret/runtime {module}")
+
+    assert failures == []
+
+
 def test_prompt_registry_stays_offline_and_runtime_free() -> None:
     failures: list[str] = []
     target = PACKAGE_ROOT / "evidence" / "prompt_registry.py"
