@@ -12,7 +12,7 @@
 - [x] Add architecture guard proving the evaluator stays offline and runtime-free.
 - [x] Update SAL-P5-017 evidence doc, progress checklist, development status and review notes.
 - [x] Run focused Green tests, related P5 suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
-- [ ] Create Chinese checkpoint commit for `SAL-P5-017`.
+- [x] Create Chinese checkpoint commit for `SAL-P5-017`.
 
 ## Review
 
@@ -20,7 +20,7 @@
 - Added deterministic `OfflineAgentEvalStub`, `AgentEvaluationScorer` and regression comparison report; baseline metrics are citation accuracy `1.0`, unsupported numeric rate `0.0`, schema success `1.0` and safety core pass.
 - Red target failed with missing `agent_evaluation` module as expected; focused Green `5 passed`, related P5 suite `76 passed`, full pytest `495 passed, 3 skipped`.
 - Final verification completed before commit: compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable upstream tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, and `git diff --check` PASS.
-- Remaining before commit: final git status and Chinese checkpoint commit.
+- Chinese implementation checkpoint created: `91d6d15b feat(P5): 建立 Agent 金标回归评测`. Status-sync commit follows to anchor this hash in recovery docs.
 
 ---
 
