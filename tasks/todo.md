@@ -9,11 +9,11 @@
 - [x] Update `docs/development-progress-checklist.md` tail summary with the same checkpoint and next task `SAL-P6-001`.
 - [x] Update `tasks/todo.md` review to include the actual checkpoint hash.
 - [x] Update `tasks/lessons.md` for the repeated automatic post-stage status-sync habit.
-- [ ] Create Chinese status-sync checkpoint commit.
+- [x] Create Chinese status-sync checkpoint commit.
 
 ## Review
 
-- In progress. This is a documentation/status sync only; no P6 implementation or runtime scope is being started.
+- Status-sync checkpoint created: `7d4d2e65 docs: 同步 SAL-P5-018 checkpoint hash`; this docs-only sync records `e65172b1` as the Gate G5 checkpoint and keeps `SAL-P6-001` as next without starting P6 implementation or runtime scope.
 
 ---
 
