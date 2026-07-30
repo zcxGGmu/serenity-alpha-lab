@@ -336,6 +336,7 @@ def test_report_delivery_ui_stays_offline_and_runtime_free() -> None:
         "datetime",
         "hashlib",
         "json",
+        "serenity_alpha_lab.application.input_fetch_security",
         "serenity_alpha_lab.evidence.report_renderer",
         "typing",
     }
@@ -527,6 +528,61 @@ def test_resource_authorization_stays_framework_neutral_and_runtime_free() -> No
 
     assert failures == []
 
+
+
+def test_input_fetch_security_stays_framework_neutral_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "application" / "input_fetch_security.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "enum",
+        "hashlib",
+        "ipaddress",
+        "json",
+        "re",
+        "serenity_alpha_lab.evidence.report_renderer",
+        "typing",
+        "urllib.parse",
+    }
+    forbidden_prefixes = (
+        "api.v1",
+        "bot.commands",
+        "src.services",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.repositories",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {
+        "aiohttp",
+        "akshare",
+        "authlib",
+        "baostock",
+        "boto3",
+        "efinance",
+        "fastapi",
+        "httpx",
+        "jwt",
+        "litellm",
+        "qlib",
+        "requests",
+        "sqlalchemy",
+        "tushare",
+        "yfinance",
+    }
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden input/fetch/report runtime {module}")
+
+    assert failures == []
 
 def test_config_profiles_secret_hardening_stays_framework_neutral_and_runtime_free() -> None:
     failures: list[str] = []

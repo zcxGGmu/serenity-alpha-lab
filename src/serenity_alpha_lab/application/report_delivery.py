@@ -7,6 +7,11 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
+from serenity_alpha_lab.application.input_fetch_security import (
+    InputSecurityDecisionStatus,
+    ReportRenderSecurityPolicy,
+    default_report_security_headers,
+)
 from serenity_alpha_lab.evidence.report_renderer import RenderedResearchReport
 
 
@@ -96,6 +101,9 @@ class ResearchReportPage:
 class ResearchReportPagePresenter:
     """Builds report-page payloads from trusted canonical ResearchReport JSON only."""
 
+    def __init__(self, *, report_security_policy: ReportRenderSecurityPolicy | None = None) -> None:
+        self._report_security_policy = report_security_policy or ReportRenderSecurityPolicy.default()
+
     def build(
         self,
         rendered_report: RenderedResearchReport,
@@ -104,6 +112,10 @@ class ResearchReportPagePresenter:
     ) -> ResearchReportPage:
         if type(rendered_report) is not RenderedResearchReport:
             raise ReportDeliveryError("rendered_report must be a RenderedResearchReport")
+        report_security_decision = self._report_security_policy.validate(rendered_report)
+        if report_security_decision.status is InputSecurityDecisionStatus.DENIED:
+            issue_codes = ", ".join(issue.code.value for issue in report_security_decision.issues)
+            raise ReportDeliveryError(f"unsafe report display html: {issue_codes}")
 
         trusted = rendered_report.trusted_report
         authoritative = trusted.authoritative_json
@@ -120,10 +132,18 @@ class ResearchReportPagePresenter:
             for evidence in _sequence(report.get("evidence"), "evidence")
         }
         expanded_claims = [
-            _expand_claim(claim, citations_by_id=citations_by_id, evidence_by_id=evidence_by_id)
+            _expand_claim(
+                claim,
+                citations_by_id=citations_by_id,
+                evidence_by_id=evidence_by_id,
+                report_security_policy=self._report_security_policy,
+            )
             for claim in _sequence(report.get("claims"), "claims")
         ]
-        evidence_lineage = [_evidence_summary(evidence) for evidence in evidence_by_id.values()]
+        evidence_lineage = [
+            _evidence_summary(evidence, report_security_policy=self._report_security_policy)
+            for evidence in evidence_by_id.values()
+        ]
         notification_statuses = [_notification_record(item) for item in notification_records]
         citation_graph = {
             "claims": expanded_claims,
@@ -160,6 +180,7 @@ class ResearchReportPagePresenter:
             },
         }
         headers = {
+            **default_report_security_headers(),
             "Location": f"/api/v1/research/reports/{report_id}",
             "X-Authoritative-Json-Hash": trusted.authoritative_json_hash,
         }
@@ -171,6 +192,7 @@ def _expand_claim(
     *,
     citations_by_id: Mapping[str, Mapping[str, Any]],
     evidence_by_id: Mapping[str, Mapping[str, Any]],
+    report_security_policy: ReportRenderSecurityPolicy,
 ) -> dict[str, Any]:
     claim_id = _required_string("claim_id", str(claim["claim_id"]))
     citation_ids = [str(citation_id) for citation_id in claim.get("citation_ids", [])]
@@ -183,7 +205,7 @@ def _expand_claim(
         evidence = evidence_by_id.get(evidence_id)
         if evidence is None:
             raise ReportDeliveryError(f"citation {citation_id} references missing evidence {evidence_id}")
-        citations.append(_citation_summary(citation, evidence=evidence))
+        citations.append(_citation_summary(citation, evidence=evidence, report_security_policy=report_security_policy))
 
     record = dict(claim)
     record["citation_ids"] = citation_ids
@@ -191,7 +213,12 @@ def _expand_claim(
     return _drop_none(record)
 
 
-def _citation_summary(citation: Mapping[str, Any], *, evidence: Mapping[str, Any]) -> dict[str, Any]:
+def _citation_summary(
+    citation: Mapping[str, Any],
+    *,
+    evidence: Mapping[str, Any],
+    report_security_policy: ReportRenderSecurityPolicy,
+) -> dict[str, Any]:
     return _drop_none(
         {
             "citation_id": citation["citation_id"],
@@ -204,13 +231,19 @@ def _citation_summary(citation: Mapping[str, Any], *, evidence: Mapping[str, Any
             "run_id": citation.get("run_id"),
             "stage_id": citation.get("stage_id"),
             "artifact_hash": citation.get("artifact_hash"),
-            "evidence": _evidence_summary(evidence),
+            "evidence": _evidence_summary(evidence, report_security_policy=report_security_policy),
         }
     )
 
 
-def _evidence_summary(evidence: Mapping[str, Any]) -> dict[str, Any]:
+def _evidence_summary(
+    evidence: Mapping[str, Any],
+    *,
+    report_security_policy: ReportRenderSecurityPolicy,
+) -> dict[str, Any]:
     source = _mapping(evidence.get("source"), "source")
+    source_link = source.get("source_uri")
+    link_decision = report_security_policy.validate_source_link(str(source_link) if source_link is not None else None)
     artifact = _drop_none(
         {
             "artifact_id": evidence.get("artifact_id"),
@@ -227,7 +260,10 @@ def _evidence_summary(evidence: Mapping[str, Any]) -> dict[str, Any]:
             "available_at": evidence["available_at"],
             "trust": evidence["trust"],
             "source": source,
-            "source_link": source.get("source_uri"),
+            "source_link": source_link if link_decision.status is InputSecurityDecisionStatus.ALLOWED else None,
+            "source_link_security": (
+                link_decision.to_record() if link_decision.status is InputSecurityDecisionStatus.DENIED else None
+            ),
             "dataset_versions": evidence.get("dataset_versions", {}),
             "run_id": evidence.get("run_id"),
             "stage_id": evidence.get("stage_id"),

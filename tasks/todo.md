@@ -1,3 +1,44 @@
+# SAL-P6-004 Input Fetch And Report Rendering Hardening Implementation Plan
+
+> Scope: Complete only `SAL-P6-004` by adding framework-neutral URL/fetch policy, file upload metadata scanning, report rendering safety validation and security headers. Do not start `SAL-P6-005+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read required recovery docs, progress checklist, Gate G5, Auth/RBAC, Resource/Artifact authorization, Secret/Config hardening, upstream patch and directly related source trust / agent tool security / trusted renderer / report delivery code.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Attempt read-only subagent exploration for the three relevant areas; wrapper rejected both attempts, so continue with local senior review and record fallback.
+- [x] Write SAL-P6-004 implementation plan in `docs/superpowers/plans/2026-07-31-input-fetch-report-hardening.md`.
+- [x] Add failing contract tests for URL policy, redirect/response limits, upload scanning, report HTML/link safety and security headers.
+- [x] Run focused Red targets and record expected failures.
+- [x] Implement framework-neutral `application.input_fetch_security` contracts without runtime fetch/scanner/provider imports.
+- [x] Harden `ResearchReportPagePresenter` with report security validation, safe source links and default security headers.
+- [x] Export public symbols and add an architecture import guard proving no FastAPI/requests/httpx/Provider/LLM/Worker/Qlib/runtime imports.
+- [x] Add `docs/input-fetch-report-hardening.md` evidence record and update progress/status registers for P6 `4/23`, total `110/129`, `SAL-P6-005` next.
+- [x] Run focused Green, related SourceTrust + AgentToolSecurity + Renderer + Delivery + architecture suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
+- [ ] Create Chinese checkpoint commit for `SAL-P6-004`.
+
+## Recovery Anchors
+
+- Phase: P6 安全、稳定性与发布加固.
+- Gate: G5 已通过；G6 未通过.
+- Completed entering task: `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001..003`.
+- Current READY task: `SAL-P6-004` 加固输入、抓取与报告渲染.
+- Implementation checkpoint entering task: `984813fd feat(P6): 加固密钥与配置`.
+- Latest final anchor entering task: `69a824ce docs: 固化 SAL-P6-003 启动提示锚点`.
+- Strict boundary: do not start `SAL-P6-005+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
+
+## Review
+
+- Plan check-in completed before code changes. Subagent exploration was attempted twice, but the wrapper rejected the payloads (`reasoning_effort must not be empty`, then `Provide either message or items, but not both`); per existing lesson, implementation continued with local senior review and fresh verification.
+- Red target failed as expected during collection with missing `serenity_alpha_lab.application.input_fetch_security` (`1 error`).
+- Implemented `security.input_fetch_report_hardening@1.0.0` in `src/serenity_alpha_lab/application/input_fetch_security.py`: URL/fetch metadata policy, upload metadata/sample scanning, report HTML/link safety policy, deterministic issue/decision records and default report security headers.
+- Hardened `ResearchReportPagePresenter` so trusted report display HTML is validated before page payload creation, unsafe source links are removed with `source_link_security` metadata, and security headers are attached.
+- Verification completed before checkpoint: focused Green `6 passed`, architecture/focused security `8 passed`, related suite `53 passed`, full pytest `520 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
+- Scope held: no live fetch/DNS/browser/upload parser/AV/FastAPI route, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
+- Chinese implementation checkpoint pending creation; checkpoint hash will be synced after commit.
+
+---
+
 # SAL-P6-003 Post-Completion Status Review
 
 > Scope: Refresh recovery state after completed `SAL-P6-003` and the latest user reminder. Do not start `SAL-P6-004` implementation, `SAL-P6-005+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
