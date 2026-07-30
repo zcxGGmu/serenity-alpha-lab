@@ -13,7 +13,7 @@
 - [x] Export public RBAC symbols and add an architecture import guard.
 - [x] Add `docs/auth-rbac.md` evidence record and update progress/status registers for P6 `1/23`, total `107/129`, `SAL-P6-002` next.
 - [x] Run focused Green, related suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
-- [ ] Create Chinese checkpoint commit for `SAL-P6-001`.
+- [x] Create Chinese checkpoint commit for `SAL-P6-001`.
 
 ## Review
 
@@ -22,7 +22,7 @@
 - Implemented `security.auth_rbac@1.0.0` in `src/serenity_alpha_lab/application/auth_rbac.py`: desktop local owner, standalone local roles, team-mode data/run/config/admin separation, tenant/team mismatch denies, optional OIDC declaration/claim mapping and deterministic API authorization catalog.
 - Verification completed before checkpoint: focused Green `5 passed`, architecture guard `1 passed`, related suite `41 passed`, full pytest `503 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no `SAL-P6-002` signed URL/object policy, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, Worker loop, real Provider/LLM, Qlib runtime, notification sender, production scheduler, release packaging or formal backtest promotion was started.
-- Chinese implementation checkpoint pending; actual hash will be recorded immediately after commit in a status-sync pass.
+- Chinese implementation checkpoint created: `10397052 feat(P6): 完善认证与 RBAC`; actual hash is now recorded in the status-sync pass.
 
 ---
 
