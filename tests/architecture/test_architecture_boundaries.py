@@ -753,6 +753,44 @@ def test_application_and_dsa_task_facade_do_not_import_thread_pool_executor() ->
     assert failures == []
 
 
+def test_agent_evaluation_stays_offline_and_runtime_free() -> None:
+    failures: list[str] = []
+    target = PACKAGE_ROOT / "application" / "agent_evaluation.py"
+    allowed_modules = {
+        "__future__",
+        "collections.abc",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "hashlib",
+        "json",
+        "serenity_alpha_lab.evidence.schema",
+        "typing",
+    }
+    forbidden_prefixes = (
+        "src.agent",
+        "src.core.pipeline",
+        "api.v1.endpoints.agent",
+        "bot.commands",
+        "serenity_alpha_lab.integrations",
+        "serenity_alpha_lab.quant",
+        "serenity_alpha_lab.repositories",
+        "serenity_alpha_lab.services",
+    )
+    forbidden_roots = {"akshare", "baostock", "efinance", "fastapi", "litellm", "qlib", "sqlalchemy", "tushare", "yfinance"}
+    if not target.exists():
+        failures.append(f"{target.relative_to(ROOT)} does not exist")
+    else:
+        for module in imported_modules(target):
+            root = module.split(".", maxsplit=1)[0]
+            if module not in allowed_modules:
+                failures.append(f"{target.relative_to(ROOT)} imports {module}")
+            if root in forbidden_roots or module.startswith(forbidden_prefixes):
+                failures.append(f"{target.relative_to(ROOT)} imports forbidden runtime {module}")
+
+    assert failures == []
+
+
 def test_research_orchestrator_contracts_do_not_import_concrete_dsa_agent_runtime() -> None:
     failures: list[str] = []
     forbidden_prefixes = (

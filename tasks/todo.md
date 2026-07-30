@@ -1,3 +1,29 @@
+# SAL-P5-017 Agent Golden Regression Evaluation Plan
+
+> Scope: Complete only `SAL-P5-017` by adding offline Agent golden cases, a deterministic stub, a scorer and a regression report. Do not start Gate G5, real Provider/LLM, Worker loop, Qlib runtime, production scheduling or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read recovery docs and confirm actual git state before implementation.
+- [x] Write SAL-P5-017 implementation plan in `docs/superpowers/plans/2026-07-30-agent-golden-regression-evaluation.md`.
+- [x] Add failing tests for 50+ golden cases, category/market coverage, scorer thresholds, safety-core checks and prompt/model regression comparison.
+- [x] Run focused Red tests and record expected missing-module failure.
+- [x] Implement offline `application.agent_evaluation` with golden catalog, deterministic stub, scorer and report DTOs.
+- [x] Add architecture guard proving the evaluator stays offline and runtime-free.
+- [x] Update SAL-P5-017 evidence doc, progress checklist, development status and review notes.
+- [x] Run focused Green tests, related P5 suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
+- [ ] Create Chinese checkpoint commit for `SAL-P5-017`.
+
+## Review
+
+- Implemented `research.agent_evaluation@1.0.0` in `src/serenity_alpha_lab/application/agent_evaluation.py`; default catalog has 56 cases across 7 required categories and CN/HK/US/JP/KR/TW markets.
+- Added deterministic `OfflineAgentEvalStub`, `AgentEvaluationScorer` and regression comparison report; baseline metrics are citation accuracy `1.0`, unsupported numeric rate `0.0`, schema success `1.0` and safety core pass.
+- Red target failed with missing `agent_evaluation` module as expected; focused Green `5 passed`, related P5 suite `76 passed`, full pytest `495 passed, 3 skipped`.
+- Final verification completed before commit: compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable upstream tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, and `git diff --check` PASS.
+- Remaining before commit: final git status and Chinese checkpoint commit.
+
+---
+
 # SAL-P5-016 Post-Completion Status Review
 
 > Scope: Update repository recovery state after completed `SAL-P5-016`. Do not start `SAL-P5-017`, Gate G5, real Provider/LLM, Worker loop, Qlib runtime, production scheduling or formal backtest promotion.
