@@ -1,3 +1,22 @@
+# SAL-P5-018 Post-Completion Status Sync
+
+> Scope: Record the actual `SAL-P5-018` checkpoint hash, refresh recovery prompts, and capture the repeated lesson to always do this automatically after every phase task. Do not start `SAL-P6-001` implementation, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender or formal backtest promotion.
+
+## Checklist
+
+- [x] Confirm latest checkpoint with `git log -8 --oneline`.
+- [x] Update `docs/development-status.md` and next startup prompt with `e65172b1 docs(P5): 通过 Gate G5 可信研究评审`.
+- [x] Update `docs/development-progress-checklist.md` tail summary with the same checkpoint and next task `SAL-P6-001`.
+- [x] Update `tasks/todo.md` review to include the actual checkpoint hash.
+- [x] Update `tasks/lessons.md` for the repeated automatic post-stage status-sync habit.
+- [ ] Create Chinese status-sync checkpoint commit.
+
+## Review
+
+- In progress. This is a documentation/status sync only; no P6 implementation or runtime scope is being started.
+
+---
+
 # SAL-P5-018 Gate G5 Trusted Research Review Plan
 
 > Scope: Complete only `SAL-P5-018` Gate G5 by adding the trusted research review record, executable gate test and state/checklist sync. Do not start real Provider/LLM, Worker loop, Qlib runtime, production scheduling, formal backtest promotion or P6 implementation beyond naming `SAL-P6-001` as next.
@@ -21,7 +40,7 @@
 - Verification completed: related P5 suite `78 passed`, full pytest `497 passed, 3 skipped`, compileall PASS, dependency lock guard PASS, immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - DSA patch validation note: live patched worktree `--check-only` hit expected already-applied context conflict at `0004`; clean temp DSA worktree sequentially applied `0001..0007` successfully.
 - Scope held: no real Provider/LLM, Agent/tool runtime, Worker loop, Qlib runtime, notification sender, production scheduler, P6 implementation or formal backtest promotion was started.
-- Chinese checkpoint commit is created as the final Git step for this task.
+- Chinese checkpoint commit created: `e65172b1 docs(P5): 通过 Gate G5 可信研究评审`.
 
 ---
 

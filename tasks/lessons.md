@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-07-30: SAL-P5-018 后必须把实际 checkpoint hash 回写到恢复提示词
+
+- 纠正来源：`SAL-P5-018` Gate G5 可信研究评审 checkpoint `e65172b1` 完成后，用户要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使阶段任务已经提交，如果 `docs/development-status.md`、`docs/development-progress-checklist.md` 或下次启动提示词仍写“本次提交生成后确认 / 将由本次中文提交生成”，下次恢复仍要人工查 `git log`，也容易误判 P5/G5 是否已完全收尾。
+- 规则：每个阶段性任务完成后，必须立即把实际实现 checkpoint hash、完成/未完成范围、当前 Phase/Gate、当前 READY 任务、最新状态同步锚点、严格禁区和可复制下次启动提示词回写到仓库文档；用户再次提醒该习惯时，必须追加本文件并提交中文状态同步 checkpoint。
+- 执行：后续从 `SAL-P6-001` 完善认证与 RBAC 开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、验收证据、风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和中文 checkpoint；不得跳到真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender 或正式组合回测推广。
+
 ## 2026-07-30: SAL-P5-017 后再次提醒时必须把复核锚点推进到最新任务
 
 - 纠正来源：`SAL-P5-017` Agent 金标与回归评测实现 checkpoint `91d6d15b`、状态同步 checkpoint `4607532d`、状态同步 hash-anchor checkpoint `6e75580a` 和最终固化 checkpoint `8e17b3df` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
