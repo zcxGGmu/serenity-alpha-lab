@@ -17,7 +17,7 @@
 - Create: `tests/application/test_input_fetch_report_security.py`
 - Modify: `tests/architecture/test_architecture_boundaries.py`
 
-- [ ] **Step 1: Write failing tests for URL and upload policy**
+- [x] **Step 1: Write failing tests for URL and upload policy**
 
 Add tests that import `UrlFetchPolicy`, `UrlFetchHop`, `UrlFetchCandidate`, `FileUploadPolicy`, `FileUploadCandidate`, `InputSecurityDecisionStatus` and `InputSecurityIssueCode`.
 
@@ -28,7 +28,7 @@ Expected behavior:
 - `FileUploadPolicy.default()` allows small `.pdf`, `.txt`, `.csv` and `.json` inputs with matching content types, records SHA-256 of the supplied sample and sanitized filename.
 - It denies path traversal filenames, oversized files, dangerous extensions/content types and executable/script signatures in supplied sample bytes.
 
-- [ ] **Step 2: Run focused Red**
+- [x] **Step 2: Run focused Red**
 
 Run:
 
@@ -38,7 +38,7 @@ uv run --extra core --extra dev python -m pytest tests/application/test_input_fe
 
 Expected: collection fails because `serenity_alpha_lab.application.input_fetch_security` does not exist.
 
-- [ ] **Step 3: Implement minimal contracts**
+- [x] **Step 3: Implement minimal contracts**
 
 Create `input_fetch_security.py` with:
 - `INPUT_FETCH_REPORT_SECURITY_CONTRACT_VERSION = "security.input_fetch_report_hardening@1.0.0"`
@@ -49,7 +49,7 @@ Create `input_fetch_security.py` with:
 
 Do not import `requests`, `httpx`, `fastapi`, cloud SDKs, file scanners, Provider SDKs, LLM libraries, Qlib or SQLAlchemy.
 
-- [ ] **Step 4: Run focused Green**
+- [x] **Step 4: Run focused Green**
 
 Run:
 
@@ -67,7 +67,7 @@ Expected: URL and upload policy tests pass.
 - Modify: `tests/application/test_input_fetch_report_security.py`
 - Modify: `tests/application/test_report_delivery_ui.py`
 
-- [ ] **Step 1: Write failing report safety tests**
+- [x] **Step 1: Write failing report safety tests**
 
 Add tests that verify:
 - `ReportRenderSecurityPolicy.default().validate(rendered_report)` allows the existing trusted renderer output.
@@ -75,7 +75,7 @@ Add tests that verify:
 - `ResearchReportPagePresenter` rejects unsafe `rendered_report.html` and strips unsafe `source_link` values from evidence summaries while keeping safe `artifact://` and `https://` links.
 - `ResearchReportPagePresenter` returns security headers: CSP, `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, and `Permissions-Policy`.
 
-- [ ] **Step 2: Run focused Red**
+- [x] **Step 2: Run focused Red**
 
 Run:
 
@@ -85,7 +85,7 @@ uv run --extra core --extra dev python -m pytest tests/application/test_input_fe
 
 Expected: failures for missing report security policy and missing hardened presenter behavior.
 
-- [ ] **Step 3: Implement report security**
+- [x] **Step 3: Implement report security**
 
 Extend `input_fetch_security.py` with:
 - `ReportRenderSecurityPolicy`
@@ -100,7 +100,7 @@ Update `ResearchReportPagePresenter` to:
 - sanitize evidence `source_link` values into safe links plus deterministic security issue metadata
 - merge default security headers into page headers
 
-- [ ] **Step 4: Run focused Green**
+- [x] **Step 4: Run focused Green**
 
 Run:
 
@@ -120,19 +120,19 @@ Expected: all focused tests pass.
 - Modify: `docs/development-status.md`
 - Modify: `tasks/todo.md`
 
-- [ ] **Step 1: Export public symbols and architecture guard**
+- [x] **Step 1: Export public symbols and architecture guard**
 
 Export the new security symbols from `serenity_alpha_lab.application`. Add `test_input_fetch_security_stays_framework_neutral_and_runtime_free` with an explicit allowed import list.
 
-- [ ] **Step 2: Add evidence doc**
+- [x] **Step 2: Add evidence doc**
 
 Create `docs/input-fetch-report-hardening.md` describing URL policy, upload scanning metadata, report HTML/link validation, security headers, non-goals and verification evidence.
 
-- [ ] **Step 3: Update progress and status**
+- [x] **Step 3: Update progress and status**
 
 Mark only `SAL-P6-004` complete. Advance P6 to `4/23`, total to `110/129`, keep G6 unpassed and set `SAL-P6-005` as next. Record subagent fallback due wrapper rejection.
 
-- [ ] **Step 4: Run verification**
+- [x] **Step 4: Run verification**
 
 Run:
 
@@ -147,7 +147,7 @@ git diff --check
 
 Expected: all tests/checks pass; immutable upstream tag remains `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Stage only relevant files and create a Chinese checkpoint commit:
 

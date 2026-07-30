@@ -15,7 +15,7 @@
 - [x] Export public symbols and add an architecture import guard proving no FastAPI/requests/httpx/Provider/LLM/Worker/Qlib/runtime imports.
 - [x] Add `docs/input-fetch-report-hardening.md` evidence record and update progress/status registers for P6 `4/23`, total `110/129`, `SAL-P6-005` next.
 - [x] Run focused Green, related SourceTrust + AgentToolSecurity + Renderer + Delivery + architecture suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
-- [ ] Create Chinese checkpoint commit for `SAL-P6-004`.
+- [x] Create Chinese checkpoint commit for `SAL-P6-004`.
 
 ## Recovery Anchors
 
@@ -35,7 +35,7 @@
 - Hardened `ResearchReportPagePresenter` so trusted report display HTML is validated before page payload creation, unsafe source links are removed with `source_link_security` metadata, and security headers are attached.
 - Verification completed before checkpoint: focused Green `6 passed`, architecture/focused security `8 passed`, related suite `53 passed`, full pytest `520 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no live fetch/DNS/browser/upload parser/AV/FastAPI route, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
-- Chinese implementation checkpoint pending creation; checkpoint hash will be synced after commit.
+- Chinese implementation checkpoint created: `47fd9cf2 feat(P6): 加固输入抓取与报告渲染`; this status-sync update records the actual hash for recovery.
 
 ---
 
