@@ -1,3 +1,40 @@
+# SAL-P6-002 Resource And Artifact Authorization Implementation Plan
+
+> Scope: Complete only `SAL-P6-002` by adding framework-neutral object-level authorization for Run, Definition, Evidence, Report and Artifact downloads, including owner/tenant policy, short-lived signed Artifact URL contracts, audit records and Worker least-privilege grants. Do not start `SAL-P6-003+`, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, backup/restore, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read required recovery, security, Auth/RBAC, Artifact, Evidence Store, Backtest API, Research Report Delivery and upstream patch docs.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Add failing contract tests for tenant/team/owner object authorization, guess-resistant IDs, signed Artifact URL expiry/scope, audit records and Worker least-privilege grants.
+- [x] Run focused Red target and record expected missing-module failure.
+- [x] Implement framework-neutral `application.resource_authorization` using SAL-P6-001 `AuthSubject`, `RbacPolicy`, `AuthPermission` and `ResourceScope`.
+- [x] Export public resource-authorization symbols and add an architecture import guard proving no FastAPI/Authlib/JWT/requests/SQLAlchemy/Provider/LLM/Worker/Qlib runtime imports.
+- [x] Add `docs/resource-artifact-authorization.md` evidence record and update progress/status registers for P6 `2/23`, total `108/129`, `SAL-P6-003` next.
+- [x] Run focused Green, related Auth/RBAC + Artifact/Evidence/Backtest/Report suite, full pytest, compileall, dependency lock, immutable tag and diff hygiene checks.
+- [ ] Create Chinese checkpoint commit for `SAL-P6-002`.
+
+## Recovery Anchors
+
+- Phase: P6 安全、稳定性与发布加固.
+- Gate: G5 已通过；G6 未通过.
+- Completed entering task: `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001`.
+- Current READY task: `SAL-P6-002` 实现资源与 Artifact 授权.
+- Implementation checkpoint entering task: `10397052 feat(P6): 完善认证与 RBAC`.
+- Latest status-review final anchor entering task: `3f2160a7 docs: 固化 SAL-P6-001 状态复核 hash-anchor`.
+- Strict boundary: do not start `SAL-P6-003+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
+
+## Review
+
+- Plan check-in completed in this file before code changes. Implementation stayed application-layer only and runtime-free.
+- Red target failed as expected with missing `serenity_alpha_lab.application.resource_authorization` (`1 error`); architecture guard Red failed because the module file did not exist (`1 failed`).
+- Implemented `security.resource_artifact_authorization@1.0.0` in `src/serenity_alpha_lab/application/resource_authorization.py`: tenant/team/private owner authorization, Artifact parent-read binding, deterministic audit records, percent-encoded HMAC signed URL issue/verify, duplicated signature/query rejection, and run-bound task-scoped Worker grants.
+- Verification completed before checkpoint: focused Green `6 passed`, architecture guard `1 passed`, related suite `62 passed`, full pytest `510 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
+- Scope held: no Secret Manager/OS Keychain, FastAPI middleware, object-store adapter, real Provider/LLM, Worker loop, Qlib runtime, notification sender, production scheduler, release packaging or formal portfolio backtest promotion was started.
+- Chinese implementation checkpoint is pending; after commit, update recovery docs with the actual hash.
+
+---
+
 # SAL-P6-001 Post-Completion Status Review
 
 > Scope: Refresh recovery state after completed `SAL-P6-001` and the latest user reminder. Do not start `SAL-P6-002` implementation, `SAL-P6-003+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender or formal backtest promotion.
