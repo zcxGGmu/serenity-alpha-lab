@@ -9,14 +9,14 @@
 - [x] Update `docs/development-progress-checklist.md` tail summary so latest status-review anchors no longer point at `SAL-P5-016`.
 - [x] Update `tasks/lessons.md` for the repeated instruction to automatically perform status docs, recovery prompt and checkpoint commits after each phase task.
 - [x] Run document status-anchor checks and `git diff --check`.
-- [ ] Create Chinese status-review checkpoint and follow-up hash-anchor commit.
+- [x] Create Chinese status-review checkpoint and follow-up hash-anchor commit.
 
 ## Review
 
 - Confirmed current phase remains P5 and Gate G5 is not passed.
 - Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..017`; unfinished range starts at `SAL-P5-018` Gate G5 and P6 remains incomplete.
 - Latest implementation checkpoint entering this review is `91d6d15b feat(P5): 建立 Agent 金标回归评测`; latest status-sync checkpoint is `4607532d docs: 同步 SAL-P5-017 checkpoint hash`; latest status-sync hash-anchor is `6e75580a docs: 记录 SAL-P5-017 状态同步 hash`.
-- Status-review checkpoint created: `62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`; hash-anchor will be created and then backfilled into recovery docs.
+- Status-review checkpoint created: `62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`; status-review hash-anchor created: `839293a4 docs: 记录 SAL-P5-017 状态复核 hash`.
 
 ---
 

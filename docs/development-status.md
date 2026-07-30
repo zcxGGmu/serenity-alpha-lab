@@ -11,7 +11,7 @@
 > 最新状态同步 checkpoint：`4607532d docs: 同步 SAL-P5-017 checkpoint hash`；上一状态同步 checkpoint 为 `b562b844 docs: 同步 SAL-P5-016 checkpoint hash`；Gate G4 checkpoint 为 `1466c11c docs(P4): 通过 Gate G4 回测与风控评审`<br>
 > 最新状态同步 hash-anchor checkpoint：`6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；上一 hash-anchor checkpoint 为 `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint 为 `1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint 为 `a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`<br>
 > 本次阶段任务 checkpoint：`91d6d15b feat(P5): 建立 Agent 金标回归评测`；已完成任务范围推进至 `SAL-P5-017`<br>
-> 最新状态复核 checkpoint：`62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`；上一状态复核 checkpoint：`b815b7d6 docs: 复核 SAL-P5-016 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`待提交 docs: 记录 SAL-P5-017 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`e96dc3cb docs: 记录 SAL-P5-016 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint 为 `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`<br>
+> 最新状态复核 checkpoint：`62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`；上一状态复核 checkpoint：`b815b7d6 docs: 复核 SAL-P5-016 最新开发状态与恢复提示`；最新状态复核 hash-anchor checkpoint：`839293a4 docs: 记录 SAL-P5-017 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`e96dc3cb docs: 记录 SAL-P5-016 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint 为 `1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`；SAL-P5-008 交接习惯复核 checkpoint：`6b251300 docs: 复核 SAL-P5-008 最新状态与交接习惯`<br>
 > 权威清单：[开发进度跟踪清单](./development-progress-checklist.md)
 
 ## 已完成
@@ -451,7 +451,7 @@
 - 最新状态同步 checkpoint：`4607532d docs: 同步 SAL-P5-017 checkpoint hash`；上一状态同步 checkpoint：`b562b844 docs: 同步 SAL-P5-016 checkpoint hash`
 - 最新状态同步 hash-anchor checkpoint：`6e75580a docs: 记录 SAL-P5-017 状态同步 hash`；上一 hash-anchor checkpoint：`bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`；SAL-P5-013 hash-anchor checkpoint：`1d421656 docs: 记录 SAL-P5-013 状态同步 hash`；SAL-P5-012 hash-anchor checkpoint：`a7ab1a52 docs: 记录 SAL-P5-012 状态同步 hash`
 - 最新状态复核 checkpoint：`62cdcf23 docs: 复核 SAL-P5-017 最新开发状态与恢复提示`；上一状态复核 checkpoint：`b815b7d6 docs: 复核 SAL-P5-016 最新开发状态与恢复提示`
-- 最新状态复核 hash-anchor checkpoint：`待提交 docs: 记录 SAL-P5-017 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`e96dc3cb docs: 记录 SAL-P5-016 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint：`1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`
+- 最新状态复核 hash-anchor checkpoint：`839293a4 docs: 记录 SAL-P5-017 状态复核 hash`；上一状态复核 hash-anchor checkpoint：`e96dc3cb docs: 记录 SAL-P5-016 状态复核 hash`；最新最终锚点 checkpoint：`84424467 docs: 记录 SAL-P5-013 最终锚点`；上一最终锚点 checkpoint：`1326b033 docs: 固化 SAL-P5-013 状态同步 hash-anchor`
 - 进度：P0 13/13，P1 16/16，P2 20/20，P3 17/17，P4 22/22，P5 17/18，总计 105/129
 
 下一步优先执行：
