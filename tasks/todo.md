@@ -22,7 +22,7 @@
 - Implemented `security.auth_rbac@1.0.0` in `src/serenity_alpha_lab/application/auth_rbac.py`: desktop local owner, standalone local roles, team-mode data/run/config/admin separation, tenant/team mismatch denies, optional OIDC declaration/claim mapping and deterministic API authorization catalog.
 - Verification completed before checkpoint: focused Green `5 passed`, architecture guard `1 passed`, related suite `41 passed`, full pytest `503 passed, 3 skipped`, compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable tag `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, `git diff --check` PASS.
 - Scope held: no `SAL-P6-002` signed URL/object policy, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, Worker loop, real Provider/LLM, Qlib runtime, notification sender, production scheduler, release packaging or formal backtest promotion was started.
-- Chinese implementation checkpoint created: `10397052 feat(P6): 完善认证与 RBAC`; actual hash is now recorded in the status-sync pass.
+- Chinese implementation checkpoint created: `10397052 feat(P6): 完善认证与 RBAC`; status-sync checkpoint created: `23878a6d docs: 同步 SAL-P6-001 checkpoint hash`.
 
 ---
 
