@@ -20,7 +20,7 @@
 - Added deterministic `OfflineAgentEvalStub`, `AgentEvaluationScorer` and regression comparison report; baseline metrics are citation accuracy `1.0`, unsupported numeric rate `0.0`, schema success `1.0` and safety core pass.
 - Red target failed with missing `agent_evaluation` module as expected; focused Green `5 passed`, related P5 suite `76 passed`, full pytest `495 passed, 3 skipped`.
 - Final verification completed before commit: compileall PASS, dependency lock guard PASS (`Resolved 298 packages`), immutable upstream tag stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`, and `git diff --check` PASS.
-- Chinese implementation checkpoint created: `91d6d15b feat(P5): 建立 Agent 金标回归评测`. Status-sync commit follows to anchor this hash in recovery docs.
+- Chinese implementation checkpoint created: `91d6d15b feat(P5): 建立 Agent 金标回归评测`. Status-sync checkpoint created: `4607532d docs: 同步 SAL-P5-017 checkpoint hash`; hash-anchor commit follows to record it.
 
 ---
 
