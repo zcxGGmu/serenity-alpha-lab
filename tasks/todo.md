@@ -1,3 +1,26 @@
+# SAL-P6-002 Post-Completion Status Review
+
+> Scope: Refresh recovery state after completed `SAL-P6-002` and the latest user reminder. Do not start `SAL-P6-003` implementation, `SAL-P6-004+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
+
+## Checklist
+
+- [x] Re-read current recovery docs, progress checklist, todo and lessons.
+- [x] Confirm actual git state with `git status --short --branch` and `git log -8 --oneline`.
+- [x] Update `docs/development-status.md` to show completed through `SAL-P6-002`, unfinished from `SAL-P6-003`, current checkpoints and recovery prompt.
+- [x] Update `docs/development-progress-checklist.md` tail summary with the latest `SAL-P6-002` anchors.
+- [x] Update `tasks/lessons.md` for the repeated instruction to automatically do this after every phase task.
+- [x] Run document status-anchor checks and `git diff --check`.
+- [ ] Create a Chinese status-review checkpoint commit.
+
+## Review
+
+- Current phase remains P6 安全、稳定性与发布加固; Gate G5 is passed and G6 is not passed.
+- Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001..002`; unfinished range starts at `SAL-P6-003`.
+- Latest implementation checkpoint entering this review is `33f76bad feat(P6): 实现资源与 Artifact 授权`; latest status-sync checkpoint is `09d49744 docs: 同步 SAL-P6-002 checkpoint hash`; latest status-sync hash record is `03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`.
+- Status-review checkpoint is pending; after commit, update recovery docs with the actual hash.
+
+---
+
 # SAL-P6-002 Resource And Artifact Authorization Implementation Plan
 
 > Scope: Complete only `SAL-P6-002` by adding framework-neutral object-level authorization for Run, Definition, Evidence, Report and Artifact downloads, including owner/tenant policy, short-lived signed Artifact URL contracts, audit records and Worker least-privilege grants. Do not start `SAL-P6-003+`, Secret Manager, SSRF/file-upload hardening, SCA gates, OpenTelemetry, backup/restore, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
