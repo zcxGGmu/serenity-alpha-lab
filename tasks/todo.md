@@ -19,6 +19,7 @@
 - Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..016`.
 - Current unfinished range starts at `SAL-P5-017` Agent 金标与回归评测; `SAL-P5-018` Gate G5 and all P6 release tasks remain incomplete.
 - Latest implementation checkpoint entering this review is `518a785f feat(P5): 实现引用 UI 与通知 Outbox`; latest status-sync hash-anchor is `bfc921aa docs: 记录 SAL-P5-016 状态同步 hash`.
+- Status-review checkpoint is `b815b7d6 docs: 复核 SAL-P5-016 最新开发状态与恢复提示`; this follow-up records its hash-anchor.
 
 ---
 
