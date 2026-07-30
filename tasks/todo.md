@@ -10,14 +10,14 @@
 - [x] Update `docs/development-progress-checklist.md` tail summary with the latest `SAL-P6-002` anchors.
 - [x] Update `tasks/lessons.md` for the repeated instruction to automatically do this after every phase task.
 - [x] Run document status-anchor checks and `git diff --check`.
-- [ ] Create a Chinese status-review checkpoint commit.
+- [x] Create a Chinese status-review checkpoint commit.
 
 ## Review
 
 - Current phase remains P6 安全、稳定性与发布加固; Gate G5 is passed and G6 is not passed.
 - Completed range is `SAL-P0-001..013`, `SAL-P1-001..016`, `SAL-P2-001..020`, `SAL-P3-001..017`, `SAL-P4-001..022`, `SAL-P5-001..018`, `SAL-P6-001..002`; unfinished range starts at `SAL-P6-003`.
 - Latest implementation checkpoint entering this review is `33f76bad feat(P6): 实现资源与 Artifact 授权`; latest status-sync checkpoint is `09d49744 docs: 同步 SAL-P6-002 checkpoint hash`; latest status-sync hash record is `03c31a21 docs: 记录 SAL-P6-002 状态同步 hash`.
-- Status-review checkpoint is pending; after commit, update recovery docs with the actual hash.
+- Status-review checkpoint is `981c4b4f docs: 复核 SAL-P6-002 最新开发状态与恢复提示`; this follow-up update records the hash for recovery.
 
 ---
 
