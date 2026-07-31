@@ -118,7 +118,7 @@ scripts/verify-python-dependency-lock.sh
 
 Expected: pytest passes with the current project baseline, compileall succeeds, dependency lock check resolves the pinned packages.
 
-- [ ] **Step 3: Create Chinese checkpoint commit**
+- [x] **Step 3: Create Chinese checkpoint commit**
 
 Run:
 

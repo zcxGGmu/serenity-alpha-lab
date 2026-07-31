@@ -11,7 +11,7 @@
 - [x] Add root `README.md` and point `pyproject.toml` package readme at it.
 - [x] Add standalone static product homepage under `docs/product-homepage/`.
 - [x] Run static and project verification.
-- [ ] Create Chinese checkpoint commit.
+- [x] Create Chinese checkpoint commit.
 
 ## Review
 
@@ -20,6 +20,7 @@
 - `pyproject.toml` now uses `README.md` as the package readme.
 - Current phase status remains P6 `4/23`, total `110/129`, Gate G5 passed with accepted risks, Gate G6 not passed, next task still `SAL-P6-005`.
 - Verification completed: static HTML/CSS parse PASS; required README/homepage/status markers present; `pytest -q` `520 passed, 3 skipped`; compileall PASS; dependency lock guard PASS; pyproject readme metadata PASS; immutable `upstream/dsa-v3.26.1` stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+- Chinese checkpoint commit created: `9150d87f docs: 完善 README 与产品主页`.
 
 ---
 
