@@ -24,6 +24,10 @@
         <a href="#trust">Trust</a>
         <a href="#roadmap">Roadmap</a>
       </nav>
+      <div class="nav-status" aria-label="Current project status">
+        <span>G5 approved</span>
+        <strong>110/129</strong>
+      </div>
     </header>
 
     <main id="main">
@@ -69,6 +73,10 @@
                 <span>unsafe links stripped</span>
               </div>
             </div>
+            <div class="scene-command">
+              <span>run.verify()</span>
+              <strong>520 passed · 3 skipped · no runtime side effects</strong>
+            </div>
           </div>
         </div>
 
@@ -79,6 +87,20 @@
             A deterministic quant core, evidence-bound research agents, and release gates for teams that need stock
             analysis they can replay, audit, and defend.
           </p>
+          <dl class="hero-status" aria-label="Current delivery status">
+            <div>
+              <dt>Phase</dt>
+              <dd>P6 hardening</dd>
+            </div>
+            <div>
+              <dt>Next task</dt>
+              <dd>SAL-P6-005</dd>
+            </div>
+            <div>
+              <dt>Gate</dt>
+              <dd>G6 pending</dd>
+            </div>
+          </dl>
           <div class="hero-actions" aria-label="Primary actions">
             <a class="button button-primary" href="../development-status.md">View current status</a>
             <a class="button button-secondary" href="../../README.md">Read the README</a>
@@ -108,6 +130,10 @@
       <section id="loop" class="section">
         <div class="section-kicker">Operating loop</div>
         <h2>Research starts with data lineage, not a model answer.</h2>
+        <p class="section-lede">
+          Every stage either produces a deterministic artifact, a cited research claim, or a visible gate decision. The
+          homepage mirrors that contract instead of hiding it behind generic AI marketing language.
+        </p>
         <div class="loop-grid">
           <article>
             <span>01</span>
@@ -135,23 +161,27 @@
       <section id="capabilities" class="section section-muted">
         <div class="section-kicker">Capability map</div>
         <h2>Built as contracts first, product surface second.</h2>
-        <div class="capability-table" role="table" aria-label="Capability status table">
-          <div role="row">
-            <strong role="cell">Data foundation</strong>
-            <span role="cell">Instrument master, calendars, raw bars, corporate actions, PIT fundamentals, schema registry.</span>
-          </div>
-          <div role="row">
-            <strong role="cell">Quant core</strong>
-            <span role="cell">Factors, screening snapshots, formal backtest contracts, execution rules, ledger, costs, risk.</span>
-          </div>
-          <div role="row">
-            <strong role="cell">Research evidence</strong>
-            <span role="cell">Source trust, prompt registry, citation validator, quant evidence adapter, trusted renderer.</span>
-          </div>
-          <div role="row">
-            <strong role="cell">Release hardening</strong>
-            <span role="cell">Auth/RBAC, artifact authorization, secret config, input fetch and report rendering security.</span>
-          </div>
+        <div class="capability-bento" aria-label="Capability status">
+          <article class="capability-card card-large">
+            <span>Data foundation</span>
+            <h3>Decision-time datasets before decisions.</h3>
+            <p>Instrument master, calendars, raw bars, corporate actions, PIT fundamentals, schema registry.</p>
+          </article>
+          <article class="capability-card">
+            <span>Quant core</span>
+            <h3>Deterministic math.</h3>
+            <p>Factors, screening snapshots, formal backtest contracts, execution rules, ledger, costs, risk.</p>
+          </article>
+          <article class="capability-card card-dark">
+            <span>Evidence layer</span>
+            <h3>Claims need citations.</h3>
+            <p>Source trust, prompt registry, citation validator, quant evidence adapter, trusted renderer.</p>
+          </article>
+          <article class="capability-card">
+            <span>Release hardening</span>
+            <h3>Boundaries are visible.</h3>
+            <p>Auth/RBAC, artifact authorization, secret config, input fetch and report rendering security.</p>
+          </article>
         </div>
       </section>
 
@@ -166,10 +196,10 @@
           </p>
         </div>
         <ul class="trust-list">
-          <li>No live trading or automatic broker execution.</li>
-          <li>No Provider or LLM runtime from document, renderer, validator, grant, or config contracts.</li>
-          <li>No unsafe URL, upload, HTML, or report-link path through the presentation boundary.</li>
-          <li>No release-ready claim until Gate G6 passes.</li>
+          <li><span>Execution</span>No live trading or automatic broker execution.</li>
+          <li><span>Runtime</span>No Provider or LLM runtime from document, renderer, validator, grant, or config contracts.</li>
+          <li><span>Input</span>No unsafe URL, upload, HTML, or report-link path through the presentation boundary.</li>
+          <li><span>Release</span>No release-ready claim until Gate G6 passes.</li>
         </ul>
       </section>
 
@@ -202,4 +232,3 @@
     </footer>
   </body>
 </html>
-

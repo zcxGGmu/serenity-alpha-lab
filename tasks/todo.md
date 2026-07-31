@@ -1,3 +1,23 @@
+# Product Homepage UI Optimization
+
+> Scope: Use `ui-ux-pro-max` guidance to refine the static product homepage only. Keep the work documentation-only with no SAL-P6-005 implementation, Provider/LLM runtime, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal portfolio backtest promotion.
+
+## Checklist
+
+- [x] Re-check current homepage HTML/CSS and existing responsive screenshot findings.
+- [x] Improve hero hierarchy with a darker product-workbench treatment, status pill, delivery status cards and command evidence strip.
+- [x] Replace the capability table with a responsive bento-style capability map.
+- [x] Tighten mobile and low-height landscape layouts so CTA controls remain visible earlier and the page has no horizontal overflow.
+- [x] Run static HTML/CSS checks, diff hygiene and browser screenshot verification across desktop, mobile portrait and mobile landscape.
+
+## Review
+
+- Applied `ui-ux-pro-max` guidance for stronger first-viewport product signal, evidence-first visual hierarchy, accessible focus/touch states, compact mobile density and responsive no-overflow behavior.
+- Homepage remains standalone static HTML/CSS with no external scripts, analytics, runtime service, Provider call, LLM call, Worker loop, Qlib runtime, production scheduler, notification sender, release packaging or formal portfolio backtest promotion.
+- Browser verification covered 1440×960 desktop, 390×844 mobile portrait and 844×390 mobile landscape; all reported no horizontal overflow and refreshed screenshots were written under ignored `.cache/ui-review/`.
+
+---
+
 # README And Product Homepage Refresh
 
 > Scope: Improve the root project narrative and add a static product homepage. Approved approach: root `README.md` plus standalone `docs/product-homepage/index.html` / `styles.css`, with no new frontend framework, no runtime service, and no SAL-P6-005 implementation.
