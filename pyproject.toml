@@ -1,20 +1,149 @@
 [build-system]
-requires = ["setuptools>=64"]
+requires = ["setuptools>=79.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "serenity-alpha-lab"
-version = "0.1.0"
-description = "Local-first Serenity-style supply-chain bottleneck research engine"
-requires-python = ">=3.9"
+version = "0.1.0a0"
+description = "AI-assisted stock research and quantitative analysis platform built around the DSA product trunk."
+readme = { file = "docs/ai-stock-quant-platform-development-plan.md", content-type = "text/markdown" }
+requires-python = ">=3.11,<3.13"
+authors = [
+    { name = "Serenity Alpha Lab Contributors" },
+]
 dependencies = []
+
+[project.optional-dependencies]
+core = [
+    "python-dotenv>=1.0.0",
+    "tenacity>=8.2.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg[binary]>=3.2.0",
+    "alembic>=1.13.0",
+    "schedule>=1.2.0",
+    "exchange-calendars>=4.13.0",
+    "pandas>=2.0.0",
+    "pypinyin>=0.50.0",
+    "pydantic-settings>=2.0.0",
+    "openpyxl>=3.1.0",
+    "numpy>=1.24.0",
+    "json-repair>=0.55.1",
+    "orjson>=3.10,<4",
+    "litellm>=1.80.10,!=1.82.7,!=1.82.8,<2.0.0",
+    "tiktoken>=0.8.0,<0.12.0",
+    "openai>=1.0.0",
+    "PyYAML>=6.0",
+    "requests>=2.31.0",
+    "markdown2>=2.4.0",
+    "imgkit>=1.2.0",
+    "fake-useragent>=1.4.0",
+    "httpx[socks]",
+    "newspaper3k>=0.2.8",
+    "lxml_html_clean",
+    "jinja2>=3.1.0",
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "python-multipart>=0.0.6",
+]
+providers = [
+    "efinance>=0.5.5",
+    "akshare>=1.12.0",
+    "tushare>=1.4.0",
+    "pytdx>=1.72",
+    "baostock>=0.8.0",
+    "yfinance>=0.2.0",
+    "longbridge==0.2.74; platform_system == 'Linux' and python_version < '3.12'",
+    "longbridge>=4.0.5,<5; platform_system != 'Linux' or python_version >= '3.12'",
+    "tickflow>=0.1.24",
+    "tavily-python>=0.3.0",
+    "google-search-results>=2.4.0",
+]
+desktop = [
+    "lark-oapi>=1.0.0",
+    "dingtalk-stream>=0.24.3",
+    "discord.py>=2.0.0",
+    "PyNaCl>=1.5.0",
+]
+quant = [
+    "polars>=1.0.0",
+    "pyarrow>=16.0.0",
+    "duckdb>=1.0.0",
+    "pyqlib==0.9.7",
+]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-cov>=7.0.0",
+    "black>=25.0.0",
+    "isort>=7.0.0",
+    "ruff>=0.14.0",
+    "bandit>=1.8.0",
+]
 
 [project.scripts]
 serenity-alpha-lab = "serenity_alpha_lab.cli:main"
-
-[tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["tests"]
+serenity-dsa-cli = "serenity_alpha_lab.integrations.dsa.entrypoints:run_cli"
+serenity-dsa-api = "serenity_alpha_lab.integrations.dsa.entrypoints:run_api"
+serenity-dsa-worker = "serenity_alpha_lab.integrations.dsa.entrypoints:run_worker"
+serenity-dsa-tests = "serenity_alpha_lab.integrations.dsa.entrypoints:run_tests"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["serenity_alpha_lab*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = ["--strict-markers", "--tb=short"]
+markers = [
+    "unit: fast offline unit tests",
+    "integration: service-level integration tests without external network dependency",
+    "architecture: static architecture and dependency-direction tests",
+]
+norecursedirs = [
+    ".git",
+    ".cache",
+    ".worktrees",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "node_modules",
+    "static",
+]
+
+[tool.black]
+line-length = 120
+target-version = ["py311", "py312"]
+exclude = '''
+/(
+    \.git
+    | \.cache
+    | \.worktrees
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | venv
+    | build
+    | dist
+    | __pycache__
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip = [".git", ".cache", ".worktrees", "__pycache__", ".env", "venv", ".venv"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [".cache", ".worktrees", ".venv", "venv", "node_modules", "static"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501", "W503", "E203"]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".cache", ".worktrees", ".venv", "venv"]
+skips = ["B101"]

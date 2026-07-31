@@ -1,0 +1,971 @@
+{
+  "agent_tools": [
+    {
+      "category": "data",
+      "description": "Inspect backtest data for a specific skill when skill-scoped stats exist. Provide skill_id for a targeted lookup; use get_strategy_backtest_summary for overall metrics. When skill-scoped rollups are unavailable, returns an informational response instead of fabricating metrics.",
+      "name": "get_skill_backtest_summary",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "eval_window_days": {
+            "description": "Evaluation window in days (default: 30). How many trading days after signal to evaluate.",
+            "type": "integer"
+          },
+          "skill_id": {
+            "description": "Skill identifier, e.g. 'bull_trend'.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill_id"
+        ],
+        "type": "object"
+      },
+      "policy": {
+        "permissions": [
+          "backtest:read"
+        ],
+        "policy_status": "declared",
+        "read_only": true,
+        "side_effects": [
+          "db_read"
+        ]
+      },
+      "scope": {
+        "requires_stock_scope": false,
+        "scope_dimensions": []
+      },
+      "semantic_scope": "legacy_signal_evaluation"
+    },
+    {
+      "category": "data",
+      "description": "Get backtest performance data for a specific stock: per-stock summary (win rate, accuracy, avg return) plus recent evaluation records. Read-only, does not trigger new backtests.",
+      "name": "get_stock_backtest_summary",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "eval_window_days": {
+            "description": "Evaluation window in days (default: 30)",
+            "type": "integer"
+          },
+          "limit": {
+            "description": "Max number of recent evaluation records to return (default: 10)",
+            "type": "integer"
+          },
+          "stock_code": {
+            "description": "Stock code, e.g., '600519' (A-share), 'AAPL' (US), 'hk00700' (HK)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "stock_code"
+        ],
+        "type": "object"
+      },
+      "policy": {
+        "permissions": [
+          "backtest:read"
+        ],
+        "policy_status": "declared",
+        "read_only": true,
+        "side_effects": [
+          "db_read"
+        ]
+      },
+      "scope": {
+        "requires_stock_scope": true,
+        "scope_dimensions": [
+          "stock"
+        ]
+      },
+      "semantic_scope": "legacy_signal_evaluation"
+    },
+    {
+      "category": "data",
+      "description": "Legacy alias returning the overall backtest performance summary without triggering new backtests.",
+      "name": "get_strategy_backtest_summary",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "eval_window_days": {
+            "description": "Evaluation window in days (default: 30). How many trading days after signal to evaluate.",
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "policy": {
+        "permissions": [
+          "backtest:read"
+        ],
+        "policy_status": "declared",
+        "read_only": true,
+        "side_effects": [
+          "db_read"
+        ]
+      },
+      "scope": {
+        "requires_stock_scope": false,
+        "scope_dimensions": []
+      },
+      "semantic_scope": "legacy_signal_evaluation"
+    }
+  ],
+  "legacy_name_boundary": {
+    "formal_backtest_started": false,
+    "legacy_prefix": "/api/v1/backtest",
+    "not_formal_backtest_prefix": "/api/v1/quant/backtest-runs",
+    "semantic_scope": "legacy_signal_evaluation"
+  },
+  "routes": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "name": "get_overall_performance",
+      "path": "/api/v1/backtest/performance",
+      "response_model": "PerformanceMetrics",
+      "semantic_scope": "legacy_signal_evaluation",
+      "summary": "获取整体回测表现"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "name": "get_stock_performance",
+      "path": "/api/v1/backtest/performance/{code}",
+      "response_model": "PerformanceMetrics",
+      "semantic_scope": "legacy_signal_evaluation",
+      "summary": "获取单股回测表现"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "name": "get_backtest_results",
+      "path": "/api/v1/backtest/results",
+      "response_model": "BacktestResultsResponse",
+      "semantic_scope": "legacy_signal_evaluation",
+      "summary": "获取回测结果"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "name": "run_backtest",
+      "path": "/api/v1/backtest/run",
+      "response_model": "BacktestRunResponse",
+      "semantic_scope": "legacy_signal_evaluation",
+      "summary": "触发回测"
+    }
+  ],
+  "schemas": {
+    "BacktestResultItem": {
+      "properties": {
+        "action": {
+          "anyOf": [
+            {
+              "enum": [
+                "buy",
+                "add",
+                "hold",
+                "reduce",
+                "sell",
+                "watch",
+                "avoid",
+                "alert"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action"
+        },
+        "action_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action Label"
+        },
+        "actual_movement": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Movement"
+        },
+        "actual_return_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Return Pct"
+        },
+        "analysis_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Analysis Date"
+        },
+        "analysis_history_id": {
+          "title": "Analysis History Id",
+          "type": "integer"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "direction_correct": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction Correct"
+        },
+        "direction_expected": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction Expected"
+        },
+        "end_close": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Close"
+        },
+        "engine_version": {
+          "title": "Engine Version",
+          "type": "string"
+        },
+        "eval_status": {
+          "title": "Eval Status",
+          "type": "string"
+        },
+        "eval_window_days": {
+          "title": "Eval Window Days",
+          "type": "integer"
+        },
+        "evaluated_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evaluated At"
+        },
+        "first_hit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Hit"
+        },
+        "first_hit_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Hit Date"
+        },
+        "first_hit_trading_days": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Hit Trading Days"
+        },
+        "hit_stop_loss": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hit Stop Loss"
+        },
+        "hit_take_profit": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hit Take Profit"
+        },
+        "market_phase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Market Phase"
+        },
+        "market_phase_summary": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MarketPhaseSummary"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "max_high": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max High"
+        },
+        "min_low": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Low"
+        },
+        "operation_advice": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Operation Advice"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "position_recommendation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Position Recommendation"
+        },
+        "simulated_entry_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Simulated Entry Price"
+        },
+        "simulated_exit_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Simulated Exit Price"
+        },
+        "simulated_exit_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Simulated Exit Reason"
+        },
+        "simulated_return_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Simulated Return Pct"
+        },
+        "start_price": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Price"
+        },
+        "stock_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stock Name"
+        },
+        "stock_return_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stock Return Pct"
+        },
+        "stop_loss": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stop Loss"
+        },
+        "take_profit": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Take Profit"
+        },
+        "trend_prediction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trend Prediction"
+        }
+      },
+      "required": [
+        "analysis_history_id",
+        "code",
+        "eval_window_days",
+        "engine_version",
+        "eval_status"
+      ],
+      "title": "BacktestResultItem"
+    },
+    "BacktestResultsResponse": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/BacktestResultItem"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "limit": {
+          "title": "Limit",
+          "type": "integer"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "total": {
+          "title": "Total",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total",
+        "page",
+        "limit"
+      ],
+      "title": "BacktestResultsResponse"
+    },
+    "BacktestRunRequest": {
+      "properties": {
+        "analysis_date_from": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "分析日期起始（含）",
+          "title": "Analysis Date From"
+        },
+        "analysis_date_to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "分析日期结束（含）",
+          "title": "Analysis Date To"
+        },
+        "code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "仅回测指定股票",
+          "title": "Code"
+        },
+        "eval_window_days": {
+          "anyOf": [
+            {
+              "maximum": 120,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "评估窗口（交易日数）",
+          "title": "Eval Window Days"
+        },
+        "force": {
+          "default": false,
+          "description": "强制重新计算",
+          "title": "Force",
+          "type": "boolean"
+        },
+        "limit": {
+          "default": 200,
+          "description": "最多处理的分析记录数",
+          "maximum": 2000,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "min_age_days": {
+          "anyOf": [
+            {
+              "maximum": 365,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "分析记录最小天龄（0=不限）",
+          "title": "Min Age Days"
+        }
+      },
+      "required": [],
+      "title": "BacktestRunRequest"
+    },
+    "BacktestRunResponse": {
+      "properties": {
+        "applied_eval_window_days": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "实际生效的评估窗口（交易日数）",
+          "title": "Applied Eval Window Days"
+        },
+        "completed": {
+          "description": "完成回测数",
+          "title": "Completed",
+          "type": "integer"
+        },
+        "diagnostics": {
+          "additionalProperties": true,
+          "description": "回测筛选与诊断信息",
+          "title": "Diagnostics",
+          "type": "object"
+        },
+        "errors": {
+          "description": "错误数",
+          "title": "Errors",
+          "type": "integer"
+        },
+        "insufficient": {
+          "description": "数据不足数",
+          "title": "Insufficient",
+          "type": "integer"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "空结果或降级时的诊断说明",
+          "title": "Message"
+        },
+        "processed": {
+          "description": "候选记录数",
+          "title": "Processed",
+          "type": "integer"
+        },
+        "saved": {
+          "description": "写入回测结果数",
+          "title": "Saved",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "processed",
+        "saved",
+        "completed",
+        "insufficient",
+        "errors",
+        "applied_eval_window_days"
+      ],
+      "title": "BacktestRunResponse"
+    },
+    "PerformanceMetrics": {
+      "properties": {
+        "advice_breakdown": {
+          "additionalProperties": true,
+          "title": "Advice Breakdown",
+          "type": "object"
+        },
+        "ambiguous_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ambiguous Rate"
+        },
+        "avg_days_to_first_hit": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Avg Days To First Hit"
+        },
+        "avg_simulated_return_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Avg Simulated Return Pct"
+        },
+        "avg_stock_return_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Avg Stock Return Pct"
+        },
+        "cash_count": {
+          "title": "Cash Count",
+          "type": "integer"
+        },
+        "code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Code"
+        },
+        "completed_count": {
+          "title": "Completed Count",
+          "type": "integer"
+        },
+        "computed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Computed At"
+        },
+        "diagnostics": {
+          "additionalProperties": true,
+          "title": "Diagnostics",
+          "type": "object"
+        },
+        "direction_accuracy_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction Accuracy Pct"
+        },
+        "engine_version": {
+          "title": "Engine Version",
+          "type": "string"
+        },
+        "eval_window_days": {
+          "title": "Eval Window Days",
+          "type": "integer"
+        },
+        "insufficient_count": {
+          "title": "Insufficient Count",
+          "type": "integer"
+        },
+        "long_count": {
+          "title": "Long Count",
+          "type": "integer"
+        },
+        "loss_count": {
+          "title": "Loss Count",
+          "type": "integer"
+        },
+        "neutral_count": {
+          "title": "Neutral Count",
+          "type": "integer"
+        },
+        "neutral_rate_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Neutral Rate Pct"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "stop_loss_trigger_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stop Loss Trigger Rate"
+        },
+        "take_profit_trigger_rate": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Take Profit Trigger Rate"
+        },
+        "total_evaluations": {
+          "title": "Total Evaluations",
+          "type": "integer"
+        },
+        "win_count": {
+          "title": "Win Count",
+          "type": "integer"
+        },
+        "win_rate_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Win Rate Pct"
+        }
+      },
+      "required": [
+        "scope",
+        "eval_window_days",
+        "engine_version",
+        "total_evaluations",
+        "completed_count",
+        "insufficient_count",
+        "long_count",
+        "cash_count",
+        "win_count",
+        "loss_count",
+        "neutral_count"
+      ],
+      "title": "PerformanceMetrics"
+    }
+  }
+}

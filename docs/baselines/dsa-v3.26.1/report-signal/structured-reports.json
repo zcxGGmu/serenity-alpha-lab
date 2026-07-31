@@ -1,0 +1,235 @@
+{
+  "items": [
+    {
+      "code": "600519",
+      "content_integrity": {
+        "missing": [],
+        "passed": true
+      },
+      "name": "贵州茅台",
+      "parsed": {
+        "action": "buy",
+        "action_label": "买入",
+        "analysis_summary": "量价结构改善，适合等待回踩后分批关注。",
+        "buy_reason": "",
+        "change_pct": null,
+        "code": "600519",
+        "company_highlights": "",
+        "confidence_level": "中",
+        "current_price": null,
+        "dashboard": {
+          "battle_plan": {
+            "action_checklist": [
+              "✅ 趋势保持向上",
+              "⚠️ 量能仍需确认",
+              "❌ 不追高"
+            ],
+            "position_strategy": {
+              "entry_plan": "分两笔买入，等待回踩确认。",
+              "risk_control": "跌破 1600 后停止加仓。",
+              "suggested_position": "20%-30%"
+            },
+            "sniper_points": {
+              "ideal_buy": "1660-1680",
+              "secondary_buy": "1620",
+              "stop_loss": "1600",
+              "take_profit": "1740"
+            }
+          },
+          "core_conclusion": {
+            "one_sentence": "回踩不破支撑时可分批买入。",
+            "position_advice": {
+              "has_position": "保留底仓，跌破 1600 执行止损。",
+              "no_position": "等待回踩 1660 附近试探性建仓。"
+            },
+            "signal_type": "🟢买入信号",
+            "time_sensitivity": "本周内"
+          },
+          "data_perspective": {
+            "chip_structure": {
+              "avg_cost": 1580,
+              "chip_health": "健康",
+              "concentration": "中等",
+              "profit_ratio": "62%"
+            },
+            "price_position": {
+              "bias_ma5": 1.2,
+              "bias_status": "安全",
+              "current_price": 1688.0,
+              "ma10": 1642.0,
+              "ma20": 1608.0,
+              "ma5": 1668.0,
+              "resistance_level": 1740.0,
+              "support_level": 1600.0
+            },
+            "trend_status": {
+              "is_bullish": true,
+              "ma_alignment": "多头排列",
+              "trend_score": 76
+            },
+            "volume_analysis": {
+              "turnover_rate": 0.8,
+              "volume_meaning": "缩量回踩后买盘回补。",
+              "volume_ratio": 1.18,
+              "volume_status": "温和放量"
+            }
+          },
+          "intelligence": {
+            "earnings_outlook": "利润率保持韧性。",
+            "latest_news": "公司渠道库存维持正常。",
+            "positive_catalysts": [
+              "春节备货预期改善",
+              "现金流质量稳定"
+            ],
+            "risk_alerts": [
+              "消费复苏斜率低于预期",
+              "高端白酒估值仍受利率影响"
+            ],
+            "sentiment_summary": "机构观点偏中性乐观。"
+          },
+          "phase_decision": {
+            "action_window": "盘后复盘",
+            "confidence_reason": "日线数据完整但缺少盘中确认。",
+            "data_limitations": [
+              "未使用真实 Provider，仅为离线金标"
+            ],
+            "immediate_action": "设置提醒",
+            "next_check_time": "下一交易日 10:00",
+            "phase_context": {
+              "market": "cn",
+              "phase": "postmarket"
+            },
+            "watch_conditions": [
+              "1660 支撑有效",
+              "量能不低于 5 日均量"
+            ]
+          },
+          "signal_attribution": {
+            "fundamentals": 25,
+            "market_conditions": 15,
+            "news_sentiment": 15,
+            "strongest_bearish_signal": "估值弹性有限",
+            "strongest_bullish_signal": "均线多头排列",
+            "technical_indicators": 45
+          }
+        },
+        "decision_type": "buy",
+        "error_message": null,
+        "fundamental_analysis": "",
+        "hot_topics": "",
+        "key_points": "均线走稳；量能温和；估值仍需观察。",
+        "ma_analysis": "",
+        "market_sentiment": "",
+        "market_snapshot": null,
+        "market_structure_context": null,
+        "medium_term_outlook": "",
+        "model_used": "stub/offline-golden",
+        "name": "贵州茅台",
+        "news_summary": "",
+        "operation_advice": "买入",
+        "pattern_analysis": "",
+        "report_language": "zh",
+        "risk_warning": "若放量跌破支撑位，需要降低仓位。",
+        "search_performed": false,
+        "sector_position": "",
+        "sentiment_score": 74,
+        "short_term_outlook": "",
+        "success": true,
+        "technical_analysis": "",
+        "trend_analysis": "",
+        "trend_prediction": "看多",
+        "volume_analysis": ""
+      },
+      "raw_response_sha256": "2c7cfbd3fde5a1b793240fa48cca4649b453b77adb81c92c7d8934a921a6329a"
+    },
+    {
+      "code": "AAPL",
+      "content_integrity": {
+        "missing": [],
+        "passed": true
+      },
+      "name": "Apple",
+      "parsed": {
+        "action": "watch",
+        "action_label": "观望",
+        "analysis_summary": "短期等待放量突破后再提高仓位。",
+        "buy_reason": "",
+        "change_pct": null,
+        "code": "AAPL",
+        "company_highlights": "",
+        "confidence_level": "中",
+        "current_price": null,
+        "dashboard": {
+          "battle_plan": {
+            "sniper_points": {
+              "ideal_buy": "190",
+              "stop_loss": "182",
+              "take_profit": "205"
+            }
+          },
+          "core_conclusion": {
+            "one_sentence": "等待放量突破后再行动。",
+            "position_advice": {
+              "has_position": "维持底仓，跌破 182 减仓。",
+              "no_position": "等待 190 上方放量确认。"
+            },
+            "signal_type": "🟡持有观望",
+            "time_sensitivity": "不急"
+          },
+          "intelligence": {
+            "positive_catalysts": [
+              "服务收入保持稳健"
+            ],
+            "risk_alerts": [
+              "新品周期预期已有部分反映"
+            ],
+            "sentiment_summary": "市场预期分歧扩大。"
+          },
+          "signal_attribution": {
+            "fundamentals": 30,
+            "market_conditions": 20,
+            "news_sentiment": 20,
+            "strongest_bearish_signal": "短线量能不足",
+            "strongest_bullish_signal": "服务业务韧性",
+            "technical_indicators": 30
+          }
+        },
+        "decision_type": "hold",
+        "error_message": null,
+        "fundamental_analysis": "",
+        "hot_topics": "",
+        "key_points": "趋势未坏；成交量不足；等待业绩确认。",
+        "ma_analysis": "",
+        "market_sentiment": "",
+        "market_snapshot": null,
+        "market_structure_context": null,
+        "medium_term_outlook": "",
+        "model_used": "stub/offline-golden",
+        "name": "Apple",
+        "news_summary": "",
+        "operation_advice": "观望",
+        "pattern_analysis": "",
+        "report_language": "zh",
+        "risk_warning": "若科技权重回调，股价可能测试下方支撑。",
+        "search_performed": false,
+        "sector_position": "",
+        "sentiment_score": 54,
+        "short_term_outlook": "",
+        "success": true,
+        "technical_analysis": "",
+        "trend_analysis": "",
+        "trend_prediction": "震荡",
+        "volume_analysis": ""
+      },
+      "raw_response_sha256": "0df53237edd6eaac81aefe058500920c52a216fe59240dfc1dde8a9effd87c5f"
+    }
+  ],
+  "validation": {
+    "content_integrity_passed": true,
+    "phase_decision_required_for": [
+      "600519"
+    ],
+    "schema_validation_passed": true,
+    "uses_stub_llm_only": true
+  }
+}

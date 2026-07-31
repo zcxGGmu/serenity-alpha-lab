@@ -1,8 +1,0 @@
-[
-  {
-    "ticker": "SIVE",
-    "cik": "9999999999",
-    "path": "sec_companyfacts_sive.json",
-    "source_url": "https://data.sec.gov/api/xbrl/companyfacts/CIK9999999999.json"
-  }
-]

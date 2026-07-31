@@ -1,0 +1,6023 @@
+{
+  "baseline": {
+    "commit": "e8a9ca7742e8cb2498c8f491dd76d239b3064e1a",
+    "schema_version": "2026-06-05-create-all-baseline",
+    "tag": "v3.26.1",
+    "upstream": "ZhuLinsen/daily_stock_analysis"
+  },
+  "index_count": 177,
+  "sqlite": {
+    "foreign_keys": 0,
+    "journal_mode": "delete",
+    "page_count": 231,
+    "page_size": 4096,
+    "user_version": 0
+  },
+  "table_count": 28,
+  "tables": {
+    "agent_provider_turns": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "session_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "run_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "provider",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "model",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(160)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "anchor_user_message_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "anchor_assistant_message_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "messages_json",
+          "notnull": true,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "contains_reasoning",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "contains_tool_calls",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "contains_thinking_blocks",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "must_roundtrip",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "estimated_tokens",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "713924d87c471f77aff6beec69e5d0579ca86fc64932afa50270156adadfc956",
+      "create_sql": "CREATE TABLE agent_provider_turns (\n\tid INTEGER NOT NULL, \n\tsession_id VARCHAR(100) NOT NULL, \n\trun_id VARCHAR(64) NOT NULL, \n\tprovider VARCHAR(64) NOT NULL, \n\tmodel VARCHAR(160) NOT NULL, \n\tanchor_user_message_id INTEGER NOT NULL, \n\tanchor_assistant_message_id INTEGER NOT NULL, \n\tmessages_json TEXT NOT NULL, \n\tcontains_reasoning BOOLEAN NOT NULL, \n\tcontains_tool_calls BOOLEAN NOT NULL, \n\tcontains_thinking_blocks BOOLEAN NOT NULL, \n\tmust_roundtrip BOOLEAN NOT NULL, \n\testimated_tokens INTEGER NOT NULL, \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "session_id",
+            "provider",
+            "model",
+            "must_roundtrip"
+          ],
+          "name": "ix_agent_provider_turn_bucket",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "anchor_assistant_message_id"
+          ],
+          "name": "ix_agent_provider_turns_anchor_assistant_message_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "anchor_user_message_id"
+          ],
+          "name": "ix_agent_provider_turns_anchor_user_message_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_agent_provider_turns_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "model"
+          ],
+          "name": "ix_agent_provider_turns_model",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "must_roundtrip"
+          ],
+          "name": "ix_agent_provider_turns_must_roundtrip",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "provider"
+          ],
+          "name": "ix_agent_provider_turns_provider",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "run_id"
+          ],
+          "name": "ix_agent_provider_turns_run_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "ix_agent_provider_turns_session_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "alert_cooldowns": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "rule_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "rule_key",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "target",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "severity",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "last_triggered_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "cooldown_until",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "reason",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "state",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "1f20eb6733aca7b7f7ad71e6ae03d4ad7cefb019ba9d416e5ae925599eff53b4",
+      "create_sql": "CREATE TABLE alert_cooldowns (\n\tid INTEGER NOT NULL, \n\trule_id INTEGER, \n\trule_key VARCHAR(255), \n\ttarget VARCHAR(64) NOT NULL, \n\tseverity VARCHAR(16) NOT NULL, \n\tlast_triggered_at DATETIME, \n\tcooldown_until DATETIME, \n\treason TEXT, \n\tstate VARCHAR(16) NOT NULL, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_alert_cooldown_rule_target_severity UNIQUE (rule_id, target, severity)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "cooldown_until"
+          ],
+          "name": "ix_alert_cooldowns_cooldown_until",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "last_triggered_at"
+          ],
+          "name": "ix_alert_cooldowns_last_triggered_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "rule_id"
+          ],
+          "name": "ix_alert_cooldowns_rule_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "rule_key"
+          ],
+          "name": "ix_alert_cooldowns_rule_key",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "severity"
+          ],
+          "name": "ix_alert_cooldowns_severity",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "state"
+          ],
+          "name": "ix_alert_cooldowns_state",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "target"
+          ],
+          "name": "ix_alert_cooldowns_target",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_alert_cooldowns_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "rule_id",
+            "target",
+            "severity"
+          ],
+          "name": "sqlite_autoindex_alert_cooldowns_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "alert_notifications": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "trigger_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "channel",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "attempt",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "success",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "error_code",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "retryable",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "latency_ms",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "diagnostics",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "4452ce9d192b913fb65253b5324ed2870fd5643e1fe3690a08d9627ebbd7ece1",
+      "create_sql": "CREATE TABLE alert_notifications (\n\tid INTEGER NOT NULL, \n\ttrigger_id INTEGER, \n\tchannel VARCHAR(32) NOT NULL, \n\tattempt INTEGER NOT NULL, \n\tsuccess BOOLEAN NOT NULL, \n\terror_code VARCHAR(64), \n\tretryable BOOLEAN NOT NULL, \n\tlatency_ms INTEGER, \n\tdiagnostics TEXT, \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "trigger_id",
+            "channel"
+          ],
+          "name": "ix_alert_notification_trigger_channel",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "channel"
+          ],
+          "name": "ix_alert_notifications_channel",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_alert_notifications_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "success"
+          ],
+          "name": "ix_alert_notifications_success",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "trigger_id"
+          ],
+          "name": "ix_alert_notifications_trigger_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "alert_rules": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "name",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "target_scope",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "target",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "alert_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "parameters",
+          "notnull": true,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "severity",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "enabled",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "source",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "cooldown_policy",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "notification_policy",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "28b8a7e200757df5d516dce63c6037846377373a17aacaa38930c18b68246a37",
+      "create_sql": "CREATE TABLE alert_rules (\n\tid INTEGER NOT NULL, \n\tname VARCHAR(64) NOT NULL, \n\ttarget_scope VARCHAR(32) NOT NULL, \n\ttarget VARCHAR(64) NOT NULL, \n\talert_type VARCHAR(32) NOT NULL, \n\tparameters TEXT NOT NULL, \n\tseverity VARCHAR(16) NOT NULL, \n\tenabled BOOLEAN NOT NULL, \n\tsource VARCHAR(16) NOT NULL, \n\tcooldown_policy TEXT, \n\tnotification_policy TEXT, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "alert_type",
+            "target"
+          ],
+          "name": "ix_alert_rule_type_target",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "alert_type"
+          ],
+          "name": "ix_alert_rules_alert_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_alert_rules_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "enabled"
+          ],
+          "name": "ix_alert_rules_enabled",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "severity"
+          ],
+          "name": "ix_alert_rules_severity",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source"
+          ],
+          "name": "ix_alert_rules_source",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "target"
+          ],
+          "name": "ix_alert_rules_target",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "target_scope"
+          ],
+          "name": "ix_alert_rules_target_scope",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_alert_rules_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "alert_triggers": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "rule_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "target",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "observed_value",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "threshold",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "reason",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "data_source",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "data_timestamp",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "triggered_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "status",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "diagnostics",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "content_sha256": "497a14d53f2822fd84d852c6675e3142ddd0d8bebe4068a96c229fc31adac3dc",
+      "create_sql": "CREATE TABLE alert_triggers (\n\tid INTEGER NOT NULL, \n\trule_id INTEGER, \n\ttarget VARCHAR(64) NOT NULL, \n\tobserved_value FLOAT, \n\tthreshold FLOAT, \n\treason TEXT, \n\tdata_source VARCHAR(64), \n\tdata_timestamp DATETIME, \n\ttriggered_at DATETIME, \n\tstatus VARCHAR(16) NOT NULL, \n\tdiagnostics TEXT, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "rule_id",
+            "triggered_at"
+          ],
+          "name": "ix_alert_trigger_rule_time",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "data_timestamp"
+          ],
+          "name": "ix_alert_triggers_data_timestamp",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "rule_id"
+          ],
+          "name": "ix_alert_triggers_rule_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "status"
+          ],
+          "name": "ix_alert_triggers_status",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "target"
+          ],
+          "name": "ix_alert_triggers_target",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "triggered_at"
+          ],
+          "name": "ix_alert_triggers_triggered_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "analysis_history": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "query_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "code",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(10)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(50)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "report_type",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "sentiment_score",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "operation_advice",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "trend_prediction",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(50)"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "analysis_summary",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "raw_result",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "news_content",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "context_snapshot",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "ideal_buy",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "secondary_buy",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "stop_loss",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "take_profit",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "d133ade444fc895bc3dda951ade0f7612cdaad439db9e0ee2f3e93121897b702",
+      "create_sql": "CREATE TABLE analysis_history (\n\tid INTEGER NOT NULL, \n\tquery_id VARCHAR(64), \n\tcode VARCHAR(10) NOT NULL, \n\tname VARCHAR(50), \n\treport_type VARCHAR(16), \n\tsentiment_score INTEGER, \n\toperation_advice VARCHAR(20), \n\ttrend_prediction VARCHAR(50), \n\tanalysis_summary TEXT, \n\traw_result TEXT, \n\tnews_content TEXT, \n\tcontext_snapshot TEXT, \n\tideal_buy FLOAT, \n\tsecondary_buy FLOAT, \n\tstop_loss FLOAT, \n\ttake_profit FLOAT, \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "code",
+            "created_at"
+          ],
+          "name": "ix_analysis_code_time",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "code"
+          ],
+          "name": "ix_analysis_history_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_analysis_history_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "query_id"
+          ],
+          "name": "ix_analysis_history_query_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "report_type"
+          ],
+          "name": "ix_analysis_history_report_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 2
+    },
+    "backtest_results": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "analysis_history_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "code",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(10)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "analysis_date",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "eval_window_days",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "engine_version",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "eval_status",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "evaluated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "operation_advice",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "position_recommendation",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "start_price",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "end_close",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "max_high",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "min_low",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "stock_return_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "direction_expected",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "direction_correct",
+          "notnull": false,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "hidden": 0,
+          "name": "outcome",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "hidden": 0,
+          "name": "stop_loss",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "hidden": 0,
+          "name": "take_profit",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 20,
+          "default": null,
+          "hidden": 0,
+          "name": "hit_stop_loss",
+          "notnull": false,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 21,
+          "default": null,
+          "hidden": 0,
+          "name": "hit_take_profit",
+          "notnull": false,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 22,
+          "default": null,
+          "hidden": 0,
+          "name": "first_hit",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 23,
+          "default": null,
+          "hidden": 0,
+          "name": "first_hit_date",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 24,
+          "default": null,
+          "hidden": 0,
+          "name": "first_hit_trading_days",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 25,
+          "default": null,
+          "hidden": 0,
+          "name": "simulated_entry_price",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 26,
+          "default": null,
+          "hidden": 0,
+          "name": "simulated_exit_price",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 27,
+          "default": null,
+          "hidden": 0,
+          "name": "simulated_exit_reason",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(24)"
+        },
+        {
+          "cid": 28,
+          "default": null,
+          "hidden": 0,
+          "name": "simulated_return_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        }
+      ],
+      "content_sha256": "05b04ec1e023600bfec9c67eec1f605dbb42df80631690ed3ff8afd8211f5819",
+      "create_sql": "CREATE TABLE backtest_results (\n\tid INTEGER NOT NULL, \n\tanalysis_history_id INTEGER NOT NULL, \n\tcode VARCHAR(10) NOT NULL, \n\tanalysis_date DATE, \n\teval_window_days INTEGER NOT NULL, \n\tengine_version VARCHAR(16) NOT NULL, \n\teval_status VARCHAR(16) NOT NULL, \n\tevaluated_at DATETIME, \n\toperation_advice VARCHAR(20), \n\tposition_recommendation VARCHAR(8), \n\tstart_price FLOAT, \n\tend_close FLOAT, \n\tmax_high FLOAT, \n\tmin_low FLOAT, \n\tstock_return_pct FLOAT, \n\tdirection_expected VARCHAR(16), \n\tdirection_correct BOOLEAN, \n\toutcome VARCHAR(16), \n\tstop_loss FLOAT, \n\ttake_profit FLOAT, \n\thit_stop_loss BOOLEAN, \n\thit_take_profit BOOLEAN, \n\tfirst_hit VARCHAR(16), \n\tfirst_hit_date DATE, \n\tfirst_hit_trading_days INTEGER, \n\tsimulated_entry_price FLOAT, \n\tsimulated_exit_price FLOAT, \n\tsimulated_exit_reason VARCHAR(24), \n\tsimulated_return_pct FLOAT, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_backtest_analysis_window_version UNIQUE (analysis_history_id, eval_window_days, engine_version), \n\tFOREIGN KEY(analysis_history_id) REFERENCES analysis_history (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "analysis_history_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "analysis_history",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "code",
+            "analysis_date"
+          ],
+          "name": "ix_backtest_code_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "analysis_date"
+          ],
+          "name": "ix_backtest_results_analysis_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "analysis_history_id"
+          ],
+          "name": "ix_backtest_results_analysis_history_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "code"
+          ],
+          "name": "ix_backtest_results_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "evaluated_at"
+          ],
+          "name": "ix_backtest_results_evaluated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "analysis_history_id",
+            "eval_window_days",
+            "engine_version"
+          ],
+          "name": "sqlite_autoindex_backtest_results_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "backtest_summaries": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "scope",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "code",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "eval_window_days",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "engine_version",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "computed_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "total_evaluations",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "completed_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "insufficient_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "long_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "cash_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "win_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "loss_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "neutral_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "direction_accuracy_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "win_rate_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "neutral_rate_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "hidden": 0,
+          "name": "avg_stock_return_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "hidden": 0,
+          "name": "avg_simulated_return_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "hidden": 0,
+          "name": "stop_loss_trigger_rate",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 20,
+          "default": null,
+          "hidden": 0,
+          "name": "take_profit_trigger_rate",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 21,
+          "default": null,
+          "hidden": 0,
+          "name": "ambiguous_rate",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 22,
+          "default": null,
+          "hidden": 0,
+          "name": "avg_days_to_first_hit",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 23,
+          "default": null,
+          "hidden": 0,
+          "name": "advice_breakdown_json",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 24,
+          "default": null,
+          "hidden": 0,
+          "name": "diagnostics_json",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "content_sha256": "da3077ededfc158c3fa565fa3f32c9ea592de91c029dc572b099ebd648ba3b75",
+      "create_sql": "CREATE TABLE backtest_summaries (\n\tid INTEGER NOT NULL, \n\tscope VARCHAR(16) NOT NULL, \n\tcode VARCHAR(16), \n\teval_window_days INTEGER NOT NULL, \n\tengine_version VARCHAR(16) NOT NULL, \n\tcomputed_at DATETIME, \n\ttotal_evaluations INTEGER, \n\tcompleted_count INTEGER, \n\tinsufficient_count INTEGER, \n\tlong_count INTEGER, \n\tcash_count INTEGER, \n\twin_count INTEGER, \n\tloss_count INTEGER, \n\tneutral_count INTEGER, \n\tdirection_accuracy_pct FLOAT, \n\twin_rate_pct FLOAT, \n\tneutral_rate_pct FLOAT, \n\tavg_stock_return_pct FLOAT, \n\tavg_simulated_return_pct FLOAT, \n\tstop_loss_trigger_rate FLOAT, \n\ttake_profit_trigger_rate FLOAT, \n\tambiguous_rate FLOAT, \n\tavg_days_to_first_hit FLOAT, \n\tadvice_breakdown_json TEXT, \n\tdiagnostics_json TEXT, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_backtest_summary_scope_code_window_version UNIQUE (scope, code, eval_window_days, engine_version)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "code"
+          ],
+          "name": "ix_backtest_summaries_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "computed_at"
+          ],
+          "name": "ix_backtest_summaries_computed_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "scope"
+          ],
+          "name": "ix_backtest_summaries_scope",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "scope",
+            "code",
+            "eval_window_days",
+            "engine_version"
+          ],
+          "name": "sqlite_autoindex_backtest_summaries_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "conversation_messages": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "session_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "role",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "content",
+          "notnull": true,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "53d5f32e7c141240a94df1e563caf568fdf7902863c4db3af2cd42f5b1941baf",
+      "create_sql": "CREATE TABLE conversation_messages (\n\tid INTEGER NOT NULL, \n\tsession_id VARCHAR(100) NOT NULL, \n\trole VARCHAR(20) NOT NULL, \n\tcontent TEXT NOT NULL, \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_conversation_messages_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "ix_conversation_messages_session_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 2
+    },
+    "conversation_summaries": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "session_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "summary",
+          "notnull": true,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "covered_message_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "source_message_count",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "estimated_tokens",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "c69772709f28b1dfcfc245442f7b401367706a7f95e778315306291856663697",
+      "create_sql": "CREATE TABLE conversation_summaries (\n\tid INTEGER NOT NULL, \n\tsession_id VARCHAR(100) NOT NULL, \n\tsummary TEXT NOT NULL, \n\tcovered_message_id INTEGER NOT NULL, \n\tsource_message_count INTEGER NOT NULL, \n\testimated_tokens INTEGER NOT NULL, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_conversation_summaries_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "ix_conversation_summaries_session_id",
+          "origin": "c",
+          "partial": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_conversation_summaries_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "decision_signal_feedback": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "signal_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "feedback_value",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "reason_code",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "note",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "source",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "9365672e53572768659a1e511a8be051c7e4939befe773d303814c25113fb932",
+      "create_sql": "CREATE TABLE decision_signal_feedback (\n\tid INTEGER NOT NULL, \n\tsignal_id INTEGER NOT NULL, \n\tfeedback_value VARCHAR(16) NOT NULL, \n\treason_code VARCHAR(64), \n\tnote TEXT, \n\tsource VARCHAR(16) NOT NULL, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_decision_signal_feedback_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "feedback_value"
+          ],
+          "name": "ix_decision_signal_feedback_feedback_value",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "reason_code"
+          ],
+          "name": "ix_decision_signal_feedback_reason_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "signal_id"
+          ],
+          "name": "ix_decision_signal_feedback_signal_id",
+          "origin": "c",
+          "partial": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "source"
+          ],
+          "name": "ix_decision_signal_feedback_source",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_decision_signal_feedback_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "decision_signal_outcomes": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "signal_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "horizon",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "engine_version",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "eval_status",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(24)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "outcome",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "direction_expected",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "direction_correct",
+          "notnull": false,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "unable_reason",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "anchor_date",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "eval_window_days",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "start_price",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "end_close",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "max_high",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "min_low",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "stock_return_pct",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "action",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "hidden": 0,
+          "name": "market_phase",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(24)"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "hidden": 0,
+          "name": "source_type",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 20,
+          "default": null,
+          "hidden": 0,
+          "name": "source_agent",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 21,
+          "default": null,
+          "hidden": 0,
+          "name": "plan_quality",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 22,
+          "default": null,
+          "hidden": 0,
+          "name": "data_quality_level",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(24)"
+        },
+        {
+          "cid": 23,
+          "default": null,
+          "hidden": 0,
+          "name": "holding_state",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 24,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 25,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "a8048b52fac85273c2ded77be01dc3ad15bdfb3f71886ac827111c008ded2241",
+      "create_sql": "CREATE TABLE decision_signal_outcomes (\n\tid INTEGER NOT NULL, \n\tsignal_id INTEGER NOT NULL, \n\thorizon VARCHAR(16) NOT NULL, \n\tengine_version VARCHAR(32) NOT NULL, \n\teval_status VARCHAR(24) NOT NULL, \n\toutcome VARCHAR(16), \n\tdirection_expected VARCHAR(16), \n\tdirection_correct BOOLEAN, \n\tunable_reason VARCHAR(64), \n\tanchor_date DATE, \n\teval_window_days INTEGER, \n\tstart_price FLOAT, \n\tend_close FLOAT, \n\tmax_high FLOAT, \n\tmin_low FLOAT, \n\tstock_return_pct FLOAT, \n\taction VARCHAR(16), \n\tmarket VARCHAR(8), \n\tmarket_phase VARCHAR(24), \n\tsource_type VARCHAR(32), \n\tsource_agent VARCHAR(64), \n\tplan_quality VARCHAR(16), \n\tdata_quality_level VARCHAR(24), \n\tholding_state VARCHAR(16) NOT NULL, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_decision_signal_outcome_key UNIQUE (signal_id, horizon, engine_version)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "engine_version",
+            "action",
+            "horizon"
+          ],
+          "name": "ix_decision_signal_outcome_stats_action",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "engine_version",
+            "market",
+            "horizon"
+          ],
+          "name": "ix_decision_signal_outcome_stats_market",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "action"
+          ],
+          "name": "ix_decision_signal_outcomes_action",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "anchor_date"
+          ],
+          "name": "ix_decision_signal_outcomes_anchor_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_decision_signal_outcomes_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "data_quality_level"
+          ],
+          "name": "ix_decision_signal_outcomes_data_quality_level",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "direction_expected"
+          ],
+          "name": "ix_decision_signal_outcomes_direction_expected",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "engine_version"
+          ],
+          "name": "ix_decision_signal_outcomes_engine_version",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "eval_status"
+          ],
+          "name": "ix_decision_signal_outcomes_eval_status",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "holding_state"
+          ],
+          "name": "ix_decision_signal_outcomes_holding_state",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "horizon"
+          ],
+          "name": "ix_decision_signal_outcomes_horizon",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market"
+          ],
+          "name": "ix_decision_signal_outcomes_market",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market_phase"
+          ],
+          "name": "ix_decision_signal_outcomes_market_phase",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "outcome"
+          ],
+          "name": "ix_decision_signal_outcomes_outcome",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "plan_quality"
+          ],
+          "name": "ix_decision_signal_outcomes_plan_quality",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "signal_id"
+          ],
+          "name": "ix_decision_signal_outcomes_signal_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_agent"
+          ],
+          "name": "ix_decision_signal_outcomes_source_agent",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_type"
+          ],
+          "name": "ix_decision_signal_outcomes_source_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "unable_reason"
+          ],
+          "name": "ix_decision_signal_outcomes_unable_reason",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_decision_signal_outcomes_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "signal_id",
+            "horizon",
+            "engine_version"
+          ],
+          "name": "sqlite_autoindex_decision_signal_outcomes_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "decision_signals": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "stock_code",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "stock_name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "source_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "source_agent",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "source_report_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "trace_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "decision_profile",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "market_phase",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(24)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "trigger_source",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "action",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "action_label",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "confidence",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "score",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "horizon",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "entry_low",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "hidden": 0,
+          "name": "entry_high",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "hidden": 0,
+          "name": "stop_loss",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "hidden": 0,
+          "name": "target_price",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 20,
+          "default": null,
+          "hidden": 0,
+          "name": "invalidation",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 21,
+          "default": null,
+          "hidden": 0,
+          "name": "watch_conditions",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 22,
+          "default": null,
+          "hidden": 0,
+          "name": "reason",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 23,
+          "default": null,
+          "hidden": 0,
+          "name": "risk_summary",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 24,
+          "default": null,
+          "hidden": 0,
+          "name": "catalyst_summary",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 25,
+          "default": null,
+          "hidden": 0,
+          "name": "evidence_json",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 26,
+          "default": null,
+          "hidden": 0,
+          "name": "data_quality_summary_json",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 27,
+          "default": null,
+          "hidden": 0,
+          "name": "plan_quality",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 28,
+          "default": null,
+          "hidden": 0,
+          "name": "status",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 29,
+          "default": null,
+          "hidden": 0,
+          "name": "expires_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 30,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 31,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 32,
+          "default": null,
+          "hidden": 0,
+          "name": "metadata_json",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "content_sha256": "1b74f3b98c4319cef20f08310f1f073102d9549ac6687473eb3c0ab64d62308a",
+      "create_sql": "CREATE TABLE decision_signals (\n\tid INTEGER NOT NULL, \n\tstock_code VARCHAR(16) NOT NULL, \n\tstock_name VARCHAR(64), \n\tmarket VARCHAR(8) NOT NULL, \n\tsource_type VARCHAR(32) NOT NULL, \n\tsource_agent VARCHAR(64), \n\tsource_report_id INTEGER, \n\ttrace_id VARCHAR(64), \n\tdecision_profile VARCHAR(16), \n\tmarket_phase VARCHAR(24), \n\ttrigger_source VARCHAR(64) NOT NULL, \n\taction VARCHAR(16) NOT NULL, \n\taction_label VARCHAR(32), \n\tconfidence FLOAT, \n\tscore INTEGER, \n\thorizon VARCHAR(16), \n\tentry_low FLOAT, \n\tentry_high FLOAT, \n\tstop_loss FLOAT, \n\ttarget_price FLOAT, \n\tinvalidation TEXT, \n\twatch_conditions TEXT, \n\treason TEXT, \n\trisk_summary TEXT, \n\tcatalyst_summary TEXT, \n\tevidence_json TEXT, \n\tdata_quality_summary_json TEXT, \n\tplan_quality VARCHAR(16) NOT NULL, \n\tstatus VARCHAR(16) NOT NULL, \n\texpires_at DATETIME, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tmetadata_json TEXT, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "market",
+            "status",
+            "created_at"
+          ],
+          "name": "ix_decision_signal_market_status_time",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market",
+            "stock_code",
+            "decision_profile",
+            "created_at"
+          ],
+          "name": "ix_decision_signal_market_stock_profile_created",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_report_id",
+            "source_type",
+            "market",
+            "stock_code",
+            "action",
+            "horizon",
+            "market_phase"
+          ],
+          "name": "ix_decision_signal_report_type_market_stock_action_horizon_phase",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_report_id",
+            "source_type",
+            "market",
+            "stock_code",
+            "decision_profile",
+            "action",
+            "horizon",
+            "market_phase"
+          ],
+          "name": "ix_decision_signal_report_type_market_stock_profile_action_horizon_phase",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "stock_code",
+            "status",
+            "created_at"
+          ],
+          "name": "ix_decision_signal_stock_status_time",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "trace_id",
+            "source_type",
+            "market",
+            "stock_code",
+            "action",
+            "horizon",
+            "market_phase"
+          ],
+          "name": "ix_decision_signal_trace_type_market_stock_action_horizon_phase",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "trace_id",
+            "source_type",
+            "market",
+            "stock_code",
+            "decision_profile",
+            "action",
+            "horizon",
+            "market_phase"
+          ],
+          "name": "ix_decision_signal_trace_type_market_stock_profile_action_horizon_phase",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "action"
+          ],
+          "name": "ix_decision_signals_action",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_decision_signals_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "decision_profile"
+          ],
+          "name": "ix_decision_signals_decision_profile",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "expires_at"
+          ],
+          "name": "ix_decision_signals_expires_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "horizon"
+          ],
+          "name": "ix_decision_signals_horizon",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market"
+          ],
+          "name": "ix_decision_signals_market",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market_phase"
+          ],
+          "name": "ix_decision_signals_market_phase",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "plan_quality"
+          ],
+          "name": "ix_decision_signals_plan_quality",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_report_id"
+          ],
+          "name": "ix_decision_signals_source_report_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_type"
+          ],
+          "name": "ix_decision_signals_source_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "status"
+          ],
+          "name": "ix_decision_signals_status",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "stock_code"
+          ],
+          "name": "ix_decision_signals_stock_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "trace_id"
+          ],
+          "name": "ix_decision_signals_trace_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "trigger_source"
+          ],
+          "name": "ix_decision_signals_trigger_source",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_decision_signals_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "fundamental_snapshot": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "query_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "code",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(10)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "payload",
+          "notnull": true,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "source_chain",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "coverage",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "267a6e1b39c979493ad336f6921da05fc28473b32034983a246a82f5e2117761",
+      "create_sql": "CREATE TABLE fundamental_snapshot (\n\tid INTEGER NOT NULL, \n\tquery_id VARCHAR(64) NOT NULL, \n\tcode VARCHAR(10) NOT NULL, \n\tpayload TEXT NOT NULL, \n\tsource_chain TEXT, \n\tcoverage TEXT, \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "code"
+          ],
+          "name": "ix_fundamental_snapshot_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_fundamental_snapshot_created",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_fundamental_snapshot_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "query_id",
+            "code"
+          ],
+          "name": "ix_fundamental_snapshot_query_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "query_id"
+          ],
+          "name": "ix_fundamental_snapshot_query_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "intelligence_items": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "source_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "source_name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "source_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "title",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(300)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "summary",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "url",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(1000)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "source",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "published_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "fetched_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "scope_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "scope_value",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "raw_payload",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "content_sha256": "4abbbd7d0b9fcdd9f3b20ac11ff3428012086ab083455f0b57ff268485794718",
+      "create_sql": "CREATE TABLE intelligence_items (\n\tid INTEGER NOT NULL, \n\tsource_id INTEGER, \n\tsource_name VARCHAR(100), \n\tsource_type VARCHAR(32) NOT NULL, \n\ttitle VARCHAR(300) NOT NULL, \n\tsummary TEXT, \n\turl VARCHAR(1000) NOT NULL, \n\tsource VARCHAR(100), \n\tpublished_at DATETIME, \n\tfetched_at DATETIME, \n\tscope_type VARCHAR(32) NOT NULL, \n\tscope_value VARCHAR(64) NOT NULL, \n\tmarket VARCHAR(32) NOT NULL, \n\traw_payload TEXT, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_intel_item_source_scope_url UNIQUE (source_id, url, scope_type, scope_value, market), \n\tFOREIGN KEY(source_id) REFERENCES intelligence_sources (id) ON DELETE SET NULL\n)",
+      "foreign_keys": [
+        {
+          "from": "source_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "SET NULL",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "intelligence_sources",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "fetched_at"
+          ],
+          "name": "ix_intel_item_fetch_time",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "scope_type",
+            "scope_value",
+            "market",
+            "published_at"
+          ],
+          "name": "ix_intel_item_scope_time",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "fetched_at"
+          ],
+          "name": "ix_intelligence_items_fetched_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market"
+          ],
+          "name": "ix_intelligence_items_market",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "published_at"
+          ],
+          "name": "ix_intelligence_items_published_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "scope_type"
+          ],
+          "name": "ix_intelligence_items_scope_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "scope_value"
+          ],
+          "name": "ix_intelligence_items_scope_value",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_id"
+          ],
+          "name": "ix_intelligence_items_source_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_name"
+          ],
+          "name": "ix_intelligence_items_source_name",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_type"
+          ],
+          "name": "ix_intelligence_items_source_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "url"
+          ],
+          "name": "ix_intelligence_items_url",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_id",
+            "url",
+            "scope_type",
+            "scope_value",
+            "market"
+          ],
+          "name": "sqlite_autoindex_intelligence_items_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "intelligence_sources": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "name",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "source_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "url",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(1000)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "enabled",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "scope_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "scope_value",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "description",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "last_status",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "last_error",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "last_fetched_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "3c998805bfb56db806437e92fc7e3ea40cbbb42c128d2b7f359fdebfaf7cb827",
+      "create_sql": "CREATE TABLE intelligence_sources (\n\tid INTEGER NOT NULL, \n\tname VARCHAR(100) NOT NULL, \n\tsource_type VARCHAR(32) NOT NULL, \n\turl VARCHAR(1000) NOT NULL, \n\tenabled BOOLEAN NOT NULL, \n\tscope_type VARCHAR(32) NOT NULL, \n\tscope_value VARCHAR(64), \n\tmarket VARCHAR(32) NOT NULL, \n\tdescription TEXT, \n\tlast_status VARCHAR(32), \n\tlast_error TEXT, \n\tlast_fetched_at DATETIME, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "scope_type",
+            "scope_value",
+            "market"
+          ],
+          "name": "ix_intel_source_scope",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_intelligence_sources_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "enabled"
+          ],
+          "name": "ix_intelligence_sources_enabled",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "last_fetched_at"
+          ],
+          "name": "ix_intelligence_sources_last_fetched_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market"
+          ],
+          "name": "ix_intelligence_sources_market",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "name"
+          ],
+          "name": "ix_intelligence_sources_name",
+          "origin": "c",
+          "partial": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "scope_type"
+          ],
+          "name": "ix_intelligence_sources_scope_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "scope_value"
+          ],
+          "name": "ix_intelligence_sources_scope_value",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "source_type"
+          ],
+          "name": "ix_intelligence_sources_source_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_intelligence_sources_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "llm_usage": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "call_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "model",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(128)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "stock_code",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "provider",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "prompt_tokens",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "completion_tokens",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "total_tokens",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_usage_json",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_usage_schema_name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_usage_schema_version",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_usage_observed_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_prompt_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_completion_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_total_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_cache_read_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_cache_write_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_cache_miss_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_uncached_input_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_cache_eligible_input_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 20,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_cache_hit_ratio",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 21,
+          "default": null,
+          "hidden": 0,
+          "name": "normalized_cache_write_ratio",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 22,
+          "default": null,
+          "hidden": 0,
+          "name": "cache_capability",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 23,
+          "default": null,
+          "hidden": 0,
+          "name": "cache_eligibility",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 24,
+          "default": null,
+          "hidden": 0,
+          "name": "cache_observation",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 25,
+          "default": null,
+          "hidden": 0,
+          "name": "estimated_prefix_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 26,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_reported_prompt_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 27,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_reported_cached_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 28,
+          "default": null,
+          "hidden": 0,
+          "name": "provider_min_cache_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 29,
+          "default": null,
+          "hidden": 0,
+          "name": "eligibility_confidence",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 30,
+          "default": null,
+          "hidden": 0,
+          "name": "tokenizer_name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(128)"
+        },
+        {
+          "cid": 31,
+          "default": null,
+          "hidden": 0,
+          "name": "tokenizer_version",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 32,
+          "default": null,
+          "hidden": 0,
+          "name": "messages_hmac",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 33,
+          "default": null,
+          "hidden": 0,
+          "name": "system_message_hmac",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 34,
+          "default": null,
+          "hidden": 0,
+          "name": "user_message_hmac",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 35,
+          "default": null,
+          "hidden": 0,
+          "name": "hmac_key_version",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 36,
+          "default": null,
+          "hidden": 0,
+          "name": "hmac_domain",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 37,
+          "default": null,
+          "hidden": 0,
+          "name": "hash_scope",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 38,
+          "default": null,
+          "hidden": 0,
+          "name": "language",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 39,
+          "default": null,
+          "hidden": 0,
+          "name": "market_group",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 40,
+          "default": null,
+          "hidden": 0,
+          "name": "analysis_mode",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 41,
+          "default": null,
+          "hidden": 0,
+          "name": "legacy_prompt_mode",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 42,
+          "default": null,
+          "hidden": 0,
+          "name": "skill_config_hmac",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 43,
+          "default": null,
+          "hidden": 0,
+          "name": "transport",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 44,
+          "default": null,
+          "hidden": 0,
+          "name": "message_count",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 45,
+          "default": null,
+          "hidden": 0,
+          "name": "estimated_total_prompt_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 46,
+          "default": null,
+          "hidden": 0,
+          "name": "approx_common_prefix_chars",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 47,
+          "default": null,
+          "hidden": 0,
+          "name": "approx_common_prefix_tokens",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 48,
+          "default": null,
+          "hidden": 0,
+          "name": "known_dynamic_marker_positions",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 49,
+          "default": null,
+          "hidden": 0,
+          "name": "called_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "e69dee662a3a7e0b25c797feeb2d827c95a135aa5366ab432574de9d2c6aa24e",
+      "create_sql": "CREATE TABLE llm_usage (\n\tid INTEGER NOT NULL, \n\tcall_type VARCHAR(32) NOT NULL, \n\tmodel VARCHAR(128) NOT NULL, \n\tstock_code VARCHAR(16), \n\tprovider VARCHAR(64), \n\tprompt_tokens INTEGER NOT NULL, \n\tcompletion_tokens INTEGER NOT NULL, \n\ttotal_tokens INTEGER NOT NULL, \n\tprovider_usage_json TEXT, \n\tprovider_usage_schema_name VARCHAR(64), \n\tprovider_usage_schema_version VARCHAR(32), \n\tprovider_usage_observed_at VARCHAR(32), \n\tnormalized_prompt_tokens INTEGER, \n\tnormalized_completion_tokens INTEGER, \n\tnormalized_total_tokens INTEGER, \n\tnormalized_cache_read_tokens INTEGER, \n\tnormalized_cache_write_tokens INTEGER, \n\tnormalized_cache_miss_tokens INTEGER, \n\tnormalized_uncached_input_tokens INTEGER, \n\tnormalized_cache_eligible_input_tokens INTEGER, \n\tnormalized_cache_hit_ratio FLOAT, \n\tnormalized_cache_write_ratio FLOAT, \n\tcache_capability VARCHAR(32), \n\tcache_eligibility VARCHAR(32), \n\tcache_observation VARCHAR(32), \n\testimated_prefix_tokens INTEGER, \n\tprovider_reported_prompt_tokens INTEGER, \n\tprovider_reported_cached_tokens INTEGER, \n\tprovider_min_cache_tokens INTEGER, \n\teligibility_confidence VARCHAR(32), \n\ttokenizer_name VARCHAR(128), \n\ttokenizer_version VARCHAR(64), \n\tmessages_hmac VARCHAR(64), \n\tsystem_message_hmac VARCHAR(64), \n\tuser_message_hmac VARCHAR(64), \n\thmac_key_version VARCHAR(64), \n\thmac_domain VARCHAR(32), \n\thash_scope VARCHAR(32), \n\tlanguage VARCHAR(16), \n\tmarket_group VARCHAR(16), \n\tanalysis_mode VARCHAR(64), \n\tlegacy_prompt_mode VARCHAR(32), \n\tskill_config_hmac VARCHAR(64), \n\ttransport VARCHAR(64), \n\tmessage_count INTEGER, \n\testimated_total_prompt_tokens INTEGER, \n\tapprox_common_prefix_chars INTEGER, \n\tapprox_common_prefix_tokens INTEGER, \n\tknown_dynamic_marker_positions TEXT, \n\tcalled_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "call_type"
+          ],
+          "name": "ix_llm_usage_call_type",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "called_at"
+          ],
+          "name": "ix_llm_usage_called_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "news_intel": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "query_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "code",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(10)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(50)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "dimension",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "query",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "provider",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "title",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(300)"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "snippet",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "url",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(1000)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "source",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(100)"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "published_date",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "fetched_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "query_source",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "requester_platform",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "requester_user_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "requester_user_name",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "hidden": 0,
+          "name": "requester_chat_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "hidden": 0,
+          "name": "requester_message_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "hidden": 0,
+          "name": "requester_query",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        }
+      ],
+      "content_sha256": "fb557cf0c613ca3efc22022c1433aa4f26ea707eadeffbb4107a13bc9ce08ad1",
+      "create_sql": "CREATE TABLE news_intel (\n\tid INTEGER NOT NULL, \n\tquery_id VARCHAR(64), \n\tcode VARCHAR(10) NOT NULL, \n\tname VARCHAR(50), \n\tdimension VARCHAR(32), \n\t\"query\" VARCHAR(255), \n\tprovider VARCHAR(32), \n\ttitle VARCHAR(300) NOT NULL, \n\tsnippet TEXT, \n\turl VARCHAR(1000) NOT NULL, \n\tsource VARCHAR(100), \n\tpublished_date DATETIME, \n\tfetched_at DATETIME, \n\tquery_source VARCHAR(32), \n\trequester_platform VARCHAR(20), \n\trequester_user_id VARCHAR(64), \n\trequester_user_name VARCHAR(64), \n\trequester_chat_id VARCHAR(64), \n\trequester_message_id VARCHAR(64), \n\trequester_query VARCHAR(255), \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_news_url UNIQUE (url)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "code",
+            "published_date"
+          ],
+          "name": "ix_news_code_pub",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "code"
+          ],
+          "name": "ix_news_intel_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "dimension"
+          ],
+          "name": "ix_news_intel_dimension",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "fetched_at"
+          ],
+          "name": "ix_news_intel_fetched_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "provider"
+          ],
+          "name": "ix_news_intel_provider",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "published_date"
+          ],
+          "name": "ix_news_intel_published_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "query_id"
+          ],
+          "name": "ix_news_intel_query_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "query_source"
+          ],
+          "name": "ix_news_intel_query_source",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "url"
+          ],
+          "name": "sqlite_autoindex_news_intel_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_accounts": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "owner_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "name",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "broker",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "base_currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "is_active",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "ebd0c1619710bc99158280ab2178921b4549978a226b3e1ac31ecafe2a9f1608",
+      "create_sql": "CREATE TABLE portfolio_accounts (\n\tid INTEGER NOT NULL, \n\towner_id VARCHAR(64), \n\tname VARCHAR(64) NOT NULL, \n\tbroker VARCHAR(64), \n\tmarket VARCHAR(8) NOT NULL, \n\tbase_currency VARCHAR(8) NOT NULL, \n\tis_active BOOLEAN NOT NULL, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "owner_id",
+            "is_active"
+          ],
+          "name": "ix_portfolio_account_owner_active",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_portfolio_accounts_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "is_active"
+          ],
+          "name": "ix_portfolio_accounts_is_active",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "market"
+          ],
+          "name": "ix_portfolio_accounts_market",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "owner_id"
+          ],
+          "name": "ix_portfolio_accounts_owner_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_cash_ledger": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "account_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "event_date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "direction",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "amount",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "note",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "7e3663f77b0771eb05de2526480a9cbebc3007aafa62cd9d50caa50f1d19ea44",
+      "create_sql": "CREATE TABLE portfolio_cash_ledger (\n\tid INTEGER NOT NULL, \n\taccount_id INTEGER NOT NULL, \n\tevent_date DATE NOT NULL, \n\tdirection VARCHAR(8) NOT NULL, \n\tamount FLOAT NOT NULL, \n\tcurrency VARCHAR(8) NOT NULL, \n\tnote VARCHAR(255), \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id), \n\tFOREIGN KEY(account_id) REFERENCES portfolio_accounts (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "account_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_accounts",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "account_id",
+            "event_date"
+          ],
+          "name": "ix_portfolio_cash_account_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id"
+          ],
+          "name": "ix_portfolio_cash_ledger_account_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_portfolio_cash_ledger_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "event_date"
+          ],
+          "name": "ix_portfolio_cash_ledger_event_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_corporate_actions": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "account_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "symbol",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "effective_date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "action_type",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(24)"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "cash_dividend_per_share",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "split_ratio",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "note",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "c1c80089209c2860b07177130ea96daca309cbbf2bd81ccc4b4d8e4fbdce9304",
+      "create_sql": "CREATE TABLE portfolio_corporate_actions (\n\tid INTEGER NOT NULL, \n\taccount_id INTEGER NOT NULL, \n\tsymbol VARCHAR(16) NOT NULL, \n\tmarket VARCHAR(8) NOT NULL, \n\tcurrency VARCHAR(8) NOT NULL, \n\teffective_date DATE NOT NULL, \n\taction_type VARCHAR(24) NOT NULL, \n\tcash_dividend_per_share FLOAT, \n\tsplit_ratio FLOAT, \n\tnote VARCHAR(255), \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id), \n\tFOREIGN KEY(account_id) REFERENCES portfolio_accounts (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "account_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_accounts",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "account_id",
+            "effective_date"
+          ],
+          "name": "ix_portfolio_ca_account_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id"
+          ],
+          "name": "ix_portfolio_corporate_actions_account_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_portfolio_corporate_actions_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "effective_date"
+          ],
+          "name": "ix_portfolio_corporate_actions_effective_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "symbol"
+          ],
+          "name": "ix_portfolio_corporate_actions_symbol",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_daily_snapshots": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "account_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "snapshot_date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "cost_method",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "base_currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "total_cash",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "total_market_value",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "total_equity",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "unrealized_pnl",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "realized_pnl",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "fee_total",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "tax_total",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "fx_stale",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "payload",
+          "notnull": false,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "9217b8f0aabe5d439e006ff05facc5a2a81164e71c5c95f34c3caaddad43ef32",
+      "create_sql": "CREATE TABLE portfolio_daily_snapshots (\n\tid INTEGER NOT NULL, \n\taccount_id INTEGER NOT NULL, \n\tsnapshot_date DATE NOT NULL, \n\tcost_method VARCHAR(8) NOT NULL, \n\tbase_currency VARCHAR(8) NOT NULL, \n\ttotal_cash FLOAT NOT NULL, \n\ttotal_market_value FLOAT NOT NULL, \n\ttotal_equity FLOAT NOT NULL, \n\tunrealized_pnl FLOAT NOT NULL, \n\trealized_pnl FLOAT NOT NULL, \n\tfee_total FLOAT NOT NULL, \n\ttax_total FLOAT NOT NULL, \n\tfx_stale BOOLEAN NOT NULL, \n\tpayload TEXT, \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_portfolio_snapshot_account_date_method UNIQUE (account_id, snapshot_date, cost_method), \n\tFOREIGN KEY(account_id) REFERENCES portfolio_accounts (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "account_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_accounts",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "account_id"
+          ],
+          "name": "ix_portfolio_daily_snapshots_account_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_portfolio_daily_snapshots_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "snapshot_date"
+          ],
+          "name": "ix_portfolio_daily_snapshots_snapshot_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id",
+            "snapshot_date",
+            "cost_method"
+          ],
+          "name": "sqlite_autoindex_portfolio_daily_snapshots_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_fx_rates": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "from_currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "to_currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "rate_date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "rate",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "source",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(32)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "is_stale",
+          "notnull": true,
+          "pk": 0,
+          "type": "BOOLEAN"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "326c2e887d98b2ea46885e1f0e00975550f540828da75925e0328d007ae9749f",
+      "create_sql": "CREATE TABLE portfolio_fx_rates (\n\tid INTEGER NOT NULL, \n\tfrom_currency VARCHAR(8) NOT NULL, \n\tto_currency VARCHAR(8) NOT NULL, \n\trate_date DATE NOT NULL, \n\trate FLOAT NOT NULL, \n\tsource VARCHAR(32) NOT NULL, \n\tis_stale BOOLEAN NOT NULL, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_portfolio_fx_pair_date UNIQUE (from_currency, to_currency, rate_date)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "from_currency"
+          ],
+          "name": "ix_portfolio_fx_rates_from_currency",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "rate_date"
+          ],
+          "name": "ix_portfolio_fx_rates_rate_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "to_currency"
+          ],
+          "name": "ix_portfolio_fx_rates_to_currency",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "from_currency",
+            "to_currency",
+            "rate_date"
+          ],
+          "name": "sqlite_autoindex_portfolio_fx_rates_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_position_lots": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "account_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "cost_method",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "symbol",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "open_date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "remaining_quantity",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "unit_cost",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "source_trade_id",
+          "notnull": false,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "d969ba416377980ab6163c404bab51013a800322c1ce4143472c1d8d0ca3ec70",
+      "create_sql": "CREATE TABLE portfolio_position_lots (\n\tid INTEGER NOT NULL, \n\taccount_id INTEGER NOT NULL, \n\tcost_method VARCHAR(8) NOT NULL, \n\tsymbol VARCHAR(16) NOT NULL, \n\tmarket VARCHAR(8) NOT NULL, \n\tcurrency VARCHAR(8) NOT NULL, \n\topen_date DATE NOT NULL, \n\tremaining_quantity FLOAT NOT NULL, \n\tunit_cost FLOAT NOT NULL, \n\tsource_trade_id INTEGER, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tFOREIGN KEY(account_id) REFERENCES portfolio_accounts (id), \n\tFOREIGN KEY(source_trade_id) REFERENCES portfolio_trades (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "source_trade_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_trades",
+          "to": "id"
+        },
+        {
+          "from": "account_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_accounts",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "account_id",
+            "symbol"
+          ],
+          "name": "ix_portfolio_lot_account_symbol",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id"
+          ],
+          "name": "ix_portfolio_position_lots_account_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "open_date"
+          ],
+          "name": "ix_portfolio_position_lots_open_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "symbol"
+          ],
+          "name": "ix_portfolio_position_lots_symbol",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_portfolio_position_lots_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_positions": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "account_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "cost_method",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "symbol",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "quantity",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "avg_cost",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "total_cost",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "last_price",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "market_value_base",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "unrealized_pnl_base",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "valuation_currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "8ea7b92587653b5f549a869da999bf63b83192fc92b5cfd38d0a51c59b7df9d8",
+      "create_sql": "CREATE TABLE portfolio_positions (\n\tid INTEGER NOT NULL, \n\taccount_id INTEGER NOT NULL, \n\tcost_method VARCHAR(8) NOT NULL, \n\tsymbol VARCHAR(16) NOT NULL, \n\tmarket VARCHAR(8) NOT NULL, \n\tcurrency VARCHAR(8) NOT NULL, \n\tquantity FLOAT NOT NULL, \n\tavg_cost FLOAT NOT NULL, \n\ttotal_cost FLOAT NOT NULL, \n\tlast_price FLOAT NOT NULL, \n\tmarket_value_base FLOAT NOT NULL, \n\tunrealized_pnl_base FLOAT NOT NULL, \n\tvaluation_currency VARCHAR(8) NOT NULL, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_portfolio_position_account_symbol_market_currency UNIQUE (account_id, symbol, market, currency, cost_method), \n\tFOREIGN KEY(account_id) REFERENCES portfolio_accounts (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "account_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_accounts",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "account_id"
+          ],
+          "name": "ix_portfolio_positions_account_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "symbol"
+          ],
+          "name": "ix_portfolio_positions_symbol",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "updated_at"
+          ],
+          "name": "ix_portfolio_positions_updated_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id",
+            "symbol",
+            "market",
+            "currency",
+            "cost_method"
+          ],
+          "name": "sqlite_autoindex_portfolio_positions_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "portfolio_trades": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "account_id",
+          "notnull": true,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "trade_uid",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(128)"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "symbol",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(16)"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "market",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "currency",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "trade_date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "side",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(8)"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "quantity",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "price",
+          "notnull": true,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "fee",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "tax",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "note",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "dedup_hash",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "a07f4aa77027dc4ca9d7f3deba70fb4bd585882cd445daa72136555118cd631b",
+      "create_sql": "CREATE TABLE portfolio_trades (\n\tid INTEGER NOT NULL, \n\taccount_id INTEGER NOT NULL, \n\ttrade_uid VARCHAR(128), \n\tsymbol VARCHAR(16) NOT NULL, \n\tmarket VARCHAR(8) NOT NULL, \n\tcurrency VARCHAR(8) NOT NULL, \n\ttrade_date DATE NOT NULL, \n\tside VARCHAR(8) NOT NULL, \n\tquantity FLOAT NOT NULL, \n\tprice FLOAT NOT NULL, \n\tfee FLOAT, \n\ttax FLOAT, \n\tnote VARCHAR(255), \n\tdedup_hash VARCHAR(64), \n\tcreated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_portfolio_trade_uid UNIQUE (account_id, trade_uid), \n\tCONSTRAINT uix_portfolio_trade_dedup_hash UNIQUE (account_id, dedup_hash), \n\tFOREIGN KEY(account_id) REFERENCES portfolio_accounts (id)\n)",
+      "foreign_keys": [
+        {
+          "from": "account_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "portfolio_accounts",
+          "to": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "account_id",
+            "trade_date"
+          ],
+          "name": "ix_portfolio_trade_account_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id"
+          ],
+          "name": "ix_portfolio_trades_account_id",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "ix_portfolio_trades_created_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "dedup_hash"
+          ],
+          "name": "ix_portfolio_trades_dedup_hash",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "symbol"
+          ],
+          "name": "ix_portfolio_trades_symbol",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "trade_date"
+          ],
+          "name": "ix_portfolio_trades_trade_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "account_id",
+            "trade_uid"
+          ],
+          "name": "sqlite_autoindex_portfolio_trades_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "account_id",
+            "dedup_hash"
+          ],
+          "name": "sqlite_autoindex_portfolio_trades_2",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "schema_migrations": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "version",
+          "notnull": true,
+          "pk": 1,
+          "type": "VARCHAR(64)"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "description",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "applied_at",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "9652e59f48f3540b9f8035389fbe088c7c8b5ee5848b303c2806ca3be5f87fe5",
+      "create_sql": "CREATE TABLE schema_migrations (\n\tversion VARCHAR(64) NOT NULL, \n\tdescription VARCHAR(255) NOT NULL, \n\tapplied_at DATETIME NOT NULL, \n\tPRIMARY KEY (version)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "applied_at"
+          ],
+          "name": "ix_schema_migrations_applied_at",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "version"
+          ],
+          "name": "sqlite_autoindex_schema_migrations_1",
+          "origin": "pk",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 1
+    },
+    "stock_daily": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "hidden": 0,
+          "name": "id",
+          "notnull": true,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "hidden": 0,
+          "name": "code",
+          "notnull": true,
+          "pk": 0,
+          "type": "VARCHAR(10)"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "hidden": 0,
+          "name": "date",
+          "notnull": true,
+          "pk": 0,
+          "type": "DATE"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "hidden": 0,
+          "name": "open",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "hidden": 0,
+          "name": "high",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "hidden": 0,
+          "name": "low",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "hidden": 0,
+          "name": "close",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "hidden": 0,
+          "name": "volume",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "hidden": 0,
+          "name": "amount",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "hidden": 0,
+          "name": "pct_chg",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "hidden": 0,
+          "name": "ma5",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "hidden": 0,
+          "name": "ma10",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "hidden": 0,
+          "name": "ma20",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "hidden": 0,
+          "name": "volume_ratio",
+          "notnull": false,
+          "pk": 0,
+          "type": "FLOAT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "hidden": 0,
+          "name": "data_source",
+          "notnull": false,
+          "pk": 0,
+          "type": "VARCHAR(50)"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "hidden": 0,
+          "name": "created_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "hidden": 0,
+          "name": "updated_at",
+          "notnull": false,
+          "pk": 0,
+          "type": "DATETIME"
+        }
+      ],
+      "content_sha256": "6d815a77c8e35a65215595a217116db1bbdb2808b44ee80d14fc56395d8a5be6",
+      "create_sql": "CREATE TABLE stock_daily (\n\tid INTEGER NOT NULL, \n\tcode VARCHAR(10) NOT NULL, \n\tdate DATE NOT NULL, \n\topen FLOAT, \n\thigh FLOAT, \n\tlow FLOAT, \n\tclose FLOAT, \n\tvolume FLOAT, \n\tamount FLOAT, \n\tpct_chg FLOAT, \n\tma5 FLOAT, \n\tma10 FLOAT, \n\tma20 FLOAT, \n\tvolume_ratio FLOAT, \n\tdata_source VARCHAR(50), \n\tcreated_at DATETIME, \n\tupdated_at DATETIME, \n\tPRIMARY KEY (id), \n\tCONSTRAINT uix_code_date UNIQUE (code, date)\n)",
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            "code",
+            "date"
+          ],
+          "name": "ix_code_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "code"
+          ],
+          "name": "ix_stock_daily_code",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "date"
+          ],
+          "name": "ix_stock_daily_date",
+          "origin": "c",
+          "partial": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "code",
+            "date"
+          ],
+          "name": "sqlite_autoindex_stock_daily_1",
+          "origin": "u",
+          "partial": false,
+          "unique": true
+        }
+      ],
+      "row_count": 2
+    }
+  }
+}

@@ -1,190 +1,288 @@
 # Lessons
 
-- Observability logs should be allowlisted, not merely redacted. For Serenity failed-open paths, log structured status/count/version fields and exception type only; do not put sanitized exception bodies in warning messages because they can still contain raw query text, provider payload fragments, or unpublished notes.
-- Report safety scanners need explicit surface roles, not broad key-name inference. Treat Serenity-generated sections and explicit scan sections as in scope, keep DSA main report fields out of scope, and add regression tests so generic top-level keys such as `coverage`, `readiness`, or `tasks` do not accidentally become Serenity-gated.
-- Quoted source excerpt exemptions must require provenance. A quoted excerpt with investment-action language can be allowed as an info finding only when it carries a sanitized provenance id; missing provenance should warn instead of silently passing.
-- Dedicated-table decision gates should count only current product needs, not future risks. If fewer than two table criteria are met, write a decision record that keeps snapshot-first persistence and records performance, concurrency, and audit gaps as future triggers instead of creating schema prematurely.
-- Snapshot persistence for research-only task metadata needs nested schema sanitization, not only top-level allowlists. Validate each `context_snapshot.serenity_research.tasks[]` entry with `SerenityResearchTask`, cap the list, and strip task-level trading fields before writing JSON.
-- Status updates inside historical JSON snapshots should support `history_id + task_id` precise targeting once duplicate `query_id/code/report_type` records are possible. Latest-row fallback is acceptable for whole-audit patching, but task status mutation needs a safer row anchor.
-- Pydantic schema contracts are the right first step before persistence. Define strict task objects, lifecycle transitions, old-record defaults, and trading-field rejection before writing snapshot or DB persistence logic.
-- At every stage boundary, refresh the development tracker, task log, lessons, tracker restart prompt, and final user-facing restart prompt before closing the turn; include completed scope, unfinished next task, latest Serenity/DSA commit ids, validation evidence, known blockers, and forbidden generated files.
-- Agent tool feature flags must gate exposure before intent matching. If a research-only tool is globally registered, `SERENITY_RESEARCH_ENABLED=false` must hide it even when the user explicitly asks for evidence quality, and tests should cover both flag-off and flag-on explicit-intent paths.
-- Do not trust request-provided context flags as security or boundary gates. External context such as `serenity_research_tools_enabled=True` can bypass product semantics unless the executor ignores it or validates it as server-owned state.
-- Specialist agents should default to an empty tool whitelist when skill metadata lacks `required_tools`. Falling back to the global registry can silently expose auxiliary or research-only tools outside their intended intent boundary.
-- DSA Web API clients deep-convert backend `snake_case` payloads into `camelCase`, so frontend types and report components should model optional add-ons as camelCase fields such as `serenityResearch` even when backend schemas and storage use `serenity_research`.
-- After every stage-level task, automatically refresh the tracker, task log, lessons when relevant, and copyable restart prompt before finishing; the user explicitly wants this treated as a standing habit, not a one-off request.
-- P1-T03 showed that DSA analysis history is saved before `AnalysisService` formats the API response, so durable optional add-ons may need a best-effort post-save patch keyed by `query_id + code + report_type`; do not rely only on mutating `result.diagnostic_context_snapshot` after persistence.
-- At the end of each phase, always update the development tracker, `tasks/todo.md`, and the copyable restart prompt with completed items, incomplete items, current next step, and validation evidence; update `tasks/lessons.md` when a reusable habit changes, then verify, stage only owned files, and commit with a detailed Chinese message automatically.
-- After completing each discrete implementation or documentation phase, stage only the files owned by that phase, run fresh verification, and create a commit with a detailed Chinese message before moving to the next phase. Do not wait for the user to remind you in a later session.
-- When comparing an external reference repository with a local working copy, use the user-provided local path as the source of truth before writing development plans. Public clones are useful for broad context, but file-level implementation guidance must be based on the actual local repository state.
-- README architecture diagrams should be visually QA'd after SVG export, not only XML-validated. Render PNGs, inspect for clipped labels and crowded nodes, fix the SVG layout, and then rerun link checks plus tests before calling the documentation update complete.
-- Saved project libraries need activity-state filters once cards show collaboration history. Let users filter active versus inactive projects and sort by activity count from the same review event log, while keeping the data operational rather than investment-directed.
-- Project cards need activity summaries once review events become operational. Reuse the durable event log to show latest activity and event count on cards and detail drawers so users can triage projects before opening the full timeline.
-- Collaboration event logs need type filters once multiple workflow actions write to the same timeline. Count and filter events by operational type while preserving the project-specific audit trail and avoiding investment guidance.
-- Editable workflow owners should be persisted and audited once owner-role queues exist. Preserve `owner` in project records, expose a compact assignment control on each project card, and log `owner-changed` events so team handoffs remain traceable.
-- Shared research project queues need owner-role triage before true collaboration features. Derive lightweight workflow owners from next actions, expose owner filters and count cards, and keep the metadata operational rather than turning it into investment advice.
-- Queue handoffs should be previewable before copying. Render a compact, localized, research-only preview from the same generated handoff text and expose item counts so users can inspect shared workflow context before sending it to another reviewer.
-- Queue handoff copy actions should have first-class review event labels. If a workflow action is important enough to persist in `/api/project-events`, add localized event labels and tests so the timeline remains auditable instead of falling back to generic review-event copy.
-- Project queues need copyable handoff artifacts once they become operational surfaces. Generate grouped, research-only briefs from the same next-action metadata used by the UI, include concise project context and report links, and record the copy action in the review trail for auditability.
-- Saved project libraries should show queue counts for durable workflow states, not just filters. Pair next-action filters with compact count cards that update from the same `nextActionSummary` data and can set the matching filter directly, so users can operate large research backlogs at a glance.
-- Saved project libraries should pair workflow next-action summaries with matching filters. Once projects know whether they need evidence collection, report review, rerun, or archive handling, expose that state as a first-class filter and include it in search metadata so users can triage large project queues without opening each drawer.
-- Saved project libraries should turn durable workflow state into explicit next actions. Combine project status, task progress, remaining collection blockers, and report availability into a `nextActionSummary` so users can tell whether to collect evidence, rerun, review, deliver, or archive without opening every report.
-- Saved project libraries should summarize durable evidence task progress alongside quality deltas. Enrich `/api/projects` from `task_statuses.json` with total, verified, collected, and to-collect counts so users can triage evidence workflow progress without opening each generated report.
-- Saved project libraries should surface evidence-quality deltas directly on project records once audit summaries exist. Enrich `/api/projects` from durable evidence audit history and render compact project-card/detail impact summaries, but keep project status user-controlled rather than auto-promoting workflow state from quality deltas.
-- Evidence audit APIs should return summary-level quality delta data alongside detailed logs. Keep the detailed `audits` array for traceability, but also return a latest `summary` with project id, ticker, task id, before score, after score, and delta so UI surfaces can show import impact at a glance.
-- Completed preflight evidence gap tasks should carry a report-section handoff link, not only a search prompt. Enrich completed run records with `import_handoff_href` pointing to `#evidence-tasks`, and let the UI render both copy-search and open-import actions so users can move from run triage into evidence intake without hunting through the report.
-- Preflight evidence gaps should become executable tasks at the same point candidate coverage is computed. Derive missing primary/fact and risk tasks from ticker-level coverage, include copyable search prompts, and persist them through preview, queued/running records, completed job details, and reruns so users can act before reading the full report.
-- Candidate-level coverage belongs in the preflight payload, not only the final report. Return and persist ticker-level evidence, primary/fact, and risk counts so preview panels, Run History, and Job Detail explain why each candidate is included before report generation completes.
-- Async analysis jobs need backend-backed preflight metadata at queue time. Persist the resolver's canonical theme, candidate tickers, evidence coverage label, and source into queued/running records, then carry those fields through failed/completed worker writes so users can audit scope before the report exists.
-- Cancellable background jobs need terminal-state guards around shared run records. When a user cancels a queued/running job, persist `cancelled_at` and `completed_at`, clear the report href, and make the worker check for `cancelled` before writing failed or completed state.
-- Job detail and retry APIs need atomic run-state persistence once background workers update shared JSON. Guard `runs.json` reads/writes with one lock, write through a temp file plus `os.replace`, and make retry submissions preserve `query`, `language`, `retry_of_job_id`, and incremented `attempt` metadata.
-- Background analysis jobs should be introduced behind a JSON submission API while preserving deep-link compatibility. Let the homepage submit to `/api/analyze-jobs`, return `202` with `job_id` and `queued_at`, continue polling `/api/runs`, and keep `/analyze` as the fallback route for retries, direct navigation, and non-JavaScript recovery.
-- Run Center lifecycle should preserve queue metadata in the same durable run record before introducing async workers. Write `queued_at` before generation starts, carry it through running/completed/failed states, and show a localized queued state so users get immediate feedback without losing synchronous reliability.
-- Evidence import success should advance task state and audit history in the same server-backed workflow. When `/ingest-evidence` regenerates an analysis, it should mark the related task `verified`, persist quality-before/after audit context, and keep the rerun loop available without requiring manual status changes.
-- Evidence task status controls should become server-backed once they drive audit logs and rerun workflow. Keep localStorage as immediate fallback, but persist `to_collect`, `collected`, and `verified` status records through a filtered API so task progress survives refreshes, browser changes, and future multi-user review.
-- Project evidence audit logs should become server-backed once they are part of reusable project workflow. Keep localStorage as a fast fallback, but persist verified-task and rerun quality-contribution entries through a small filtered API so audit history survives browser changes and can later support multi-user review.
-- Project-level audit logs should summarize evidence-task verification and rerun quality contribution history inside the same drawer as project review actions. Users need task id, ticker, quality-before/after, delta, and timestamp in a compact durable local trail, not only hidden per-task state.
-- Evidence-task flows should preserve rerun and quality-delta hooks in both populated and empty states. Users need to see the verified-task rerun path before and after tasks appear, and verified task state should carry task id, ticker, quality-before, rerun URL, and quality-delta context into the next analysis run.
-- Project review actions should close the loop into visible next work, not only record clicks. Evidence-gap actions should focus the linked evidence task, rerun actions should preserve project identity and quality-before/after context, and the drawer should show the user what changed.
-- Local preview startup must tolerate stale served artifact cleanup. If generated UI rebuilds replace served pack directories, deletion can race with already-missing files; handle `FileNotFoundError` with a bounded retry and cover it with a regression test.
-- Project detail drawers should pair event history with explicit next-action controls. Once users can see review history, add compact actions for evidence closure, rerun, delivery marking, and report opening so the drawer guides workflow instead of becoming a passive log.
-- Review timelines should graduate to a server-backed event log once they become part of a reusable project workflow. Keep browser state as a fast fallback, but persist detail-open, status-change, and handoff-copy events through a small filtered API so review history survives browser changes and can later support multi-user workflows.
-- Saved-project review flows should keep a compact event trail inside the same detail drawer. Local timeline events for detail opens, status changes, and handoff-copy actions give users auditability without adding another crowded page.
-- Saved-project lists should provide an in-place detail drawer before forcing users to navigate away. Keep quality, gaps, status, next action, and report entry in the drawer so review stays focused and the main project library remains compact.
-- Saved-project libraries need search, sort, and tag controls before accumulating many analyses. Keep the management controls compact, derive tags from existing metadata, and preserve comparison/share flows when filtering the visible project list.
-- Multi-analysis comparison becomes shareable only when the matrix can produce a copyable handoff artifact. Keep the copied text research-only, derive it from selected project metadata, and include the boundary language in the artifact itself.
-- Persisted project libraries need selectable side-by-side comparison once users can accumulate multiple analyses. Keep the comparison compact inside the existing project area, persist only selected ids locally, and compare research metadata rather than introducing investment recommendations.
-- When running a long-lived local preview server, use a reusable TCP server (`allow_reuse_address = True`) and verify the HTTP endpoint after restart. A process can be terminated while the port is still briefly unavailable, so smoke tests must exercise restart behavior instead of only checking that a server can start once.
-- When a UI has both page filtering and generation workflows, keep them as separate visible controls. A search box should not be expected to launch analysis; provide an explicit submit button and route for new research generation.
-- Any action that can take more than a moment must provide immediate visible feedback and an `aria-live` status message before navigation or server work completes.
-- Generated UI must only link to assets served from the same local preview root. If source artifacts live outside that root, copy or publish them into a served subdirectory before rendering links.
-- Dense research dashboards should use progressive disclosure for long-form artifacts: keep the overview compact and open full reports in a drawer, modal, or detail pane on demand.
-- Local browser preview servers must handle concurrent requests. A single-threaded server can appear alive while one stalled connection blocks every link and makes valid URLs time out.
-- Bilingual UI must localize generated artifacts, not just chrome text. When a user opens a Chinese dashboard report, the memo body, headings, disclaimer, preview extraction, and UI-launched generation path must all use Chinese.
-- UI-launched analysis should return a readable diagnostic report even when readiness gates block a formal memo. Otherwise users see an empty report area instead of actionable evidence gaps.
-- A stock-selection product cannot rely on a fixed ticker list. User-entered industries, sectors, themes, and tickers need an explicit resolver that expands aliases, ranks evidence-backed candidates, and keeps configured boundaries when running scoped demos or tests.
-- Chinese investment reports need product-level sections, not only translated evidence memo labels. Include conclusion, factor interpretation, and tracking indicators while keeping research-only language.
-- Stable stock-selection systems need a maintained stock universe catalog. Evidence-derived tickers alone under-cover new industries and can bury the most relevant companies behind noisy adjacent evidence.
-- Resolve known industry/theme aliases before ticker-symbol detection. Short uppercase themes such as `HBM` can look like tickers, so alias intent must take precedence.
-- Raw numeric scores are not enough for a stable investment research product. Users need an interpretable rating, confidence tier, and explicit key gaps visible at both report and dashboard levels.
-- Scorecard metadata must be generated once from scoring logic and then propagated through memo headers, pack indexes, and UI previews; otherwise the homepage and full report can tell different stories.
-- Generated reports must be discoverable from the product homepage. Persist a small manifest when reports are created, then render it as a report library so users do not depend on ad hoc deep links.
-- Report history links must be language-aware. Chinese homepages should open `index.zh.html`, while English homepages should open `index.html` for the same generated analysis.
-- Industry research pages need side-by-side candidate comparison before report drilling. Separate memo cards are useful, but users need one compact table that compares score, rating, confidence, key gaps, and evidence coverage.
-- Comparison tables should reuse the same scorecard metadata as memo previews and report headers, so the homepage, cards, comparison table, and full report stay aligned.
-- Financial and market metrics should be a maintained local catalog until a real data feed exists. Clearly separate source-backed metrics from qualitative placeholders, and render unknown fields as `n/a` instead of fabricating precision.
-- Generated deep analysis pages need to inherit shared UI artifacts such as `metrics.json` from parent directories. Do not assume every generated `analyses/<slug>/` page has its own complete local copy.
-- Source-backed UI metrics must refresh stale generated artifacts from the canonical config source during project builds. Otherwise dashboards can silently keep showing old `output/ui/metrics.json` values after `config/financial_metrics.json` is regenerated.
-- Do not infer losses from accounting label text such as `Net Income (Loss)`. Profitability classification must use the reported amount sign or explicit negative direction, otherwise profitable companies get mislabeled.
-- Keep metric catalogs language-neutral and localize values at render time. This avoids duplicating source-backed metric data while still making Chinese UI pages readable.
-- When localizing metric values, match complete canonical phrases before prefix rules. Otherwise values such as `source-backed revenue base` can be incorrectly handled as a revenue amount.
-- Reports should convert scorecard gaps into explicit evidence-acquisition actions. Static gap labels are useful for triage, but users need concrete next evidence steps before trusting or promoting a research candidate.
-- Smoke tests for action plans should validate that the section exists and contains an action matching the current scorecard gaps, not force every report to contain every possible gap action.
-- Report drawers should render Markdown into structured, readable HTML rather than showing raw `<pre>` text. A product UI should optimize for reading and scanning, not just file access.
-- Any client-side Markdown rendering must escape HTML before applying simple inline formatting. Treat fetched report files as content, not trusted markup.
-- Release hardening tests may assert exact compliance phrases. Preserve canonical wording such as `research only` in release and safety docs unless tests are updated with the wording change.
-- Report safety scans should distinguish generated product prose from quoted source evidence. External evidence excerpts may contain investment-action words, but the product itself must not generate direct recommendations, target prices, or position-sizing instructions.
-- UI product flows need HTTP-level E2E coverage in addition to static HTML tests. A local server test should exercise `/analyze`, generated language-specific report pages, and served memo assets so broken routing or drawer links are caught before handoff.
-- Report-quality sections should prioritize actionable evidence gaps over aggregate score labels. Users can act on primary-source depth, demand validation, invalidation planning, and crowding review more directly than on a generic low-score label.
-- Industry pages can look complete while the maintained universe still has uncovered candidates. Add a universe-level coverage matrix before promotion so missing ticker evidence, missing primary sources, and missing risk coverage are visible outside individual memo generation.
-- Generated operational reports must be both copied into the served UI root and linked from visible UI controls. A file that exists under `output/reports/` is still a product bug if users can only discover it by guessing an unserved path.
-- Generated analysis pages need query-specific operational reports, not copied default homepage reports. If a user launches `HBM`, coverage and acquisition reports must say `HBM`, not a previous default query such as `存储芯片`.
-- Chinese product flows must localize generated operational report bodies, not just UI buttons. Drawer-opened reports should use Chinese headings, table labels, gap labels, and source-target descriptions when launched from the Chinese UI.
-- Analysis pages should surface the highest-priority evidence-acquisition tasks inline, not only behind an operational report link. Users need immediate next actions, source targets, and copyable search prompts before they can raise confidence in an industry or ticker report.
-- Evidence task cards should support lightweight local progress tracking. For a static local UI, `localStorage` status controls are enough to let users mark tasks as to-collect, collected, or verified without adding backend state too early.
-- Evidence import loops should verify gap transitions after intake. When a primary-source task is completed, tests should assert that the primary/fact gap disappears and the next remaining gap is promoted, not that stale acquisition prompts remain.
-- Evidence import UX needs both optimistic feedback and failure recovery. Long-running local form posts should show an `aria-live` submitting state, and rejected evidence should return a readable localized page with the exact validation detail and a clear correction path.
-- Imported evidence history must be server-rendered from durable manual intake, not only shown through a one-time success banner. If a completed task drops out of the current acquisition queue after the gap is closed, keep a resolved history card so users can audit what changed.
-- Investment research homepages need an explicit workflow model, not only a search launcher and report list. Show users how inputs flow into candidate comparison, report reading, evidence-gap closure, and reruns, and provide example launches that reuse the real analysis route.
-- Analysis generation needs an explicit run-center state model. A launcher alone hides progress and retry context, so persist the last run locally and show the same steps users expect the backend to perform.
-- Stable local product flows need server-side run records, not only browser state. Persist `/analyze` success and failure records behind a small status API so refreshes, retries, diagnostics, and future multi-user UX have a durable source of truth.
-- Run records become product value only when users can act on them. Pair every persisted analysis run with visible history, report-open actions, rerun actions, and failure diagnostics in the Run Center.
-- Product-grade analysis generation should create a run record before work starts, not only after it ends. Preserve `started_at` through completion or failure, and return localized retry pages for failed runs so users can recover without reading raw server errors.
-- Run Center polling should begin at submit time and stop on terminal backend states. Tie the latest-report action to the backend `href` so users can open the completed analysis immediately without manually searching the run history.
-- Report workbenches should preserve structure in empty and completed states. If there are no generated reports or no pending evidence tasks, render a localized empty-state card with the same filters and actions instead of removing the section.
-- Analysis launch previews should be backend-backed, not only client-side heuristics. Use the same topic resolver, maintained stock universe, evidence files, and manual intake data as the actual analysis run so previewed intent, canonical theme, candidates, and evidence coverage match the generated report.
-- Generated analysis pages need a top-level briefing before detailed tables and memos. Users should see the top candidate, coverage state, key evidence gap, and next actions immediately after report generation instead of having to infer workflow from long report sections.
-- A stock-selection research UI should separate decision triage from trade recommendations. Show ranking rationale, key drivers, counter-thesis risks, and runner-up context while explicitly labeling the panel as research-only triage.
-- Candidate ranking should be interactive when multiple research dimensions matter. Let users switch between score, evidence depth, primary-source depth, and risk coverage, and update the explanation in place so ranking changes remain auditable.
-- Stable research products need an explicit publish-quality gate before users share or trust generated reports. Surface publish status, quality score, evidence depth, primary-source depth, risk coverage, and remaining checklist gaps separately from investment conclusions.
-- Research products become reusable when local state is explicit. Before adding backend accounts, persist saved report links, candidate marks, sort preferences, and quality snapshots locally so users can resume analysis without re-discovering generated pages.
-- Generated analysis becomes easier to share when a concise deliverable artifact is created alongside the interactive dashboard. Keep the interactive UI for exploration, but always emit a Markdown report with topic, candidate ranking, quality gate, evidence gaps, next actions, and research-only boundaries.
-- Deliverable research reports need direct evidence traceability, not only summary conclusions. Include key primary-source title, id, usage, claim, and excerpt when available, and show an explicit primary-source empty state when not available instead of fabricating support.
-- Evidence acquisition queues should behave like executable playbooks, not passive to-do lists. Each task needs a reason, acceptance criteria, and after-import action, and empty states must stay explicit when no evidence work is currently pending.
-- Evidence import should close the loop visibly. After a source is imported, show which gap was closed, that the analysis was rerun, how to review the quality gate, and whether remaining evidence tasks still need attention.
-- Evidence import quality feedback must compare real snapshots, not implied improvement. Capture the pre-import quality score in the form, parse the regenerated report's post-import score, and show an explicit unavailable state whenever either side is missing.
-- Generated analysis pages need a machine-readable manifest alongside human-readable reports. Persist input resolution, candidates, quality snapshot, report links, and research-only boundaries so UI surfaces, automation, sharing, and debugging all use the same run metadata.
-- Run history should summarize completed analyses from the manifest, not only store a destination URL. Persist manifest href, candidate tickers, canonical theme, and quality status in run records so users can triage old runs without reopening every report.
-- Shareable research outputs should expose both human and machine handoff links. Pair every deliverable report link with its analysis manifest link, and copy absolute URLs from the current page so users can pass reports to others without reconstructing local paths.
-- Report-heavy analysis pages need a consolidated delivery package, not scattered links. Put the deliverable, manifest, coverage matrix, and evidence queue in one compact panel that can open each artifact in the reader and copy each link.
-- Report drawers should retain artifact actions after content opens. Show the current report URL, copy-current-link action, and full-page action inside the reader so users do not have to return to source cards for handoff or navigation.
-- Stable research products need one-click handoff bundles. In addition to per-artifact copy buttons, generate a concise copied checklist with all human-readable and machine-readable report URLs so users can pass the full analysis package to others.
-- Delivery packages should summarize publish quality at the handoff point. Reuse the same quality snapshot as the gate, and show status, score, top candidate, remaining gaps, and research-only boundary without adding another large dashboard section.
-- Report readers need in-drawer navigation for long generated research artifacts. Build the outline from Markdown headings, surface a compact highlights list, and reset drawer navigation state between reports so users can review without returning to the main dashboard.
-- Generated analysis pages should turn quality gaps into one-click research actions. Route users from the summary to evidence tasks, deliverable reports, acquisition queues, and copyable search prompts so the report naturally continues into evidence collection and rerun workflows.
-- Reusable investment research products need a project object, not only generated pages. Save each analysis with query, href, status, quality snapshot, top ticker, and gap metadata so users can track pending evidence, reviewable reports, delivered work, and reruns across sessions.
-- Local project libraries should graduate to a server-backed store before account features. Keep browser localStorage as an immediate fallback, but expose a simple project API and durable JSON store so saved research survives browser changes and can later map cleanly to multi-user persistence.
-- Saved project libraries need in-place triage and comparison once they can persist. Add status filters and aggregate metrics such as total projects, average quality score, evidence backlog, and delivered count so users can manage many analyses without reopening every report.
-- Filtered project handoffs should derive from the same visible record set as the UI. Once project libraries have filters, activity states, and sort controls, copy/export actions must respect current filters and ordering instead of defaulting to the full project store.
-- Long-running trackers with copyable restart prompts must update the prompt whenever task status changes. Otherwise the next session can follow stale instructions even if the progress table was updated correctly.
-- Integration boundary guardrails should include at least one executable static test once they are meant to protect future code, not only prose documentation. Keep the test narrow so it scans intended runtime paths and avoids false positives from the boundary document itself.
-- Optional DSA add-ons should keep heavy dependencies out of lightweight import paths. If a feature can be default-off, lazy-load repository/storage/provider helpers and optional services at the callsite so focused tests still run in known missing-dependency environments such as absent `pandas`.
-- When adding config registry keys, update both backend metadata and frontend settings-help locale maps in the same stage. The full config registry test checks every `help_key`, so a backend-only registration leaves the UI contract incomplete.
-- Do not use Python `py_compile` on TypeScript files. Validate Python with `py_compile`, and cover TypeScript locale/config changes through the repository's existing registry/help tests unless a frontend toolchain is available.
-- Tests that prove "Serenity does not change DSA trading fields" should compare against a flag-off baseline response, not hardcode expected action labels. DSA may normalize `action` from score/advice independently of Serenity.
-- Pydantic `model_dump()` keeps optional `None` fields by default. Smoke tests for backward compatibility should assert no effective payload value, or use explicit exclude-none output, instead of assuming optional fields disappear from dumps.
-- After every stage-level task, update the tracker, task log, restart prompt, and reusable lessons before final handoff. The restart prompt must include completed scope, unfinished next step, commit ids, validation evidence, known environment blockers, and files that must not be staged.
-- Review gates should use independent read-only checks to look for contract-layer gaps, not only rerun existing tests. When a subagent flags a plausible API/schema risk, convert it into red-green regression tests before declaring the phase verified.
-- Research-only API blocks need defense-in-depth at every boundary. Storage sanitization is not enough if the public Pydantic schema allows extra fields; forbid unexpected audit fields and explicitly test that trading fields such as `operation_advice` are rejected.
-- Failed-open payloads often use unavailable values. Keep API schemas aligned with fail-open output, for example allowing `None` for unavailable research-quality scores, and verify the actual failed-open response model path.
-- When a user asks for a restart prompt or stage handoff, update the tracker first, then the task log, then lessons if a reusable habit changed, and finally provide a copyable next-start prompt that names completed work, unfinished next step, latest commit ids, validation evidence, known blockers, and files that must not be staged.
-- Research-only Agent tools can still become model-selectable once registered globally. Require explicit caller-provided context, return blocked diagnostics when context is absent, avoid provider/DB fetches in the handler, and test both schema text and recursive output for trading-field leakage.
-- Treat phase-completion handoff as an automatic closeout step, not a user reminder. After every verified stage, update the tracker status, task log review, reusable lessons when applicable, restart prompt, latest commit ids, validation evidence, known blockers, and forbidden-stage files before final response.
-- Evidence-gap Agent tools should be thin normalizers over audited acquisition tasks: require caller-provided context, reuse existing service outputs, sort tasks deterministically, and include persistence-ready fields without creating DB records in the Agent tool stage.
-- After every stage-level task, automatically refresh development status docs and the copyable restart prompt before final handoff; include completed scope, unfinished next step, latest Serenity/DSA commits, fresh validation evidence, known blockers, and forbidden files without waiting for a user reminder.
-- Globally registered research-only Agent tools need both prompt-level and executor-level gates. Test the OpenAI tool declarations and the registry passed to the runner so default analysis paths cannot select auxiliary tools unless the user explicitly asks for research quality or evidence gaps.
-- When a stage finishes, treat tracker/todo/lessons/restart-prompt refresh as part of the task itself: update completed vs incomplete scope, next step, latest commits, validation evidence, known blockers, and forbidden generated files before final response and commit only owned documentation changes.
-- Snapshot-backed research task APIs should return stable row anchors such as `history_id`, `query_id`, `stock_code`, and `report_type`; otherwise duplicate analysis snapshots become risky to update from an intelligence workflow.
-- API tests that import the full DSA app may need the same optional dependency stubs as existing smoke tests. Keep those mocks local to the test and verify the red failure reaches the intended route or service contract, not an unrelated missing package.
-- Phase review verification commands can drift as filenames change. Before recording a guard result, search for the current test path and rerun the actual guard so stale command failures are documented as replaced, not ignored.
-- Provenance IDs should be stable internal references, not raw source paths. Use an internal namespace plus sanitized external URLs, excerpt hashes, and claim IDs; explicitly mark missing source metadata in diagnostics instead of copying local paths or full context into API snapshots.
-- Release gates that protect optional research add-ons should run in both PR CI and tag-release workflows; PR-only CI can be bypassed by release tags, so add tests that assert every publication path invokes the offline gate without secrets or external providers.
-- Serenity-led DSA migration means `serenity-alpha-lab` remains the primary project, product shell, and long-term runtime. `daily_stock_analysis` is the source system to migrate from: preserve its analysis pipeline, market data, Web/API, scheduling, notification, portfolio/backtest, Agent, and report capabilities, then adapt them to Serenity's evidence-first investment research discipline, provenance, safety scanner, and research-only guardrails.
-- For Serenity-led DSA migration, Phase 0 guardrails must be executable before migration code moves. Keep a path-based inventory artifact plus a narrow runtime AST import-boundary test, and scan only `src/serenity_alpha_lab` for external DSA checkout imports so historical docs and the guard test itself do not create false-positive verification noise.
-- For Serenity-led DSA migration, every completed phase-level task must end with a commit before handoff. Stage only owned phase files, explicitly exclude protected generated `output/ui/*` artifacts, and use a detailed Chinese commit message so the next Codex session can continue without rediscovering status.
-- Local API skeleton tests must use the real persisted state shape, not a convenient fixture. When exposing run-state over a new API, cover the current `{ "runs": [...] }` JSON contract and any intentional legacy compatibility so endpoint tests do not pass while production state reads empty.
-- After each phase-level task is completed and committed, automatically refresh the development status docs and copyable restart prompt before handoff. The prompt must clearly mark completed phases, incomplete phases, latest commit ids, verification evidence, next phase, and protected files that must remain unstaged.
-- Market-data provider migration should start with provider-neutral Serenity contracts and in-process stub tests before any live provider adapter. This preserves default-off credentials, avoids network/provider SDK drift, and keeps DSA as source reference rather than runtime dependency.
-- Provider normalization must reject non-finite numeric payloads such as `NaN`, `inf`, and `-inf`. Treat them as missing data so invalid provider responses cannot pass `has_basic_data()` or leak into JSON/report surfaces.
-- After every completed migration phase, automatically update tracker, task log, lessons, restart prompt, verification evidence, latest commit ids, and next-phase status before final handoff; do this even when the user does not explicitly request it.
-- For Serenity-led DSA migration, stock-analysis pipeline outputs should convert market data into evidence items and readiness-gated research signals, not direct trading advice. Block report generation when source coverage is incomplete, and keep all tests stubbed/offline until live provider adapters are explicitly added.
-- For Serenity-led DSA report migration, migrate report templates as research-only structure rather than vocabulary: keep useful sections such as intelligence brief, data view, readiness guardrails, signal attribution, history, and provenance, but safety-scan generated text before writing artifacts and attach stable claim/evidence refs to every key claim.
-- When any migration phase finishes, automatically refresh development status docs before final handoff: update completed/pending phase tables, task checklist review, reusable lessons, copyable restart prompt, latest commit ids, validation evidence, next-step scope, and protected files; then commit only owned docs/source files while leaving protected generated UI artifacts unstaged.
-- Treat phase-planning checkpoints as trackable stage work, even before implementation starts. When a checklist/approach decision is completed, immediately refresh tracker, `tasks/todo.md`, lessons, and restart prompt so the next session sees "planning complete / implementation not started" instead of stale "write the plan first" instructions.
-- For Serenity-owned frontend migration, do not copy source-system React apps wholesale. Start with a minimal route inventory, typed report artifact fixtures, report semantics panels, and tests that reject early Phase 6/7 surfaces, external checkout strings, and unsupported trading language.
-- Frontend dependency ranges can drift to unavailable transitive packages in local registries. Pin Playwright when needed, record the reason, and keep app-local `node_modules`, `dist`, Playwright reports, and test-results ignored and cleaned before staging.
-- Playwright browser availability is an environment dependency. If bundled Chromium download is blocked or too slow, use an installed browser channel for smoke tests and record that verification detail in the handoff.
-- Portfolio/backtest/alert/notification migration should start as pure research contracts before any persistence, live delivery, or UI expansion. Keep portfolio and backtest outputs as validation evidence, keep monitor evaluations as default-off dry-runs with handoff records, and expose only no-secret readiness/notification status until explicit configuration and tests justify more runtime surface.
-- After a phase implementation commit, refresh tracker and restart prompt again with the final handoff-docs commit id. The next session should see the actual latest HEAD, not the implementation commit as "current" after closeout docs have been committed.
-- Phase 7 runtime migration should separate capability contracts from transports and packaging. Agent tools must require explicit caller context and allowlists; Bot commands should be platform-neutral and default-off; Docker/CI should package only Serenity-owned local runtime surfaces; Electron, auto-update, and external Bot adapters should wait behind explicit parity and threat-model gates.
-- An offline application release gate should prove no-secret/no-provider behavior without silently passing unavailable checks. Required failures block release, environment-dependent browser or Docker checks may be skipped only by explicit caller choice with a recorded reason, and PR/branch/tag paths should invoke the same machine-readable gate.
-- Desktop migration can be complete as a documented runtime-readiness contract before native packaging exists. Record loopback commands, local asset ownership, disabled updates, unbundled credentials, and the exact parity criteria that must pass before Electron or installer work begins.
-- Caller-provided Agent context needs both recursive forbidden-key checks and an allowlist of valid state values. Unknown readiness/status strings must fail closed instead of becoming public tool or Bot statuses.
-- Platform-neutral Bot output still needs a final report-safety pass after Agent normalization. Key-level field rejection cannot prevent unsafe advice language embedded inside otherwise allowed signal values.
-- Machine-readable release results should always include a reason and sanitize repository-root paths from stdout/stderr tails. Environment-dependent checks may be skipped only by explicit caller choice, and the exact daemon/tool blocker must remain visible in handoff evidence.
-- When CI runtime versions and release entrypoints change, update legacy workflow-hardening tests in the same stage. Otherwise the full suite can enforce an obsolete Python version or bypass the new unified gate despite focused Phase tests passing.
-- Standing project habit reaffirmed by the user: after every stage-level task, automatically refresh and commit the tracker, `tasks/todo.md`, reusable lessons, and copyable restart prompt before the final response. The handoff must distinguish Completed, Not Started, Environment Blocked, and Deferred work, include current commits and verification evidence, preserve protected files, and never wait for another reminder.
-- Post-migration Web parity should use a versioned, allowlisted backend artifact DTO rather than letting the browser parse Markdown, combine unrelated responses, or cast static JSON directly into a UI model. Keep canonical manifest generation in the backend and use a strict frontend decoder/adapter.
-- Fixture replacement must fail closed. If `research_only`, readiness, source coverage, skeptical review, report safety, or key-claim provenance is missing or invalid, render an explicit unavailable/blocked state instead of filling gaps from a sample fixture.
-- The user reconfirmed the standing closeout habit after the runtime-parity design checkpoint: every stage-level completion must automatically update and commit the migration tracker, `tasks/todo.md`, reusable lessons, and the copyable restart prompt with current commits, verification evidence, next action, blockers, deferred scope, and protected files.
-- Runtime-parity planning checkpoints must distinguish pre-implementation baselines from implementation evidence. Every TDD task should name the exact red command and intended missing behavior, and planning must not be reported as runtime parity completion before those tests fail for the expected reason and later pass.
-- When a stage-level handoff or restart prompt is requested, perform the tracker/todo/lessons/restart-prompt refresh and commit it in the same turn; do not merely quote stale status text or wait for another reminder.
-- Canonical artifact timestamps must be timezone-aware and normalized to UTC before both human and machine rendering. Reject naive datetimes so a Markdown `UTC` label can never disagree with the manifest ISO offset.
-- Canonical manifest tests should assert the exact approved top-level allowlist, not only individual required fields. This catches accidental path leakage, internal-state exposure, and unreviewed contract expansion.
-- Fixed-name artifact readers must validate resolved containment for both manifest and report files, reject symlink escapes and loops, and convert `OSError`, `RuntimeError`, and `ValueError` into stable sanitized repository errors.
-- Allowlisting keys is insufficient when allowlisted values can contain local paths or malformed URLs. Validate canonical path literals and trusted provenance URL schemes before returning manifest or summary DTOs.
-- Artifact API leakage guards must validate trusted URL candidates structurally before masking them and scan only the remaining free text. Cross-platform tests should cover malformed URLs, POSIX/Windows/UNC/file paths, IPv6/query URLs, HTML closing tags, and a finite allowlist of slash-prefixed market symbols so the boundary fails closed without rejecting legitimate research content.
-- Shared frontend view-model migrations must include every current compile-time consumer in the same slice, even when a later task owns the final runtime replacement. Update the temporary production fixture and semantic renderer enough to keep `tsc -b` green, but defer deleting the fixture until `App` no longer imports it; focused Vitest alone can hide this dependency break.
-- Frontend artifact loaders must preserve an already-received HTTP safety classification when response-body parsing fails. Abort remains highest priority; for non-2xx responses, the 404/409/422 fallback outranks body `TypeError`; only successful-response body `TypeError` becomes `network_unavailable`. Keep backend reason values in explicit per-status allowlists and lock the complete current set with parity tests.
-- Route-intercepted Playwright tests do not prove that a Vite loopback proxy works. When proxy configuration changes and `reuseExistingServer` is enabled, restart the dev server and compare a real proxied response against the loopback backend using a disposable artifact; keep route interception for deterministic non-default UI and blocked-state semantics.
-- Closeout verification on a machine with multiple editable checkouts must prove which source tree Python imports before accepting pytest or `make verify` evidence. Print `serenity_alpha_lab.__file__`, pin `PYTHONPATH="$PWD/src"` for current-workspace commands, and scope diff hygiene around explicitly protected dirty paths such as `git diff --check -- . ':(exclude)output/ui/**'` so validation neither certifies the wrong checkout nor reads protected artifact diffs.
+## 2026-07-31: SAL-P6-003 后再次提醒时必须把状态复核锚点推进到最新恢复入口
+
+- 纠正来源：`SAL-P6-003` 加固密钥与配置实现 checkpoint `984813fd`、状态同步 checkpoint `00418b3d` 和状态同步 hash 记录 checkpoint `70b003c2` 已完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使阶段任务实现、状态同步和 hash 记录已经提交，如果 `docs/development-status.md` 顶部恢复栏、清单尾部、`tasks/todo.md` 或下次启动提示词仍把状态复核/最终锚点停在上一任务，下次会话会误判最新可恢复入口，或需要人工从 `git log` 拼接状态。
+- 规则：每个阶段性任务完成后的最终交接必须再次复核并同步：已完成/未完成范围、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、状态同步 hash 记录、状态复核 checkpoint、最终锚点、严格禁区和完整可复制启动提示词；用户再次提醒该习惯时，立即追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P6-004` 加固输入、抓取与报告渲染开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、中文 checkpoint 和必要 hash-anchor；不得跳到 `SAL-P6-005+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender、release packaging 或正式组合回测推广。
+
+## 2026-07-30: SAL-P6-002 后必须把状态同步 hash 记录推进到最新恢复入口
+
+- 纠正来源：`SAL-P6-002` 资源与 Artifact 授权实现 checkpoint `33f76bad`、状态同步 checkpoint `09d49744` 和状态同步 hash 记录 checkpoint `03c31a21` 已完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和状态同步 hash 记录都已提交，如果 `docs/development-status.md` 顶部恢复栏、清单尾部或 `tasks/todo.md` 的最新复核入口仍停在 `SAL-P6-001`，下次会话会误判 `SAL-P6-002` 是否已完全收尾，或需要人工从 `git log` 拼接最新锚点。
+- 规则：阶段性任务完成后的最终交接必须把最近实现 checkpoint、状态同步 checkpoint、状态同步 hash 记录、状态复核 checkpoint、已完成/未完成范围、当前 READY 任务、严格禁区和可复制启动提示词同时推进到最新任务；用户再次提醒该习惯时，立即追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P6-003` 加固密钥与配置开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、中文 checkpoint 和必要 hash-anchor；不得跳到 `SAL-P6-004+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender 或正式组合回测推广。
+
+## 2026-07-30: SAL-P6-001 后再次提醒时必须把复核状态推进到 P6 当前入口
+
+- 纠正来源：`SAL-P6-001` 完善认证与 RBAC 实现 checkpoint `10397052`、状态同步 checkpoint `23878a6d`、状态同步 hash 记录 `a44e6483` 和状态同步最终固化 checkpoint `f4912114` 已完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使 P6 进度已推进到 `1/23`，如果顶部状态栏、清单尾部或启动提示仍只记录 P5 复核锚点，下一次会话会误判 `SAL-P6-001` 是否已完整收尾，或需要人工把 `git log` 与状态文档重新拼接。
+- 规则：每个阶段性任务完成后，最终交接前必须再次复核并同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md`、`tasks/lessons.md`（如有纠正）和下次启动提示词，写清最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、已完成范围、未完成起点、当前 READY 任务和严格禁区。
+- 执行：后续从 `SAL-P6-002` 资源与 Artifact 授权开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和中文 checkpoint；不得跳到 `SAL-P6-003+`、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender 或正式组合回测推广。
+
+## 2026-07-30: SAL-P5-018 后必须把实际 checkpoint hash 回写到恢复提示词
+
+- 纠正来源：`SAL-P5-018` Gate G5 可信研究评审 checkpoint `e65172b1` 完成后，用户要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使阶段任务已经提交，如果 `docs/development-status.md`、`docs/development-progress-checklist.md` 或下次启动提示词仍写“本次提交生成后确认 / 将由本次中文提交生成”，下次恢复仍要人工查 `git log`，也容易误判 P5/G5 是否已完全收尾。
+- 规则：每个阶段性任务完成后，必须立即把实际实现 checkpoint hash、完成/未完成范围、当前 Phase/Gate、当前 READY 任务、最新状态同步锚点、严格禁区和可复制下次启动提示词回写到仓库文档；用户再次提醒该习惯时，必须追加本文件并提交中文状态同步 checkpoint。
+- 执行：后续从 `SAL-P6-001` 完善认证与 RBAC 开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、验收证据、风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和中文 checkpoint；不得跳到真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、通知 sender 或正式组合回测推广。
+
+## 2026-07-30: SAL-P5-017 后再次提醒时必须把复核锚点推进到最新任务
+
+- 纠正来源：`SAL-P5-017` Agent 金标与回归评测实现 checkpoint `91d6d15b`、状态同步 checkpoint `4607532d`、状态同步 hash-anchor checkpoint `6e75580a` 和最终固化 checkpoint `8e17b3df` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 已经落地，如果 `docs/development-status.md`、`docs/development-progress-checklist.md` 或下次启动提示词的状态复核锚点仍停在 `SAL-P5-016`，或全局未完成摘要仍写“尚未完成 Agent 金标与回归评测”，下次会话会误判 `SAL-P5-017` 是否已经完整收尾。
+- 规则：每个阶段性任务完成后的最终收尾必须再次扫描并同步已完成/未完成范围、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、状态同步 hash-anchor、状态复核 checkpoint、状态复核 hash-anchor、严格禁区和可复制下次启动提示词；用户再次提醒该习惯时，立即追加 lessons 并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-018` Gate G5 可信研究评审开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要 checkpoint；不得跳到真实 Provider/LLM、Worker loop、Qlib runtime、生产调度、正式组合回测推广或 P6 后续任务。
+
+## 2026-07-30: SAL-P5-016 后再次提醒时必须把复核动作本身落到仓库
+
+- 纠正来源：`SAL-P5-016` 引用 UI 与通知 Outbox 实现 checkpoint `518a785f`、状态同步 checkpoint `b562b844` 和状态同步 hash-anchor checkpoint `bfc921aa` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使清单和状态主体已经推进到 `SAL-P5-016`，如果顶部状态栏、尾部恢复摘要或下次启动提示词仍留下旧任务复核锚点、hash-anchor 占位或“尚未完成引用 UI/通知 Outbox”等过期表述，下次会话仍可能误判当前 READY 任务或重复启动已完成任务。
+- 规则：阶段性任务完成后的最终收尾必须额外扫描并消除旧占位和矛盾句子，写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、状态同步 hash-anchor、状态复核 checkpoint、严格禁区和可复制下次启动提示词；用户再次提醒该习惯时，立即追加 lessons 并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-017` Agent 金标与回归评测开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要 checkpoint；不得跳到 Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
+## 2026-07-29: SAL-P5-015 后再次提醒时必须把状态同步 hash-anchor 和状态复核入口一起固化
+
+- 纠正来源：`SAL-P5-015` 可信 ResearchReport Renderer 实现 checkpoint `a816cf72`、状态同步 checkpoint `f9e9c961` 和状态同步 hash-anchor checkpoint `65a0e446` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 已提交，如果 `docs/development-status.md` 的最新状态复核仍停在较早任务，或下次启动提示词没有写清最新 hash-anchor 与唯一下一步，恢复会话仍需要人工拼接 `git log`，也可能误跳到 Agent 评测、Gate G5 或后续 P5 runtime。
+- 规则：每个阶段性任务完成后，最终交接前必须额外复核 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md` 和下次启动提示词，写清最近实现 checkpoint、状态同步 checkpoint、hash-anchor、状态复核入口、已完成/未完成范围、当前 READY 任务和严格禁区；用户再次提醒该习惯时，立即追加 lessons 并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-016` 引用 UI 与通知 Outbox 开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要 checkpoint；不得跳到 Agent 评测、Gate G5、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
+## 2026-07-28: SAL-P5-013 后再次提醒时必须推进状态复核锚点与可复制提示词
+
+- 纠正来源：`SAL-P5-013` Citation Validator 实现 checkpoint `dfd82553`、状态同步 checkpoint `a64145ac`、状态同步 hash-anchor checkpoint `1d421656`、状态同步最终固化 checkpoint `1326b033` 和最终锚点记录 checkpoint `84424467` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步、hash-anchor 和最终锚点记录都已完成，如果 `docs/development-status.md` 的最新状态复核 checkpoint、`docs/development-progress-checklist.md` 的尾部恢复摘要、`tasks/todo.md` review 或可复制启动提示词仍停留在上一任务，下次启动会误判是否已完整交接，或需要人工从 `git log` 拼接当前恢复入口。
+- 规则：每个阶段性任务完成后的最终交接必须把最新完成范围、未完成范围、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、状态复核 checkpoint、严格禁区和可复制启动提示词同步到仓库文档；用户再次提醒该习惯时，必须新增 lessons 并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-014` Agent 工具安全开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor；不得跳到报告渲染、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
+## 2026-07-28: SAL-P5-012 后再次提醒时必须推进状态复核与启动提示词
+
+- 纠正来源：`SAL-P5-012` 模型路由、缓存与预算实现 checkpoint `83ae4310`、状态同步 checkpoint `a3224012`、状态同步 hash-anchor checkpoint `a7ab1a52` 和最终固化 checkpoint `e8a8e386` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步、hash-anchor 和最终固化都已完成，如果最新状态复核锚点、下次启动提示词或 lessons 没有同步到当前任务，下次启动仍可能误认为当前可执行任务是已完成的 `SAL-P5-012`，或跳过 `SAL-P5-013` 的严格边界直接进入报告渲染/真实 runtime。
+- 规则：每个阶段性任务完成后的最终交接必须再次复核 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md`、`tasks/lessons.md` 和下次启动提示词；用户再次提醒习惯时，必须新增 lessons、写清已完成/未完成、当前 READY 任务、实现/状态同步/hash-anchor/final-anchor 和严格禁区，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-013` Citation Validator 开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor；不得跳到报告渲染、真实 Provider/LLM、Worker loop、Qlib runtime、生产调度或正式组合回测推广。
+
+## 2026-07-28: SAL-P5-010 后再次提醒时必须推进状态复核 checkpoint
+
+- 纠正来源：`SAL-P5-010` Risk/Portfolio Agent 改造实现 checkpoint `22ecff19`、状态同步 checkpoint `490590ba`、状态同步 hash-anchor checkpoint `dbe74521` 和最终固化 checkpoint `c70a7077` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步、hash-anchor 和最终固化都已完成，如果 `docs/development-status.md` 的“最新状态复核 checkpoint”仍停在上一任务，下次启动会误判当前任务是否已完整交接，或者需要人工从 `git log` 拼接状态。
+- 规则：每个阶段性任务完成后的最终交接必须额外检查状态复核锚点；如果用户再次要求更新状态或提醒习惯，必须同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md`、`tasks/lessons.md` 和可复制启动提示词，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-011` 多空反证与最终综合开始，不等待用户提醒；完成或阻塞任一阶段性任务后自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor；不得跳到 Model routing、Citation Validator 或报告渲染任务。
+
+## 2026-07-28: SAL-P5-009 后状态复核必须把 hash-anchor 和可复制提示词同步到仓库
+
+- 纠正来源：`SAL-P5-009` Intel Agent 改造实现 checkpoint `a6974362`、状态同步 checkpoint `7521d6d9`、状态同步 hash-anchor checkpoint `c2da5fe8` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 都已完成，如果 `docs/development-status.md` 顶部状态、进度清单尾部或恢复提示词仍把最新 hash-anchor 停在上一任务，下次启动会误判当前进度，或者需要人工比对 `git log`。
+- 规则：每个阶段性任务完成、阻塞或形成可评审交付后，最终交接前必须复核并同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、验收证据/风险/决策登记、`tasks/todo.md` review、`tasks/lessons.md`（用户提醒或纠正时必更）和下次启动提示词；必须写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、严格禁区和可复制启动提示词。
+- 执行：后续从 `SAL-P5-010` Risk/Portfolio Agent 改造开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词和必要中文 checkpoint，不得跳到 Model routing、Citation Validator 或报告渲染任务。
+
+## 2026-07-27: SAL-P5-008 后用户再次提醒交接习惯时必须新增状态复核锚点
+
+- 纠正来源：`SAL-P5-008` Technical Agent 改造实现 checkpoint `74701974`、状态同步 checkpoint `7b0d572a`、状态同步 hash-anchor `cc1b327e`、最终 docs 固化 checkpoint `e35b0612`、状态复核 checkpoint `7d6b325f`、状态复核 hash-anchor `4f377abf` 和状态复核最终固化 checkpoint `044a487e` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使上一轮已经完成实现、状态同步、hash-anchor、最终固化和状态复核，如果用户再次提醒交接习惯，说明恢复入口仍需要把最新复核动作本身固化成项目规则和可追踪 checkpoint；否则后续可能只依赖聊天回复，而没有仓库内的最新执行记录。
+- 规则：每次阶段性任务完成后，最终交接前必须按固定顺序复核并必要时更新 `docs/development-status.md`、`docs/development-progress-checklist.md`、相关验收证据、风险/决策登记、`tasks/todo.md` review、`tasks/lessons.md`（用户提醒或纠正时必更）和下次启动提示词；同时写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、状态复核 checkpoint、严格禁区和可复制启动提示词，并提交中文 checkpoint。
+- 执行：后续从 `SAL-P5-009` Intel Agent 改造开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor，不得跳到 Risk/Decision Agent、Model routing、Citation Validator 或报告渲染任务。
+
+## 2026-07-27: SAL-P5-007 后状态复核必须推进状态复核锚点
+
+- 纠正来源：`SAL-P5-007` Agent Stage 持久化实现 checkpoint `c12b81fe`、状态同步 checkpoint `aac19354`、状态同步 hash-anchor `8d66ecf0` 和最终 docs 固化 checkpoint `f10b48f5` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使状态同步、hash-anchor 和最终 docs 固化都已完成，如果 `docs/development-status.md` 的“最新状态复核 checkpoint”仍停在较早的 P4 复核，下次启动会误以为 SAL-P5-007 后的状态复核没有落地，或者需要人工拼接 `SAL-P5-008` 的恢复入口。
+- 规则：每个阶段性任务完成后，最终交接前必须把最新状态复核 checkpoint、最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、完成/未完成范围、当前 READY 任务、严格禁区和可复制启动提示词同时推进到当前任务；用户再次提醒该习惯时，立即追加本文件，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-008` Technical Agent 改造开始，不等待用户提醒；阶段性交付结束前自动完成验证、状态快照、进度清单、证据/风险/决策、`tasks/todo.md` review、lessons（如有纠正）、恢复提示词、状态复核和必要 hash-anchor。
+
+## 2026-07-26: SAL-P4-022 后状态复核必须消除 checkpoint 占位并提交
+
+- 纠正来源：`SAL-P4-022` Gate G4 checkpoint `1466c11c` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可复制下次启动提示词，并再次强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使 Gate 文档、进度清单和状态文档已经同步，如果恢复提示词或状态栏仍保留“本次提交”“将由本次中文提交生成”等占位，下次启动仍需要人工查询 `git log` 才能确认真实锚点，降低可恢复性。
+- 规则：阶段性任务完成后必须把最新可评审交付 checkpoint 的实际 hash 写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 和下次启动提示词；用户再次提醒习惯时，立即更新本文件，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P5-001` 开始，不等待用户提醒；每个阶段性任务完成后自动执行实现/验证/状态/清单/证据/风险/决策/`tasks/todo.md` review/lessons（如有纠正）/恢复提示词收尾，最终回复直接给出可复制提示词和最新 checkpoint。
+
+## 2026-07-26: SAL-P4-021 后用户再次提醒时必须把交接习惯写成可执行收尾规则
+
+- 纠正来源：`SAL-P4-021` Quant Lab 实现 checkpoint `643b4452`、状态同步 checkpoint `70303f8f`、状态同步 hash-anchor `52830c20`、状态复核 checkpoint `6e8bb74a` 和状态复核 hash-anchor `8f3cfb79` 完成后，用户再次要求更新最新开发状态、标注完成/未完成、给出可直接复用的下次启动提示词，并强调“希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：即使主状态文档和进度清单已经推进到 `SAL-P4-022`，只要用户再次提醒固定习惯，就说明最终交接仍需要把“阶段任务完成后的状态同步动作”转化为更明确的执行规则；否则后续任务容易只做实现提交，遗漏 `tasks/todo.md` review、lessons、hash-anchor 或下次启动提示词。
+- 规则：每个阶段性任务完成、阻塞或形成可评审交付后，最终回复前必须按固定顺序复核并更新 `docs/development-status.md`、`docs/development-progress-checklist.md`、相关验收证据、风险/决策登记、`tasks/todo.md` review、`tasks/lessons.md`（如有用户纠正）和下次启动提示词；同时写清已完成范围、未完成起点、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、状态复核 checkpoint 和严格禁区，并提交中文 checkpoint。
+- 执行：后续从 `SAL-P4-022` Gate G4 开始，不等待用户提醒；完成或阻塞任务时先完成验证和文档同步，再给用户可复制的恢复提示词，不得跳过 Gate G4 启动 Evidence Agent、真实 Provider/LLM、Worker loop 或正式组合回测推广。
+
+## 2026-07-26: SAL-P4-020 后状态复核必须推进最新 hash-anchor 并直接给出启动提示词
+
+- 纠正来源：`SAL-P4-020` 实现 checkpoint `c1bb1dcc`、状态同步 checkpoint `64346b83` 和状态同步 hash-anchor `9c308f2e` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 都已经提交，如果 `docs/development-status.md` 顶部状态栏、进度清单尾部或下次启动提示词仍把最新 hash-anchor / 状态复核停在旧任务，下次恢复会误判 `SAL-P4-020` 是否已完整收尾，或跳过 `SAL-P4-021` Quant Lab 直接进入 Evidence Agent、真实 Provider/LLM 或 Worker loop。
+- 规则：每个阶段性任务完成后，最终交接前必须再次复核并同步最新完成/未完成范围、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、状态复核 checkpoint、严格禁区和完整可复制启动提示词；用户再次提醒该习惯时，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-021` 开始，不等待用户提醒；阶段性交付结束前自动完成实现/验证/状态/进度/证据/风险/决策/`tasks/todo.md` review/lessons（如有纠正）/恢复提示词，并创建可追踪中文 checkpoint。
+
+## 2026-07-25: SAL-P4-010 后状态复核必须在实现锚点后再落一次可恢复快照
+
+- 纠正来源：`SAL-P4-010` 实现 checkpoint `e194984c`、状态同步 checkpoint `e8ad2fd8`、状态同步 hash-anchor `ca9eabf2` 和最终锚点 `3a46eccc` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 都已经提交，如果 `docs/development-status.md`、`docs/development-progress-checklist.md` 或下次启动提示词仍把最新状态复核停在上一任务，下一次恢复会误判 `SAL-P4-010` 是否已经完整收尾，或绕过 `SAL-P4-011` 直接进入正式组合回测相关任务。
+- 规则：每个阶段性任务完成后，必须额外复核并同步最新完成/未完成范围、当前 READY 任务、实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、严格禁区和完整可复制启动提示词；如果用户再次提醒该习惯，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-011` 开始，不等待用户提醒；阶段性交付结束前自动完成实现/验证/状态/进度/证据/风险/决策/`tasks/todo.md` review/lessons（如有纠正）/恢复提示词，并创建可追踪中文 checkpoint。
+
+## 2026-07-25: SAL-P4-009 后状态复核必须把最终锚点和可复制提示词一起交付
+
+- 纠正来源：`SAL-P4-009` 实现 checkpoint `18d6782d`、状态同步 checkpoint `2d6f78a8`、状态同步 hash-anchor `6ecb95d3`、最终锚点固化提交 `dbc6f286` 和状态复核 checkpoint `1627ec4f` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 都已提交，如果最终交接没有直接给出最新完成/未完成范围、当前 READY 任务、最终锚点和可复制启动提示词，下次恢复仍需要人工拼接状态，容易误启动 `SAL-P4-010` 之外的正式组合回测或 Evidence/Worker 流程。
+- 规则：每个阶段性任务完成后，最终回复前必须复核 `docs/development-status.md`、`docs/development-progress-checklist.md`、任务 evidence、`tasks/todo.md` review 和必要的 `tasks/lessons.md`；明确最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final-anchor、已完成范围、未完成起点、当前 READY 任务、严格禁区和完整可复制启动提示词。
+- 执行：后续从 `SAL-P4-010` 开始，不等待用户提醒；完成阶段任务后自动做实现/验证/状态/进度/证据/风险/决策/lessons（如有纠正）/恢复提示词收尾，并提交中文 checkpoint。
+
+## 2026-07-25: SAL-P4-007 后状态复核必须推进到最新状态同步 checkpoint
+
+- 纠正来源：`SAL-P4-007` 实现 checkpoint `6e81ae6f` 和状态同步 checkpoint `8bc892d4` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现 checkpoint 已写入文档，如果顶部状态栏、进度清单尾部或下次启动提示词里的“最新状态同步/状态复核 checkpoint”仍停留在上一阶段任务，下次恢复会误判 SAL-P4-007 是否完整收尾，或重复启动已完成任务。
+- 规则：每个阶段性任务完成后，最终交接前必须把最近实现 checkpoint、最新状态同步 checkpoint、状态复核 checkpoint、完成范围、未完成起点、当前 READY 任务、严格禁区和可复制启动提示词全部推进到当前任务；用户再次提醒该习惯时，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-008` 开始，不等待用户提醒；阶段任务完成后自动完成实现提交、状态同步、必要 hash 同步/状态复核、`tasks/todo.md` review、`tasks/lessons.md`（若有纠正）和最终可复制启动提示词。
+
+## 2026-07-25: SAL-P4-006 后状态复核必须把最终固化锚点写入恢复提示
+
+- 纠正来源：`SAL-P4-006` 实现 checkpoint `1c5c6e81`、状态同步 checkpoint `76089299`、状态同步 hash-anchor `64c7998e` 和最终锚点固化提交 `ea244bdc` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现、状态同步和 hash-anchor 已提交，如果 `docs/development-status.md` 的“最新状态复核 checkpoint”仍停留在上一阶段任务，或最终交接没有给出可直接复用的启动提示词，下次恢复仍会误判当前任务是否已完整收尾。
+- 规则：阶段性任务完成后，最终交接前必须再次复核并更新 `docs/development-status.md`、`docs/development-progress-checklist.md` 和 `tasks/todo.md`：明确最近实现 checkpoint、状态同步 checkpoint、hash-anchor/final anchor、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制提示词；用户再次提醒该习惯时必须追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-007` 开始，不等待用户提醒；每个阶段性交付后自动执行实现提交、状态同步、必要 hash-anchor、状态复核、`tasks/lessons.md` 更新（若有纠正）和最终可复制启动提示词。
+
+## 2026-07-25: SAL-P4-006 子代理派发失败时必须立即降级为本地复核并记录
+
+- 纠正来源：`SAL-P4-006` 收尾期间多次尝试 code-review subagent，host wrapper 对空 optional fields、`message`/`items` 同时出现以及空 `items` 均拒绝，导致派发无法完成。
+- 模式：如果反复调整 subagent payload 仍被平台包装层拒绝，继续重试会消耗上下文且不增加验证质量；但 AGENTS.md 仍要求使用子代理策略，因此必须把尝试、失败原因和本地复核范围写入 review。
+- 规则：后续阶段任务需要 code review subagent 时，只做一次最小 payload 尝试；若仍因包装层 schema 被拒绝，立即停止重试，改为本地 senior review + 新鲜验证，并在 `tasks/todo.md` review 中记录 fallback。
+- 执行：从 `SAL-P4-007` 开始，子代理失败不得阻断实现/验证/状态同步；最终完成声明仍以本轮实际测试、diff review 和 checkpoint 为准。
+
+## 2026-07-25: SAL-P4-005 后状态复核必须记录 hash-anchor 与可复制提示词
+
+- 纠正来源：`SAL-P4-005` 实现 checkpoint `82580fdb`、状态同步 checkpoint `800bef4e` 和状态同步 hash-anchor `ee5761ba` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使已经完成实现提交、状态同步提交和 hash-anchor 提交，如果 `docs/development-status.md` 的最新状态复核仍停留在更早的 P3 checkpoint，或下次启动提示词没有列出最新 hash-anchor，下次恢复时仍会误以为状态同步不完整。
+- 规则：每个阶段性任务完成后，必须把最近实现 checkpoint、最新状态同步 checkpoint、最新 hash-anchor checkpoint、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词同时写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；用户再次提醒该习惯时，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P4-006` 开始，完成阶段任务后自动完成实现/验证/证据/状态/lessons/恢复提示词收尾；最终回复必须直接给出最新实现 checkpoint、状态同步或状态复核 checkpoint、hash-anchor checkpoint 和完整下次启动提示词。
+
+## 2026-07-25: SAL-P3-015 后状态复核必须保留最新已落地复核 checkpoint
+
+- 纠正来源：`SAL-P3-015` 实现 checkpoint `847e5263`、状态同步 checkpoint `fa0ba469` 与状态复核 checkpoint `3c19b937` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使已经有状态复核提交，如果恢复提示词仍只写“本次状态复核 checkpoint 提交后以最终回复为准”，下一次启动仍需要人工追溯最新已落地复核提交。
+- 规则：每次状态同步或状态复核都必须保留上一已落地实现 checkpoint、状态同步 checkpoint、状态复核 checkpoint、完成/未完成范围、当前 READY 任务和严格禁区；新的复核提交可以用提交后确认语句，但不得覆盖或省略上一已落地复核 hash。
+- 执行：后续从 `SAL-P3-016` 开始，阶段性任务完成后自动完成状态快照、进度清单、证据、风险/决策、`tasks/todo.md` review、必要 lessons、可复制启动提示词和中文 checkpoint commit；最终回复必须直接给出最新提交 hash 与完整下次启动提示词。
+
+## 2026-07-25: SAL-P3-014 后状态复核必须写清最新已落地状态同步 checkpoint
+
+- 纠正来源：`SAL-P3-014` 实现 checkpoint `dd4e9465` 与状态同步 checkpoint `cd0d6c6f` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使上一轮已经提交状态同步，如果恢复文档仍写“本次状态同步提交生成后以 git log 为准”，下次启动仍需要人工判断哪个 hash 是最新已落地状态同步，降低恢复确定性。
+- 规则：每个阶段性任务完成后，最终交接前必须把最近实现 checkpoint、最新已落地状态同步 checkpoint、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；如果随后又做状态复核提交，文档可写明“本次状态复核 checkpoint 以提交后 `git log -1 --oneline` 和最终回复为准”，但不得丢失上一已落地状态同步实际 hash。
+- 执行：后续从 `SAL-P3-015` 开始，不等待用户提醒；阶段性任务完成后自动做状态/清单/证据/风险/决策/`tasks/todo.md` review/必要 lessons/可复制提示词收尾，并在最终回复直接给出最新实现 checkpoint、最新状态同步或状态复核 checkpoint 和完整下次启动提示词。
+
+## 2026-07-24: SAL-P3-013 后状态复核必须把 docs sync 实际 hash 写入提示词
+
+- 纠正来源：`SAL-P3-013` 实现 checkpoint `10d97975` 与状态同步 checkpoint `e0ca42d9` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时强调“每个阶段性任务完成后自动去做”。
+- 模式：即使完成了实现提交和状态同步提交，如果恢复文档仍写“本次状态同步提交，标题为 ...”而没有实际 hash，下次启动仍需要人工用 `git log` 对齐状态同步锚点。
+- 规则：每个阶段性任务完成后，最终交接前必须把最近实现 checkpoint、最新状态同步 checkpoint 的实际 hash、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；用户再次提醒该习惯时，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P3-014` 开始，不等待用户提醒；完成实现后自动进行状态/清单/证据/`tasks/todo.md` review/必要 lessons/可复制提示词收尾，且最终回复必须直接给出最新状态同步 checkpoint 和下次启动提示词。
+
+## 2026-07-24: SAL-P3-007 后状态复核必须在最终交接给出实际 docs checkpoint
+
+- 纠正来源：`SAL-P3-007` 实现 checkpoint `27b87c2e` 与状态同步 checkpoint `e3ce4840` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“给我一个提示词，直接发给我”和“每个阶段性任务完成后自动去做”。
+- 模式：即使状态文档已经包含完成范围和下一步，如果最终交接没有再次复核并给出最新 docs checkpoint 实际 hash，用户仍需要额外确认下次启动是否能直接恢复。
+- 规则：每次阶段性任务后或用户提醒状态同步时，必须把最近实现 checkpoint、上一状态同步 checkpoint、已完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词同步到 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；最终回复必须写出最新状态同步 checkpoint 的实际 hash。
+- 执行：后续从 `SAL-P3-008` 开始，不等待用户提醒；实现完成后自动做状态/清单/证据/`tasks/todo.md` review/必要 lessons/可复制提示词收尾，并提交中文 checkpoint。
+
+## 2026-07-24: SAL-P3-006 后状态复核必须写入最新状态同步 hash
+
+- 纠正来源：`SAL-P3-006` 实现 checkpoint `a63822d0` 与状态同步 checkpoint `6ee91eed` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使已经做过实现提交和 checkpoint hash 同步，如果恢复提示词仍把“最新状态同步 checkpoint”写成“本文件所在提交”但没有记录上一状态同步实际 hash，下一次恢复仍需要额外比对 `git log` 才能确认文档是否已落地。
+- 规则：每个阶段性任务完成后，最终交接前必须把最近实现 checkpoint、上一状态同步 checkpoint、完成/未完成范围、当前 READY 任务、严格禁区和完整可复制启动提示词同步到 `docs/development-status.md`、`docs/development-progress-checklist.md` 与 `tasks/todo.md`；用户再次提醒该习惯时，立即追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P3-007` 开始，不等待用户提醒；任务完成后自动完成实现/验证/证据/状态/lessons/启动提示词收尾，并在最终回复中直接给出可复制提示词。
+
+## 2026-07-24: SAL-P3-005 后状态同步必须消除实现 checkpoint 占位
+
+- 纠正来源：`SAL-P3-005` 实现 checkpoint `d405e6ab` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“给我一个提示词，直接发给我”和“每个阶段性任务完成后自动去做”。
+- 模式：阶段性实现提交虽然已经包含状态更新，但如果恢复文档仍保留“本次实现提交”“将由本次提交生成”等占位表达，下次启动仍需要人工查询实际 hash，无法直接从文档判断当前进度。
+- 规则：每个阶段性任务完成后，最终交接前必须把实际实现 checkpoint 写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 和下次启动提示词；若用户再次提醒该习惯，立即追加本文件，并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P3-006` 开始，不等待用户提醒；任务完成后自动同步状态、清单、证据、`tasks/todo.md` review、必要 lessons、实际 checkpoint 和可复制启动提示词，再运行状态锚点扫描与 `git diff --check`。
+
+## 2026-07-23: SAL-P3-002 后状态复核必须补齐最新状态同步锚点
+
+- 纠正来源：`SAL-P3-002` 实现 checkpoint `50012b44` 与状态同步 `c53daa65` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“给我一个提示词，直接发给我”和“每个阶段性任务完成后自动去做”。
+- 模式：即使状态文档已更新到正确 Phase/Gate/下一任务，如果下次启动提示词没有纳入本阶段新增证据文档，或没有在最终交接中再次明确最新状态同步 checkpoint，恢复时仍可能漏读关键 evidence 或重复询问当前进度。
+- 规则：每个阶段性任务完成后，最终交接前必须再次复核 `docs/development-status.md` 的下次启动提示词，确保包含本阶段新增 evidence 文档、最近实现 checkpoint、最新状态同步 checkpoint、完成/未完成范围、当前 READY 任务和严格禁区；用户再次提醒该习惯时，必须追加本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P3-003` 开始，不等待用户提醒；完成任务后自动同步状态、清单、证据、`tasks/todo.md` review、必要 lessons 和可复制启动提示词，并在最终回复直接给出完整 prompt。
+
+## 2026-07-23: SAL-P3-001 后状态同步必须写入实际交付 hash
+
+- 纠正来源：`SAL-P3-001` checkpoint `4e6d5ee4` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求直接给出下次启动提示词，同时再次强调“每个阶段性任务完成后自动去做”。
+- 模式：即使实现 checkpoint 已经包含状态同步，如果恢复文档仍把最近交付写成“本文件所在提交”，下次启动仍要先人工确认实际 hash，降低可恢复性。
+- 规则：每个阶段性任务完成后，最终交接前必须把最近可评审交付的实际 hash、完成范围、未完成起点、当前 READY 任务、严格禁区和可复制下次启动提示词写入 `docs/development-status.md` 与 `docs/development-progress-checklist.md`；若用户再次提醒该习惯，立即更新本文件并提交中文状态复核 checkpoint。
+- 执行：后续从 `SAL-P3-002` 开始，不等待用户提醒；阶段性任务完成后先完成实现 checkpoint，再同步状态文档和 `tasks/todo.md` review，运行状态锚点扫描与 `git diff --check`，最终回复必须附完整下一次启动提示词。
+
+## 2026-07-23: SAL-P2-016 后再次复核必须直接给出可复制启动提示词
+
+- 纠正来源：`SAL-P2-016` 实现 checkpoint `cfadc415` 与状态同步 `70f82cee` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“给我一个提示词，直接发给我”和“每个阶段性任务完成后自动去做”。
+- 模式：即使状态文档已经更新，如果最终交接没有再次明确最新完成范围、未完成起点、当前 READY 任务、最近实现 checkpoint、最新状态同步 checkpoint 和可复制提示词，用户仍需要重复提醒才能放心恢复开发。
+- 规则：每个阶段性任务完成后，最终回复前必须完成仓库内状态复核并直接给出可复制启动提示词；若用户再次提醒该习惯，立即更新本文件，运行状态锚点扫描和 `git diff --check`，提交中文状态复核 checkpoint。
+- 执行：后续完成 `SAL-P2-017` 或任一 `SAL-*` 后，不等待用户提醒；先写清已完成/未完成/下一步/禁区/实际实现 checkpoint/状态同步锚点，再提交状态同步，最终回复必须附完整下一次启动提示词。
+
+## 2026-07-23: SAL-P2-015 后状态同步必须写入实际实现 checkpoint
+
+- 纠正来源：`SAL-P2-015` 实现 checkpoint `378ba734` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求把“每个阶段性任务完成后自动去做”固化为习惯。
+- 模式：即使实现 commit 已经包含大部分状态同步，如果恢复文档里仍写“本文件所在提交”或“最近实现 checkpoint 将在本次提交生成”，下次启动时仍需要人工查询实际实现 hash，进度恢复不够直接。
+- 规则：阶段性任务完成后的状态同步必须把最近可评审交付的实际 hash 写入 `docs/development-status.md`、`docs/development-progress-checklist.md` 和下次启动提示词；最新状态同步 commit 自身可以写标题并要求启动后用 `git log -1 --oneline` 确认实际 hash。
+- 执行：后续完成 `SAL-P2-016` 或任一 `SAL-*` 后，不等待用户提醒；先写清已完成/未完成/下一步/禁区/实际实现 checkpoint，再更新 `tasks/todo.md` review 和本文件（若用户再次纠正习惯），最后运行状态扫描与 `git diff --check` 并提交中文 checkpoint/status-sync commit。
+
+## 2026-07-23: SAL-P2-014 后状态复核必须再次固化恢复提示
+
+- 纠正来源：`SAL-P2-014` 实现 checkpoint `5016ced6` 与状态同步 `8c70cde5` 后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并强调“每个阶段性任务完成后自动去做”。
+- 模式：即使已经做过状态同步，只要用户再次要求恢复提示，就必须把实际完成范围、未完成起点、当前 READY 任务、最近实现 checkpoint、状态同步锚点和禁止提前进入的范围重新写入仓库文档，而不能只在聊天里回答。
+- 规则：每个阶段性任务完成后，最终回复前必须执行一次状态复核：`git status --short --branch`、`git log -3 --oneline`、状态锚点扫描、`git diff --check`；若文档仍只写提交标题而没有足够恢复锚点，补写上一状态同步 hash 和恢复确认命令。
+- 执行：后续完成 `SAL-P2-015` 或任一 `SAL-*` 后，自动同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、相关证据文档和 `tasks/todo.md`，并在最终回复直接给出可复制的下次启动提示词；用户再次提醒该习惯时继续追加本文件。
+
+## 2026-07-22: SAL-P2-010 后状态同步要避免模糊 checkpoint
+
+- 纠正来源：`SAL-P2-010` checkpoint `3e2056fe` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“我希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：实现 checkpoint 已经包含状态同步时，如果恢复文档仍写“本文件所在提交”或 `tasks/todo.md` 里提交步骤未勾选，下次启动仍要人工判断哪些内容真实完成、哪个 commit 是实现交付、哪个任务可以继续。
+- 规则：每个阶段性任务完成后，状态文档必须优先记录最近可评审交付的明确 hash、完成/未完成范围、当前 READY 任务和严格禁区；若另有状态同步提交，最终回复必须给出实际 docs checkpoint hash，文档中至少写清提交标题和恢复确认命令。
+- 执行：后续完成 `SAL-P2-011` 或任一 `SAL-*` 后，除实现/验证/证据外，还必须复核 `tasks/todo.md` checklist 是否全勾选，更新 `docs/development-status.md` 的下次启动提示词，并在最终回复直接提供可复制提示词；不得再等待用户提醒。
+
+## 2026-07-22: SAL-P2-008 后必须继续自动做状态同步
+
+- 纠正来源：`SAL-P2-008` checkpoint `81e65230` 完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“我希望你能记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：阶段性交付完成后，即使已经同步过状态，如果最终文档和最终回复没有明确列出“已完成/未完成/下一步/可复制提示词/最近 checkpoint”，用户仍需要再次追问才能放心恢复开发。
+- 规则：每个阶段性任务完成后，必须自动完成固定收尾：更新 `docs/development-status.md`、`docs/development-progress-checklist.md`、任务证据文档、决策/证据登记、`tasks/todo.md` review、`tasks/lessons.md`（若用户提醒习惯或指出偏差）和下次启动提示词；同时明确最近可评审交付 commit、当前完成度、当前 READY 任务和禁止提前进入的范围。
+- 执行：后续完成 `SAL-P2-009` 或任一 `SAL-*` 后，不等待用户提醒；先做状态锚点扫描和 `git diff --check`，再提交中文 checkpoint/status-sync commit，最终回复必须附一段可直接复制给 Codex 的下次启动提示词。
+
+## 2026-07-19: 阶段性任务收尾要自动同步恢复状态
+
+- 纠正来源：用户要求“请更新文档的最新开发状态”和“我希望你能记住这个习惯，在每个阶段性任务完成后自动去做”；在 `SAL-P0-008` 完成后用户再次要求同步最新开发状态和下次启动提示词。
+- 模式：阶段性任务完成后，如果只提交实现而没有同步状态快照、进度清单、证据和恢复提示，下次会话容易丢失真实进度，重复询问或误进入后续 Phase。
+- 规则：每完成、阻塞或形成可评审交付的阶段性任务，必须在结束前同步 `docs/development-status.md`、`docs/development-progress-checklist.md`、受影响的验收证据/风险/决策登记、`tasks/todo.md` review 和下次启动提示词；可评审交付必须创建中文 checkpoint commit。
+- 执行：后续完成 `SAL-P0-009`、`SAL-P0-010`、`SAL-P0-012` 或 Gate `SAL-P0-013` 时，不等待用户提醒，自动完成上述收尾动作；完成后最终回复必须直接给出可复制的下次启动提示词。
+
+## 2026-07-20: 用户再次强调状态同步必须成为固定习惯
+
+- 纠正来源：Gate G0 checkpoint 完成后，用户再次要求“请更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求下次启动提示词可直接继续开发。
+- 模式：即使刚完成 checkpoint，也不能只在最终回复口头说明状态；必须确保仓库内状态文档本身已经能独立恢复上下文。
+- 规则：每个阶段性任务结束后，最终回复前必须复核并必要时更新 `docs/development-status.md` 的已完成/未完成/下一步/下次启动提示词，复核 `docs/development-progress-checklist.md` 的完成度和当前任务，并把本次 review 写入 `tasks/todo.md`。
+- 执行：若用户再次提醒“更新状态”或“记住这个习惯”，立即更新 `tasks/lessons.md`，并运行 `git status`、状态锚点扫描和 `git diff --check` 后再声称状态同步完成。
+
+## 2026-07-20: 到达用户指定提示节点后仍要提交状态同步
+
+- 纠正来源：用户在 Gate G1 已通过、项目进入 P2 后再次要求“请更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并强调“每个阶段性任务完成后自动去做”。
+- 模式：即使阶段 Gate checkpoint 已经提交，也可能只在最终回复中提示用户，而没有追加一次明确的状态复核记录；这会让下次会话难以判断“已到 P2”是口头状态还是仓库内权威状态。
+- 规则：每次到达用户要求的停顿/提示节点（例如“等到 P2 再提示我”）时，必须在最终回复前确认并必要时更新 `docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md` 和下次启动提示词；如果用户再次提醒这个习惯，必须把提醒写入 `tasks/lessons.md`。
+- 执行：后续完成任一 `SAL-*` 阶段任务或 Gate 后，不等待用户提醒，先做状态锚点扫描（Phase/Gate/完成度/当前可执行任务/恢复提示词），再提交中文 checkpoint 或状态同步 commit，最后把可复制启动提示词发给用户。
+
+## 2026-07-21: 阶段性交付后状态同步要写清 checkpoint 锚点
+
+- 纠正来源：`SAL-P2-001` checkpoint 已完成后，用户再次要求“更新文档的最新开发状态，标注清楚哪些完成了哪些未完成”，并要求“记住这个习惯，在每个阶段性任务完成后自动去做”。
+- 模式：状态文档即使已经列出 Phase/Gate/下一步，如果 checkpoint 仍写成“本文件所在提交”，下次会话仍需要额外判断最近可评审交付和状态同步是否同一个 commit。
+- 规则：阶段性任务完成后，状态同步必须明确记录最近可评审交付 commit、当前完成度、当前 READY/DOING/BLOCKED 任务、仍未完成范围和下次启动提示词；用户再次提醒该习惯时必须追加到本文件。
+- 执行：以后完成任一 `SAL-*` 后，先提交可评审交付，再根据需要追加状态同步 commit；最终回复必须提供可复制的下一次启动提示词，并说明最近交付 commit 与最新状态同步 commit。
+
+## 2026-07-21: 状态同步提示词必须可直接复用
+
+- 纠正来源：`SAL-P2-002` checkpoint `68e8fea9` 完成后，用户再次要求“标注清楚哪些完成了哪些未完成”并“给我一个提示词，直接发给我”，同时要求把该习惯固化。
+- 模式：如果状态文档只描述抽象的“本文件所在提交”，或最终回复没有给出完整可复制 prompt，下次启动仍需要人工拼接当前 Phase、Gate、完成范围、下一步和禁区。
+- 规则：每个阶段性任务完成后，必须把最近可评审交付 commit、最新状态同步 commit、完成/未完成范围、当前 READY 任务和严格禁区同时写入 `docs/development-status.md` 的正文与下次启动提示词；最终回复必须直接附上可复制提示词。
+- 执行：后续任一 `SAL-*` 或 Gate 收尾时，先更新 `tasks/lessons.md`（若用户再次提醒习惯）、`docs/development-status.md`、`docs/development-progress-checklist.md`、`tasks/todo.md` review，再运行状态锚点扫描和 `git diff --check`，最后提交中文 status-sync 或 checkpoint commit。
+
+## 2026-07-19: “下一阶段开发”不能长期停留在文档收尾
+
+- 纠正来源：用户指出“为什么还不开始写代码，一直在写这些文档？”
+- 模式：在 P0 Gate 未通过时，容易把“下一阶段开发”解释成继续补证据/状态文档，而没有尽快进入可运行脚本、测试、Docker profile 或代码修复。
+- 规则：完成必要的计划和状态同步后，下一步必须选择一个会产生可运行产物的任务；文档只能作为证据收尾，不应成为主要交付。
+- 执行：后续推进 P0 时，优先执行 `SAL-P0-007` Docker baseline 或 `SAL-P0-004` backend gate/offline-tests；若发现脚本、配置、compose、healthcheck 或测试入口缺口，直接最小范围修改代码/脚本。

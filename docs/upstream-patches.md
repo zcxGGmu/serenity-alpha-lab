@@ -1,0 +1,197 @@
+# DSA 上游补丁登记
+
+> 目的：记录 Serenity Alpha Lab 在锁定 DSA release 上必须携带的最小兼容补丁。所有补丁都必须有 Characterization Test、应用脚本和验证证据；能通过扩展点解决的问题不得修改上游核心。
+
+## 当前补丁
+
+分类口径见根目录 [UPSTREAM_BASE.md](../UPSTREAM_BASE.md)：`compatible` 表示保持上游运行语义并修复基线阻断项，`extension` 表示 Serenity-only 脚本/证据/CI，`divergence` 表示改变上游运行或产品语义并需要 ADR/Gate 批准。
+
+| Patch ID | 状态 | 分类 | 上游基线 | 补丁文件 | 原因 | 验证 |
+|---|---|---|---|---|---|---|
+| DSA-PATCH-001 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0001-isolate-intelligence-request-proxies.patch` | `IntelligenceService` 把模块级可变代理字典传给 `requests.get`，前序请求可污染后续离线测试，导致 `SAL-P0-004` full gate 顺序依赖失败 | `scripts/run-dsa-backend-offline-baseline.sh` 全 phase exit 0；`4455 passed, 4 deselected, 48 warnings, 416 subtests passed` |
+| DSA-PATCH-002 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0002-align-alert-market-region-test-contract.patch` | `AlertRuleForm` 的一个 Vitest 用例要求 market-light 区域出现 `jp/kr`，但 Web `MarketRegion` 类型、alert labels 和相邻用例均只支持 `cn/hk/us`，导致 `SAL-P0-005` Web baseline 稳定失败 | 修复前 targeted Vitest `17 passed / 1 failed`；补丁后 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` 为 `18 passed` |
+| DSA-PATCH-003 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0003-align-web-smoke-e2e-contract.patch` | Playwright smoke 真实执行后暴露 e2e 契约漂移：首次登录未填 `passwordConfirm`、首页侧栏已演进为“个股栏”、ReportMarkdown smoke 缺少历史报告 fixture、chat/settings 断言使用旧文案或非唯一 selector | `scripts/seed-dsa-web-smoke-fixture.sh` 生成本地 auth/history fixture；`npm run test:smoke -- --reporter=line` 真实执行 `13 passed` |
+| DSA-PATCH-004 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0004-add-screen-lab.patch` | `SAL-P3-015` 在 DSA Web 中增加 Serenity Screen Lab 页面，作为 Quant Screening API 的 UI extension；不修改上游筛选核心语义 | Targeted web `24 passed`；full Vitest `973 passed, 2 skipped`；`npm run lint` PASS；`npm run build` PASS；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0004` already applied |
+| DSA-PATCH-005 | APPLIED | `compatible` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0005-migrate-signal-evaluation-engine.patch` | `SAL-P4-002` 把 legacy T+N recommendation evaluation 的内部语义迁移为 `SignalEvaluationEngine` / `evaluation_type=signal`，同时保留 legacy `/api/v1/backtest/*`、`Backtest*` schema、数据库表和 Agent read-tool 兼容面；Web 可见文案改为 Signal Evaluation，避免误称正式组合回测 | Root parity `3 passed`；migration architecture `4 passed`；P4 snapshot script PASS；DSA focused Python `95 passed, 1 warning`；focused web Vitest `26 passed`；`scripts/apply-dsa-baseline-patches.sh --check-only` 识别 `0001..0005` already applied |
+| DSA-PATCH-006 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0006-add-quant-lab.patch` | `SAL-P4-021` 在 DSA Web 中增加 Serenity Quant Lab 页面，作为 `/api/v1/quant/backtest-runs` 正式组合回测 API 的 UI extension；不修改 legacy `/api/v1/backtest/*` Signal Evaluation 语义，不启动 Worker/Qlib/Provider/LLM runtime | Focused web `4 passed files / 27 passed tests`；`npm run lint` PASS；`npm run build` PASS；related Python suite `34 passed`；compileall/lock/tag/diff checks PASS；clean temp DSA worktree sequentially applied `0001..0006` |
+| DSA-PATCH-007 | APPLIED | `extension` | `v3.26.1 @ e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` | `patches/dsa/v3.26.1/0007-add-research-report-delivery-ui.patch` | `SAL-P5-016` 在 DSA Web 中增加可信 Research Report 页面，作为 `/api/v1/research/reports/{report_id}` 与通知 Outbox 状态 GET API 的 UI extension；不注册 backend route、不调用通知 sender、不启动真实 Provider/LLM/Worker/Qlib runtime | Focused web `4 passed files / 26 passed tests`；`npm run lint` PASS；`npm run build` PASS；related Python suite `79 passed`；full pytest `490 passed, 3 skipped`；clean temp DSA worktree sequentially applied `0001..0007` |
+
+当前没有登记为 `divergence` 的补丁。`DSA-PATCH-005` 属于 compatible semantic naming cleanup：它纠正 legacy backtest 命名歧义但保留运行行为、API/schema/table 兼容和 P4-001 快照。`DSA-PATCH-006` 与 `DSA-PATCH-007` 属于 UI extension：它们分别新增 Quant Lab 与可信 Research Report 页面，不改变上游 legacy Signal Evaluation 行为，也不启动后端 Worker、Provider、LLM、Qlib 或通知 sender runtime。若后续需要改变上游运行或产品语义，必须先补 ADR 或 Gate 评审记录。
+
+## DSA-PATCH-001：隔离 Intelligence 请求代理参数
+
+### 背景
+
+`SAL-P0-004` 首轮完整后端离线测试中，`tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_fetch_enabled_sources_is_fail_open` 在全量顺序下失败，单独运行通过。排查后发现 `_DISABLE_REQUEST_PROXIES = {"http": None, "https": None}` 是模块级可变字典，并被直接作为默认 `proxies` 传入 `requests.get`。前序 suite 活动会让该字典出现额外键 `use: "false"`，从而污染后续请求参数。
+
+### 修改
+
+- 新增 Characterization Test：`test_request_proxy_defaults_are_isolated_between_fetches`，在 fake `requests.get` 中主动污染第一次收到的 `proxies` 字典，要求第二次 fetch 仍收到干净代理默认值。
+- 最小实现：`request_kwargs.setdefault("proxies", dict(_DISABLE_REQUEST_PROXIES))`，每次默认请求传递独立字典副本。
+- 新增 `scripts/apply-dsa-baseline-patches.sh`，对 `.worktrees/dsa-v3.26.1` 幂等应用 `patches/dsa/v3.26.1/*.patch`。
+- `scripts/run-dsa-backend-offline-baseline.sh` 在运行 gate 前自动应用登记补丁。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| 修复前运行新增回归测试 | 失败，第二次请求代理参数包含 `use: "false"` |
+| `pytest tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_request_proxy_defaults_are_isolated_between_fetches -q --tb=short` | 通过 |
+| `pytest tests/test_intelligence_service.py::IntelligenceServiceTestCase::test_fetch_enabled_sources_is_fail_open -q --tb=short` | 通过 |
+| 前 55 个复现测试文件 + `tests/test_intelligence_service.py` | 通过，`1257 passed, 2 skipped, 12 warnings` |
+| `scripts/run-dsa-backend-offline-baseline.sh` | 通过，syntax/flake8/deterministic/collect/offline-tests 全部 exit 0 |
+
+## DSA-PATCH-002：对齐 Alert market region 测试契约
+
+### 背景
+
+`SAL-P0-005` Web 基线中，`src/components/alerts/__tests__/AlertRuleForm.test.tsx::shows JP/KR options for market region in Chinese UI mode` 稳定失败。失败断言要求市场区域下拉存在 `日股（jp）` 与 `韩股（kr）`，但当前 Web alert 类型 `MarketRegion` 仅为 `cn | hk | us`，`ALERT_MARKET_REGION_LABELS` 与 `ALERT_MARKET_REGION_OPTIONS` 也只列出 A 股、港股和美股。同一测试文件相邻用例明确断言 market-light 规则不展示 JP/KR。
+
+### 修改
+
+- 将错误用例改名为 `limits market region options to supported market-light regions in Chinese UI mode`。
+- 保留 `A 股（cn）`、`港股（hk）`、`美股（us）` 的可见性断言。
+- 将 `日股（jp）`、`韩股（kr）` 从存在断言改为不存在断言，与类型定义和英文 UI 用例一致。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| 修复前 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` | 失败，`17 passed / 1 failed`，无法找到 `日股（jp）` option |
+| 补丁后 `npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx` | 通过，`18 passed` |
+| `scripts/apply-dsa-baseline-patches.sh --check-only` | 通过，`0001`、`0002` 和 `0003` 均识别为 already applied |
+
+## DSA-PATCH-003：对齐 Web smoke E2E 契约
+
+### 背景
+
+`SAL-P0-005` 在设置 `DSA_WEB_SMOKE_PASSWORD` 后，Playwright smoke 不再跳过，但真实执行暴露出 e2e 契约漂移：登录 helper 只填写 password、不处理首次设置密码确认框；首页已从旧“历史分析”列表演进为“个股栏”工作区；ReportMarkdown 用例依赖历史报告但 smoke 环境没有固定 fixture；chat/settings 部分断言使用过时文案或非唯一 selector。
+
+### 修改
+
+- 登录 helper 在首次设置状态下填充 `#passwordConfirm`，同时保持已有密码登录路径不变。
+- 首页 smoke 改为断言当前“个股栏”工作区及“历史/自选/今日”页签。
+- chat smoke 使用 `chat-skill-picker-panel` 内的“策略”标题，避免 strict mode 命中多个元素。
+- settings 英文语言切换 smoke 改为断言当前默认设置页的 `Reset`、`Save configuration` 与 `First-run setup check`。
+- ReportMarkdown smoke 通过 `openFirstHistoryReport()` 明确打开本地 fixture 历史报告，并兼容移动端已自动选中报告的布局。
+- 新增 `scripts/seed-dsa-web-smoke-fixture.sh`，在 `.cache/dsa-p0/web-smoke` 生成本地 auth password、env file 与 `600519` 历史报告 fixture。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| 未预置密码/fixture 的真实 smoke | 失败，登录首次设置和历史报告 fixture 缺失导致 11 个用例失败 |
+| 预置密码但未修 e2e 契约的 smoke | 失败，旧“历史分析”文案、chat strict selector、settings 旧按钮文案等导致 7 个用例失败 |
+| 补丁后 `scripts/seed-dsa-web-smoke-fixture.sh` | 通过，生成/复用本地 smoke env、auth password 与历史报告 fixture |
+| 补丁后 `npm run test:smoke -- --reporter=line` | 通过，`13 passed`，无 skipped |
+| `npm run lint` / `npm run build` / `npm run test` | 通过；Vitest `90 passed` files，`965 passed, 2 skipped` |
+
+## DSA-PATCH-005：迁移 SignalEvaluationEngine 语义命名
+
+### 背景
+
+`SAL-P4-001` 已确认当前 DSA `BacktestEngine` 实际只做 T+N 后验信号评价，不是正式组合回测。继续在 UI、服务和核心命名中称为 Backtest 会阻塞 `SAL-P4-003` 正式 `BacktestSpec` 的边界澄清。
+
+### 修改
+
+- 新增 `src/core/signal_evaluation_engine.py`，把 legacy engine 以 `SignalEvaluationEngine` / `SignalEvaluationConfig` / `evaluation_type=signal` 暴露。
+- `backtest_service.py` 与 `decision_signal_outcome_service.py` 内部改用 signal evaluation 命名，并在 diagnostics 中写入 `evaluation_type=signal` 和 `semantic_scope=legacy_signal_evaluation`。
+- DSA Web 可见文案改为“信号评价 / Signal Evaluation”，但保留 legacy `/backtest` route 和 `/api/v1/backtest/*` client。
+- `scripts/run-dsa-signal-evaluation-characterization.sh` 允许 registered patch 引入的新文件出现在 DSA worktree，避免误报 `src/core/signal_evaluation_engine.py` 为未登记改动。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `.venv/bin/python -m pytest tests/quant/test_signal_evaluation_engine.py -q` | `3 passed` |
+| `.venv/bin/python -m pytest tests/architecture/test_dsa_signal_evaluation_engine_migration.py -q` | `4 passed` |
+| `scripts/run-dsa-signal-evaluation-characterization.sh` | committed snapshots match |
+| `scripts/apply-dsa-baseline-patches.sh --check-only` | `0001..0005` already applied |
+| DSA Web focused Vitest | `3 passed files / 26 passed tests` |
+| DSA focused Python tests | `95 passed, 1 warning` |
+
+## DSA-PATCH-004：增加 Screen Lab UI extension
+
+### 背景
+
+`SAL-P3-014` 已冻结 framework-neutral Quant Screening API，但 DSA Web 尚无页面能复用该契约进行定义编辑、Preview/Formal run、结果浏览、单行解释和历史比较。`SAL-P3-015` 要求 Screen Lab 复用 Quant Screening API、ScreenSnapshot、ScreenDefinition Pipeline、CandidateBatch、FactorDefinition、Factor Evaluation、Dataset Catalog/Manifest、ProblemDetails、Trace、Artifact 和 Run/Stage/Event 口径，不能回退到 legacy AlphaSift UI 数据路径。
+
+### 修改
+
+- 新增 `src/api/quantScreening.ts` 与 API client tests，覆盖 `POST /api/v1/quant/screen-runs` 的 `Idempotency-Key`、stable results pagination、single-result explanation lookup 和 run comparison。
+- 新增 `ScreenLabPage` 与 page tests，覆盖定义输入、Draft/Published、Snapshot/History、Preview/Formal、loading/empty/partial/stale/error/permission states、结果行、解释抽屉和 comparison。
+- 新增 lazy route `/screen-lab`、SidebarNav item、zh/en labels 和 route test。
+- 更新 `SidebarNav.test.tsx`，明确导航顺序为 `/chat -> /screen-lab -> /screening`，legacy AlphaSift screening 仍受既有 AlphaSift enablement 控制。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `npm run test -- src/api/__tests__/quantScreening.test.ts src/pages/__tests__/ScreenLabPage.test.tsx src/App.test.tsx` | `3 passed files / 15 passed tests` |
+| `npm run test -- src/components/layout/__tests__/SidebarNav.test.tsx src/api/__tests__/quantScreening.test.ts src/pages/__tests__/ScreenLabPage.test.tsx src/App.test.tsx` | `4 passed files / 24 passed tests` |
+| `npm run test` | 一次重跑后通过，`92 passed files / 973 passed / 2 skipped`；中途曾暴露 stale SidebarNav order 和 unrelated HomePage timeout，均用 targeted/retry 验证关闭 |
+| `npm run lint` | 通过 |
+| `npm run build` | 通过；中途曾捕获并修复 `explanationSteps` optional narrowing |
+| `scripts/apply-dsa-baseline-patches.sh --check-only` | 通过，`0001`、`0002`、`0003`、`0004` 均识别为 already applied |
+
+## DSA-PATCH-006：增加 Quant Lab UI extension
+
+### 背景
+
+`SAL-P4-020` 已冻结 framework-neutral `/api/v1/quant/backtest-runs` 正式组合回测 API，但 DSA Web 尚无页面能创建 Preview/Formal run、查看 compact status、净值/回撤、订单、持仓、偏差审计、Artifact 下载和 lineage。`SAL-P4-021` 要求 Quant Lab 复用该 formal API contract，并继续与 legacy `/api/v1/backtest/*` Signal Evaluation 隔离。
+
+### 修改
+
+- 新增 `src/api/quantBacktest.ts` 与 API client tests，覆盖 `POST /api/v1/quant/backtest-runs` 的 `Idempotency-Key`、status、metrics、orders、positions、audit、artifact download 和 cancel。
+- 新增 `QuantLabPage` 与 page tests，覆盖 Preview/Formal 创建、mode/artifact/ranking 独立 badge、compact runtime flags、metrics、equity/drawdown、orders、positions、audit、lineage、download、cancel、permission 和 generic error states。
+- 新增 lazy route `/quant-lab`、SidebarNav item、zh/en labels 和 route/nav tests。
+- 保持 `/backtest` route 与 `/api/v1/backtest/*` label 为 Signal Evaluation；Quant Lab 不触发 Evidence Agent、Worker loop、Qlib runtime、真实 Provider/LLM 调用或 Gate G4 promotion。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `npm run test -- src/api/__tests__/quantBacktest.test.ts src/pages/__tests__/QuantLabPage.test.tsx src/App.test.tsx src/components/layout/__tests__/SidebarNav.test.tsx` | 通过，`4 passed files / 27 passed tests` |
+| `npm run lint` | 通过 |
+| `npm run build` | 通过；Vite 生成 `QuantLabPage-CR2xIlDc.js` chunk |
+| Root related Python suite | 通过，`34 passed` |
+| `uv run --extra core --extra dev python -m compileall -q src/serenity_alpha_lab tests` | 通过 |
+| `scripts/verify-python-dependency-lock.sh` | 通过，`Resolved 298 packages` |
+| Clean temp DSA worktree + `scripts/apply-dsa-baseline-patches.sh --worktree <temp>` | 通过，`0001` 至 `0006` 顺序应用 |
+| `git rev-parse upstream/dsa-v3.26.1` | `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` |
+| `git diff --check` | 通过 |
+
+## DSA-PATCH-007：增加 Research Report Delivery UI extension
+
+### 背景
+
+`SAL-P5-015` 已冻结可信 ResearchReport Renderer，但 DSA Web 尚无页面可以消费未来 `/api/v1/research/reports/{report_id}` payload，并以用户可审计方式展开 claim、citation、evidence、source 和 artifact hash。`SAL-P5-016` 还需要把通知 Outbox 状态作为只读状态面展示，但不得实现发送器或启动真实通知 runtime。
+
+### 修改
+
+- 新增 `src/api/researchReports.ts` 与 API client tests，只调用 `GET /api/v1/research/reports/{report_id}` 和 `GET /api/v1/research/reports/{report_id}/notifications`。
+- 新增 `ResearchReportPage` 与 page tests，覆盖 canonical authority/hash、model/cost/dataset/risk/disclaimer、claim citation expansion、evidence source URI、artifact hash 和 Outbox status display。
+- 新增 lazy route `/research-reports/:reportId`、SidebarNav item、zh/en labels 和 route/nav tests。
+- 保持 UI extension GET-only；不注册后端 route、不调用 sender、不触发 Provider/LLM、Worker loop、Qlib runtime、production scheduler 或 Gate G5 promotion。
+
+### 验证
+
+| 命令 | 结果 |
+|---|---|
+| `npm run test -- src/api/__tests__/researchReports.test.ts src/pages/__tests__/ResearchReportPage.test.tsx src/App.test.tsx src/components/layout/__tests__/SidebarNav.test.tsx` | 通过，`4 passed files / 26 passed tests` |
+| `npm run lint` | 通过 |
+| `npm run build` | 通过；Vite 生成 `ResearchReportPage-CDhe0e93.js` chunk |
+| Root related Python suite | 通过，`79 passed` |
+| `uv run --extra core --extra dev python -m pytest -q` | 通过，`490 passed, 3 skipped` |
+| Clean temp DSA worktree + `scripts/apply-dsa-baseline-patches.sh --worktree <temp>` | 通过，`0001` 至 `0007` 顺序应用 |
+| `git rev-parse upstream/dsa-v3.26.1` | `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a` |
+
+## 应用方式
+
+```bash
+scripts/apply-dsa-baseline-patches.sh
+DSA_WEB_SMOKE_PASSWORD=p0-smoke-password scripts/seed-dsa-web-smoke-fixture.sh
+scripts/run-dsa-backend-offline-baseline.sh
+```
+
+补丁只修改隔离 DSA worktree，不把上游源码混入本项目工作树。后续同步 DSA 新 release 时，应先检查上游是否已吸收等效修复；若已吸收，移除本地补丁并保留迁移记录。

@@ -1,0 +1,63 @@
+{
+  "items": [
+    {
+      "anchor_date": "2026-01-02",
+      "case": "decision_up_hit",
+      "direction_correct": true,
+      "direction_expected": "up",
+      "end_close": 104.0,
+      "engine_version": "v1",
+      "eval_status": "completed",
+      "eval_window_days": 3,
+      "max_high": 105.0,
+      "min_low": 99.0,
+      "outcome": "hit",
+      "start_price": 100.0,
+      "stock_return_pct": 4.0
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "case": "decision_not_up_hit",
+      "direction_correct": true,
+      "direction_expected": "not_up",
+      "end_close": 99.0,
+      "engine_version": "v1",
+      "eval_status": "completed",
+      "eval_window_days": 3,
+      "max_high": 102.0,
+      "min_low": 98.0,
+      "outcome": "hit",
+      "start_price": 100.0,
+      "stock_return_pct": -1.0
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "case": "decision_invalid_anchor",
+      "direction_expected": "up",
+      "eval_status": "unable",
+      "unable_reason": "invalid_anchor_price"
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "case": "decision_insufficient_forward_bars",
+      "direction_expected": "up",
+      "engine_version": "v1",
+      "eval_status": "unable",
+      "eval_window_days": 3,
+      "unable_reason": "insufficient_forward_bars"
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "case": "decision_missing_end_close",
+      "direction_expected": "up",
+      "end_close": null,
+      "engine_version": "v1",
+      "eval_status": "unable",
+      "eval_window_days": 3,
+      "max_high": 105.0,
+      "min_low": 99.0,
+      "start_price": 100.0,
+      "unable_reason": "missing_end_close"
+    }
+  ]
+}

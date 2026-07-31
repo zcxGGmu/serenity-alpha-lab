@@ -1,0 +1,431 @@
+{
+  "baseline": {
+    "commit": "e8a9ca7742e8cb2498c8f491dd76d239b3064e1a",
+    "tag": "v3.26.1",
+    "upstream": "ZhuLinsen/daily_stock_analysis"
+  },
+  "decision_signal_cases": [
+    {
+      "anchor_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 103.0,
+          "date": "2026-01-04",
+          "high": 104.0,
+          "low": 100.0
+        },
+        {
+          "close": 104.0,
+          "date": "2026-01-05",
+          "high": 105.0,
+          "low": 101.0
+        }
+      ],
+      "case": "decision_up_hit",
+      "direction_expected": "up",
+      "start_price": 100.0
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 100.0,
+          "date": "2026-01-04",
+          "high": 101.0,
+          "low": 98.0
+        },
+        {
+          "close": 99.0,
+          "date": "2026-01-05",
+          "high": 100.0,
+          "low": 98.0
+        }
+      ],
+      "case": "decision_not_up_hit",
+      "direction_expected": "not_up",
+      "start_price": 100.0
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 103.0,
+          "date": "2026-01-04",
+          "high": 104.0,
+          "low": 100.0
+        },
+        {
+          "close": 104.0,
+          "date": "2026-01-05",
+          "high": 105.0,
+          "low": 101.0
+        }
+      ],
+      "case": "decision_invalid_anchor",
+      "direction_expected": "up",
+      "start_price": 0.0
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        }
+      ],
+      "case": "decision_insufficient_forward_bars",
+      "direction_expected": "up",
+      "start_price": 100.0
+    },
+    {
+      "anchor_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 103.0,
+          "date": "2026-01-04",
+          "high": 104.0,
+          "low": 100.0
+        },
+        {
+          "close": null,
+          "date": "2026-01-05",
+          "high": 105.0,
+          "low": 99.0
+        }
+      ],
+      "case": "decision_missing_end_close",
+      "direction_expected": "up",
+      "start_price": 100.0
+    }
+  ],
+  "engine_cases": [
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 104.0,
+          "date": "2026-01-03",
+          "high": 106.0,
+          "low": 99.0
+        },
+        {
+          "close": 107.0,
+          "date": "2026-01-04",
+          "high": 108.0,
+          "low": 102.0
+        },
+        {
+          "close": 108.0,
+          "date": "2026-01-05",
+          "high": 109.0,
+          "low": 106.0
+        }
+      ],
+      "case": "buy_take_profit",
+      "operation_advice": "买入",
+      "start_price": 100.0,
+      "stop_loss": 94.0,
+      "take_profit": 105.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 49.0,
+          "date": "2026-01-03",
+          "high": 50.5,
+          "low": 48.0
+        },
+        {
+          "close": 47.2,
+          "date": "2026-01-04",
+          "high": 49.2,
+          "low": 46.8
+        },
+        {
+          "close": 47.0,
+          "date": "2026-01-05",
+          "high": 48.0,
+          "low": 46.5
+        }
+      ],
+      "case": "sell_direction_win",
+      "operation_advice": "卖出",
+      "start_price": 50.0,
+      "stop_loss": null,
+      "take_profit": null
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 19.5,
+          "date": "2026-01-03",
+          "high": 20.2,
+          "low": 19.2
+        },
+        {
+          "close": 19.0,
+          "date": "2026-01-04",
+          "high": 19.6,
+          "low": 18.7
+        },
+        {
+          "close": 19.0,
+          "date": "2026-01-05",
+          "high": 19.1,
+          "low": 18.8
+        }
+      ],
+      "case": "hold_loss",
+      "operation_advice": "持有",
+      "start_price": 20.0,
+      "stop_loss": 18.0,
+      "take_profit": 23.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 30.1,
+          "date": "2026-01-03",
+          "high": 30.5,
+          "low": 29.7
+        },
+        {
+          "close": 30.0,
+          "date": "2026-01-04",
+          "high": 30.4,
+          "low": 29.8
+        },
+        {
+          "close": 30.3,
+          "date": "2026-01-05",
+          "high": 30.6,
+          "low": 29.9
+        }
+      ],
+      "case": "watch_flat_win",
+      "operation_advice": "观望",
+      "start_price": 30.0,
+      "stop_loss": null,
+      "take_profit": null
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 100.0,
+          "date": "2026-01-03",
+          "high": 110.0,
+          "low": 90.0
+        },
+        {
+          "close": 99.0,
+          "date": "2026-01-04",
+          "high": 101.0,
+          "low": 98.0
+        },
+        {
+          "close": 98.0,
+          "date": "2026-01-05",
+          "high": 100.0,
+          "low": 97.0
+        }
+      ],
+      "case": "buy_ambiguous_stop_first",
+      "operation_advice": "买入",
+      "start_price": 100.0,
+      "stop_loss": 95.0,
+      "take_profit": 105.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        }
+      ],
+      "case": "buy_insufficient_data",
+      "operation_advice": "买入",
+      "start_price": 100.0,
+      "stop_loss": 95.0,
+      "take_profit": 105.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 102.0,
+          "date": "2026-01-03",
+          "high": 103.0,
+          "low": 99.0
+        },
+        {
+          "close": 103.0,
+          "date": "2026-01-04",
+          "high": 104.0,
+          "low": 100.0
+        },
+        {
+          "close": 104.0,
+          "date": "2026-01-05",
+          "high": 105.0,
+          "low": 101.0
+        }
+      ],
+      "case": "negated_buy_wait_cash",
+      "operation_advice": "不要买入，等待确认",
+      "start_price": 100.0,
+      "stop_loss": null,
+      "take_profit": null
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 100.0,
+          "date": "2026-01-04",
+          "high": 101.0,
+          "low": 98.0
+        },
+        {
+          "close": 101.0,
+          "date": "2026-01-05",
+          "high": 103.0,
+          "low": 99.0
+        }
+      ],
+      "case": "negated_sell_hold_long",
+      "operation_advice": "不要卖出，继续持有",
+      "start_price": 100.0,
+      "stop_loss": 95.0,
+      "take_profit": 110.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 100.0,
+          "date": "2026-01-04",
+          "high": 101.0,
+          "low": 98.0
+        },
+        {
+          "close": 101.0,
+          "date": "2026-01-05",
+          "high": 103.0,
+          "low": 99.0
+        }
+      ],
+      "case": "english_negated_sell_hold",
+      "operation_advice": "do not sell, hold and watch",
+      "start_price": 100.0,
+      "stop_loss": 95.0,
+      "take_profit": 110.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": 102.0,
+          "low": 99.0
+        },
+        {
+          "close": 102.0,
+          "date": "2026-01-04",
+          "high": 103.0,
+          "low": 98.0
+        },
+        {
+          "close": null,
+          "date": "2026-01-05",
+          "high": 104.0,
+          "low": 99.0
+        }
+      ],
+      "case": "missing_end_close",
+      "operation_advice": "买入",
+      "start_price": 100.0,
+      "stop_loss": 95.0,
+      "take_profit": 105.0
+    },
+    {
+      "analysis_date": "2026-01-02",
+      "bars": [
+        {
+          "close": 101.0,
+          "date": "2026-01-03",
+          "high": null,
+          "low": null
+        },
+        {
+          "close": 102.0,
+          "date": "2026-01-04",
+          "high": null,
+          "low": null
+        },
+        {
+          "close": 103.0,
+          "date": "2026-01-05",
+          "high": null,
+          "low": null
+        }
+      ],
+      "case": "missing_high_low",
+      "operation_advice": "买入",
+      "start_price": 100.0,
+      "stop_loss": 95.0,
+      "take_profit": 105.0
+    }
+  ],
+  "signal_evaluation_config": {
+    "engine_version": "v1",
+    "eval_window_days": 3,
+    "neutral_band_pct": 2.0
+  },
+  "task": "SAL-P4-001"
+}

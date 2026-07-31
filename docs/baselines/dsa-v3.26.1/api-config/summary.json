@@ -1,0 +1,52 @@
+{
+  "baseline": {
+    "commit": "e8a9ca7742e8cb2498c8f491dd76d239b3064e1a",
+    "upstream": "ZhuLinsen/daily_stock_analysis",
+    "version": "v3.26.1"
+  },
+  "config_inventory": {
+    "category_counts": {
+      "agent": 22,
+      "ai_model": 47,
+      "backtest": 5,
+      "base": 2,
+      "data_source": 27,
+      "notification": 62,
+      "system": 23,
+      "uncategorized": 198
+    },
+    "class_counts": {
+      "compatibility_alias": 2,
+      "config_dataclass": 240,
+      "config_schema": 179,
+      "deprecated": 4,
+      "dynamic_pattern": 9,
+      "env_example": 313,
+      "runtime_hidden": 10,
+      "runtime_mutable": 187,
+      "runtime_only": 114,
+      "secret": 81,
+      "server_masked": 5
+    },
+    "field_count": 386
+  },
+  "config_schema": {
+    "category_count": 8,
+    "registered_field_count": 179,
+    "schema_version": "2026-06-29-claude-code-cli-backend"
+  },
+  "files": {
+    "config-env-inventory.json": "b6323b11d030dcf31e873197b5fa5cb6dc1bac457cbecd523b413fbbe8f051bb",
+    "config-schema.json": "c571a4b4d6adca42743fb264cb3b6cdac57c6e82eb6143dd16c3d9b18acf9e57",
+    "openapi.json": "a24ecf00772c51ba99c1d4c7ed42761322d95bf15a76eaeb34989409ac01d33e"
+  },
+  "openapi": {
+    "api_version": "1.0.0",
+    "component_schema_count": 186,
+    "operation_count": 119,
+    "path_count": 105,
+    "security_scheme_count": 1,
+    "title": "Daily Stock Analysis API",
+    "version": "3.1.0"
+  }
+}

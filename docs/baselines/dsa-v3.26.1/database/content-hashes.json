@@ -1,0 +1,38 @@
+{
+  "files": {
+    "fixture-summary.json": "122d2b5602b0e297edfcc3e2d53fc16496210a9fef6991bd6c02a202e22fe160",
+    "fixture.sql": "382f4719d813f20b233786d90b0b5de66637a40d7ae35de61c69c4b0f57fa931",
+    "schema-metadata.json": "c17c0038814e27bebced45be9d5edc2deb1f28b6b5036639b730323b6aa7f7ae",
+    "schema.sql": "8d39743b05e5f6b6b7417805ced0fc27d5e5323d2ac04f791ac22c50038a5a51"
+  },
+  "tables": {
+    "agent_provider_turns": "713924d87c471f77aff6beec69e5d0579ca86fc64932afa50270156adadfc956",
+    "alert_cooldowns": "1f20eb6733aca7b7f7ad71e6ae03d4ad7cefb019ba9d416e5ae925599eff53b4",
+    "alert_notifications": "4452ce9d192b913fb65253b5324ed2870fd5643e1fe3690a08d9627ebbd7ece1",
+    "alert_rules": "28b8a7e200757df5d516dce63c6037846377373a17aacaa38930c18b68246a37",
+    "alert_triggers": "497a14d53f2822fd84d852c6675e3142ddd0d8bebe4068a96c229fc31adac3dc",
+    "analysis_history": "d133ade444fc895bc3dda951ade0f7612cdaad439db9e0ee2f3e93121897b702",
+    "backtest_results": "05b04ec1e023600bfec9c67eec1f605dbb42df80631690ed3ff8afd8211f5819",
+    "backtest_summaries": "da3077ededfc158c3fa565fa3f32c9ea592de91c029dc572b099ebd648ba3b75",
+    "conversation_messages": "53d5f32e7c141240a94df1e563caf568fdf7902863c4db3af2cd42f5b1941baf",
+    "conversation_summaries": "c69772709f28b1dfcfc245442f7b401367706a7f95e778315306291856663697",
+    "decision_signal_feedback": "9365672e53572768659a1e511a8be051c7e4939befe773d303814c25113fb932",
+    "decision_signal_outcomes": "a8048b52fac85273c2ded77be01dc3ad15bdfb3f71886ac827111c008ded2241",
+    "decision_signals": "1b74f3b98c4319cef20f08310f1f073102d9549ac6687473eb3c0ab64d62308a",
+    "fundamental_snapshot": "267a6e1b39c979493ad336f6921da05fc28473b32034983a246a82f5e2117761",
+    "intelligence_items": "4abbbd7d0b9fcdd9f3b20ac11ff3428012086ab083455f0b57ff268485794718",
+    "intelligence_sources": "3c998805bfb56db806437e92fc7e3ea40cbbb42c128d2b7f359fdebfaf7cb827",
+    "llm_usage": "e69dee662a3a7e0b25c797feeb2d827c95a135aa5366ab432574de9d2c6aa24e",
+    "news_intel": "fb557cf0c613ca3efc22022c1433aa4f26ea707eadeffbb4107a13bc9ce08ad1",
+    "portfolio_accounts": "ebd0c1619710bc99158280ab2178921b4549978a226b3e1ac31ecafe2a9f1608",
+    "portfolio_cash_ledger": "7e3663f77b0771eb05de2526480a9cbebc3007aafa62cd9d50caa50f1d19ea44",
+    "portfolio_corporate_actions": "c1c80089209c2860b07177130ea96daca309cbbf2bd81ccc4b4d8e4fbdce9304",
+    "portfolio_daily_snapshots": "9217b8f0aabe5d439e006ff05facc5a2a81164e71c5c95f34c3caaddad43ef32",
+    "portfolio_fx_rates": "326c2e887d98b2ea46885e1f0e00975550f540828da75925e0328d007ae9749f",
+    "portfolio_position_lots": "d969ba416377980ab6163c404bab51013a800322c1ce4143472c1d8d0ca3ec70",
+    "portfolio_positions": "8ea7b92587653b5f549a869da999bf63b83192fc92b5cfd38d0a51c59b7df9d8",
+    "portfolio_trades": "a07f4aa77027dc4ca9d7f3deba70fb4bd585882cd445daa72136555118cd631b",
+    "schema_migrations": "9652e59f48f3540b9f8035389fbe088c7c8b5ee5848b303c2806ca3be5f87fe5",
+    "stock_daily": "6d815a77c8e35a65215595a217116db1bbdb2808b44ee80d14fc56395d8a5be6"
+  }
+}

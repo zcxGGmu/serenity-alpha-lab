@@ -1,28 +1,23 @@
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.pytest_cache/
-*.egg-info/
-build/
-dist/
-node_modules/
-.vite/
-playwright-report/
-test-results/
-apps/serenity-web/.cache/
-
-# Virtual environments
+.cache/
+.worktrees/
 .venv/
 venv/
-env/
-
-# Local runtime state
-*.log
-*.pid
-
-# OS/editor noise
-.DS_Store
-.idea/
-.vscode/
+node_modules/
+dist/
+build/
+*.egg-info/
+static/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+test-results/
+playwright-report/
+logs/
+reports/
+data/
+!src/serenity_alpha_lab/integrations/data/
+!src/serenity_alpha_lab/integrations/data/*.py
+longbridge_tokens/
+.env
+.env.*
+!.env.example

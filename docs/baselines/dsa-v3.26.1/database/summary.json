@@ -1,0 +1,116 @@
+{
+  "artifact_set": "database-schema-fixture",
+  "artifacts": {
+    "content-hashes.json": "3755370362408edb83f09e1e830eef3cb0f3c0a0c21284fbb67c1b6302fe9754",
+    "fixture-summary.json": "122d2b5602b0e297edfcc3e2d53fc16496210a9fef6991bd6c02a202e22fe160",
+    "fixture.sql": "382f4719d813f20b233786d90b0b5de66637a40d7ae35de61c69c4b0f57fa931",
+    "schema-metadata.json": "c17c0038814e27bebced45be9d5edc2deb1f28b6b5036639b730323b6aa7f7ae",
+    "schema.sql": "8d39743b05e5f6b6b7417805ced0fc27d5e5323d2ac04f791ac22c50038a5a51"
+  },
+  "auth_session_persistence": {
+    "covered": false,
+    "reason": "DSA v3.26.1 auth password/session state is file-backed or signed-cookie based, not a SQLite table; no auth secrets are included in this database fixture."
+  },
+  "baseline": {
+    "commit": "e8a9ca7742e8cb2498c8f491dd76d239b3064e1a",
+    "schema_version": "2026-06-05-create-all-baseline",
+    "tag": "v3.26.1",
+    "upstream": "ZhuLinsen/daily_stock_analysis"
+  },
+  "coverage": {
+    "analysis": {
+      "covered": true,
+      "row_counts": {
+        "analysis_history": 2,
+        "fundamental_snapshot": 1,
+        "news_intel": 1
+      },
+      "tables": [
+        "analysis_history",
+        "news_intel",
+        "fundamental_snapshot"
+      ]
+    },
+    "llm_usage": {
+      "covered": true,
+      "row_counts": {
+        "llm_usage": 1
+      },
+      "tables": [
+        "llm_usage"
+      ]
+    },
+    "portfolio": {
+      "covered": true,
+      "row_counts": {
+        "portfolio_accounts": 1,
+        "portfolio_cash_ledger": 1,
+        "portfolio_daily_snapshots": 1,
+        "portfolio_positions": 1,
+        "portfolio_trades": 1
+      },
+      "tables": [
+        "portfolio_accounts",
+        "portfolio_trades",
+        "portfolio_cash_ledger",
+        "portfolio_positions",
+        "portfolio_daily_snapshots"
+      ]
+    },
+    "schema_migration": {
+      "covered": true,
+      "row_counts": {
+        "schema_migrations": 1
+      },
+      "tables": [
+        "schema_migrations"
+      ]
+    },
+    "sessions": {
+      "covered": true,
+      "row_counts": {
+        "agent_provider_turns": 1,
+        "conversation_messages": 2,
+        "conversation_summaries": 1
+      },
+      "tables": [
+        "conversation_messages",
+        "conversation_summaries",
+        "agent_provider_turns"
+      ]
+    },
+    "signal_evaluation": {
+      "covered": true,
+      "row_counts": {
+        "backtest_results": 1,
+        "backtest_summaries": 1,
+        "decision_signal_feedback": 1,
+        "decision_signal_outcomes": 1,
+        "decision_signals": 1
+      },
+      "tables": [
+        "backtest_results",
+        "backtest_summaries",
+        "decision_signals",
+        "decision_signal_outcomes",
+        "decision_signal_feedback"
+      ]
+    }
+  },
+  "generated_at": "2026-07-19T00:00:00Z",
+  "index_count": 177,
+  "runtime_artifacts": {
+    "fixture.sqlite": "Generated under .cache/dsa-p0/database-baseline-artifacts/generated/fixture.sqlite; omitted from committed snapshots because SQLite page/header bytes are not stable across identical content rebuilds."
+  },
+  "table_count": 28,
+  "total_fixture_rows": 31,
+  "validation": {
+    "fixture_sql_round_trip_passed": true,
+    "foreign_key_check_passed": true,
+    "required_coverage_passed": true,
+    "restored_content_hashes_match": true,
+    "restored_row_counts_match": true,
+    "schema_migration_version": "2026-06-05-create-all-baseline",
+    "secret_scan_passed": true
+  }
+}

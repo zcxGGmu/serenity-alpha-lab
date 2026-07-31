@@ -1,0 +1,84 @@
+{
+  "build": {
+    "backend": "setuptools.build_meta via uv build",
+    "command": "SOURCE_DATE_EPOCH=1783081838 uv build --wheel --python 3.11 --out-dir .cache/alphasift-wheel-intake/wheelhouse --clear <source-archive>",
+    "reproducibility": "SOURCE_DATE_EPOCH pinned to locked commit time",
+    "source_date_epoch": 1783081838,
+    "wheel_generator": "setuptools (83.0.0)"
+  },
+  "evidence": {
+    "checksum": "docs/baselines/alphasift-wheel-intake/alphasift-wheel.sha256",
+    "license_inventory": "docs/baselines/alphasift-wheel-intake/license-inventory.csv",
+    "license_summary": "docs/baselines/alphasift-wheel-intake/license-summary.md",
+    "manifest": "docs/baselines/alphasift-wheel-intake/intake-manifest.json",
+    "sbom": "docs/baselines/alphasift-wheel-intake/sbom-cyclonedx.json"
+  },
+  "internal_artifact": {
+    "binary_committed_to_git": false,
+    "checksum_file": "docs/baselines/alphasift-wheel-intake/alphasift-wheel.sha256",
+    "local_wheelhouse_path": ".cache/alphasift-wheel-intake/wheelhouse/alphasift-0.2.0-py3-none-any.whl",
+    "uri": "internal://serenity-alpha-lab/python-wheels/alphasift/9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf/alphasift-0.2.0-py3-none-any.whl#sha256=b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2"
+  },
+  "offline_install_check": {
+    "command": "uv pip install --target .cache/alphasift-wheel-intake/offline-install-check --reinstall --no-index --find-links .cache/alphasift-wheel-intake/wheelhouse --no-deps alphasift==0.2.0",
+    "status": "PASS",
+    "target": ".cache/alphasift-wheel-intake/offline-install-check"
+  },
+  "package": {
+    "license_spdx": "Apache-2.0",
+    "name": "alphasift",
+    "requires_python": ">=3.10",
+    "runtime_dependencies": [
+      "pandas>=2.0",
+      "pyyaml>=6.0",
+      "litellm>=1.0",
+      "efinance>=0.4",
+      "akshare>=1.10",
+      "baostock>=0.8.9",
+      "tushare>=1.4",
+      "yfinance>=0.2",
+      "requests>=2.28"
+    ],
+    "version": "0.2.0"
+  },
+  "production_install_policy": {
+    "git_dependencies_allowed": false,
+    "offline_install_mode": "uv pip install --no-index --find-links <internal-wheelhouse> --no-deps alphasift==0.2.0",
+    "production_requirements_modified": false,
+    "root_pyproject_modified": false,
+    "root_uv_lock_modified": false
+  },
+  "prohibited_scope": [
+    "No ScreeningProvider Adapter implementation in SAL-P3-002.",
+    "No CandidateBatch, Factor Engine, Quant Core, formal backtest, or Evidence Agent.",
+    "No real Provider or real LLM calls.",
+    "No DSA runtime source migration and no upstream tag movement."
+  ],
+  "source": {
+    "archive_sha256": "4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a",
+    "archive_size_bytes": 300697,
+    "archive_url": "https://codeload.github.com/ZhuLinsen/alphasift/tar.gz/9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf",
+    "locked_commit": "9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf",
+    "repository": "https://github.com/ZhuLinsen/alphasift"
+  },
+  "status": "APPROVED_FOR_INTERNAL_WHEELHOUSE",
+  "task": "SAL-P3-002",
+  "wheel": {
+    "file_count": 56,
+    "filename": "alphasift-0.2.0-py3-none-any.whl",
+    "license_files": [
+      {
+        "path": "alphasift-0.2.0.data/data/LICENSE",
+        "sha256": "4aa75c59fb0d50653262470726b84c66636899ca96232a6e94e83c77456f8175"
+      },
+      {
+        "path": "alphasift-0.2.0.dist-info/licenses/LICENSE",
+        "sha256": "4aa75c59fb0d50653262470726b84c66636899ca96232a6e94e83c77456f8175"
+      }
+    ],
+    "root_is_purelib": true,
+    "sha256": "b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2",
+    "size_bytes": 216518,
+    "tag": "py3-none-any"
+  }
+}

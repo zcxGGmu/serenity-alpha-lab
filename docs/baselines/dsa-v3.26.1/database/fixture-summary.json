@@ -1,0 +1,133 @@
+{
+  "auth_session_persistence": {
+    "covered": false,
+    "reason": "DSA v3.26.1 auth password/session state is file-backed or signed-cookie based, not a SQLite table; no auth secrets are included in this database fixture."
+  },
+  "baseline": {
+    "commit": "e8a9ca7742e8cb2498c8f491dd76d239b3064e1a",
+    "schema_version": "2026-06-05-create-all-baseline",
+    "tag": "v3.26.1",
+    "upstream": "ZhuLinsen/daily_stock_analysis"
+  },
+  "coverage": {
+    "analysis": {
+      "covered": true,
+      "row_counts": {
+        "analysis_history": 2,
+        "fundamental_snapshot": 1,
+        "news_intel": 1
+      },
+      "tables": [
+        "analysis_history",
+        "news_intel",
+        "fundamental_snapshot"
+      ]
+    },
+    "llm_usage": {
+      "covered": true,
+      "row_counts": {
+        "llm_usage": 1
+      },
+      "tables": [
+        "llm_usage"
+      ]
+    },
+    "portfolio": {
+      "covered": true,
+      "row_counts": {
+        "portfolio_accounts": 1,
+        "portfolio_cash_ledger": 1,
+        "portfolio_daily_snapshots": 1,
+        "portfolio_positions": 1,
+        "portfolio_trades": 1
+      },
+      "tables": [
+        "portfolio_accounts",
+        "portfolio_trades",
+        "portfolio_cash_ledger",
+        "portfolio_positions",
+        "portfolio_daily_snapshots"
+      ]
+    },
+    "schema_migration": {
+      "covered": true,
+      "row_counts": {
+        "schema_migrations": 1
+      },
+      "tables": [
+        "schema_migrations"
+      ]
+    },
+    "sessions": {
+      "covered": true,
+      "row_counts": {
+        "agent_provider_turns": 1,
+        "conversation_messages": 2,
+        "conversation_summaries": 1
+      },
+      "tables": [
+        "conversation_messages",
+        "conversation_summaries",
+        "agent_provider_turns"
+      ]
+    },
+    "signal_evaluation": {
+      "covered": true,
+      "row_counts": {
+        "backtest_results": 1,
+        "backtest_summaries": 1,
+        "decision_signal_feedback": 1,
+        "decision_signal_outcomes": 1,
+        "decision_signals": 1
+      },
+      "tables": [
+        "backtest_results",
+        "backtest_summaries",
+        "decision_signals",
+        "decision_signal_outcomes",
+        "decision_signal_feedback"
+      ]
+    }
+  },
+  "fixture": {
+    "contains_real_user_data": false,
+    "contains_secrets": false,
+    "database_file": "fixture.sqlite",
+    "fixed_clock": "2026-01-05T09:30:00",
+    "kind": "sanitized-synthetic-sqlite-history-db",
+    "sql_dump": "fixture.sql"
+  },
+  "index_count": 177,
+  "row_counts": {
+    "agent_provider_turns": 1,
+    "alert_cooldowns": 1,
+    "alert_notifications": 1,
+    "alert_rules": 1,
+    "alert_triggers": 1,
+    "analysis_history": 2,
+    "backtest_results": 1,
+    "backtest_summaries": 1,
+    "conversation_messages": 2,
+    "conversation_summaries": 1,
+    "decision_signal_feedback": 1,
+    "decision_signal_outcomes": 1,
+    "decision_signals": 1,
+    "fundamental_snapshot": 1,
+    "intelligence_items": 1,
+    "intelligence_sources": 1,
+    "llm_usage": 1,
+    "news_intel": 1,
+    "portfolio_accounts": 1,
+    "portfolio_cash_ledger": 1,
+    "portfolio_corporate_actions": 1,
+    "portfolio_daily_snapshots": 1,
+    "portfolio_fx_rates": 1,
+    "portfolio_position_lots": 1,
+    "portfolio_positions": 1,
+    "portfolio_trades": 1,
+    "schema_migrations": 1,
+    "stock_daily": 2
+  },
+  "table_count": 28,
+  "total_rows": 31
+}

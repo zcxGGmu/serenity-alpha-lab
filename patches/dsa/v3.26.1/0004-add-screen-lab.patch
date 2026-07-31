@@ -1,0 +1,1311 @@
+diff --git a/apps/dsa-web/src/App.test.tsx b/apps/dsa-web/src/App.test.tsx
+index 7988770f..980db790 100644
+--- a/apps/dsa-web/src/App.test.tsx
++++ b/apps/dsa-web/src/App.test.tsx
+@@ -60,6 +60,10 @@ vi.mock('./pages/TokenUsagePage', () => ({
+   default: () => <div data-testid="token-usage-page">Usage</div>,
+ }));
+
++vi.mock('./pages/ScreenLabPage', () => ({
++  default: () => <div data-testid="screen-lab-page">Screen Lab</div>,
++}));
++
+ vi.mock('./pages/SettingsPage', () => ({
+   default: () => <div data-testid="settings-page">Settings</div>,
+ }));
+@@ -142,6 +146,16 @@ describe('App routing behavior', () => {
+     expect(screen.queryByTestId('home-page')).not.toBeInTheDocument();
+   });
+
++  it('routes /screen-lab to the Screen Lab page after auth is ready', async () => {
++    window.history.pushState({}, '', '/screen-lab');
++
++    render(<App />);
++
++    expect(await screen.findByTestId('screen-lab-page')).toBeInTheDocument();
++    expect(setCurrentRoute).toHaveBeenCalledWith('/screen-lab');
++    expect(screen.queryByTestId('home-page')).not.toBeInTheDocument();
++  });
++
+   it('routes /decision-signals to the AI signals page after auth is ready', async () => {
+     window.history.pushState({}, '', '/decision-signals');
+
+diff --git a/apps/dsa-web/src/App.tsx b/apps/dsa-web/src/App.tsx
+index 9fb8f48d..d25ec9ce 100644
+--- a/apps/dsa-web/src/App.tsx
++++ b/apps/dsa-web/src/App.tsx
+@@ -23,6 +23,7 @@ const DecisionSignalsPage = lazy(() => import('./pages/DecisionSignalsPage'));
+ const AlertsPage = lazy(() => import('./pages/AlertsPage'));
+ const TokenUsagePage = lazy(() => import('./pages/TokenUsagePage'));
+ const StockScreeningPage = lazy(() => import('./pages/StockScreeningPage'));
++const ScreenLabPage = lazy(() => import('./pages/ScreenLabPage'));
+
+ const AppContent: React.FC = () => {
+   const location = useLocation();
+@@ -83,6 +84,7 @@ const AppContent: React.FC = () => {
+         <Route path="/chat" element={<ChatPage />} />
+         <Route path="/portfolio" element={<PortfolioPage />} />
+         <Route path="/decision-signals" element={<DecisionSignalsPage />} />
++        <Route path="/screen-lab" element={<ScreenLabPage />} />
+         <Route path="/screening" element={<StockScreeningPage />} />
+         <Route path="/backtest" element={<BacktestPage />} />
+         <Route path="/alerts" element={<AlertsPage />} />
+diff --git a/apps/dsa-web/src/api/__tests__/quantScreening.test.ts b/apps/dsa-web/src/api/__tests__/quantScreening.test.ts
+new file mode 100644
+index 00000000..b4e72c5c
+--- /dev/null
++++ b/apps/dsa-web/src/api/__tests__/quantScreening.test.ts
+@@ -0,0 +1,155 @@
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import { quantScreeningApi } from '../quantScreening';
++
++const { get, post } = vi.hoisted(() => ({
++  get: vi.fn(),
++  post: vi.fn(),
++}));
++
++vi.mock('../index', () => ({
++  default: {
++    get,
++    post,
++  },
++}));
++
++describe('quantScreeningApi', () => {
++  beforeEach(() => {
++    get.mockReset();
++    post.mockReset();
++  });
++
++  it('submits screen runs through the Quant Screening API with an Idempotency-Key', async () => {
++    post.mockResolvedValueOnce({
++      data: {
++        run_id: 'run_qs_123',
++        task_id: 'task_123',
++        status: 'queued',
++        run_type: 'quant.screen.run',
++        screen_definition_version_id: 'sdv_11111111111111111111111111111111',
++        screen_snapshot_id: 'ssn_22222222222222222222222222222222',
++        pipeline_snapshot_id: 'sps_33333333333333333333333333333333',
++        as_of: '2026-07-24',
++        dataset_versions: { universe: 'dsv_44444444444444444444444444444444' },
++        schema: { name: 'quant.screen_snapshot', version: '1.0.0' },
++        trace: { trace_id: 'trace-1', run_id: 'run-1', stage_id: 'stage-1' },
++      },
++    });
++
++    const result = await quantScreeningApi.createScreenRun(
++      {
++        screenDefinitionId: 'screen_def_alpha',
++        screenDefinitionVersionId: 'sdv_11111111111111111111111111111111',
++        asOf: '2026-07-24',
++        datasetVersions: { universe: 'dsv_44444444444444444444444444444444' },
++        screenSnapshotId: 'ssn_22222222222222222222222222222222',
++        runMode: 'preview',
++      },
++      'idem-screen-lab-1',
++    );
++
++    expect(post).toHaveBeenCalledWith(
++      '/api/v1/quant/screen-runs',
++      {
++        screen_definition_id: 'screen_def_alpha',
++        screen_definition_version_id: 'sdv_11111111111111111111111111111111',
++        as_of: '2026-07-24',
++        dataset_versions: { universe: 'dsv_44444444444444444444444444444444' },
++        screen_snapshot_id: 'ssn_22222222222222222222222222222222',
++        run_mode: 'preview',
++      },
++      { headers: { 'Idempotency-Key': 'idem-screen-lab-1' } },
++    );
++    expect(result.runId).toBe('run_qs_123');
++    expect(result.schema.name).toBe('quant.screen_snapshot');
++    expect(result.datasetVersions.universe).toBe('dsv_44444444444444444444444444444444');
++  });
++
++  it('loads stable result pages and keeps snapshot lineage metadata', async () => {
++    get.mockResolvedValueOnce({
++      data: {
++        run_id: 'run_qs_123',
++        screen_snapshot_id: 'ssn_22222222222222222222222222222222',
++        pipeline_snapshot_id: 'sps_33333333333333333333333333333333',
++        as_of: '2026-07-24',
++        dataset_versions: { universe: 'dsv_44444444444444444444444444444444' },
++        schema: { name: 'quant.screen_snapshot', version: '1.0.0' },
++        trace: { trace_id: 'trace-1', run_id: 'run-1', stage_id: 'stage-1' },
++        items: [
++          {
++            instrument_id: 'CN.XSHG.600519',
++            name: '贵州茅台',
++            status: 'passed',
++            rank: 1,
++            final_score: 92.4,
++          },
++        ],
++        page_size: 25,
++        cursor: null,
++        next_cursor: '25',
++        total_count: 80,
++      },
++    });
++
++    const page = await quantScreeningApi.getScreenRunResults('run_qs_123', { pageSize: 25 });
++
++    expect(get).toHaveBeenCalledWith('/api/v1/quant/screen-runs/run_qs_123/results', {
++      params: { page_size: 25, cursor: undefined },
++    });
++    expect(page.items[0].instrumentId).toBe('CN.XSHG.600519');
++    expect(page.nextCursor).toBe('25');
++    expect(page.trace.traceId).toBe('trace-1');
++  });
++
++  it('loads one result explanation row and compares two screen runs', async () => {
++    get
++      .mockResolvedValueOnce({
++        data: {
++          instrument_id: 'CN.XSHG.600519',
++          name: '贵州茅台',
++          status: 'passed',
++          rank: 1,
++          final_score: 92.4,
++          stage_scores: { l1_provider: 88, l2_factor: 94 },
++          factor_contributions: { roe_ttm: 0.31 },
++          explanation_steps: [
++            {
++              stage: 'l4_final',
++              rule_id: 'l4_final_passed',
++              reason: '通过 deterministic final screen gates',
++              authoritative: true,
++            },
++          ],
++        },
++      })
++      .mockResolvedValueOnce({
++        data: {
++          schema: { name: 'quant.screen_snapshot_comparison', version: '1.0.0' },
++          previous_run_id: 'run_qs_old',
++          current_run_id: 'run_qs_new',
++          added: ['CN.XSHG.600519'],
++          removed: [],
++          retained: ['CN.XSHE.000001'],
++          status_changes: [],
++          rank_changes: [{ instrument_id: 'CN.XSHE.000001', previous_rank: 2, current_rank: 1 }],
++          score_deltas: [{ instrument_id: 'CN.XSHE.000001', delta: 4.2 }],
++        },
++      });
++
++    const row = await quantScreeningApi.getScreenRunResult('run_qs_123', 'CN.XSHG.600519');
++    const comparison = await quantScreeningApi.compareScreenRuns('run_qs_old', 'run_qs_new');
++
++    expect(get).toHaveBeenNthCalledWith(
++      1,
++      '/api/v1/quant/screen-runs/run_qs_123/results/CN.XSHG.600519',
++    );
++    expect(row.explanationSteps?.[0]?.ruleId).toBe('l4_final_passed');
++    expect(get).toHaveBeenNthCalledWith(
++      2,
++      '/api/v1/quant/screen-runs/run_qs_new/comparison',
++      { params: { previous_run_id: 'run_qs_old' } },
++    );
++    expect(comparison.added).toEqual(['CN.XSHG.600519']);
++    expect(comparison.rankChanges[0].previousRank).toBe(2);
++  });
++});
+diff --git a/apps/dsa-web/src/api/quantScreening.ts b/apps/dsa-web/src/api/quantScreening.ts
+new file mode 100644
+index 00000000..1c57dfe0
+--- /dev/null
++++ b/apps/dsa-web/src/api/quantScreening.ts
+@@ -0,0 +1,179 @@
++import apiClient from './index';
++import { toCamelCase } from './utils';
++
++export type QuantSchemaRef = {
++  name: string;
++  version: string;
++};
++
++export type QuantTraceRef = {
++  traceId: string;
++  runId?: string | null;
++  stageId?: string | null;
++};
++
++export type QuantArtifactManifest = {
++  artifactId?: string;
++  uri?: string;
++  sha256?: string;
++  contentType?: string;
++};
++
++export type QuantDatasetVersions = Record<string, string>;
++
++export type QuantScreenRunMode = 'preview' | 'formal';
++
++export type QuantScreenRunCreatePayload = {
++  screenDefinitionId: string;
++  screenDefinitionVersionId: string;
++  asOf: string;
++  datasetVersions: QuantDatasetVersions;
++  screenSnapshotId: string;
++  runMode: QuantScreenRunMode;
++};
++
++export type QuantScreenRunAccepted = {
++  runId: string;
++  taskId: string;
++  status: string;
++  runType: string;
++  screenDefinitionVersionId: string;
++  screenSnapshotId: string;
++  pipelineSnapshotId: string;
++  asOf: string;
++  datasetVersions: QuantDatasetVersions;
++  schema: QuantSchemaRef;
++  trace: QuantTraceRef;
++  artifact?: QuantArtifactManifest | null;
++};
++
++export type QuantScreenResultStatus = 'passed' | 'failed' | string;
++
++export type QuantExplanationStep = {
++  stage: string;
++  ruleId: string;
++  reason: string;
++  authoritative: boolean;
++  scores?: Record<string, number>;
++  factorContributions?: Record<string, number>;
++  sourceIds?: string[];
++  details?: Record<string, unknown>;
++};
++
++export type QuantScreenResultRow = {
++  instrumentId: string;
++  name?: string | null;
++  status: QuantScreenResultStatus;
++  rank?: number | null;
++  failedStage?: string | null;
++  finalScore?: number | null;
++  stageScores?: Record<string, number>;
++  factorContributions?: Record<string, number>;
++  reasonCodes?: string[];
++  industry?: string | null;
++  explanationSteps?: QuantExplanationStep[];
++};
++
++export type QuantScreenResultsPage = {
++  runId: string;
++  screenSnapshotId: string;
++  pipelineSnapshotId: string;
++  asOf: string;
++  datasetVersions: QuantDatasetVersions;
++  schema: QuantSchemaRef;
++  trace: QuantTraceRef;
++  artifact?: QuantArtifactManifest | null;
++  items: QuantScreenResultRow[];
++  pageSize: number;
++  cursor?: string | null;
++  nextCursor?: string | null;
++  totalCount: number;
++  partial?: boolean;
++  stale?: boolean;
++};
++
++export type QuantScreenComparison = {
++  schema: QuantSchemaRef;
++  previousRunId: string;
++  currentRunId: string;
++  added: string[];
++  removed: string[];
++  retained: string[];
++  statusChanges: Array<Record<string, unknown>>;
++  rankChanges: Array<{
++    instrumentId: string;
++    previousRank?: number | null;
++    currentRank?: number | null;
++  }>;
++  scoreDeltas: Array<{
++    instrumentId: string;
++    delta?: number | null;
++  }>;
++};
++
++function isPlainRecord(value: unknown): value is Record<string, unknown> {
++  return typeof value === 'object' && value !== null && !Array.isArray(value);
++}
++
++function toSnakeKey(value: string): string {
++  return value.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
++}
++
++function toSnakeCase(value: unknown): unknown {
++  if (Array.isArray(value)) {
++    return value.map((item) => toSnakeCase(item));
++  }
++
++  if (!isPlainRecord(value)) {
++    return value;
++  }
++
++  return Object.fromEntries(
++    Object.entries(value).map(([key, entry]) => [toSnakeKey(key), toSnakeCase(entry)]),
++  );
++}
++
++export const quantScreeningApi = {
++  async createScreenRun(
++    payload: QuantScreenRunCreatePayload,
++    idempotencyKey: string,
++  ): Promise<QuantScreenRunAccepted> {
++    const response = await apiClient.post<Record<string, unknown>>(
++      '/api/v1/quant/screen-runs',
++      toSnakeCase(payload),
++      { headers: { 'Idempotency-Key': idempotencyKey } },
++    );
++    return toCamelCase<QuantScreenRunAccepted>(response.data);
++  },
++
++  async getScreenRunResults(
++    runId: string,
++    options: { cursor?: string | null; pageSize?: number } = {},
++  ): Promise<QuantScreenResultsPage> {
++    const response = await apiClient.get<Record<string, unknown>>(
++      `/api/v1/quant/screen-runs/${encodeURIComponent(runId)}/results`,
++      {
++        params: {
++          page_size: options.pageSize ?? 25,
++          cursor: options.cursor ?? undefined,
++        },
++      },
++    );
++    return toCamelCase<QuantScreenResultsPage>(response.data);
++  },
++
++  async getScreenRunResult(runId: string, instrumentId: string): Promise<QuantScreenResultRow> {
++    const response = await apiClient.get<Record<string, unknown>>(
++      `/api/v1/quant/screen-runs/${encodeURIComponent(runId)}/results/${encodeURIComponent(instrumentId)}`,
++    );
++    return toCamelCase<QuantScreenResultRow>(response.data);
++  },
++
++  async compareScreenRuns(previousRunId: string, currentRunId: string): Promise<QuantScreenComparison> {
++    const response = await apiClient.get<Record<string, unknown>>(
++      `/api/v1/quant/screen-runs/${encodeURIComponent(currentRunId)}/comparison`,
++      { params: { previous_run_id: previousRunId } },
++    );
++    return toCamelCase<QuantScreenComparison>(response.data);
++  },
++};
+diff --git a/apps/dsa-web/src/components/layout/SidebarNav.tsx b/apps/dsa-web/src/components/layout/SidebarNav.tsx
+index 0c595f12..e346feb8 100644
+--- a/apps/dsa-web/src/components/layout/SidebarNav.tsx
++++ b/apps/dsa-web/src/components/layout/SidebarNav.tsx
+@@ -1,5 +1,5 @@
+ import React, { useEffect, useState } from 'react';
+-import { Activity, BarChart3, Bell, BriefcaseBusiness, Gauge, Home, LogOut, MessageSquareQuote, Search, Settings2 } from 'lucide-react';
++import { Activity, BarChart3, Bell, BriefcaseBusiness, Gauge, Home, LogOut, MessageSquareQuote, Microscope, Search, Settings2 } from 'lucide-react';
+ import { NavLink } from 'react-router-dom';
+ import { ALPHASIFT_CONFIG_CHANGED_EVENT, SYSTEM_CONFIG_CHANGED_EVENT, alphasiftApi } from '../../api/alphasift';
+ import { useAuth } from '../../contexts/AuthContext';
+@@ -30,6 +30,7 @@ type NavItem = {
+ const NAV_ITEMS: NavItem[] = [
+   { key: 'home', labelKey: 'layout.nav.home', to: '/', icon: Home, exact: true },
+   { key: 'chat', labelKey: 'layout.nav.chat', to: '/chat', icon: MessageSquareQuote, badge: 'completion' },
++  { key: 'screen-lab', labelKey: 'layout.nav.screenLab', to: '/screen-lab', icon: Microscope },
+   { key: 'screening', labelKey: 'layout.nav.screening', to: '/screening', icon: Search },
+   { key: 'portfolio', labelKey: 'layout.nav.portfolio', to: '/portfolio', icon: BriefcaseBusiness },
+   { key: 'decision-signals', labelKey: 'layout.nav.decisionSignals', to: '/decision-signals', icon: Activity },
+diff --git a/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx b/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
+index 4873c44e..39b9722a 100644
+--- a/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
++++ b/apps/dsa-web/src/components/layout/__tests__/SidebarNav.test.tsx
+@@ -60,7 +60,7 @@ describe('SidebarNav', () => {
+     expect(await screen.findByRole('link', { name: '选股' })).toHaveAttribute('href', '/screening');
+   });
+
+-  it('places screening directly after chat when AlphaSift is enabled', async () => {
++  it('places screen lab after chat and legacy screening after the lab when AlphaSift is enabled', async () => {
+     mockGetAlphaSiftStatus.mockResolvedValueOnce({ enabled: true, available: false, installSpecIsDefault: false });
+
+     render(
+@@ -69,9 +69,10 @@ describe('SidebarNav', () => {
+       </MemoryRouter>,
+     );
+
++    await screen.findByRole('link', { name: '筛选实验室' });
+     await screen.findByRole('link', { name: '选股' });
+     const hrefs = screen.getAllByRole('link').map((link) => link.getAttribute('href'));
+-    expect(hrefs.slice(0, 5)).toEqual(['/', '/chat', '/screening', '/portfolio', '/decision-signals']);
++    expect(hrefs.slice(0, 6)).toEqual(['/', '/chat', '/screen-lab', '/screening', '/portfolio', '/decision-signals']);
+   });
+
+   it('refreshes the screening navigation item after any config save event', async () => {
+diff --git a/apps/dsa-web/src/i18n/uiText.ts b/apps/dsa-web/src/i18n/uiText.ts
+index f9726bf0..31dde6d4 100644
+--- a/apps/dsa-web/src/i18n/uiText.ts
++++ b/apps/dsa-web/src/i18n/uiText.ts
+@@ -54,6 +54,7 @@ const zh = {
+   'layout.nav.home': '首页',
+   'layout.nav.portfolio': '持仓',
+   'layout.nav.settings': '设置',
++  'layout.nav.screenLab': '筛选实验室',
+   'layout.nav.screening': '选股',
+   'layout.nav.usage': '用量',
+   'layout.navMenu': '导航菜单',
+@@ -73,6 +74,8 @@ const zh = {
+   'layout.route.portfolio.title': '持仓',
+   'layout.route.settings.description': '系统配置、模型与认证管理',
+   'layout.route.settings.title': '设置',
++  'layout.route.screenLab.description': 'ScreenDefinition 配置、Quant Screening Run、结果解释与历史比较',
++  'layout.route.screenLab.title': '筛选实验室',
+   'layout.route.screening.description': 'AlphaSift 策略选股与候选研究',
+   'layout.route.screening.title': '选股',
+   'layout.route.usage.description': 'LLM Token 消耗与模型调用明细',
+@@ -892,6 +895,7 @@ const en: Record<UiTextKey, string> = {
+   'layout.nav.home': 'Home',
+   'layout.nav.portfolio': 'Portfolio',
+   'layout.nav.settings': 'Settings',
++  'layout.nav.screenLab': 'Screen Lab',
+   'layout.nav.screening': 'Screening',
+   'layout.nav.usage': 'Usage',
+   'layout.navMenu': 'Navigation',
+@@ -911,6 +915,8 @@ const en: Record<UiTextKey, string> = {
+   'layout.route.portfolio.title': 'Portfolio',
+   'layout.route.settings.description': 'System config, models, and authentication',
+   'layout.route.settings.title': 'Settings',
++  'layout.route.screenLab.description': 'ScreenDefinition configuration, Quant Screening runs, result explanations, and history comparison',
++  'layout.route.screenLab.title': 'Screen Lab',
+   'layout.route.screening.description': 'AlphaSift strategy screening and candidate research',
+   'layout.route.screening.title': 'Screening',
+   'layout.route.usage.description': 'LLM token consumption and model call details',
+diff --git a/apps/dsa-web/src/pages/ScreenLabPage.tsx b/apps/dsa-web/src/pages/ScreenLabPage.tsx
+new file mode 100644
+index 00000000..f5d6ad77
+--- /dev/null
++++ b/apps/dsa-web/src/pages/ScreenLabPage.tsx
+@@ -0,0 +1,611 @@
++import type React from 'react';
++import { useMemo, useState } from 'react';
++import {
++  BarChart3,
++  BookOpen,
++  Boxes,
++  Clock3,
++  FileText,
++  GitCompare,
++  Layers3,
++  ListChecks,
++  LockKeyhole,
++  Microscope,
++  Play,
++  RefreshCw,
++  Search,
++  ShieldCheck,
++  SlidersHorizontal,
++  Sparkles,
++} from 'lucide-react';
++import {
++  AppPage,
++  Badge,
++  Button,
++  Card,
++  Drawer,
++  EmptyState,
++  InlineAlert,
++  StatusDot,
++} from '../components/common';
++import {
++  quantScreeningApi,
++  type QuantScreenComparison,
++  type QuantScreenResultsPage,
++  type QuantScreenResultRow,
++  type QuantScreenRunAccepted,
++  type QuantScreenRunMode,
++} from '../api/quantScreening';
++
++const DEMO_SCREEN_DEFINITION_ID = 'screen_def_screen_lab_demo';
++const DEMO_SCREEN_DEFINITION_VERSION_ID = 'sdv_11111111111111111111111111111111';
++const DEMO_SCREEN_SNAPSHOT_ID = 'ssn_22222222222222222222222222222222';
++const DEMO_DATASET_VERSION = 'dsv_44444444444444444444444444444444';
++const DEFAULT_AS_OF = '2026-07-24';
++const DEFAULT_PAGE_SIZE = 25;
++
++type PageState = 'initial' | 'loading' | 'ready' | 'error' | 'permission-denied';
++
++type ScreenLabError = {
++  title: string;
++  message: string;
++};
++
++function formatScore(value?: number | null): string {
++  if (value == null || !Number.isFinite(Number(value))) {
++    return '-';
++  }
++  return Number(value).toFixed(1);
++}
++
++function formatObjectEntries(values?: Record<string, string | number> | null): string {
++  if (!values || Object.keys(values).length === 0) {
++    return '-';
++  }
++  return Object.entries(values)
++    .map(([key, value]) => `${key}: ${value}`)
++    .join(' · ');
++}
++
++function getErrorStatus(error: unknown): number | undefined {
++  if (typeof error !== 'object' || error === null) {
++    return undefined;
++  }
++  const response = (error as { response?: { status?: number } }).response;
++  return response?.status;
++}
++
++function getErrorMessage(error: unknown): string {
++  if (error instanceof Error && error.message.trim()) {
++    return error.message.trim();
++  }
++  if (typeof error === 'object' && error !== null) {
++    const data = (error as { response?: { data?: { title?: string; detail?: string; message?: string } } }).response?.data;
++    const message = data?.detail || data?.message || data?.title;
++    if (typeof message === 'string' && message.trim()) {
++      return message.trim();
++    }
++  }
++  return 'Unknown error';
++}
++
++function stateTone(status: string): 'success' | 'warning' | 'danger' | 'info' | 'default' {
++  if (status === 'passed' || status === 'queued' || status === 'completed') {
++    return 'success';
++  }
++  if (status === 'failed') {
++    return 'danger';
++  }
++  if (status === 'partial' || status === 'stale') {
++    return 'warning';
++  }
++  return 'info';
++}
++
++const PipelineStep: React.FC<{
++  icon: React.ComponentType<{ className?: string }>;
++  title: string;
++  description: string;
++}> = ({ icon: Icon, title, description }) => (
++  <div className="rounded-xl border border-border/70 bg-surface/70 p-3">
++    <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
++      <span className="grid h-7 w-7 place-items-center rounded-lg bg-cyan/10 text-cyan">
++        <Icon className="h-4 w-4" />
++      </span>
++      {title}
++    </div>
++    <p className="mt-2 text-xs leading-5 text-secondary-text">{description}</p>
++  </div>
++);
++
++const LineagePanel: React.FC<{ run: QuantScreenRunAccepted | null; page: QuantScreenResultsPage | null }> = ({ run, page }) => {
++  if (!run && !page) {
++    return null;
++  }
++  const datasetVersions = page?.datasetVersions || run?.datasetVersions || {};
++  return (
++    <div className="grid gap-3 rounded-2xl border border-border/70 bg-card/80 p-4 text-xs text-secondary-text md:grid-cols-2 xl:grid-cols-4">
++      <div>
++        <p className="font-semibold text-foreground">Snapshot</p>
++        <p className="mt-1 break-all">{page?.screenSnapshotId || run?.screenSnapshotId}</p>
++        <p className="mt-1">as-of {page?.asOf || run?.asOf}</p>
++      </div>
++      <div>
++        <p className="font-semibold text-foreground">Dataset / schema</p>
++        <p className="mt-1 break-all">{formatObjectEntries(datasetVersions)}</p>
++        <p className="mt-1">{page?.schema.name || run?.schema.name}@{page?.schema.version || run?.schema.version}</p>
++      </div>
++      <div>
++        <p className="font-semibold text-foreground">Trace</p>
++        <p className="mt-1 break-all">{page?.trace.traceId || run?.trace.traceId}</p>
++        <p className="mt-1 break-all">{page?.trace.stageId || run?.trace.stageId || '-'}</p>
++      </div>
++      <div>
++        <p className="font-semibold text-foreground">Artifact</p>
++        <p className="mt-1 break-all">{page?.artifact?.artifactId || run?.artifact?.artifactId || '-'}</p>
++        <p className="mt-1 break-all">{page?.artifact?.sha256 || run?.artifact?.sha256 || '-'}</p>
++      </div>
++    </div>
++  );
++};
++
++const ResultTable: React.FC<{
++  page: QuantScreenResultsPage | null;
++  onExplain: (row: QuantScreenResultRow) => void;
++}> = ({ page, onExplain }) => {
++  if (!page) {
++    return (
++      <EmptyState
++        title="No ScreenSnapshot loaded"
++        description="Run a Preview or Formal screen to load Quant Screening API rows with dataset, schema, trace, and artifact lineage."
++        icon={<Search className="h-8 w-8" />}
++      />
++    );
++  }
++
++  if (page.items.length === 0) {
++    return (
++      <EmptyState
++        title="Empty ScreenSnapshot"
++        description="The API returned a valid snapshot with no result rows. Keep the lineage visible and adjust filters before rerunning."
++        icon={<ListChecks className="h-8 w-8" />}
++      />
++    );
++  }
++
++  return (
++    <div className="overflow-hidden rounded-2xl border border-border/70">
++      <div className="max-h-[520px] overflow-auto">
++        <table className="min-w-full divide-y divide-border/70 text-sm">
++          <thead className="sticky top-0 bg-card text-xs uppercase tracking-normal text-secondary-text">
++            <tr>
++              <th className="px-4 py-3 text-left font-semibold">Rank</th>
++              <th className="px-4 py-3 text-left font-semibold">Instrument</th>
++              <th className="px-4 py-3 text-left font-semibold">Status</th>
++              <th className="px-4 py-3 text-right font-semibold">Score</th>
++              <th className="px-4 py-3 text-left font-semibold">Factors</th>
++              <th className="px-4 py-3 text-right font-semibold">Trace</th>
++            </tr>
++          </thead>
++          <tbody className="divide-y divide-border/60 bg-card/70">
++            {page.items.map((row) => (
++              <tr key={row.instrumentId} className="align-top">
++                <td className="px-4 py-3 font-mono text-secondary-text">{row.rank ?? '-'}</td>
++                <td className="px-4 py-3">
++                  <p className="font-semibold text-foreground">{row.name || row.instrumentId}</p>
++                  <p className="mt-1 font-mono text-xs text-secondary-text">{row.instrumentId}</p>
++                  {row.industry ? <p className="mt-1 text-xs text-secondary-text">{row.industry}</p> : null}
++                </td>
++                <td className="px-4 py-3">
++                  <Badge variant={stateTone(row.status)}>{row.status}</Badge>
++                  {row.failedStage ? <p className="mt-2 text-xs text-warning">{row.failedStage}</p> : null}
++                </td>
++                <td className="px-4 py-3 text-right font-mono text-foreground">{formatScore(row.finalScore)}</td>
++                <td className="max-w-xs px-4 py-3 text-xs leading-5 text-secondary-text">
++                  {formatObjectEntries(row.factorContributions)}
++                  {(row.reasonCodes || []).length > 0 ? (
++                    <p className="mt-1 text-cyan">{row.reasonCodes?.join(', ')}</p>
++                  ) : null}
++                </td>
++                <td className="px-4 py-3 text-right">
++                  <Button
++                    size="sm"
++                    variant="secondary"
++                    onClick={() => onExplain(row)}
++                    aria-label={`Explain ${row.instrumentId}`}
++                  >
++                    <BookOpen className="h-4 w-4" />
++                    Explain
++                  </Button>
++                </td>
++              </tr>
++            ))}
++          </tbody>
++        </table>
++      </div>
++    </div>
++  );
++};
++
++const ComparisonPanel: React.FC<{ comparison: QuantScreenComparison | null }> = ({ comparison }) => {
++  if (!comparison) {
++    return (
++      <p className="rounded-xl border border-dashed border-border/70 bg-surface/60 px-4 py-3 text-sm text-secondary-text">
++        Enter a previous run id to compare History against the current Snapshot.
++      </p>
++    );
++  }
++
++  return (
++    <div className="space-y-3">
++      <div className="grid gap-2 sm:grid-cols-3">
++        <Badge variant="success" size="md">Added {comparison.added.length}</Badge>
++        <Badge variant="danger" size="md">Removed {comparison.removed.length}</Badge>
++        <Badge variant="info" size="md">Retained {comparison.retained.length}</Badge>
++      </div>
++      <div className="rounded-xl border border-border/70 bg-surface/70 p-3 text-xs leading-5 text-secondary-text">
++        <p>{comparison.schema.name}@{comparison.schema.version}</p>
++        {comparison.rankChanges.map((item) => (
++          <p key={item.instrumentId} className="mt-1">
++            {item.instrumentId}: rank {item.previousRank ?? '-'}{' -> '}{item.currentRank ?? '-'}
++          </p>
++        ))}
++        {comparison.scoreDeltas.map((item) => (
++          <p key={`${item.instrumentId}-delta`} className="mt-1">
++            {item.instrumentId}: score delta {formatScore(item.delta)}
++          </p>
++        ))}
++      </div>
++    </div>
++  );
++};
++
++const ScreenLabPage: React.FC = () => {
++  const [runMode, setRunMode] = useState<QuantScreenRunMode>('preview');
++  const [asOf, setAsOf] = useState(DEFAULT_AS_OF);
++  const [pageState, setPageState] = useState<PageState>('initial');
++  const [error, setError] = useState<ScreenLabError | null>(null);
++  const [currentRun, setCurrentRun] = useState<QuantScreenRunAccepted | null>(null);
++  const [resultsPage, setResultsPage] = useState<QuantScreenResultsPage | null>(null);
++  const [selectedRow, setSelectedRow] = useState<QuantScreenResultRow | null>(null);
++  const [drawerOpen, setDrawerOpen] = useState(false);
++  const [previousRunId, setPreviousRunId] = useState('');
++  const [comparison, setComparison] = useState<QuantScreenComparison | null>(null);
++  const [comparisonLoading, setComparisonLoading] = useState(false);
++
++  const passedCount = useMemo(
++    () => resultsPage?.items.filter((item) => item.status === 'passed').length ?? 0,
++    [resultsPage],
++  );
++  const failedCount = useMemo(
++    () => resultsPage?.items.filter((item) => item.status === 'failed').length ?? 0,
++    [resultsPage],
++  );
++
++  async function runScreen(nextRunMode: QuantScreenRunMode) {
++    setRunMode(nextRunMode);
++    setPageState('loading');
++    setError(null);
++    setComparison(null);
++    try {
++      const run = await quantScreeningApi.createScreenRun(
++        {
++          screenDefinitionId: DEMO_SCREEN_DEFINITION_ID,
++          screenDefinitionVersionId: DEMO_SCREEN_DEFINITION_VERSION_ID,
++          asOf,
++          datasetVersions: {
++            universe: DEMO_DATASET_VERSION,
++            factor_values: DEMO_DATASET_VERSION,
++            candidate_batch: DEMO_DATASET_VERSION,
++          },
++          screenSnapshotId: DEMO_SCREEN_SNAPSHOT_ID,
++          runMode: nextRunMode,
++        },
++        `screen-lab-${nextRunMode}-${asOf}`,
++      );
++      const page = await quantScreeningApi.getScreenRunResults(run.runId, { pageSize: DEFAULT_PAGE_SIZE });
++      setCurrentRun(run);
++      setResultsPage(page);
++      setPageState('ready');
++    } catch (requestError) {
++      if (getErrorStatus(requestError) === 403) {
++        setPageState('permission-denied');
++        setError({ title: 'Permission denied', message: getErrorMessage(requestError) });
++        return;
++      }
++      setPageState('error');
++      setError({ title: 'Screen Lab request failed', message: getErrorMessage(requestError) });
++    }
++  }
++
++  async function loadExplanation(row: QuantScreenResultRow) {
++    if (!currentRun) {
++      return;
++    }
++    setDrawerOpen(true);
++    setSelectedRow(row);
++    try {
++      const detailedRow = await quantScreeningApi.getScreenRunResult(currentRun.runId, row.instrumentId);
++      setSelectedRow(detailedRow);
++    } catch {
++      setSelectedRow(row);
++    }
++  }
++
++  async function compareHistory() {
++    if (!currentRun || !previousRunId.trim()) {
++      return;
++    }
++    setComparisonLoading(true);
++    setError(null);
++    try {
++      const nextComparison = await quantScreeningApi.compareScreenRuns(previousRunId.trim(), currentRun.runId);
++      setComparison(nextComparison);
++    } catch (requestError) {
++      setError({ title: 'Screen Lab request failed', message: getErrorMessage(requestError) });
++    } finally {
++      setComparisonLoading(false);
++    }
++  }
++
++  return (
++    <AppPage className="max-w-[1480px] space-y-6 pb-12 pt-6">
++      <div data-testid="screen-lab-page" className="contents">
++      <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
++        <div className="flex items-start gap-3">
++          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-cyan/10 text-cyan shadow-[0_14px_36px_hsl(var(--primary)/0.14)]">
++            <Microscope className="h-5 w-5" />
++          </span>
++          <div>
++            <span className="label-uppercase">Quant Screening</span>
++            <h1 className="mt-1 text-2xl font-bold tracking-normal text-foreground">Screen Lab</h1>
++            <p className="mt-2 max-w-3xl text-sm leading-6 text-secondary-text">
++              Configure ScreenDefinition drafts, submit Preview/Formal runs through `/api/v1/quant`, inspect
++              `quant.screen_snapshot@1.0.0` rows, and compare History without rebuilding UI-only data semantics.
++            </p>
++          </div>
++        </div>
++        <div className="flex flex-wrap gap-2">
++          <Badge variant="info" size="md">Draft</Badge>
++          <Badge variant="success" size="md">Published</Badge>
++          <Badge variant="history" size="md">Snapshot</Badge>
++          <Badge variant="default" size="md">History</Badge>
++          <Badge variant={runMode === 'preview' ? 'info' : 'default'} size="md">Preview</Badge>
++          <Badge variant={runMode === 'formal' ? 'warning' : 'default'} size="md">Formal</Badge>
++        </div>
++      </div>
++
++      <InlineAlert
++        variant="info"
++        title="Contract boundary"
++        message="Screen Lab consumes Quant Screening API records with ScreenSnapshot, ScreenDefinition, CandidateBatch, FactorDefinition, Factor Evaluation, Dataset Manifest, ProblemDetails, Trace, Artifact, and Run/Stage/Event lineage. It does not call the legacy AlphaSift screen endpoints."
++      />
++
++      {pageState === 'loading' ? (
++        <InlineAlert
++          variant="info"
++          title="Loading Quant snapshot..."
++          message={`Submitting ${runMode} run and loading stable cursor results from /api/v1/quant.`}
++        />
++      ) : null}
++      {pageState === 'permission-denied' && error ? (
++        <InlineAlert variant="danger" title={error.title} message={error.message} />
++      ) : null}
++      {pageState === 'error' && error ? (
++        <InlineAlert variant="danger" title={error.title} message={error.message} />
++      ) : null}
++      {resultsPage?.partial ? <InlineAlert variant="warning" title="Partial result" message="The API marked this result page as partial; keep the trace and artifact visible before using it downstream." /> : null}
++      {resultsPage?.stale ? <InlineAlert variant="warning" title="Stale snapshot" message="The loaded snapshot may be stale relative to the latest published Dataset Version. Refresh before formal review." /> : null}
++
++      <div className="grid gap-5 xl:grid-cols-[390px_1fr]">
++        <div className="space-y-5">
++          <Card title="Definition editor" subtitle="L0-L4 ScreenDefinition" padding="md">
++            <div className="space-y-3">
++              <label className="block text-xs font-semibold text-secondary-text">
++                Definition version
++                <input
++                  className="mt-2 h-10 w-full rounded-xl border border-border bg-surface px-3 font-mono text-xs text-foreground outline-none focus:border-cyan"
++                  value={DEMO_SCREEN_DEFINITION_VERSION_ID}
++                  readOnly
++                />
++              </label>
++              <label className="block text-xs font-semibold text-secondary-text">
++                As-of date
++                <input
++                  aria-label="As-of date"
++                  className="mt-2 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-cyan"
++                  type="date"
++                  value={asOf}
++                  onChange={(event) => setAsOf(event.target.value)}
++                />
++              </label>
++              <div className="grid gap-2">
++                <PipelineStep icon={Boxes} title="Universe" description="L0 historical universe, trading status and hard exclusions use concrete dsv_* versions." />
++                <PipelineStep icon={SlidersHorizontal} title="Filter" description="L1 provider and L2 deterministic factor filters retain CandidateBatch and factor-version lineage." />
++                <PipelineStep icon={Sparkles} title="Score" description="Factor weights are previewed here; LLM overlay is displayed separately and cannot bypass hard filters." />
++                <PipelineStep icon={ShieldCheck} title="Constraint" description="L4 top_n and max_per_industry gates remain deterministic Screen gates, not a portfolio risk engine." />
++              </div>
++            </div>
++          </Card>
++
++          <Card title="Run controls" subtitle="Preview / Formal" padding="md">
++            <div className="grid gap-3">
++              <div className="grid grid-cols-2 gap-2" role="group" aria-label="Run mode">
++                <button
++                  type="button"
++                  className={`rounded-xl border px-3 py-2 text-sm font-semibold ${runMode === 'preview' ? 'border-cyan bg-cyan/10 text-cyan' : 'border-border bg-surface text-secondary-text'}`}
++                  onClick={() => setRunMode('preview')}
++                >
++                  Preview mode
++                </button>
++                <button
++                  type="button"
++                  className={`rounded-xl border px-3 py-2 text-sm font-semibold ${runMode === 'formal' ? 'border-warning bg-warning/10 text-warning' : 'border-border bg-surface text-secondary-text'}`}
++                  onClick={() => setRunMode('formal')}
++                >
++                  Formal mode
++                </button>
++              </div>
++              <Button
++                isLoading={pageState === 'loading'}
++                loadingText="Submitting..."
++                onClick={() => void runScreen(runMode)}
++              >
++                <Play className="h-4 w-4" />
++                Run {runMode}
++              </Button>
++              <Button
++                variant="secondary"
++                disabled={pageState === 'loading'}
++                onClick={() => void runScreen('preview')}
++              >
++                <RefreshCw className="h-4 w-4" />
++                Refresh Snapshot
++              </Button>
++            </div>
++          </Card>
++
++          <Card title="History comparison" subtitle="Snapshot diff" padding="md">
++            <div className="space-y-3">
++              <label className="block text-xs font-semibold text-secondary-text">
++                Previous run id
++                <input
++                  aria-label="Previous run id"
++                  className="mt-2 h-10 w-full rounded-xl border border-border bg-surface px-3 font-mono text-xs text-foreground outline-none focus:border-cyan"
++                  placeholder="run_qs_previous"
++                  value={previousRunId}
++                  onChange={(event) => setPreviousRunId(event.target.value)}
++                />
++              </label>
++              <Button
++                variant="secondary"
++                isLoading={comparisonLoading}
++                loadingText="Comparing..."
++                disabled={!currentRun || !previousRunId.trim()}
++                onClick={() => void compareHistory()}
++              >
++                <GitCompare className="h-4 w-4" />
++                Compare history
++              </Button>
++              <ComparisonPanel comparison={comparison} />
++            </div>
++          </Card>
++        </div>
++
++        <div className="space-y-5">
++          <div className="grid gap-3 md:grid-cols-4">
++            <Card padding="sm">
++              <p className="text-xs text-secondary-text">Run</p>
++              <p className="mt-2 break-all font-mono text-sm text-foreground">{currentRun?.runId || '-'}</p>
++            </Card>
++            <Card padding="sm">
++              <p className="text-xs text-secondary-text">Passed</p>
++              <p className="mt-2 text-2xl font-bold text-success">{passedCount}</p>
++            </Card>
++            <Card padding="sm">
++              <p className="text-xs text-secondary-text">Failed</p>
++              <p className="mt-2 text-2xl font-bold text-warning">{failedCount}</p>
++            </Card>
++            <Card padding="sm">
++              <p className="text-xs text-secondary-text">Total</p>
++              <p className="mt-2 text-2xl font-bold text-foreground">{resultsPage?.totalCount ?? 0}</p>
++            </Card>
++          </div>
++
++          <LineagePanel run={currentRun} page={resultsPage} />
++
++          <section className="rounded-2xl border border-border bg-card/95 p-4 shadow-soft-card">
++            <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
++              <div>
++                <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
++                  <BarChart3 className="h-4 w-4 text-cyan" />
++                  Results
++                </div>
++                <p className="mt-1 text-xs text-secondary-text">
++                  Stable cursor rows from Quant Screening API, including passed and failed-stage explanations.
++                </p>
++              </div>
++              <div className="flex flex-wrap gap-2 text-xs text-secondary-text">
++                <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-3 py-1">
++                  <StatusDot tone="success" /> passed
++                </span>
++                <span className="inline-flex items-center gap-1 rounded-full border border-border/70 px-3 py-1">
++                  <StatusDot tone="warning" /> failed-stage
++                </span>
++              </div>
++            </div>
++            <ResultTable page={resultsPage} onExplain={(row) => void loadExplanation(row)} />
++          </section>
++
++          <div className="grid gap-3 md:grid-cols-3">
++            <Card padding="sm">
++              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
++                <FileText className="h-4 w-4 text-cyan" />
++                ProblemDetails
++              </div>
++              <p className="mt-2 text-xs text-secondary-text">Validation, permission, and stale states remain API-owned.</p>
++            </Card>
++            <Card padding="sm">
++              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
++                <Layers3 className="h-4 w-4 text-cyan" />
++                Dataset Manifest
++              </div>
++              <p className="mt-2 text-xs text-secondary-text">Every row is displayed with concrete Dataset Version lineage.</p>
++            </Card>
++            <Card padding="sm">
++              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
++                <LockKeyhole className="h-4 w-4 text-cyan" />
++                Run/Stage/Event
++              </div>
++              <p className="mt-2 text-xs text-secondary-text">Run identity and stage trace stay visible for audit and recovery.</p>
++            </Card>
++          </div>
++        </div>
++      </div>
++
++      <Drawer
++        isOpen={drawerOpen}
++        onClose={() => setDrawerOpen(false)}
++        title="Explanation trace"
++        width="max-w-3xl"
++      >
++        {selectedRow ? (
++          <div className="space-y-4">
++            <div>
++              <p className="text-sm font-semibold text-foreground">{selectedRow.name || selectedRow.instrumentId}</p>
++              <p className="mt-1 font-mono text-xs text-secondary-text">{selectedRow.instrumentId}</p>
++            </div>
++            {(selectedRow.explanationSteps || []).length === 0 ? (
++              <EmptyState
++                title="No explanation steps"
++                description="This result row did not include structured explanation steps in the API response."
++                icon={<Clock3 className="h-8 w-8" />}
++              />
++            ) : (
++              <div className="space-y-3">
++                {(selectedRow.explanationSteps || []).map((step) => (
++                  <div key={`${step.stage}-${step.ruleId}`} className="rounded-xl border border-border/70 bg-surface/70 p-4">
++                    <div className="flex flex-wrap items-center gap-2">
++                      <Badge variant="info">{step.stage}</Badge>
++                      <span className="font-mono text-xs font-semibold text-foreground">{step.ruleId}</span>
++                      {step.authoritative ? <Badge variant="success">authoritative</Badge> : null}
++                    </div>
++                    <p className="mt-3 text-sm leading-6 text-secondary-text">{step.reason}</p>
++                    <p className="mt-3 text-xs text-secondary-text">Scores: {formatObjectEntries(step.scores)}</p>
++                    <p className="mt-1 text-xs text-secondary-text">Factors: {formatObjectEntries(step.factorContributions)}</p>
++                    {(step.sourceIds || []).length > 0 ? (
++                      <p className="mt-1 break-all text-xs text-secondary-text">Sources: {step.sourceIds?.join(', ')}</p>
++                    ) : null}
++                  </div>
++                ))}
++              </div>
++            )}
++          </div>
++        ) : null}
++      </Drawer>
++      </div>
++    </AppPage>
++  );
++};
++
++export default ScreenLabPage;
+diff --git a/apps/dsa-web/src/pages/__tests__/ScreenLabPage.test.tsx b/apps/dsa-web/src/pages/__tests__/ScreenLabPage.test.tsx
+new file mode 100644
+index 00000000..b9ff63b5
+--- /dev/null
++++ b/apps/dsa-web/src/pages/__tests__/ScreenLabPage.test.tsx
+@@ -0,0 +1,208 @@
++import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import ScreenLabPage from '../ScreenLabPage';
++
++const {
++  compareScreenRuns,
++  createScreenRun,
++  getScreenRunResult,
++  getScreenRunResults,
++} = vi.hoisted(() => ({
++  compareScreenRuns: vi.fn(),
++  createScreenRun: vi.fn(),
++  getScreenRunResult: vi.fn(),
++  getScreenRunResults: vi.fn(),
++}));
++
++vi.mock('../../api/quantScreening', () => ({
++  quantScreeningApi: {
++    compareScreenRuns: (...args: unknown[]) => compareScreenRuns(...args),
++    createScreenRun: (...args: unknown[]) => createScreenRun(...args),
++    getScreenRunResult: (...args: unknown[]) => getScreenRunResult(...args),
++    getScreenRunResults: (...args: unknown[]) => getScreenRunResults(...args),
++  },
++}));
++
++function createDeferred<T>() {
++  let resolve: (value: T) => void = () => undefined;
++  let reject: (reason?: unknown) => void = () => undefined;
++  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
++    resolve = resolvePromise;
++    reject = rejectPromise;
++  });
++  return { promise, resolve, reject };
++}
++
++const acceptedRun = {
++  runId: 'run_qs_123',
++  taskId: 'task_123',
++  status: 'queued',
++  runType: 'quant.screen.run',
++  screenDefinitionVersionId: 'sdv_11111111111111111111111111111111',
++  screenSnapshotId: 'ssn_22222222222222222222222222222222',
++  pipelineSnapshotId: 'sps_33333333333333333333333333333333',
++  asOf: '2026-07-24',
++  datasetVersions: { universe: 'dsv_44444444444444444444444444444444' },
++  schema: { name: 'quant.screen_snapshot', version: '1.0.0' },
++  trace: { traceId: 'trace-1', runId: 'run-1', stageId: 'stage-1' },
++  artifact: { artifactId: 'art_1', sha256: 'sha256:abc' },
++};
++
++const resultsPage = {
++  runId: 'run_qs_123',
++  screenSnapshotId: 'ssn_22222222222222222222222222222222',
++  pipelineSnapshotId: 'sps_33333333333333333333333333333333',
++  asOf: '2026-07-24',
++  datasetVersions: { universe: 'dsv_44444444444444444444444444444444' },
++  schema: { name: 'quant.screen_snapshot', version: '1.0.0' },
++  trace: { traceId: 'trace-1', runId: 'run-1', stageId: 'stage-1' },
++  artifact: { artifactId: 'art_1', sha256: 'sha256:abc' },
++  items: [
++    {
++      instrumentId: 'CN.XSHG.600519',
++      name: '贵州茅台',
++      status: 'passed',
++      rank: 1,
++      finalScore: 92.4,
++      stageScores: { l1_provider: 88, l2_factor: 94, l4_final: 92.4 },
++      factorContributions: { roe_ttm: 0.31, momentum_20d: 0.22 },
++      reasonCodes: ['l4_final_passed'],
++      industry: '食品饮料',
++    },
++    {
++      instrumentId: 'CN.XSHE.000001',
++      name: '平安银行',
++      status: 'failed',
++      failedStage: 'l4_final',
++      finalScore: 80.1,
++      reasonCodes: ['max_per_industry'],
++      industry: '银行',
++    },
++  ],
++  pageSize: 25,
++  cursor: null,
++  nextCursor: null,
++  totalCount: 2,
++  partial: true,
++  stale: true,
++};
++
++describe('ScreenLabPage', () => {
++  beforeEach(() => {
++    vi.clearAllMocks();
++    createScreenRun.mockResolvedValue(acceptedRun);
++    getScreenRunResults.mockResolvedValue(resultsPage);
++    getScreenRunResult.mockResolvedValue({
++      ...resultsPage.items[0],
++      explanationSteps: [
++        {
++          stage: 'l4_final',
++          ruleId: 'l4_final_passed',
++          reason: '通过 deterministic final screen gates',
++          authoritative: true,
++          scores: { final: 92.4 },
++          factorContributions: { roe_ttm: 0.31 },
++          sourceIds: ['screen_snapshot:ssn_22222222222222222222222222222222'],
++        },
++      ],
++    });
++    compareScreenRuns.mockResolvedValue({
++      schema: { name: 'quant.screen_snapshot_comparison', version: '1.0.0' },
++      previousRunId: 'run_qs_previous',
++      currentRunId: 'run_qs_123',
++      added: ['CN.XSHG.600519'],
++      removed: ['CN.XSHE.000001'],
++      retained: ['CN.XSHG.601318'],
++      statusChanges: [],
++      rankChanges: [{ instrumentId: 'CN.XSHG.601318', previousRank: 3, currentRank: 2 }],
++      scoreDeltas: [{ instrumentId: 'CN.XSHG.601318', delta: 4.2 }],
++    });
++  });
++
++  it('renders Screen Lab contract labels and empty state without using legacy AlphaSift data', () => {
++    render(<ScreenLabPage />);
++
++    expect(screen.getByTestId('screen-lab-page')).toBeInTheDocument();
++    expect(screen.getByRole('heading', { name: 'Screen Lab' })).toBeInTheDocument();
++    expect(screen.getByText('Draft')).toBeInTheDocument();
++    expect(screen.getByText('Published')).toBeInTheDocument();
++    expect(screen.getByText('Snapshot')).toBeInTheDocument();
++    expect(screen.getByText('History')).toBeInTheDocument();
++    expect(screen.getByText('Preview')).toBeInTheDocument();
++    expect(screen.getByText('Formal')).toBeInTheDocument();
++    expect(screen.getByText('No ScreenSnapshot loaded')).toBeInTheDocument();
++    expect(screen.getByText(/quant.screen_snapshot@1.0.0/)).toBeInTheDocument();
++  });
++
++  it('submits a preview run, renders partial and stale result lineage, explains a row, and compares history', async () => {
++    render(<ScreenLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run preview' }));
++
++    await waitFor(() => {
++      expect(createScreenRun).toHaveBeenCalledWith(
++        expect.objectContaining({
++          screenDefinitionId: 'screen_def_screen_lab_demo',
++          screenDefinitionVersionId: 'sdv_11111111111111111111111111111111',
++          runMode: 'preview',
++        }),
++        expect.stringMatching(/^screen-lab-/),
++      );
++    });
++    expect(getScreenRunResults).toHaveBeenCalledWith('run_qs_123', { pageSize: 25 });
++
++    expect(await screen.findByText('贵州茅台')).toBeInTheDocument();
++    expect(screen.getByText('CN.XSHG.600519')).toBeInTheDocument();
++    expect(screen.getByText('Partial result')).toBeInTheDocument();
++    expect(screen.getByText('Stale snapshot')).toBeInTheDocument();
++    expect(screen.getByText('as-of 2026-07-24')).toBeInTheDocument();
++    expect(screen.getByText(/dsv_44444444444444444444444444444444/)).toBeInTheDocument();
++    expect(screen.getByText(/trace-1/)).toBeInTheDocument();
++    expect(screen.getByText(/art_1/)).toBeInTheDocument();
++
++    fireEvent.click(screen.getByRole('button', { name: 'Explain CN.XSHG.600519' }));
++
++    const drawer = await screen.findByRole('dialog');
++    expect(within(drawer).getByText('Explanation trace')).toBeInTheDocument();
++    expect(within(drawer).getByText('l4_final_passed')).toBeInTheDocument();
++    expect(within(drawer).getByText(/deterministic final screen gates/)).toBeInTheDocument();
++
++    fireEvent.change(screen.getByLabelText('Previous run id'), { target: { value: 'run_qs_previous' } });
++    fireEvent.click(screen.getByRole('button', { name: 'Compare history' }));
++
++    await waitFor(() => expect(compareScreenRuns).toHaveBeenCalledWith('run_qs_previous', 'run_qs_123'));
++    expect(await screen.findByText('Added 1')).toBeInTheDocument();
++    expect(screen.getByText('Removed 1')).toBeInTheDocument();
++    expect(screen.getByText('Retained 1')).toBeInTheDocument();
++    expect(screen.getAllByText(/CN.XSHG.601318/).length).toBeGreaterThan(0);
++  });
++
++  it('shows loading state while a run is being created', async () => {
++    const deferred = createDeferred<typeof acceptedRun>();
++    createScreenRun.mockReturnValueOnce(deferred.promise);
++
++    render(<ScreenLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run preview' }));
++
++    expect(screen.getByText('Loading Quant snapshot...')).toBeInTheDocument();
++    deferred.resolve(acceptedRun);
++    expect(await screen.findByText('贵州茅台')).toBeInTheDocument();
++  });
++
++  it('renders permission-denied and generic error states from ProblemDetails-compatible failures', async () => {
++    createScreenRun.mockRejectedValueOnce({ response: { status: 403, data: { title: 'permission denied' } } });
++
++    render(<ScreenLabPage />);
++
++    fireEvent.click(screen.getByRole('button', { name: 'Run preview' }));
++
++    expect(await screen.findByText('Permission denied')).toBeInTheDocument();
++
++    createScreenRun.mockRejectedValueOnce(new Error('network down'));
++    fireEvent.click(screen.getByRole('button', { name: 'Run preview' }));
++
++    expect(await screen.findByText('Screen Lab request failed')).toBeInTheDocument();
++    expect(screen.getByText('network down')).toBeInTheDocument();
++  });
++});

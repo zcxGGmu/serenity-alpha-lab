@@ -1,0 +1,224 @@
+name: P0 Required Baselines
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p0-required-baselines-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DSA_BASELINE_SHA: e8a9ca7742e8cb2498c8f491dd76d239b3064e1a
+  DSA_UPSTREAM_URL: https://github.com/ZhuLinsen/daily_stock_analysis.git
+  SERENITY_BASELINE_TAG: upstream/dsa-v3.26.1
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "24"
+  DSA_WEB_SMOKE_PASSWORD: p0-smoke-password
+
+jobs:
+  p0-backend-offline-baseline:
+    name: p0-backend-offline-baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Prepare locked upstream ref
+        run: |
+          git remote get-url upstream >/dev/null 2>&1 || git remote add upstream "$DSA_UPSTREAM_URL"
+          git fetch upstream +refs/heads/*:refs/remotes/upstream/* +refs/tags/*:refs/tags/* --prune
+          test "$(git rev-parse v3.26.1)" = "$DSA_BASELINE_SHA"
+          git tag -f "$SERENITY_BASELINE_TAG" "$DSA_BASELINE_SHA"
+          test "$(git rev-parse "$SERENITY_BASELINE_TAG")" = "$DSA_BASELINE_SHA"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Bootstrap DSA Python baseline
+        run: bash scripts/bootstrap-dsa-baseline.sh --python python --install-python --install-ci-tools
+
+      - name: Check registered patches
+        run: scripts/apply-dsa-baseline-patches.sh --check-only
+
+      - name: Run backend offline baseline
+        run: scripts/run-dsa-backend-offline-baseline.sh
+
+      - name: Upload backend artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: p0-backend-offline-artifacts
+          path: .cache/dsa-p0/backend-offline-artifacts
+          if-no-files-found: ignore
+
+  p0-web-baseline:
+    name: p0-web-baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Prepare locked upstream ref
+        run: |
+          git remote get-url upstream >/dev/null 2>&1 || git remote add upstream "$DSA_UPSTREAM_URL"
+          git fetch upstream +refs/heads/*:refs/remotes/upstream/* +refs/tags/*:refs/tags/* --prune
+          test "$(git rev-parse v3.26.1)" = "$DSA_BASELINE_SHA"
+          git tag -f "$SERENITY_BASELINE_TAG" "$DSA_BASELINE_SHA"
+          test "$(git rev-parse "$SERENITY_BASELINE_TAG")" = "$DSA_BASELINE_SHA"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Bootstrap DSA Web baseline
+        run: bash scripts/bootstrap-dsa-baseline.sh --python python --install-python --install-ci-tools --install-web
+
+      - name: Apply registered patches and seed smoke fixture
+        run: |
+          scripts/apply-dsa-baseline-patches.sh
+          scripts/seed-dsa-web-smoke-fixture.sh --password "$DSA_WEB_SMOKE_PASSWORD"
+
+      - name: Install Playwright Chromium
+        working-directory: .worktrees/dsa-v3.26.1/apps/dsa-web
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Web lint, build and tests
+        working-directory: .worktrees/dsa-v3.26.1/apps/dsa-web
+        run: |
+          npm run lint
+          npm run build
+          npm run test
+
+      - name: Run Web smoke
+        working-directory: .worktrees/dsa-v3.26.1/apps/dsa-web
+        env:
+          ENV_FILE: ${{ github.workspace }}/.cache/dsa-p0/web-smoke/.env
+          DATABASE_PATH: ${{ github.workspace }}/.cache/dsa-p0/web-smoke/stock_analysis.db
+          ADMIN_AUTH_ENABLED: "true"
+          DSA_WEB_SMOKE_BACKEND_CMD: ${{ github.workspace }}/.cache/dsa-p0/venv/bin/python main.py --webui-only --host 127.0.0.1 --port 8000
+        run: npm run test:smoke -- --reporter=line
+
+      - name: Upload Web artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: p0-web-artifacts
+          path: |
+            .cache/dsa-p0/web-smoke
+            .worktrees/dsa-v3.26.1/apps/dsa-web/test-results
+            .worktrees/dsa-v3.26.1/apps/dsa-web/playwright-report
+          if-no-files-found: ignore
+
+  p0-contract-and-golden-baselines:
+    name: p0-contract-and-golden-baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Prepare locked upstream ref
+        run: |
+          git remote get-url upstream >/dev/null 2>&1 || git remote add upstream "$DSA_UPSTREAM_URL"
+          git fetch upstream +refs/heads/*:refs/remotes/upstream/* +refs/tags/*:refs/tags/* --prune
+          test "$(git rev-parse v3.26.1)" = "$DSA_BASELINE_SHA"
+          git tag -f "$SERENITY_BASELINE_TAG" "$DSA_BASELINE_SHA"
+          test "$(git rev-parse "$SERENITY_BASELINE_TAG")" = "$DSA_BASELINE_SHA"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Bootstrap DSA contract baseline
+        run: bash scripts/bootstrap-dsa-baseline.sh --python python --install-python --install-ci-tools
+
+      - name: Validate scripts
+        run: |
+          bash -n scripts/run-dsa-api-config-baseline.sh
+          bash -n scripts/run-dsa-database-baseline.sh
+          bash -n scripts/run-dsa-report-signal-baseline.sh
+
+      - name: Run API/config, database and report/signal baselines
+        run: |
+          scripts/run-dsa-api-config-baseline.sh
+          scripts/run-dsa-database-baseline.sh
+          scripts/run-dsa-report-signal-baseline.sh
+
+      - name: Upload contract/golden artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: p0-contract-golden-artifacts
+          path: |
+            .cache/dsa-p0/api-config-contract-artifacts
+            .cache/dsa-p0/database-baseline-artifacts
+            .cache/dsa-p0/report-signal-baseline-artifacts
+          if-no-files-found: ignore
+
+  p0-docker-and-supply-chain-baseline:
+    name: p0-docker-and-supply-chain-baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Prepare locked upstream ref
+        run: |
+          git remote get-url upstream >/dev/null 2>&1 || git remote add upstream "$DSA_UPSTREAM_URL"
+          git fetch upstream +refs/heads/*:refs/remotes/upstream/* +refs/tags/*:refs/tags/* --prune
+          test "$(git rev-parse v3.26.1)" = "$DSA_BASELINE_SHA"
+          git tag -f "$SERENITY_BASELINE_TAG" "$DSA_BASELINE_SHA"
+          test "$(git rev-parse "$SERENITY_BASELINE_TAG")" = "$DSA_BASELINE_SHA"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Install supply-chain scanners
+        run: |
+          python -m venv .cache/dsa-p0/supply-chain-tools-venv
+          .cache/dsa-p0/supply-chain-tools-venv/bin/python -m pip install --upgrade pip pip-audit
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
+
+      - name: Bootstrap DSA Docker and supply-chain baseline
+        run: bash scripts/bootstrap-dsa-baseline.sh --python python --install-python --install-ci-tools --install-web
+
+      - name: Run Docker baseline
+        run: scripts/run-dsa-docker-baseline.sh
+
+      - name: Run supply-chain baseline
+        run: scripts/run-dsa-supply-chain-baseline.sh
+
+      - name: Upload Docker and supply-chain artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: p0-docker-supply-chain-artifacts
+          path: |
+            .cache/dsa-p0/docker-baseline-artifacts
+            .cache/dsa-p0/supply-chain-artifacts
+          if-no-files-found: ignore

@@ -1,0 +1,297 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "alphasift",
+      "properties": [
+        {
+          "name": "serenity:task",
+          "value": "SAL-P3-002"
+        },
+        {
+          "name": "serenity:source_commit",
+          "value": "9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf"
+        },
+        {
+          "name": "serenity:source_archive_sha256",
+          "value": "4ab7a4124d9b95a1fdad6a1f9a3f0fc12913e903ed0d532d4b2848a9bb77de7a"
+        },
+        {
+          "name": "serenity:internal_artifact_uri",
+          "value": "internal://serenity-alpha-lab/python-wheels/alphasift/9f522747caafd3c0b1ddb7e14d5cf44c8580b6cf/alphasift-0.2.0-py3-none-any.whl"
+        }
+      ],
+      "purl": "pkg:pypi/alphasift@0.2.0",
+      "type": "library",
+      "version": "0.2.0"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD License"
+          }
+        }
+      ],
+      "name": "pandas",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "pandas>=2.0"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "2.3.3"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "name": "PyYAML",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "pyyaml>=6.0"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "6.0.3"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "name": "litellm",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "litellm>=1.0"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "1.93.0"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "name": "efinance",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "efinance>=0.4"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "0.5.9"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
+      "name": "akshare",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "akshare>=1.10"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "1.18.64"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        }
+      ],
+      "name": "baostock",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "baostock>=0.8.9"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "0.9.3"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        }
+      ],
+      "name": "tushare",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "tushare>=1.4"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "1.4.29"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "yfinance",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "yfinance>=0.2"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "1.5.1"
+    },
+    {
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "requests",
+      "properties": [
+        {
+          "name": "serenity:declared_requirement",
+          "value": "requests>=2.28"
+        },
+        {
+          "name": "serenity:not_vendored_in_alphasift_wheel",
+          "value": "true"
+        }
+      ],
+      "scope": "required",
+      "type": "library",
+      "version": "2.34.2"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:pypi/pandas@2.3.3",
+        "pkg:pypi/pyyaml@6.0.3",
+        "pkg:pypi/litellm@1.93.0",
+        "pkg:pypi/efinance@0.5.9",
+        "pkg:pypi/akshare@1.18.64",
+        "pkg:pypi/baostock@0.9.3",
+        "pkg:pypi/tushare@1.4.29",
+        "pkg:pypi/yfinance@1.5.1",
+        "pkg:pypi/requests@2.34.2"
+      ],
+      "ref": "pkg:pypi/alphasift@0.2.0"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b71fe6f4b11c9655b2190f91217fee66361f9852ae344c53fe501455a4823ed2"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "alphasift",
+      "purl": "pkg:pypi/alphasift@0.2.0",
+      "type": "library",
+      "version": "0.2.0"
+    },
+    "timestamp": "2026-07-23T00:00:00Z",
+    "tools": [
+      {
+        "name": "build-alphasift-wheel-intake",
+        "vendor": "Serenity Alpha Lab",
+        "version": "SAL-P3-002"
+      }
+    ]
+  },
+  "serialNumber": "urn:uuid:fdb1d255-5027-5ef1-b8bf-66f94d884740",
+  "specVersion": "1.5",
+  "version": 1
+}
