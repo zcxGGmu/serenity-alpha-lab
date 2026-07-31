@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "serenity-alpha-lab"
 version = "0.1.0a0"
 description = "AI-assisted stock research and quantitative analysis platform built around the DSA product trunk."
-readme = { file = "docs/ai-stock-quant-platform-development-plan.md", content-type = "text/markdown" }
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11,<3.13"
 authors = [
     { name = "Serenity Alpha Lab Contributors" },

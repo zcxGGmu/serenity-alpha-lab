@@ -1,3 +1,28 @@
+# README And Product Homepage Refresh
+
+> Scope: Improve the root project narrative and add a static product homepage. Approved approach: root `README.md` plus standalone `docs/product-homepage/index.html` / `styles.css`, with no new frontend framework, no runtime service, and no SAL-P6-005 implementation.
+
+## Checklist
+
+- [x] Review current repo state, phase status, package metadata, and existing docs.
+- [x] Review the requested external references and extract only structural/design patterns.
+- [x] Write design spec in `docs/superpowers/specs/2026-07-31-readme-product-homepage-design.md`.
+- [x] Write implementation plan in `docs/superpowers/plans/2026-07-31-readme-product-homepage.md`.
+- [x] Add root `README.md` and point `pyproject.toml` package readme at it.
+- [x] Add standalone static product homepage under `docs/product-homepage/`.
+- [x] Run static and project verification.
+- [ ] Create Chinese checkpoint commit.
+
+## Review
+
+- Root README now uses a strong project thesis, TL;DR table, humans/agents sections, architecture loop, capability matrix, status checkpoints, installation, safety boundaries, and homepage link.
+- Product homepage is static HTML/CSS with no script, build step, external image, analytics, Provider call, LLM call, Worker loop, Qlib runtime, production scheduler, notification sender, release packaging, or formal portfolio backtest promotion.
+- `pyproject.toml` now uses `README.md` as the package readme.
+- Current phase status remains P6 `4/23`, total `110/129`, Gate G5 passed with accepted risks, Gate G6 not passed, next task still `SAL-P6-005`.
+- Verification completed: static HTML/CSS parse PASS; required README/homepage/status markers present; `pytest -q` `520 passed, 3 skipped`; compileall PASS; dependency lock guard PASS; pyproject readme metadata PASS; immutable `upstream/dsa-v3.26.1` stayed `e8a9ca7742e8cb2498c8f491dd76d239b3064e1a`; `git diff --check` PASS.
+
+---
+
 # SAL-P6-004 Input Fetch And Report Rendering Hardening Implementation Plan
 
 > Scope: Complete only `SAL-P6-004` by adding framework-neutral URL/fetch policy, file upload metadata scanning, report rendering safety validation and security headers. Do not start `SAL-P6-005+`, real Provider/LLM, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal backtest promotion.
