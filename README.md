@@ -10,7 +10,8 @@ You bring an investment question. Serenity Alpha Lab turns it into versioned dat
 
 | You want | Start here | What you get |
 | --- | --- | --- |
-| Product overview | [`docs/product-homepage/index.html`](docs/product-homepage/index.html) | Static product homepage that opens directly in a browser |
+| Product overview | [`https://zcxggmu.github.io/serenity-alpha-lab/`](https://zcxggmu.github.io/serenity-alpha-lab/) | GitHub Pages product homepage |
+| Local homepage preview | [`web/index.html`](web/index.html) | Static homepage source published by GitHub Pages |
 | Current project state | [`docs/development-status.md`](docs/development-status.md) | Phase, gate, checkpoint, next task, and recovery prompt |
 | Execution ledger | [`docs/development-progress-checklist.md`](docs/development-progress-checklist.md) | 129-task roadmap with evidence, decisions, and acceptance notes |
 | Architecture plan | [`docs/ai-stock-quant-platform-development-plan.md`](docs/ai-stock-quant-platform-development-plan.md) | Full AI stock research and quant platform design |
@@ -66,7 +67,7 @@ Candidate discovery
 
 Read these in order:
 
-1. [`docs/product-homepage/index.html`](docs/product-homepage/index.html)
+1. [`https://zcxggmu.github.io/serenity-alpha-lab/`](https://zcxggmu.github.io/serenity-alpha-lab/)
 2. [`docs/development-status.md`](docs/development-status.md)
 3. [`docs/ai-stock-quant-platform-development-plan.md`](docs/ai-stock-quant-platform-development-plan.md)
 4. [`docs/development-progress-checklist.md`](docs/development-progress-checklist.md)
@@ -112,13 +113,19 @@ Optional extras are split by boundary:
 
 ## Product Homepage
 
-Open the product homepage directly:
+Open the product homepage through GitHub Pages:
 
 ```text
-docs/product-homepage/index.html
+https://zcxggmu.github.io/serenity-alpha-lab/
 ```
 
-It is intentionally static. No build system, analytics, external image, Provider call, LLM call, Worker loop, or runtime service is required.
+Preview the same static source locally:
+
+```text
+web/index.html
+```
+
+It is intentionally static and published from [`web/`](web/) by [`deploy-pages.yml`](.github/workflows/deploy-pages.yml). No build system, analytics, external image, Provider call, LLM call, Worker loop, or runtime service is required.
 
 ## Safety Boundaries
 
@@ -145,4 +152,3 @@ The immutable upstream tag remains:
 ```text
 upstream/dsa-v3.26.1 = e8a9ca7742e8cb2498c8f491dd76d239b3064e1a
 ```
-

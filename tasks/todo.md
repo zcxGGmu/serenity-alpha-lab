@@ -1,3 +1,26 @@
+# GitHub Pages Product Homepage Publishing
+
+> Scope: Match the `zcxGGmu/CodeInsights` GitHub Pages pattern by publishing the static product homepage from a repository `web/` directory through GitHub Actions. Keep this documentation/static-site only with no SAL-P6-005 implementation, Provider/LLM runtime, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal portfolio backtest promotion.
+
+## Checklist
+
+- [x] Compare CodeInsights Pages structure and workflow pattern.
+- [x] Create a repository-root `web/` static homepage source that mirrors the current product homepage.
+- [x] Add a GitHub Pages deploy workflow that uploads `web/` with no build step.
+- [x] Update README entry points to the public `github.io` URL and local `web/index.html` preview.
+- [x] Add offline structure tests for the Pages source and workflow.
+- [x] Run static checks, focused tests, full project verification, diff hygiene and create a Chinese checkpoint.
+
+## Review
+
+- Added `web/` as the GitHub Pages static source with `index.html`, `styles.css`, `.nojekyll` and a short publishing README; `web/` contains only publishable static files.
+- Added `.github/workflows/deploy-pages.yml`, which runs the lightweight homepage structure test, uploads `web/` with `actions/upload-pages-artifact@v4`, and deploys via `actions/deploy-pages@v4` on pushes to `main`.
+- Updated root `README.md` so product overview points to `https://zcxggmu.github.io/serenity-alpha-lab/` and local preview points to `web/index.html`.
+- Added `tests/architecture/test_pages_homepage.py` to guard the Pages source, workflow contract, static/no-script boundary, accessibility markers and no dynamic viewport font sizing.
+- Browser verification covered 1440×960 desktop, 390×844 mobile portrait and 844×390 mobile landscape against `web/index.html`; all reported no horizontal overflow and refreshed screenshots were written under ignored `.cache/ui-review-pages/`.
+
+---
+
 # Product Homepage UI Optimization
 
 > Scope: Use `ui-ux-pro-max` guidance to refine the static product homepage only. Keep the work documentation-only with no SAL-P6-005 implementation, Provider/LLM runtime, Worker loop, Qlib runtime, production scheduling, notification sender, release packaging or formal portfolio backtest promotion.
